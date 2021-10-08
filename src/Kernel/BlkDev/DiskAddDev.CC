@@ -235,6 +235,7 @@ U0 BlkDevsInitAll()
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 
+	"\nAHCIInit;\n";
 	AHCIInit;
 
 	if (!blkdev.ahci_hba)

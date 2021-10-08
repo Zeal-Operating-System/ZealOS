@@ -190,6 +190,7 @@ U0 ToTheFront()
 				"$$GREEN$$  2$$FG$$\tPlayer 2 view.\n"
 				"$$GREEN$$  c$$FG$$\tView odds calculations.\n"
 				"$$GREEN$$  d$$FG$$\tSet animation delay.");
+	PaletteSetLight(FALSE);
 	Fs->task_end_cb = &TaskEndCB; //<CTRL-ALT-x>
 	Fs->draw_it = &DrawIt;
 	try

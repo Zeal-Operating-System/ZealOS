@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -41,11 +41,11 @@ body {background-color:#fef1f0;}
 <a name="l14"></a>Currently, ZealOS has no PCI drivers beyond AHCI and networking.  Most drivers use I/O ports and operate in ISA bus mode.   At 
 <a name="l15"></a>this point, we only have one driver for each type of device and it is delightfully simple that way.  ZealOS has one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/SerialDev/Keyboard.CC.html#l1"><span class=cF4>keyboard</span></a><span class=cF0> 
 <a name="l16"></a>driver, one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/SerialDev/Mouse.CC.html#l1"><span class=cF4>mouse</span></a><span class=cF0> driver, one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1"><span class=cF4>ATA hard drive</span></a><span class=cF0> driver, one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1"><span class=cF4>ATAPI CD/DVD</span></a><span class=cF0> driver, one </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrScreen.CC.html#l1"><span class=cF4>32-bit color high-res VBE graphics</span></a><span class=cF0> video 
-<a name="l17"></a>driver and one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l129"><span class=cF4>PC Speaker</span></a><span class=cF0> driver.  We use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l116"><span class=cF4>PIT timer</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l157"><span class=cF4>PIC Interrupt Controller</span></a><span class=cF0>.  We use   IRQ0 for timer, IRQ1 for 
+<a name="l17"></a>driver and one </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l129"><span class=cF4>PC Speaker</span></a><span class=cF0> driver.  We use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l116"><span class=cF4>PIT timer</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l149"><span class=cF4>PIC Interrupt Controller</span></a><span class=cF0>.  We use   IRQ0 for timer, IRQ1 for 
 <a name="l18"></a>keyboard, and IRQ12 for mouse.  If IRQ12 is not firing, we are able to poll the mouse.
 <a name="l19"></a>
-<a name="l20"></a>In the CPU department, ZealOS has state of the art 64-bit </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart64.CC.html#l1"><span class=cF4>long mode</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l1"><span class=cF4>multicore</span></a><span class=cF0> support. We use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l176"><span class=cF4>APIC</span></a><span class=cF0> and start-up </span><span class=cF4>
-<a name="l21"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l298"><span class=cF4>multicore</span></a><span class=cF0> operation.
+<a name="l20"></a>In the CPU department, ZealOS has state of the art 64-bit </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart64.CC.html#l1"><span class=cF4>long mode</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l1"><span class=cF4>multicore</span></a><span class=cF0> support. We use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l181"><span class=cF4>APIC</span></a><span class=cF0> and start-up </span><span class=cF4>
+<a name="l21"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l303"><span class=cF4>multicore</span></a><span class=cF0> operation.
 <a name="l22"></a>
 <a name="l23"></a>Terry Davis made an incredible accomplishment by getting it to work on practically everyone's computer as long as it is 64-bit 
 <a name="l24"></a>and they run inside VMware, QEMU or VirtualBox.

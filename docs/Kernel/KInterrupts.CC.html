@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -89,7 +89,7 @@ body {background-color:#fef1f0;}
 <a name="l62"></a></span><span class=cFD>INT_FAULT</span><span class=cF0>::
 <a name="l63"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RBX</span><span class=cF0>
 <a name="l64"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
-<a name="l65"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>BL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]  </span><span class=cF2>//We pushed fault_num </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l196"><span class=cF4>IntFaultHandlersNew</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l65"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>BL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]  </span><span class=cF2>//We pushed fault_num </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l199"><span class=cF4>IntFaultHandlersNew</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l66"></a>        </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
 <a name="l67"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>FS</span><span class=cF0>:</span><span class=cF1>U8</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>BL</span><span class=cF0>
 <a name="l68"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>
@@ -173,108 +173,111 @@ body {background-color:#fef1f0;}
 <a name="l146"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l147"></a>}
 <a name="l148"></a>
-<a name="l149"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>IntEntryFree</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> irq)
-<a name="l150"></a>{ </span><span class=cF2>// 'Free' a user irq num. Unsets bit in user irq bitmap.</span><span class=cF0>
-<a name="l151"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0xFF</span><span class=cF0> &gt;= irq &gt;= </span><span class=cFE>0xFF</span><span class=cF0> - </span><span class=cFE>64</span><span class=cF0>)
-<a name="l152"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Btr</span><span class=cF0>(&amp;</span><span class=cFB>dev</span><span class=cF0>.user_int_bitmap, irq - </span><span class=cFE>192</span><span class=cF0>);
-<a name="l153"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l154"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l155"></a>}
-<a name="l156"></a>
-<a name="l157"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntPICInit</span><span class=cF0>()
-<a name="l158"></a>{</span><span class=cF2>//Init 8259</span><span class=cF0>
-<a name="l159"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW (Initialization Word) 1</span><span class=cF0>
-<a name="l160"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW1</span><span class=cF0>
-<a name="l161"></a>
-<a name="l162"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x20</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 0 -&gt; 32 (beyond Intel reserved faults)</span><span class=cF0>
-<a name="l163"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x28</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 8 -&gt; 40</span><span class=cF0>
-<a name="l164"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x04</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_1 PIC_2 exists.</span><span class=cF0>
-<a name="l165"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x02</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_2 its cascade identity.</span><span class=cF0>
-<a name="l166"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x0D</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Master PIC)</span><span class=cF0>
-<a name="l167"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x09</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Slave PIC)</span><span class=cF0>
-<a name="l168"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0xFA</span><span class=cF0>); </span><span class=cF2>//Mask all but IRQ0 (timer) and IRQ2 Cascade.</span><span class=cF0>
-<a name="l169"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0xFF</span><span class=cF0>);
-<a name="l170"></a>}
-<a name="l171"></a>
-<a name="l172"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntNop</span><span class=cF0>()
-<a name="l173"></a>{</span><span class=cF2>//Make unplanned IRQs stop by all means!</span><span class=cF0>
-<a name="l174"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
-<a name="l175"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
-<a name="l176"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l177"></a>}
+<a name="l149"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntPICInit</span><span class=cF0>()
+<a name="l150"></a>{</span><span class=cF2>//Init 8259</span><span class=cF0>
+<a name="l151"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW (Initialization Word) 1</span><span class=cF0>
+<a name="l152"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW1</span><span class=cF0>
+<a name="l153"></a>
+<a name="l154"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x20</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 0 -&gt; 32 (beyond Intel reserved faults)</span><span class=cF0>
+<a name="l155"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x28</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 8 -&gt; 40</span><span class=cF0>
+<a name="l156"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x04</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_1 PIC_2 exists.</span><span class=cF0>
+<a name="l157"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x02</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_2 its cascade identity.</span><span class=cF0>
+<a name="l158"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x0D</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Master PIC)</span><span class=cF0>
+<a name="l159"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x09</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Slave PIC)</span><span class=cF0>
+<a name="l160"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0xFA</span><span class=cF0>); </span><span class=cF2>//Mask all but IRQ0 (timer) and IRQ2 Cascade.</span><span class=cF0>
+<a name="l161"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0xFF</span><span class=cF0>);
+<a name="l162"></a>}
+<a name="l163"></a>
+<a name="l164"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntNop</span><span class=cF0>()
+<a name="l165"></a>{</span><span class=cF2>//Make unplanned IRQs stop by all means!</span><span class=cF0>
+<a name="l166"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l167"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l168"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l169"></a>}
+<a name="l170"></a>
+<a name="l171"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>IntEntryFree</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> irq)
+<a name="l172"></a>{ </span><span class=cF2>// 'Free' a user irq num. Unsets bit in user irq bitmap.</span><span class=cF0>
+<a name="l173"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l174"></a>
+<a name="l175"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0xFF</span><span class=cF0> &gt;= irq &gt;= </span><span class=cFE>0xFF</span><span class=cF0> - </span><span class=cFE>64</span><span class=cF0>)
+<a name="l176"></a>        </span><span class=cF1>if</span><span class=cF0> (res = </span><span class=cF5>Btr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>dev</span><span class=cF0>.user_int_bitmap, irq - </span><span class=cFE>192</span><span class=cF7>)</span><span class=cF0>)
+<a name="l177"></a>            </span><span class=cF5>IntEntrySet</span><span class=cF0>(irq, &amp;</span><span class=cFD>IntNop</span><span class=cF0>); </span><span class=cF2>// clear the irq entry vect</span><span class=cF0>
 <a name="l178"></a>
-<a name="l179"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntDivZero</span><span class=cF0>()
-<a name="l180"></a>{
-<a name="l181"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num)
-<a name="l182"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l183"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l184"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
-<a name="l185"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l186"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>8</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//Get RIP off of stack.</span><span class=cF0>
-<a name="l187"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip = </span><span class=cF5>RAXGet</span><span class=cF0>;
-<a name="l188"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message = </span><span class=cF6>&quot;Div Zero&quot;</span><span class=cF0>;
-<a name="l189"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l190"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l191"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
-<a name="l192"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l193"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'DivZero'</span><span class=cF0>);
-<a name="l194"></a>}
-<a name="l195"></a>
-<a name="l196"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>IntFaultHandlersNew</span><span class=cF0>()
-<a name="l197"></a>{
-<a name="l198"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
-<a name="l199"></a>    </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>7</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap), *dst = res;
-<a name="l200"></a>
-<a name="l201"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
-<a name="l202"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l203"></a>        *dst++ = </span><span class=cFE>0x6A</span><span class=cF0>; </span><span class=cF2>//PUSH I8 xx</span><span class=cF0>
-<a name="l204"></a>        *dst(</span><span class=cF1>I8</span><span class=cF0> *)++ = i;
-<a name="l205"></a>        *dst++ = </span><span class=cFE>0xE9</span><span class=cF0>; </span><span class=cF2>//JMP</span><span class=cF0>    </span><span class=cF2>I32 xxxxxxxx</span><span class=cF0>
-<a name="l206"></a>        *dst(</span><span class=cF9>I32</span><span class=cF0> *) = </span><span class=cFD>INT_FAULT</span><span class=cF0> - dst - </span><span class=cFE>4</span><span class=cF0>;
-<a name="l207"></a>        dst += </span><span class=cFE>4</span><span class=cF0>;
-<a name="l208"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l209"></a>
-<a name="l210"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l211"></a>}
+<a name="l179"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l180"></a>}
+<a name="l181"></a>
+<a name="l182"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntDivZero</span><span class=cF0>()
+<a name="l183"></a>{
+<a name="l184"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num)
+<a name="l185"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l186"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l187"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
+<a name="l188"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l189"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>8</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//Get RIP off of stack.</span><span class=cF0>
+<a name="l190"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip = </span><span class=cF5>RAXGet</span><span class=cF0>;
+<a name="l191"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message = </span><span class=cF6>&quot;Div Zero&quot;</span><span class=cF0>;
+<a name="l192"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l193"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l194"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
+<a name="l195"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l196"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'DivZero'</span><span class=cF0>);
+<a name="l197"></a>}
+<a name="l198"></a>
+<a name="l199"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>IntFaultHandlersNew</span><span class=cF0>()
+<a name="l200"></a>{
+<a name="l201"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l202"></a>    </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>7</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap), *dst = res;
+<a name="l203"></a>
+<a name="l204"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l205"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l206"></a>        *dst++ = </span><span class=cFE>0x6A</span><span class=cF0>; </span><span class=cF2>//PUSH I8 xx</span><span class=cF0>
+<a name="l207"></a>        *dst(</span><span class=cF1>I8</span><span class=cF0> *)++ = i;
+<a name="l208"></a>        *dst++ = </span><span class=cFE>0xE9</span><span class=cF0>; </span><span class=cF2>//JMP</span><span class=cF0>    </span><span class=cF2>I32 xxxxxxxx</span><span class=cF0>
+<a name="l209"></a>        *dst(</span><span class=cF9>I32</span><span class=cF0> *) = </span><span class=cFD>INT_FAULT</span><span class=cF0> - dst - </span><span class=cFE>4</span><span class=cF0>;
+<a name="l210"></a>        dst += </span><span class=cFE>4</span><span class=cF0>;
+<a name="l211"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l212"></a>
-<a name="l213"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit1</span><span class=cF0>()
-<a name="l214"></a>{</span><span class=cF2>//Interrupt descriptor table part1.</span><span class=cF0>
-<a name="l215"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
-<a name="l216"></a>    </span><span class=cF9>CSysLimitBase</span><span class=cF0>   tmp_ptr;
-<a name="l217"></a>
-<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4103"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
-<a name="l219"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l220"></a>        </span><span class=cFB>dev</span><span class=cF0>.idt = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CIDTEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
-<a name="l221"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
-<a name="l222"></a>            </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFD>IntNop</span><span class=cF0>);
-<a name="l223"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l224"></a>    tmp_ptr.limit = </span><span class=cFE>256</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CIDTEntry</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
-<a name="l225"></a>    tmp_ptr.base = </span><span class=cFB>dev</span><span class=cF0>.idt;
-<a name="l226"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(&amp;tmp_ptr);
-<a name="l227"></a>    </span><span class=cF1>LIDT</span><span class=cF0> </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0>]
-<a name="l228"></a>}
-<a name="l229"></a>
-<a name="l230"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit2</span><span class=cF0>()
-<a name="l231"></a>{</span><span class=cF2>//Interrupt descriptor table part2: Core 0 Only.</span><span class=cF0>
-<a name="l232"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
-<a name="l233"></a>
-<a name="l234"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l235"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l236"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DIV_ZERO</span><span class=cF0>, &amp;</span><span class=cFD>IntDivZero</span><span class=cF0>);
-<a name="l237"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
-<a name="l238"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * i]);
-<a name="l239"></a></span><span class=cF2>/*In theory, we use the PIC mask reg to insure we don't get</span><span class=cF0>
-<a name="l240"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, Terry had</span><span class=cF0>
-<a name="l241"></a></span><span class=cF2>gotten IRQ 0x27, he thought perhaps because he didn't initialize the APIC?</span><span class=cF0>
-<a name="l242"></a></span><span class=cF2>We go ahead and ACK PIC in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l172"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l243"></a></span><span class=cF2>He had no idea why he got a IRQ 0x27.</span><span class=cF0>
-<a name="l244"></a></span><span class=cF2>*/</span><span class=cF0>
-<a name="l245"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_NMI</span><span class=cF0>,       </span><span class=cFD>_SYS_HLT</span><span class=cF0>);
-<a name="l246"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_TIMER</span><span class=cF0>,     </span><span class=cFD>IRQ_TIMER</span><span class=cF0>);
-<a name="l247"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, *</span><span class=cFD>INT_MP_CRASH_ADDR</span><span class=cF7>(</span><span class=cF9>U32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>);
-<a name="l248"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_WAKE</span><span class=cF0>,      </span><span class=cFD>INT_WAKE</span><span class=cF0>);
-<a name="l249"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DEBUG</span><span class=cF0>,    &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * </span><span class=cF3>I_DEBUG</span><span class=cF0>]);
-<a name="l250"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l251"></a>}
+<a name="l213"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l214"></a>}
+<a name="l215"></a>
+<a name="l216"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit1</span><span class=cF0>()
+<a name="l217"></a>{</span><span class=cF2>//Interrupt descriptor table part1.</span><span class=cF0>
+<a name="l218"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
+<a name="l219"></a>    </span><span class=cF9>CSysLimitBase</span><span class=cF0>   tmp_ptr;
+<a name="l220"></a>
+<a name="l221"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4103"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
+<a name="l222"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l223"></a>        </span><span class=cFB>dev</span><span class=cF0>.idt = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CIDTEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l224"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l225"></a>            </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFD>IntNop</span><span class=cF0>);
+<a name="l226"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l227"></a>    tmp_ptr.limit = </span><span class=cFE>256</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CIDTEntry</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l228"></a>    tmp_ptr.base = </span><span class=cFB>dev</span><span class=cF0>.idt;
+<a name="l229"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(&amp;tmp_ptr);
+<a name="l230"></a>    </span><span class=cF1>LIDT</span><span class=cF0> </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l231"></a>}
+<a name="l232"></a>
+<a name="l233"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit2</span><span class=cF0>()
+<a name="l234"></a>{</span><span class=cF2>//Interrupt descriptor table part2: Core 0 Only.</span><span class=cF0>
+<a name="l235"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l236"></a>
+<a name="l237"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l238"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l239"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DIV_ZERO</span><span class=cF0>, &amp;</span><span class=cFD>IntDivZero</span><span class=cF0>);
+<a name="l240"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
+<a name="l241"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * i]);
+<a name="l242"></a></span><span class=cF2>/*In theory, we use the PIC mask reg to insure we don't get</span><span class=cF0>
+<a name="l243"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, Terry had</span><span class=cF0>
+<a name="l244"></a></span><span class=cF2>gotten IRQ 0x27, he thought perhaps because he didn't initialize the APIC?</span><span class=cF0>
+<a name="l245"></a></span><span class=cF2>We go ahead and ACK PIC in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l164"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l246"></a></span><span class=cF2>He had no idea why he got a IRQ 0x27.</span><span class=cF0>
+<a name="l247"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l248"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_NMI</span><span class=cF0>,       </span><span class=cFD>_SYS_HLT</span><span class=cF0>);
+<a name="l249"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_TIMER</span><span class=cF0>,     </span><span class=cFD>IRQ_TIMER</span><span class=cF0>);
+<a name="l250"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, *</span><span class=cFD>INT_MP_CRASH_ADDR</span><span class=cF7>(</span><span class=cF9>U32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>);
+<a name="l251"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_WAKE</span><span class=cF0>,      </span><span class=cFD>INT_WAKE</span><span class=cF0>);
+<a name="l252"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DEBUG</span><span class=cF0>,    &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * </span><span class=cF3>I_DEBUG</span><span class=cF0>]);
+<a name="l253"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l254"></a>}
 </span></pre></body>
 </html>

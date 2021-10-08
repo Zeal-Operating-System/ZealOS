@@ -103,12 +103,12 @@ else bus, dev, fun.
 
 	if (sys_pci_services)
 	{
-		"System has PCIBIOS\n";
+		"(System has PCIBIOS)\n";
 		res = PCIBIOSClassFind(class_code, n);
 	}
 	else
 	{
-		"System does not have PCIBIOS\n";
+		"(System does not have PCIBIOS)\n";
 		for (b = 0; b < sys_pci_buses; b++)
 			for (d = 0; d < 32; d++)
 				for (f = 0; f < 8; f++)

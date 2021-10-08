@@ -288,7 +288,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	I64			 i, disp, imm, opsize, opadd, arg1, arg2, reloced_arg1, reloced_arg2,
 				 arg1_size = 0, arg2_size = 0, reloced_arg1_size, reloced_arg2_size,
 				 ModrM = -1, SIB = -1, scale, r1, r2, Mod = -1, RM1 = -1, RM2 = -1, REX = -1, REX_r = 0, REX_x = 0, REX_b = 0;
-	Bool		 cont;
+	Bool		 cont, isXMM, isXMM1, isXMM2;
 	CInst		*tmpins, *tmpins2;
 	CHashOpcode	*tmpo;
 	U8			*rip = *_rip, *ptr, *reloced_arg1_st, *reloced_arg2_st, *bin_data_area1, *bin_data_area2,
@@ -476,10 +476,16 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 		}
 	}
 
-	if (ARGT_RM8 <= arg1 <= ARGT_RM64 || ARGT_M8 <= arg1 <= ARGT_M64 ||
+	isXMM1 = ARGT_XMM <= arg1 <= ARGT_XMM0;
+	isXMM2 = ARGT_XMM <= arg2 <= ARGT_XMM0;
+	isXMM = isXMM1 || isXMM2;
+
+	if (isXMM ||
+		ARGT_RM8 <= arg1 <= ARGT_RM64 || ARGT_M8 <= arg1 <= ARGT_M64 ||
 		ARGT_RM8 <= arg2 <= ARGT_RM64 || ARGT_M8 <= arg2 <= ARGT_M64)
 	{
-		if (ARGT_RM8 <= arg2 <= ARGT_RM64 || ARGT_M8 <= arg2 <= ARGT_M64)
+		if (ARGT_XMM32 <= arg2 <= ARGT_XMM0 || // registers are swapped in ModrM when two XMM no indirect
+			ARGT_RM8 <= arg2 <= ARGT_RM64 || ARGT_M8 <= arg2 <= ARGT_M64)
 		{
 			reloced_arg1 = arg2;
 			reloced_arg2 = arg1;
@@ -503,7 +509,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 		Mod = ModrM >> 6 & 3;
 		RM1 = ModrM & 7 + REX_b;
 		RM2 = ModrM >> 3 & 7 + REX_r;
-		if (Mod < 3 && RM1 & 7 == 4)
+		if (Mod < 3 && RM1 & 7 == 4 && !isXMM) // SSE instructions have lower bit clear and doesn't mean SIB
 			SIB = *rip++;
 		if (Mod == 1) {
 			disp = *rip(U8 *)++;
@@ -539,11 +545,13 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 					ptr = "ST_U32_REGS";
 				else if (reloced_arg2_size == 64)
 					ptr = "ST_U64_REGS";
+				else if (reloced_arg2_size == 128)
+					ptr = "ST_XMM_REGS";
 			}
 			if (ptr)
 				CatPrint(reloced_arg2_st, "%Z", RM2, ptr);
 		}
-		if (RM1 & 7 == 5 && !Mod)
+		if ((RM1 & 7 == 5 || RM1 & 7 == 4 && isXMM) && !Mod)
 		{
 			disp = *rip(I32 *)++;
 			if (seg_size == 64)
@@ -620,6 +628,8 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 					ptr = "ST_U32_REGS";
 				else if (reloced_arg1_size == 64)
 					ptr = "ST_U64_REGS";
+				else if (reloced_arg1_size == 128)
+					ptr = "ST_XMM_REGS";
 				if (ptr)
 					CatPrint(reloced_arg1_st, DefineSub(RM1, ptr));
 			}

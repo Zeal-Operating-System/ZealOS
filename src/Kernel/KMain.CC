@@ -166,23 +166,29 @@ U0 KMain()
 	//Before this point use $LK,"Sound",A="MN:Sound"$() and $LK,"Busy",A="MN:Busy"$()
 	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level, RLf_RAW);
-	"ZealOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;
+	"\nZealOS V%0.2f\t%D %T\n", sys_os_version, sys_compile_time, sys_compile_time;
+	"อออออออออออออออออออออออออออออออออ\n\n";
 
+	"TimerInit;\n";
 	TimerInit;
+
 	if (MemBIOSTotal < ToI64 (0.95 * MEM_MIN_MEG * 0x100000) )
 		RawPrint(4000, "!!! Requires $TX,"256Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 
+	"IntPICInit;\n";
 	IntPICInit;
-	"Enable IRQs\n";
 	RFlagsSet(RFLAGG_NORMAL);
 	Busy(2000);
+	"IntInit2;\n";
 	IntInit2;
 	LBts(&sys_run_level, RLf_INTERRUPTS);
 
+	"TimeCal;\n";
 	TimeCal;
+
 	"BlkDevsInitAll;\n";
 	BlkDevsInitAll;
-	"DiskChange(':');\n";
+	"\nDiskChange(':');\n";
 	DiskChange(':');
 
 	#exe
@@ -211,17 +217,21 @@ U0 KMain()
 	#exe
 	{
 		if (!kernel_config->opts[CONFIG_NO_MP])
-			StreamPrint("\"MultiCore Start\\n\\n\";"
+			StreamPrint("\"\\nCore0StartMP;\\n\\n\";"
 						"Core0StartMP;"
 						"LBts(&sys_run_level, RLf_MP);");
 	};
 
+	"KbdMouseInit;\n";
 	KbdMouseInit;
+	"MouseInit;\n";
 	MouseInit;
+	"KbdInit;\n";
 	KbdInit;
+	"Spawn(&MouseHardDriverInstall);\n\n";
 	Spawn(&MouseHardDriverInstall);
 
-	"Loading Compiler\n";
+	"Load(\"Compiler\");\n";
 	Cd("/Compiler");
 	Load("Compiler", LDF_SILENT);
 	LBts(&sys_run_level, RLf_COMPILER);

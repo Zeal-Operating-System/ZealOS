@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -44,7 +44,7 @@ body {background-color:#fef1f0;}
 <a name="l17"></a>
 <a name="l18"></a>All of the regular page tables are marked, &quot;cached&quot;.    When accessing hardware, however, you need uncached page table.  The 
 <a name="l19"></a>lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, </span><span class=cF2>0x01D7800000</span><span class=cF0>.    See </span><span class=cF4>
-<a name="l20"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l147"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
+<a name="l20"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
 <a name="l21"></a>
 <a name="l22"></a>During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.  It has never 
 <a name="l23"></a>happens to me.
@@ -54,13 +54,13 @@ body {background-color:#fef1f0;}
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF5>                                                Single System-wide Memory Map
 <a name="l29"></a>
-<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036BEF</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036DFF</span><span class=cF0>
 <a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4484"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF2> 0x0000096600- 0x0000096FFF</span><span class=cF0>
 <a name="l34"></a>  Boot block relocated here before loading the Kernel module, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.CC.html#l1"><span class=cF4>BootDVD</span></a><span class=cF0> &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.CC.html#l1"><span class=cF4>BootHD</span></a><span class=cF0>.
 <a name="l35"></a>
-<a name="l36"></a></span><span class=cF2> 0x0000097000- 0x0000097030</span><span class=cF0> Multicore start-up vect code, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF0>.
+<a name="l36"></a></span><span class=cF2> 0x0000097000- 0x000009703B</span><span class=cF0> Multicore start-up vect code, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF0>.
 <a name="l37"></a></span><span class=cF2>~0x000009F000- 0x000009FFFF</span><span class=cF0> Extended BIOS data area.
 <a name="l38"></a></span><span class=cF2> 0x00000A0000- 0x00000BFFFF</span><span class=cF0> VGA graphics mem with alias at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l30"><span class=cF4>text</span></a><span class=cF0>.vga_alias.
 <a name="l39"></a></span><span class=cF2> 0x0000100000- 0x0000101FFF</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4127"><span class=cF4>CSysFixedArea</span></a><span class=cF0> for misc.
@@ -116,6 +116,6 @@ body {background-color:#fef1f0;}
 <a name="l89"></a>
 <a name="l90"></a>Terry's original plan was to allow changing the page tables as needed, so he had code for taking control of 2Meg pages and 
 <a name="l91"></a>marking them uncached or whatever.  When he did an HDAudio driver, he requested some 32-bit address space as uncached.  Today, 
-<a name="l92"></a>all of the first 4Gig can be accessed without caching at the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l147"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
+<a name="l92"></a>all of the first 4Gig can be accessed without caching at the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
 </span></pre></body>
 </html>

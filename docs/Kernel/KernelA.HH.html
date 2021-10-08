@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -1911,7 +1911,7 @@ body {background-color:#fef1f0;}
 <a name="l1884"></a></span><span class=cF2>//Slash value</span><span class=cF0>
 <a name="l1885"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_R_REG</span><span class=cF0>        </span><span class=cFE>8</span><span class=cF0>
 <a name="l1886"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_I_REG</span><span class=cF0>        </span><span class=cFE>9</span><span class=cF0>
-<a name="l1887"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/AsmInit.CC.html#l136"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
+<a name="l1887"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/AsmInit.CC.html#l137"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
 <a name="l1888"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_NONE</span><span class=cF0>         </span><span class=cFE>11</span><span class=cF0>
 <a name="l1889"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CInst</span><span class=cF0>
 <a name="l1890"></a>{
@@ -2389,7 +2389,7 @@ body {background-color:#fef1f0;}
 <a name="l2362"></a>    </span><span class=cF9>I64</span><span class=cF0>                  num_reg_vars, num_non_ptr_vars,
 <a name="l2363"></a>                         stack_tmps_mask, reg_vars_mask, non_ptr_vars_mask;
 <a name="l2364"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *to_reg_vars_map, *non_ptr_vars_map;
-<a name="l2365"></a>    </span><span class=cF9>I64</span><span class=cF0>                  size_arg_mask[</span><span class=cFE>9</span><span class=cF0>],
+<a name="l2365"></a>    </span><span class=cF9>I64</span><span class=cF0>                  size_arg_mask[</span><span class=cFE>17</span><span class=cF0>],
 <a name="l2366"></a>                         compiled_lines;
 <a name="l2367"></a>};
 <a name="l2368"></a>
@@ -3881,7 +3881,7 @@ body {background-color:#fef1f0;}
 <a name="l3854"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l143"><span class=cF4>TaskMessage</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Post message</span><span class=cF0>
 <a name="l3855"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l45"><span class=cF4>TaskExe</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Compile &amp; execute src code text</span><span class=cF0>
 <a name="l3856"></a></span><span class=cF2>//MP cmds</span><span class=cF0>
-<a name="l3857"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>       </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l224"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
+<a name="l3857"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>       </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
 <a name="l3858"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF2>() Tell MP to spawn task</span><span class=cF0>
 <a name="l3859"></a>
 <a name="l3860"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CJob</span><span class=cF0>

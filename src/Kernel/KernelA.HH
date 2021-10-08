@@ -2362,7 +2362,7 @@ public class CCompGlobals
 	I64					 num_reg_vars, num_non_ptr_vars,
 						 stack_tmps_mask, reg_vars_mask, non_ptr_vars_mask;
 	U8					*to_reg_vars_map, *non_ptr_vars_map;
-	I64					 size_arg_mask[9],
+	I64					 size_arg_mask[17],
 						 compiled_lines;
 };
 

@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -369,66 +369,67 @@ body {background-color:#fef1f0;}
 <a name="l342"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
 <a name="l343"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
 <a name="l344"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l345"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l346"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it      = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l347"></a>    Init;
-<a name="l348"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l349"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l350"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l351"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>KeyGet</span><span class=cF7>(</span><span class=cF0>&amp;sc</span><span class=cF7>)</span><span class=cF0>)
-<a name="l352"></a>            {
-<a name="l353"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l354"></a>                    </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l355"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l356"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
-<a name="l357"></a>                            v += </span><span class=cFE>10</span><span class=cF0>;
-<a name="l358"></a>                            </span><span class=cF1>if</span><span class=cF0> (v &gt; </span><span class=cFE>300</span><span class=cF0>)
-<a name="l359"></a>                                v = </span><span class=cFE>300</span><span class=cF0>;
-<a name="l360"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l361"></a>
-<a name="l362"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
-<a name="l363"></a>                            v -= </span><span class=cFE>10</span><span class=cF0>;
-<a name="l364"></a>                            </span><span class=cF1>if</span><span class=cF0> (v &lt; </span><span class=cFE>20</span><span class=cF0>)
-<a name="l365"></a>                                v = </span><span class=cFE>20</span><span class=cF0>;
-<a name="l366"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l367"></a>
-<a name="l368"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l369"></a>                            key_count++;
-<a name="l370"></a>                            thetaf += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>Wrap</span><span class=cF0>(thetaf - theta, -</span><span class=cF3>pi</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
-<a name="l371"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l372"></a>
-<a name="l373"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l374"></a>                            key_count++;
-<a name="l375"></a>                            thetaf -= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>Wrap</span><span class=cF0>(thetaf - theta, -</span><span class=cF3>pi</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
-<a name="l376"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l377"></a>
-<a name="l378"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l379"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l380"></a>
-<a name="l381"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
-<a name="l382"></a>                    key_count++;
-<a name="l383"></a>                    BombDrop(-x - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>8</span><span class=cF0> * FALL_TIME * v * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0>, -y - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>8</span><span class=cF0> * FALL_TIME * v * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0>);
-<a name="l384"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l385"></a>
-<a name="l386"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l387"></a>                    CleanUp;
-<a name="l388"></a>                    Init;
-<a name="l389"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l390"></a>
-<a name="l391"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
-<a name="l392"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l393"></a>                    </span><span class=cF1>goto</span><span class=cF0> bm_done;
-<a name="l394"></a>            }
-<a name="l395"></a>bm_done:
-<a name="l396"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l397"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l398"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l399"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l400"></a>    CleanUp;
-<a name="l401"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l402"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/BomberGolf&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
-<a name="l403"></a>}
-<a name="l404"></a> 
-<a name="l405"></a>BomberGolf;
+<a name="l345"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l346"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l347"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it      = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l348"></a>    Init;
+<a name="l349"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l350"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l351"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l352"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>KeyGet</span><span class=cF7>(</span><span class=cF0>&amp;sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l353"></a>            {
+<a name="l354"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l355"></a>                    </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l356"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l357"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l358"></a>                            v += </span><span class=cFE>10</span><span class=cF0>;
+<a name="l359"></a>                            </span><span class=cF1>if</span><span class=cF0> (v &gt; </span><span class=cFE>300</span><span class=cF0>)
+<a name="l360"></a>                                v = </span><span class=cFE>300</span><span class=cF0>;
+<a name="l361"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l362"></a>
+<a name="l363"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l364"></a>                            v -= </span><span class=cFE>10</span><span class=cF0>;
+<a name="l365"></a>                            </span><span class=cF1>if</span><span class=cF0> (v &lt; </span><span class=cFE>20</span><span class=cF0>)
+<a name="l366"></a>                                v = </span><span class=cFE>20</span><span class=cF0>;
+<a name="l367"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l368"></a>
+<a name="l369"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l370"></a>                            key_count++;
+<a name="l371"></a>                            thetaf += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>Wrap</span><span class=cF0>(thetaf - theta, -</span><span class=cF3>pi</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
+<a name="l372"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l373"></a>
+<a name="l374"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l375"></a>                            key_count++;
+<a name="l376"></a>                            thetaf -= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>Wrap</span><span class=cF0>(thetaf - theta, -</span><span class=cF3>pi</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
+<a name="l377"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l378"></a>
+<a name="l379"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l380"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l381"></a>
+<a name="l382"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l383"></a>                    key_count++;
+<a name="l384"></a>                    BombDrop(-x - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>8</span><span class=cF0> * FALL_TIME * v * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0>, -y - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>8</span><span class=cF0> * FALL_TIME * v * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0>);
+<a name="l385"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l386"></a>
+<a name="l387"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l388"></a>                    CleanUp;
+<a name="l389"></a>                    Init;
+<a name="l390"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l391"></a>
+<a name="l392"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l393"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l394"></a>                    </span><span class=cF1>goto</span><span class=cF0> bm_done;
+<a name="l395"></a>            }
+<a name="l396"></a>bm_done:
+<a name="l397"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l398"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l399"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l400"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l401"></a>    CleanUp;
+<a name="l402"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l403"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/BomberGolf&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
+<a name="l404"></a>}
+<a name="l405"></a> 
+<a name="l406"></a>BomberGolf;
 </span></pre></body>
 </html>

@@ -146,14 +146,6 @@ I64 IntEntryAlloc()
 	return res;
 }
 
-I64 IntEntryFree(I64 irq)
-{ // 'Free' a user irq num. Unsets bit in user irq bitmap.
-	if (0xFF >= irq >= 0xFF - 64)
-		return Btr(&dev.user_int_bitmap, irq - 192);
-	else
-		return 0;
-}
-
 U0 IntPICInit()
 {//Init 8259
 	OutU8(PIC_1, PIC_INIT); //IW (Initialization Word) 1
@@ -174,6 +166,17 @@ interrupt U0 IntNop()
 	OutU8(PIC_2, PIC_EOI);
 	OutU8(PIC_1, PIC_EOI);
 	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+}
+
+I64 IntEntryFree(I64 irq)
+{ // 'Free' a user irq num. Unsets bit in user irq bitmap.
+	I64 res = 0;
+
+	if (0xFF >= irq >= 0xFF - 64)
+		if (res = Btr(&dev.user_int_bitmap, irq - 192))
+			IntEntrySet(irq, &IntNop); // clear the irq entry vect
+
+	return res;
 }
 
 interrupt U0 IntDivZero()

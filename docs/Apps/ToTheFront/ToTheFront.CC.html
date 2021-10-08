@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -217,57 +217,58 @@ body {background-color:#fef1f0;}
 <a name="l190"></a>                </span><span class=cF6>&quot;$GREEN$  2$FG$\tPlayer 2 view.\n&quot;</span><span class=cF0>
 <a name="l191"></a>                </span><span class=cF6>&quot;$GREEN$  c$FG$\tView odds calculations.\n&quot;</span><span class=cF0>
 <a name="l192"></a>                </span><span class=cF6>&quot;$GREEN$  d$FG$\tSet animation delay.&quot;</span><span class=cF0>);
-<a name="l193"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;TaskEndCB; </span><span class=cF2>//&lt;CTRL-ALT-x&gt;</span><span class=cF0>
-<a name="l194"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l195"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l196"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l197"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l198"></a>        {
-<a name="l199"></a>            res = PhaseDo;
-<a name="l200"></a>            </span><span class=cF1>if</span><span class=cF0> (res == </span><span class=cF6>'GameOver'</span><span class=cF0>)
-<a name="l201"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l202"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l203"></a>                {
-<a name="l204"></a>                    message_off_timeout = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l205"></a>                    </span><span class=cF5>StrCopy</span><span class=cF0>(message_buf, </span><span class=cF6>&quot;Game Over&quot;</span><span class=cF0>);
-<a name="l206"></a>                    </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l207"></a>                    ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l208"></a>                    </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
-<a name="l209"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l210"></a>                        CleanUp;
-<a name="l211"></a>                        Init;
-<a name="l212"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l213"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l214"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>)
-<a name="l215"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l216"></a>                        res = </span><span class=cF6>'ExitGame'</span><span class=cF0>;
-<a name="l217"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l218"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l219"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'1'</span><span class=cF0>)
-<a name="l220"></a>                        ViewPlayerSet(</span><span class=cFE>0</span><span class=cF0>);
-<a name="l221"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'2'</span><span class=cF0>)
-<a name="l222"></a>                        ViewPlayerSet(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l223"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'d'</span><span class=cF0>)
-<a name="l224"></a>                        AnimationDelaySet;
-<a name="l225"></a>                }
-<a name="l226"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l227"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (res == </span><span class=cF6>'NewGame'</span><span class=cF0>)
-<a name="l228"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l229"></a>                CleanUp;
-<a name="l230"></a>                Init;
-<a name="l231"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l232"></a>        }
-<a name="l233"></a>        </span><span class=cF1>while</span><span class=cF0> (res != </span><span class=cF6>'ExitGame'</span><span class=cF0>);
-<a name="l234"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l235"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l236"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l237"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
-<a name="l238"></a>
-<a name="l239"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l240"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(map_dc);
-<a name="l241"></a>    CleanUp;
-<a name="l242"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l243"></a>    </span><span class=cF5>Seed</span><span class=cF0>;
-<a name="l244"></a>}
+<a name="l193"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l194"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;TaskEndCB; </span><span class=cF2>//&lt;CTRL-ALT-x&gt;</span><span class=cF0>
+<a name="l195"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l196"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l197"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l198"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l199"></a>        {
+<a name="l200"></a>            res = PhaseDo;
+<a name="l201"></a>            </span><span class=cF1>if</span><span class=cF0> (res == </span><span class=cF6>'GameOver'</span><span class=cF0>)
+<a name="l202"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l203"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l204"></a>                {
+<a name="l205"></a>                    message_off_timeout = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l206"></a>                    </span><span class=cF5>StrCopy</span><span class=cF0>(message_buf, </span><span class=cF6>&quot;Game Over&quot;</span><span class=cF0>);
+<a name="l207"></a>                    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l208"></a>                    ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l209"></a>                    </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
+<a name="l210"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l211"></a>                        CleanUp;
+<a name="l212"></a>                        Init;
+<a name="l213"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l214"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l215"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>)
+<a name="l216"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l217"></a>                        res = </span><span class=cF6>'ExitGame'</span><span class=cF0>;
+<a name="l218"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l219"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l220"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'1'</span><span class=cF0>)
+<a name="l221"></a>                        ViewPlayerSet(</span><span class=cFE>0</span><span class=cF0>);
+<a name="l222"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'2'</span><span class=cF0>)
+<a name="l223"></a>                        ViewPlayerSet(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l224"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'d'</span><span class=cF0>)
+<a name="l225"></a>                        AnimationDelaySet;
+<a name="l226"></a>                }
+<a name="l227"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l228"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (res == </span><span class=cF6>'NewGame'</span><span class=cF0>)
+<a name="l229"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l230"></a>                CleanUp;
+<a name="l231"></a>                Init;
+<a name="l232"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l233"></a>        }
+<a name="l234"></a>        </span><span class=cF1>while</span><span class=cF0> (res != </span><span class=cF6>'ExitGame'</span><span class=cF0>);
+<a name="l235"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l236"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l237"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l238"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
+<a name="l239"></a>
+<a name="l240"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l241"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(map_dc);
+<a name="l242"></a>    CleanUp;
+<a name="l243"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l244"></a>    </span><span class=cF5>Seed</span><span class=cF0>;
+<a name="l245"></a>}
 </span></pre></body>
 </html>

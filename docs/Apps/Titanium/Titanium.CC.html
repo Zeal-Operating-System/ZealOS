@@ -2,29 +2,29 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cE0{color:#000000;background-color:#c7ab00;}
-.cE1{color:#0148a4;background-color:#c7ab00;}
-.cEA{color:#82bc49;background-color:#c7ab00;}
-.cEE{color:#c7ab00;background-color:#c7ab00;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cE0{color:#e3e3e3;background-color:#d4b475;}
+.cE1{color:#4f84a6;background-color:#d4b475;}
+.cEA{color:#a1ce97;background-color:#d4b475;}
+.cEE{color:#d4b475;background-color:#d4b475;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -932,175 +932,176 @@ body {background-color:#fef1f0;}
 <a name="l901"></a>    </span><span class=cF5>PressAKey</span><span class=cF0>;
 <a name="l902"></a>
 <a name="l903"></a>    Init;
-<a name="l904"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l905"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l906"></a>
-<a name="l907"></a>    gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l908"></a>
-<a name="l909"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l910"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l911"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l912"></a>        {
-<a name="l913"></a>            next_update_jiffy = </span><span class=cFB>counts</span><span class=cF0>.jiffies + </span><span class=cF3>JIFFY_FREQ</span><span class=cF0> / </span><span class=cFE>100</span><span class=cF0>;
-<a name="l914"></a>            </span><span class=cF1>while</span><span class=cF0> (message_code = </span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, &amp;sc, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF7>)</span><span class=cF0>)
-<a name="l915"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l916"></a>                </span><span class=cF1>switch</span><span class=cF0> (message_code)
-<a name="l917"></a>                {
-<a name="l918"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
-<a name="l919"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
-<a name="l920"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l921"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l922"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l923"></a>                                {
-<a name="l924"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l925"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
-<a name="l926"></a>                                            FireMissile(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l927"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l928"></a>
-<a name="l929"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l930"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
-<a name="l931"></a>                                            FireMissile(-</span><span class=cFE>1</span><span class=cF0>);
-<a name="l932"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l933"></a>                                }
-<a name="l934"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l935"></a>
-<a name="l936"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l937"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
-<a name="l938"></a>                                </span><span class=cF1>goto</span><span class=cF0> to_done;
-<a name="l939"></a>
-<a name="l940"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l941"></a>                                Init;
-<a name="l942"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l943"></a>
-<a name="l944"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
-<a name="l945"></a>                                gun_on = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l946"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l947"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l948"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l949"></a>
-<a name="l950"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>:
-<a name="l951"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SPACE</span><span class=cF0>)
-<a name="l952"></a>                            gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l953"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0> || sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>)
-<a name="l954"></a>                            theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l955"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l956"></a>                }
-<a name="l957"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l958"></a>
-<a name="l959"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; B_NUM; i++)
-<a name="l960"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l961"></a>                </span><span class=cF1>if</span><span class=cF0> (!b[i].dead)
-<a name="l962"></a>                {
-<a name="l963"></a>                    b[i].x += b[i].dx2;
-<a name="l964"></a>                    b[i].y += b[i].dy2;
-<a name="l965"></a>                    </span><span class=cF1>if</span><span class=cF0> (b[i].y &lt; </span><span class=cFE>0</span><span class=cF0> || b[i].x &lt; </span><span class=cFE>0</span><span class=cF0> || b[i].x &gt;&gt; </span><span class=cFE>32</span><span class=cF0> &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width || b[i].y &gt;&gt; </span><span class=cFE>32</span><span class=cF0> &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height)
-<a name="l966"></a>                        b[i].dead = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l967"></a>                }
-<a name="l968"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l969"></a>
-<a name="l970"></a>            dx = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l971"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CTRL</span><span class=cF7>)</span><span class=cF0>)
-<a name="l972"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l973"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF7>)</span><span class=cF0>)
-<a name="l974"></a>                {
-<a name="l975"></a>                    theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>15</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l976"></a>                    dx = -</span><span class=cFE>2</span><span class=cF0>;
-<a name="l977"></a>                }
-<a name="l978"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF7>)</span><span class=cF0>)
-<a name="l979"></a>                {
-<a name="l980"></a>                    theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>15</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l981"></a>                    dx = </span><span class=cFE>2</span><span class=cF0>;
-<a name="l982"></a>                }
-<a name="l983"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l984"></a>            x += dx;
-<a name="l985"></a>            </span><span class=cF1>while</span><span class=cF0> (x &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width)
-<a name="l986"></a>                x -= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
-<a name="l987"></a>            </span><span class=cF1>while</span><span class=cF0> (x &lt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l988"></a>                x += </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
-<a name="l989"></a>
-<a name="l990"></a>            </span><span class=cF2>//It takes too much CPU do do all these all the time.</span><span class=cF0>
-<a name="l991"></a>            </span><span class=cF1>switch</span><span class=cF0> [main_loop_pass &amp; </span><span class=cFE>7</span><span class=cF0>]
-<a name="l992"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l993"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l994"></a>                    </span><span class=cF1>switch</span><span class=cF0> [main_loop_pass &gt;&gt; </span><span class=cFE>3</span><span class=cF0> &amp; </span><span class=cFE>7</span><span class=cF0>]
-<a name="l995"></a>                    {
-<a name="l996"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l997"></a>                            </span><span class=cF1>if</span><span class=cF0> (--y &lt; </span><span class=cFE>20</span><span class=cF0>)
-<a name="l998"></a>                                game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l999"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l1000"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0>:
-<a name="l1001"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>6</span><span class=cF0>:
-<a name="l1002"></a>                            MenFight(main_loop_pass &gt;&gt; </span><span class=cFE>4</span><span class=cF0> % PHASES_GROUPS);
-<a name="l1003"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1004"></a>
-<a name="l1005"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l1006"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
-<a name="l1007"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>5</span><span class=cF0>:
-<a name="l1008"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>7</span><span class=cF0>:
-<a name="l1009"></a>                            MenMove (main_loop_pass &gt;&gt; </span><span class=cFE>4</span><span class=cF0> % PHASES_GROUPS);
-<a name="l1010"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1011"></a>                    }
-<a name="l1012"></a>
-<a name="l1013"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0>:
-<a name="l1014"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1015"></a>
-<a name="l1016"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l1017"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>6</span><span class=cF0>:
-<a name="l1018"></a>                    </span><span class=cF1>if</span><span class=cF0> (gun_on)
-<a name="l1019"></a>                        FireBullet;
-<a name="l1020"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1021"></a>
-<a name="l1022"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l1023"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
-<a name="l1024"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>5</span><span class=cF0>:
-<a name="l1025"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>7</span><span class=cF0>:
-<a name="l1026"></a>                    CheckCollisions;
-<a name="l1027"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1028"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1029"></a>            main_loop_pass++;
-<a name="l1030"></a>
-<a name="l1031"></a>            </span><span class=cF1>if</span><span class=cF0> (sound_timeout &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; sound_timeout)
-<a name="l1032"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1033"></a>                sound_timeout = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1034"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l1035"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1036"></a>            </span><span class=cF5>SleepUntil</span><span class=cF0>(next_update_jiffy);
-<a name="l1037"></a>
-<a name="l1038"></a>            total_score = </span><span class=cFE>3</span><span class=cF0> * (U_ENEMY_NUM - enemy_left) +
-<a name="l1039"></a>                          </span><span class=cFE>5</span><span class=cF0> * enemy_by_friendly - </span><span class=cFE>100</span><span class=cF0> * friendly_fire - </span><span class=cFE>10</span><span class=cF0> * (</span><span class=cF5>tS</span><span class=cF0> - t0) - bullets_fired;
-<a name="l1040"></a>            </span><span class=cF1>if</span><span class=cF0> (game_over)
-<a name="l1041"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1042"></a>                tf = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l1043"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>750</span><span class=cF0>);
-<a name="l1044"></a>                </span><span class=cF5>FlushMessages</span><span class=cF0>;
-<a name="l1045"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>KeyScan</span><span class=cF7>(</span><span class=cF0>&amp;ch</span><span class=cF7>)</span><span class=cF0> &amp;&amp; friendly_left || </span><span class=cF5>tS</span><span class=cF0> - tf &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>)
-<a name="l1046"></a>                {
-<a name="l1047"></a>                    total_score += </span><span class=cFE>250</span><span class=cF0>;
-<a name="l1048"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>86</span><span class=cF0>);
-<a name="l1049"></a>                    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>150</span><span class=cF0>);
-<a name="l1050"></a>                    </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l1051"></a>                    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0>);
-<a name="l1052"></a>                    friendly_left--;
-<a name="l1053"></a>                }
-<a name="l1054"></a>                total_score += </span><span class=cFE>250</span><span class=cF0> * friendly_left;
-<a name="l1055"></a>                </span><span class=cF1>if</span><span class=cF0> (total_score &gt; best_score)
-<a name="l1056"></a>                    best_score = total_score;
-<a name="l1057"></a>                </span><span class=cF1>if</span><span class=cF0> (!ch)
-<a name="l1058"></a>                    ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l1059"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>)
-<a name="l1060"></a>                    </span><span class=cF1>goto</span><span class=cF0> to_done;
-<a name="l1061"></a>                gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1062"></a>                Init;
-<a name="l1063"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1064"></a>        }
-<a name="l1065"></a>to_done:
-<a name="l1066"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
-<a name="l1067"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1068"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l1069"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l1070"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l1071"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l1072"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/Titanium&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
-<a name="l1073"></a>}
+<a name="l904"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l905"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l906"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l907"></a>
+<a name="l908"></a>    gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l909"></a>
+<a name="l910"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l911"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l912"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l913"></a>        {
+<a name="l914"></a>            next_update_jiffy = </span><span class=cFB>counts</span><span class=cF0>.jiffies + </span><span class=cF3>JIFFY_FREQ</span><span class=cF0> / </span><span class=cFE>100</span><span class=cF0>;
+<a name="l915"></a>            </span><span class=cF1>while</span><span class=cF0> (message_code = </span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, &amp;sc, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l916"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l917"></a>                </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l918"></a>                {
+<a name="l919"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l920"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l921"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l922"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l923"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l924"></a>                                {
+<a name="l925"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l926"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
+<a name="l927"></a>                                            FireMissile(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l928"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l929"></a>
+<a name="l930"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l931"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
+<a name="l932"></a>                                            FireMissile(-</span><span class=cFE>1</span><span class=cF0>);
+<a name="l933"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l934"></a>                                }
+<a name="l935"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l936"></a>
+<a name="l937"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l938"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l939"></a>                                </span><span class=cF1>goto</span><span class=cF0> to_done;
+<a name="l940"></a>
+<a name="l941"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l942"></a>                                Init;
+<a name="l943"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l944"></a>
+<a name="l945"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l946"></a>                                gun_on = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l947"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l948"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l949"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l950"></a>
+<a name="l951"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>:
+<a name="l952"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SPACE</span><span class=cF0>)
+<a name="l953"></a>                            gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l954"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0> || sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>)
+<a name="l955"></a>                            theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l956"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l957"></a>                }
+<a name="l958"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l959"></a>
+<a name="l960"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; B_NUM; i++)
+<a name="l961"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l962"></a>                </span><span class=cF1>if</span><span class=cF0> (!b[i].dead)
+<a name="l963"></a>                {
+<a name="l964"></a>                    b[i].x += b[i].dx2;
+<a name="l965"></a>                    b[i].y += b[i].dy2;
+<a name="l966"></a>                    </span><span class=cF1>if</span><span class=cF0> (b[i].y &lt; </span><span class=cFE>0</span><span class=cF0> || b[i].x &lt; </span><span class=cFE>0</span><span class=cF0> || b[i].x &gt;&gt; </span><span class=cFE>32</span><span class=cF0> &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width || b[i].y &gt;&gt; </span><span class=cFE>32</span><span class=cF0> &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height)
+<a name="l967"></a>                        b[i].dead = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l968"></a>                }
+<a name="l969"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l970"></a>
+<a name="l971"></a>            dx = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l972"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CTRL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l973"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l974"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l975"></a>                {
+<a name="l976"></a>                    theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>15</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l977"></a>                    dx = -</span><span class=cFE>2</span><span class=cF0>;
+<a name="l978"></a>                }
+<a name="l979"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l980"></a>                {
+<a name="l981"></a>                    theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>15</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l982"></a>                    dx = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l983"></a>                }
+<a name="l984"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l985"></a>            x += dx;
+<a name="l986"></a>            </span><span class=cF1>while</span><span class=cF0> (x &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width)
+<a name="l987"></a>                x -= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
+<a name="l988"></a>            </span><span class=cF1>while</span><span class=cF0> (x &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l989"></a>                x += </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
+<a name="l990"></a>
+<a name="l991"></a>            </span><span class=cF2>//It takes too much CPU do do all these all the time.</span><span class=cF0>
+<a name="l992"></a>            </span><span class=cF1>switch</span><span class=cF0> [main_loop_pass &amp; </span><span class=cFE>7</span><span class=cF0>]
+<a name="l993"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l994"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l995"></a>                    </span><span class=cF1>switch</span><span class=cF0> [main_loop_pass &gt;&gt; </span><span class=cFE>3</span><span class=cF0> &amp; </span><span class=cFE>7</span><span class=cF0>]
+<a name="l996"></a>                    {
+<a name="l997"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l998"></a>                            </span><span class=cF1>if</span><span class=cF0> (--y &lt; </span><span class=cFE>20</span><span class=cF0>)
+<a name="l999"></a>                                game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1000"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l1001"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0>:
+<a name="l1002"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>6</span><span class=cF0>:
+<a name="l1003"></a>                            MenFight(main_loop_pass &gt;&gt; </span><span class=cFE>4</span><span class=cF0> % PHASES_GROUPS);
+<a name="l1004"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1005"></a>
+<a name="l1006"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l1007"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
+<a name="l1008"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>5</span><span class=cF0>:
+<a name="l1009"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>7</span><span class=cF0>:
+<a name="l1010"></a>                            MenMove (main_loop_pass &gt;&gt; </span><span class=cFE>4</span><span class=cF0> % PHASES_GROUPS);
+<a name="l1011"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1012"></a>                    }
+<a name="l1013"></a>
+<a name="l1014"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0>:
+<a name="l1015"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1016"></a>
+<a name="l1017"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l1018"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>6</span><span class=cF0>:
+<a name="l1019"></a>                    </span><span class=cF1>if</span><span class=cF0> (gun_on)
+<a name="l1020"></a>                        FireBullet;
+<a name="l1021"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1022"></a>
+<a name="l1023"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l1024"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
+<a name="l1025"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>5</span><span class=cF0>:
+<a name="l1026"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>7</span><span class=cF0>:
+<a name="l1027"></a>                    CheckCollisions;
+<a name="l1028"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1029"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1030"></a>            main_loop_pass++;
+<a name="l1031"></a>
+<a name="l1032"></a>            </span><span class=cF1>if</span><span class=cF0> (sound_timeout &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; sound_timeout)
+<a name="l1033"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1034"></a>                sound_timeout = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1035"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l1036"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1037"></a>            </span><span class=cF5>SleepUntil</span><span class=cF0>(next_update_jiffy);
+<a name="l1038"></a>
+<a name="l1039"></a>            total_score = </span><span class=cFE>3</span><span class=cF0> * (U_ENEMY_NUM - enemy_left) +
+<a name="l1040"></a>                          </span><span class=cFE>5</span><span class=cF0> * enemy_by_friendly - </span><span class=cFE>100</span><span class=cF0> * friendly_fire - </span><span class=cFE>10</span><span class=cF0> * (</span><span class=cF5>tS</span><span class=cF0> - t0) - bullets_fired;
+<a name="l1041"></a>            </span><span class=cF1>if</span><span class=cF0> (game_over)
+<a name="l1042"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1043"></a>                tf = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l1044"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>750</span><span class=cF0>);
+<a name="l1045"></a>                </span><span class=cF5>FlushMessages</span><span class=cF0>;
+<a name="l1046"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>KeyScan</span><span class=cF7>(</span><span class=cF0>&amp;ch</span><span class=cF7>)</span><span class=cF0> &amp;&amp; friendly_left || </span><span class=cF5>tS</span><span class=cF0> - tf &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>)
+<a name="l1047"></a>                {
+<a name="l1048"></a>                    total_score += </span><span class=cFE>250</span><span class=cF0>;
+<a name="l1049"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>86</span><span class=cF0>);
+<a name="l1050"></a>                    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>150</span><span class=cF0>);
+<a name="l1051"></a>                    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l1052"></a>                    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0>);
+<a name="l1053"></a>                    friendly_left--;
+<a name="l1054"></a>                }
+<a name="l1055"></a>                total_score += </span><span class=cFE>250</span><span class=cF0> * friendly_left;
+<a name="l1056"></a>                </span><span class=cF1>if</span><span class=cF0> (total_score &gt; best_score)
+<a name="l1057"></a>                    best_score = total_score;
+<a name="l1058"></a>                </span><span class=cF1>if</span><span class=cF0> (!ch)
+<a name="l1059"></a>                    ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1060"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>)
+<a name="l1061"></a>                    </span><span class=cF1>goto</span><span class=cF0> to_done;
+<a name="l1062"></a>                gun_on = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1063"></a>                Init;
+<a name="l1064"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1065"></a>        }
+<a name="l1066"></a>to_done:
+<a name="l1067"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l1068"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1069"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l1070"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l1071"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l1072"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l1073"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/Titanium&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
+<a name="l1074"></a>}
 </span></pre></body>
 </html>

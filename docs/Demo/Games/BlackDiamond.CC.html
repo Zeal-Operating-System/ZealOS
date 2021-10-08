@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -345,112 +345,113 @@ body {background-color:#fef1f0;}
 <a name="l318"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
 <a name="l319"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
 <a name="l320"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l321"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l322"></a>
-<a name="l323"></a>    Init;
-<a name="l324"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l325"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l326"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l327"></a>        {
-<a name="l328"></a>bd_restart:
-<a name="l329"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(obj_x, obj_saved_x, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>obj_x</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//Wolves move. We must reset the</span><span class=cF0>
-<a name="l330"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(obj_y, obj_saved_y, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>obj_y</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//wolves if running same game.</span><span class=cF0>
-<a name="l331"></a>
-<a name="l332"></a>            game_over = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l333"></a>            screen_top_y = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l334"></a>            x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
-<a name="l335"></a>            y = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l336"></a>            penalty = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l337"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l338"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l339"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>KeyScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, &amp;sc</span><span class=cF7>)</span><span class=cF0>)
-<a name="l340"></a>                {
-<a name="l341"></a>                    </span><span class=cF1>switch</span><span class=cF0> (ch)
-<a name="l342"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l343"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l344"></a>                            </span><span class=cF1>if</span><span class=cF0> (!game_over)
-<a name="l345"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l346"></a>                                {
-<a name="l347"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l348"></a>                                        x += </span><span class=cFE>10</span><span class=cF0>;
-<a name="l349"></a>                                        </span><span class=cF1>if</span><span class=cF0> (x &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width)
-<a name="l350"></a>                                            x -= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
-<a name="l351"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l352"></a>
-<a name="l353"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l354"></a>                                        x -= </span><span class=cFE>10</span><span class=cF0>;
-<a name="l355"></a>                                        </span><span class=cF1>if</span><span class=cF0> (x &lt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l356"></a>                                            x += </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
-<a name="l357"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l358"></a>
-<a name="l359"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
-<a name="l360"></a>                                        y -= </span><span class=cFE>10</span><span class=cF0>;
-<a name="l361"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l362"></a>
-<a name="l363"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
-<a name="l364"></a>                                        y += </span><span class=cFE>10</span><span class=cF0>;
-<a name="l365"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l366"></a>                                }
-<a name="l367"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l368"></a>
-<a name="l369"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
-<a name="l370"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l371"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_done;
-<a name="l372"></a>
-<a name="l373"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l374"></a>                            Init;
-<a name="l375"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_restart;
-<a name="l376"></a>
-<a name="l377"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
-<a name="l378"></a>                            game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l379"></a>                            </span><span class=cF1>while</span><span class=cF0> (screen_top_y &gt; </span><span class=cFE>0</span><span class=cF0> || y &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l380"></a>                            {</span><span class=cF2>//Animate going back to top.</span><span class=cF0>
-<a name="l381"></a>                                screen_top_y = </span><span class=cF5>MaxI64</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, screen_top_y - </span><span class=cFE>4</span><span class=cF0>);
-<a name="l382"></a>                                y = </span><span class=cF5>MaxI64</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, y - </span><span class=cFE>4</span><span class=cF0>);
-<a name="l383"></a>                                x += </span><span class=cF5>SignI64</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - x);
-<a name="l384"></a>                                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l385"></a>                            }
-<a name="l386"></a>                            </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l387"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_restart;
-<a name="l388"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l389"></a></span><span class=cF2>//Don't want keystrokes building-up in the buf.</span><span class=cF0>
-<a name="l390"></a>                    </span><span class=cF5>FlushMessages</span><span class=cF0>;
-<a name="l391"></a>                }
-<a name="l392"></a>                </span><span class=cF1>if</span><span class=cF0> (!game_over)
-<a name="l393"></a>                {
-<a name="l394"></a>                    y += </span><span class=cFE>2</span><span class=cF0>;
-<a name="l395"></a>                    screen_top_y++;
-<a name="l396"></a>                    </span><span class=cF1>if</span><span class=cF0> (y - screen_top_y &gt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height)
-<a name="l397"></a>                    </span><span class=cF7>{</span><span class=cF2>//Animate scrolling screen.</span><span class=cF0>
-<a name="l398"></a>                        </span><span class=cF1>while</span><span class=cF0> (y - screen_top_y &gt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &gt;&gt; </span><span class=cFE>1</span><span class=cF0>)
-<a name="l399"></a>                        {
-<a name="l400"></a>                            screen_top_y += </span><span class=cFE>2</span><span class=cF0>;
-<a name="l401"></a>                            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l402"></a>                        }
-<a name="l403"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l404"></a>                    </span><span class=cF1>if</span><span class=cF0> (y &gt;= MAP_HEIGHT)
-<a name="l405"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l406"></a>                        game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l407"></a>                        </span><span class=cF5>Beep</span><span class=cF0>;
-<a name="l408"></a>                        </span><span class=cF1>if</span><span class=cF0> (penalty &lt;= best_score)
-<a name="l409"></a>                        {
-<a name="l410"></a>                            best_score = penalty;
-<a name="l411"></a>                            </span><span class=cF5>Beep</span><span class=cF0>;
-<a name="l412"></a>                        }
-<a name="l413"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l414"></a>                }
-<a name="l415"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
-<a name="l416"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l417"></a>        }
-<a name="l418"></a>bd_done:
-<a name="l419"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l420"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l421"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l422"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l423"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l424"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/BlackDiamond&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
-<a name="l425"></a>}
-<a name="l426"></a>
-<a name="l427"></a>BlackDiamond; </span><span class=cF2>//Start game when #included.</span><span class=cF0>
+<a name="l321"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l322"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l323"></a>
+<a name="l324"></a>    Init;
+<a name="l325"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l326"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l327"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l328"></a>        {
+<a name="l329"></a>bd_restart:
+<a name="l330"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(obj_x, obj_saved_x, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>obj_x</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//Wolves move. We must reset the</span><span class=cF0>
+<a name="l331"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(obj_y, obj_saved_y, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>obj_y</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//wolves if running same game.</span><span class=cF0>
+<a name="l332"></a>
+<a name="l333"></a>            game_over = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l334"></a>            screen_top_y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l335"></a>            x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l336"></a>            y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l337"></a>            penalty = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l338"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l339"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l340"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>KeyScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, &amp;sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l341"></a>                {
+<a name="l342"></a>                    </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l343"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l344"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l345"></a>                            </span><span class=cF1>if</span><span class=cF0> (!game_over)
+<a name="l346"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l347"></a>                                {
+<a name="l348"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l349"></a>                                        x += </span><span class=cFE>10</span><span class=cF0>;
+<a name="l350"></a>                                        </span><span class=cF1>if</span><span class=cF0> (x &gt;= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width)
+<a name="l351"></a>                                            x -= </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
+<a name="l352"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l353"></a>
+<a name="l354"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l355"></a>                                        x -= </span><span class=cFE>10</span><span class=cF0>;
+<a name="l356"></a>                                        </span><span class=cF1>if</span><span class=cF0> (x &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l357"></a>                                            x += </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
+<a name="l358"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l359"></a>
+<a name="l360"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l361"></a>                                        y -= </span><span class=cFE>10</span><span class=cF0>;
+<a name="l362"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l363"></a>
+<a name="l364"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l365"></a>                                        y += </span><span class=cFE>10</span><span class=cF0>;
+<a name="l366"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l367"></a>                                }
+<a name="l368"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l369"></a>
+<a name="l370"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l371"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l372"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_done;
+<a name="l373"></a>
+<a name="l374"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l375"></a>                            Init;
+<a name="l376"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_restart;
+<a name="l377"></a>
+<a name="l378"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l379"></a>                            game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l380"></a>                            </span><span class=cF1>while</span><span class=cF0> (screen_top_y &gt; </span><span class=cFE>0</span><span class=cF0> || y &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l381"></a>                            {</span><span class=cF2>//Animate going back to top.</span><span class=cF0>
+<a name="l382"></a>                                screen_top_y = </span><span class=cF5>MaxI64</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, screen_top_y - </span><span class=cFE>4</span><span class=cF0>);
+<a name="l383"></a>                                y = </span><span class=cF5>MaxI64</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, y - </span><span class=cFE>4</span><span class=cF0>);
+<a name="l384"></a>                                x += </span><span class=cF5>SignI64</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - x);
+<a name="l385"></a>                                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l386"></a>                            }
+<a name="l387"></a>                            </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l388"></a>                            </span><span class=cF1>goto</span><span class=cF0> bd_restart;
+<a name="l389"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l390"></a></span><span class=cF2>//Don't want keystrokes building-up in the buf.</span><span class=cF0>
+<a name="l391"></a>                    </span><span class=cF5>FlushMessages</span><span class=cF0>;
+<a name="l392"></a>                }
+<a name="l393"></a>                </span><span class=cF1>if</span><span class=cF0> (!game_over)
+<a name="l394"></a>                {
+<a name="l395"></a>                    y += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l396"></a>                    screen_top_y++;
+<a name="l397"></a>                    </span><span class=cF1>if</span><span class=cF0> (y - screen_top_y &gt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height)
+<a name="l398"></a>                    </span><span class=cF7>{</span><span class=cF2>//Animate scrolling screen.</span><span class=cF0>
+<a name="l399"></a>                        </span><span class=cF1>while</span><span class=cF0> (y - screen_top_y &gt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &gt;&gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l400"></a>                        {
+<a name="l401"></a>                            screen_top_y += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l402"></a>                            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l403"></a>                        }
+<a name="l404"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l405"></a>                    </span><span class=cF1>if</span><span class=cF0> (y &gt;= MAP_HEIGHT)
+<a name="l406"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l407"></a>                        game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l408"></a>                        </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l409"></a>                        </span><span class=cF1>if</span><span class=cF0> (penalty &lt;= best_score)
+<a name="l410"></a>                        {
+<a name="l411"></a>                            best_score = penalty;
+<a name="l412"></a>                            </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l413"></a>                        }
+<a name="l414"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l415"></a>                }
+<a name="l416"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
+<a name="l417"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l418"></a>        }
+<a name="l419"></a>bd_done:
+<a name="l420"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l421"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l422"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l423"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l424"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l425"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/BlackDiamond&quot;</span><span class=cF0>, </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>, best_score);
+<a name="l426"></a>}
+<a name="l427"></a>
+<a name="l428"></a>BlackDiamond; </span><span class=cF2>//Start game when #included.</span><span class=cF0>
 </span></pre></body>
 </html>

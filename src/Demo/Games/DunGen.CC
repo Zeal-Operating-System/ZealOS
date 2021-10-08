@@ -366,6 +366,7 @@ U0 DunGen()
 	DocCursor;
 	DocClear;
 	Init;
+	PaletteSetLight(FALSE);
 	Fs->animate_task = Spawn(&AnimateTask, NULL, "Animate",, Fs);
 	Fs->draw_it		 = &DrawIt;
 

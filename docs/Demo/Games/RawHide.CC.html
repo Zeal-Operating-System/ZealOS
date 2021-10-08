@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -629,46 +629,47 @@ body {background-color:#fef1f0;}
 <a name="l602"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
 <a name="l603"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
 <a name="l604"></a>    Init;
-<a name="l605"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l606"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it      = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l607"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l608"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l609"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l610"></a>        {
-<a name="l611"></a>            message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_DOWN</span><span class=cF0>);
-<a name="l612"></a>            </span><span class=cF1>switch</span><span class=cF0> (message_code)
-<a name="l613"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l614"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:  </span><span class=cF2>//Doesn't do anything, yet.</span><span class=cF0>
-<a name="l615"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l616"></a>
-<a name="l617"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_DOWN</span><span class=cF0>:  </span><span class=cF2>//Doesn't do anything, yet.</span><span class=cF0>
-<a name="l618"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l619"></a>
-<a name="l620"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
-<a name="l621"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
-<a name="l622"></a>                    {
-<a name="l623"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l624"></a>                            ReInit;
-<a name="l625"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l626"></a>
-<a name="l627"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l628"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
-<a name="l629"></a>                            </span><span class=cF1>goto</span><span class=cF0> rh_done;
-<a name="l630"></a>                    }
-<a name="l631"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l632"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l633"></a>        }
-<a name="l634"></a>rh_done:
-<a name="l635"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
-<a name="l636"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l637"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l638"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l639"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l640"></a>    CleanUp;
-<a name="l641"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l642"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/RawHide&quot;</span><span class=cF0>, </span><span class=cF6>&quot;F64 best_score=%5.4f;\n&quot;</span><span class=cF0>, best_score);
-<a name="l643"></a>}
-<a name="l644"></a>
-<a name="l645"></a>RawHide;
+<a name="l605"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l606"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l607"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it      = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l608"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l609"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l610"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l611"></a>        {
+<a name="l612"></a>            message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_DOWN</span><span class=cF0>);
+<a name="l613"></a>            </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l614"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l615"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:  </span><span class=cF2>//Doesn't do anything, yet.</span><span class=cF0>
+<a name="l616"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l617"></a>
+<a name="l618"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_DOWN</span><span class=cF0>:  </span><span class=cF2>//Doesn't do anything, yet.</span><span class=cF0>
+<a name="l619"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l620"></a>
+<a name="l621"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l622"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
+<a name="l623"></a>                    {
+<a name="l624"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l625"></a>                            ReInit;
+<a name="l626"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l627"></a>
+<a name="l628"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l629"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l630"></a>                            </span><span class=cF1>goto</span><span class=cF0> rh_done;
+<a name="l631"></a>                    }
+<a name="l632"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l633"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l634"></a>        }
+<a name="l635"></a>rh_done:
+<a name="l636"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l637"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l638"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l639"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l640"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l641"></a>    CleanUp;
+<a name="l642"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l643"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/RawHide&quot;</span><span class=cF0>, </span><span class=cF6>&quot;F64 best_score=%5.4f;\n&quot;</span><span class=cF0>, best_score);
+<a name="l644"></a>}
+<a name="l645"></a>
+<a name="l646"></a>RawHide;
 </span></pre></body>
 </html>

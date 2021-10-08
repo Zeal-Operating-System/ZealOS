@@ -20,6 +20,11 @@ AP_GDT_PTR: 	DU16		sizeof(CGDT) - 1;
 
 				MOV 		EAX, SYS_START_CR0
 				MOV_CR0_EAX
+
+				MOV_EAX_CR4
+				BTS			EAX, CR4f_OSFXSR // enable SSE
+				MOV_CR4_EAX
+
 				DU8 		0x66, 0xEA;		//JMP CGDT.cs32:AP_32BIT_INIT
 				DU32		AP_32BIT_INIT;
 				DU16		CGDT.cs32;

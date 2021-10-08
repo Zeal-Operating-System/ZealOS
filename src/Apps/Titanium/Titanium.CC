@@ -901,6 +901,7 @@ U0 Titanium()
 	PressAKey;
 
 	Init;
+	PaletteSetLight(FALSE);
 	DocClear;
 	Fs->draw_it = &DrawIt;
 

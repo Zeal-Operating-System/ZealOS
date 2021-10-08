@@ -602,6 +602,7 @@ U0 RawHide()
 	DocCursor;
 	DocClear;
 	Init;
+	PaletteSetLight(FALSE);
 	Fs->animate_task = Spawn(&AnimateTask, Fs, "Animate",, Fs);
 	Fs->draw_it		 = &DrawIt;
 	try

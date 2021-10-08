@@ -28,8 +28,8 @@ public U0 PaletteSetStd(Bool persistent=TRUE)
 }
 //********************************************************************************
 public CBGR24 gr_palette_gray[COLORS_NUM] = {
-	0x000000, 0x111111, 0x222222, 0x333333, 0x444444, 0x555555, 0x666666, 0x777777,
-	0x888888, 0x999999, 0xAAAAAA, 0xBBBBBB, 0xCCCCCC, 0xDDDDDD, 0xEEEEEE, 0xFFFFFF
+	0x000000, 0x4A4A4A, 0x6B6B6B, 0x6F6F6F, 0x626262, 0x696969, 0x868686, 0xB5B5B5,
+	0x565656, 0x8B8B8B, 0xACACAC, 0x878787, 0x919191, 0x8F8F8F, 0xADADAD, 0xFFFFFF
 };
 
 public U0 PaletteSetGray(Bool persistent=TRUE)
@@ -39,7 +39,6 @@ public U0 PaletteSetGray(Bool persistent=TRUE)
 	if (persistent)
 		fp_set_std_palette = &PaletteSetGray;
 }
-
 //********************************************************************************
 public CBGR24 gr_palette_dark[COLORS_NUM] = {
 	0xFFFFFF, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x9969A1, 0xCE982F, 0xBCC0B9,
@@ -78,4 +77,16 @@ public U0 PaletteSetSlate(Bool persistent=TRUE)
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetSlate;
+}
+//********************************************************************************
+public CBGR24 gr_palette_commander[COLORS_NUM] = {
+	0xFFFFFF, 0x867ADE, 0x00CC55, 0x5A878B, 0xB80000, 0xCC44CC, 0xDD8855, 0xBBBBBB,
+	0x777777, 0x0088FF, 0xAAFF66, 0xAAFFEE, 0xFF7777, 0xCA94E8, 0xEEEE77, 0x483AAA
+};
+public U0 PaletteSetCommander(Bool persistent=TRUE)
+{//Activate Slate palette.
+	GrPaletteSet(gr_palette_commander);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetCommander;
 }

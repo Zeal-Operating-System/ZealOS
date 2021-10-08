@@ -587,12 +587,12 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	if (port->signature == AHCI_PxSIG_ATA)
 	{
 		bd->max_blk = AHCILBA48CapacityGet(dev_id_record);
-		"Max Block: %d, Disk Size: %d MiB\n", bd->max_blk, bd->max_blk * BLK_SIZE / 1024 / 1024; 
+		"(Max Block: %d, Disk Size: %d MiB)\n", bd->max_blk, bd->max_blk * BLK_SIZE / 1024 / 1024; 
 	}
 	else
 	{
 		bd->max_blk = AHCIAtapiCapacityGet(bd);
-		"Max Block: %d, Disk Size: %d MiB\n", bd->max_blk, bd->max_blk * DVD_BLK_SIZE / 1024 / 1024; 
+		"(Max Block: %d, Disk Size: %d MiB)\n", bd->max_blk, bd->max_blk * DVD_BLK_SIZE / 1024 / 1024; 
 	}
 }
 
@@ -1063,9 +1063,11 @@ U0 AHCIInit()
 {
 	CAHCIHba	*hba;
 	CAHCIPort	*port;
-	I64			 i, bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0); //0x010601, last byte prog_if, AHCI version 1.0
+	I64			 i, bdf;
 
-	"\n";
+	"컴컴컴컴컴컴컴컴컴컴컴\n";
+
+	bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0); //0x010601, last byte prog_if, AHCI version 1.0
 
 	if (bdf == -1)
 	{
@@ -1079,7 +1081,7 @@ U0 AHCIInit()
 
 
 	Bts(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
-	"AHCI: GHC.AE\n";
+	"AHCI: GHC.AE set\n";
 
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
@@ -1115,7 +1117,7 @@ U0 AHCIInit()
 
 				if (!AHCIPortIsIdle(i))
 				{
-					"AHCI: Port not idle\n";
+					"AHCI: Port %2d not idle, stopping port\n", i;
 					AHCIPortCmdStop(i);
 				}
 			}
@@ -1123,7 +1125,7 @@ U0 AHCIInit()
 				"Unknown\n";
 		}
 	}
-	"\n";
+	"컴컴컴컴컴컴컴컴컴컴컴\n\n";
 }
 
 Bool AHCIBootDVDProbeAll(CBlkDev *bd)
@@ -1132,6 +1134,8 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 	CAHCIPort	*port;
 	U8			*buf = CAlloc(DVD_BLK_SIZE);
 	CKernel 	*kernel;
+
+	"컴컴컴컴컴컴컴컴컴컴컴\n";
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
@@ -1161,6 +1165,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 				if (kernel->compile_time == sys_compile_time)
 				{
 					"AHCI: Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
+					"컴컴컴컴컴컴컴컴컴컴컴\n";
 					return TRUE;
 				}
 				else

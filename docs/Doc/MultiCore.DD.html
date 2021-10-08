@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.01">
+<meta name="generator" content="ZealOS V1.02">
 <style type="text/css">
-body {background-color:#fef1f0;}
-.cF0{color:#000000;background-color:#fef1f0;}
-.cF1{color:#0148a4;background-color:#fef1f0;}
-.cF2{color:#3b7901;background-color:#fef1f0;}
-.cF3{color:#057c7e;background-color:#fef1f0;}
-.cF4{color:#bb2020;background-color:#fef1f0;}
-.cF5{color:#9e42ae;background-color:#fef1f0;}
-.cF6{color:#b57901;background-color:#fef1f0;}
-.cF7{color:#b2b6af;background-color:#fef1f0;}
-.cF8{color:#555753;background-color:#fef1f0;}
-.cF9{color:#678fbb;background-color:#fef1f0;}
-.cFA{color:#82bc49;background-color:#fef1f0;}
-.cFB{color:#0097a2;background-color:#fef1f0;}
-.cFC{color:#e26a6a;background-color:#fef1f0;}
-.cFD{color:#c671bc;background-color:#fef1f0;}
-.cFE{color:#c7ab00;background-color:#fef1f0;}
-.cFF{color:#fef1f0;background-color:#fef1f0;}
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
 </style>
 </head>
 <body>
@@ -35,7 +35,7 @@ body {background-color:#fef1f0;}
 <a name="l8"></a>
 <a name="l9"></a>Each core has an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> which is the father of all tasks on that core.  </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System</span></a><span class=cF0> is the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> on </span><span class=cF2>Core0</span><span class=cF0>.
 <a name="l10"></a>
-<a name="l11"></a>You give a job to an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l224"><span class=cF4>JobQueue</span></a><span class=cF0>() and get the result with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l242"><span class=cF4>JobResGet</span></a><span class=cF0>().  You spawn a task on any core with </span><span class=cF4>
+<a name="l11"></a>You give a job to an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF0>() and get the result with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l242"><span class=cF4>JobResGet</span></a><span class=cF0>().  You spawn a task on any core with </span><span class=cF4>
 <a name="l12"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
 <a name="l13"></a>
 <a name="l14"></a>Note: You must use the </span><span class=cF2>LOCK</span><span class=cF0> asm prefix when changing shared structures in a multicore environment.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l17"><span class=cF4>LBts</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l16"><span class=cF4>LBtr</span></a><span class=cF0>() and </span><span class=cF4>
