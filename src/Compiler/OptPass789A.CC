@@ -105,7 +105,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 				start:
 					start:
 						case IC_ABS_ADDR:
-							ICU16(tmpi, 0xB848);
+							ICU16(tmpi, 0xB848); // MOV U64 RAX, U64
 							ICU64(tmpi, tmpi->ic_data);
 							if (buf && cc->flags & CCF_AOT_COMPILE && !(cc->flags & (CCF_NO_ABSS | CCF_ASM_EXPRESSIONS)))
 							{
@@ -118,8 +118,8 @@ cc->pass == 10 is final pass, code is placed into buf.
 							break;
 
 						case IC_HEAP_GLOBAL:
-							ICU16(tmpi, 0xB848);
-							ICU64(tmpi, 0);
+							ICU16(tmpi, 0xB848); //
+							ICU64(tmpi, 0);      // MOV U64 RAX, U64 0x0
 							tmphg = tmpi->ic_data;
 							if (buf && cc->flags & CCF_AOT_COMPILE && !(cc->flags & (CCF_NO_ABSS | CCF_ASM_EXPRESSIONS)))
 							{//TODO:is this necessary--flags?
@@ -146,7 +146,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							break;
 
 						case IC_RIP:
-							ICU16(tmpi, 0xB848);
+							ICU16(tmpi, 0xB848); // MOV U64 RAX, U64
 							ICU64(tmpi, rip2 + tmpi->ic_count - 2);
 							if (cc->flags & CCF_AOT_COMPILE && buf &&!(cc->flags & CCF_NO_ABSS))
 							{
@@ -361,20 +361,20 @@ cc->pass == 10 is final pass, code is placed into buf.
 						i = tmpi->ic_data - (rip2 + 5);
 						if (!(I32_MIN <= i <= I32_MAX) && !(cc->flags & CCF_AOT_COMPILE))
 						{
-							ICU16(tmpi, 0xBB48);
+							ICU16(tmpi, 0xBB48); // MOV U64 RBX, U64
 							ICU64(tmpi, tmpi->ic_data);
-							ICU16(tmpi, 0xD3FF);
+							ICU16(tmpi, 0xD3FF); // CALL U64 RBX
 						}
 						else
 						{
-							ICU8(tmpi, 0xE8);
+							ICU8(tmpi, 0xE8); // CALL
 							ICU32(tmpi, i);
 						}
 						break;
 
 					case IC_CALL_EXTERN: //Only for static modules
-						ICU8(tmpi, 0xE8);
-						ICU32(tmpi, 0);
+						ICU8(tmpi, 0xE8); //
+						ICU32(tmpi, 0);   // CALL I32 0x5
 						if (buf)
 						{
 							tmpf = tmpi->ic_data;
@@ -386,11 +386,11 @@ cc->pass == 10 is final pass, code is placed into buf.
 						break;
 
 					case IC_CALL_INDIRECT2:
-						ICU16(tmpi, 0xBB48);
+						ICU16(tmpi, 0xBB48); // MOV U64 RBX, U64
 						if (cc->flags & CCF_AOT_COMPILE)
 							i = rip2 + tmpi->ic_count;
 						ICU64(tmpi, tmpi->ic_data);
-						ICU16(tmpi, 0x13FF);
+						ICU16(tmpi, 0x13FF); // CALL U64 [RBX]
 						if (buf && cc->flags & CCF_AOT_COMPILE && !(cc->flags & CCF_NO_ABSS))
 						{
 							tmpa = CAlloc(sizeof(CAOTAbsAddr));
@@ -404,8 +404,8 @@ cc->pass == 10 is final pass, code is placed into buf.
 					case IC_CALL_IMPORT:
 						if (OptionGet(OPTf_USE_IMM64))
 						{
-							ICU16(tmpi, 0xBB48);
-							ICU64(tmpi, 0);
+							ICU16(tmpi, 0xBB48); // 
+							ICU64(tmpi, 0);      // MOV U64 RBX, U64 0x0
 							if (buf)
 							{
 								tmpf = tmpi->ic_data;
@@ -415,12 +415,12 @@ cc->pass == 10 is final pass, code is placed into buf.
 								tmpie->next = tmpf->ie_list;
 								tmpf->ie_list = tmpie;
 							}
-							ICU16(tmpi, 0xD3FF);
+							ICU16(tmpi, 0xD3FF); // CALL U64 RBX
 						}
 						else
 						{
-							ICU8(tmpi, 0xE8);
-							ICU32(tmpi, 0);
+							ICU8(tmpi, 0xE8); //
+							ICU32(tmpi, 0);   // CALL I32 0x5
 							if (buf)
 							{
 								tmpf = tmpi->ic_data;
@@ -461,31 +461,31 @@ cc->pass == 10 is final pass, code is placed into buf.
 					{
 						if (Bt(&cc->htc.fun->flags, Ff_HASERRCODE))
 							ICAddRSP(tmpi, 8);
-						ICU16(tmpi, 0xCF48);
+						ICU16(tmpi, 0xCF48); // IRET
 					}
 					else if (cc->htc.fun && cc->htc.fun->arg_count &&
 							(Bt(&cc->htc.fun->flags, Ff_RET1) || Bt(&cc->htc.fun->flags, Ff_ARGPOP)) &&
 							!Bt(&cc->htc.fun->flags, Ff_NOARGPOP))
 					{
-						ICU8(tmpi, 0xC2);
+						ICU8(tmpi, 0xC2); // RET1 I16
 						ICU16(tmpi, cc->htc.fun->arg_count << 3);
 					}
 					else
-						ICU8(tmpi, 0xC3);
+						ICU8(tmpi, 0xC3); // RET
 					break;
 
 				case IC_RET:
-					ICU8(tmpi, 0xC3);
+					ICU8(tmpi, 0xC3); // RET
 					break;
 
 				case IC_FS:
 					ICZero(tmpi, REG_RAX);
-					ICU32(tmpi, 0x8B4864);
+					ICU32(tmpi, 0x8B4864); // MOV U64 RBP, U64 FS:RSP
 					break;
 
 				case IC_GS:
 					ICZero(tmpi, REG_RAX);
-					ICU32(tmpi, 0x8B4865);
+					ICU32(tmpi, 0x8B4865); // MOV U64 RBP, U64 GS:RSP
 					break;
 
 				case IC_MOV_FS:
@@ -804,7 +804,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 					break;
 
 				case IC_ENTER:
-					ICU32(tmpi, 0xEC8B4855);
+					ICU32(tmpi, 0xEC8B4855); // PUSH U64 RBP // MOV U64 RBP, U64 RSP
 					if (tmpi->ic_data)
 						ICAddRSP(tmpi, -tmpi->ic_data, FALSE);
 					if (cc->htc.fun)
@@ -835,12 +835,12 @@ cc->pass == 10 is final pass, code is placed into buf.
 				case IC_CALL_INDIRECT:
 					if (I8_MIN <= tmpi->ic_data <= I8_MAX)
 					{
-						ICU24(tmpi, 0x2454FF);  //CALL disp[RSP]
+						ICU24(tmpi, 0x2454FF);  // CALL disp[RSP]
 						ICU8(tmpi, tmpi->ic_data);
 					}
 					else
 					{
-						ICU24(tmpi, 0x2494FF);  //CALL disp[RSP]
+						ICU24(tmpi, 0x2494FF);  // CALL disp[RSP]
 						ICU32(tmpi, tmpi->ic_data);
 					}
 					break;
@@ -850,17 +850,17 @@ cc->pass == 10 is final pass, code is placed into buf.
 					break;
 
 				case IC_POP:
-					ICU8(tmpi, 0x58);
+					ICU8(tmpi, 0x58); // POP U64 RAX
 					break;
 
 				case IC_INVLPG:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU24(tmpi, 0x38010F);
+					ICU24(tmpi, 0x38010F); // INVLPG U8 [RAX]
 					break;
 
 				case IC_CLFLUSH:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU24(tmpi, 0x38AE0F);
+					ICU24(tmpi, 0x38AE0F); // CLFLUSH U8 [RAX]
 					break;
 
 				case IC_RFLAGS_GET:
@@ -869,8 +869,8 @@ cc->pass == 10 is final pass, code is placed into buf.
 					break;
 
 				case IC_CARRY:
-					ICU24(tmpi, 0xC0920F); //SETC AL
-					ICU24(tmpi, 0x01E083); //AND EAX,1
+					ICU24(tmpi, 0xC0920F); // SETB U8 AL
+					ICU24(tmpi, 0x01E083); // AND U32 EAX, I8 0x01
 					break;
 
 				case IC_RDTSC:
@@ -928,22 +928,22 @@ cc->pass == 10 is final pass, code is placed into buf.
 
 				case IC_BSF:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU32(tmpi, 0xC0BC0F48);
-					ICU16(tmpi, 0x0375);
-					ICU24(tmpi, 0xD0F748);
+					ICU32(tmpi, 0xC0BC0F48); // BSF U64 RAX, U64 RAX
+					ICU16(tmpi, 0x0375);     // JNE I8 0x9
+					ICU24(tmpi, 0xD0F748);   // NOT U64 RAX
 					break;
 
 				case IC_BSR:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU32(tmpi, 0xC0BD0F48);
-					ICU16(tmpi, 0x0375);
-					ICU24(tmpi, 0xD0F748);
+					ICU32(tmpi, 0xC0BD0F48); // BSR U64 RAX, U64 RAX
+					ICU16(tmpi, 0x0375);     // JNE I8 0x9
+					ICU24(tmpi, 0xD0F748);   // NOT U64 RAX
 					break;
 
 				case IC_POPCNT:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU16(tmpi, 0xF348);
-					ICU32(tmpi, 0xC0B80F48);
+					ICU16(tmpi, 0xF348);     // 
+					ICU32(tmpi, 0xC0B80F48); // POPCNT U64 RAX, U64 RAX 
 					break;
 
 				case IC_SIGN_I64:
@@ -997,9 +997,9 @@ cc->pass == 10 is final pass, code is placed into buf.
 
 				case IC_ABS_I64:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
-					ICU24(tmpi, 0xC08548);
-					ICU16(tmpi, 0x0379);
-					ICU24(tmpi, 0xD8F748);
+					ICU24(tmpi, 0xC08548); // TEST U64 RAX, U64 RAX
+					ICU16(tmpi, 0x0379);   // JNS  I8  0x8
+					ICU24(tmpi, 0xD8F748); // NEG  U64 RAX
 					break;
 
 				case IC_MIN_I64:
@@ -1223,8 +1223,8 @@ cc->pass == 10 is final pass, code is placed into buf.
 				{
 					if (tmpi->ic_code == IC_PUSH_CMP)
 					{
-						ICU24(tmpi, 0x242CDF); //FILD U64 [RSP]
-						ICU24(tmpi, 0x241CDD); //FSTP U64 [RSP]
+						ICU24(tmpi, 0x242CDF); // FILD U64 [RSP]
+						ICU24(tmpi, 0x241CDD); // FSTP U64 [RSP]
 					}
 					else
 					{

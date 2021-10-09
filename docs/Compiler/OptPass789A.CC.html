@@ -132,7 +132,7 @@ body {background-color:#1f1f1f;}
 <a name="l105"></a>                </span><span class=cF1>start</span><span class=cF0>:
 <a name="l106"></a>                    </span><span class=cF1>start</span><span class=cF0>:
 <a name="l107"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_ABS_ADDR</span><span class=cF0>:
-<a name="l108"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>);
+<a name="l108"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>); </span><span class=cF2>// MOV U64 RAX, U64</span><span class=cF0>
 <a name="l109"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, tmpi-&gt;ic_data);
 <a name="l110"></a>                            </span><span class=cF1>if</span><span class=cF0> (buf &amp;&amp; cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; (</span><span class=cF3>CCF_NO_ABSS</span><span class=cF0> | </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l111"></a>                            {
@@ -145,8 +145,8 @@ body {background-color:#1f1f1f;}
 <a name="l118"></a>                            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l119"></a>
 <a name="l120"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_HEAP_GLOBAL</span><span class=cF0>:
-<a name="l121"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>);
-<a name="l122"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l121"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>); </span><span class=cF2>//</span><span class=cF0>
+<a name="l122"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);      </span><span class=cF2>// MOV U64 RAX, U64 0x0</span><span class=cF0>
 <a name="l123"></a>                            tmphg = tmpi-&gt;ic_data;
 <a name="l124"></a>                            </span><span class=cF1>if</span><span class=cF0> (buf &amp;&amp; cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; (</span><span class=cF3>CCF_NO_ABSS</span><span class=cF0> | </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l125"></a>                            {</span><span class=cF2>//TODO:is this necessary--flags?</span><span class=cF0>
@@ -173,7 +173,7 @@ body {background-color:#1f1f1f;}
 <a name="l146"></a>                            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l147"></a>
 <a name="l148"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_RIP</span><span class=cF0>:
-<a name="l149"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>);
+<a name="l149"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xB848</span><span class=cF0>); </span><span class=cF2>// MOV U64 RAX, U64</span><span class=cF0>
 <a name="l150"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, rip2 + tmpi-&gt;ic_count - </span><span class=cFE>2</span><span class=cF0>);
 <a name="l151"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0> &amp;&amp; buf &amp;&amp;!</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_NO_ABSS</span><span class=cF7>)</span><span class=cF0>)
 <a name="l152"></a>                            {
@@ -388,20 +388,20 @@ body {background-color:#1f1f1f;}
 <a name="l361"></a>                        i = tmpi-&gt;ic_data - (rip2 + </span><span class=cFE>5</span><span class=cF0>);
 <a name="l362"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF3>I32_MIN</span><span class=cF0> &lt;= i &lt;= </span><span class=cF3>I32_MAX</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF7>)</span><span class=cF0>)
 <a name="l363"></a>                        {
-<a name="l364"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>);
+<a name="l364"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>); </span><span class=cF2>// MOV U64 RBX, U64</span><span class=cF0>
 <a name="l365"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, tmpi-&gt;ic_data);
-<a name="l366"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xD3FF</span><span class=cF0>);
+<a name="l366"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xD3FF</span><span class=cF0>); </span><span class=cF2>// CALL U64 RBX</span><span class=cF0>
 <a name="l367"></a>                        }
 <a name="l368"></a>                        </span><span class=cF1>else</span><span class=cF0>
 <a name="l369"></a>                        {
-<a name="l370"></a>                            </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>);
+<a name="l370"></a>                            </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>); </span><span class=cF2>// CALL</span><span class=cF0>
 <a name="l371"></a>                            </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, i);
 <a name="l372"></a>                        }
 <a name="l373"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l374"></a>
 <a name="l375"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_EXTERN</span><span class=cF0>: </span><span class=cF2>//Only for static modules</span><span class=cF0>
-<a name="l376"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>);
-<a name="l377"></a>                        </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l376"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>); </span><span class=cF2>//</span><span class=cF0>
+<a name="l377"></a>                        </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);   </span><span class=cF2>// CALL I32 0x5</span><span class=cF0>
 <a name="l378"></a>                        </span><span class=cF1>if</span><span class=cF0> (buf)
 <a name="l379"></a>                        {
 <a name="l380"></a>                            tmpf = tmpi-&gt;ic_data;
@@ -413,11 +413,11 @@ body {background-color:#1f1f1f;}
 <a name="l386"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l387"></a>
 <a name="l388"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_INDIRECT2</span><span class=cF0>:
-<a name="l389"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>);
+<a name="l389"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>); </span><span class=cF2>// MOV U64 RBX, U64</span><span class=cF0>
 <a name="l390"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0>)
 <a name="l391"></a>                            i = rip2 + tmpi-&gt;ic_count;
 <a name="l392"></a>                        </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, tmpi-&gt;ic_data);
-<a name="l393"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x13FF</span><span class=cF0>);
+<a name="l393"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x13FF</span><span class=cF0>); </span><span class=cF2>// CALL U64 [RBX]</span><span class=cF0>
 <a name="l394"></a>                        </span><span class=cF1>if</span><span class=cF0> (buf &amp;&amp; cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_NO_ABSS</span><span class=cF7>)</span><span class=cF0>)
 <a name="l395"></a>                        {
 <a name="l396"></a>                            tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
@@ -431,8 +431,8 @@ body {background-color:#1f1f1f;}
 <a name="l404"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_IMPORT</span><span class=cF0>:
 <a name="l405"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>OptionGet</span><span class=cF7>(</span><span class=cF3>OPTf_USE_IMM64</span><span class=cF7>)</span><span class=cF0>)
 <a name="l406"></a>                        {
-<a name="l407"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>);
-<a name="l408"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l407"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xBB48</span><span class=cF0>); </span><span class=cF2>// </span><span class=cF0>
+<a name="l408"></a>                            </span><span class=cFD>ICU64</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);      </span><span class=cF2>// MOV U64 RBX, U64 0x0</span><span class=cF0>
 <a name="l409"></a>                            </span><span class=cF1>if</span><span class=cF0> (buf)
 <a name="l410"></a>                            </span><span class=cF7>{</span><span class=cF0>
 <a name="l411"></a>                                tmpf = tmpi-&gt;ic_data;
@@ -442,12 +442,12 @@ body {background-color:#1f1f1f;}
 <a name="l415"></a>                                tmpie-&gt;next = tmpf-&gt;ie_list;
 <a name="l416"></a>                                tmpf-&gt;ie_list = tmpie;
 <a name="l417"></a>                            </span><span class=cF7>}</span><span class=cF0>
-<a name="l418"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xD3FF</span><span class=cF0>);
+<a name="l418"></a>                            </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xD3FF</span><span class=cF0>); </span><span class=cF2>// CALL U64 RBX</span><span class=cF0>
 <a name="l419"></a>                        }
 <a name="l420"></a>                        </span><span class=cF1>else</span><span class=cF0>
 <a name="l421"></a>                        {
-<a name="l422"></a>                            </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>);
-<a name="l423"></a>                            </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l422"></a>                            </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xE8</span><span class=cF0>); </span><span class=cF2>//</span><span class=cF0>
+<a name="l423"></a>                            </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0</span><span class=cF0>);   </span><span class=cF2>// CALL I32 0x5</span><span class=cF0>
 <a name="l424"></a>                            </span><span class=cF1>if</span><span class=cF0> (buf)
 <a name="l425"></a>                            </span><span class=cF7>{</span><span class=cF0>
 <a name="l426"></a>                                tmpf = tmpi-&gt;ic_data;
@@ -488,31 +488,31 @@ body {background-color:#1f1f1f;}
 <a name="l461"></a>                    {
 <a name="l462"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;htc.fun-&gt;flags, </span><span class=cF3>Ff_HASERRCODE</span><span class=cF7>)</span><span class=cF0>)
 <a name="l463"></a>                            </span><span class=cFD>ICAddRSP</span><span class=cF0>(tmpi, </span><span class=cFE>8</span><span class=cF0>);
-<a name="l464"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xCF48</span><span class=cF0>);
+<a name="l464"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xCF48</span><span class=cF0>); </span><span class=cF2>// IRET</span><span class=cF0>
 <a name="l465"></a>                    }
 <a name="l466"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun &amp;&amp; cc-&gt;htc.fun-&gt;arg_count &amp;&amp;
 <a name="l467"></a>                            </span><span class=cF7>(</span><span class=cF5>Bt</span><span class=cF0>(&amp;cc-&gt;htc.fun-&gt;flags, </span><span class=cF3>Ff_RET1</span><span class=cF0>) || </span><span class=cF5>Bt</span><span class=cF0>(&amp;cc-&gt;htc.fun-&gt;flags, </span><span class=cF3>Ff_ARGPOP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
 <a name="l468"></a>                            !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;htc.fun-&gt;flags, </span><span class=cF3>Ff_NOARGPOP</span><span class=cF7>)</span><span class=cF0>)
 <a name="l469"></a>                    {
-<a name="l470"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC2</span><span class=cF0>);
+<a name="l470"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC2</span><span class=cF0>); </span><span class=cF2>// RET1 I16</span><span class=cF0>
 <a name="l471"></a>                        </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, cc-&gt;htc.fun-&gt;arg_count &lt;&lt; </span><span class=cFE>3</span><span class=cF0>);
 <a name="l472"></a>                    }
 <a name="l473"></a>                    </span><span class=cF1>else</span><span class=cF0>
-<a name="l474"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC3</span><span class=cF0>);
+<a name="l474"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC3</span><span class=cF0>); </span><span class=cF2>// RET</span><span class=cF0>
 <a name="l475"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l476"></a>
 <a name="l477"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_RET</span><span class=cF0>:
-<a name="l478"></a>                    </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC3</span><span class=cF0>);
+<a name="l478"></a>                    </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0xC3</span><span class=cF0>); </span><span class=cF2>// RET</span><span class=cF0>
 <a name="l479"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l480"></a>
 <a name="l481"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_FS</span><span class=cF0>:
 <a name="l482"></a>                    </span><span class=cFD>ICZero</span><span class=cF0>(tmpi, </span><span class=cF3>REG_RAX</span><span class=cF0>);
-<a name="l483"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0x8B4864</span><span class=cF0>);
+<a name="l483"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0x8B4864</span><span class=cF0>); </span><span class=cF2>// MOV U64 RBP, U64 FS:RSP</span><span class=cF0>
 <a name="l484"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l485"></a>
 <a name="l486"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_GS</span><span class=cF0>:
 <a name="l487"></a>                    </span><span class=cFD>ICZero</span><span class=cF0>(tmpi, </span><span class=cF3>REG_RAX</span><span class=cF0>);
-<a name="l488"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0x8B4865</span><span class=cF0>);
+<a name="l488"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0x8B4865</span><span class=cF0>); </span><span class=cF2>// MOV U64 RBP, U64 GS:RSP</span><span class=cF0>
 <a name="l489"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l490"></a>
 <a name="l491"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_MOV_FS</span><span class=cF0>:
@@ -831,7 +831,7 @@ body {background-color:#1f1f1f;}
 <a name="l804"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l805"></a>
 <a name="l806"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_ENTER</span><span class=cF0>:
-<a name="l807"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xEC8B4855</span><span class=cF0>);
+<a name="l807"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xEC8B4855</span><span class=cF0>); </span><span class=cF2>// PUSH U64 RBP // MOV U64 RBP, U64 RSP</span><span class=cF0>
 <a name="l808"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_data)
 <a name="l809"></a>                        </span><span class=cFD>ICAddRSP</span><span class=cF0>(tmpi, -tmpi-&gt;ic_data, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l810"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun)
@@ -862,12 +862,12 @@ body {background-color:#1f1f1f;}
 <a name="l835"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_INDIRECT</span><span class=cF0>:
 <a name="l836"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>I8_MIN</span><span class=cF0> &lt;= tmpi-&gt;ic_data &lt;= </span><span class=cF3>I8_MAX</span><span class=cF0>)
 <a name="l837"></a>                    {
-<a name="l838"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x2454FF</span><span class=cF0>);  </span><span class=cF2>//CALL disp[RSP]</span><span class=cF0>
+<a name="l838"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x2454FF</span><span class=cF0>);  </span><span class=cF2>// CALL disp[RSP]</span><span class=cF0>
 <a name="l839"></a>                        </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, tmpi-&gt;ic_data);
 <a name="l840"></a>                    }
 <a name="l841"></a>                    </span><span class=cF1>else</span><span class=cF0>
 <a name="l842"></a>                    {
-<a name="l843"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x2494FF</span><span class=cF0>);  </span><span class=cF2>//CALL disp[RSP]</span><span class=cF0>
+<a name="l843"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x2494FF</span><span class=cF0>);  </span><span class=cF2>// CALL disp[RSP]</span><span class=cF0>
 <a name="l844"></a>                        </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, tmpi-&gt;ic_data);
 <a name="l845"></a>                    }
 <a name="l846"></a>                    </span><span class=cF1>break</span><span class=cF0>;
@@ -877,17 +877,17 @@ body {background-color:#1f1f1f;}
 <a name="l850"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l851"></a>
 <a name="l852"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_POP</span><span class=cF0>:
-<a name="l853"></a>                    </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0x58</span><span class=cF0>);
+<a name="l853"></a>                    </span><span class=cFD>ICU8</span><span class=cF0>(tmpi, </span><span class=cFE>0x58</span><span class=cF0>); </span><span class=cF2>// POP U64 RAX</span><span class=cF0>
 <a name="l854"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l855"></a>
 <a name="l856"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_INVLPG</span><span class=cF0>:
 <a name="l857"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l858"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x38010F</span><span class=cF0>);
+<a name="l858"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x38010F</span><span class=cF0>); </span><span class=cF2>// INVLPG U8 [RAX]</span><span class=cF0>
 <a name="l859"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l860"></a>
 <a name="l861"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CLFLUSH</span><span class=cF0>:
 <a name="l862"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l863"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x38AE0F</span><span class=cF0>);
+<a name="l863"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x38AE0F</span><span class=cF0>); </span><span class=cF2>// CLFLUSH U8 [RAX]</span><span class=cF0>
 <a name="l864"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l865"></a>
 <a name="l866"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_RFLAGS_GET</span><span class=cF0>:
@@ -896,8 +896,8 @@ body {background-color:#1f1f1f;}
 <a name="l869"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l870"></a>
 <a name="l871"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CARRY</span><span class=cF0>:
-<a name="l872"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0920F</span><span class=cF0>); </span><span class=cF2>//SETC AL</span><span class=cF0>
-<a name="l873"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x01E083</span><span class=cF0>); </span><span class=cF2>//AND EAX,1</span><span class=cF0>
+<a name="l872"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0920F</span><span class=cF0>); </span><span class=cF2>// SETB U8 AL</span><span class=cF0>
+<a name="l873"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x01E083</span><span class=cF0>); </span><span class=cF2>// AND U32 EAX, I8 0x01</span><span class=cF0>
 <a name="l874"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l875"></a>
 <a name="l876"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_RDTSC</span><span class=cF0>:
@@ -955,22 +955,22 @@ body {background-color:#1f1f1f;}
 <a name="l928"></a>
 <a name="l929"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BSF</span><span class=cF0>:
 <a name="l930"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l931"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0BC0F48</span><span class=cF0>);
-<a name="l932"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0375</span><span class=cF0>);
-<a name="l933"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD0F748</span><span class=cF0>);
+<a name="l931"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0BC0F48</span><span class=cF0>); </span><span class=cF2>// BSF U64 RAX, U64 RAX</span><span class=cF0>
+<a name="l932"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0375</span><span class=cF0>);     </span><span class=cF2>// JNE I8 0x9</span><span class=cF0>
+<a name="l933"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD0F748</span><span class=cF0>);   </span><span class=cF2>// NOT U64 RAX</span><span class=cF0>
 <a name="l934"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l935"></a>
 <a name="l936"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BSR</span><span class=cF0>:
 <a name="l937"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l938"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0BD0F48</span><span class=cF0>);
-<a name="l939"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0375</span><span class=cF0>);
-<a name="l940"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD0F748</span><span class=cF0>);
+<a name="l938"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0BD0F48</span><span class=cF0>); </span><span class=cF2>// BSR U64 RAX, U64 RAX</span><span class=cF0>
+<a name="l939"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0375</span><span class=cF0>);     </span><span class=cF2>// JNE I8 0x9</span><span class=cF0>
+<a name="l940"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD0F748</span><span class=cF0>);   </span><span class=cF2>// NOT U64 RAX</span><span class=cF0>
 <a name="l941"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l942"></a>
 <a name="l943"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_POPCNT</span><span class=cF0>:
 <a name="l944"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l945"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xF348</span><span class=cF0>);
-<a name="l946"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0B80F48</span><span class=cF0>);
+<a name="l945"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0xF348</span><span class=cF0>);     </span><span class=cF2>// </span><span class=cF0>
+<a name="l946"></a>                    </span><span class=cFD>ICU32</span><span class=cF0>(tmpi, </span><span class=cFE>0xC0B80F48</span><span class=cF0>); </span><span class=cF2>// POPCNT U64 RAX, U64 RAX </span><span class=cF0>
 <a name="l947"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l948"></a>
 <a name="l949"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_SIGN_I64</span><span class=cF0>:
@@ -1024,9 +1024,9 @@ body {background-color:#1f1f1f;}
 <a name="l997"></a>
 <a name="l998"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_ABS_I64</span><span class=cF0>:
 <a name="l999"></a>                    </span><span class=cFD>ICMov</span><span class=cF0>(tmpi, </span><span class=cF3>MDF_REG</span><span class=cF0> + </span><span class=cF3>RT_I64</span><span class=cF0>, </span><span class=cF3>REG_RAX</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpi-&gt;arg1.type, tmpi-&gt;arg1.</span><span class=cF1>reg</span><span class=cF0>, tmpi-&gt;arg1.disp, rip2);
-<a name="l1000"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xC08548</span><span class=cF0>);
-<a name="l1001"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0379</span><span class=cF0>);
-<a name="l1002"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD8F748</span><span class=cF0>);
+<a name="l1000"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xC08548</span><span class=cF0>); </span><span class=cF2>// TEST U64 RAX, U64 RAX</span><span class=cF0>
+<a name="l1001"></a>                    </span><span class=cFD>ICU16</span><span class=cF0>(tmpi, </span><span class=cFE>0x0379</span><span class=cF0>);   </span><span class=cF2>// JNS  I8  0x8</span><span class=cF0>
+<a name="l1002"></a>                    </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0xD8F748</span><span class=cF0>); </span><span class=cF2>// NEG  U64 RAX</span><span class=cF0>
 <a name="l1003"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l1004"></a>
 <a name="l1005"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_MIN_I64</span><span class=cF0>:
@@ -1250,8 +1250,8 @@ body {background-color:#1f1f1f;}
 <a name="l1223"></a>                {
 <a name="l1224"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0>)
 <a name="l1225"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1226"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x242CDF</span><span class=cF0>); </span><span class=cF2>//FILD U64 [RSP]</span><span class=cF0>
-<a name="l1227"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x241CDD</span><span class=cF0>); </span><span class=cF2>//FSTP U64 [RSP]</span><span class=cF0>
+<a name="l1226"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x242CDF</span><span class=cF0>); </span><span class=cF2>// FILD U64 [RSP]</span><span class=cF0>
+<a name="l1227"></a>                        </span><span class=cFD>ICU24</span><span class=cF0>(tmpi, </span><span class=cFE>0x241CDD</span><span class=cF0>); </span><span class=cF2>// FSTP U64 [RSP]</span><span class=cF0>
 <a name="l1228"></a>                    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1229"></a>                    </span><span class=cF1>else</span><span class=cF0>
 <a name="l1230"></a>                    </span><span class=cF7>{</span><span class=cF0>

@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----10/09/21 04:05:32----$IV,0$
+* Add MOVQ, PMOVMSKB, MINPS, MAXPS, XORPS, CVTSI2SD, and CVTSD2SI assembly opcodes to OpCodes.DD. $TX+IV,"Note"$: Assembler adds extra REX 0x48 byte to SSE instructions using 64bit registers. Using ` opcode flag only disables prefixing REX 0x48 when using lower registers; TODO modify assembler to fix this for SSE instructions, or make new OpCodes flag to never prefix REX 0x48.
+
 $IV,1$----10/07/21 18:06:15----$IV,0$
 * Raised version number to 1.02.
 * Fix Std Font characters after char 128.
