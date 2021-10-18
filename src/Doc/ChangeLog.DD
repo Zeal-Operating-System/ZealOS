@@ -1,13 +1,20 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----10/18/21 01:16:10----$IV,0$
+* Raised version number to 1.03.
+* Increased $LK+PU,"CInst",A="MN:CInst"$ opcode size from 4 to 8.
+* $MA-X+PU,"Added 3 operand support to assembler.",LM="Find(\"arg3\", \"::/Compiler/\");View;"$
+* Added almost all SSE instructions to OpCodes.DD. SSE instructions operating on MMX registers were not implemented.
+* Fixed $LK+PU,"0x66 prefix unassembly opcode reporting",A="FF:::/Compiler/UAsm.CC,OC_OP_SIZE_PREFIX"$, assembler now $LK+PU,"prevents duplicate REX",A="FF:::/Compiler/Asm.CC,tmpins->opcode[0] == 0x66"$ for prefixed SSE instructions. The tradeoff for fixing this is that 0x66, 0xF2, or 0xF3 prefixed SSE opcodes can only use XMM0-XMM7 RAX-RDI.
+
 $IV,1$----10/09/21 04:05:32----$IV,0$
-* Add MOVQ, PMOVMSKB, MINPS, MAXPS, XORPS, CVTSI2SD, and CVTSD2SI assembly opcodes to OpCodes.DD. $TX+IV,"Note"$: Assembler adds extra REX 0x48 byte to SSE instructions using 64bit registers. Using ` opcode flag only disables prefixing REX 0x48 when using lower registers; TODO modify assembler to fix this for SSE instructions, or make new OpCodes flag to never prefix REX 0x48.
+* Added MOVQ, PMOVMSKB, MINPS, MAXPS, XORPS, CVTSI2SD, and CVTSD2SI assembly opcodes to OpCodes.DD.
 
 $IV,1$----10/07/21 18:06:15----$IV,0$
 * Raised version number to 1.02.
-* Fix Std Font characters after char 128.
+* Fixed Std Font characters after char 128.
 * Added links to ZealOS-specific applications in PersonalMenu.
 * Removed all files from ::/Downloads.
-* Started initial work integrating SSE instructions into assembler. $MA-X+PU,"See changes here.",LM="Find(\"XMM\", \"::/Compiler/OpCodes.DD\", \"-i\");\"\n\n\";Find(\"XMM\", \"::/Compiler/Asm.CC\", \"-i\");\"\n\";Find(\" == 128\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"XMM\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[16]\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[0]  = 0xF\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"arg_mask[17\", \"::/Kernel/KernelA.HH\", \"-i\");\"\n\";Find(\"SSE\", \"::/Kernel/MultiProc.CC\", \"-i\");View;"$ Only added 2 arg opcodes and only added instructions <= 4 bytes, compiler and assembler must first be expanded upon to support opcodes with more than two args and instructions larger than 4 bytes. $TX+IV,"Current bugs"$: unassembling 0x66 prefixed opcodes reports wrong opcode, unassembling SSE instructions that use non-128-bit vars will incorrectly report U128, MOVHLPS and MOVLHPS 2nd operand is defined XMM128 to hack ModrM order but operands should be XMM XMM, due to MOVSD name clash we define opcode as MOVSD_SSE. $TX+IV,"TOD"$$TX+IV,"O"$: add CosmiC U128 and XMM register allocation support, find way to ensure 16-byte aligned stack and aligned instructions.
+* Started initial work integrating SSE instructions into assembler. $MA-X+PU,"See changes here.",LM="Find(\"XMM\", \"::/Compiler/OpCodes.DD\", \"-i\");\"\n\n\";Find(\"XMM\", \"::/Compiler/Asm.CC\", \"-i\");\"\n\";Find(\" == 128\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"XMM\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[16]\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[0]  = 0xF\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"arg_mask[17\", \"::/Kernel/KernelA.HH\", \"-i\");\"\n\";Find(\"SSE\", \"::/Kernel/MultiProc.CC\", \"-i\");View;"$ Only added 2 arg opcodes and only added instructions <= 4 bytes. $TX+IV,"Current bugs"$: unassembling SSE instructions that use non-128-bit vars will incorrectly report U128, MOVHLPS and MOVLHPS 2nd operand is defined XMM128 to hack ModrM order but operands should be XMM XMM, due to MOVSD name clash we define opcode as MOVSD_SSE. $TX+IV,"TODO"$: add CosmiC U128 and XMM register allocation support, find way to ensure 16-byte aligned stack and aligned instructions.
 
 $IV,1$----09/21/21 23:35:00----$IV,0$
 * Raised version number to 1.01.
@@ -140,7 +147,6 @@ $IV,1$----07/05/21 14:58:59----$IV,0$
 * Allow OS Upgrade feature on VMs.
 
 $IV,1$----07/03/21 00:01:32----$IV,0$
-
 * Raised version number to 0.05.
 * Fixed HTML Demo, implemented it into DoDistro process. Outputs to ::/HTML/.
 

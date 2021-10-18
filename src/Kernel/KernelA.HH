@@ -1890,11 +1890,11 @@ class CInst
 {
 	U8	ins_entry_num, //This entry num in opcode hash entry
 		opcode_count,
-		opcode[4];
+		opcode[8];
 	U16	flags;
 	U8	slash_val, uasm_slash_val, opcode_modifier,
-		arg1, arg2,
-		size1, size2,//Size in bits
+		arg1, arg2, arg3,
+		size1, size2, size3, //Size in bits
 		pad;
 };
 
@@ -1950,13 +1950,13 @@ class CAOTBinBlk
 
 I64 class CAbsCountsI64
 {
-	U16 abs_address,	//Only odd/even matters. Count of absolute address in an exp.
-		c_address;	//Only odd/even matters. Count of C address in an exp.
+	U16 abs_address,	//Only odd/even matters. Count of absolute address in an expression.
+		c_address;	//Only odd/even matters. Count of C address in an expression.
 	U32 externs;	//Only nonzero matters. Some regions have externs banned.
 };
 
 class CAsmUndefHash
-{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.CC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM exp.
+{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.CC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM expression.
 	CAsmUndefHash	*next;
 	CHashExport 	*hash;
 };
@@ -2083,12 +2083,12 @@ class CAsmUnresolvedRef
 #define ARGT_MM 		48 // Not implemented
 #define ARGT_MM32 		49 // Not implemented
 #define ARGT_MM64 		50 // Not implemented
-#define ARGT_XMM		51 // Not implemented
+#define ARGT_XMM		51
 
-#define ARGT_XMM32		52 // Not implemented
-#define ARGT_XMM64		53 // Not implemented
-#define ARGT_XMM128 	54 // Not implemented
-#define ARGT_XMM0 		55 // Not implemented
+#define ARGT_XMM32		52
+#define ARGT_XMM64		53
+#define ARGT_XMM128 	54
+#define ARGT_XMM0 		55
 
 #help_index "Compiler/Internal;Hash/System"
 #define OCF_ALIAS 			1
@@ -2193,7 +2193,7 @@ class CLexFile
 class CAOTCtrl
 {
 	I64					 rip; //Instruction pointer
-	CAsmArg				 arg1, arg2;
+	CAsmArg				 arg1, arg2, arg3;
 	CAOTBinBlk			*bin;
 	I64					 num_bin_U8s,
 						 max_align_bits, org;

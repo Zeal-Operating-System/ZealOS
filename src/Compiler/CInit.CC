@@ -372,6 +372,7 @@ U0 CompLoadDefines()
 					"XMM5\0"
 					"XMM6\0"
 					"XMM7\0"
+					"XMM8\0"
 					"XMM9\0"
 					"XMM10\0"
 					"XMM11\0"

@@ -285,14 +285,14 @@ U0 UAsmHashLoad()
 
 U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FALSE)
 {//Unassembles one instruction
-	I64			 i, disp, imm, opsize, opadd, arg1, arg2, reloced_arg1, reloced_arg2,
-				 arg1_size = 0, arg2_size = 0, reloced_arg1_size, reloced_arg2_size,
+	I64			 i, disp, imm, opsize, opadd, arg1, arg2, arg3, reloced_arg1, reloced_arg2,
+				 arg1_size = 0, arg2_size = 0, arg3_size = 0, reloced_arg1_size, reloced_arg2_size,
 				 ModrM = -1, SIB = -1, scale, r1, r2, Mod = -1, RM1 = -1, RM2 = -1, REX = -1, REX_r = 0, REX_x = 0, REX_b = 0;
 	Bool		 cont, isXMM, isXMM1, isXMM2;
 	CInst		*tmpins, *tmpins2;
 	CHashOpcode	*tmpo;
 	U8			*rip = *_rip, *ptr, *reloced_arg1_st, *reloced_arg2_st, *bin_data_area1, *bin_data_area2,
-				 line1[512], line2[512], buf2[512], arg1_st[512], arg2_st[512], seg_overrides[32];
+				 line1[512], line2[512], buf2[512], arg1_st[512], arg2_st[512], arg3_st[512], seg_overrides[32];
 
 	if (_jmp_dst)
 		*_jmp_dst = -1;
@@ -313,6 +313,8 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	}
 	*arg1_st = 0;
 	*arg2_st = 0;
+	*arg3_st = 0;
+
 	if (!IsRaw && PutSrcLink(rip, 1, line1))
 		CatPrint(line1, "\n");
 	else
@@ -366,6 +368,38 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				break;
 
 			case OC_OP_SIZE_PREFIX:
+				// OC_OP_SIZE_PREFIX (0x66) legacy byte is ignored if it's an SSE instruction, checking early here.
+				tmpins = InstEntryFind(rip, opsize, seg_size);
+				for (i = 0; i < tmpins->opcode_count; i++)
+				{
+					if (tmpins->opcode[i] != rip[i])
+					{
+//						ST_ERR_ST "$$HL,0$$\nBAD MATCH SSE check #1! %02X with %02X\n", tmpins->opcode[i], rip[i];
+//						D(tmpins, sizeof(CInst));"$$HL,1$$";
+						if (opsize == 32 && seg_size == 64)
+						{
+							tmpins2 = InstEntryFind(rip, 64, seg_size);
+							if (tmpins2 != tmpins)
+								tmpins = tmpins2;
+						}
+						break; // leave for loop
+					}
+				}
+				if (ARGT_XMM <= tmpins->arg1 <= ARGT_XMM0 ||
+					ARGT_XMM <= tmpins->arg2 <= ARGT_XMM0)
+				{
+					for (i = 0; i < tmpins->opcode_count; i++)
+					{
+						if (tmpins->opcode[i] != rip[i])
+						{
+							ST_ERR_ST "$$HL,0$$BAD MATCH SSE check #2! %02X with %02X\n", tmpins->opcode[i], rip[i];
+//							D(tmpins, sizeof(CInst));"\n$$HL,1$$";
+							goto sse_check_fail; // evaluate inst op with RIP. if not identical, not a match.
+						}
+					}
+					goto sse_check_jump; // if match, jump to processing. else, treat as legacy prefix.
+				}
+sse_check_fail:
 				if (opsize == 16)
 					opsize = 32;
 				else
@@ -407,15 +441,16 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				rip[1] >> 3 & 7 == rip[1] & 7)
 			tmpins = tmpins2;
 	}
+sse_check_jump:
 
 	rip += tmpins->opcode_count;
 	tmpo = tmpins(U8 *) - tmpins->ins_entry_num * sizeof(CInst) - offset(CHashOpcode.ins);
 	if (just_ins)
 		*line1 = 0;
 	CatPrint(line1, tmpo->str);
-
 	arg1 = tmpins->arg1;
 	arg2 = tmpins->arg2;
+	arg3 = tmpins->arg3;
 
 	if (arg1_size = tmpins->size1)
 	{
@@ -431,6 +466,13 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			CatPrint(arg2_st, "I%d ", arg2_size);
 		else
 			CatPrint(arg2_st, "U%d ", arg2_size);
+	}
+	if (arg3_size = tmpins->size3)
+	{
+		if (Bt(&uasm.signed_arg_mask, arg3))
+			CatPrint(arg3_st, "I%d ", arg3_size);
+		else
+			CatPrint(arg3_st, "U%d ", arg3_size);
 	}
 
 	if (tmpins->flags & IEF_PLUS_OPCODE)
@@ -511,7 +553,8 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 		RM2 = ModrM >> 3 & 7 + REX_r;
 		if (Mod < 3 && RM1 & 7 == 4 && !isXMM) // SSE instructions have lower bit clear and doesn't mean SIB
 			SIB = *rip++;
-		if (Mod == 1) {
+		if (Mod == 1)
+		{
 			disp = *rip(U8 *)++;
 			CatPrint(reloced_arg1_st, "0x%02X", disp);
 		}
@@ -705,7 +748,6 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			CatPrint(arg1_st, "%Z", *rip++ - tmpins->opcode[tmpins->opcode_count - 1], "ST_FSTACK_REGS");
 			break;
 	}
-
 	switch (arg2)
 	{
 		case ARGT_IMM8:
@@ -749,16 +791,27 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			CatPrint(arg2_st, "%Z", *rip++ - tmpins->opcode[tmpins->opcode_count - 1], "ST_FSTACK_REGS");
 			break;
 	}
+	switch (arg3)
+	{
+		case ARGT_IMM8:
+		case ARGT_UIMM8:
+			CatPrint(arg3_st, "0x%02X", *rip(U8 *)++);
+			break;
+	}
+
 	if (tmpins->flags & IEF_ENDING_ZERO)
 		rip++;
 
 	if (*arg1_st)
 	{
-		CatPrint(line1, "%h*c", 6 - StrLen(tmpo->str), ' ');
+		CatPrint(line1, "%h*c", 12 - StrLen(tmpo->str), ' ');
 		CatPrint(line1, " %s", arg1_st);
 	}
 	if (*arg2_st)
 		CatPrint(line1, ", %s", arg2_st);
+	if (*arg3_st)
+		CatPrint(line1, ", %s", arg3_st);
+	
 	CatPrint(line1, "\n");
 	CatPrint(line2, "\n");
 	if (!just_ins)

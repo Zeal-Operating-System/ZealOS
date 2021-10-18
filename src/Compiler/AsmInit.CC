@@ -138,7 +138,7 @@ U0 AsmHashLoad()
 					if (tmpins->flags & IEF_STI_LIKE && tmpins->slash_val != SV_I_REG)
 						tmpins->uasm_slash_val = SV_STI_LIKE;
 
-					tmpins->arg1 = tmpins->arg2 = tmpins->size1 = tmpins->size2 = 0;
+					tmpins->arg1 = tmpins->arg2 = tmpins->arg3 = tmpins->size1 = tmpins->size2 = tmpins->size3 = 0;
 					if (cc->token == TK_IDENT)
 					{
 						j = DefineMatch(cc->cur_str, "ST_ARG_TYPES");
@@ -170,6 +170,14 @@ U0 AsmHashLoad()
 							else if (Bt(&cmp.size_arg_mask[16], j))
 								tmpins->size2 = 128;
 
+							if (cc->token == TK_IDENT)
+							{
+								j = DefineMatch(cc->cur_str, "ST_ARG_TYPES");
+								Lex(cc);
+								tmpins->arg3 = j;
+								if (Bt(&cmp.size_arg_mask[1],j))
+									tmpins->size3 = 8;
+							}
 						}
 					}
 				}
