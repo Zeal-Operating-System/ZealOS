@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.02">
+<meta name="generator" content="ZealOS V1.03">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -855,8 +855,8 @@ body {background-color:#1f1f1f;}
 <a name="l828"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_FUN</span><span class=cF0>             </span><span class=cFE>0x00040</span><span class=cF0> </span><span class=cF2>//CHashFun</span><span class=cF0>
 <a name="l829"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_WORD</span><span class=cF0>            </span><span class=cFE>0x00080</span><span class=cF0> </span><span class=cF2>//CHashAC only in AutoComplete table</span><span class=cF0>
 <a name="l830"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_DICT_WORD</span><span class=cF0>       </span><span class=cFE>0x00100</span><span class=cF0> </span><span class=cF2>//CHashGeneric only in AutoComplete tbl</span><span class=cF0>
-<a name="l831"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>         </span><span class=cFE>0x00200</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OpCodes.DD.html#l147"><span class=cF4>KEYWORD</span></a><span class=cF0>
-<a name="l832"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>     </span><span class=cFE>0x00400</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OpCodes.DD.html#l196"><span class=cF4>ASM_KEYWORD</span></a><span class=cF0>
+<a name="l831"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>         </span><span class=cFE>0x00200</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OpCodes.DD.html#l148"><span class=cF4>KEYWORD</span></a><span class=cF0>
+<a name="l832"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>     </span><span class=cFE>0x00400</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OpCodes.DD.html#l197"><span class=cF4>ASM_KEYWORD</span></a><span class=cF0>
 <a name="l833"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_OPCODE</span><span class=cF0>          </span><span class=cFE>0x00800</span><span class=cF0> </span><span class=cF2>//CHashOpcode</span><span class=cF0>
 <a name="l834"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_REG</span><span class=cF0>             </span><span class=cFE>0x01000</span><span class=cF0> </span><span class=cF2>//CHashReg</span><span class=cF0>
 <a name="l835"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_FILE</span><span class=cF0>            </span><span class=cFE>0x02000</span><span class=cF0> </span><span class=cF2>//CHashGeneric</span><span class=cF0>
@@ -1917,11 +1917,11 @@ body {background-color:#1f1f1f;}
 <a name="l1890"></a>{
 <a name="l1891"></a>    </span><span class=cF1>U8</span><span class=cF0>  ins_entry_num, </span><span class=cF2>//This entry num in opcode hash entry</span><span class=cF0>
 <a name="l1892"></a>        opcode_count,
-<a name="l1893"></a>        opcode[</span><span class=cFE>4</span><span class=cF0>];
+<a name="l1893"></a>        opcode[</span><span class=cFE>8</span><span class=cF0>];
 <a name="l1894"></a>    </span><span class=cF9>U16</span><span class=cF0> flags;
 <a name="l1895"></a>    </span><span class=cF1>U8</span><span class=cF0>  slash_val, uasm_slash_val, opcode_modifier,
-<a name="l1896"></a>        arg1, arg2,
-<a name="l1897"></a>        size1, size2,</span><span class=cF2>//Size in bits</span><span class=cF0>
+<a name="l1896"></a>        arg1, arg2, arg3,
+<a name="l1897"></a>        size1, size2, size3, </span><span class=cF2>//Size in bits</span><span class=cF0>
 <a name="l1898"></a>        pad;
 <a name="l1899"></a>};
 <a name="l1900"></a>
@@ -1977,13 +1977,13 @@ body {background-color:#1f1f1f;}
 <a name="l1950"></a>
 <a name="l1951"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAbsCountsI64</span><span class=cF0>
 <a name="l1952"></a>{
-<a name="l1953"></a>    </span><span class=cF9>U16</span><span class=cF0> abs_address,    </span><span class=cF2>//Only odd/even matters. Count of absolute address in an exp.</span><span class=cF0>
-<a name="l1954"></a>        c_address;  </span><span class=cF2>//Only odd/even matters. Count of C address in an exp.</span><span class=cF0>
+<a name="l1953"></a>    </span><span class=cF9>U16</span><span class=cF0> abs_address,    </span><span class=cF2>//Only odd/even matters. Count of absolute address in an expression.</span><span class=cF0>
+<a name="l1954"></a>        c_address;  </span><span class=cF2>//Only odd/even matters. Count of C address in an expression.</span><span class=cF0>
 <a name="l1955"></a>    </span><span class=cF9>U32</span><span class=cF0> externs;    </span><span class=cF2>//Only nonzero matters. Some regions have externs banned.</span><span class=cF0>
 <a name="l1956"></a>};
 <a name="l1957"></a>
 <a name="l1958"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAsmUndefHash</span><span class=cF0>
-<a name="l1959"></a>{</span><span class=cF2>//Only place created is </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseExp.CC.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM exp.</span><span class=cF0>
+<a name="l1959"></a>{</span><span class=cF2>//Only place created is </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseExp.CC.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM expression.</span><span class=cF0>
 <a name="l1960"></a>    </span><span class=cF9>CAsmUndefHash</span><span class=cF0>   *next;
 <a name="l1961"></a>    </span><span class=cF9>CHashExport</span><span class=cF0>     *hash;
 <a name="l1962"></a>};
@@ -2110,12 +2110,12 @@ body {background-color:#1f1f1f;}
 <a name="l2083"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_MM</span><span class=cF0>         </span><span class=cFE>48</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
 <a name="l2084"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_MM32</span><span class=cF0>       </span><span class=cFE>49</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
 <a name="l2085"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_MM64</span><span class=cF0>       </span><span class=cFE>50</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
-<a name="l2086"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM</span><span class=cF0>        </span><span class=cFE>51</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
+<a name="l2086"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM</span><span class=cF0>        </span><span class=cFE>51</span><span class=cF0>
 <a name="l2087"></a>
-<a name="l2088"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM32</span><span class=cF0>      </span><span class=cFE>52</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
-<a name="l2089"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM64</span><span class=cF0>      </span><span class=cFE>53</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
-<a name="l2090"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM128</span><span class=cF0>     </span><span class=cFE>54</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
-<a name="l2091"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM0</span><span class=cF0>       </span><span class=cFE>55</span><span class=cF0> </span><span class=cF2>// Not implemented</span><span class=cF0>
+<a name="l2088"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM32</span><span class=cF0>      </span><span class=cFE>52</span><span class=cF0>
+<a name="l2089"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM64</span><span class=cF0>      </span><span class=cFE>53</span><span class=cF0>
+<a name="l2090"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM128</span><span class=cF0>     </span><span class=cFE>54</span><span class=cF0>
+<a name="l2091"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARGT_XMM0</span><span class=cF0>       </span><span class=cFE>55</span><span class=cF0>
 <a name="l2092"></a>
 <a name="l2093"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Internal;Hash/System&quot;</span><span class=cF0>
 <a name="l2094"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OCF_ALIAS</span><span class=cF0>           </span><span class=cFE>1</span><span class=cF0>
@@ -2220,7 +2220,7 @@ body {background-color:#1f1f1f;}
 <a name="l2193"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAOTCtrl</span><span class=cF0>
 <a name="l2194"></a>{
 <a name="l2195"></a>    </span><span class=cF9>I64</span><span class=cF0>                  rip; </span><span class=cF2>//Instruction pointer</span><span class=cF0>
-<a name="l2196"></a>    </span><span class=cF9>CAsmArg</span><span class=cF0>              arg1, arg2;
+<a name="l2196"></a>    </span><span class=cF9>CAsmArg</span><span class=cF0>              arg1, arg2, arg3;
 <a name="l2197"></a>    </span><span class=cF9>CAOTBinBlk</span><span class=cF0>          *bin;
 <a name="l2198"></a>    </span><span class=cF9>I64</span><span class=cF0>                  num_bin_U8s,
 <a name="l2199"></a>                         max_align_bits, org;

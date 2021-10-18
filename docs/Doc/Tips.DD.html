@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.02">
+<meta name="generator" content="ZealOS V1.03">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -45,7 +45,7 @@ body {background-color:#1f1f1f;}
 <a name="l18"></a>
 <a name="l19"></a>* You can copy your files to a mirrored ident partition, periodically with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l145"><span class=cF4>CopyTree</span></a><span class=cF0>() commands in scripts.  You can do merge 
 <a name="l20"></a>commands with a menu entry like this:
-<a name="l21"></a></span><span class=cF2>Merge(\&quot;C:/*\&quot;,\&quot;D:/*\&quot;,\&quot;+r+d\&quot;);</span><span class=cF0> to check your changes.
+<a name="l21"></a></span><span class=cF2>Merge(&quot;C:/&quot;,&quot;D:/&quot;,&quot;+r+d&quot;);</span><span class=cF0> to check your changes.
 <a name="l22"></a>
 <a name="l23"></a>* </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> at the cmd line to access your PersonalMenu. Place macros there with </span><span class=cF2>&lt;CTRL-l&gt;</span><span class=cF0>, or icon-like sprites with </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0>. 
 <a name="l24"></a>Use the </span><span class=cF2>Pop-Up</span><span class=cF0> option on macros to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>() a task to run a file. It dies when it is finished. This returns mem to the system. 
@@ -58,7 +58,7 @@ body {background-color:#1f1f1f;}
 <a name="l31"></a>
 <a name="l32"></a>* You can adjust the mouse movement rate by setting global variables in your start-up file. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l11"><span class=cF4>mouse scale</span></a><span class=cF0>.
 <a name="l33"></a>
-<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global variable in a start-up file. It's units are </span><span class=cF4>
+<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global variable in a start-up file. Its units are </span><span class=cF4>
 <a name="l35"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l707"><span class=cF4>CDATE_FREQ</span></a><span class=cF0>. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l8"><span class=cF4>local time</span></a><span class=cF0>.
 <a name="l36"></a>
 <a name="l37"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-L&gt;</span><span class=cF0> in the editor to reindent a </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> function or renumber an asm routine's local labels.

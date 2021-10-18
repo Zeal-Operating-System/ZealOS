@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.02">
+<meta name="generator" content="ZealOS V1.03">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -165,7 +165,7 @@ body {background-color:#1f1f1f;}
 <a name="l138"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_STI_LIKE</span><span class=cF0> &amp;&amp; tmpins-&gt;slash_val != </span><span class=cF3>SV_I_REG</span><span class=cF0>)
 <a name="l139"></a>                        tmpins-&gt;uasm_slash_val = </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>;
 <a name="l140"></a>
-<a name="l141"></a>                    tmpins-&gt;arg1 = tmpins-&gt;arg2 = tmpins-&gt;size1 = tmpins-&gt;size2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l141"></a>                    tmpins-&gt;arg1 = tmpins-&gt;arg2 = tmpins-&gt;arg3 = tmpins-&gt;size1 = tmpins-&gt;size2 = tmpins-&gt;size3 = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l142"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
 <a name="l143"></a>                    {
 <a name="l144"></a>                        j = </span><span class=cF5>DefineMatch</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cF6>&quot;ST_ARG_TYPES&quot;</span><span class=cF0>);
@@ -197,68 +197,76 @@ body {background-color:#1f1f1f;}
 <a name="l170"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>cmp</span><span class=cF0>.size_arg_mask[</span><span class=cFE>16</span><span class=cF0>], j</span><span class=cF7>)</span><span class=cF0>)
 <a name="l171"></a>                                tmpins-&gt;size2 = </span><span class=cFE>128</span><span class=cF0>;
 <a name="l172"></a>
-<a name="l173"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l174"></a>                    }
-<a name="l175"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l176"></a>                size = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CHashOpcode</span><span class=cF0>.ins) + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CInst</span><span class=cF0>) * tmpo_max-&gt;inst_entry_count;
-<a name="l177"></a>                tmpo = </span><span class=cF5>MAlloc</span><span class=cF0>(size);
-<a name="l178"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(tmpo, tmpo_max, size);
-<a name="l179"></a>                tmpo-&gt;use_count = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l180"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;str, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash, </span><span class=cF3>HTT_OPCODE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l181"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Duplicate OPCODE entry &quot;</span><span class=cF0>);
-<a name="l182"></a>                </span><span class=cF5>HashAdd</span><span class=cF0>(tmpo, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
-<a name="l183"></a>                </span><span class=cF2>//Parse aliases.</span><span class=cF0>
-<a name="l184"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>':'</span><span class=cF0>)
-<a name="l185"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l186"></a>                    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
-<a name="l187"></a>                    {
-<a name="l188"></a>                        tmpo2 = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpo);
-<a name="l189"></a>                        tmpo2-&gt;str = cc-&gt;cur_str;
-<a name="l190"></a>                        cc-&gt;cur_str = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l191"></a>                        tmpo2-&gt;oc_flags |= </span><span class=cF3>OCF_ALIAS</span><span class=cF0>;
-<a name="l192"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>tmpo2-&gt;str, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash, </span><span class=cF3>HTT_OPCODE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l193"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Duplicate OPCODE ALIAS entry &quot;</span><span class=cF0>);
-<a name="l194"></a>                        </span><span class=cF5>HashAdd</span><span class=cF0>(tmpo2, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
-<a name="l195"></a>                    }
-<a name="l196"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l197"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l198"></a>
-<a name="l199"></a>            </span><span class=cF1>case</span><span class=cF0>: </span><span class=cF2>//KEYWORD</span><span class=cF0>
-<a name="l200"></a>            </span><span class=cF1>case</span><span class=cF0>: </span><span class=cF2>//ASM_KEYWORD</span><span class=cF0>
-<a name="l201"></a>                tmph = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0>);
-<a name="l202"></a>                tmph-&gt;str = cc-&gt;cur_str;
-<a name="l203"></a>                cc-&gt;cur_str = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l204"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip keyword name</span><span class=cF0>
-<a name="l205"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_I64</span><span class=cF0>)
-<a name="l206"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting int at &quot;</span><span class=cF0>);
-<a name="l207"></a>                tmph-&gt;user_data0 = cc-&gt;cur_i64;
-<a name="l208"></a>                </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>10</span><span class=cF0>)
-<a name="l209"></a>                    tmph-&gt;type = </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>;
-<a name="l210"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l211"></a>                    tmph-&gt;type = </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>;
-<a name="l212"></a>                </span><span class=cF5>HashAdd</span><span class=cF0>(tmph, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
-<a name="l213"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip INT</span><span class=cF0>
-<a name="l214"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l215"></a>        }
-<a name="l216"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
-<a name="l217"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ';' at&quot;</span><span class=cF0>);
-<a name="l218"></a>        </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip ';'</span><span class=cF0>
-<a name="l219"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l220"></a>    </span><span class=cF5>Free</span><span class=cF0>(tmpo_max);
-<a name="l221"></a>    </span><span class=cF5>CompCtrlDel</span><span class=cF0>(cc);
-<a name="l222"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; INTERNAL_TYPES_NUM; i++)
-<a name="l223"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l224"></a>        tmpit = &amp;</span><span class=cFD>internal_types_table</span><span class=cF0>[i];
-<a name="l225"></a>        tmpc = </span><span class=cFD>ParseClassNew</span><span class=cF0>;
-<a name="l226"></a>        tmpc-&gt;type = </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF0>;
-<a name="l227"></a>        tmpc-&gt;raw_type = tmpit-&gt;type;
-<a name="l228"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;tmpc-&gt;flags, </span><span class=cF3>Cf_INTERNAL_TYPE</span><span class=cF0>);
-<a name="l229"></a>        tmpc-&gt;size = tmpit-&gt;size;
-<a name="l230"></a>        tmpc-&gt;str = </span><span class=cF5>SysStrNew</span><span class=cF0>(tmpit-&gt;name);
-<a name="l231"></a>        </span><span class=cF5>HashAdd</span><span class=cF0>(tmpc, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
-<a name="l232"></a>        </span><span class=cFB>cmp</span><span class=cF0>.internal_types[tmpc-&gt;raw_type] = tmpc;
-<a name="l233"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l234"></a>    </span><span class=cFB>sys_task</span><span class=cF0>-&gt;hash_table-&gt;next = </span><span class=cFB>cmp</span><span class=cF0>.asm_hash;
-<a name="l235"></a>}
+<a name="l173"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l174"></a>                            {
+<a name="l175"></a>                                j = </span><span class=cF5>DefineMatch</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cF6>&quot;ST_ARG_TYPES&quot;</span><span class=cF0>);
+<a name="l176"></a>                                </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l177"></a>                                tmpins-&gt;arg3 = j;
+<a name="l178"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>cmp</span><span class=cF0>.size_arg_mask[</span><span class=cFE>1</span><span class=cF0>],j</span><span class=cF7>)</span><span class=cF0>)
+<a name="l179"></a>                                    tmpins-&gt;size3 = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l180"></a>                            }
+<a name="l181"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l182"></a>                    }
+<a name="l183"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l184"></a>                size = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CHashOpcode</span><span class=cF0>.ins) + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CInst</span><span class=cF0>) * tmpo_max-&gt;inst_entry_count;
+<a name="l185"></a>                tmpo = </span><span class=cF5>MAlloc</span><span class=cF0>(size);
+<a name="l186"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(tmpo, tmpo_max, size);
+<a name="l187"></a>                tmpo-&gt;use_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l188"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;str, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash, </span><span class=cF3>HTT_OPCODE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l189"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Duplicate OPCODE entry &quot;</span><span class=cF0>);
+<a name="l190"></a>                </span><span class=cF5>HashAdd</span><span class=cF0>(tmpo, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
+<a name="l191"></a>                </span><span class=cF2>//Parse aliases.</span><span class=cF0>
+<a name="l192"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>':'</span><span class=cF0>)
+<a name="l193"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l194"></a>                    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l195"></a>                    {
+<a name="l196"></a>                        tmpo2 = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpo);
+<a name="l197"></a>                        tmpo2-&gt;str = cc-&gt;cur_str;
+<a name="l198"></a>                        cc-&gt;cur_str = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l199"></a>                        tmpo2-&gt;oc_flags |= </span><span class=cF3>OCF_ALIAS</span><span class=cF0>;
+<a name="l200"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>tmpo2-&gt;str, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash, </span><span class=cF3>HTT_OPCODE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l201"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Duplicate OPCODE ALIAS entry &quot;</span><span class=cF0>);
+<a name="l202"></a>                        </span><span class=cF5>HashAdd</span><span class=cF0>(tmpo2, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
+<a name="l203"></a>                    }
+<a name="l204"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l205"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l206"></a>
+<a name="l207"></a>            </span><span class=cF1>case</span><span class=cF0>: </span><span class=cF2>//KEYWORD</span><span class=cF0>
+<a name="l208"></a>            </span><span class=cF1>case</span><span class=cF0>: </span><span class=cF2>//ASM_KEYWORD</span><span class=cF0>
+<a name="l209"></a>                tmph = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0>);
+<a name="l210"></a>                tmph-&gt;str = cc-&gt;cur_str;
+<a name="l211"></a>                cc-&gt;cur_str = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l212"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip keyword name</span><span class=cF0>
+<a name="l213"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_I64</span><span class=cF0>)
+<a name="l214"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting int at &quot;</span><span class=cF0>);
+<a name="l215"></a>                tmph-&gt;user_data0 = cc-&gt;cur_i64;
+<a name="l216"></a>                </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>10</span><span class=cF0>)
+<a name="l217"></a>                    tmph-&gt;type = </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>;
+<a name="l218"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l219"></a>                    tmph-&gt;type = </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>;
+<a name="l220"></a>                </span><span class=cF5>HashAdd</span><span class=cF0>(tmph, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
+<a name="l221"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip INT</span><span class=cF0>
+<a name="l222"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l223"></a>        }
+<a name="l224"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l225"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ';' at&quot;</span><span class=cF0>);
+<a name="l226"></a>        </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip ';'</span><span class=cF0>
+<a name="l227"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l228"></a>    </span><span class=cF5>Free</span><span class=cF0>(tmpo_max);
+<a name="l229"></a>    </span><span class=cF5>CompCtrlDel</span><span class=cF0>(cc);
+<a name="l230"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; INTERNAL_TYPES_NUM; i++)
+<a name="l231"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l232"></a>        tmpit = &amp;</span><span class=cFD>internal_types_table</span><span class=cF0>[i];
+<a name="l233"></a>        tmpc = </span><span class=cFD>ParseClassNew</span><span class=cF0>;
+<a name="l234"></a>        tmpc-&gt;type = </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF0>;
+<a name="l235"></a>        tmpc-&gt;raw_type = tmpit-&gt;type;
+<a name="l236"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;tmpc-&gt;flags, </span><span class=cF3>Cf_INTERNAL_TYPE</span><span class=cF0>);
+<a name="l237"></a>        tmpc-&gt;size = tmpit-&gt;size;
+<a name="l238"></a>        tmpc-&gt;str = </span><span class=cF5>SysStrNew</span><span class=cF0>(tmpit-&gt;name);
+<a name="l239"></a>        </span><span class=cF5>HashAdd</span><span class=cF0>(tmpc, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash);
+<a name="l240"></a>        </span><span class=cFB>cmp</span><span class=cF0>.internal_types[tmpc-&gt;raw_type] = tmpc;
+<a name="l241"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l242"></a>    </span><span class=cFB>sys_task</span><span class=cF0>-&gt;hash_table-&gt;next = </span><span class=cFB>cmp</span><span class=cF0>.asm_hash;
+<a name="l243"></a>}
 </span></pre></body>
 </html>
