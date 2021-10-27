@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.03">
+<meta name="generator" content="ZealOS V1.04">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -419,7 +419,7 @@ body {background-color:#1f1f1f;}
 <a name="l392"></a>                    {
 <a name="l393"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;opcode[i] != rip[i])
 <a name="l394"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l395"></a>                            </span><span class=cF3>ST_ERR_ST</span><span class=cF0> </span><span class=cF6>&quot;$HL,0$BAD MATCH SSE check #2! %02X with %02X\n&quot;</span><span class=cF0>, tmpins-&gt;opcode[i], rip[i];
+<a name="l395"></a></span><span class=cF2>//</span><span class=cF0>                          </span><span class=cF2>ST_ERR_ST &quot;$HL,0$BAD MATCH SSE check #2! %02X with %02X\n&quot;, tmpins-&gt;opcode[i], rip[i];</span><span class=cF0>
 <a name="l396"></a></span><span class=cF2>//</span><span class=cF0>                          </span><span class=cF2>D(tmpins, sizeof(CInst));&quot;\n$HL,1$&quot;;</span><span class=cF0>
 <a name="l397"></a>                            </span><span class=cF1>goto</span><span class=cF0> sse_check_fail; </span><span class=cF2>// evaluate inst op with RIP. if not identical, not a match.</span><span class=cF0>
 <a name="l398"></a>                        </span><span class=cF7>}</span><span class=cF0>

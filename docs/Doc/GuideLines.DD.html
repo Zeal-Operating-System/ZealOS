@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.03">
+<meta name="generator" content="ZealOS V1.04">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -161,7 +161,7 @@ body {background-color:#1f1f1f;}
 <a name="l134"></a>
 <a name="l135"></a>* </span><span class=cF2>GS</span><span class=cF0> must always point to the cur </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4103"><span class=cF4>CCPU</span></a><span class=cF0>.
 <a name="l136"></a>
-<a name="l137"></a>* Don't change the segment registers unless interrupts are off. It's hard to do, anyway.    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l522"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
+<a name="l137"></a>* Don't change the segment registers unless interrupts are off. It's hard to do, anyway.    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l546"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l532"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
 <a name="l138"></a>
 <a name="l139"></a>* When interacting with </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> compiled code, preserve </span><span class=cF2>RBP, RSI, RDI, R10-R15</span><span class=cF0> because the compiler uses these for register 
 <a name="l140"></a>variables.  You are free to clobber </span><span class=cF2>RAX, RBX, RCX, RDX</span><span class=cF0>, </span><span class=cF2>R8</span><span class=cF0> and </span><span class=cF2>R9</span><span class=cF0>.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>Compiler Reg Masks</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1911"><span class=cF4>PUSH_C_REGS</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1912"><span class=cF4>POP_C_REGS</span></a><span class=cF0>

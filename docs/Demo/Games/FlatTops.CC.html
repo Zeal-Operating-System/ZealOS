@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.03">
+<meta name="generator" content="ZealOS V1.04">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .c10{color:#e3e3e3;background-color:#4f84a6;}
@@ -731,305 +731,305 @@ body {background-color:#1f1f1f;}
 <a name="l702"></a>            d -= </span><span class=cFE>20</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (FIRE_WIDTH * FIRE_HEIGHT);
 <a name="l703"></a>}
 <a name="l704"></a>
-<a name="l705"></a></span><span class=cF1>U0</span><span class=cF0> MyNoise(</span><span class=cF9>I64</span><span class=cF0> mS, </span><span class=cF1>F64</span><span class=cF0> min_ona, </span><span class=cF1>F64</span><span class=cF0> max_ona)
-<a name="l706"></a>{</span><span class=cF2>//Make white noise for given number of mS.</span><span class=cF0>
-<a name="l707"></a></span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Sound.CC.html#l432"><span class=cF4>Noise</span></a><span class=cF2>. On bare-metal, Spawn() hogs CPU.</span><span class=cF0>
-<a name="l708"></a>    </span><span class=cF9>CSoundEffectFrame</span><span class=cF0> *ns;
-<a name="l709"></a>
-<a name="l710"></a>    </span><span class=cF1>if</span><span class=cF0> (mS &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l711"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l712"></a>        ns = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSoundEffectFrame</span><span class=cF7>)</span><span class=cF0>);
-<a name="l713"></a>        ns-&gt;type = </span><span class=cF3>SE_NOISE</span><span class=cF0>;
-<a name="l714"></a>        ns-&gt;duration = mS / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l715"></a>        ns-&gt;ona1 = min_ona;
-<a name="l716"></a>        ns-&gt;ona2 = max_ona;
-<a name="l717"></a>        </span><span class=cFB>music</span><span class=cF0>.mute++;
-<a name="l718"></a>        </span><span class=cF5>SoundEffectTask</span><span class=cF0>(ns);
-<a name="l719"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l720"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l721"></a>
-<a name="l722"></a>    </span><span class=cF1>return</span><span class=cF0>;
-<a name="l723"></a>}
-<a name="l724"></a>
-<a name="l725"></a></span><span class=cF1>U0</span><span class=cF0> Combat(</span><span class=cF1>F64</span><span class=cF0> period)
-<a name="l726"></a>{
-<a name="l727"></a>    </span><span class=cF1>F64</span><span class=cF0>      d;
-<a name="l728"></a>    Obj     *tmpo, *tmpo1;
-<a name="l729"></a>    Torpedo *tmpt;
-<a name="l730"></a>
-<a name="l731"></a>    tmpo = obj_head.next;
-<a name="l732"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l733"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l734"></a>        tmpo-&gt;flags &amp;= ~OF_SHOOTING;
-<a name="l735"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp;
-<a name="l736"></a>            </span><span class=cF7>(</span><span class=cF0>tmpo1 = ObjFind(tmpo-&gt;x, tmpo-&gt;y, OF_ACTIVE, OF_ACTIVE,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;player ^ </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, &amp;d)</span><span class=cF7>)</span><span class=cF0>)
-<a name="l737"></a>        {
-<a name="l738"></a>            tmpo-&gt;target_x = tmpo1-&gt;x;
-<a name="l739"></a>            tmpo-&gt;target_y = tmpo1-&gt;y;
-<a name="l740"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo1-&gt;flags &amp; OF_SHIP)
-<a name="l741"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l742"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;torpedos &amp;&amp; d &lt; tmpo-&gt;torpedos_range &amp;&amp; </span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>125</span><span class=cF0> * period)
-<a name="l743"></a>                {
-<a name="l744"></a>                    tmpo-&gt;torpedos--;
-<a name="l745"></a>                    tmpt = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>Torpedo</span><span class=cF7>)</span><span class=cF0>);
-<a name="l746"></a>                    tmpt-&gt;x         = tmpo-&gt;x;
-<a name="l747"></a>                    tmpt-&gt;y         = tmpo-&gt;y;
-<a name="l748"></a>                    tmpt-&gt;speed     = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l749"></a>                    d /= tmpt-&gt;speed * (GAME_SPEED_SCALE * game_speed);
-<a name="l750"></a>                    tmpo1-&gt;death_time = tmpt-&gt;timeout = </span><span class=cF5>tS</span><span class=cF0> + d;
-<a name="l751"></a>                    tmpt-&gt;target    = tmpo1;
-<a name="l752"></a>                    tmpt-&gt;theta         = </span><span class=cF5>Arg</span><span class=cF0>(tmpo1-&gt;x - tmpo-&gt;x, tmpo1-&gt;y - tmpo-&gt;y);
-<a name="l753"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpt, torpedo_head.last);
-<a name="l754"></a>                    </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>, </span><span class=cFE>86</span><span class=cF0>, </span><span class=cFE>53</span><span class=cF0>);
-<a name="l755"></a>                }
-<a name="l756"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;ship_guns &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; d &lt; tmpo-&gt;ship_guns_range)
-<a name="l757"></a>                {
-<a name="l758"></a>                    tmpo-&gt;flags |= OF_SHOOTING;
-<a name="l759"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>125</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
-<a name="l760"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l761"></a>                        ShipDamage(tmpo1, tmpo-&gt;ship_guns * </span><span class=cF5>Rand</span><span class=cF0> * period);
-<a name="l762"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
-<a name="l763"></a>                            tmpo1-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
-<a name="l764"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l765"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; next_noise)
-<a name="l766"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l767"></a>                        MyNoise(</span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>29</span><span class=cF0>, </span><span class=cFE>46</span><span class=cF0>);
-<a name="l768"></a>                        next_noise = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>;
-<a name="l769"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l770"></a>                }
-<a name="l771"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l772"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l773"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l774"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;air_guns &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; d &lt; tmpo-&gt;air_guns_range)
-<a name="l775"></a>                {
-<a name="l776"></a>                    tmpo-&gt;flags |= OF_SHOOTING;
-<a name="l777"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0>&lt;</span><span class=cFE>125</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
-<a name="l778"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l779"></a>                        tmpo1-&gt;life_percent -= tmpo-&gt;air_guns * </span><span class=cF5>Rand</span><span class=cF0> * period;
-<a name="l780"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
-<a name="l781"></a>                            tmpo1-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
-<a name="l782"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l783"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; next_noise)
-<a name="l784"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l785"></a>                        MyNoise(</span><span class=cFE>25</span><span class=cF0>, </span><span class=cFE>62</span><span class=cF0>, </span><span class=cFE>86</span><span class=cF0>);
-<a name="l786"></a>                        next_noise = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>025</span><span class=cF0>;
-<a name="l787"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l788"></a>                }
-<a name="l789"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l790"></a>        }
-<a name="l791"></a>        tmpo = tmpo-&gt;next;
-<a name="l792"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l793"></a>    tmpo = obj_head.next;
-<a name="l794"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l795"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l796"></a>        tmpo1 = tmpo-&gt;next;
-<a name="l797"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;type == OT_FIGHTER &amp;&amp;
-<a name="l798"></a>                </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> || tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp; tmpo-&gt;fuel &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> || tmpo-&gt;host &amp;&amp;
-<a name="l799"></a>                !(tmpo-&gt;flags &amp; OF_ACTIVE) &amp;&amp; tmpo-&gt;host-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
-<a name="l800"></a>            ObjDel(tmpo);
-<a name="l801"></a>        tmpo = tmpo1;
-<a name="l802"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l803"></a>    tmpo = obj_head.next;
-<a name="l804"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l805"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l806"></a>        tmpo1 = tmpo-&gt;next;
-<a name="l807"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
-<a name="l808"></a>            ObjDel(tmpo);
-<a name="l809"></a>        tmpo = tmpo1;
-<a name="l810"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l811"></a>}
-<a name="l812"></a>
-<a name="l813"></a>#</span><span class=cF1>define</span><span class=cF0> ANIMATE_FREQ        </span><span class=cFE>50</span><span class=cF0>
-<a name="l814"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
-<a name="l815"></a>{
-<a name="l816"></a>    Obj     *tmpo;
-<a name="l817"></a>    Torpedo *tmpt, *tmpt1;
-<a name="l818"></a>    </span><span class=cF1>F64</span><span class=cF0>      d, period;
-<a name="l819"></a>
-<a name="l820"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l821"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l822"></a>        period = GAME_SPEED_SCALE * game_speed / ANIMATE_FREQ;
-<a name="l823"></a>        SquadronActions;
-<a name="l824"></a>
-<a name="l825"></a>        tmpo = obj_head.next;
-<a name="l826"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l827"></a>        {
-<a name="l828"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp; tmpo-&gt;fuel &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l829"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l830"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;dtheta)
-<a name="l831"></a>                {
-<a name="l832"></a>                    d = tmpo-&gt;dtheta;
-<a name="l833"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;turn_rate * period)
-<a name="l834"></a>                        d = tmpo-&gt;turn_rate * period;
-<a name="l835"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; -tmpo-&gt;turn_rate * period)
-<a name="l836"></a>                        d = -tmpo-&gt;turn_rate * period;
-<a name="l837"></a>                    tmpo-&gt;theta  += d;
-<a name="l838"></a>                    tmpo-&gt;dtheta -= d;
+<a name="l705"></a></span><span class=cF1>U0</span><span class=cF0> Combat(</span><span class=cF1>F64</span><span class=cF0> period)
+<a name="l706"></a>{
+<a name="l707"></a>    </span><span class=cF1>F64</span><span class=cF0>      d;
+<a name="l708"></a>    Obj     *tmpo, *tmpo1;
+<a name="l709"></a>    Torpedo *tmpt;
+<a name="l710"></a>
+<a name="l711"></a>    tmpo = obj_head.next;
+<a name="l712"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l713"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l714"></a>        tmpo-&gt;flags &amp;= ~OF_SHOOTING;
+<a name="l715"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp;
+<a name="l716"></a>            </span><span class=cF7>(</span><span class=cF0>tmpo1 = ObjFind(tmpo-&gt;x, tmpo-&gt;y, OF_ACTIVE, OF_ACTIVE,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;player ^ </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, &amp;d)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l717"></a>        {
+<a name="l718"></a>            tmpo-&gt;target_x = tmpo1-&gt;x;
+<a name="l719"></a>            tmpo-&gt;target_y = tmpo1-&gt;y;
+<a name="l720"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo1-&gt;flags &amp; OF_SHIP)
+<a name="l721"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l722"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;torpedos &amp;&amp; d &lt; tmpo-&gt;torpedos_range &amp;&amp; </span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>125</span><span class=cF0> * period)
+<a name="l723"></a>                {
+<a name="l724"></a>                    tmpo-&gt;torpedos--;
+<a name="l725"></a>                    tmpt = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>Torpedo</span><span class=cF7>)</span><span class=cF0>);
+<a name="l726"></a>                    tmpt-&gt;x         = tmpo-&gt;x;
+<a name="l727"></a>                    tmpt-&gt;y         = tmpo-&gt;y;
+<a name="l728"></a>                    tmpt-&gt;speed     = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l729"></a>                    d /= tmpt-&gt;speed * (GAME_SPEED_SCALE * game_speed);
+<a name="l730"></a>                    tmpo1-&gt;death_time = tmpt-&gt;timeout = </span><span class=cF5>tS</span><span class=cF0> + d;
+<a name="l731"></a>                    tmpt-&gt;target    = tmpo1;
+<a name="l732"></a>                    tmpt-&gt;theta         = </span><span class=cF5>Arg</span><span class=cF0>(tmpo1-&gt;x - tmpo-&gt;x, tmpo1-&gt;y - tmpo-&gt;y);
+<a name="l733"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpt, torpedo_head.last);
+<a name="l734"></a>                    </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>, </span><span class=cFE>86</span><span class=cF0>, </span><span class=cFE>53</span><span class=cF0>);
+<a name="l735"></a>                }
+<a name="l736"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;ship_guns &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; d &lt; tmpo-&gt;ship_guns_range)
+<a name="l737"></a>                {
+<a name="l738"></a>                    tmpo-&gt;flags |= OF_SHOOTING;
+<a name="l739"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>125</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
+<a name="l740"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l741"></a>                        ShipDamage(tmpo1, tmpo-&gt;ship_guns * </span><span class=cF5>Rand</span><span class=cF0> * period);
+<a name="l742"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
+<a name="l743"></a>                            tmpo1-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
+<a name="l744"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l745"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; next_noise)
+<a name="l746"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l747"></a>                        </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>29</span><span class=cF0>, </span><span class=cFE>46</span><span class=cF0>);
+<a name="l748"></a>                        next_noise = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>;
+<a name="l749"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l750"></a>                }
+<a name="l751"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l752"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l753"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l754"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;air_guns &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; d &lt; tmpo-&gt;air_guns_range)
+<a name="l755"></a>                {
+<a name="l756"></a>                    tmpo-&gt;flags |= OF_SHOOTING;
+<a name="l757"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0>&lt;</span><span class=cFE>125</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
+<a name="l758"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l759"></a>                        tmpo1-&gt;life_percent -= tmpo-&gt;air_guns * </span><span class=cF5>Rand</span><span class=cF0> * period;
+<a name="l760"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * period)
+<a name="l761"></a>                            tmpo1-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
+<a name="l762"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l763"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; next_noise)
+<a name="l764"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l765"></a>                        </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>, </span><span class=cFE>62</span><span class=cF0>, </span><span class=cFE>86</span><span class=cF0>);
+<a name="l766"></a>                        next_noise = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>025</span><span class=cF0>;
+<a name="l767"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l768"></a>                }
+<a name="l769"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l770"></a>        }
+<a name="l771"></a>        tmpo = tmpo-&gt;next;
+<a name="l772"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l773"></a>    tmpo = obj_head.next;
+<a name="l774"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l775"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l776"></a>        tmpo1 = tmpo-&gt;next;
+<a name="l777"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;type == OT_FIGHTER &amp;&amp;
+<a name="l778"></a>                </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> || tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp; tmpo-&gt;fuel &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> || tmpo-&gt;host &amp;&amp;
+<a name="l779"></a>                !(tmpo-&gt;flags &amp; OF_ACTIVE) &amp;&amp; tmpo-&gt;host-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l780"></a>            ObjDel(tmpo);
+<a name="l781"></a>        tmpo = tmpo1;
+<a name="l782"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l783"></a>    tmpo = obj_head.next;
+<a name="l784"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l785"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l786"></a>        tmpo1 = tmpo-&gt;next;
+<a name="l787"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;life_percent &lt;= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l788"></a>            ObjDel(tmpo);
+<a name="l789"></a>        tmpo = tmpo1;
+<a name="l790"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l791"></a>}
+<a name="l792"></a>
+<a name="l793"></a>#</span><span class=cF1>define</span><span class=cF0> ANIMATE_FREQ        </span><span class=cFE>50</span><span class=cF0>
+<a name="l794"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
+<a name="l795"></a>{
+<a name="l796"></a>    Obj     *tmpo;
+<a name="l797"></a>    Torpedo *tmpt, *tmpt1;
+<a name="l798"></a>    </span><span class=cF1>F64</span><span class=cF0>      d, period;
+<a name="l799"></a>
+<a name="l800"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l801"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l802"></a>        period = GAME_SPEED_SCALE * game_speed / ANIMATE_FREQ;
+<a name="l803"></a>        SquadronActions;
+<a name="l804"></a>
+<a name="l805"></a>        tmpo = obj_head.next;
+<a name="l806"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l807"></a>        {
+<a name="l808"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE &amp;&amp; tmpo-&gt;fuel &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l809"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l810"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;dtheta)
+<a name="l811"></a>                {
+<a name="l812"></a>                    d = tmpo-&gt;dtheta;
+<a name="l813"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;turn_rate * period)
+<a name="l814"></a>                        d = tmpo-&gt;turn_rate * period;
+<a name="l815"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; -tmpo-&gt;turn_rate * period)
+<a name="l816"></a>                        d = -tmpo-&gt;turn_rate * period;
+<a name="l817"></a>                    tmpo-&gt;theta  += d;
+<a name="l818"></a>                    tmpo-&gt;dtheta -= d;
+<a name="l819"></a>                }
+<a name="l820"></a>                tmpo-&gt;x     += tmpo-&gt;speed * </span><span class=cF5>Cos</span><span class=cF0>(tmpo-&gt;theta) * period * tmpo-&gt;life_percent / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l821"></a>                tmpo-&gt;y     += tmpo-&gt;speed * </span><span class=cF5>Sin</span><span class=cF0>(tmpo-&gt;theta) * period * tmpo-&gt;life_percent / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l822"></a>                tmpo-&gt;fuel  -= tmpo-&gt;speed * tmpo-&gt;fuel_burn_rate * period;
+<a name="l823"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l824"></a>            tmpo = tmpo-&gt;next;
+<a name="l825"></a>        }
+<a name="l826"></a>
+<a name="l827"></a>        tmpt = torpedo_head.next;
+<a name="l828"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpt != &amp;torpedo_head)
+<a name="l829"></a>        {
+<a name="l830"></a>            tmpt1 = tmpt-&gt;next;
+<a name="l831"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpt-&gt;timeout)
+<a name="l832"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l833"></a>                tmpo = tmpt-&gt;target;
+<a name="l834"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>333333</span><span class=cF0>)
+<a name="l835"></a>                {
+<a name="l836"></a>                    ShipDamage(tmpo, </span><span class=cFE>150</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>);
+<a name="l837"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>333333</span><span class=cF0>)
+<a name="l838"></a>                        tmpo-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
 <a name="l839"></a>                }
-<a name="l840"></a>                tmpo-&gt;x     += tmpo-&gt;speed * </span><span class=cF5>Cos</span><span class=cF0>(tmpo-&gt;theta) * period * tmpo-&gt;life_percent / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l841"></a>                tmpo-&gt;y     += tmpo-&gt;speed * </span><span class=cF5>Sin</span><span class=cF0>(tmpo-&gt;theta) * period * tmpo-&gt;life_percent / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l842"></a>                tmpo-&gt;fuel  -= tmpo-&gt;speed * tmpo-&gt;fuel_burn_rate * period;
-<a name="l843"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l844"></a>            tmpo = tmpo-&gt;next;
-<a name="l845"></a>        }
-<a name="l846"></a>
-<a name="l847"></a>        tmpt = torpedo_head.next;
-<a name="l848"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpt != &amp;torpedo_head)
-<a name="l849"></a>        {
-<a name="l850"></a>            tmpt1 = tmpt-&gt;next;
-<a name="l851"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpt-&gt;timeout)
-<a name="l852"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l853"></a>                tmpo = tmpt-&gt;target;
-<a name="l854"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>333333</span><span class=cF0>)
-<a name="l855"></a>                {
-<a name="l856"></a>                    ShipDamage(tmpo, </span><span class=cFE>150</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>);
-<a name="l857"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>333333</span><span class=cF0>)
-<a name="l858"></a>                        tmpo-&gt;fuel *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>25</span><span class=cF0>;
-<a name="l859"></a>                }
-<a name="l860"></a>                </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpt);
-<a name="l861"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpt);
-<a name="l862"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l863"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l864"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l865"></a>                tmpt-&gt;x += tmpt-&gt;speed * </span><span class=cF5>Cos</span><span class=cF0>(tmpt-&gt;theta) * period;
-<a name="l866"></a>                tmpt-&gt;y += tmpt-&gt;speed * </span><span class=cF5>Sin</span><span class=cF0>(tmpt-&gt;theta) * period;
-<a name="l867"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l868"></a>            tmpt = tmpt1;
-<a name="l869"></a>        }
-<a name="l870"></a>
-<a name="l871"></a>        tmpo = obj_head.next;
-<a name="l872"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l873"></a>        {
-<a name="l874"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;flags &amp; OF_ACTIVE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l875"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l876"></a>                tmpo-&gt;x = tmpo-&gt;host-&gt;x;
-<a name="l877"></a>                tmpo-&gt;y = tmpo-&gt;host-&gt;y;
-<a name="l878"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l879"></a>            tmpo = tmpo-&gt;next;
-<a name="l880"></a>        }
-<a name="l881"></a>
-<a name="l882"></a>        tmpo = obj_head.next;
-<a name="l883"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
-<a name="l884"></a>        {
-<a name="l885"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE)
-<a name="l886"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l887"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host)
-<a name="l888"></a>                {
-<a name="l889"></a>                    d = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;x - tmpo-&gt;host-&gt;x</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;y - tmpo-&gt;host-&gt;y</span><span class=cF7>)</span><span class=cF0>);
-<a name="l890"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; tmpo-&gt;max_fuel - tmpo-&gt;fuel &gt; </span><span class=cFE>30</span><span class=cF0>)
-<a name="l891"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l892"></a>                        tmpo-&gt;life_percent = </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l893"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host-&gt;fuel &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l894"></a>                        {
-<a name="l895"></a>                            d = tmpo-&gt;max_fuel - tmpo-&gt;fuel;
-<a name="l896"></a>                            </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;host-&gt;fuel)
-<a name="l897"></a>                                d = tmpo-&gt;host-&gt;fuel;
-<a name="l898"></a>                            tmpo-&gt;host-&gt;fuel -= d;
-<a name="l899"></a>                            tmpo-&gt;fuel += d;
-<a name="l900"></a>                        }
-<a name="l901"></a>                        tmpo-&gt;torpedos  = tmpo-&gt;max_torpedos;
-<a name="l902"></a>                        tmpo-&gt;x         = tmpo-&gt;host-&gt;x;
-<a name="l903"></a>                        tmpo-&gt;y         = tmpo-&gt;host-&gt;y;
-<a name="l904"></a>                        tmpo-&gt;flags     &amp;= ~OF_ACTIVE;
-<a name="l905"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l906"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;fuel - </span><span class=cFE>250</span><span class=cF0>)
-<a name="l907"></a>                        tmpo-&gt;flags |= OF_RETURNING;
-<a name="l908"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_RETURNING)
-<a name="l909"></a>                        tmpo-&gt;dtheta += </span><span class=cF5>Wrap</span><span class=cF0>(</span><span class=cF5>Arg</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;host-&gt;x - tmpo-&gt;x, tmpo-&gt;host-&gt;y - tmpo-&gt;y</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;theta + tmpo-&gt;dtheta</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF3>pi</span><span class=cF0>);
-<a name="l910"></a>                }
-<a name="l911"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;type == OT_CARRIER)
-<a name="l912"></a>                    ShipFix(tmpo, </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * period);
-<a name="l913"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l914"></a>            tmpo = tmpo-&gt;next;
-<a name="l915"></a>        }
-<a name="l916"></a>
-<a name="l917"></a>        AI(</span><span class=cFE>1</span><span class=cF0>, period);
-<a name="l918"></a>        Combat(period);
-<a name="l919"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0> / ANIMATE_FREQ);
-<a name="l920"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l921"></a>}
-<a name="l922"></a>
-<a name="l923"></a></span><span class=cF1>U0</span><span class=cF0> FlatTops()
-<a name="l924"></a>{
-<a name="l925"></a>    </span><span class=cF9>I64</span><span class=cF0> arg1, arg2;
-<a name="l926"></a>
-<a name="l927"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l928"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
-<a name="l929"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
-<a name="l930"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
-<a name="l931"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
-<a name="l932"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
-<a name="l933"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l934"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;$GREEN${Left-Mouse}$FG$\t\tChange Course\n&quot;</span><span class=cF0>
-<a name="l935"></a>            </span><span class=cF6>&quot;$GREEN${Right-Mouse}$FG$\t\tLaunch Squadron\n&quot;</span><span class=cF0>
-<a name="l936"></a>            </span><span class=cF6>&quot;$GREEN${Right-Double-Mouse}$FG$\tReturn Squadron\n&quot;</span><span class=cF0>
-<a name="l937"></a>            </span><span class=cF6>&quot;$GREEN${Ctrl-Left Grab}$FG$\tScroll Screen\n&quot;</span><span class=cF0>);
-<a name="l938"></a>
-<a name="l939"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
-<a name="l940"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
-<a name="l941"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
-<a name="l942"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
-<a name="l943"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
-<a name="l944"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
-<a name="l945"></a>                </span><span class=cF6>&quot;  Faster(,'+');&quot;</span><span class=cF0>
-<a name="l946"></a>                </span><span class=cF6>&quot;  Slower(,'-');&quot;</span><span class=cF0>
-<a name="l947"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
-<a name="l948"></a>                );
-<a name="l949"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit |= </span><span class=cF3>WIF_SELF_MS_L</span><span class=cF0> | </span><span class=cF3>WIF_SELF_MS_R</span><span class=cF0>;
-<a name="l950"></a>    Init;
-<a name="l951"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l952"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l953"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l954"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l955"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l956"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>MessageGet</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, 
-<a name="l957"></a>                                </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_D_UP</span><span class=cF7>)</span><span class=cF0>)
-<a name="l958"></a>            {
-<a name="l959"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
-<a name="l960"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
-<a name="l961"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l962"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l963"></a>                            CleanUp;
-<a name="l964"></a>                            Init;
-<a name="l965"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l966"></a>
-<a name="l967"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
-<a name="l968"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l969"></a>                            </span><span class=cF1>goto</span><span class=cF0> nv_done;
-<a name="l970"></a>
-<a name="l971"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
-<a name="l972"></a>                            game_speed *= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>;
-<a name="l973"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l974"></a>
-<a name="l975"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
-<a name="l976"></a>                            game_speed /= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>;
-<a name="l977"></a>                            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l978"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l979"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l980"></a>
-<a name="l981"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
-<a name="l982"></a>                    SquadronSettheta(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
-<a name="l983"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l840"></a>                </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpt);
+<a name="l841"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpt);
+<a name="l842"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l843"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l844"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l845"></a>                tmpt-&gt;x += tmpt-&gt;speed * </span><span class=cF5>Cos</span><span class=cF0>(tmpt-&gt;theta) * period;
+<a name="l846"></a>                tmpt-&gt;y += tmpt-&gt;speed * </span><span class=cF5>Sin</span><span class=cF0>(tmpt-&gt;theta) * period;
+<a name="l847"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l848"></a>            tmpt = tmpt1;
+<a name="l849"></a>        }
+<a name="l850"></a>
+<a name="l851"></a>        tmpo = obj_head.next;
+<a name="l852"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l853"></a>        {
+<a name="l854"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;flags &amp; OF_ACTIVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l855"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l856"></a>                tmpo-&gt;x = tmpo-&gt;host-&gt;x;
+<a name="l857"></a>                tmpo-&gt;y = tmpo-&gt;host-&gt;y;
+<a name="l858"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l859"></a>            tmpo = tmpo-&gt;next;
+<a name="l860"></a>        }
+<a name="l861"></a>
+<a name="l862"></a>        tmpo = obj_head.next;
+<a name="l863"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpo != &amp;obj_head)
+<a name="l864"></a>        {
+<a name="l865"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_ACTIVE)
+<a name="l866"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l867"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host)
+<a name="l868"></a>                {
+<a name="l869"></a>                    d = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;x - tmpo-&gt;host-&gt;x</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;y - tmpo-&gt;host-&gt;y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l870"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; tmpo-&gt;max_fuel - tmpo-&gt;fuel &gt; </span><span class=cFE>30</span><span class=cF0>)
+<a name="l871"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l872"></a>                        tmpo-&gt;life_percent = </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l873"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;host-&gt;fuel &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l874"></a>                        {
+<a name="l875"></a>                            d = tmpo-&gt;max_fuel - tmpo-&gt;fuel;
+<a name="l876"></a>                            </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;host-&gt;fuel)
+<a name="l877"></a>                                d = tmpo-&gt;host-&gt;fuel;
+<a name="l878"></a>                            tmpo-&gt;host-&gt;fuel -= d;
+<a name="l879"></a>                            tmpo-&gt;fuel += d;
+<a name="l880"></a>                        }
+<a name="l881"></a>                        tmpo-&gt;torpedos  = tmpo-&gt;max_torpedos;
+<a name="l882"></a>                        tmpo-&gt;x         = tmpo-&gt;host-&gt;x;
+<a name="l883"></a>                        tmpo-&gt;y         = tmpo-&gt;host-&gt;y;
+<a name="l884"></a>                        tmpo-&gt;flags     &amp;= ~OF_ACTIVE;
+<a name="l885"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l886"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (d &gt; tmpo-&gt;fuel - </span><span class=cFE>250</span><span class=cF0>)
+<a name="l887"></a>                        tmpo-&gt;flags |= OF_RETURNING;
+<a name="l888"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;flags &amp; OF_RETURNING)
+<a name="l889"></a>                        tmpo-&gt;dtheta += </span><span class=cF5>Wrap</span><span class=cF0>(</span><span class=cF5>Arg</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;host-&gt;x - tmpo-&gt;x, tmpo-&gt;host-&gt;y - tmpo-&gt;y</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF7>(</span><span class=cF0>tmpo-&gt;theta + tmpo-&gt;dtheta</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF3>pi</span><span class=cF0>);
+<a name="l890"></a>                }
+<a name="l891"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;type == OT_CARRIER)
+<a name="l892"></a>                    ShipFix(tmpo, </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * period);
+<a name="l893"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l894"></a>            tmpo = tmpo-&gt;next;
+<a name="l895"></a>        }
+<a name="l896"></a>
+<a name="l897"></a>        AI(</span><span class=cFE>1</span><span class=cF0>, period);
+<a name="l898"></a>        Combat(period);
+<a name="l899"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0> / ANIMATE_FREQ);
+<a name="l900"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l901"></a>}
+<a name="l902"></a>
+<a name="l903"></a></span><span class=cF1>U0</span><span class=cF0> FlatTops()
+<a name="l904"></a>{
+<a name="l905"></a>    </span><span class=cF9>I64</span><span class=cF0> arg1, arg2;
+<a name="l906"></a>
+<a name="l907"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l908"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l909"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l910"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l911"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l912"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l913"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l914"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;$GREEN${Left-Mouse}$FG$\t\tChange Course\n&quot;</span><span class=cF0>
+<a name="l915"></a>            </span><span class=cF6>&quot;$GREEN${Right-Mouse}$FG$\t\tLaunch Squadron\n&quot;</span><span class=cF0>
+<a name="l916"></a>            </span><span class=cF6>&quot;$GREEN${Right-Double-Mouse}$FG$\tReturn Squadron\n&quot;</span><span class=cF0>
+<a name="l917"></a>            </span><span class=cF6>&quot;$GREEN${Ctrl-Left Grab}$FG$\tScroll Screen\n&quot;</span><span class=cF0>);
+<a name="l918"></a>
+<a name="l919"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l920"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l921"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l922"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l923"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l924"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l925"></a>                </span><span class=cF6>&quot;  Faster(,'+');&quot;</span><span class=cF0>
+<a name="l926"></a>                </span><span class=cF6>&quot;  Slower(,'-');&quot;</span><span class=cF0>
+<a name="l927"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l928"></a>                );
+<a name="l929"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit |= </span><span class=cF3>WIF_SELF_MS_L</span><span class=cF0> | </span><span class=cF3>WIF_SELF_MS_R</span><span class=cF0>;
+<a name="l930"></a>    Init;
+<a name="l931"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l932"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l933"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l934"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l935"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l936"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>MessageGet</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, 
+<a name="l937"></a>                                </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_D_UP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l938"></a>            {
+<a name="l939"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l940"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
+<a name="l941"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l942"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l943"></a>                            CleanUp;
+<a name="l944"></a>                            Init;
+<a name="l945"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l946"></a>
+<a name="l947"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l948"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l949"></a>                            </span><span class=cF1>goto</span><span class=cF0> nv_done;
+<a name="l950"></a>
+<a name="l951"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
+<a name="l952"></a>                            game_speed *= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>;
+<a name="l953"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l954"></a>
+<a name="l955"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
+<a name="l956"></a>                            game_speed /= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>;
+<a name="l957"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l958"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l959"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l960"></a>
+<a name="l961"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
+<a name="l962"></a>                    SquadronSettheta(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
+<a name="l963"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l964"></a>
+<a name="l965"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l966"></a>                    SquadronLaunch(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
+<a name="l967"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l968"></a>
+<a name="l969"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_D_UP</span><span class=cF0>:
+<a name="l970"></a>                    SquadronReturn(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
+<a name="l971"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l972"></a>            }
+<a name="l973"></a>nv_done:
+<a name="l974"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l975"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l976"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l977"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l978"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l979"></a>    CleanUp;
+<a name="l980"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l981"></a>}
+<a name="l982"></a>
+<a name="l983"></a>FlatTops;
 <a name="l984"></a>
-<a name="l985"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
-<a name="l986"></a>                    SquadronLaunch(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
-<a name="l987"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l985"></a>
+<a name="l986"></a>
+<a name="l987"></a>
 <a name="l988"></a>
-<a name="l989"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_D_UP</span><span class=cF0>:
-<a name="l990"></a>                    SquadronReturn(</span><span class=cFE>0</span><span class=cF0>, arg1, arg2);
-<a name="l991"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l992"></a>            }
-<a name="l993"></a>nv_done:
-<a name="l994"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
-<a name="l995"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l996"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l997"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l998"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l999"></a>    CleanUp;
-<a name="l1000"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l1001"></a>}
+<a name="l989"></a>
+<a name="l990"></a>
+<a name="l991"></a>
+<a name="l992"></a>
+<a name="l993"></a>
+<a name="l994"></a>
+<a name="l995"></a>
+<a name="l996"></a>
+<a name="l997"></a>
+<a name="l998"></a>
+<a name="l999"></a>
+<a name="l1000"></a>
+<a name="l1001"></a></span><span class=cF2>//Maybe use this in the future</span><span class=cF0>  </span><span class=cFA>&lt;7&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
 <a name="l1002"></a>
-<a name="l1003"></a>FlatTops;
+<a name="l1003"></a>
 <a name="l1004"></a>
 <a name="l1005"></a>
 <a name="l1006"></a>
@@ -1044,25 +1044,5 @@ body {background-color:#1f1f1f;}
 <a name="l1015"></a>
 <a name="l1016"></a>
 <a name="l1017"></a>
-<a name="l1018"></a>
-<a name="l1019"></a>
-<a name="l1020"></a>
-<a name="l1021"></a></span><span class=cF2>//Maybe use this in the future</span><span class=cF0>  </span><span class=cFA>&lt;7&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
-<a name="l1022"></a>
-<a name="l1023"></a>
-<a name="l1024"></a>
-<a name="l1025"></a>
-<a name="l1026"></a>
-<a name="l1027"></a>
-<a name="l1028"></a>
-<a name="l1029"></a>
-<a name="l1030"></a>
-<a name="l1031"></a>
-<a name="l1032"></a>
-<a name="l1033"></a>
-<a name="l1034"></a>
-<a name="l1035"></a>
-<a name="l1036"></a>
-<a name="l1037"></a>
 </span></pre></body>
 </html>

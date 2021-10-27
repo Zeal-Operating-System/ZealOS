@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.03">
+<meta name="generator" content="ZealOS V1.04">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .c00{color:#e3e3e3;background-color:#e3e3e3;}
@@ -1056,720 +1056,700 @@ body {background-color:#1f1f1f;}
 <a name="l1027"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1028"></a>}
 <a name="l1029"></a>
-<a name="l1030"></a></span><span class=cF1>U0</span><span class=cF0> MyNoise(</span><span class=cF9>I64</span><span class=cF0> mS, </span><span class=cF1>F64</span><span class=cF0> min_ona, </span><span class=cF1>F64</span><span class=cF0> max_ona)
-<a name="l1031"></a>{</span><span class=cF2>//Make white noise for given number of mS.</span><span class=cF0>
-<a name="l1032"></a></span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Sound.CC.html#l432"><span class=cF4>Noise</span></a><span class=cF2>. On bare-metal, Spawn() hogs CPU.</span><span class=cF0>
-<a name="l1033"></a>    </span><span class=cF9>CSoundEffectFrame</span><span class=cF0> *ns;
-<a name="l1034"></a>
-<a name="l1035"></a>    </span><span class=cF1>if</span><span class=cF0> (mS &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l1036"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1037"></a>        ns = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSoundEffectFrame</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1038"></a>        ns-&gt;type = </span><span class=cF3>SE_NOISE</span><span class=cF0>;
-<a name="l1039"></a>        ns-&gt;duration = mS / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1040"></a>        ns-&gt;ona1 = min_ona;
-<a name="l1041"></a>        ns-&gt;ona2 = max_ona;
-<a name="l1042"></a>        </span><span class=cFB>music</span><span class=cF0>.mute++;
-<a name="l1043"></a>        </span><span class=cF5>SoundEffectTask</span><span class=cF0>(ns);
-<a name="l1044"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l1045"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1046"></a>
-<a name="l1047"></a>    </span><span class=cF1>return</span><span class=cF0>;
-<a name="l1048"></a>}
-<a name="l1049"></a>
-<a name="l1050"></a></span><span class=cF1>U0</span><span class=cF0> CheckDamage()
-<a name="l1051"></a>{
-<a name="l1052"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, death_score;
-<a name="l1053"></a>    Ship    *tmpsp, *tmpsp1;
-<a name="l1054"></a>    MyMass  *tmpm, *tmpm1, *best_mass;
-<a name="l1055"></a>    </span><span class=cF9>CD3</span><span class=cF0>      p, p1, p2;
-<a name="l1056"></a>    </span><span class=cF1>F64</span><span class=cF0>      d, best_distance;
-<a name="l1057"></a>    </span><span class=cF1>Bool</span><span class=cF0>     facing_sun = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1058"></a>
-<a name="l1059"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
-<a name="l1060"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1061"></a>        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
-<a name="l1062"></a>        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;human-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
-<a name="l1063"></a>        </span><span class=cF5>D3Add</span><span class=cF0>(&amp;p, &amp;p1, &amp;p2);
-<a name="l1064"></a>        </span><span class=cF1>if</span><span class=cF0> (p.x&gt;</span><span class=cFE>0</span><span class=cF0>)
-<a name="l1065"></a>            facing_sun = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1066"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1067"></a>
-<a name="l1068"></a>    tmpm = ode-&gt;next_mass;
-<a name="l1069"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
-<a name="l1070"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1071"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ION)
-<a name="l1072"></a>        {
-<a name="l1073"></a>            </span><span class=cF1>if</span><span class=cF0> (facing_sun)
-<a name="l1074"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1075"></a>                tmpm1 = ode-&gt;next_mass;
-<a name="l1076"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpm1 != &amp;ode-&gt;next_mass)
-<a name="l1077"></a>                {
-<a name="l1078"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpm1-&gt;type == MT_HUMAN_SHIP)
-<a name="l1079"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1080"></a>                        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p, &amp;tmpm1-&gt;x, &amp;tmpm-&gt;x);
-<a name="l1081"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3NormSqr</span><span class=cF7>(</span><span class=cF0>&amp;p</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpm1-&gt;radius</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1082"></a>                            tmpm1-&gt;temperature += </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1083"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1084"></a>                    tmpm1 = tmpm1-&gt;next;
-<a name="l1085"></a>                }
-<a name="l1086"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1087"></a>        }
-<a name="l1088"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ANTIMATTER_SPLAT)
-<a name="l1089"></a>        {
-<a name="l1090"></a>            tmpm1 = ode-&gt;next_mass;
-<a name="l1091"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpm1 != &amp;ode-&gt;next_mass)
-<a name="l1092"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1093"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpm1-&gt;type != MT_ION &amp;&amp; tmpm1-&gt;type != MT_ANTIMATTER_SPLAT)
-<a name="l1094"></a>                {
-<a name="l1095"></a>                    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p, &amp;tmpm1-&gt;x, &amp;tmpm-&gt;x);
-<a name="l1096"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3NormSqr</span><span class=cF7>(</span><span class=cF0>&amp;p</span><span class=cF7>)</span><span class=cF0>&lt;</span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpm1-&gt;radius</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1097"></a>                        tmpm1-&gt;temperature += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>4</span><span class=cF0>;
-<a name="l1098"></a>                }
-<a name="l1099"></a>                tmpm1 = tmpm1-&gt;next;
-<a name="l1100"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1101"></a>        }
-<a name="l1102"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1103"></a>            tmpm-&gt;temperature *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>9</span><span class=cF0>;
-<a name="l1104"></a>        tmpm = tmpm-&gt;next;
-<a name="l1105"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1106"></a>
-<a name="l1107"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
-<a name="l1108"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1109"></a>        human-&gt;laser_temperature *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>975</span><span class=cF0>;
-<a name="l1110"></a>
-<a name="l1111"></a>        </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_overheat)
-<a name="l1112"></a>        {
-<a name="l1113"></a>            </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_temperature &lt; LASER_THRESHOLD_TEMP)
-<a name="l1114"></a>                human-&gt;laser_overheat = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1115"></a>        }
-<a name="l1116"></a>        </span><span class=cF1>if</span><span class=cF0> (!human-&gt;laser_overheat &amp;&amp; human-&gt;lasering)
-<a name="l1117"></a>        {
-<a name="l1118"></a>            </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_temperature &gt;= LASER_TEMP_MAX)
-<a name="l1119"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1120"></a>                human-&gt;laser_overheat = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1121"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l1122"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1123"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l1124"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1125"></a>                human-&gt;laser_temperature += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1126"></a>                </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
-<a name="l1127"></a>                </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
-<a name="l1128"></a>                </span><span class=cF5>D3Unit</span><span class=cF0>(</span><span class=cF5>D3Add</span><span class=cF7>(</span><span class=cF0>&amp;p, &amp;p1, &amp;p2</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1129"></a>                p2.x = p.y;
-<a name="l1130"></a>                p2.y = -p.x;
-<a name="l1131"></a>                p2.z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1132"></a>                best_mass = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l1133"></a>                best_distance = </span><span class=cF3>F64_MAX</span><span class=cF0>;
-<a name="l1134"></a>                tmpm = ode-&gt;next_mass;
-<a name="l1135"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
-<a name="l1136"></a>                {
-<a name="l1137"></a>                    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpm-&gt;x);
-<a name="l1138"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>D3Dot</span><span class=cF0>(&amp;p1, &amp;p2)</span><span class=cF7>)</span><span class=cF0> &lt; tmpm-&gt;radius &amp;&amp; </span><span class=cF5>D3Dot</span><span class=cF7>(</span><span class=cF0>&amp;p1, &amp;p</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
-<a name="l1139"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1140"></a>                        d = </span><span class=cF5>D3NormSqr</span><span class=cF0>(&amp;p1);
-<a name="l1141"></a>                        </span><span class=cF1>if</span><span class=cF0> (d &lt; best_distance)
-<a name="l1142"></a>                        {
-<a name="l1143"></a>                            best_distance = d;
-<a name="l1144"></a>                            best_mass = tmpm;
-<a name="l1145"></a>                        }
-<a name="l1146"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1147"></a>                    tmpm = tmpm-&gt;next;
-<a name="l1148"></a>                }
-<a name="l1149"></a>                </span><span class=cF1>if</span><span class=cF0> (best_mass)
-<a name="l1150"></a>                    best_mass-&gt;temperature += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1151"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1152"></a>        }
-<a name="l1153"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1154"></a>
-<a name="l1155"></a>    tmpsp = ship_head.next;
-<a name="l1156"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpsp != &amp;ship_head)
-<a name="l1157"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1158"></a>        tmpsp1 = tmpsp-&gt;next;
-<a name="l1159"></a>        death_score = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1160"></a>        </span><span class=cF1>switch</span><span class=cF0> (tmpsp-&gt;type)
-<a name="l1161"></a>        {
-<a name="l1162"></a>            </span><span class=cF1>case</span><span class=cF0> ST_HUMAN1:
-<a name="l1163"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;exploding)
-<a name="l1164"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l1165"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;die_timeout)
-<a name="l1166"></a>                    {
-<a name="l1167"></a>                        ShipDel(tmpsp);
-<a name="l1168"></a>                        human = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l1169"></a>                    }
-<a name="l1170"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l1171"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l1172"></a>                    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;springs; i++)
-<a name="l1173"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1174"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF0>tmpsp-&gt;s[i].f</span><span class=cF7>)</span><span class=cF0> &gt; tmpsp-&gt;s[i].strength)
-<a name="l1175"></a>                        {
-<a name="l1176"></a>                            tmpsp-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
-<a name="l1177"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>4</span><span class=cF0>)
-<a name="l1178"></a>                                MissileDel(&amp;tmpsp-&gt;missiles[</span><span class=cFE>0</span><span class=cF0>]);
-<a name="l1179"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>5</span><span class=cF0>)
-<a name="l1180"></a>                                MissileDel(&amp;tmpsp-&gt;missiles[</span><span class=cFE>1</span><span class=cF0>]);
-<a name="l1181"></a>                        }
-<a name="l1182"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;s[i].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF0> &amp;&amp; i &lt; </span><span class=cFE>3</span><span class=cF0>)
-<a name="l1183"></a>                            death_score++;
-<a name="l1184"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1185"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1186"></a>
-<a name="l1187"></a>            </span><span class=cF1>default</span><span class=cF0>:
-<a name="l1188"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;exploding)
-<a name="l1189"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l1190"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;die_timeout)
-<a name="l1191"></a>                    {
-<a name="l1192"></a>                        ShipDel(tmpsp);
-<a name="l1193"></a>                        score += level;
-<a name="l1194"></a>                        </span><span class=cF1>if</span><span class=cF0> (score &gt; best_score)
-<a name="l1195"></a>                            best_score = score;
-<a name="l1196"></a>                    }
-<a name="l1197"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l1198"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l1199"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l1200"></a>                    j = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1201"></a>                    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;springs; i++)
-<a name="l1202"></a>                    {
-<a name="l1203"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;s[i].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>)
-<a name="l1204"></a>                            j++;
-<a name="l1205"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF0>tmpsp-&gt;s[i].f</span><span class=cF7>)</span><span class=cF0> &gt; tmpsp-&gt;s[i].strength)
-<a name="l1206"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l1207"></a>                            tmpsp-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
-<a name="l1208"></a>                            j++;
-<a name="l1209"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l1210"></a>                    }
-<a name="l1211"></a>                    </span><span class=cF1>if</span><span class=cF0> (j &gt; </span><span class=cFE>1</span><span class=cF0>)
-<a name="l1212"></a>                        death_score++;
-<a name="l1213"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l1214"></a>        }
-<a name="l1215"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpsp-&gt;exploding)
-<a name="l1216"></a>        {
-<a name="l1217"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;masses; i++)
-<a name="l1218"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;p[i].temperature &gt; MASS_TEMP_MAX)
-<a name="l1219"></a>                    death_score++;
-<a name="l1220"></a>            </span><span class=cF1>if</span><span class=cF0> (death_score)
-<a name="l1221"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1222"></a>                tmpsp-&gt;exploding = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1223"></a>                tmpsp-&gt;die_time = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l1224"></a>                tmpsp-&gt;die_timeout = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0>;
-<a name="l1225"></a>                MyNoise(</span><span class=cFE>750</span><span class=cF0>, </span><span class=cFE>74</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>);
-<a name="l1226"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;type == ST_HUMAN1)
-<a name="l1227"></a>                    game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1228"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1229"></a>        }
-<a name="l1230"></a>        tmpsp = tmpsp1;
-<a name="l1231"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1232"></a>}
-<a name="l1233"></a>
-<a name="l1234"></a></span><span class=cF2>//********************************** Shots</span><span class=cF0>
-<a name="l1235"></a>
-<a name="l1236"></a>Shot *ShotNew(</span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>CD3</span><span class=cF0> *_p, </span><span class=cF9>CD3</span><span class=cF0> *_v, </span><span class=cF1>F64</span><span class=cF0> r, </span><span class=cF1>F64</span><span class=cF0> fuse_time, </span><span class=cF9>CD3</span><span class=cF0> *_p_gun_offset=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l1237"></a>{
-<a name="l1238"></a>    Shot *tmps = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>Shot</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1239"></a>
-<a name="l1240"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmps-&gt;p.x, _p);
-<a name="l1241"></a>    tmps-&gt;radius = r;
-<a name="l1242"></a>    tmps-&gt;splats = </span><span class=cFE>20</span><span class=cF0> * r;
-<a name="l1243"></a>    tmps-&gt;fuse_time = </span><span class=cF5>tS</span><span class=cF0> + fuse_time;
-<a name="l1244"></a>    tmps-&gt;p.mass = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>3</span><span class=cF0> * r * r * r;
-<a name="l1245"></a>    tmps-&gt;p.type = type;
-<a name="l1246"></a>    </span><span class=cF1>if</span><span class=cF0> (_p_gun_offset)
-<a name="l1247"></a>        </span><span class=cF5>D3AddEqu</span><span class=cF0>(&amp;tmps-&gt;p.x, _p_gun_offset);
-<a name="l1248"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmps-&gt;p.DxDt, _v);
-<a name="l1249"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;tmps-&gt;p, ode-&gt;last_mass);
-<a name="l1250"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmps, shot_head.last);
-<a name="l1251"></a>}
-<a name="l1252"></a>
-<a name="l1253"></a></span><span class=cF1>U0</span><span class=cF0> SolarFlares()
-<a name="l1254"></a>{
-<a name="l1255"></a>    </span><span class=cF9>CD3</span><span class=cF0>     p, v, p1, p2;
-<a name="l1256"></a>    </span><span class=cF9>CTask</span><span class=cF0>  *task = ode-&gt;win_task;
-<a name="l1257"></a>
-<a name="l1258"></a>    </span><span class=cF1>if</span><span class=cF0> (!alarm &amp;&amp; t_solar_storm - </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> &lt; </span><span class=cF5>tS</span><span class=cF0> &lt; t_solar_storm + </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
-<a name="l1259"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1260"></a>        </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>, </span><span class=cFE>74</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>);
-<a name="l1261"></a>        alarm = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1262"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1263"></a>    </span><span class=cF1>if</span><span class=cF0> (t_solar_storm &lt; </span><span class=cF5>tS</span><span class=cF0>)
-<a name="l1264"></a>    </span><span class=cF7>{</span><span class=cF0>  </span><span class=cF2>//If solar storm has arrived</span><span class=cF0>
-<a name="l1265"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &lt; t_solar_storm + </span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
-<a name="l1266"></a>        { </span><span class=cF2>//If solar storm not over</span><span class=cF0>
-<a name="l1267"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; .</span><span class=cFE>1</span><span class=cF0>)
-<a name="l1268"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1269"></a>                </span><span class=cF5>D3Equ</span><span class=cF0>(&amp;p, -</span><span class=cFE>300</span><span class=cF0>, </span><span class=cF5>Rand</span><span class=cF0> * task-&gt;pix_height, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l1270"></a>                </span><span class=cF5>D3Equ</span><span class=cF0>(&amp;v, </span><span class=cFE>200</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l1271"></a>                ShotNew(MT_SOLAR_FLARE, &amp;p, &amp;v, </span><span class=cFE>25</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>);
-<a name="l1272"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1273"></a>        }
-<a name="l1274"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1275"></a>        {
-<a name="l1276"></a>            t_solar_storm = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>25</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>;  </span><span class=cF2>//Schedule next solar storm</span><span class=cF0>
-<a name="l1277"></a>            alarm = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1278"></a>        }
-<a name="l1279"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1280"></a>}
-<a name="l1281"></a>
-<a name="l1282"></a></span><span class=cF1>U0</span><span class=cF0> FireOneGun(Ship *tmpsp, </span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF1>F64</span><span class=cF0> r, </span><span class=cF1>F64</span><span class=cF0> fuse_time)
-<a name="l1283"></a>{
-<a name="l1284"></a>    </span><span class=cF9>I64</span><span class=cF0>   ona;
-<a name="l1285"></a>    </span><span class=cF9>CD3</span><span class=cF0>   p, v, p1, p2;
-<a name="l1286"></a>    Shot *tmps;
-<a name="l1287"></a>
-<a name="l1288"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
-<a name="l1289"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
-<a name="l1290"></a>    </span><span class=cF5>D3Unit</span><span class=cF0>(</span><span class=cF5>D3Add</span><span class=cF7>(</span><span class=cF0>&amp;p, &amp;p1, &amp;p2</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1291"></a>    </span><span class=cF5>D3MulEqu</span><span class=cF0>(</span><span class=cF5>D3Copy</span><span class=cF7>(</span><span class=cF0>&amp;p1, &amp;p</span><span class=cF7>)</span><span class=cF0>, r + tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].radius + </span><span class=cFE>5</span><span class=cF0>);
-<a name="l1292"></a>    </span><span class=cF5>D3AddEqu</span><span class=cF0>(</span><span class=cF5>D3MulEqu</span><span class=cF7>(</span><span class=cF5>D3Copy</span><span class=cF0>(&amp;v, &amp;p), </span><span class=cFE>1000</span><span class=cF0> / (r + </span><span class=cFE>1</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, &amp;tmpsp-&gt;p[n].DxDt);
-<a name="l1293"></a>    tmps=ShotNew(MT_ANTIMATTER_BALL, &amp;tmpsp-&gt;p[n].x, &amp;v, r, fuse_time, &amp;p1);
-<a name="l1294"></a>    </span><span class=cF5>D3MulEqu</span><span class=cF0>(&amp;p, tmps-&gt;p.mass / tmpsp-&gt;p[n].mass / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
-<a name="l1295"></a>    </span><span class=cF5>D3SubEqu</span><span class=cF0>(&amp;tmpsp-&gt;p[n].DxDt, &amp;p);
-<a name="l1296"></a>    tmpsp-&gt;reload_timeout = </span><span class=cF5>tS</span><span class=cF0> + r / tmpsp-&gt;fire_rate;
-<a name="l1297"></a>    ona = </span><span class=cF5>Freq2Ona</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0> / r);
-<a name="l1298"></a>    MyNoise(</span><span class=cFE>100</span><span class=cF0>, ona, ona + </span><span class=cFE>12</span><span class=cF0>);
-<a name="l1299"></a>}
-<a name="l1300"></a>
-<a name="l1301"></a></span><span class=cF1>U0</span><span class=cF0> FireOneMissile(Ship *tmpsp, </span><span class=cF9>I64</span><span class=cF0> n)
-<a name="l1302"></a>{
-<a name="l1303"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
-<a name="l1304"></a>    Missile *tmpmi = &amp;tmpsp-&gt;missiles[n];
-<a name="l1305"></a>
-<a name="l1306"></a>    </span><span class=cF1>if</span><span class=cF0> (!tmpmi-&gt;launched &amp;&amp; tmpmi-&gt;target)
-<a name="l1307"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1308"></a>        tmpmi-&gt;fuse_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1309"></a>        tmpmi-&gt;die_timeout = tmpmi-&gt;fuse_time + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>125</span><span class=cF0>;
-<a name="l1310"></a>        tmpmi-&gt;img = </span><span class=cFA>&lt;8&gt;</span><span class=cF0>;
-<a name="l1311"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>5</span><span class=cF0>; i++)
-<a name="l1312"></a>            tmpmi-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
-<a name="l1313"></a>        tmpmi-&gt;launched = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1314"></a>        </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>, </span><span class=cFE>53</span><span class=cF0>, </span><span class=cFE>56</span><span class=cF0>);
-<a name="l1315"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1316"></a>}
-<a name="l1317"></a>
-<a name="l1318"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireGunBegin()
-<a name="l1319"></a>{
-<a name="l1320"></a>    </span><span class=cF1>F64</span><span class=cF0> r = </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * ctrl_panel.shot_radius / CTRL_PANEL_RANGE + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>,
-<a name="l1321"></a>        fuse_time = </span><span class=cF5>ToF64</span><span class=cF0>(ctrl_panel.fuse_time + </span><span class=cFE>1</span><span class=cF0>) / CTRL_PANEL_RANGE;
-<a name="l1322"></a>
-<a name="l1323"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
-<a name="l1324"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1325"></a>        </span><span class=cF1>if</span><span class=cF0> (!human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
-<a name="l1326"></a>            </span><span class=cF1>switch</span><span class=cF0> (level)
-<a name="l1327"></a>            {
-<a name="l1328"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
-<a name="l1329"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>3</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1330"></a>                        FireOneGun(human, </span><span class=cFE>3</span><span class=cF0>, r, fuse_time);
-<a name="l1331"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>5</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1332"></a>                        FireOneGun(human, </span><span class=cFE>4</span><span class=cF0>, r, fuse_time);
-<a name="l1333"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l1334"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>1</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1335"></a>                        FireOneGun(human, </span><span class=cFE>1</span><span class=cF0>, r, fuse_time);
-<a name="l1336"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>2</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1337"></a>                        FireOneGun(human, </span><span class=cFE>2</span><span class=cF0>, r, fuse_time);
-<a name="l1338"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l1339"></a>                    FireOneGun(human, </span><span class=cFE>0</span><span class=cF0>, r, fuse_time);
-<a name="l1340"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1341"></a>            }
+<a name="l1030"></a></span><span class=cF1>U0</span><span class=cF0> CheckDamage()
+<a name="l1031"></a>{
+<a name="l1032"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, death_score;
+<a name="l1033"></a>    Ship    *tmpsp, *tmpsp1;
+<a name="l1034"></a>    MyMass  *tmpm, *tmpm1, *best_mass;
+<a name="l1035"></a>    </span><span class=cF9>CD3</span><span class=cF0>      p, p1, p2;
+<a name="l1036"></a>    </span><span class=cF1>F64</span><span class=cF0>      d, best_distance;
+<a name="l1037"></a>    </span><span class=cF1>Bool</span><span class=cF0>     facing_sun = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1038"></a>
+<a name="l1039"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
+<a name="l1040"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1041"></a>        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
+<a name="l1042"></a>        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;human-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
+<a name="l1043"></a>        </span><span class=cF5>D3Add</span><span class=cF0>(&amp;p, &amp;p1, &amp;p2);
+<a name="l1044"></a>        </span><span class=cF1>if</span><span class=cF0> (p.x&gt;</span><span class=cFE>0</span><span class=cF0>)
+<a name="l1045"></a>            facing_sun = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1046"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1047"></a>
+<a name="l1048"></a>    tmpm = ode-&gt;next_mass;
+<a name="l1049"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l1050"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1051"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ION)
+<a name="l1052"></a>        {
+<a name="l1053"></a>            </span><span class=cF1>if</span><span class=cF0> (facing_sun)
+<a name="l1054"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1055"></a>                tmpm1 = ode-&gt;next_mass;
+<a name="l1056"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpm1 != &amp;ode-&gt;next_mass)
+<a name="l1057"></a>                {
+<a name="l1058"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpm1-&gt;type == MT_HUMAN_SHIP)
+<a name="l1059"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1060"></a>                        </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p, &amp;tmpm1-&gt;x, &amp;tmpm-&gt;x);
+<a name="l1061"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3NormSqr</span><span class=cF7>(</span><span class=cF0>&amp;p</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpm1-&gt;radius</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1062"></a>                            tmpm1-&gt;temperature += </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l1063"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1064"></a>                    tmpm1 = tmpm1-&gt;next;
+<a name="l1065"></a>                }
+<a name="l1066"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1067"></a>        }
+<a name="l1068"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ANTIMATTER_SPLAT)
+<a name="l1069"></a>        {
+<a name="l1070"></a>            tmpm1 = ode-&gt;next_mass;
+<a name="l1071"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpm1 != &amp;ode-&gt;next_mass)
+<a name="l1072"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1073"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpm1-&gt;type != MT_ION &amp;&amp; tmpm1-&gt;type != MT_ANTIMATTER_SPLAT)
+<a name="l1074"></a>                {
+<a name="l1075"></a>                    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p, &amp;tmpm1-&gt;x, &amp;tmpm-&gt;x);
+<a name="l1076"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3NormSqr</span><span class=cF7>(</span><span class=cF0>&amp;p</span><span class=cF7>)</span><span class=cF0>&lt;</span><span class=cF5>Sqr</span><span class=cF7>(</span><span class=cF0>tmpm1-&gt;radius</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1077"></a>                        tmpm1-&gt;temperature += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>4</span><span class=cF0>;
+<a name="l1078"></a>                }
+<a name="l1079"></a>                tmpm1 = tmpm1-&gt;next;
+<a name="l1080"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1081"></a>        }
+<a name="l1082"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1083"></a>            tmpm-&gt;temperature *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>9</span><span class=cF0>;
+<a name="l1084"></a>        tmpm = tmpm-&gt;next;
+<a name="l1085"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1086"></a>
+<a name="l1087"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
+<a name="l1088"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1089"></a>        human-&gt;laser_temperature *= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>975</span><span class=cF0>;
+<a name="l1090"></a>
+<a name="l1091"></a>        </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_overheat)
+<a name="l1092"></a>        {
+<a name="l1093"></a>            </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_temperature &lt; LASER_THRESHOLD_TEMP)
+<a name="l1094"></a>                human-&gt;laser_overheat = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1095"></a>        }
+<a name="l1096"></a>        </span><span class=cF1>if</span><span class=cF0> (!human-&gt;laser_overheat &amp;&amp; human-&gt;lasering)
+<a name="l1097"></a>        {
+<a name="l1098"></a>            </span><span class=cF1>if</span><span class=cF0> (human-&gt;laser_temperature &gt;= LASER_TEMP_MAX)
+<a name="l1099"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1100"></a>                human-&gt;laser_overheat = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1101"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l1102"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1103"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1104"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1105"></a>                human-&gt;laser_temperature += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l1106"></a>                </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
+<a name="l1107"></a>                </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;human-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
+<a name="l1108"></a>                </span><span class=cF5>D3Unit</span><span class=cF0>(</span><span class=cF5>D3Add</span><span class=cF7>(</span><span class=cF0>&amp;p, &amp;p1, &amp;p2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1109"></a>                p2.x = p.y;
+<a name="l1110"></a>                p2.y = -p.x;
+<a name="l1111"></a>                p2.z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1112"></a>                best_mass = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1113"></a>                best_distance = </span><span class=cF3>F64_MAX</span><span class=cF0>;
+<a name="l1114"></a>                tmpm = ode-&gt;next_mass;
+<a name="l1115"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l1116"></a>                {
+<a name="l1117"></a>                    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpm-&gt;x);
+<a name="l1118"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF5>D3Dot</span><span class=cF0>(&amp;p1, &amp;p2)</span><span class=cF7>)</span><span class=cF0> &lt; tmpm-&gt;radius &amp;&amp; </span><span class=cF5>D3Dot</span><span class=cF7>(</span><span class=cF0>&amp;p1, &amp;p</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l1119"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1120"></a>                        d = </span><span class=cF5>D3NormSqr</span><span class=cF0>(&amp;p1);
+<a name="l1121"></a>                        </span><span class=cF1>if</span><span class=cF0> (d &lt; best_distance)
+<a name="l1122"></a>                        {
+<a name="l1123"></a>                            best_distance = d;
+<a name="l1124"></a>                            best_mass = tmpm;
+<a name="l1125"></a>                        }
+<a name="l1126"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1127"></a>                    tmpm = tmpm-&gt;next;
+<a name="l1128"></a>                }
+<a name="l1129"></a>                </span><span class=cF1>if</span><span class=cF0> (best_mass)
+<a name="l1130"></a>                    best_mass-&gt;temperature += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l1131"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1132"></a>        }
+<a name="l1133"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1134"></a>
+<a name="l1135"></a>    tmpsp = ship_head.next;
+<a name="l1136"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpsp != &amp;ship_head)
+<a name="l1137"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1138"></a>        tmpsp1 = tmpsp-&gt;next;
+<a name="l1139"></a>        death_score = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1140"></a>        </span><span class=cF1>switch</span><span class=cF0> (tmpsp-&gt;type)
+<a name="l1141"></a>        {
+<a name="l1142"></a>            </span><span class=cF1>case</span><span class=cF0> ST_HUMAN1:
+<a name="l1143"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;exploding)
+<a name="l1144"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1145"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;die_timeout)
+<a name="l1146"></a>                    {
+<a name="l1147"></a>                        ShipDel(tmpsp);
+<a name="l1148"></a>                        human = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1149"></a>                    }
+<a name="l1150"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1151"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1152"></a>                    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;springs; i++)
+<a name="l1153"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1154"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF0>tmpsp-&gt;s[i].f</span><span class=cF7>)</span><span class=cF0> &gt; tmpsp-&gt;s[i].strength)
+<a name="l1155"></a>                        {
+<a name="l1156"></a>                            tmpsp-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
+<a name="l1157"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>4</span><span class=cF0>)
+<a name="l1158"></a>                                MissileDel(&amp;tmpsp-&gt;missiles[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l1159"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>5</span><span class=cF0>)
+<a name="l1160"></a>                                MissileDel(&amp;tmpsp-&gt;missiles[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l1161"></a>                        }
+<a name="l1162"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;s[i].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF0> &amp;&amp; i &lt; </span><span class=cFE>3</span><span class=cF0>)
+<a name="l1163"></a>                            death_score++;
+<a name="l1164"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1165"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1166"></a>
+<a name="l1167"></a>            </span><span class=cF1>default</span><span class=cF0>:
+<a name="l1168"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;exploding)
+<a name="l1169"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1170"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;die_timeout)
+<a name="l1171"></a>                    {
+<a name="l1172"></a>                        ShipDel(tmpsp);
+<a name="l1173"></a>                        score += level;
+<a name="l1174"></a>                        </span><span class=cF1>if</span><span class=cF0> (score &gt; best_score)
+<a name="l1175"></a>                            best_score = score;
+<a name="l1176"></a>                    }
+<a name="l1177"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1178"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1179"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1180"></a>                    j = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1181"></a>                    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;springs; i++)
+<a name="l1182"></a>                    {
+<a name="l1183"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;s[i].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>)
+<a name="l1184"></a>                            j++;
+<a name="l1185"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Abs</span><span class=cF7>(</span><span class=cF0>tmpsp-&gt;s[i].f</span><span class=cF7>)</span><span class=cF0> &gt; tmpsp-&gt;s[i].strength)
+<a name="l1186"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1187"></a>                            tmpsp-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
+<a name="l1188"></a>                            j++;
+<a name="l1189"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1190"></a>                    }
+<a name="l1191"></a>                    </span><span class=cF1>if</span><span class=cF0> (j &gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l1192"></a>                        death_score++;
+<a name="l1193"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1194"></a>        }
+<a name="l1195"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpsp-&gt;exploding)
+<a name="l1196"></a>        {
+<a name="l1197"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpsp-&gt;masses; i++)
+<a name="l1198"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;p[i].temperature &gt; MASS_TEMP_MAX)
+<a name="l1199"></a>                    death_score++;
+<a name="l1200"></a>            </span><span class=cF1>if</span><span class=cF0> (death_score)
+<a name="l1201"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1202"></a>                tmpsp-&gt;exploding = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1203"></a>                tmpsp-&gt;die_time = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l1204"></a>                tmpsp-&gt;die_timeout = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0>;
+<a name="l1205"></a>                </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>750</span><span class=cF0>, </span><span class=cFE>74</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>);
+<a name="l1206"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpsp-&gt;type == ST_HUMAN1)
+<a name="l1207"></a>                    game_over = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1208"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1209"></a>        }
+<a name="l1210"></a>        tmpsp = tmpsp1;
+<a name="l1211"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1212"></a>}
+<a name="l1213"></a>
+<a name="l1214"></a></span><span class=cF2>//********************************** Shots</span><span class=cF0>
+<a name="l1215"></a>
+<a name="l1216"></a>Shot *ShotNew(</span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>CD3</span><span class=cF0> *_p, </span><span class=cF9>CD3</span><span class=cF0> *_v, </span><span class=cF1>F64</span><span class=cF0> r, </span><span class=cF1>F64</span><span class=cF0> fuse_time, </span><span class=cF9>CD3</span><span class=cF0> *_p_gun_offset=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l1217"></a>{
+<a name="l1218"></a>    Shot *tmps = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>Shot</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1219"></a>
+<a name="l1220"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmps-&gt;p.x, _p);
+<a name="l1221"></a>    tmps-&gt;radius = r;
+<a name="l1222"></a>    tmps-&gt;splats = </span><span class=cFE>20</span><span class=cF0> * r;
+<a name="l1223"></a>    tmps-&gt;fuse_time = </span><span class=cF5>tS</span><span class=cF0> + fuse_time;
+<a name="l1224"></a>    tmps-&gt;p.mass = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>3</span><span class=cF0> * r * r * r;
+<a name="l1225"></a>    tmps-&gt;p.type = type;
+<a name="l1226"></a>    </span><span class=cF1>if</span><span class=cF0> (_p_gun_offset)
+<a name="l1227"></a>        </span><span class=cF5>D3AddEqu</span><span class=cF0>(&amp;tmps-&gt;p.x, _p_gun_offset);
+<a name="l1228"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmps-&gt;p.DxDt, _v);
+<a name="l1229"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;tmps-&gt;p, ode-&gt;last_mass);
+<a name="l1230"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmps, shot_head.last);
+<a name="l1231"></a>}
+<a name="l1232"></a>
+<a name="l1233"></a></span><span class=cF1>U0</span><span class=cF0> SolarFlares()
+<a name="l1234"></a>{
+<a name="l1235"></a>    </span><span class=cF9>CD3</span><span class=cF0>     p, v, p1, p2;
+<a name="l1236"></a>    </span><span class=cF9>CTask</span><span class=cF0>  *task = ode-&gt;win_task;
+<a name="l1237"></a>
+<a name="l1238"></a>    </span><span class=cF1>if</span><span class=cF0> (!alarm &amp;&amp; t_solar_storm - </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> &lt; </span><span class=cF5>tS</span><span class=cF0> &lt; t_solar_storm + </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l1239"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1240"></a>        </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>, </span><span class=cFE>74</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>);
+<a name="l1241"></a>        alarm = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1242"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1243"></a>    </span><span class=cF1>if</span><span class=cF0> (t_solar_storm &lt; </span><span class=cF5>tS</span><span class=cF0>)
+<a name="l1244"></a>    </span><span class=cF7>{</span><span class=cF0>  </span><span class=cF2>//If solar storm has arrived</span><span class=cF0>
+<a name="l1245"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &lt; t_solar_storm + </span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l1246"></a>        { </span><span class=cF2>//If solar storm not over</span><span class=cF0>
+<a name="l1247"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Rand</span><span class=cF0> &lt; .</span><span class=cFE>1</span><span class=cF0>)
+<a name="l1248"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1249"></a>                </span><span class=cF5>D3Equ</span><span class=cF0>(&amp;p, -</span><span class=cFE>300</span><span class=cF0>, </span><span class=cF5>Rand</span><span class=cF0> * task-&gt;pix_height, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1250"></a>                </span><span class=cF5>D3Equ</span><span class=cF0>(&amp;v, </span><span class=cFE>200</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1251"></a>                ShotNew(MT_SOLAR_FLARE, &amp;p, &amp;v, </span><span class=cFE>25</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>);
+<a name="l1252"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1253"></a>        }
+<a name="l1254"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1255"></a>        {
+<a name="l1256"></a>            t_solar_storm = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>25</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>;  </span><span class=cF2>//Schedule next solar storm</span><span class=cF0>
+<a name="l1257"></a>            alarm = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1258"></a>        }
+<a name="l1259"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1260"></a>}
+<a name="l1261"></a>
+<a name="l1262"></a></span><span class=cF1>U0</span><span class=cF0> FireOneGun(Ship *tmpsp, </span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF1>F64</span><span class=cF0> r, </span><span class=cF1>F64</span><span class=cF0> fuse_time)
+<a name="l1263"></a>{
+<a name="l1264"></a>    </span><span class=cF9>I64</span><span class=cF0>   ona;
+<a name="l1265"></a>    </span><span class=cF9>CD3</span><span class=cF0>   p, v, p1, p2;
+<a name="l1266"></a>    Shot *tmps;
+<a name="l1267"></a>
+<a name="l1268"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
+<a name="l1269"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
+<a name="l1270"></a>    </span><span class=cF5>D3Unit</span><span class=cF0>(</span><span class=cF5>D3Add</span><span class=cF7>(</span><span class=cF0>&amp;p, &amp;p1, &amp;p2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1271"></a>    </span><span class=cF5>D3MulEqu</span><span class=cF0>(</span><span class=cF5>D3Copy</span><span class=cF7>(</span><span class=cF0>&amp;p1, &amp;p</span><span class=cF7>)</span><span class=cF0>, r + tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].radius + </span><span class=cFE>5</span><span class=cF0>);
+<a name="l1272"></a>    </span><span class=cF5>D3AddEqu</span><span class=cF0>(</span><span class=cF5>D3MulEqu</span><span class=cF7>(</span><span class=cF5>D3Copy</span><span class=cF0>(&amp;v, &amp;p), </span><span class=cFE>1000</span><span class=cF0> / (r + </span><span class=cFE>1</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, &amp;tmpsp-&gt;p[n].DxDt);
+<a name="l1273"></a>    tmps=ShotNew(MT_ANTIMATTER_BALL, &amp;tmpsp-&gt;p[n].x, &amp;v, r, fuse_time, &amp;p1);
+<a name="l1274"></a>    </span><span class=cF5>D3MulEqu</span><span class=cF0>(&amp;p, tmps-&gt;p.mass / tmpsp-&gt;p[n].mass / </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
+<a name="l1275"></a>    </span><span class=cF5>D3SubEqu</span><span class=cF0>(&amp;tmpsp-&gt;p[n].DxDt, &amp;p);
+<a name="l1276"></a>    tmpsp-&gt;reload_timeout = </span><span class=cF5>tS</span><span class=cF0> + r / tmpsp-&gt;fire_rate;
+<a name="l1277"></a>    ona = </span><span class=cF5>Freq2Ona</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0> / r);
+<a name="l1278"></a>    </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>, ona, ona + </span><span class=cFE>12</span><span class=cF0>);
+<a name="l1279"></a>}
+<a name="l1280"></a>
+<a name="l1281"></a></span><span class=cF1>U0</span><span class=cF0> FireOneMissile(Ship *tmpsp, </span><span class=cF9>I64</span><span class=cF0> n)
+<a name="l1282"></a>{
+<a name="l1283"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
+<a name="l1284"></a>    Missile *tmpmi = &amp;tmpsp-&gt;missiles[n];
+<a name="l1285"></a>
+<a name="l1286"></a>    </span><span class=cF1>if</span><span class=cF0> (!tmpmi-&gt;launched &amp;&amp; tmpmi-&gt;target)
+<a name="l1287"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1288"></a>        tmpmi-&gt;fuse_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l1289"></a>        tmpmi-&gt;die_timeout = tmpmi-&gt;fuse_time + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>125</span><span class=cF0>;
+<a name="l1290"></a>        tmpmi-&gt;img = </span><span class=cFA>&lt;8&gt;</span><span class=cF0>;
+<a name="l1291"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>5</span><span class=cF0>; i++)
+<a name="l1292"></a>            tmpmi-&gt;s[i].flags |= </span><span class=cF3>SSF_INACTIVE</span><span class=cF0>;
+<a name="l1293"></a>        tmpmi-&gt;launched = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1294"></a>        </span><span class=cF5>Sweep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>, </span><span class=cFE>53</span><span class=cF0>, </span><span class=cFE>56</span><span class=cF0>);
+<a name="l1295"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1296"></a>}
+<a name="l1297"></a>
+<a name="l1298"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireGunBegin()
+<a name="l1299"></a>{
+<a name="l1300"></a>    </span><span class=cF1>F64</span><span class=cF0> r = </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * ctrl_panel.shot_radius / CTRL_PANEL_RANGE + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>,
+<a name="l1301"></a>        fuse_time = </span><span class=cF5>ToF64</span><span class=cF0>(ctrl_panel.fuse_time + </span><span class=cFE>1</span><span class=cF0>) / CTRL_PANEL_RANGE;
+<a name="l1302"></a>
+<a name="l1303"></a>    </span><span class=cF1>if</span><span class=cF0> (human)
+<a name="l1304"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1305"></a>        </span><span class=cF1>if</span><span class=cF0> (!human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
+<a name="l1306"></a>            </span><span class=cF1>switch</span><span class=cF0> (level)
+<a name="l1307"></a>            {
+<a name="l1308"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
+<a name="l1309"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>3</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1310"></a>                        FireOneGun(human, </span><span class=cFE>3</span><span class=cF0>, r, fuse_time);
+<a name="l1311"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>5</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1312"></a>                        FireOneGun(human, </span><span class=cFE>4</span><span class=cF0>, r, fuse_time);
+<a name="l1313"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l1314"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>1</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1315"></a>                        FireOneGun(human, </span><span class=cFE>1</span><span class=cF0>, r, fuse_time);
+<a name="l1316"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>human-&gt;s[</span><span class=cFE>2</span><span class=cF0>].flags &amp; </span><span class=cF3>SSF_INACTIVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1317"></a>                        FireOneGun(human, </span><span class=cFE>2</span><span class=cF0>, r, fuse_time);
+<a name="l1318"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l1319"></a>                    FireOneGun(human, </span><span class=cFE>0</span><span class=cF0>, r, fuse_time);
+<a name="l1320"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1321"></a>            }
+<a name="l1322"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1323"></a>}
+<a name="l1324"></a>
+<a name="l1325"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireMissileBegin(</span><span class=cF9>I64</span><span class=cF0> n)
+<a name="l1326"></a>{
+<a name="l1327"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
+<a name="l1328"></a>        FireOneMissile(human, n);
+<a name="l1329"></a>}
+<a name="l1330"></a>
+<a name="l1331"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireLaserBegin()
+<a name="l1332"></a>{
+<a name="l1333"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
+<a name="l1334"></a>        human-&gt;lasering = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1335"></a>}
+<a name="l1336"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireLaserEnd()
+<a name="l1337"></a>{
+<a name="l1338"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding)
+<a name="l1339"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1340"></a>        human-&gt;lasering = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1341"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
 <a name="l1342"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1343"></a>}
 <a name="l1344"></a>
-<a name="l1345"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireMissileBegin(</span><span class=cF9>I64</span><span class=cF0> n)
+<a name="l1345"></a></span><span class=cF1>U0</span><span class=cF0> SplatNew(Shot *tmps, </span><span class=cF1>F64</span><span class=cF0> die_time, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>end</span><span class=cF0>)
 <a name="l1346"></a>{
-<a name="l1347"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
-<a name="l1348"></a>        FireOneMissile(human, n);
-<a name="l1349"></a>}
+<a name="l1347"></a>    MyMass *tmpm;
+<a name="l1348"></a>    </span><span class=cF1>F64</span><span class=cF0>     theta = </span><span class=cF5>Arg</span><span class=cF0>(tmps-&gt;p.DxDt, tmps-&gt;p.DyDt);
+<a name="l1349"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
 <a name="l1350"></a>
-<a name="l1351"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireLaserBegin()
-<a name="l1352"></a>{
-<a name="l1353"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding &amp;&amp; !human-&gt;spacewalk_side &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; human-&gt;reload_timeout)
-<a name="l1354"></a>        human-&gt;lasering = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1355"></a>}
-<a name="l1356"></a></span><span class=cF1>U0</span><span class=cF0> HumanFireLaserEnd()
-<a name="l1357"></a>{
-<a name="l1358"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding)
-<a name="l1359"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1360"></a>        human-&gt;lasering = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1361"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l1362"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1363"></a>}
-<a name="l1364"></a>
-<a name="l1365"></a></span><span class=cF1>U0</span><span class=cF0> SplatNew(Shot *tmps, </span><span class=cF1>F64</span><span class=cF0> die_time, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>end</span><span class=cF0>)
-<a name="l1366"></a>{
-<a name="l1367"></a>    MyMass *tmpm;
-<a name="l1368"></a>    </span><span class=cF1>F64</span><span class=cF0>     theta = </span><span class=cF5>Arg</span><span class=cF0>(tmps-&gt;p.DxDt, tmps-&gt;p.DyDt);
-<a name="l1369"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
-<a name="l1370"></a>
-<a name="l1371"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmps-&gt;splats; i++)
-<a name="l1372"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1373"></a>        tmpm = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>MyMass</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1374"></a>        </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmpm-&gt;x, &amp;tmps-&gt;p.x);
-<a name="l1375"></a>        tmpm-&gt;radius = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1376"></a>        tmpm-&gt;mass = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1377"></a>        tmpm-&gt;die_timeout = </span><span class=cF5>tS</span><span class=cF0> + die_time;
-<a name="l1378"></a>        </span><span class=cF1>if</span><span class=cF0> (tmps-&gt;p.type == MT_SOLAR_FLARE)
-<a name="l1379"></a>            tmpm-&gt;type = MT_ION;
-<a name="l1380"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1381"></a>            tmpm-&gt;type = MT_ANTIMATTER_SPLAT;
-<a name="l1382"></a>        </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmpm-&gt;DxDt, &amp;tmps-&gt;p.DxDt);
-<a name="l1383"></a>        tmpm-&gt;DxDt += </span><span class=cFE>50</span><span class=cF0> * </span><span class=cF5>Sqr</span><span class=cF0>(tmps-&gt;radius) * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(</span><span class=cF1>start</span><span class=cF0> + theta + </span><span class=cF7>(</span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> * i / tmps-&gt;splats);
-<a name="l1384"></a>        tmpm-&gt;DyDt += </span><span class=cFE>50</span><span class=cF0> * </span><span class=cF5>Sqr</span><span class=cF0>(tmps-&gt;radius) * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cF1>start</span><span class=cF0> + theta + </span><span class=cF7>(</span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> * i / tmps-&gt;splats);
-<a name="l1385"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpm, ode-&gt;last_mass);
-<a name="l1386"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1387"></a>}
-<a name="l1388"></a>
-<a name="l1389"></a></span><span class=cF1>U0</span><span class=cF0> ExpireShots()
-<a name="l1390"></a>{
-<a name="l1391"></a>    Shot *tmps = shot_head.next, *tmps1;
-<a name="l1392"></a>
-<a name="l1393"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;shot_head)
-<a name="l1394"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1395"></a>        tmps1 = tmps-&gt;next;
-<a name="l1396"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmps-&gt;fuse_time)
-<a name="l1397"></a>        {
-<a name="l1398"></a>            </span><span class=cF1>if</span><span class=cF0> (tmps-&gt;p.type == MT_SOLAR_FLARE)
-<a name="l1399"></a>                SplatNew(tmps, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
-<a name="l1400"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l1401"></a>                SplatNew(tmps, .</span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
-<a name="l1402"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmps);
-<a name="l1403"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(&amp;tmps-&gt;p);
-<a name="l1404"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmps);
-<a name="l1405"></a>        }
-<a name="l1406"></a>        tmps = tmps1;
-<a name="l1407"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1408"></a>}
-<a name="l1409"></a>
-<a name="l1410"></a></span><span class=cF1>U0</span><span class=cF0> ExpireSplats()
-<a name="l1411"></a>{
-<a name="l1412"></a>    MyMass *tmpm, *tmpm1;
-<a name="l1413"></a>
-<a name="l1414"></a>    tmpm = ode-&gt;next_mass;
-<a name="l1415"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
-<a name="l1416"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1417"></a>        tmpm1 = tmpm-&gt;next;
-<a name="l1418"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmpm-&gt;type == MT_ION || tmpm-&gt;type == MT_ANTIMATTER_SPLAT</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; tmpm-&gt;die_timeout)
-<a name="l1419"></a>        {
-<a name="l1420"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpm);
-<a name="l1421"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpm);
-<a name="l1422"></a>        }
-<a name="l1423"></a>        tmpm = tmpm1;
-<a name="l1424"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1425"></a>}
-<a name="l1426"></a>
-<a name="l1427"></a></span><span class=cF1>U0</span><span class=cF0> ExpireMissiles()
-<a name="l1428"></a>{
-<a name="l1429"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
-<a name="l1430"></a>    </span><span class=cF1>F64</span><span class=cF0>      dd, best_dd;
-<a name="l1431"></a>    Missile *tmpmi = missile_head.next, *tmpm1;
-<a name="l1432"></a>
-<a name="l1433"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpmi != &amp;missile_head)
-<a name="l1434"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1435"></a>        tmpm1 = tmpmi-&gt;next;
-<a name="l1436"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpmi-&gt;launched)
-<a name="l1437"></a>        {
-<a name="l1438"></a>            best_dd = </span><span class=cF3>F64_MAX</span><span class=cF0>;
-<a name="l1439"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpmi-&gt;target)
-<a name="l1440"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpmi-&gt;target-&gt;masses; i++)
-<a name="l1441"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l1442"></a>                    dd = </span><span class=cF5>D3DistSqr</span><span class=cF0>(&amp;tmpmi-&gt;p_front.x, &amp;tmpmi-&gt;target-&gt;p[i].x);
-<a name="l1443"></a>                    </span><span class=cF1>if</span><span class=cF0> (dd &lt; best_dd)
-<a name="l1444"></a>                        best_dd = dd;
-<a name="l1445"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l1446"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpmi-&gt;exploding &amp;&amp; </span><span class=cF7>(</span><span class=cF0>best_dd &lt; </span><span class=cFE>30</span><span class=cF0> * </span><span class=cFE>30</span><span class=cF0> || </span><span class=cF5>tS</span><span class=cF0> &gt; tmpmi-&gt;fuse_time</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1447"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1448"></a>                tmpmi-&gt;p_front.mass = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//They go flying, if too light.</span><span class=cF0>
-<a name="l1449"></a>                tmpmi-&gt;p_back.mass = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l1450"></a>                tmpmi-&gt;exploding = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1451"></a>                MyNoise(</span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>, </span><span class=cFE>105</span><span class=cF0>);
-<a name="l1452"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1453"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpmi-&gt;die_timeout)
-<a name="l1454"></a>                MissileDel(tmpmi);
-<a name="l1455"></a>        }
-<a name="l1456"></a>        tmpmi = tmpm1;
-<a name="l1457"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1458"></a>}
-<a name="l1459"></a>
-<a name="l1460"></a></span><span class=cF2>//********************************** AI</span><span class=cF0>
-<a name="l1461"></a>
-<a name="l1462"></a></span><span class=cF1>U0</span><span class=cF0> AI()
-<a name="l1463"></a>{
-<a name="l1464"></a>    </span><span class=cF9>CD3</span><span class=cF0>   p, p1, p2;
-<a name="l1465"></a>    Ship *tmpsp = ship_head.next;
-<a name="l1466"></a>
-<a name="l1467"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding)
-<a name="l1468"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1469"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpsp != &amp;ship_head)
-<a name="l1470"></a>        {
-<a name="l1471"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
-<a name="l1472"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
-<a name="l1473"></a>            </span><span class=cF5>D3Add</span><span class=cF0>(&amp;p, &amp;p1, &amp;p2);
-<a name="l1474"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
-<a name="l1475"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3Dot</span><span class=cF7>(</span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p), </span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p1)</span><span class=cF7>)</span><span class=cF0>&gt;</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>995</span><span class=cF0> &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;reload_timeout)
-<a name="l1476"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1477"></a>                FireOneGun(tmpsp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> + .</span><span class=cFE>5</span><span class=cF0>, .</span><span class=cFE>4</span><span class=cF0>);
-<a name="l1478"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1479"></a>            tmpsp = tmpsp-&gt;next;
+<a name="l1351"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmps-&gt;splats; i++)
+<a name="l1352"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1353"></a>        tmpm = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>MyMass</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1354"></a>        </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmpm-&gt;x, &amp;tmps-&gt;p.x);
+<a name="l1355"></a>        tmpm-&gt;radius = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1356"></a>        tmpm-&gt;mass = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1357"></a>        tmpm-&gt;die_timeout = </span><span class=cF5>tS</span><span class=cF0> + die_time;
+<a name="l1358"></a>        </span><span class=cF1>if</span><span class=cF0> (tmps-&gt;p.type == MT_SOLAR_FLARE)
+<a name="l1359"></a>            tmpm-&gt;type = MT_ION;
+<a name="l1360"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1361"></a>            tmpm-&gt;type = MT_ANTIMATTER_SPLAT;
+<a name="l1362"></a>        </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;tmpm-&gt;DxDt, &amp;tmps-&gt;p.DxDt);
+<a name="l1363"></a>        tmpm-&gt;DxDt += </span><span class=cFE>50</span><span class=cF0> * </span><span class=cF5>Sqr</span><span class=cF0>(tmps-&gt;radius) * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(</span><span class=cF1>start</span><span class=cF0> + theta + </span><span class=cF7>(</span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> * i / tmps-&gt;splats);
+<a name="l1364"></a>        tmpm-&gt;DyDt += </span><span class=cFE>50</span><span class=cF0> * </span><span class=cF5>Sqr</span><span class=cF0>(tmps-&gt;radius) * </span><span class=cF5>Rand</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cF1>start</span><span class=cF0> + theta + </span><span class=cF7>(</span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> * i / tmps-&gt;splats);
+<a name="l1365"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpm, ode-&gt;last_mass);
+<a name="l1366"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1367"></a>}
+<a name="l1368"></a>
+<a name="l1369"></a></span><span class=cF1>U0</span><span class=cF0> ExpireShots()
+<a name="l1370"></a>{
+<a name="l1371"></a>    Shot *tmps = shot_head.next, *tmps1;
+<a name="l1372"></a>
+<a name="l1373"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;shot_head)
+<a name="l1374"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1375"></a>        tmps1 = tmps-&gt;next;
+<a name="l1376"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmps-&gt;fuse_time)
+<a name="l1377"></a>        {
+<a name="l1378"></a>            </span><span class=cF1>if</span><span class=cF0> (tmps-&gt;p.type == MT_SOLAR_FLARE)
+<a name="l1379"></a>                SplatNew(tmps, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l1380"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1381"></a>                SplatNew(tmps, .</span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
+<a name="l1382"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmps);
+<a name="l1383"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(&amp;tmps-&gt;p);
+<a name="l1384"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmps);
+<a name="l1385"></a>        }
+<a name="l1386"></a>        tmps = tmps1;
+<a name="l1387"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1388"></a>}
+<a name="l1389"></a>
+<a name="l1390"></a></span><span class=cF1>U0</span><span class=cF0> ExpireSplats()
+<a name="l1391"></a>{
+<a name="l1392"></a>    MyMass *tmpm, *tmpm1;
+<a name="l1393"></a>
+<a name="l1394"></a>    tmpm = ode-&gt;next_mass;
+<a name="l1395"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l1396"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1397"></a>        tmpm1 = tmpm-&gt;next;
+<a name="l1398"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmpm-&gt;type == MT_ION || tmpm-&gt;type == MT_ANTIMATTER_SPLAT</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; tmpm-&gt;die_timeout)
+<a name="l1399"></a>        {
+<a name="l1400"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpm);
+<a name="l1401"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpm);
+<a name="l1402"></a>        }
+<a name="l1403"></a>        tmpm = tmpm1;
+<a name="l1404"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1405"></a>}
+<a name="l1406"></a>
+<a name="l1407"></a></span><span class=cF1>U0</span><span class=cF0> ExpireMissiles()
+<a name="l1408"></a>{
+<a name="l1409"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
+<a name="l1410"></a>    </span><span class=cF1>F64</span><span class=cF0>      dd, best_dd;
+<a name="l1411"></a>    Missile *tmpmi = missile_head.next, *tmpm1;
+<a name="l1412"></a>
+<a name="l1413"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpmi != &amp;missile_head)
+<a name="l1414"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1415"></a>        tmpm1 = tmpmi-&gt;next;
+<a name="l1416"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpmi-&gt;launched)
+<a name="l1417"></a>        {
+<a name="l1418"></a>            best_dd = </span><span class=cF3>F64_MAX</span><span class=cF0>;
+<a name="l1419"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpmi-&gt;target)
+<a name="l1420"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpmi-&gt;target-&gt;masses; i++)
+<a name="l1421"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1422"></a>                    dd = </span><span class=cF5>D3DistSqr</span><span class=cF0>(&amp;tmpmi-&gt;p_front.x, &amp;tmpmi-&gt;target-&gt;p[i].x);
+<a name="l1423"></a>                    </span><span class=cF1>if</span><span class=cF0> (dd &lt; best_dd)
+<a name="l1424"></a>                        best_dd = dd;
+<a name="l1425"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1426"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpmi-&gt;exploding &amp;&amp; </span><span class=cF7>(</span><span class=cF0>best_dd &lt; </span><span class=cFE>30</span><span class=cF0> * </span><span class=cFE>30</span><span class=cF0> || </span><span class=cF5>tS</span><span class=cF0> &gt; tmpmi-&gt;fuse_time</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1427"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1428"></a>                tmpmi-&gt;p_front.mass = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//They go flying, if too light.</span><span class=cF0>
+<a name="l1429"></a>                tmpmi-&gt;p_back.mass = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l1430"></a>                tmpmi-&gt;exploding = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1431"></a>                </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>93</span><span class=cF0>, </span><span class=cFE>105</span><span class=cF0>);
+<a name="l1432"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1433"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt; tmpmi-&gt;die_timeout)
+<a name="l1434"></a>                MissileDel(tmpmi);
+<a name="l1435"></a>        }
+<a name="l1436"></a>        tmpmi = tmpm1;
+<a name="l1437"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1438"></a>}
+<a name="l1439"></a>
+<a name="l1440"></a></span><span class=cF2>//********************************** AI</span><span class=cF0>
+<a name="l1441"></a>
+<a name="l1442"></a></span><span class=cF1>U0</span><span class=cF0> AI()
+<a name="l1443"></a>{
+<a name="l1444"></a>    </span><span class=cF9>CD3</span><span class=cF0>   p, p1, p2;
+<a name="l1445"></a>    Ship *tmpsp = ship_head.next;
+<a name="l1446"></a>
+<a name="l1447"></a>    </span><span class=cF1>if</span><span class=cF0> (human &amp;&amp; !human-&gt;exploding)
+<a name="l1448"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1449"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpsp != &amp;ship_head)
+<a name="l1450"></a>        {
+<a name="l1451"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>1</span><span class=cF0>].x);
+<a name="l1452"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p2, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>2</span><span class=cF0>].x);
+<a name="l1453"></a>            </span><span class=cF5>D3Add</span><span class=cF0>(&amp;p, &amp;p1, &amp;p2);
+<a name="l1454"></a>            </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p1, &amp;human-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x, &amp;tmpsp-&gt;p[</span><span class=cFE>0</span><span class=cF0>].x);
+<a name="l1455"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D3Dot</span><span class=cF7>(</span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p), </span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p1)</span><span class=cF7>)</span><span class=cF0>&gt;</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>995</span><span class=cF0> &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &gt; tmpsp-&gt;reload_timeout)
+<a name="l1456"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1457"></a>                FireOneGun(tmpsp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> + .</span><span class=cFE>5</span><span class=cF0>, .</span><span class=cFE>4</span><span class=cF0>);
+<a name="l1458"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1459"></a>            tmpsp = tmpsp-&gt;next;
+<a name="l1460"></a>        }
+<a name="l1461"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1462"></a>}
+<a name="l1463"></a>
+<a name="l1464"></a></span><span class=cF2>//********************************** Init</span><span class=cF0>
+<a name="l1465"></a></span><span class=cF1>U0</span><span class=cF0> InitLevel()
+<a name="l1466"></a>{
+<a name="l1467"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
+<a name="l1468"></a>    MyMass *tmpm, *tmpm1;
+<a name="l1469"></a>
+<a name="l1470"></a>    t_solar_storm = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1471"></a>
+<a name="l1472"></a>    tmpm = ode-&gt;next_mass;
+<a name="l1473"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l1474"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1475"></a>        tmpm1 = tmpm-&gt;next;
+<a name="l1476"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ION || tmpm-&gt;type == MT_ANTIMATTER_SPLAT)
+<a name="l1477"></a>        {
+<a name="l1478"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpm);
+<a name="l1479"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpm);
 <a name="l1480"></a>        }
-<a name="l1481"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1482"></a>}
-<a name="l1483"></a>
-<a name="l1484"></a></span><span class=cF2>//********************************** Init</span><span class=cF0>
-<a name="l1485"></a></span><span class=cF1>U0</span><span class=cF0> InitLevel()
-<a name="l1486"></a>{
-<a name="l1487"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
-<a name="l1488"></a>    MyMass *tmpm, *tmpm1;
-<a name="l1489"></a>
-<a name="l1490"></a>    t_solar_storm = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1491"></a>
-<a name="l1492"></a>    tmpm = ode-&gt;next_mass;
-<a name="l1493"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
-<a name="l1494"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1495"></a>        tmpm1 = tmpm-&gt;next;
-<a name="l1496"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;type == MT_ION || tmpm-&gt;type == MT_ANTIMATTER_SPLAT)
-<a name="l1497"></a>        {
-<a name="l1498"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpm);
-<a name="l1499"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpm);
-<a name="l1500"></a>        }
-<a name="l1501"></a>        tmpm = tmpm1;
-<a name="l1502"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1503"></a>    </span><span class=cF1>if</span><span class=cF0> (level == </span><span class=cFE>1</span><span class=cF0>)
-<a name="l1504"></a>        </span><span class=cF5>OneTimePopUp</span><span class=cF0>(&amp;message_flags, XMESSAGEF_SOLAR_STORM, 
-<a name="l1505"></a>                    </span><span class=cF6>&quot;Face away from Sun in solar storm.\n&quot;</span><span class=cF0>);
-<a name="l1506"></a>    </span><span class=cF1>if</span><span class=cF0> (level == </span><span class=cFE>4</span><span class=cF0>)
-<a name="l1507"></a>        </span><span class=cF5>OneTimePopUp</span><span class=cF0>(&amp;message_flags, XMESSAGEF_ANTISPIN, 
-<a name="l1508"></a>                    </span><span class=cF6>&quot;Press $GREEN$&lt;CURSOR-DOWN&gt;$FG$ for anti-spin stabilizer.\n&quot;</span><span class=cF0>);
-<a name="l1509"></a>    human = ShipNew(</span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>, ST_HUMAN1);
-<a name="l1510"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; level + </span><span class=cFE>2</span><span class=cF0>; i++)
-<a name="l1511"></a>        PlaceShip(ST_ENEMY1);
-<a name="l1512"></a>    PlaceShip(ST_ENEMY2);
-<a name="l1513"></a>    show_level_message = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1514"></a>    </span><span class=cF5>ODEPause</span><span class=cF0>(ode);
-<a name="l1515"></a>}
-<a name="l1516"></a>
-<a name="l1517"></a></span><span class=cF1>U0</span><span class=cF0> Init()
-<a name="l1518"></a>{
-<a name="l1519"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
-<a name="l1520"></a>    game_over = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1521"></a>    score = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1522"></a>    level = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1523"></a>
-<a name="l1524"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;ship_head);
-<a name="l1525"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;shot_head);
-<a name="l1526"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;missile_head);
-<a name="l1527"></a>
-<a name="l1528"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; STARS_NUM; i++)
-<a name="l1529"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1530"></a>        stars_x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>;
-<a name="l1531"></a>        stars_y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_HEIGHT</span><span class=cF0>;
-<a name="l1532"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1533"></a>
-<a name="l1534"></a>    human_t_left = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1535"></a>    human_t_right = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1536"></a>    human_antispin = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1537"></a>
-<a name="l1538"></a>    InitLevel;
-<a name="l1539"></a>}
-<a name="l1540"></a>
-<a name="l1541"></a></span><span class=cF2>//********************************** Main</span><span class=cF0>
-<a name="l1542"></a></span><span class=cF1>U0</span><span class=cF0> XCaliber()
-<a name="l1543"></a>{
-<a name="l1544"></a>    </span><span class=cF9>I64</span><span class=cF0>     ch, message_code, arg1, arg2, sc;
-<a name="l1545"></a>    </span><span class=cF9>CCtrl</span><span class=cF0>  *cp = CtrlPanelNew;
-<a name="l1546"></a>
-<a name="l1547"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l1548"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
-<a name="l1549"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
-<a name="l1550"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
-<a name="l1551"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
-<a name="l1552"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
-<a name="l1553"></a>                </span><span class=cF6>&quot;Game {&quot;</span><span class=cF0>
-<a name="l1554"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
-<a name="l1555"></a>                </span><span class=cF6>&quot;  LevelUp(,'+');&quot;</span><span class=cF0>
-<a name="l1556"></a>                </span><span class=cF6>&quot;  LevelDown(,'-');&quot;</span><span class=cF0>
-<a name="l1557"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
-<a name="l1558"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
-<a name="l1559"></a>                </span><span class=cF6>&quot;  Fire(,CH_SPACE);&quot;</span><span class=cF0>
-<a name="l1560"></a>                </span><span class=cF6>&quot;  Thrust(,,SC_CURSOR_UP);&quot;</span><span class=cF0>
-<a name="l1561"></a>                </span><span class=cF6>&quot;  StopSpin(,,SC_CURSOR_DOWN);&quot;</span><span class=cF0>
-<a name="l1562"></a>                </span><span class=cF6>&quot;  Left(,,SC_CURSOR_LEFT);&quot;</span><span class=cF0>
-<a name="l1563"></a>                </span><span class=cF6>&quot;  Right(,,SC_CURSOR_RIGHT);&quot;</span><span class=cF0>
-<a name="l1564"></a>                </span><span class=cF6>&quot;  LeftMissile(,,SC_CURSOR_LEFT|SCF_CTRL);&quot;</span><span class=cF0>
-<a name="l1565"></a>                </span><span class=cF6>&quot;  RightMissile(,,SC_CURSOR_RIGHT|SCF_CTRL);&quot;</span><span class=cF0>
-<a name="l1566"></a>                </span><span class=cF6>&quot;  Spackwalk(,'w');&quot;</span><span class=cF0>
-<a name="l1567"></a>                </span><span class=cF6>&quot;  LongerFuse(,,SC_CURSOR_RIGHT|SCF_SHIFT);&quot;</span><span class=cF0>
-<a name="l1568"></a>                </span><span class=cF6>&quot;  ShorterFuse(,,SC_CURSOR_LEFT|SCF_SHIFT);&quot;</span><span class=cF0>
-<a name="l1569"></a>                </span><span class=cF6>&quot;  LargerShot(,,SC_CURSOR_UP|SCF_SHIFT);&quot;</span><span class=cF0>
-<a name="l1570"></a>                </span><span class=cF6>&quot;  SmallerShot(,,SC_CURSOR_DOWN|SCF_SHIFT);&quot;</span><span class=cF0>
-<a name="l1571"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
-<a name="l1572"></a>                );
-<a name="l1573"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
-<a name="l1574"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
-<a name="l1575"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
-<a name="l1576"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
-<a name="l1577"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l1578"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l1579"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_FOCUS_TASK_MENU</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
-<a name="l1580"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l1581"></a>    </span><span class=cF1>do</span><span class=cF0>
-<a name="l1582"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1583"></a>        ode = </span><span class=cF5>ODENew</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>01</span><span class=cF0>, </span><span class=cF3>ODEF_HAS_MASSES</span><span class=cF0>);
-<a name="l1584"></a>        ode-&gt;derive = &amp;MyDerivative;
-<a name="l1585"></a>        ode-&gt;min_tolerance = </span><span class=cFE>1</span><span class=cF0>e-</span><span class=cFE>9</span><span class=cF0>;
-<a name="l1586"></a>        ode-&gt;drag_v3 = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>00001</span><span class=cF0>;
-<a name="l1587"></a>        Init;
-<a name="l1588"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(ode, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ode);
-<a name="l1589"></a>        ch = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1590"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l1591"></a>        {
-<a name="l1592"></a>            </span><span class=cF1>while</span><span class=cF0> (!game_over &amp;&amp; !show_level_message &amp;&amp;
-<a name="l1593"></a>                    </span><span class=cF7>(</span><span class=cF0>message_code = </span><span class=cF5>MessageScan</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1594"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1595"></a>                </span><span class=cF1>switch</span><span class=cF0> (message_code)
-<a name="l1596"></a>                {
-<a name="l1597"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
-<a name="l1598"></a>                        ch = arg1;
-<a name="l1599"></a>                        sc = arg2;
-<a name="l1600"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
-<a name="l1601"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l1602"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l1603"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l1604"></a>                                {
-<a name="l1605"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l1606"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
-<a name="l1607"></a>                                            HumanFireMissileBegin(</span><span class=cFE>0</span><span class=cF0>);
-<a name="l1608"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
-<a name="l1609"></a>                                            ctrl_panel.fuse_time += </span><span class=cFE>2</span><span class=cF0>;
-<a name="l1610"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1611"></a>                                            human_t_right = THRUST_MAX;
-<a name="l1612"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1613"></a>
-<a name="l1614"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l1615"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
-<a name="l1616"></a>                                            HumanFireMissileBegin(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l1617"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
-<a name="l1618"></a>                                            ctrl_panel.fuse_time -= </span><span class=cFE>2</span><span class=cF0>;
-<a name="l1619"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1620"></a>                                            human_t_left = THRUST_MAX;
-<a name="l1621"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1622"></a>
-<a name="l1623"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
-<a name="l1624"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
-<a name="l1625"></a>                                            ctrl_panel.shot_radius += </span><span class=cFE>2</span><span class=cF0>;
-<a name="l1626"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1627"></a>                                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l1628"></a>                                            human_t_right = THRUST_MAX;
-<a name="l1629"></a>                                            human_t_left  = THRUST_MAX;
-<a name="l1630"></a>                                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l1631"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1481"></a>        tmpm = tmpm1;
+<a name="l1482"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1483"></a>    </span><span class=cF1>if</span><span class=cF0> (level == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l1484"></a>        </span><span class=cF5>OneTimePopUp</span><span class=cF0>(&amp;message_flags, XMESSAGEF_SOLAR_STORM, 
+<a name="l1485"></a>                    </span><span class=cF6>&quot;Face away from Sun in solar storm.\n&quot;</span><span class=cF0>);
+<a name="l1486"></a>    </span><span class=cF1>if</span><span class=cF0> (level == </span><span class=cFE>4</span><span class=cF0>)
+<a name="l1487"></a>        </span><span class=cF5>OneTimePopUp</span><span class=cF0>(&amp;message_flags, XMESSAGEF_ANTISPIN, 
+<a name="l1488"></a>                    </span><span class=cF6>&quot;Press $GREEN$&lt;CURSOR-DOWN&gt;$FG$ for anti-spin stabilizer.\n&quot;</span><span class=cF0>);
+<a name="l1489"></a>    human = ShipNew(</span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>, ST_HUMAN1);
+<a name="l1490"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; level + </span><span class=cFE>2</span><span class=cF0>; i++)
+<a name="l1491"></a>        PlaceShip(ST_ENEMY1);
+<a name="l1492"></a>    PlaceShip(ST_ENEMY2);
+<a name="l1493"></a>    show_level_message = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1494"></a>    </span><span class=cF5>ODEPause</span><span class=cF0>(ode);
+<a name="l1495"></a>}
+<a name="l1496"></a>
+<a name="l1497"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l1498"></a>{
+<a name="l1499"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l1500"></a>    game_over = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1501"></a>    score = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1502"></a>    level = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1503"></a>
+<a name="l1504"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;ship_head);
+<a name="l1505"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;shot_head);
+<a name="l1506"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;missile_head);
+<a name="l1507"></a>
+<a name="l1508"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; STARS_NUM; i++)
+<a name="l1509"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1510"></a>        stars_x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>;
+<a name="l1511"></a>        stars_y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_HEIGHT</span><span class=cF0>;
+<a name="l1512"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1513"></a>
+<a name="l1514"></a>    human_t_left = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1515"></a>    human_t_right = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1516"></a>    human_antispin = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1517"></a>
+<a name="l1518"></a>    InitLevel;
+<a name="l1519"></a>}
+<a name="l1520"></a>
+<a name="l1521"></a></span><span class=cF2>//********************************** Main</span><span class=cF0>
+<a name="l1522"></a></span><span class=cF1>U0</span><span class=cF0> XCaliber()
+<a name="l1523"></a>{
+<a name="l1524"></a>    </span><span class=cF9>I64</span><span class=cF0>     ch, message_code, arg1, arg2, sc;
+<a name="l1525"></a>    </span><span class=cF9>CCtrl</span><span class=cF0>  *cp = CtrlPanelNew;
+<a name="l1526"></a>
+<a name="l1527"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l1528"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l1529"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l1530"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l1531"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l1532"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l1533"></a>                </span><span class=cF6>&quot;Game {&quot;</span><span class=cF0>
+<a name="l1534"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l1535"></a>                </span><span class=cF6>&quot;  LevelUp(,'+');&quot;</span><span class=cF0>
+<a name="l1536"></a>                </span><span class=cF6>&quot;  LevelDown(,'-');&quot;</span><span class=cF0>
+<a name="l1537"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l1538"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l1539"></a>                </span><span class=cF6>&quot;  Fire(,CH_SPACE);&quot;</span><span class=cF0>
+<a name="l1540"></a>                </span><span class=cF6>&quot;  Thrust(,,SC_CURSOR_UP);&quot;</span><span class=cF0>
+<a name="l1541"></a>                </span><span class=cF6>&quot;  StopSpin(,,SC_CURSOR_DOWN);&quot;</span><span class=cF0>
+<a name="l1542"></a>                </span><span class=cF6>&quot;  Left(,,SC_CURSOR_LEFT);&quot;</span><span class=cF0>
+<a name="l1543"></a>                </span><span class=cF6>&quot;  Right(,,SC_CURSOR_RIGHT);&quot;</span><span class=cF0>
+<a name="l1544"></a>                </span><span class=cF6>&quot;  LeftMissile(,,SC_CURSOR_LEFT|SCF_CTRL);&quot;</span><span class=cF0>
+<a name="l1545"></a>                </span><span class=cF6>&quot;  RightMissile(,,SC_CURSOR_RIGHT|SCF_CTRL);&quot;</span><span class=cF0>
+<a name="l1546"></a>                </span><span class=cF6>&quot;  Spackwalk(,'w');&quot;</span><span class=cF0>
+<a name="l1547"></a>                </span><span class=cF6>&quot;  LongerFuse(,,SC_CURSOR_RIGHT|SCF_SHIFT);&quot;</span><span class=cF0>
+<a name="l1548"></a>                </span><span class=cF6>&quot;  ShorterFuse(,,SC_CURSOR_LEFT|SCF_SHIFT);&quot;</span><span class=cF0>
+<a name="l1549"></a>                </span><span class=cF6>&quot;  LargerShot(,,SC_CURSOR_UP|SCF_SHIFT);&quot;</span><span class=cF0>
+<a name="l1550"></a>                </span><span class=cF6>&quot;  SmallerShot(,,SC_CURSOR_DOWN|SCF_SHIFT);&quot;</span><span class=cF0>
+<a name="l1551"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l1552"></a>                );
+<a name="l1553"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l1554"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l1555"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l1556"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l1557"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l1558"></a>    </span><span class=cF5>PaletteSetLight</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1559"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_FOCUS_TASK_MENU</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
+<a name="l1560"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l1561"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l1562"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1563"></a>        ode = </span><span class=cF5>ODENew</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>01</span><span class=cF0>, </span><span class=cF3>ODEF_HAS_MASSES</span><span class=cF0>);
+<a name="l1564"></a>        ode-&gt;derive = &amp;MyDerivative;
+<a name="l1565"></a>        ode-&gt;min_tolerance = </span><span class=cFE>1</span><span class=cF0>e-</span><span class=cFE>9</span><span class=cF0>;
+<a name="l1566"></a>        ode-&gt;drag_v3 = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>00001</span><span class=cF0>;
+<a name="l1567"></a>        Init;
+<a name="l1568"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(ode, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ode);
+<a name="l1569"></a>        ch = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1570"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l1571"></a>        {
+<a name="l1572"></a>            </span><span class=cF1>while</span><span class=cF0> (!game_over &amp;&amp; !show_level_message &amp;&amp;
+<a name="l1573"></a>                    </span><span class=cF7>(</span><span class=cF0>message_code = </span><span class=cF5>MessageScan</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1574"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1575"></a>                </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l1576"></a>                {
+<a name="l1577"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l1578"></a>                        ch = arg1;
+<a name="l1579"></a>                        sc = arg2;
+<a name="l1580"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l1581"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1582"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l1583"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l1584"></a>                                {
+<a name="l1585"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l1586"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
+<a name="l1587"></a>                                            HumanFireMissileBegin(</span><span class=cFE>0</span><span class=cF0>);
+<a name="l1588"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
+<a name="l1589"></a>                                            ctrl_panel.fuse_time += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l1590"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1591"></a>                                            human_t_right = THRUST_MAX;
+<a name="l1592"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1593"></a>
+<a name="l1594"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l1595"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
+<a name="l1596"></a>                                            HumanFireMissileBegin(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l1597"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
+<a name="l1598"></a>                                            ctrl_panel.fuse_time -= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l1599"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1600"></a>                                            human_t_left = THRUST_MAX;
+<a name="l1601"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1602"></a>
+<a name="l1603"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l1604"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
+<a name="l1605"></a>                                            ctrl_panel.shot_radius += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l1606"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1607"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1608"></a>                                            human_t_right = THRUST_MAX;
+<a name="l1609"></a>                                            human_t_left  = THRUST_MAX;
+<a name="l1610"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1611"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1612"></a>
+<a name="l1613"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l1614"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
+<a name="l1615"></a>                                            ctrl_panel.shot_radius -= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l1616"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1617"></a>                                            human_antispin = ANTISPIN_MAX;
+<a name="l1618"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1619"></a>                                }
+<a name="l1620"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1621"></a>
+<a name="l1622"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l1623"></a>                                </span><span class=cF1>if</span><span class=cF0> (level &lt; </span><span class=cFE>4</span><span class=cF0>)
+<a name="l1624"></a>                                    HumanFireGunBegin;
+<a name="l1625"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1626"></a>                                    HumanFireLaserBegin;
+<a name="l1627"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1628"></a>
+<a name="l1629"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'w'</span><span class=cF0>:
+<a name="l1630"></a>                                ctrl_panel.spacewalk = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1631"></a>                                </span><span class=cF1>break</span><span class=cF0>;
 <a name="l1632"></a>
-<a name="l1633"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
-<a name="l1634"></a>                                        </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)
-<a name="l1635"></a>                                            ctrl_panel.shot_radius -= </span><span class=cFE>2</span><span class=cF0>;
-<a name="l1636"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1637"></a>                                            human_antispin = ANTISPIN_MAX;
-<a name="l1638"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1639"></a>                                }
-<a name="l1640"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1641"></a>
-<a name="l1642"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
-<a name="l1643"></a>                                </span><span class=cF1>if</span><span class=cF0> (level &lt; </span><span class=cFE>4</span><span class=cF0>)
-<a name="l1644"></a>                                    HumanFireGunBegin;
-<a name="l1645"></a>                                </span><span class=cF1>else</span><span class=cF0>
-<a name="l1646"></a>                                    HumanFireLaserBegin;
-<a name="l1647"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1648"></a>
-<a name="l1649"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'w'</span><span class=cF0>:
-<a name="l1650"></a>                                ctrl_panel.spacewalk = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1651"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1652"></a>
-<a name="l1653"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
-<a name="l1654"></a>                                level++;
-<a name="l1655"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1656"></a>
-<a name="l1657"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
-<a name="l1658"></a>                                level--;
-<a name="l1659"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1660"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l1661"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1662"></a>
-<a name="l1663"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>:
-<a name="l1664"></a>                        ch = arg1;
-<a name="l1665"></a>                        sc = arg2;
-<a name="l1666"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
-<a name="l1667"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l1668"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l1669"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l1670"></a>                                {
-<a name="l1671"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l1672"></a>                                        human_t_right = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1673"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1674"></a>
-<a name="l1675"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l1676"></a>                                        human_t_left = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1677"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1678"></a>
-<a name="l1679"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
-<a name="l1680"></a>                                        human_t_right = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1681"></a>                                        human_t_left  = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1682"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1683"></a>
-<a name="l1684"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
-<a name="l1685"></a>                                        human_antispin = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1686"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1687"></a>                                }
-<a name="l1688"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1689"></a>
-<a name="l1690"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l1691"></a>                                ch = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1692"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1693"></a>
-<a name="l1694"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
-<a name="l1695"></a>                                </span><span class=cF1>if</span><span class=cF0> (level &gt;= </span><span class=cFE>4</span><span class=cF0>)
-<a name="l1696"></a>                                    HumanFireLaserEnd;
-<a name="l1697"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1698"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l1699"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l1700"></a>                }
-<a name="l1701"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1702"></a>            AI;
-<a name="l1703"></a>            SolarFlares;
-<a name="l1704"></a>            ExpireShots;
-<a name="l1705"></a>            ExpireSplats;
-<a name="l1706"></a>            ExpireMissiles;
-<a name="l1707"></a>            CheckDamage;
-<a name="l1708"></a>            </span><span class=cF5>Refresh</span><span class=cF0>; </span><span class=cF2>//messages are only qued by winmgr</span><span class=cF0>
-<a name="l1709"></a>            </span><span class=cF1>if</span><span class=cF0> (show_level_message)
-<a name="l1710"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1711"></a>                ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
-<a name="l1712"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
-<a name="l1713"></a>                    ch = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1714"></a>                </span><span class=cF5>ODEPause</span><span class=cF0>(ode, </span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l1715"></a>                show_level_message = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1716"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1717"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (game_over)
-<a name="l1718"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1719"></a>                ch = </span><span class=cF5>CharScan</span><span class=cF0>;
-<a name="l1720"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1721"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l1722"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1723"></a>                </span><span class=cF1>if</span><span class=cF0> (!remaining)
-<a name="l1724"></a>                {
-<a name="l1725"></a>                    level++;
-<a name="l1726"></a>                    ShipDel(human);
-<a name="l1727"></a>                    human = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l1728"></a>                    InitLevel;
-<a name="l1729"></a>                }
-<a name="l1730"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1731"></a>        }
-<a name="l1732"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'\n'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>);
-<a name="l1733"></a>
-<a name="l1734"></a>        AllDel(ode);
-<a name="l1735"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1736"></a>    </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>);
-<a name="l1737"></a>
-<a name="l1738"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l1739"></a>    CtrlPanelDel(cp);
-<a name="l1740"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l1741"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/XCaliber&quot;</span><span class=cF0>, 
-<a name="l1742"></a>             </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>
-<a name="l1743"></a>             </span><span class=cF6>&quot;I64 message_flags=%d;\n&quot;</span><span class=cF0>, best_score, message_flags);
-<a name="l1744"></a>}
+<a name="l1633"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
+<a name="l1634"></a>                                level++;
+<a name="l1635"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1636"></a>
+<a name="l1637"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
+<a name="l1638"></a>                                level--;
+<a name="l1639"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1640"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1641"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1642"></a>
+<a name="l1643"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>:
+<a name="l1644"></a>                        ch = arg1;
+<a name="l1645"></a>                        sc = arg2;
+<a name="l1646"></a>                        </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l1647"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1648"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l1649"></a>                                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l1650"></a>                                {
+<a name="l1651"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l1652"></a>                                        human_t_right = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1653"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1654"></a>
+<a name="l1655"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l1656"></a>                                        human_t_left = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1657"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1658"></a>
+<a name="l1659"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l1660"></a>                                        human_t_right = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1661"></a>                                        human_t_left  = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1662"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1663"></a>
+<a name="l1664"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l1665"></a>                                        human_antispin = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1666"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1667"></a>                                }
+<a name="l1668"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1669"></a>
+<a name="l1670"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l1671"></a>                                ch = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1672"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1673"></a>
+<a name="l1674"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l1675"></a>                                </span><span class=cF1>if</span><span class=cF0> (level &gt;= </span><span class=cFE>4</span><span class=cF0>)
+<a name="l1676"></a>                                    HumanFireLaserEnd;
+<a name="l1677"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1678"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1679"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1680"></a>                }
+<a name="l1681"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1682"></a>            AI;
+<a name="l1683"></a>            SolarFlares;
+<a name="l1684"></a>            ExpireShots;
+<a name="l1685"></a>            ExpireSplats;
+<a name="l1686"></a>            ExpireMissiles;
+<a name="l1687"></a>            CheckDamage;
+<a name="l1688"></a>            </span><span class=cF5>Refresh</span><span class=cF0>; </span><span class=cF2>//messages are only qued by winmgr</span><span class=cF0>
+<a name="l1689"></a>            </span><span class=cF1>if</span><span class=cF0> (show_level_message)
+<a name="l1690"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1691"></a>                ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
+<a name="l1692"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
+<a name="l1693"></a>                    ch = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1694"></a>                </span><span class=cF5>ODEPause</span><span class=cF0>(ode, </span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l1695"></a>                show_level_message = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1696"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1697"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (game_over)
+<a name="l1698"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1699"></a>                ch = </span><span class=cF5>CharScan</span><span class=cF0>;
+<a name="l1700"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1701"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1702"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1703"></a>                </span><span class=cF1>if</span><span class=cF0> (!remaining)
+<a name="l1704"></a>                {
+<a name="l1705"></a>                    level++;
+<a name="l1706"></a>                    ShipDel(human);
+<a name="l1707"></a>                    human = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1708"></a>                    InitLevel;
+<a name="l1709"></a>                }
+<a name="l1710"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1711"></a>        }
+<a name="l1712"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'\n'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>);
+<a name="l1713"></a>
+<a name="l1714"></a>        AllDel(ode);
+<a name="l1715"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1716"></a>    </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>);
+<a name="l1717"></a>
+<a name="l1718"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l1719"></a>    CtrlPanelDel(cp);
+<a name="l1720"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l1721"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/XCaliber&quot;</span><span class=cF0>, 
+<a name="l1722"></a>             </span><span class=cF6>&quot;I64 best_score=%d;\n&quot;</span><span class=cF0>
+<a name="l1723"></a>             </span><span class=cF6>&quot;I64 message_flags=%d;\n&quot;</span><span class=cF0>, best_score, message_flags);
+<a name="l1724"></a>}
 </span></pre></body>
 </html>
