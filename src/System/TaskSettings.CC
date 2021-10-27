@@ -91,6 +91,7 @@ U0 SettingsPop2(CTask *task, CTaskSettings *tmpse)
 	StrCopy(task->task_title, tmpse->task_title);
 	AutoComplete(tmpse->autocomplete);
 	GrPaletteSet(tmpse->palette);
+	LFBFlush;
 	Sound;
 }
 

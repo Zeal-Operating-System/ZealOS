@@ -6,9 +6,9 @@ the normal screen text output routine.
 
 See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
-	I64  i, row, col, x, y, framebuffer_u64_size, framebuffer_u64_offset;
+	I64  i, row, col, x, y;
 	U32 *framebuffer;
-	U64  ch_bitmap, *framebuffer_u64;
+	U64  ch_bitmap;
 
 	if (!(text.raw_flags & RAWF_SHOW_DOLLAR))
 	{
@@ -59,21 +59,13 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 		if (text.raw_flags & RAWF_SCROLL && text.raw_col && !row && !col)
 		{//Scroll screen down
 
-//			MemCopy(text.fb_alias,
-//					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
-//					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+			MemCopy(text.fb_alias,
+					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
+					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
 
-			// MemCopy is slow, computing these and iterating U64's manually is far faster.
-			framebuffer_u64			= text.fb_alias;
-			framebuffer_u64_size	= sys_vbe_mode.width * sys_vbe_mode.height / 2 - sys_vbe_mode.width * FONT_HEIGHT * 8 / 2;
-			framebuffer_u64_offset	= sys_vbe_mode.width / 2 * FONT_HEIGHT * 8;
-
-			for (i = 0; i < framebuffer_u64_size; i++)
-				framebuffer_u64[i] = framebuffer_u64[i + framebuffer_u64_offset];
-
-			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT * 8, BLACK32, sys_vbe_mode.width * FONT_HEIGHT * 8);
-			text.raw_col -= text.cols * 8;
-			row = text.rows - 8;
+			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
+			text.raw_col -= text.cols ;
+			row = text.rows;
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;

@@ -392,7 +392,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 					{
 						if (tmpins->opcode[i] != rip[i])
 						{
-							ST_ERR_ST "$$HL,0$$BAD MATCH SSE check #2! %02X with %02X\n", tmpins->opcode[i], rip[i];
+//							ST_ERR_ST "$$HL,0$$BAD MATCH SSE check #2! %02X with %02X\n", tmpins->opcode[i], rip[i];
 //							D(tmpins, sizeof(CInst));"\n$$HL,1$$";
 							goto sse_check_fail; // evaluate inst op with RIP. if not identical, not a match.
 						}

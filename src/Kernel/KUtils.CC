@@ -65,10 +65,20 @@ _MEMCOPY::
 		MOV 	RBP, RSP
 		PUSH	RSI
 		PUSH	RDI
+		MOV 	RDI, U64 SF_ARG1[RBP] // dst
+		MOV 	RSI, U64 SF_ARG2[RBP] // src
+		MOV 	RCX, U64 SF_ARG3[RBP] // count
+@@05: // SSE 128-bit memcopy (count >= 16)
+		CMP		RCX, 16		// count <, >, == 16 bytes?
+		JL		@@10		// if count less than 16, jump down
+		MOVUPS	XMM15, [RSI]// move 128 bits, src-->xmm
+		MOVUPS	[RDI], XMM15// move 128 bits, xmm-->dst mem
+		ADD		RSI, 16		// increment src addr by 128 bits
+		ADD		RDI, 16		// increment dst addr by 128 bits
+		ADD		RCX, -16	// decrement count by 128 bits
+		JMP		@@05		// jump back to 16 byte check
+@@10: // TempleOS REP_MOVSB memcopy (count < 16)
 		CLD
-		MOV 	RDI, U64 SF_ARG1[RBP]
-		MOV 	RSI, U64 SF_ARG2[RBP]
-		MOV 	RCX, U64 SF_ARG3[RBP]
 		REP_MOVSB
 		MOV 	RAX, RDI
 		POP 	RDI
