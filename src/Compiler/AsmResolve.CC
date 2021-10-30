@@ -64,7 +64,7 @@ U0 AOTLocalsResolve(CCompCtrl *cc)
 		{
 			if (tmpauh->hash->type & HTF_UNRESOLVED)
 			{
-				PrintErr("Undefined sym at line:%04d %s %s\n", tmpu->line_num, aotc->last_label, tmpauh->hash->str);
+				PrintErr("Undefined symbol at line:%04d %s %s\n", tmpu->line_num, aotc->last_label, tmpauh->hash->str);
 				LexExcept(cc);
 			}
 			label = tmpauh->hash->str;
@@ -127,7 +127,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc, CAOT *tmpaot)
 						}
 						else
 						{
-							PrintErr("Undefined sym at line:%04d %s\n", tmpu->line_num, tmpex->str);
+							PrintErr("Undefined symbol at line:%04d %s\n", tmpu->line_num, tmpex->str);
 							LexExcept(cc);
 						}
 					}
@@ -180,7 +180,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc, CAOT *tmpaot)
 			{
 				if (tmpex->type & HTF_UNRESOLVED)
 				{
-					PrintErr("Undefined sym at %s\n", tmpex->str);
+					PrintErr("Undefined symbol at %s\n", tmpex->str);
 					LexExcept(cc);
 				}
 				if (tmpex->type & HTF_RESOLVE)

@@ -31,7 +31,7 @@ body {background-color:#1f1f1f;}
 <a name="l4"></a></span><span class=cF4>
 <a name="l5"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1685"><span class=cF4>OPTf_GLOBALS_ON_DATA_HEAP</span></a><span class=cF0> without this option, global variables are placed in the code heap which is limited to 2Gig.   In </span><span class=cF2>AOT</span><span class=cF0> 
 <a name="l6"></a>modules, global variables take-up room in the </span><span class=cF2>.BIN</span><span class=cF0> file, so you might want to use this option, instead.  You might wish to 
-<a name="l7"></a>turn it on and off around specific variables.  A disadvantage of data heap global vars in </span><span class=cF2>AOT</span><span class=cF0> modules is they can't be 
+<a name="l7"></a>turn it on and off around specific variables.  A disadvantage of data heap global variables in </span><span class=cF2>AOT</span><span class=cF0> modules is they can't be 
 <a name="l8"></a>initialized.
 <a name="l9"></a></span><span class=cF4>
 <a name="l10"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1682"><span class=cF4>OPTf_EXTERNS_TO_IMPORTS</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1683"><span class=cF4>OPTf_KEEP_PRIVATE</span></a><span class=cF0> are strange options, you'll never need.  They're to allow the same header file 

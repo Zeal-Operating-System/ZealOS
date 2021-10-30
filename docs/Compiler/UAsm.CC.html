@@ -636,7 +636,7 @@ body {background-color:#1f1f1f;}
 <a name="l609"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (reloced_arg2 == </span><span class=cF3>ARGT_IMM64</span><span class=cF0> || reloced_arg2 == </span><span class=cF3>ARGT_UIMM64</span><span class=cF0>)
 <a name="l610"></a>                    disp += </span><span class=cFE>8</span><span class=cF0>;
 <a name="l611"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l612"></a>            </span><span class=cF5>CatPrint</span><span class=cF0>(reloced_arg1_st, </span><span class=cF6>&quot;[%X]&quot;</span><span class=cF0>, disp);
+<a name="l612"></a>            </span><span class=cF5>CatPrint</span><span class=cF0>(reloced_arg1_st, </span><span class=cF6>&quot;[0x%X]&quot;</span><span class=cF0>, disp);
 <a name="l613"></a>            RM1 = -</span><span class=cFE>1</span><span class=cF0>;
 <a name="l614"></a>        }
 <a name="l615"></a>        </span><span class=cF1>else</span><span class=cF0>
@@ -867,34 +867,48 @@ body {background-color:#1f1f1f;}
 <a name="l840"></a>
 <a name="l841"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
 <a name="l842"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
-<a name="l843"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
-<a name="l844"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
-<a name="l845"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l846"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
-<a name="l847"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
-<a name="l848"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l849"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
-<a name="l850"></a>
-<a name="l851"></a>    </span><span class=cF1>return</span><span class=cF0> rip;
-<a name="l852"></a>}
-<a name="l853"></a>
-<a name="l854"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Un</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
-<a name="l855"></a>{</span><span class=cF2>//Unassembles a num of bytes</span><span class=cF0>
-<a name="l856"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l857"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>], *end_rip = rip(</span><span class=cF9>I64</span><span class=cF0>) + count;
-<a name="l858"></a>
-<a name="l859"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
-<a name="l860"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
-<a name="l861"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
-<a name="l862"></a>    </span><span class=cF1>while</span><span class=cF0> (rip &lt; end_rip)
-<a name="l863"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l864"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
-<a name="l865"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
-<a name="l866"></a>        i++;
-<a name="l867"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l868"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
-<a name="l869"></a>
-<a name="l870"></a>    </span><span class=cF1>return</span><span class=cF0> i;
-<a name="l871"></a>}
+<a name="l843"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l844"></a>        </span><span class=cF6>&quot;$LTCYAN$&quot;</span><span class=cF0>;
+<a name="l845"></a>    </span><span class=cF6>&quot;        &amp;Function+Offset Machine Code   Instruction  Operands&quot;</span><span class=cF0>;
+<a name="l846"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l847"></a>        </span><span class=cF6>&quot;$FG$$HL,1$&quot;</span><span class=cF0>;
+<a name="l848"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l849"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l850"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l851"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
+<a name="l852"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
+<a name="l853"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l854"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l855"></a>        </span><span class=cF6>&quot;$HL,0$&quot;</span><span class=cF0>;
+<a name="l856"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l857"></a>
+<a name="l858"></a>    </span><span class=cF1>return</span><span class=cF0> rip;
+<a name="l859"></a>}
+<a name="l860"></a>
+<a name="l861"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Un</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
+<a name="l862"></a>{</span><span class=cF2>//Unassembles a num of bytes</span><span class=cF0>
+<a name="l863"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l864"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>], *end_rip = rip(</span><span class=cF9>I64</span><span class=cF0>) + count;
+<a name="l865"></a>
+<a name="l866"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l867"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
+<a name="l868"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l869"></a>        </span><span class=cF6>&quot;$LTCYAN$&quot;</span><span class=cF0>;
+<a name="l870"></a>    </span><span class=cF6>&quot;        &amp;Function+Offset Machine Code   Instruction  Operands&quot;</span><span class=cF0>;
+<a name="l871"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l872"></a>        </span><span class=cF6>&quot;$FG$$HL,1$&quot;</span><span class=cF0>;
+<a name="l873"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l874"></a>    </span><span class=cF1>while</span><span class=cF0> (rip &lt; end_rip)
+<a name="l875"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l876"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
+<a name="l877"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
+<a name="l878"></a>        i++;
+<a name="l879"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l880"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l881"></a>        </span><span class=cF6>&quot;$HL,0$&quot;</span><span class=cF0>;
+<a name="l882"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l883"></a>
+<a name="l884"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l885"></a>}
 </span></pre></body>
 </html>

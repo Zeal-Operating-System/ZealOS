@@ -65,11 +65,11 @@ $ID,2$$FG,2$MOV RAX,FS:[RAX]$FG$ : FS can be set with a $FG,2$WRMSR$FG$, but dis
 $ID,-2$$TR,"How do I set ORG for position of code?"$
 $ID,2$The compiler creates $FG,2$pos independent$FG$ code.	Don't create code which is loaded at a fixed, specified location.  Code in a BIN file is $FG,2$pos independent$FG$ by virtue of a table in the BIN file for patching absolute addresses.
 $ID,-2$$TR,"How are symbols loaded?"$
-$ID,2$Binary executable files have export syms which are loaded into the sym tables.	The operating system $FG,2$Kernel$FG$ has such an export table.  In addition, some map files are processed to provide more information on syms -- src file links.  This is how the $LK,"Man",A="MN:Man"$()/$FG,2$AutoComplete$FG$ feature can find src lines.
+$ID,2$Binary executable files have export symbols which are loaded into the symbol tables.	The operating system $FG,2$Kernel$FG$ has such an export table.  In addition, some map files are processed to provide more information on symbols -- src file links.  This is how the $LK,"Man",A="MN:Man"$()/$FG,2$AutoComplete$FG$ feature can find src lines.
 $ID,-2$$TR,"Why doesn't assert work?"$
 $ID,2$$FG,2$#assert$FG$ might print a message at COMPILE time, not run time.
 $ID,-2$$TR,"Why doesn't C++ public work?"$
-$ID,2$The word $FG,2$public$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"Who",A="MN:Who"$() to exclude meaningless syms.	If you wish a full report of public and nonpublic syms $MA-X+PU,"Click Here",LM="DocMax(1000000);Who;View;\n"$.
+$ID,2$The word $FG,2$public$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"Who",A="MN:Who"$() to exclude meaningless symbols.	If you wish a full report of public and nonpublic symbols $MA-X+PU,"Click Here",LM="DocMax(1000000);Who;View;\n"$.
 $ID,-2$$TR,"How does the debugger do source debugging?"$
 $ID,2$When compilation takes place, the structures used by the compiler stick around.  Data on classes can be accessed.  See $LK,"ClassRep",A="MN:ClassRep"$().
 $ID,-2$$TR,"What is ASCII 5 doing in my text files?"$

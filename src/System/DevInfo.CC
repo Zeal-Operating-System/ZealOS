@@ -215,6 +215,10 @@ public U0 PCIRep()
 	}
 	PCILookUpDevs;
 	tmppci = dev.pci_head.next;
+	if (!IsRaw)
+		"$$LTCYAN$$B :D :F CC-SC-PI\n$$FG$$";
+	else
+		"B :D :F CC-SC-PI\n";
 	while (tmppci != &dev.pci_head)
 	{
 		"%02X:%02X:%01X %02X-%02X-%02X ",

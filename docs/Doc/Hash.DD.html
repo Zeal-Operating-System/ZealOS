@@ -52,10 +52,10 @@ body {background-color:#1f1f1f;}
 <a name="l25"></a>
 <a name="l26"></a>
 <a name="l27"></a>
-<a name="l28"></a>There is a symbol (hash) table for each task.  When a sym is not found, the parent task's sym table is checked.  All tasks 
-<a name="l29"></a>chain back to the </span><span class=cF2>System</span><span class=cF0> task.
+<a name="l28"></a>There is a symbol (hash) table for each task.  When a symbol is not found, the parent task's symbol table is checked.  All 
+<a name="l29"></a>tasks chain back to the </span><span class=cF2>System</span><span class=cF0> task.
 <a name="l30"></a>
-<a name="l31"></a>ZealOS sym tables are implemented with an array of linked-lists.    A num is generated from a string by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KHashA.CC.html#l258"><span class=cF4>HashStr</span></a><span class=cF0>() to index 
+<a name="l31"></a>ZealOS symbol tables are implemented with an array of linked-lists. A num is generated from a string by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KHashA.CC.html#l258"><span class=cF4>HashStr</span></a><span class=cF0>() to index 
 <a name="l32"></a>into the array of linked-lists. Multiple strings can generate the same num, so linked-lists are built.  Newer entries 
 <a name="l33"></a>overshadow older ones.
 <a name="l34"></a>

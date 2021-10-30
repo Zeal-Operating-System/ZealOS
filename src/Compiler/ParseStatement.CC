@@ -223,7 +223,7 @@ U0 ParseFun(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_flags)
 							cc->lex_include_stack->full_name, cc->lex_include_stack->line_num, tmpm->str, cc->htc.fun->str);
 		}
 		else if (!tmpm->use_count && OptionGet(OPTf_WARN_UNUSED_VAR))
-			PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
+			PrintWarn("Unused variable\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 						cc->lex_include_stack->full_name, cc->lex_include_stack->line_num, tmpm->str, cc->htc.fun->str);
 		tmpm = tmpm->next;
 	}
@@ -387,7 +387,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 					{
 						if (Bt(&cc->opts, OPTf_GLOBALS_ON_DATA_HEAP)) {
 							if (cc->token == '=')
-								LexExcept(cc, "Can't init global var on data heap in AOT module ");
+								LexExcept(cc, "Can't init global variable on data heap in AOT module ");
 							tmpg = CAlloc(sizeof(CHashGlobalVar));
 							tmphg = tmpg->heap_global=CAlloc(sizeof(CAOTHeapGlobal));
 							tmphg->size = j;
@@ -906,7 +906,7 @@ U0 ParseNoWarn(CCompCtrl *cc)
 	while (cc->token == TK_IDENT)
 	{
 		if (!(tmpm = cc->local_var_entry))
-			LexExcept(cc, "Expecting local var at ");
+			LexExcept(cc, "Expecting local variable at ");
 		tmpm->flags |= MLF_NO_UNUSED_WARN;
 		if (Lex(cc) == ',')
 			Lex(cc);
@@ -1141,7 +1141,7 @@ Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I6
 											goto sm_underscore_import;
 										if (cc->token != TK_IDENT || !(tmpex = cc->hash_entry) ||
 												!(tmpex->type & HTT_EXPORT_SYS_SYM))
-											LexExcept(cc, "Expecting system sym at ");
+											LexExcept(cc, "Expecting system symbol at ");
 										if (*cc->cur_str == '_')
 											fsp_flags |= FSF__;
 										i = tmpex->val;
@@ -1156,7 +1156,7 @@ Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I6
 									case KW__IMPORT:
 sm_underscore_import:
 										if (cc->token != TK_IDENT)
-											LexExcept(cc, "Expecting system sym at ");
+											LexExcept(cc, "Expecting system symbol at ");
 										if (*cc->cur_str == '_')
 											fsp_flags |= FSF__;
 										import_name = cc->cur_str;

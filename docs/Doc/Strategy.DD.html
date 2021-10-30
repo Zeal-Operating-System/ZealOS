@@ -86,10 +86,10 @@ body {background-color:#1f1f1f;}
 <a name="l59"></a>
 <a name="l60"></a>* </span><span class=cF4><u>Sound</u></span><span class=cF0> has single-voice 8-bit signed MIDI-like samples.
 <a name="l61"></a>
-<a name="l62"></a>* All tasks have a heap and a sym table.    Scope is that of environment variables in other operating systems.  As text is 
-<a name="l63"></a>typed at the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the syms go in the table.    If a sym is not found, the 
-<a name="l64"></a>parent task's table is checked. The father of all tasks has the API syms you'll need waiting in it's table.  No need to </span><span class=cF2>#inclu
-<a name="l65"></a>de</span><span class=cF0> headers.
+<a name="l62"></a>* All tasks have a heap and a symbol table. Scope is that of environment variables in other operating systems.  As text is 
+<a name="l63"></a>typed at the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the symbols go in the table. If a symbol is not found, the 
+<a name="l64"></a>parent task's table is checked. The father of all tasks has the API symbols you'll need waiting in it's table.  No need to </span><span class=cF2>#in
+<a name="l65"></a>clude</span><span class=cF0> headers.
 <a name="l66"></a>
 <a name="l67"></a>* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s symbol 
 <a name="l68"></a>system-wide global.

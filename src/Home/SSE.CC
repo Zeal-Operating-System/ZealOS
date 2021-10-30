@@ -34,8 +34,7 @@ I64 DemoAllSSE()
  // Will likely cause General Protection crash if run.
  // Some SSE ops require 16-byte aligned vals or else crash.
 	I64 reg RDX res = 0;
-asm
-{
+
 	LFENCE
 	MFENCE
 	SFENCE
@@ -283,7 +282,6 @@ asm
 	PREFETCHT2	[RDX]
 	PREFETCHNTA [RDX]
 
-}
 	return res;
 }
 "\n$$BK,1$$Unassembling all SSE ops, note errors:\n$$BK,0$$";
@@ -295,44 +293,44 @@ U0 DumpXMM()
 { // Dump XMM registers
 	I64 reg RAX quad;
 
-asm {PEXTRQ	RAX, XMM0, 1}
+	PEXTRQ	RAX, XMM0, 1
 	"XMM0: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM0, 0}
+	PEXTRQ	RAX, XMM0, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM1, 1}
+	PEXTRQ	RAX, XMM1, 1
 	"XMM1: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM1, 0}
+	PEXTRQ	RAX, XMM1, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM2, 1}
+	PEXTRQ	RAX, XMM2, 1
 	"XMM2: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM2, 0}
+	PEXTRQ	RAX, XMM2, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM3, 1}
+	PEXTRQ	RAX, XMM3, 1
 	"XMM3: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM3, 0}
+	PEXTRQ	RAX, XMM3, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM4, 1}
+	PEXTRQ	RAX, XMM4, 1
 	"XMM4: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM4, 0}
+	PEXTRQ	RAX, XMM4, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM5, 1}
+	PEXTRQ	RAX, XMM5, 1
 	"XMM5: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM5, 0}
+	PEXTRQ	RAX, XMM5, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM6, 1}
+	PEXTRQ	RAX, XMM6, 1
 	"XMM6: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM6, 0}
+	PEXTRQ	RAX, XMM6, 0
 	"%016X\n", quad;
 
-asm {PEXTRQ	RAX, XMM7, 1}
+	PEXTRQ	RAX, XMM7, 1
 	"XMM7: 0x%016X", quad;
-asm {PEXTRQ	RAX, XMM7, 0}
+	PEXTRQ	RAX, XMM7, 0
 	"%016X\n", quad;
 
 	"\n\n";
@@ -345,8 +343,7 @@ Uf("DumpXMM");
 I64 DemoSSE()
 {
 	I64 reg RDX res = 0;
-asm
-{
+
 	MOV			RDX, 0x3939393939393939
 	MOVQ		XMM0, RDX
 
@@ -363,17 +360,15 @@ asm
 	MOVQ		XMM6, RDX
 	MOV			RDX, 0x0000000300000002
 	MOVQ		XMM7, RDX
-}
+
 	DumpXMM;
-asm
-{
+
 	PSLLDQ	XMM0, 8
 	PSLLDQ	XMM1, 8
 	PSLLDQ	XMM2, 8
 	PSLLDQ	XMM3, 8
 	PHADDD	XMM6, XMM7
 
-}
 	DumpXMM;
 
 

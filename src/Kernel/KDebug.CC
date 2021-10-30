@@ -133,6 +133,11 @@ U0 StackRep(CTask *task=NULL)
 	POPFD
 
 	Fs->hash_table = task->hash_table;
+	if (!IsRaw)
+		"$$LTCYAN$$";
+	"RSP       RSP+Offset: Value            Value/Link\n";
+	if (!IsRaw)
+		"$$FG$$";
 	for (i = 0; i < STACK_REP_LEN; i++)
 	{
 		"%08X [RSP+%04X]: %016X ", rsp + i, i * sizeof(U8 *), my_rsp[i];
@@ -173,6 +178,10 @@ U0 CallerRep(U8 **rbp=NULL, CTask *task=NULL)
 			rbp = task->rbp;
 	}
 	"CallerRep:\n";
+	if (!IsRaw)
+		"$$LTCYAN$$RBP:       *RBP:     *RBP:$$FG$$\n";
+	else
+		"RBP:       *RBP:     *RBP\n";
 	while (CheckOnStack(rbp, task))
 	{
 		ptr = rbp + 1;

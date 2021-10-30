@@ -3565,8 +3565,8 @@ body {background-color:#1f1f1f;}
 <a name="l3538"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_HEAP_HASH_SIZE</span><span class=cF0>      </span><span class=cFE>1024</span><span class=cF0>
 <a name="l3539"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0>  </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l3540"></a></span><span class=cF2>//It is common to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>() exact powers of two.</span><span class=cF0> </span><span class=cF2>There is some overhead.</span><span class=cF0>
-<a name="l3541"></a></span><span class=cF2>//We add 2 pags, so a request is not rounded-up to next power of two.</span><span class=cF0>
-<a name="l3542"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_EXTRA_HASH2_PAGS</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0>
+<a name="l3541"></a></span><span class=cF2>//We add 1 pag, so a request is not rounded-up to next power of two.</span><span class=cF0>
+<a name="l3542"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_EXTRA_HASH2_PAGS</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0>
 <a name="l3543"></a>
 <a name="l3544"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_SYSTEM_STACK</span><span class=cF0>        (</span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> * </span><span class=cFE>512</span><span class=cF0>) </span><span class=cF2>//Like 16384*MEM_PAG_SIZE</span><span class=cF0>
 <a name="l3545"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>     (</span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> * </span><span class=cFE>512</span><span class=cF0>)

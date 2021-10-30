@@ -250,7 +250,7 @@ body {background-color:#1f1f1f;}
 <a name="l223"></a>                            cc-&gt;lex_include_stack-&gt;full_name, cc-&gt;lex_include_stack-&gt;line_num, tmpm-&gt;str, cc-&gt;htc.fun-&gt;str);
 <a name="l224"></a>        }
 <a name="l225"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!tmpm-&gt;use_count &amp;&amp; </span><span class=cF5>OptionGet</span><span class=cF7>(</span><span class=cF3>OPTf_WARN_UNUSED_VAR</span><span class=cF7>)</span><span class=cF0>)
-<a name="l226"></a>            </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Unused var\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
+<a name="l226"></a>            </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Unused variable\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
 <a name="l227"></a>                        cc-&gt;lex_include_stack-&gt;full_name, cc-&gt;lex_include_stack-&gt;line_num, tmpm-&gt;str, cc-&gt;htc.fun-&gt;str);
 <a name="l228"></a>        tmpm = tmpm-&gt;next;
 <a name="l229"></a>    </span><span class=cF7>}</span><span class=cF0>
@@ -414,7 +414,7 @@ body {background-color:#1f1f1f;}
 <a name="l387"></a>                    {
 <a name="l388"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;opts, </span><span class=cF3>OPTf_GLOBALS_ON_DATA_HEAP</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF7>{</span><span class=cF0>
 <a name="l389"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'='</span><span class=cF0>)
-<a name="l390"></a>                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Can't init global var on data heap in AOT module &quot;</span><span class=cF0>);
+<a name="l390"></a>                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Can't init global variable on data heap in AOT module &quot;</span><span class=cF0>);
 <a name="l391"></a>                            tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF7>)</span><span class=cF0>);
 <a name="l392"></a>                            tmphg = tmpg-&gt;heap_global=</span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTHeapGlobal</span><span class=cF7>)</span><span class=cF0>);
 <a name="l393"></a>                            tmphg-&gt;size = j;
@@ -933,7 +933,7 @@ body {background-color:#1f1f1f;}
 <a name="l906"></a>    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
 <a name="l907"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l908"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpm = cc-&gt;local_var_entry</span><span class=cF7>)</span><span class=cF0>)
-<a name="l909"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting local var at &quot;</span><span class=cF0>);
+<a name="l909"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting local variable at &quot;</span><span class=cF0>);
 <a name="l910"></a>        tmpm-&gt;flags |= </span><span class=cF3>MLF_NO_UNUSED_WARN</span><span class=cF0>;
 <a name="l911"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF6>','</span><span class=cF0>)
 <a name="l912"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);
@@ -1168,7 +1168,7 @@ body {background-color:#1f1f1f;}
 <a name="l1141"></a>                                            </span><span class=cF1>goto</span><span class=cF0> sm_underscore_import;
 <a name="l1142"></a>                                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_IDENT</span><span class=cF0> || !</span><span class=cF7>(</span><span class=cF0>tmpex = cc-&gt;hash_entry</span><span class=cF7>)</span><span class=cF0> ||
 <a name="l1143"></a>                                                !</span><span class=cF7>(</span><span class=cF0>tmpex-&gt;type &amp; </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1144"></a>                                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting system sym at &quot;</span><span class=cF0>);
+<a name="l1144"></a>                                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting system symbol at &quot;</span><span class=cF0>);
 <a name="l1145"></a>                                        </span><span class=cF1>if</span><span class=cF0> (*cc-&gt;cur_str == </span><span class=cF6>'_'</span><span class=cF0>)
 <a name="l1146"></a>                                            fsp_flags |= </span><span class=cF3>FSF__</span><span class=cF0>;
 <a name="l1147"></a>                                        i = tmpex-&gt;val;
@@ -1183,7 +1183,7 @@ body {background-color:#1f1f1f;}
 <a name="l1156"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>KW__IMPORT</span><span class=cF0>:
 <a name="l1157"></a>sm_underscore_import:
 <a name="l1158"></a>                                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_IDENT</span><span class=cF0>)
-<a name="l1159"></a>                                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting system sym at &quot;</span><span class=cF0>);
+<a name="l1159"></a>                                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting system symbol at &quot;</span><span class=cF0>);
 <a name="l1160"></a>                                        </span><span class=cF1>if</span><span class=cF0> (*cc-&gt;cur_str == </span><span class=cF6>'_'</span><span class=cF0>)
 <a name="l1161"></a>                                            fsp_flags |= </span><span class=cF3>FSF__</span><span class=cF0>;
 <a name="l1162"></a>                                        import_name = cc-&gt;cur_str;

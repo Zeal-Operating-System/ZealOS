@@ -404,6 +404,7 @@ U0 DriveRep()
 			}
 			if (bd->type == BDT_ISO_FILE_READ || bd->type == BDT_ISO_FILE_WRITE)
 				"   File=\"%s\"\n", bd->file_disk_name;
+			"   Offset:\t\t\tOffset + Size:\n";
 			"   %016X-%016X\n", drive->drv_offset, drive->drv_offset + drive->size - 1;
 			if (!IsRaw)
 				"$$FG$$$$BG$$";

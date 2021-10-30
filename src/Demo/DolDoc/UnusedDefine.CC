@@ -1,4 +1,4 @@
-/*Scans the sym table and checks
+/*Scans the symbol table and checks
 each $LK,"HTT_DEFINE_STR",A="MN:HTT_DEFINE_STR"$ entry to see if
 it only occurs once in files.
 

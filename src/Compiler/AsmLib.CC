@@ -159,7 +159,7 @@ I64 AsmLexExpression(CCompCtrl *cc)
 		if (cc->abs_counts.externs)
 			LexExcept(cc, "Extern Not Allowed at ");
 		if (cc->flags & CCF_UNRESOLVED)
-			LexExcept(cc, "Undefined sym at ");
+			LexExcept(cc, "Undefined symbol at ");
 		res = Call(machine_code);
 		Free(machine_code);
 	}

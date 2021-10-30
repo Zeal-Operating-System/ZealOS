@@ -340,39 +340,43 @@ body {background-color:#1f1f1f;}
 <a name="l313"></a>        </span><span class=cF1>else</span><span class=cF0>
 <a name="l314"></a>        {
 <a name="l315"></a>            tmpm = tmpf-&gt;member_list_and_root;
-<a name="l316"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpm)
-<a name="l317"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l318"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0> &lt; </span><span class=cF3>REG_REGS_NUM</span><span class=cF0>)
-<a name="l319"></a>                    </span><span class=cF6>&quot;%08Z %s\n&quot;</span><span class=cF0>, tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>, tmpm-&gt;str;
-<a name="l320"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l321"></a>                    </span><span class=cF6>&quot;%08tX %s\n&quot;</span><span class=cF0>, tmpm-&gt;</span><span class=cF1>offset</span><span class=cF0>, tmpm-&gt;str;
-<a name="l322"></a>                tmpm = tmpm-&gt;next;
-<a name="l323"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l324"></a>            </span><span class=cF6>&quot;%08tX Stack Size\n&quot;</span><span class=cF0>, tmpf-&gt;size;
-<a name="l325"></a>        }
-<a name="l326"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l327"></a>}
-<a name="l328"></a>
-<a name="l329"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Debugging/Unassemble&quot;</span><span class=cF0>
-<a name="l330"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Uf</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l331"></a>{</span><span class=cF2>//Unassembles a named function.</span><span class=cF0>
-<a name="l332"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
-<a name="l333"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmpf;
-<a name="l334"></a>    </span><span class=cF9>CDebugInfo</span><span class=cF0>  *debug_info;
-<a name="l335"></a>
-<a name="l336"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpf = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF7>)</span><span class=cF0>)
-<a name="l337"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l338"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpf-&gt;type &amp; </span><span class=cF3>HTT_FUN</span><span class=cF0>)
-<a name="l339"></a>            </span><span class=cF5>FunRep</span><span class=cF0>(st);
-<a name="l340"></a>        </span><span class=cF1>if</span><span class=cF0> (debug_info = tmpf-&gt;debug_info)
-<a name="l341"></a>        {
-<a name="l342"></a>            i = debug_info-&gt;body[debug_info-&gt;max_line + </span><span class=cFE>1</span><span class=cF0> - debug_info-&gt;min_line] - debug_info-&gt;body[</span><span class=cFE>0</span><span class=cF0>];
-<a name="l343"></a>            </span><span class=cF5>Un</span><span class=cF0>(debug_info-&gt;body[</span><span class=cFE>0</span><span class=cF0>], i);
-<a name="l344"></a>            </span><span class=cF6>&quot;Code Size:%04X\n&quot;</span><span class=cF0>, i;
-<a name="l345"></a>        }
-<a name="l346"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l347"></a>            </span><span class=cF5>U</span><span class=cF0>(</span><span class=cF5>HashVal</span><span class=cF7>(</span><span class=cF0>tmpf</span><span class=cF7>)</span><span class=cF0>);
-<a name="l348"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l349"></a>}
+<a name="l316"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l317"></a>                </span><span class=cF6>&quot;$LTCYAN$Reg/Offset Symbol$FG$\n&quot;</span><span class=cF0>;
+<a name="l318"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l319"></a>                </span><span class=cF6>&quot;Reg/Offset Symbol\n&quot;</span><span class=cF0>;
+<a name="l320"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpm)
+<a name="l321"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l322"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0> &lt; </span><span class=cF3>REG_REGS_NUM</span><span class=cF0>)
+<a name="l323"></a>                    </span><span class=cF6>&quot;%010Z %s\n&quot;</span><span class=cF0>, tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>, tmpm-&gt;str;
+<a name="l324"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l325"></a>                    </span><span class=cF6>&quot;%010tX %s\n&quot;</span><span class=cF0>, tmpm-&gt;</span><span class=cF1>offset</span><span class=cF0>, tmpm-&gt;str;
+<a name="l326"></a>                tmpm = tmpm-&gt;next;
+<a name="l327"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l328"></a>            </span><span class=cF6>&quot;%010tX Stack Size\n&quot;</span><span class=cF0>, tmpf-&gt;size;
+<a name="l329"></a>        }
+<a name="l330"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l331"></a>}
+<a name="l332"></a>
+<a name="l333"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Debugging/Unassemble&quot;</span><span class=cF0>
+<a name="l334"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Uf</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l335"></a>{</span><span class=cF2>//Unassembles a named function.</span><span class=cF0>
+<a name="l336"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
+<a name="l337"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmpf;
+<a name="l338"></a>    </span><span class=cF9>CDebugInfo</span><span class=cF0>  *debug_info;
+<a name="l339"></a>
+<a name="l340"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpf = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF7>)</span><span class=cF0>)
+<a name="l341"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l342"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpf-&gt;type &amp; </span><span class=cF3>HTT_FUN</span><span class=cF0>)
+<a name="l343"></a>            </span><span class=cF5>FunRep</span><span class=cF0>(st);
+<a name="l344"></a>        </span><span class=cF1>if</span><span class=cF0> (debug_info = tmpf-&gt;debug_info)
+<a name="l345"></a>        {
+<a name="l346"></a>            i = debug_info-&gt;body[debug_info-&gt;max_line + </span><span class=cFE>1</span><span class=cF0> - debug_info-&gt;min_line] - debug_info-&gt;body[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l347"></a>            </span><span class=cF5>Un</span><span class=cF0>(debug_info-&gt;body[</span><span class=cFE>0</span><span class=cF0>], i);
+<a name="l348"></a>            </span><span class=cF6>&quot;Code Size:%04X\n&quot;</span><span class=cF0>, i;
+<a name="l349"></a>        }
+<a name="l350"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l351"></a>            </span><span class=cF5>U</span><span class=cF0>(</span><span class=cF5>HashVal</span><span class=cF7>(</span><span class=cF0>tmpf</span><span class=cF7>)</span><span class=cF0>);
+<a name="l352"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l353"></a>}
 </span></pre></body>
 </html>

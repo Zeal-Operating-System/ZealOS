@@ -108,7 +108,7 @@ body {background-color:#1f1f1f;}
 <a name="l81"></a>}
 <a name="l82"></a>
 <a name="l83"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>ON</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l84"></a>{</span><span class=cF2>//Turn on.  Collect data.</span><span class=cF0>  </span><span class=cF2>Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF2>() or  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l174"><span class=cF4>HeapLogSizeRep</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l84"></a>{</span><span class=cF2>//Turn on.  Collect data.</span><span class=cF0>  </span><span class=cF2>Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF2>() or  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l175"><span class=cF4>HeapLogSizeRep</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l85"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l86"></a>
 <a name="l87"></a>    </span><span class=cF1>if</span><span class=cF0> (val)
@@ -176,101 +176,103 @@ body {background-color:#1f1f1f;}
 <a name="l149"></a>    </span><span class=cF6>&quot;$WW,0$&quot;</span><span class=cF0>;
 <a name="l150"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
 <a name="l151"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
-<a name="l152"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
-<a name="l153"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l154"></a>        tmphl = </span><span class=cFB>heaplog_head</span><span class=cF0>[i].next;
-<a name="l155"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphl != &amp;</span><span class=cFB>heaplog_head</span><span class=cF0>[i])
-<a name="l156"></a>        {
-<a name="l157"></a></span><span class=cF2>//Take snapshot in case modified. (while we work)</span><span class=cF0>
-<a name="l158"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;hl, tmphl, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
-<a name="l159"></a>            </span><span class=cF6>&quot;$PURPLE$%08X$FG$ %08X&quot;</span><span class=cF0>, </span><span class=cF5>MSize</span><span class=cF0>(hl.addr), hl.addr;
-<a name="l160"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
-<a name="l161"></a>                </span><span class=cF6>&quot; %P&quot;</span><span class=cF0>, hl.caller[j];
-<a name="l162"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l163"></a>            total += </span><span class=cF5>MSize</span><span class=cF0>(hl.addr);
-<a name="l164"></a>            tmphl = hl.next;
-<a name="l165"></a>        }
-<a name="l166"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l167"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
-<a name="l168"></a>    </span><span class=cF6>&quot;\n$LTRED$Total:%08X$FG$\n&quot;</span><span class=cF0>, total;
-<a name="l169"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
-<a name="l170"></a>    </span><span class=cF1>if</span><span class=cF0> (!leave_it)
-<a name="l171"></a>        </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l172"></a>}
-<a name="l173"></a>
-<a name="l174"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HeapLogSizeRep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> leave_it=</span><span class=cF3>OFF</span><span class=cF0>)
-<a name="l175"></a>{</span><span class=cF2>//Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
-<a name="l176"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, k, total = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l177"></a>    </span><span class=cF9>CHeapLog</span><span class=cF0>        *tmphla, hla, *tmphls, *tmphls1;
-<a name="l178"></a>    </span><span class=cF9>CHeapLogHash</span><span class=cF0>    *size_head;
-<a name="l179"></a>
-<a name="l180"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
-<a name="l181"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l182"></a>        </span><span class=cF6>&quot;HeapLog Not Active\n&quot;</span><span class=cF0>;
-<a name="l183"></a>        </span><span class=cF1>return</span><span class=cF0>;
-<a name="l184"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l185"></a>
-<a name="l186"></a>    size_head = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLogHash</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>, </span><span class=cFB>heaplog_hc</span><span class=cF0>);
-<a name="l187"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
-<a name="l188"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;size_head[i]);
-<a name="l189"></a>
-<a name="l190"></a>    </span><span class=cF6>&quot;$WW,0$&quot;</span><span class=cF0>;
-<a name="l191"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
-<a name="l192"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
-<a name="l193"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
-<a name="l194"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l195"></a>        tmphla = </span><span class=cFB>heaplog_head</span><span class=cF0>[i].next;
-<a name="l196"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphla != &amp;</span><span class=cFB>heaplog_head</span><span class=cF0>[i])
-<a name="l197"></a>        {
-<a name="l198"></a></span><span class=cF2>//Take snapshot in case modified. (while we work)</span><span class=cF0>
-<a name="l199"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;hla, tmphla, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
-<a name="l200"></a>            k = (</span><span class=cF5>MSize</span><span class=cF7>(</span><span class=cF0>hla.addr</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>3</span><span class=cF0> + hla.caller[</span><span class=cFE>0</span><span class=cF0>]) &amp; (</span><span class=cF3>HL_HASH_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l201"></a>            tmphls = size_head[k].next;
-<a name="l202"></a>            </span><span class=cF1>while</span><span class=cF0> (tmphls != &amp;size_head[k])
-<a name="l203"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l204"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MSize</span><span class=cF7>(</span><span class=cF0>hla.addr</span><span class=cF7>)</span><span class=cF0> == tmphls-&gt;size)
-<a name="l205"></a>                {
-<a name="l206"></a>                    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
-<a name="l207"></a>                        </span><span class=cF1>if</span><span class=cF0> (hla.caller[j] != tmphls-&gt;caller[j])
-<a name="l208"></a>                            </span><span class=cF1>goto</span><span class=cF0> hl_next;
-<a name="l209"></a>                    tmphls-&gt;count++;
-<a name="l210"></a>                    </span><span class=cF1>goto</span><span class=cF0> hl_found;
-<a name="l211"></a>                }
-<a name="l212"></a>hl_next:
-<a name="l213"></a>                tmphls = tmphls-&gt;next;
-<a name="l214"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l215"></a>            tmphls = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFB>heaplog_hc</span><span class=cF0>);
-<a name="l216"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(tmphls, &amp;hla, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
-<a name="l217"></a>            tmphls-&gt;count = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l218"></a>            tmphls-&gt;size  = </span><span class=cF5>MSize</span><span class=cF0>(hla.addr);
-<a name="l219"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmphls, size_head[k].last);
-<a name="l220"></a>hl_found:
-<a name="l221"></a>            tmphla = hla.next;
-<a name="l222"></a>        }
-<a name="l223"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l224"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
-<a name="l225"></a>
-<a name="l226"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
-<a name="l227"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l228"></a>        tmphls = size_head[i].next;
-<a name="l229"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphls != &amp;size_head[i])
-<a name="l230"></a>        {
-<a name="l231"></a>            tmphls1 = tmphls-&gt;next;
-<a name="l232"></a>            </span><span class=cF6>&quot;%08X*%08X=%08X&quot;</span><span class=cF0>, tmphls-&gt;size, tmphls-&gt;count, tmphls-&gt;size * tmphls-&gt;count;
-<a name="l233"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
-<a name="l234"></a>                </span><span class=cF6>&quot; %P&quot;</span><span class=cF0>, tmphls-&gt;caller[j];
-<a name="l235"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l236"></a>            total += tmphls-&gt;size * tmphls-&gt;count;
-<a name="l237"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmphls);
-<a name="l238"></a>            tmphls = tmphls1;
-<a name="l239"></a>        }
-<a name="l240"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l241"></a>    </span><span class=cF5>Free</span><span class=cF0>(size_head);
-<a name="l242"></a>
-<a name="l243"></a>    </span><span class=cF6>&quot;\n$LTRED$Total:%08X$FG$\n&quot;</span><span class=cF0>, total;
-<a name="l244"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
-<a name="l245"></a>    </span><span class=cF1>if</span><span class=cF0> (!leave_it)
-<a name="l246"></a>        </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l247"></a>}
+<a name="l152"></a>    </span><span class=cF6>&quot;$LTCYAN$  Size    Address$FG$\n&quot;</span><span class=cF0>;
+<a name="l153"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
+<a name="l154"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l155"></a>        tmphl = </span><span class=cFB>heaplog_head</span><span class=cF0>[i].next;
+<a name="l156"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphl != &amp;</span><span class=cFB>heaplog_head</span><span class=cF0>[i])
+<a name="l157"></a>        {
+<a name="l158"></a></span><span class=cF2>//Take snapshot in case modified. (while we work)</span><span class=cF0>
+<a name="l159"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;hl, tmphl, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
+<a name="l160"></a>            </span><span class=cF6>&quot;$PURPLE$%08X$FG$ %08X %P&quot;</span><span class=cF0>, </span><span class=cF5>MSize</span><span class=cF0>(hl.addr), hl.addr, hl.caller[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l161"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>1</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
+<a name="l162"></a>                </span><span class=cF6>&quot; . %P&quot;</span><span class=cF0>, hl.caller[j];
+<a name="l163"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l164"></a>            total += </span><span class=cF5>MSize</span><span class=cF0>(hl.addr);
+<a name="l165"></a>            tmphl = hl.next;
+<a name="l166"></a>        }
+<a name="l167"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l168"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l169"></a>    </span><span class=cF6>&quot;\n$LTRED$Total:%08X$FG$\n&quot;</span><span class=cF0>, total;
+<a name="l170"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l171"></a>    </span><span class=cF1>if</span><span class=cF0> (!leave_it)
+<a name="l172"></a>        </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l173"></a>}
+<a name="l174"></a>
+<a name="l175"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HeapLogSizeRep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> leave_it=</span><span class=cF3>OFF</span><span class=cF0>)
+<a name="l176"></a>{</span><span class=cF2>//Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
+<a name="l177"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, k, total = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l178"></a>    </span><span class=cF9>CHeapLog</span><span class=cF0>        *tmphla, hla, *tmphls, *tmphls1;
+<a name="l179"></a>    </span><span class=cF9>CHeapLogHash</span><span class=cF0>    *size_head;
+<a name="l180"></a>
+<a name="l181"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l182"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l183"></a>        </span><span class=cF6>&quot;HeapLog Not Active\n&quot;</span><span class=cF0>;
+<a name="l184"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l185"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l186"></a>
+<a name="l187"></a>    size_head = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLogHash</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>, </span><span class=cFB>heaplog_hc</span><span class=cF0>);
+<a name="l188"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
+<a name="l189"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;size_head[i]);
+<a name="l190"></a>
+<a name="l191"></a>    </span><span class=cF6>&quot;$WW,0$&quot;</span><span class=cF0>;
+<a name="l192"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l193"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
+<a name="l194"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
+<a name="l195"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l196"></a>        tmphla = </span><span class=cFB>heaplog_head</span><span class=cF0>[i].next;
+<a name="l197"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphla != &amp;</span><span class=cFB>heaplog_head</span><span class=cF0>[i])
+<a name="l198"></a>        {
+<a name="l199"></a></span><span class=cF2>//Take snapshot in case modified. (while we work)</span><span class=cF0>
+<a name="l200"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;hla, tmphla, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
+<a name="l201"></a>            k = (</span><span class=cF5>MSize</span><span class=cF7>(</span><span class=cF0>hla.addr</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>3</span><span class=cF0> + hla.caller[</span><span class=cFE>0</span><span class=cF0>]) &amp; (</span><span class=cF3>HL_HASH_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l202"></a>            tmphls = size_head[k].next;
+<a name="l203"></a>            </span><span class=cF1>while</span><span class=cF0> (tmphls != &amp;size_head[k])
+<a name="l204"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l205"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MSize</span><span class=cF7>(</span><span class=cF0>hla.addr</span><span class=cF7>)</span><span class=cF0> == tmphls-&gt;size)
+<a name="l206"></a>                {
+<a name="l207"></a>                    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
+<a name="l208"></a>                        </span><span class=cF1>if</span><span class=cF0> (hla.caller[j] != tmphls-&gt;caller[j])
+<a name="l209"></a>                            </span><span class=cF1>goto</span><span class=cF0> hl_next;
+<a name="l210"></a>                    tmphls-&gt;count++;
+<a name="l211"></a>                    </span><span class=cF1>goto</span><span class=cF0> hl_found;
+<a name="l212"></a>                }
+<a name="l213"></a>hl_next:
+<a name="l214"></a>                tmphls = tmphls-&gt;next;
+<a name="l215"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l216"></a>            tmphls = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFB>heaplog_hc</span><span class=cF0>);
+<a name="l217"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(tmphls, &amp;hla, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHeapLog</span><span class=cF7>)</span><span class=cF0>);
+<a name="l218"></a>            tmphls-&gt;count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l219"></a>            tmphls-&gt;size  = </span><span class=cF5>MSize</span><span class=cF0>(hla.addr);
+<a name="l220"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmphls, size_head[k].last);
+<a name="l221"></a>hl_found:
+<a name="l222"></a>            tmphla = hla.next;
+<a name="l223"></a>        }
+<a name="l224"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l225"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l226"></a>
+<a name="l227"></a>    </span><span class=cF6>&quot;$LTCYAN$  Size  * Count  = Total$FG$\n&quot;</span><span class=cF0>;
+<a name="l228"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>HL_HASH_SIZE</span><span class=cF0>; i++)
+<a name="l229"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l230"></a>        tmphls = size_head[i].next;
+<a name="l231"></a>        </span><span class=cF1>while</span><span class=cF0> (tmphls != &amp;size_head[i])
+<a name="l232"></a>        {
+<a name="l233"></a>            tmphls1 = tmphls-&gt;next;
+<a name="l234"></a>            </span><span class=cF6>&quot;%08X*%08X=%08X %P&quot;</span><span class=cF0>, tmphls-&gt;size, tmphls-&gt;count, tmphls-&gt;size * tmphls-&gt;count, tmphls-&gt;caller[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l235"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>1</span><span class=cF0>; j &lt; </span><span class=cF3>HL_CALLER_DEPTH</span><span class=cF0>; j++)
+<a name="l236"></a>                </span><span class=cF6>&quot; . %P&quot;</span><span class=cF0>, tmphls-&gt;caller[j];
+<a name="l237"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l238"></a>            total += tmphls-&gt;size * tmphls-&gt;count;
+<a name="l239"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmphls);
+<a name="l240"></a>            tmphls = tmphls1;
+<a name="l241"></a>        }
+<a name="l242"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l243"></a>    </span><span class=cF5>Free</span><span class=cF0>(size_head);
+<a name="l244"></a>
+<a name="l245"></a>    </span><span class=cF6>&quot;\n$LTRED$Total:%08X$FG$\n&quot;</span><span class=cF0>, total;
+<a name="l246"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_HEAPLOG_ACTIVE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l247"></a>    </span><span class=cF1>if</span><span class=cF0> (!leave_it)
+<a name="l248"></a>        </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l249"></a>}
 </span></pre></body>
 </html>

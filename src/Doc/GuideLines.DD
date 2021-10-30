@@ -92,11 +92,11 @@ $ID,-5$
 
 $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
-* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
+* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
 
-* $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ syms loaded in on start-up.
+* $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ symbols loaded in on start-up.
 
-* $FG,2$Fs->hash_table$FG$ holds user CosmiC syms and if a sym is not found, it checks parents.  When a duplicate sym is added to the table, it overshadows the prev sym.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old syms are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
+* $FG,2$Fs->hash_table$FG$ holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
 
 * To display the contents of a hash table, use the $LK,"Who",A="MN:Who"$() routine or the varients.  $LK,"HashDepthRep",A="MN:HashDepthRep"$() gives a histogram	of how long the chains are, in case you wish to make hash table sizes bigger.
 

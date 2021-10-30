@@ -137,16 +137,16 @@ body {background-color:#1f1f1f;}
 <a name="l110"></a>
 <a name="l111"></a></span><span class=cF5>                                                       Hash Sym Tables</span><span class=cF0>
 <a name="l112"></a>
-<a name="l113"></a>* See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l1"><span class=cF4>::/System/Hash.CC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child 
-<a name="l114"></a>process hash tables are chained to parents. This provides scopes for variables and functions.
+<a name="l113"></a>* See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l1"><span class=cF4>::/System/Hash.CC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and 
+<a name="l114"></a>child process hash tables are chained to parents.   This provides scopes for variables and functions.
 <a name="l115"></a>
-<a name="l116"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> syms loaded in on start-up.
+<a name="l116"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> symbols loaded in on start-up.
 <a name="l117"></a>
-<a name="l118"></a>* </span><span class=cF2>Fs-&gt;hash_table</span><span class=cF0> holds user CosmiC syms and if a sym is not found, it checks parents.  When a duplicate sym is added to the 
-<a name="l119"></a>table, it overshadows the prev sym.  When developing software, typically you include the file at the cmd prompt, make changes 
-<a name="l120"></a>and reinclude it.  Old syms are overshadowed but they are still there.  Periodically, kill the TASK and start fresh when mem 
-<a name="l121"></a>is low. If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to run the 
-<a name="l122"></a>application and kill it when it's done.
+<a name="l118"></a>* </span><span class=cF2>Fs-&gt;hash_table</span><span class=cF0> holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added 
+<a name="l119"></a>to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, 
+<a name="l120"></a>make changes and reinclude it.  Old symbols are overshadowed but they are still there.  Periodically, kill the TASK and start 
+<a name="l121"></a>fresh when mem is low.  If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to 
+<a name="l122"></a>run the application and kill it when it's done.
 <a name="l123"></a>
 <a name="l124"></a>* To display the contents of a hash table, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l169"><span class=cF4>Who</span></a><span class=cF0>() routine or the varients.  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l370"><span class=cF4>HashDepthRep</span></a><span class=cF0>() gives a histogram of how 
 <a name="l125"></a>long the chains are, in case you wish to make hash table sizes bigger.

@@ -115,7 +115,7 @@ body {background-color:#1f1f1f;}
 <a name="l88"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_err_code[</span><span class=cFC>RSI</span><span class=cF0>]
 <a name="l89"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RSI</span><span class=cF0>]
 <a name="l90"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0>.rsi[</span><span class=cFC>RSI</span><span class=cF0>]
-<a name="l91"></a>        </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>Fault2</span><span class=cF0>                 </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l696"><span class=cF4>Fault2</span></a><span class=cF0>
+<a name="l91"></a>        </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>Fault2</span><span class=cF0>                 </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l705"><span class=cF4>Fault2</span></a><span class=cF0>
 <a name="l92"></a>        </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I32</span><span class=cF0> RESTORE_FS_TASK
 <a name="l93"></a>
 <a name="l94"></a></span><span class=cFD>INT_FAULT_ERR_CODE_BITMAP</span><span class=cF0>::

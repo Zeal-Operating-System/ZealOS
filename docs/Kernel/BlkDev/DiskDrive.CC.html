@@ -431,12 +431,13 @@ body {background-color:#1f1f1f;}
 <a name="l404"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l405"></a>            </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0> || bd-&gt;type == </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>)
 <a name="l406"></a>                </span><span class=cF6>&quot;   File=\&quot;%s\&quot;\n&quot;</span><span class=cF0>, bd-&gt;file_disk_name;
-<a name="l407"></a>            </span><span class=cF6>&quot;   %016X-%016X\n&quot;</span><span class=cF0>, drive-&gt;drv_offset, drive-&gt;drv_offset + drive-&gt;size - </span><span class=cFE>1</span><span class=cF0>;
-<a name="l408"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
-<a name="l409"></a>                </span><span class=cF6>&quot;$FG$$BG$&quot;</span><span class=cF0>;
-<a name="l410"></a>        }
-<a name="l411"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l412"></a>    </span><span class=cF6>&quot;Home Dir:\&quot;%s\&quot;\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.home_dir;
-<a name="l413"></a>}
+<a name="l407"></a>            </span><span class=cF6>&quot;   Offset:\t\t\tOffset + Size:\n&quot;</span><span class=cF0>;
+<a name="l408"></a>            </span><span class=cF6>&quot;   %016X-%016X\n&quot;</span><span class=cF0>, drive-&gt;drv_offset, drive-&gt;drv_offset + drive-&gt;size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l409"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l410"></a>                </span><span class=cF6>&quot;$FG$$BG$&quot;</span><span class=cF0>;
+<a name="l411"></a>        }
+<a name="l412"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l413"></a>    </span><span class=cF6>&quot;Home Dir:\&quot;%s\&quot;\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.home_dir;
+<a name="l414"></a>}
 </span></pre></body>
 </html>

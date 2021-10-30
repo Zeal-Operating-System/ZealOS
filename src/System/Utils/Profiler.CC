@@ -54,8 +54,42 @@ after you have collected data.
 }
 
 I64 ProfCompare(U8 *i1, U8 *i2)
-{
+{ // Sort Profiler function pointer array by least-->greatest.
 	return i1 - i2;
+}
+
+U0 ProfSort(I64 *array, I64 count)
+{
+	I64 v1, v2, i1, i2, start_i1, start_i2, end_i1, end_i2, j;
+
+	while (TRUE)
+	{
+		start_i1 = i1 = 0;
+profsort_walk:
+		v1 = array[i1];
+		while (v1 == array[i1])
+		{
+			end_i1 = i1; 
+			start_i2 = i2 = ++i1;
+		}
+		if (i1 > count) break; // bail if first search went out of bounds
+		v2 = array[i2];
+		while (v2 == array[i2])
+			end_i2 = i2++; 
+		if (i2 > count) break; // bail if second search went out of bounds
+		if (end_i1 - start_i1 > end_i2 - start_i2)
+		{
+			for (j = start_i1; j <= start_i1 + end_i2 - start_i2; j++)
+				array[j] = v2;
+			for (j = start_i1 + end_i2 - start_i2 + 1; j <= end_i2 - start_i2 + end_i1 + 1; j++)
+				array[j] = v1;
+		}
+		else
+		{
+			start_i1 = i1 = start_i2;
+			goto profsort_walk;
+		}
+	}
 }
 
 public U0 ProfRep(I64 filter_count=1, Bool leave_it=OFF)
@@ -73,7 +107,9 @@ public U0 ProfRep(I64 filter_count=1, Bool leave_it=OFF)
 		if (!(total_time = pf_jiffy_end - pf_jiffy_start))
 			total_time = 1;
 		QuickSortI64(pf_array, pf_buf_in_ptr, &ProfCompare);
+		ProfSort(pf_array, pf_buf_in_ptr);
 		*last_buf = 0;
+		"$$LTCYAN$$ %%Time Hits:    &Function+Offset$$FG$$\n";
 		for (i = 0; i < pf_buf_in_ptr; i += hits)
 		{
 			rip = pf_array[i];
@@ -85,8 +121,8 @@ public U0 ProfRep(I64 filter_count=1, Bool leave_it=OFF)
 			StrFirstRemove(buf, "+", buf2);
 			if (StrCompare(buf2, last_buf))
 			{
-				if (*last_buf && routine_total >= filter_count)
-					"$$GREEN$$%6.2f %08X:%s\n$$FG$$", 100 * routine_total / total_time, routine_total, last_buf;
+//				if (*last_buf && routine_total >= filter_count)
+//					"$$GREEN$$%6.2f %08X:%s\n$$FG$$", 100 * routine_total / total_time, routine_total, last_buf;
 				StrCopy(last_buf, buf2);
 				routine_total = 0;
 			}
@@ -94,11 +130,12 @@ public U0 ProfRep(I64 filter_count=1, Bool leave_it=OFF)
 			if (hits >= filter_count)
 			{
 				"%6.2f %08X:%P\n", 100 * hits / total_time, hits, rip;
-				last_rip=rip;
+				last_rip = rip;
 			}
 		}
-		if (*last_buf && routine_total >= filter_count)
-			"$$GREEN$$%6.2f %08X:%s\n$$FG$$", 100 * routine_total / total_time, routine_total, last_buf;
+//		if (*last_buf && routine_total >= filter_count)
+//			"$$GREEN$$%6.2f %08X:%s\n$$FG$$", 100 * routine_total / total_time, routine_total, last_buf;
+		"$$LTCYAN$$ %%Time Hits:    &Function+Offset$$FG$$\n";
 		"Total Time:%0.6fs\n", total_time / JIFFY_FREQ;
 		if (leave_it)
 		{

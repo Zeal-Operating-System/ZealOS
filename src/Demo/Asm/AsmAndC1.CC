@@ -32,7 +32,7 @@ _BEEPS::
 //CosmiC return values are in RAX.	This function has no return value.
 }
 
-//_extern binds a asm sym to a function.
+//_extern binds a asm symbol to a function.
 //The convention is to put an underscore
 //on C callable asm routines.
 _extern _BEEPS U0 Beeps(I64 count);

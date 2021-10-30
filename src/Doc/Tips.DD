@@ -129,7 +129,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * You can use $LK,"Type",A="MN:Type"$() to display $FG,2$.GR$FG$ files.
 
-* Use $LK,"Man",A="MN:Man"$() to jump to short sym name src code.
+* Use $LK,"Man",A="MN:Man"$() to jump to short symbol name src code.
 
 * Use $LK,"Fix",A="MN:Fix"$() to edit and fix the last compiler error.
 

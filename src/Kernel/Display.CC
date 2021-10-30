@@ -65,7 +65,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 
 			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
 			text.raw_col -= text.cols ;
-			row = text.rows;
+			row = text.rows - 1;
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;

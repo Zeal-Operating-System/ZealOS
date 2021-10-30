@@ -149,6 +149,7 @@ public U0 HeapLogAddrRep(Bool leave_it=OFF)
 	"$$WW,0$$";
 	while (LBts(&sys_semas[SEMA_HEAPLOG_LOCK], 0))
 		PAUSE
+	"$$LTCYAN$$  Size    Address$$FG$$\n";
 	for (i = 0; i < HL_HASH_SIZE; i++)
 	{
 		tmphl = heaplog_head[i].next;
@@ -156,9 +157,9 @@ public U0 HeapLogAddrRep(Bool leave_it=OFF)
 		{
 //Take snapshot in case modified. (while we work)
 			MemCopy(&hl, tmphl, sizeof(CHeapLog));
-			"$$PURPLE$$%08X$$FG$$ %08X", MSize(hl.addr), hl.addr;
-			for (j = 0; j < HL_CALLER_DEPTH; j++)
-				" %P", hl.caller[j];
+			"$$PURPLE$$%08X$$FG$$ %08X %P", MSize(hl.addr), hl.addr, hl.caller[0];
+			for (j = 1; j < HL_CALLER_DEPTH; j++)
+				" ® %P", hl.caller[j];
 			'\n';
 			total += MSize(hl.addr);
 			tmphl = hl.next;
@@ -223,15 +224,16 @@ hl_found:
 	}
 	LBtr(&sys_semas[SEMA_HEAPLOG_LOCK], 0);
 
+	"$$LTCYAN$$  Size  * Count  = Total$$FG$$\n";
 	for (i = 0; i < HL_HASH_SIZE; i++)
 	{
 		tmphls = size_head[i].next;
 		while (tmphls != &size_head[i])
 		{
 			tmphls1 = tmphls->next;
-			"%08X*%08X=%08X", tmphls->size, tmphls->count, tmphls->size * tmphls->count;
-			for (j = 0; j < HL_CALLER_DEPTH; j++)
-				" %P", tmphls->caller[j];
+			"%08X*%08X=%08X %P", tmphls->size, tmphls->count, tmphls->size * tmphls->count, tmphls->caller[0];
+			for (j = 1; j < HL_CALLER_DEPTH; j++)
+				" ® %P", tmphls->caller[j];
 			'\n';
 			total += tmphls->size * tmphls->count;
 			Free(tmphls);

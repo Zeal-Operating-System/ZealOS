@@ -313,15 +313,19 @@ public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
 		else
 		{
 			tmpm = tmpf->member_list_and_root;
+			if (!IsRaw)
+				"$$LTCYAN$$Reg/Offset Symbol$$FG$$\n";
+			else
+				"Reg/Offset Symbol\n";
 			while (tmpm)
 			{
 				if (0 <= tmpm->reg < REG_REGS_NUM)
-					"%08Z %s\n", tmpm->reg, "ST_U64_REGS", tmpm->str;
+					"%010Z %s\n", tmpm->reg, "ST_U64_REGS", tmpm->str;
 				else
-					"%08tX %s\n", tmpm->offset, tmpm->str;
+					"%010tX %s\n", tmpm->offset, tmpm->str;
 				tmpm = tmpm->next;
 			}
-			"%08tX Stack Size\n", tmpf->size;
+			"%010tX Stack Size\n", tmpf->size;
 		}
 	}
 }

@@ -56,7 +56,7 @@ body {background-color:#1f1f1f;}
 <a name="l29"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpm)
 <a name="l30"></a>        {
 <a name="l31"></a>            tmpc = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpm-&gt;member_class);
-<a name="l32"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>&lt;</span><span class=cF3>REG_REGS_NUM</span><span class=cF0>)
+<a name="l32"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0> &lt; </span><span class=cF3>REG_REGS_NUM</span><span class=cF0>)
 <a name="l33"></a>            </span><span class=cF7>{</span><span class=cF0>
 <a name="l34"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bts</span><span class=cF7>(</span><span class=cF0>&amp;used_reg_mask, tmpm-&gt;</span><span class=cF1>reg</span><span class=cF7>)</span><span class=cF0>)
 <a name="l35"></a>                    </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Reg in use\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
@@ -74,7 +74,7 @@ body {background-color:#1f1f1f;}
 <a name="l47"></a>                mv[member_count++].m = tmpm;
 <a name="l48"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l49"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0> == </span><span class=cF3>REG_ALLOC</span><span class=cF0>)
-<a name="l50"></a>                </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Can't reg var\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
+<a name="l50"></a>                </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Can't reg variable\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
 <a name="l51"></a>                            cc-&gt;lex_include_stack-&gt;full_name,
 <a name="l52"></a>                            cc-&gt;lex_include_stack-&gt;line_num, tmpm-&gt;str, cc-&gt;htc.fun-&gt;str);
 <a name="l53"></a>            tmpm = tmpm-&gt;next;
@@ -642,7 +642,7 @@ body {background-color:#1f1f1f;}
 <a name="l615"></a>                </span><span class=cF1>else</span><span class=cF0>
 <a name="l616"></a>                {
 <a name="l617"></a>                    </span><span class=cF1>if</span><span class=cF0> (mv[i].m-&gt;</span><span class=cF1>reg</span><span class=cF0> == </span><span class=cF3>REG_ALLOC</span><span class=cF0>)
-<a name="l618"></a>                        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Can't reg var\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
+<a name="l618"></a>                        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Can't reg variable\n $LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
 <a name="l619"></a>                                    cc-&gt;lex_include_stack-&gt;full_name,
 <a name="l620"></a>                                    cc-&gt;lex_include_stack-&gt;line_num, mv[i].m-&gt;str, cc-&gt;htc.fun-&gt;str);
 <a name="l621"></a>                }
@@ -673,7 +673,7 @@ body {background-color:#1f1f1f;}
 <a name="l646"></a>                                mv[i].offset_start = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//flag as register variable</span><span class=cF0>
 <a name="l647"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;size &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; !</span><span class=cF5>StrIMatch</span><span class=cF7>(</span><span class=cF6>&quot;Bool&quot;</span><span class=cF0>, tmpm-&gt;member_class-&gt;str</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
 <a name="l648"></a>                                        tmpm-&gt;member_class-&gt;type &amp; </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF0>)
-<a name="l649"></a>                                    </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Using 64-bit reg var.\n &quot;</span><span class=cF0>
+<a name="l649"></a>                                    </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Using 64-bit reg variable.\n &quot;</span><span class=cF0>
 <a name="l650"></a>                                                </span><span class=cF6>&quot;$LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
 <a name="l651"></a>                                                cc-&gt;lex_include_stack-&gt;full_name,
 <a name="l652"></a>                                                cc-&gt;lex_include_stack-&gt;line_num, tmpm-&gt;str, cc-&gt;htc.fun-&gt;str);
@@ -700,7 +700,7 @@ body {background-color:#1f1f1f;}
 <a name="l673"></a>                                    tmpm-&gt;str, reg_offsets[tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>;
 <a name="l674"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;size &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; !</span><span class=cF5>StrIMatch</span><span class=cF7>(</span><span class=cF6>&quot;Bool&quot;</span><span class=cF0>, tmpm-&gt;member_class-&gt;str</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
 <a name="l675"></a>                                    tmpm-&gt;member_class-&gt;type &amp; </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF0>)
-<a name="l676"></a>                                </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Using 64-bit reg var.\n &quot;</span><span class=cF0>
+<a name="l676"></a>                                </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Using 64-bit reg variable.\n &quot;</span><span class=cF0>
 <a name="l677"></a>                                            </span><span class=cF6>&quot;$LK,\&quot;FL:%s,%d\&quot;$ '%s' in '%s'\n&quot;</span><span class=cF0>,
 <a name="l678"></a>                                            cc-&gt;lex_include_stack-&gt;full_name,
 <a name="l679"></a>                                            cc-&gt;lex_include_stack-&gt;line_num, tmpm-&gt;str, cc-&gt;htc.fun-&gt;str);

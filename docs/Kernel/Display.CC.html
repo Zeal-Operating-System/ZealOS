@@ -92,7 +92,7 @@ body {background-color:#1f1f1f;}
 <a name="l65"></a>
 <a name="l66"></a>            </span><span class=cF5>MemSetU32</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias + </span><span class=cFB>text</span><span class=cF0>.screen_size - </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, </span><span class=cF3>BLACK32</span><span class=cF0>, </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>);
 <a name="l67"></a>            </span><span class=cFB>text</span><span class=cF0>.raw_col -= </span><span class=cFB>text</span><span class=cF0>.cols ;
-<a name="l68"></a>            row = </span><span class=cFB>text</span><span class=cF0>.rows;
+<a name="l68"></a>            row = </span><span class=cFB>text</span><span class=cF0>.rows - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l69"></a>        }
 <a name="l70"></a>        x = col * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
 <a name="l71"></a>        y = row * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;

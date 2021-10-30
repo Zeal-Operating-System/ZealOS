@@ -609,7 +609,7 @@ sse_check_jump:
 				else if (reloced_arg2 == ARGT_IMM64 || reloced_arg2 == ARGT_UIMM64)
 					disp += 8;
 			}
-			CatPrint(reloced_arg1_st, "[%X]", disp);
+			CatPrint(reloced_arg1_st, "[0x%X]", disp);
 			RM1 = -1;
 		}
 		else
@@ -840,13 +840,20 @@ U8 *U(U8 *rip, I64 count=20, I64 seg_size=64)
 
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
-	"$$HL,1$$\n";
+	if (!IsRaw)
+		"$$LTCYAN$$";
+	"        &Function+Offset Machine Code   Instruction  Operands";
+	if (!IsRaw)
+		"$$FG$$$$HL,1$$";
+	"\n";
 	for (i = 0; i < count; i++)
 	{
 		Ui(buf, &rip, seg_size);
 		"%s", buf;
 	}
-	"$$HL,0$$\n";
+	if (!IsRaw)
+		"$$HL,0$$";
+	"\n";
 
 	return rip;
 }
@@ -858,14 +865,21 @@ I64 Un(U8 *rip, I64 count=0x80, I64 seg_size=64)
 
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
-	"$$HL,1$$\n";
+	if (!IsRaw)
+		"$$LTCYAN$$";
+	"        &Function+Offset Machine Code   Instruction  Operands";
+	if (!IsRaw)
+		"$$FG$$$$HL,1$$";
+	"\n";
 	while (rip < end_rip)
 	{
 		Ui(buf, &rip, seg_size);
 		"%s", buf;
 		i++;
 	}
-	"$$HL,0$$\n";
+	if (!IsRaw)
+		"$$HL,0$$";
+	"\n";
 
 	return i;
 }

@@ -29,7 +29,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 		while (tmpm)
 		{
 			tmpc = OptClassFwd(tmpm->member_class);
-			if (0 <= tmpm->reg<REG_REGS_NUM)
+			if (0 <= tmpm->reg < REG_REGS_NUM)
 			{
 				if (Bts(&used_reg_mask, tmpm->reg))
 					PrintWarn("Reg in use\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
@@ -47,7 +47,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 				mv[member_count++].m = tmpm;
 			}
 			else if (tmpm->reg == REG_ALLOC)
-				PrintWarn("Can't reg var\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
+				PrintWarn("Can't reg variable\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 							cc->lex_include_stack->full_name,
 							cc->lex_include_stack->line_num, tmpm->str, cc->htc.fun->str);
 			tmpm = tmpm->next;
@@ -615,7 +615,7 @@ so we only use R12 and R13 as non-pointer register variables, such as index vari
 				else
 				{
 					if (mv[i].m->reg == REG_ALLOC)
-						PrintWarn("Can't reg var\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
+						PrintWarn("Can't reg variable\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 									cc->lex_include_stack->full_name,
 									cc->lex_include_stack->line_num, mv[i].m->str, cc->htc.fun->str);
 				}
@@ -646,7 +646,7 @@ so we only use R12 and R13 as non-pointer register variables, such as index vari
 								mv[i].offset_start = 0; //flag as register variable
 								if (tmpm->size < 8 && !StrIMatch("Bool", tmpm->member_class->str) &&
 										tmpm->member_class->type & HTT_INTERNAL_TYPE)
-									PrintWarn("Using 64-bit reg var.\n "
+									PrintWarn("Using 64-bit reg variable.\n "
 												"$$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 												cc->lex_include_stack->full_name,
 												cc->lex_include_stack->line_num, tmpm->str, cc->htc.fun->str);
@@ -673,7 +673,7 @@ so we only use R12 and R13 as non-pointer register variables, such as index vari
 									tmpm->str, reg_offsets[tmpm->reg].offset;
 							if (tmpm->size < 8 && !StrIMatch("Bool", tmpm->member_class->str) &&
 									tmpm->member_class->type & HTT_INTERNAL_TYPE)
-								PrintWarn("Using 64-bit reg var.\n "
+								PrintWarn("Using 64-bit reg variable.\n "
 											"$$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 											cc->lex_include_stack->full_name,
 											cc->lex_include_stack->line_num, tmpm->str, cc->htc.fun->str);

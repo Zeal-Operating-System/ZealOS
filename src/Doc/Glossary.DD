@@ -230,7 +230,7 @@ $LK,"FILEMASK_AOT",A="MN:FILEMASK_AOT"$
 $LK,"FILEMASK_JIT",A="MN:FILEMASK_JIT"$
 $LK,"FILEMASK_GR",A="MN:FILEMASK_GR"$
 $ID,-2$$TR,"Naming Convention"$
-$ID,2$Since there are no $FG,2$namespaces$FG$, it is highly recommended to put a 2-3 character module code prefix on syms. e.g. $FG,2$WS$FG$, $FG,2$Doc$FG$, $FG,2$Lex$FG$
+$ID,2$Since there are no $FG,2$namespaces$FG$, it is highly recommended to put a 2-3 character module code prefix on symbols. e.g. $FG,2$WS$FG$, $FG,2$Doc$FG$, $FG,2$Lex$FG$
 
 $FG,5$ALL_CAPS$FG$
 	Assembly Language labels are capitalized with underscores between words.	So are $FG,2$#define$FG$'s.

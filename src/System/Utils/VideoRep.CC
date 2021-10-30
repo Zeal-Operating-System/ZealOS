@@ -28,7 +28,7 @@ public I64 VideoRep(Bool full=TRUE)
 	}
 
 	if (!IsRaw)
-		"$$CYAN$$ #    W  x   H\t\t Mode$$FG$$\n\n";
+		"$$LTCYAN$$ #    W  x   H\t\t Mode$$FG$$\n\n";
 	else
 		" #\t\t  W  x   H\t\t Mode\n\n";
 

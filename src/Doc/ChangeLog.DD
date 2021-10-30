@@ -1,11 +1,15 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----10/30/21 05:02:51----$IV,0$
+* Added column headers to Rep functions.
+* Changed $LK+PU,"ProfRep",A="FF:::/System/Utils/Profiler.CC,ProfSort"$ to sort by hits.
+
 $IV,1$----10/26/21 12:38:12----$IV,0$
 * Raised version number to 1.04.
 * Optimized $LK+PU,"MemCopy",A="MN:_MEMCOPY"$ to use SSE instructions. Large performance boost on bare-metal.
 * Reverted $LK+PU,"RawPutChar",A="MN:RawPutChar"$ scrolling functionality now that MemCopy is faster.
 * Removed all kludge MyNoise functions from Apps and Demos now that MemCopy is faster.
 * Added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"SettingsPop2",A="FF:::/System/TaskSettings.CC,LFBFlush"$ to fix task-swap palette bugs.
-* Improved $LK+PU,"ToTheFront",A="FF:C:/Apps/ToTheFront/ToTheFront.CC,Squares"$ game explanation.
+* Improved $LK+PU,"ToTheFront",A="FF:::/Apps/ToTheFront/ToTheFront.CC,Squares"$ game explanation.
 
 $IV,1$----10/18/21 01:16:10----$IV,0$
 * Raised version number to 1.03.

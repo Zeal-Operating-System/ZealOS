@@ -3538,8 +3538,8 @@ class CMemRange
 #define MEM_HEAP_HASH_SIZE		1024
 #define MEM_FREE_PAG_HASH_SIZE	0x100
 //It is common to $LK,"MAlloc",A="MN:MAlloc"$() exact powers of two.	There is some overhead.
-//We add 2 pags, so a request is not rounded-up to next power of two.
-#define MEM_EXTRA_HASH2_PAGS	2
+//We add 1 pag, so a request is not rounded-up to next power of two.
+#define MEM_EXTRA_HASH2_PAGS	1
 
 #define MEM_SYSTEM_STACK		(MEM_PAG_SIZE * 512) //Like 16384*MEM_PAG_SIZE
 #define MEM_EXECUTIVE_STACK		(MEM_PAG_SIZE * 512)
