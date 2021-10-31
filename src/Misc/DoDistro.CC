@@ -1,6 +1,6 @@
 //Make Your own Distro by #include-ing this file.
 
-#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT \n\n\n\n"
+#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n1024\n768\n\n\n"
 
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
@@ -19,10 +19,13 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	BootDVDIns;
 
 	Copy("/*","/Distro");
-	Del("/Distro/" KERNEL_BIN_C);
+//	Del("/Distro/" KERNEL_BIN_C);
+	DirMake("/Distro" BOOT_DIR);
+	Move(BOOT_DIR_DVD_KERNEL_BIN_C, "/Distro" BOOT_DIR_KERNEL_BIN_C);
 
-	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
+//	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
 	CopyTree("/Home", 		"/Distro/Home");
+	Del("/Distro/Home/Registry.CC");
 	CopyTree("/System", 	"/Distro/System");
 	CopyTree("/Apps", 		"/Distro/Apps");
 	CopyTree("/Compiler",	"/Distro/Compiler");
@@ -41,7 +44,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	//If CD-ROM use MT_CD instead of MT_DVD.
 	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
 
-	//DelTree("/Distro");
+	DelTree("/Distro");
 	Free(out_iso_filename);
 }
 

@@ -1,0 +1,35 @@
+
+Auto-ISO Host QEMU Build Distro ISO for VM Install:
+	Process:
+		- make new HDD for a quick install
+		- boot AUTO.ISO with hdd
+			- do mini-install and then reboot w/ mount hdd then copy src/-->hdd
+			- reboot, recompile kernel, reboot, run K.CC with DoDistro
+		(- copy hdd-->src maybe? not "needed" to just make the Distro ISO)
+		- export Distro.ISO to Host
+		- delete temp HDD, finish
+		
+Auto-ISO:
+	Required Stages/Steps:
+		- automatically installs to first identified hard disk. 
+			- this could maybe just mimic how current VM install works,
+				just don't bother asking any questions for user input.
+		- copy src over hdd
+		- reboot (TO HDD), recompile Kernel, reboot, run K.CC-->DoDistro
+		- export Distro.ISO to src/
+		- poweroff, done.
+
+	Thoughts:
+		- implement a "GOOD" file somewhere that is made at the end,
+			check for this after running the auto ISO and bail if not found?
+
+	Notes:
+		- the Auto HDD bootloader will need to change.
+			it has to auto-boot into the C Drive to do this process...
+			so removing&skipping the prompt will be required
+
+
+
+
+
+
