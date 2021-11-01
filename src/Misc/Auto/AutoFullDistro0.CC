@@ -1,0 +1,29 @@
+U0 Auto()
+{
+	I64			 i, ata_port = -1;
+	CAHCIPort	*port;
+	U8			*in_str;
+
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+
+	{
+		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATA)
+			{
+				ata_port = i;
+				break;
+			}
+		}
+	}
+
+	BootMHDIns('C');
+	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n1024\\n768\\n\\n\\n\");", ata_port);
+	OnceDrive('C', in_str);
+	Free(in_str);
+	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");
+	OnceDrive('C', in_str);
+	OutU8(0x501,0x31);
+}
+Auto;

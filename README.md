@@ -32,15 +32,15 @@ Features in development include:
 - For running in a VM: Intel VT-x/AMD-V acceleration enabled in your BIOS settings. (Required to virtualize any 64-bit operating system properly.)
 - Working knowledge of the C programming language.
 
-Every commit contains a "ZealOS-YYYY-MM-DD-HH_MM_SS.iso" in the root of master, which is a timestamped ISO build of that commit. Use this ISO for installation: see the Wiki for guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
+To create a Distro ISO, run `build_iso.sh` in the `build/` directory. After creating an ISO, see the Wiki for guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
 
 ### Contributing
 
-This is basically a read-only repository. Everything happens inside the OS, as intended by Terry. After you've installed the latest release in a VM and made your changes, you can run the `K.CC` file in the Home/ directory to build a Distro ISO. Then, use either the `mnt.sh` or `export.ps1` script to merge your changes & Distro ISO to the repo. 
+There are two ways to contribute. The first way involves everything happening inside the OS, as intended by Terry. After you've built the latest ISO, installed to a VM, made your changes, and powered off the VM, you can run the `sync_repo.sh` script to merge your changes to the repo. 
 
-Alternatively, you can put individual files into a folder, and run `RedSeaISO("MyChanges.ISO", "/Home/Folder");` to package them into an ISO, then use the mount scripts to export the ISO.
+Alternatively, you can edit repo files using an external editor, outside of the OS.
 
-Afterwards, you can make a pull request on the `master` branch. (Make sure to include either the new Distro ISO or package ISO in the pull request, since all other files on the repo are read-only and overwritten each commit: all merges are done manually.)
+Afterwards, you can make a pull request on the `master` branch.
 
 ## Background
 

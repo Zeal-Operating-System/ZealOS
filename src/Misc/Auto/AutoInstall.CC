@@ -96,12 +96,7 @@ U0 VMInstallWiz()
 		BootMHDIns('C');
 	}
 
-	in_str = MStrPrint("Sleep(300);In(\"CC\\n%d\\n\\n1024\\n768\\n\\n\\n\");", ata_port);
-	OnceDrive('C', in_str);
-	Free(in_str);
-	in_str = MStrPrint("BootHDIns;BootMHDIns('c');OnceFlush;"
-					"Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");
-	OnceDrive('C', in_str);
+	Copy("::/Misc/Auto/BootMHD2.CC", "C:/System/Boot/BootMHD2.CC");
 
 	////////////////////////////////////
 
@@ -117,8 +112,9 @@ Bool DoInstall(Bool prompt_reboot)
 	DocBottom;
 	VMInstallWiz();
 	res = TRUE;
-	OutU8(0x501,0x31);
-	return res;
+	OnceDrive('C', "PopUp(\"#include \\\"/Misc/Auto/AutoFullDistro0\\\";\");");
+	BootRAM("C:" BOOT_DIR_KERNEL_BIN_C);
+	return res;
 }
 
 Bool OSInstall(Bool prompt_reboot=TRUE)

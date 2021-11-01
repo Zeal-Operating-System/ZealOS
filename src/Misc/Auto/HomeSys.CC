@@ -1,8 +1,5 @@
-//Place this file in /Home and change
-//anything you want.
-
 U0 UserStartUp()
-{//Run each time a user a spawned
+{
 	DocTermNew;
 	Type("::/Doc/Start.DD");
 	LBts(&Fs->display_flags, DISPLAYf_SHOW);
@@ -12,7 +9,7 @@ U0 UserStartUp()
 }
 
 U0 ServerStartUp()
-{//Run each time a server task is spawned.
+{
 	DocTermNew;
 	LBts(&Fs->display_flags, DISPLAYf_SHOW);
 	WinToTop;
@@ -30,9 +27,9 @@ U0 StartUpTasks()
 	WinTileVert;
 	"Boot Time:%7.3fs\n", tS;
 	XTalk(user, "Cd; #include \"Once\";\n");
-	Silent; //no output to screen
-	Silent(OFF); //no output to screen
-}
+	Silent;
+	Silent(OFF);
+}
 
 StartUpTasks;
 

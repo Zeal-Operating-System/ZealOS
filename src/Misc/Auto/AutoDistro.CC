@@ -3,10 +3,9 @@
 // Used by host OS to create a full Distro ISO synced with GitHub repo.
 
 #define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n1024\n768\n\n\n"
-
+
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
-//If you have not recompiled $FG,2$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
 	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);
 	if (!DriveIsWritable)
 	{
@@ -45,7 +44,4 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	DelTree("/Distro");
 	Free(out_iso_filename);
 }
-
 MakeMyISO("/Tmp/AUTO.ISO.C");
-
-// Study the account examples $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$.

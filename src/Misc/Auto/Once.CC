@@ -5,9 +5,7 @@
 //first terminal window upon start-up.
 //See $LK,"Once",A="FF:~/HomeSys.CC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
 
-//Delete the rest from this file.
-
-U0 Tmp()
+U0 Tmp()
 {
 	OnceExe;
 	switch (sys_boot_src.u16[0])
