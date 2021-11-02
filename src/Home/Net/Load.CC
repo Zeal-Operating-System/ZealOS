@@ -17,9 +17,10 @@ Cd(__DIR__);;
 
 #include "Utilities/BST"
 #include "Protocols/UDP/MakeUDP"
-#include "Protocols/TCP/MakeTCP"
-
 #include "Protocols/DNS"
+
+#include "Protocols/TCP/MakeTCP"
+
 #include "Protocols/DHCP"
 
 #include "Utilities/NetHandler" // needs IPV4, UDP, ICMP

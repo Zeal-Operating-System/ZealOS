@@ -1076,7 +1076,10 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 	}
 
 	if (tcp_socket->state != TCP_STATE_ESTABLISHED)
+	{
+		NetErr("TCP SOCKET CONNECT: Failed to establish TCP Socket connection.");
 		return -1;
+	}
 
 	switch (tcp_socket->socket->state)
 	{
@@ -1303,6 +1306,28 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	return read_total;
 }
 
+I64 TCPSocketReceiveLine(CTCPSocket *tcp_socket, U8 *buffer, I64 size)
+{
+	I64 received = 0;
+
+	while (received + 1 < size)
+	{
+		if (TCPSocketReceive(tcp_socket, buffer + received, 1) <= 0)
+		{
+			NetErr("TCP SOCKET RECEIVE LINE: Failed at TCPSocketReceive.");
+			return -1;
+		}
+		if (buffer[received] == '\n')
+			break;
+		else if (buffer[received] != '\r')
+			received++;
+	}
+
+	// Shrine has 'FIXME: safe but incorrect behavior on overflow'
+	buffer[received] = 0; // terminate string
+	return received;
+}
+
 I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 {
 	I64 sent_total = 0;
@@ -1397,6 +1422,62 @@ I64 TCPSocketSendAll(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 I64 TCPSocketSendString(CTCPSocket *tcp_socket, U8 *string)
 {
 	return TCPSocketSendAll(tcp_socket, string, StrLen(string));
+}
+
+CTCPSocket *TCPConnectionCreate(U8 *hostname, U16 port)
+{
+	CSocketAddressIPV4	 socket_addr;
+	CAddressInfo		*current;
+	CAddressInfo		*info = NULL;
+	I64					 error = DNSAddressInfoGet(hostname, NULL, &info);
+	CTCPSocket			*result;
+
+	if (error < 0)
+	{
+		NetErr("TCP CONNECTION CREATE: Failed at DNSAddressInfoGet.");
+		AddressInfoFree(info);
+		return NULL;
+	}
+
+	socket_addr.family = AF_INET;
+	socket_addr.port = EndianU16(port);
+	socket_addr.address.address = INADDR_ANY;
+
+	current = info;
+	while (current)
+	{
+
+		if (current->family == AF_INET && (current->socket_type == 0 || current->socket_type == SOCKET_STREAM))
+		{ // TODO: IPV6 support !
+			socket_addr.address.address = EndianU32(current->address(CSocketAddressIPV4 *)->address.address); // ?? why are bits flipped here
+			AddressInfoFree(info);
+
+			result = TCPSocket(AF_INET);
+			if (!result)
+			{
+				NetErr("TCP CONNECTION CREATE: Failed to create new TCP Socket.");
+				return NULL;
+			}
+			result->timeout = TCP_TIMEOUT;
+			error = TCPSocketConnect(result, &socket_addr);
+			if (error < 0)
+			{
+				NetErr("TCP CONNECTION CREATE: Failed to connect TCP Socket to address.");
+				TCPSocketClose(result);
+				return error;
+			}
+
+			return result;
+		}
+
+		current = current->next;
+	}
+
+	NetErr("TCP CONNECTION CREATE: Failed to find a suitable address.");
+
+	AddressInfoFree(info);
+	return NULL;
+
 }
 
 U0 TCPTreeNodeRep(CTCPTreeNode *node)
