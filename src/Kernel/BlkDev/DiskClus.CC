@@ -76,7 +76,7 @@ I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
 					if (i > drive->spc)
 						i = drive->spc;
 					BlkRead(drive, buf, drive->data_area + c * drive->spc, i);
-					buf+=i << BLK_SIZE_BITS;
+					buf += i << BLK_SIZE_BITS;
 					c = ClusNumNext(drive, c, 1);
 					blks -= i;
 				}

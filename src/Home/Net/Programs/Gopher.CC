@@ -22,7 +22,7 @@ I64 GopherOpen(U8* host, U16 port, U8* selector, U8* query)
 	
 //	sock = create_connection(host, port);
 	sock = TCPConnectionCreate(host, port);
-	if (sock < 0)
+	if (sock <= 0)
 	{
 		PrintErr("Failed to connect to %s:%d\n", host, port);
 		return sock;
@@ -36,7 +36,10 @@ I64 GopherOpen(U8* host, U16 port, U8* selector, U8* query)
 	{
 		line = StrPrint(NULL, "%s\t%s\r\n", selector, query);
 	}
-	
+
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT*5;
+
+
 //	sendString(sock, line, 0);
 	TCPSocketSendString(sock, line);
 	Free(line);
@@ -197,7 +200,10 @@ U0 GopherLine(U8* line)
 		line++;
 		port = Str2I64(line);
 	}
-	
+
+	if (!*host)
+		return;
+
 	switch (type)
 	{
 		case '3':
@@ -224,7 +230,7 @@ public I64 GopherMenu
 	U8 buf[256];
 	
 	sock = GopherOpen(host, port, selector, query);
-	if (sock < 0)
+	if (sock <= 0)
 	{
 		return sock;
 	}
@@ -286,5 +292,5 @@ gopher_associations['1'] = "GopherMenu";
 gopher_associations['7'] = "GopherQueryPrompt";
 /* Include this file from your HomeSys, then add more associations */
 
-"\n\nTry using GopherMenu to connect to a gopher server,"
-"for example:  GopherMenu(\"gopher.floodgap.com\");\n\n";
+"\n\nTry using GopherMenu to connect to a gopher server, for example:\n\n"
+"          $FG,2$GopherMenu(\"gopher.floodgap.com\");$FG$\n\n";

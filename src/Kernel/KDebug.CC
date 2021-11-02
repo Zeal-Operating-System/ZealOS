@@ -725,7 +725,7 @@ U0 Fault2(I64 fault_num, I64 fault_err_code)
 
 		"Task \"";
 		"%s", Fs->task_title;
-		"\"\n";
+		"\"\n\n";
 		"Fault:    0x%02X %Z\n", fault_num, fault_num, "ST_INT_NAMES";
 		"Err Code: %08X\n", fault_err_code;
 		was_in_debug = DebugMode(ON);
