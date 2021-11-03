@@ -29,8 +29,6 @@ I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 {
 	CSliderState *s=c->state;
-
-
 	//box
 	dc->color=LTRED;
 	GrRect(dc, c->left,c->top,SLIDER_SPACING*4+2,SLIDER_SPACING*2+SLIDER_RANGE);
@@ -49,7 +47,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 	//values
 	dc->color=LTRED;
 	GrPrint(dc,c->left+1*SLIDER_SPACING+2-FONT_WIDTH/2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE+8,
+			   c->top+SLIDER_SPACING+SLIDER_RANGE+8,
 				"%d",s->left_pos*259/SLIDER_RANGE);
 	GrPrint(dc,c->left+2*SLIDER_SPACING+2-FONT_WIDTH/2,
 				c->top+SLIDER_SPACING+SLIDER_RANGE+8,
@@ -84,16 +82,24 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 	//color preview
 	I64 i, j, k;
+	I64 size=20;
 	// sizeof shows more colors?...probably cause im retarded
-    //    for (i = 0; i < sizeof(gr_palette); i++)
+	//    for (i = 0; i < sizeof(gr_palette); i++)
 	for(i=0;i<16;i++){
-		for (j = 0; j <= 20; j++){
-			for (k = 0; k <= 20; k++){
-					if(k==0 || k==20 || j==0 || j==20) DrawPixel(20+j+(i*30), c->top + k, 0x000000);
-					else DrawPixel(20+j+(i*30), c->top + k, gr_palette[i]);
+		for (j = 0; j <= size; j++){
+			for (k = 0; k <= size; k++){
+					CBGR24 tempColor=gr_palette[i];
+					if(k==0 || k==size || j==0 || j==size) tempColor=0x000000;
+					DrawPixel(size+j+(i*size), c->top + k, tempColor);
+
+
+//					if(k==0 || k==16 || j==0 || j==16) DrawPixel(16+j+(i*18), c->top + k, 0x000000);
+//					else DrawPixel(16+j+(i*18), c->top + k, gr_palette[i]);
+
 			}
 		}
-		GrPrint(dc,15+(i*30),240, "%d", i+1);
+		// GrRect(dc,16+(i*32),c->top,32+(i*32),c->top+32)
+		GrPrint(dc,(size/2)+4+(i*size),c->top - 180, "%d", i+1);
 
 	}
 	GrPrint(dc,20,c->top,"Current Color in RGB:%u,%u,%u", gr_palette[SELECTED_COLOR] & 0xFF,
@@ -112,12 +118,19 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 //	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xFCE94F, 0x000000
 //};
 
-public U0 PaletteSetTemp(Bool persistent=TRUE)
+U0 PaletteSetTemp(Bool persistent=TRUE)
 {//Activate temp palette.
 	GrPaletteSet(gr_palette);
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetTemp;
+}
+
+U0 PrintPalette(){
+	I64 i;	
+	for(i=0; i<=16; i++){
+		"%d: #%X\n",i,gr_palette[i];
+	}
 }
 
 U0 UpdateDerivedCtrlSlider(CCtrl *c)
@@ -127,17 +140,17 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 	c->right=c->left+3*SLIDER_SPACING+2;
 	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
 	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
-//	s->left_pos=ClampI64(s->left_pos,0,SLIDER_RANGE-1);
-//	s->middle_pos=ClampI64(s->middle_pos,0,SLIDER_RANGE-1);
-//	s->right_pos=ClampI64(s->right_pos,0,SLIDER_RANGE-1);
+	s->left_pos=ClampI64(s->left_pos,0,SLIDER_RANGE-1);
+	s->middle_pos=ClampI64(s->middle_pos,0,SLIDER_RANGE-1);
+	s->right_pos=ClampI64(s->right_pos,0,SLIDER_RANGE-1);
 
 //	s->left_pos  = gr_palette[SELECTED_COLOR] & 0xFF;
 //	s->middle_pos= gr_palette[SELECTED_COLOR] >> 8 & 0xFF;
 //	s->right_pos = gr_palette[SELECTED_COLOR] >> 16 & 0xFF;
 
-	s->left_pos=ClampI64(s->left_pos,gr_palette[SELECTED_COLOR] & 0xFF,SLIDER_RANGE-1);
-	s->middle_pos=ClampI64(s->middle_pos,gr_palette[SELECTED_COLOR] >> 8 & 0xFF,SLIDER_RANGE-1);
-	s->right_pos=ClampI64(s->right_pos,gr_palette[SELECTED_COLOR] >> 16 & 0xFF,SLIDER_RANGE-1);
+//	s->left_pos=ClampI64(s->left_pos,gr_palette[SELECTED_COLOR] & 0xFF,SLIDER_RANGE-1);
+//	s->middle_pos=ClampI64(s->middle_pos,gr_palette[SELECTED_COLOR] >> 8 & 0xFF,SLIDER_RANGE-1);
+//	s->right_pos=ClampI64(s->right_pos,gr_palette[SELECTED_COLOR] >> 16 & 0xFF,SLIDER_RANGE-1);
 
 	
 	I64 previewB = ClampI64(s->left_pos,0,255);	
@@ -244,23 +257,23 @@ U0 Main()
 				case MESSAGE_KEY_DOWN:
 					ch=arg1;
 					switch(ch){
-						case '1': "1";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=0;	break;
-						case '2': "2";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=1;	break;
-						case '3': "3";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=2;	break;
-						case '4': "4";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=3;	break;	
-						case '5': "5";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=4;	break;
-						case '6': "6";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=5;	break;
-						case '7': "7";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=6;	break;
-						case '8': "8";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=7;	break;
-						case '9': "9";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=8;	break;
-						case '0': "10";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=9;	break;
-						case '-': "11";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=10;	break;
-						case '=': "12";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=11;	break;
-						case 'q': "13";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=12;	break;
-						case 'w': "14";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=13;	break;
-						case 'e': "15";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=14;	break;
-						case 'r': "16";	sld.left_pos=0;sld.middle_pos=0;sld.right_pos=0; SELECTED_COLOR=15;	break;
-
+						case '1': SELECTED_COLOR=0;	 break;
+						case '2': SELECTED_COLOR=1;	 break;
+						case '3': SELECTED_COLOR=2;	 break;
+						case '4': SELECTED_COLOR=3;	 break;	
+						case '5': SELECTED_COLOR=4;	 break;
+						case '6': SELECTED_COLOR=5;	 break;
+						case '7': SELECTED_COLOR=6;	 break;
+						case '8': SELECTED_COLOR=7;	 break;
+						case '9': SELECTED_COLOR=8;	 break;
+						case '0': SELECTED_COLOR=9;	 break;
+						case '-': SELECTED_COLOR=10; break;
+						case '=': SELECTED_COLOR=11; break;
+						case 'q': SELECTED_COLOR=12; break;
+						case 'w': SELECTED_COLOR=13; break;
+						case 'e': SELECTED_COLOR=14; break;
+						case 'r': SELECTED_COLOR=15; break;
+						case 's': PrintPalette();	 break;
 						case CH_ESC:
 						case CH_SHIFT_ESC:
 							throw;
