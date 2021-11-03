@@ -6,7 +6,7 @@ See $LK,"CCtrl",A="MN:CCtrl"$.
 */
 
 //Start of autocreated Code
-#define SLIDER_RANGE	128
+#define SLIDER_RANGE	256
 #define SLIDER_SPACING	28
 #define SLIDER_BORDER	2
 
@@ -38,77 +38,55 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 				SLIDER_SPACING*2+SLIDER_RANGE-2*SLIDER_BORDER);
 	//slider
 	dc->color=BLACK;
-	GrLine(dc,c->left+1*SLIDER_SPACING+0,c->top+SLIDER_SPACING,
-				c->left+1*SLIDER_SPACING+0,c->top+SLIDER_SPACING+SLIDER_RANGE-1);
-	GrLine(dc,c->left+2*SLIDER_SPACING+1,c->top+SLIDER_SPACING,
-				c->left+2*SLIDER_SPACING+1,c->top+SLIDER_SPACING+SLIDER_RANGE-1);
-	GrLine(dc,c->left+3*SLIDER_SPACING+2,c->top+SLIDER_SPACING,
-				c->left+3*SLIDER_SPACING+2,c->top+SLIDER_SPACING+SLIDER_RANGE-1);
+	I64 SLIDER_AMOUNT=3;
+	I64 i,k,j,l;
+	for(i=1; i<=3; i++){
+		GrLine(dc,c->left+i*SLIDER_SPACING+i-1,c->top+SLIDER_SPACING, c->left+i*SLIDER_SPACING+i-1,c->top+SLIDER_SPACING+SLIDER_RANGE-1);
+	}
 	//values
 	dc->color=LTRED;
-	GrPrint(dc,c->left+1*SLIDER_SPACING+2-FONT_WIDTH/2,
-			   c->top+SLIDER_SPACING+SLIDER_RANGE+8,
-				"%d",s->left_pos*259/SLIDER_RANGE);
-	GrPrint(dc,c->left+2*SLIDER_SPACING+2-FONT_WIDTH/2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE+8,
-				"%d",s->middle_pos*259/SLIDER_RANGE);
-	GrPrint(dc,c->left+3*SLIDER_SPACING+3-FONT_WIDTH/2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE+8,
-				"%d",s->right_pos*259/SLIDER_RANGE);
-
-	GrPrint(dc,c->left+1*SLIDER_SPACING+3-FONT_WIDTH/2,
-				c->top+14,"%s","B");
-	GrPrint(dc,c->left+2*SLIDER_SPACING+3-FONT_WIDTH/2,
-				c->top+14,"%s","G");
-	GrPrint(dc,c->left+3*SLIDER_SPACING+4-FONT_WIDTH/2,
-				c->top+14,"%s","R");
-
-	//knobs
-	GrRect(dc,c->left+1*SLIDER_SPACING+0-3,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->left_pos-2,7,5);
-	GrRect(dc,c->left+2*SLIDER_SPACING+1-3,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->middle_pos-2,7,5);
-	GrRect(dc,c->left+3*SLIDER_SPACING+2-3,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->right_pos-2,7,5);
-
-	dc->color=YELLOW;
-	GrRect(dc,c->left+1*SLIDER_SPACING+0-2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->left_pos-1,5,3);
-	GrRect(dc,c->left+2*SLIDER_SPACING+1-2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->middle_pos-1,5,3);
-	GrRect(dc,c->left+3*SLIDER_SPACING+2-2,
-				c->top+SLIDER_SPACING+SLIDER_RANGE-1-s->right_pos-1,5,3);
+	I64 pos,col;
+	for(i=1; i<=3; i++){
+		if (i==1) { pos=s->left_pos;  col="B";}
+		if (i==2) { pos=s->middle_pos;col="G";}
+		if (i==3) { pos=s->right_pos; col="R";}
+		//values
+		GrPrint(dc,c->left+i*SLIDER_SPACING+i-FONT_WIDTH/2, c->top+SLIDER_SPACING+SLIDER_RANGE+8, "%d",pos);
+		//RGB label
+		GrPrint(dc,c->left+i*SLIDER_SPACING+3-FONT_WIDTH/2,c->top+14, "%s", col);
+		//knobs
+		GrRect(dc,c->left+i*SLIDER_SPACING+i-4, c->top+SLIDER_SPACING+SLIDER_RANGE-1-pos-2,7,5);
+		//inner knobs
+		//dc->color=YELLOW;
+		//GrRect(dc,c->left+i*SLIDER_SPACING+i-2, c->top+SLIDER_SPACING+SLIDER_RANGE-1-pos-1,5,3);
+	}
 
 
 	//color preview
-	I64 i, j, k;
 	I64 size=20;
-	// sizeof shows more colors?...probably cause im retarded
-	//    for (i = 0; i < sizeof(gr_palette); i++)
 	for(i=0;i<16;i++){
 		for (j = 0; j <= size; j++){
 			for (k = 0; k <= size; k++){
 					CBGR24 tempColor=gr_palette[i];
+					// black borders
 					if(k==0 || k==size || j==0 || j==size) tempColor=0x000000;
+					// color preview
 					DrawPixel(size+j+(i*size), c->top + k, tempColor);
-
-
-//					if(k==0 || k==16 || j==0 || j==16) DrawPixel(16+j+(i*18), c->top + k, 0x000000);
-//					else DrawPixel(16+j+(i*18), c->top + k, gr_palette[i]);
-
 			}
 		}
-		// GrRect(dc,16+(i*32),c->top,32+(i*32),c->top+32)
-		GrPrint(dc,(size/2)+4+(i*size),c->top - 180, "%d", i+1);
-
+		// label
+		GrPrint(dc,(size/2)+4+(i*size),c->top - 180, "%d", i+1);
 	}
-	GrPrint(dc,20,c->top,"Current Color in RGB:%u,%u,%u", gr_palette[SELECTED_COLOR] & 0xFF,
-													   gr_palette[SELECTED_COLOR] >> 8 & 0xFF,
-													   gr_palette[SELECTED_COLOR] >> 16 & 0xFF);
-	for(i=0; i <=20; i++)
-		for(j=0; j<=20; j++){			
-			if(i==0 || i==20 || j==0 || j==20) DrawPixel(300+i, c->top + 160 + j, 0x000000);	
-			else DrawPixel(300 + i, c->top + 160 + j, gr_palette[SELECTED_COLOR]);
+	// current color box preview
+	GrPrint(dc,size,c->top,"Current Color in RGB: %u,%u,%u", gr_palette[SELECTED_COLOR] & 0xFF,
+														   	 gr_palette[SELECTED_COLOR] >> 8 & 0xFF,
+													   		 gr_palette[SELECTED_COLOR] >> 16 & 0xFF);
+	// pixel loop for current color preview
+	for(i=0; i <=size; i++)
+		for(j=0; j<=size; j++){			
+			tempColor = gr_palette[SELECTED_COLOR];
+			if(i==0 || i==size || j==0 || j==size) tempColor = 0x000000;	
+			DrawPixel(300 + i, c->top + 160 + j, tempColor);
 		}
 
 }
@@ -133,13 +111,19 @@ U0 PrintPalette(){
 	}
 }
 
+U0 SelectColor(I64 color_number){
+	SELECTED_COLOR = color_number;
+}
+
 U0 UpdateDerivedCtrlSlider(CCtrl *c)
 {
 	CSliderState *s=c->state;
+
 	c->left=c->win_task->pix_width/2-(SLIDER_SPACING*3+2)/2;
 	c->right=c->left+3*SLIDER_SPACING+2;
 	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
 	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
+
 	s->left_pos=ClampI64(s->left_pos,0,SLIDER_RANGE-1);
 	s->middle_pos=ClampI64(s->middle_pos,0,SLIDER_RANGE-1);
 	s->right_pos=ClampI64(s->right_pos,0,SLIDER_RANGE-1);
@@ -148,16 +132,18 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 //	s->middle_pos= gr_palette[SELECTED_COLOR] >> 8 & 0xFF;
 //	s->right_pos = gr_palette[SELECTED_COLOR] >> 16 & 0xFF;
 
-//	s->left_pos=ClampI64(s->left_pos,gr_palette[SELECTED_COLOR] & 0xFF,SLIDER_RANGE-1);
+//	s->left_pos=ClampI64(s->left_pos,gr_palette[SELECTED_COLOR] & 0xFF, SLIDER_RANGE-1);
 //	s->middle_pos=ClampI64(s->middle_pos,gr_palette[SELECTED_COLOR] >> 8 & 0xFF,SLIDER_RANGE-1);
 //	s->right_pos=ClampI64(s->right_pos,gr_palette[SELECTED_COLOR] >> 16 & 0xFF,SLIDER_RANGE-1);
 
 	
-	I64 previewB = ClampI64(s->left_pos,0,255);	
-	I64 previewG = ClampI64(s->middle_pos,0,255);
-	I64 previewR = ClampI64(s->right_pos,0,255);
+	//I64 previewB = ClampI64(s->left_pos,0,255);	
+	//I64 previewG = ClampI64(s->middle_pos,0,255);
+	//I64 previewR = ClampI64(s->right_pos,0,255);
 
-	s->preview = previewB + previewG << 8 + previewR << 16;
+	//s->preview = previewB + previewG << 8 + previewR << 16;
+	
+	s->preview = s->left_pos + s->middle_pos << 8 + s->right_pos << 16;	
 	
 	//gr_palette_temp = GrPaletteGet;	
 	//gr_palette_temp[2] = preview*2;
@@ -179,7 +165,7 @@ U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 		(*c->update_derived_vals)(c);
 
 	// set palette
-	gr_palette[SELECTED_COLOR] = s->preview*2;
+	gr_palette[SELECTED_COLOR] = s->preview;
 	PaletteSetTemp;
 	LFBFlush; //why is this used?
 }
@@ -226,7 +212,7 @@ U0 Main()
 		"}"
 		);
 
-	AutoComplete;
+	//AutoComplete;
 	//WinBorder;
 	//WinMax;
 
@@ -241,9 +227,9 @@ U0 Main()
 	//PressAKey;
 	//"Left: %d Middle:%d Right: %d\n",
 
-	sld.left_pos*10/SLIDER_RANGE,
-	sld.middle_pos*10/SLIDER_RANGE,
-	sld.right_pos*10/SLIDER_RANGE;
+	//sld.left_pos*1/SLIDER_RANGE,
+	//sld.middle_pos*1/SLIDER_RANGE,
+	//sld.right_pos*1/SLIDER_RANGE;
 
 	I64 arg1,arg2,ch=0,sc=0;
 	
@@ -257,23 +243,23 @@ U0 Main()
 				case MESSAGE_KEY_DOWN:
 					ch=arg1;
 					switch(ch){
-						case '1': SELECTED_COLOR=0;	 break;
-						case '2': SELECTED_COLOR=1;	 break;
-						case '3': SELECTED_COLOR=2;	 break;
-						case '4': SELECTED_COLOR=3;	 break;	
-						case '5': SELECTED_COLOR=4;	 break;
-						case '6': SELECTED_COLOR=5;	 break;
-						case '7': SELECTED_COLOR=6;	 break;
-						case '8': SELECTED_COLOR=7;	 break;
-						case '9': SELECTED_COLOR=8;	 break;
-						case '0': SELECTED_COLOR=9;	 break;
-						case '-': SELECTED_COLOR=10; break;
-						case '=': SELECTED_COLOR=11; break;
-						case 'q': SELECTED_COLOR=12; break;
-						case 'w': SELECTED_COLOR=13; break;
-						case 'e': SELECTED_COLOR=14; break;
-						case 'r': SELECTED_COLOR=15; break;
-						case 's': PrintPalette();	 break;
+						case '1': SelectColor(0); break;
+						case '2': SelectColor(1); break;
+						case '3': SelectColor(2); break;
+						case '4': SelectColor(3); break;	
+						case '5': SelectColor(4); break;
+						case '6': SelectColor(5); break;
+						case '7': SelectColor(6); break;
+						case '8': SelectColor(7); break;
+						case '9': SelectColor(8); break;
+						case '0': SelectColor(9); break;
+						case '-': SelectColor(10);break;
+						case '=': SelectColor(11);break;
+						case 'q': SelectColor(12);break;
+						case 'w': SelectColor(13);break;
+						case 'e': SelectColor(14);break;
+						case 'r': SelectColor(15);break;
+						case 's': PrintPalette(); break;
 						case CH_ESC:
 						case CH_SHIFT_ESC:
 							throw;
