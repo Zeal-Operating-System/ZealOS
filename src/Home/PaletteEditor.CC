@@ -6,7 +6,7 @@ See $LK,"CCtrl",A="MN:CCtrl"$.
 */
 
 //Start of autocreated Code
-#define SLIDER_RANGE	256
+#define SLIDER_RANGE	255
 #define SLIDER_SPACING	28
 #define SLIDER_BORDER	2
 
@@ -28,59 +28,83 @@ I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 
 U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 {
+
 	CSliderState *s=c->state;
+
+
 	//box
+
 	dc->color=LTRED;
-	GrRect(dc, c->left,c->top,SLIDER_SPACING*4+2,SLIDER_SPACING*2+SLIDER_RANGE);
+	GrRect(dc,	c->left,
+				c->top,
+				SLIDER_SPACING*4+2,
+				SLIDER_SPACING*2+SLIDER_RANGE);
 	dc->color=BLUE;
-	GrRect(dc, c->left+SLIDER_BORDER,c->top+SLIDER_BORDER,
+	GrRect(dc,	c->left+SLIDER_BORDER,
+				c->top+SLIDER_BORDER,
 				SLIDER_SPACING*4+2-2*SLIDER_BORDER,
 				SLIDER_SPACING*2+SLIDER_RANGE-2*SLIDER_BORDER);
+
 	//slider
+
 	dc->color=BLACK;
+
 	I64 SLIDER_AMOUNT=3;
 	I64 i,k,j,l;
 	for(i=1; i<=3; i++){
-		GrLine(dc,c->left+i*SLIDER_SPACING+i-1,c->top+SLIDER_SPACING, c->left+i*SLIDER_SPACING+i-1,c->top+SLIDER_SPACING+SLIDER_RANGE-1);
+		GrLine(dc,	c->left+i*SLIDER_SPACING+i-1,
+					c->top+SLIDER_SPACING,
+					c->left+i*SLIDER_SPACING+i-1,
+					c->top+SLIDER_SPACING+SLIDER_RANGE-1);
 	}
+
 	//values
+
 	dc->color=LTRED;
 	I64 pos,col;
+
 	for(i=1; i<=3; i++){
+
 		if (i==1) { pos=s->left_pos;  col="B";}
 		if (i==2) { pos=s->middle_pos;col="G";}
 		if (i==3) { pos=s->right_pos; col="R";}
+
 		//values
-		GrPrint(dc,c->left+i*SLIDER_SPACING+i-FONT_WIDTH/2, c->top+SLIDER_SPACING+SLIDER_RANGE+8, "%d",pos);
+		GrPrint(dc,	c->left+i*SLIDER_SPACING+i-FONT_WIDTH/2,
+					c->top+SLIDER_SPACING+SLIDER_RANGE+8,
+					"%d",pos);
 		//RGB label
-		GrPrint(dc,c->left+i*SLIDER_SPACING+3-FONT_WIDTH/2,c->top+14, "%s", col);
+		GrPrint(dc,	c->left+i*SLIDER_SPACING+3-FONT_WIDTH/2,
+					c->top+14,
+					"%s", col);
 		//knobs
-		GrRect(dc,c->left+i*SLIDER_SPACING+i-4, c->top+SLIDER_SPACING+SLIDER_RANGE-1-pos-2,7,5);
-		//inner knobs
-		//dc->color=YELLOW;
-		//GrRect(dc,c->left+i*SLIDER_SPACING+i-2, c->top+SLIDER_SPACING+SLIDER_RANGE-1-pos-1,5,3);
+		GrRect(dc,	c->left+i*SLIDER_SPACING+i-4,
+					c->top+SLIDER_SPACING+SLIDER_RANGE-1-pos-2,
+					7,5);
 	}
 
 
 	//color preview
 	I64 size=20;
+
 	for(i=0;i<16;i++){
 		for (j = 0; j <= size; j++){
 			for (k = 0; k <= size; k++){
-					CBGR24 tempColor=gr_palette[i];
-					// black borders
-					if(k==0 || k==size || j==0 || j==size) tempColor=0x000000;
-					// color preview
-					DrawPixel(size+j+(i*size), c->top + k, tempColor);
+				CBGR24 tempColor=gr_palette[i];
+				// black borders
+				if(k==0 || k==size || j==0 || j==size) tempColor=0x000000;
+				// color preview
+				DrawPixel(size+j+(i*size), c->top + k, tempColor);
 			}
 		}
 		// label
 		GrPrint(dc,(size/2)+4+(i*size),c->top - 180, "%d", i+1);
 	}
+
 	// current color box preview
-	GrPrint(dc,size,c->top,"Current Color in RGB: %u,%u,%u", gr_palette[SELECTED_COLOR] & 0xFF,
-														   	 gr_palette[SELECTED_COLOR] >> 8 & 0xFF,
-													   		 gr_palette[SELECTED_COLOR] >> 16 & 0xFF);
+	GrPrint(dc,size,c->top,"Current Color in RGB: %u,%u,%u", gr_palette[SELECTED_COLOR].r,
+														   	 gr_palette[SELECTED_COLOR].g,
+													   		 gr_palette[SELECTED_COLOR].b);
 	// pixel loop for current color preview
 	for(i=0; i <=size; i++)
 		for(j=0; j<=size; j++){			
@@ -91,43 +115,37 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 }
 
-//public CBGR24 gr_palette_temp[16] = {
-//	0xFFFFFF, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xCE982F, 0xBCC0B9,
-//	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xFCE94F, 0x000000
-//};
 
 U0 FESave(Bool prompt)
 {
 	//U8		 old_draw_it = Fs->draw_it;
 	CDoc	*doc = DocNew;
 	I64		 i;
-	I64		 name="blue";
- 
-	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {
-	", name);
+	U8		 tmp_name= doc->filename.name;
+	U8		 name;
+	//StrLastRemove(tmp_name,".", name);
+	//StrFirstRemove(tmp_name,"/", name);
+	
+	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {\n	", name);
 	
 	for (i = 0; i < 16; i++)
 	{
 		if (i == 15) DocPrint(doc, "0x%X", gr_palette[i]);
 		else DocPrint(doc, "0x%X, ", gr_palette[i]);
 
-		if (i == 7) {
-			DocPrint(doc, "
-	");
+		if (i == 7) {
+			DocPrint(doc, "\n	");
 		}
 	}
 	
-	DocPrint(doc, "
-};
-
-public U0 PaletteSetBlue(Bool persistent=TRUE)
-{
-	GrPaletteSet(gr_palette_%s);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetBlue;
-}",name);
-
+	DocPrint(doc,"\n};
+				\n\n
+				public U0 PaletteSet%s(Bool persistent=TRUE)\n
+				{\n	GrPaletteSet(gr_palette_%s);\n
+					LFBFlush;\n
+					if (persistent)\n
+						fp_set_std_palette = &PaletteSet%s\n
+				}",name,name,name);
 	DocWrite(doc, prompt);
 	DocDel(doc);
 }
@@ -152,18 +170,23 @@ U0 SelectColor(I64 color_number, CCtrl *c){
 	SELECTED_COLOR = color_number;
 	CSliderState *s=c->state;
 
-	s->left_pos  = gr_palette[SELECTED_COLOR] & 0xFF;
-	s->middle_pos= gr_palette[SELECTED_COLOR] >> 8 & 0xFF;
-	s->right_pos = gr_palette[SELECTED_COLOR] >> 16 & 0xFF;
+	s->left_pos  = gr_palette[SELECTED_COLOR].r;
+	s->middle_pos= gr_palette[SELECTED_COLOR].g;
+	s->right_pos = gr_palette[SELECTED_COLOR].b;
 }
 
 U0 UpdateDerivedCtrlSlider(CCtrl *c)
 {
 	CSliderState *s=c->state;
 
-	c->left=c->win_task->pix_width/2-(SLIDER_SPACING*3+2)/2;
+//	c->left=c->win_task->pix_width/2-(SLIDER_SPACING*3+2)/2;
+//	c->right=c->left+3*SLIDER_SPACING+2;
+//	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
+//	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
+
+	c->left=c->win_task->pix_width/2;
 	c->right=c->left+3*SLIDER_SPACING+2;
-	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
+	c->top=c->win_task->pix_height/3;
 	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
 
 	// I used to clamp between 0 and 127 and do math but i changed it to 256 for now.
@@ -172,13 +195,14 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 	s->right_pos=ClampI64(s->right_pos,0,SLIDER_RANGE);
 
 	// add the slider's BGR value to s->preview
-	s->preview = s->left_pos + s->middle_pos << 8 + s->right_pos << 16;	
-
+	s->preview = s->left_pos + s->middle_pos << 8 + s->right_pos << 16;
 }
+
 
 U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 {
 	CSliderState *s=c->state;
+
 	if (x<c->left+1*SLIDER_SPACING+0+SLIDER_SPACING/3)
 		s->left_pos=SLIDER_RANGE-1-(y-(c->top+SLIDER_SPACING));
 
@@ -193,7 +217,6 @@ U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 	// set palette
 	gr_palette[SELECTED_COLOR] = s->preview;
 	PaletteSetTemp(FALSE);
-	LFBFlush; //why is this used?
 }
 
 CCtrl *SliderNew()
@@ -224,6 +247,9 @@ U0 Main()
 {
 
 	SettingsPush;
+	WinBorder;
+	WinMax;
+	WinHorz(0, 50, Fs);
 	MenuPush(
 		"File {"
 		"	New(,'.');"
@@ -241,7 +267,9 @@ U0 Main()
 	//AutoComplete;
 	//WinBorder;
 	//WinMax;
-
+	//WinTileVert;
+	//	WinHorz(50,Fs->win_right);
+	//	WinVert(3, Fs->win_bottom);
 	//dirname=StrNew("~/Palettes");
 
 	MenuPop;
