@@ -1,18 +1,18 @@
 /* Gopher client for TempleOS/Sockets
    by Declan Hoare 2020
-   ported to ZealOS by TomAwezome in 2021
+   ported to ZealOS and modified by TomAwezome in 2021
    Public Domain - No Warranty */
 
 #define GOPHER_CLIENT_LOADED
 
 #ifndef GOPHER_ASSOCIATIONS
 #define GOPHER_ASSOCIATIONS
-U8* gopher_associations[256];
+U8 *gopher_associations[256];
 #endif
 
-I64 GopherOpen(U8* host, U16 port, U8* selector, U8* query)
+I64 GopherOpen(U8 *host, U16 port, U8 *selector, U8 *query)
 {
-	U8* line;
+	U8 *line;
 	I64 sock;
 	
 	if (host == NULL)
@@ -37,8 +37,7 @@ I64 GopherOpen(U8* host, U16 port, U8* selector, U8* query)
 		line = StrPrint(NULL, "%s\t%s\r\n", selector, query);
 	}
 
-	sock(CTCPSocket *)->timeout = TCP_TIMEOUT*5;
-
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT * 5;
 
 //	sendString(sock, line, 0);
 	TCPSocketSendString(sock, line);
@@ -47,13 +46,15 @@ I64 GopherOpen(U8* host, U16 port, U8* selector, U8* query)
 	return sock;
 }
 
-public I64 GopherDl
-(U8* host, U16 port = 70, U8* selector, U8* query = NULL, U8* dest)
+#define GOPHER_BUFF_SIZE	BLK_SIZE * 64
+
+public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 *dest)
 {
-	CFile* f;
-	U8 buf[BLK_SIZE];
-	I64 data_len = 0, total_len = 0, got, sock;
-	
+	CFile	*f;
+	U8		 buf[BLK_SIZE];
+//	U8		 buf[GOPHER_BUFF_SIZE];
+	I64		 data_len = 0, total_len = 0, got, sock;
+
 	f = FOpen(dest, "w");
 	if (!f)
 	{
@@ -62,7 +63,7 @@ public I64 GopherDl
 	}
 	
 	sock = GopherOpen(host, port, selector, query);
-	if (sock < 0)
+	if (sock <= 0)
 	{
 		return sock;
 	}
@@ -74,6 +75,7 @@ public I64 GopherDl
 		if (got <= 0)
 		{
 			if (data_len != 0 && !FBlkWrite(f, buf))
+//			if (data_len != 0 && !FBlkWrite(f, buf,, GOPHER_BUFF_SIZE))
 			{
 				break;
 			}
@@ -84,23 +86,27 @@ public I64 GopherDl
 		data_len += got;
 		total_len += got;
 		if (data_len == BLK_SIZE)
+//		if (data_len == GOPHER_BUFF_SIZE)
 		{
 			if (!FBlkWrite(f, buf))
+//			if (!FBlkWrite(f, buf,, GOPHER_BUFF_SIZE))
 			{
 				break;
 			}
 			data_len = 0;
 		}
 	}
+
 	PrintErr("Write failed, %s may be corrupted\n", dest);
 	FClose(f);
 	return -1;
+
 }
 
-U0 PrintEscaped(U8* txt, U8* backslashes = "")
+U0 PrintEscaped(U8 *txt, U8 *backslashes = "")
 {
-	U8* cur;
-	U8 offending;
+	U8 *cur;
+	U64 offending;
 	
 	while (cur = StrFirstOcc(txt, "$$\\\""))
 	{
@@ -116,26 +122,39 @@ U0 PrintEscaped(U8* txt, U8* backslashes = "")
 		}
 		txt = cur + 1;
 	}
+
 	"%s", txt;
 }
 
-U8* GopherBasename(U8* selector)
+U8 *GopherBasename(U8 *selector)
 {
-	U8* lastslash = StrLastOcc(selector, "/");
+	U8 *lastslash = StrLastOcc(selector, "/"), *result;
+
 	if (lastslash == NULL)
 	{
-		return selector;
+		result = selector;
 	}
 	else
 	{
-		return lastslash + 1;
+		result = lastslash + 1;
 	}
+
+	//BAD FOR FILENAMES: ? / | = % 
+	result = StrReplace(result, "?", "");
+	result = StrReplace(result, "/", "",, TRUE);
+	result = StrReplace(result, "|", "",, TRUE);
+	result = StrReplace(result, "=", "",, TRUE);
+	result = StrReplace(result, "%", "",, TRUE);
+//	result = StrNew("TEST.TXT");
+	SysLog("%s\n", result);
+
+	return result;
 }
 
-U0 GopherTextView(U8* host, U16 port, U8* selector)
+U0 GopherTextView(U8 *host, U16 port, U8 *selector)
 {
-	U8* basename;
-	U8* tmpname;
+	U8 *basename;
+	U8 *tmpname;
 	
 	DirMake("::/Tmp/Gopher");
 	
@@ -155,12 +174,12 @@ U0 GopherTextView(U8* host, U16 port, U8* selector)
 	Free(tmpname);
 }
 
-U0 GopherLine(U8* line)
+U0 GopherLine(U8 *line)
 {
-	U8 type;
-	U8* display;
-	U8* selector;
-	U8* host = NULL;
+	U64 type;
+	U8 *display;
+	U8 *selector;
+	U8 *host = NULL;
 	U16 port = 0;
 	
 	if (*line == 0)
@@ -202,7 +221,7 @@ U0 GopherLine(U8* line)
 	}
 
 	if (!*host)
-		return;
+		return;
 
 	switch (type)
 	{
@@ -223,11 +242,10 @@ U0 GopherLine(U8* line)
 	"\n";
 }
 
-public I64 GopherMenu
-(U8* host, U16 port = 70, U8* selector = "/", U8* query = NULL)
+public I64 GopherMenu(U8 *host, U16 port = 70, U8 *selector = "/", U8 *query = NULL)
 {
 	I64 sock, n;
-	U8 buf[256];
+	U8  buf[256];
 	
 	sock = GopherOpen(host, port, selector, query);
 	if (sock <= 0)
@@ -256,7 +274,7 @@ class CQueryForm
 {
 	U8 query[65] format "$$DA-P,A=\"Query:%s\"$$";
 };
-U0 GopherQueryPrompt(U8* host, U16 port, U8* selector)
+U0 GopherQueryPrompt(U8 *host, U16 port, U8 *selector)
 {
 	CQueryForm form;
 	
@@ -271,12 +289,13 @@ class CDlForm
 {
 	U8 name[256] format "$$DA-P,LEN=255,A=\"FileName:%s\"$$";
 };
-U0 GopherDlPrompt(U8* host, U16 port, U8* selector)
+U0 GopherDlPrompt(U8 *host, U16 port, U8 *selector)
 {
-	CDlForm form;
-	U8* basename;
+	CDlForm	 form;
+	U8		*basename;
 	
 	basename = GopherBasename(selector);
+	MemSet(form.name, 0, 256);
 	MemCopy(form.name, basename,
 		MinI64(StrLen(basename), sizeof(form.name) - 1));
 	form.name[255] = 0;
@@ -286,11 +305,21 @@ U0 GopherDlPrompt(U8* host, U16 port, U8* selector)
 	}
 }
 
+public I64 Gopher(U8 *hostname)
+{
+	return GopherMenu(hostname);
+}
+
 MemSetI64(gopher_associations, "GopherDlPrompt", 256);
 gopher_associations['0'] = "GopherTextView";
 gopher_associations['1'] = "GopherMenu";
 gopher_associations['7'] = "GopherQueryPrompt";
-/* Include this file from your HomeSys, then add more associations */
+/* Include this file from your Net/Load.CC, then add more associations */
 
-"\n\nTry using GopherMenu to connect to a gopher server, for example:\n\n"
-"          $FG,2$GopherMenu(\"gopher.floodgap.com\");$FG$\n\n";
+
+DocMax;
+"\n\nTry using Gopher to connect to a gopher server, for example:"
+"\n\n$FG,2$          Gopher(\"gopher.floodgap.com\");$FG$"
+"\n\n$FG,2$          GopherMenu(\"eyeblea.ch\",70,\"/~zealos\");$FG$"
+"\n\n$FG,2$          Gopher(\"codevoid.de\");$FG$"
+"\n\n";

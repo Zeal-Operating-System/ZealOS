@@ -150,7 +150,7 @@ public U0 ACInit(U8 *mask=NULL)
 		ACMainFileListTraverse(mask);
 
 	ACDWordsLoad;
-	RegDefault("AutoComplete", "ac.col = TEXT_COLS-31;ac.row = 10;");
+	RegDefault("AutoComplete", "ac.col = TEXT_COLS-34;ac.row = 10;");
 	RegExe("AutoComplete");
 	LBtr(&ac.flags, ACf_INIT_IN_PROGRESS);
 	LBts(&sys_run_level, RLf_AUTOCOMPLETE);

@@ -276,6 +276,9 @@ I64 TCPHandleRefuse(CIPV4Packet *packet, CTCPHeader *header, I64 length)
 
 	// review RFC Reset-Generation ...
 
+	if (Bt(&header->flags, TCPf_RST) && Bt(&header->flags, TCPf_ACK))
+		return 0; // bail: we probably sent an RST earlier, and this is the acknowledgement
+
 	de_index = TCPSend(packet->destination_ip_address,
 					   EndianU16(header->destination_port),
 					   packet->source_ip_address,
