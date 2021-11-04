@@ -77,7 +77,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 					"%d",pos);
 		//RGB label
 		GrPrint(dc,	c->left+i*SLIDER_SPACING+3-FONT_WIDTH/2,
-					c->top+14,
+					c->top+14,
 					"%s", col);
 		//knobs
 		GrRect(dc,	c->left+i*SLIDER_SPACING+i-4,
@@ -107,13 +107,13 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		dc->color=BLACK;
 		if(i==15) {
 			GrRect(dc,(size*15)+size/4,(size+size/12),size-size/2,size/6);
-			GrRect(dc,6,(size*2)+65+16*i,56,18);
+			GrRect(dc,6,(size*2)+65+16*i,80,18);
 		}	
 		dc->color=i;
 		I64 bias=(size/2)-4;
 		if(i >= 9) bias = (size/2)-8;
 		GrPrint(dc,bias+(i*size),size+size/8, "%d", i+1);
-		GrPrint(dc,10,(size*2)+70+16*i,"//Test");
+		GrPrint(dc,10,(size*2)+70+16*i,"#%d: Test",i+1);
 		
 	}
 
@@ -128,7 +128,8 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 			DrawPixel(c->win_task->pix_left + 78 + i, c->win_task->pix_top + (size*2)-8 + j, tempColor);
 		}
 	GrPrint(dc,10,(size*2)+20,"Current Color: #%d",	SELECTED_COLOR+1);
-	GrPrint(dc,10,(size*2)+40,"RGB: #%x%x%x",	gr_palette[SELECTED_COLOR].r,
+	dc->color=SELECTED_COLOR;
+	GrPrint(dc,10,(size*2)+40,"#%x%x%x",gr_palette[SELECTED_COLOR].r,
 										gr_palette[SELECTED_COLOR].g,
 										gr_palette[SELECTED_COLOR].b);
 
