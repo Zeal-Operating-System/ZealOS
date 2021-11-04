@@ -77,7 +77,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 					"%d",pos);
 		//RGB label
 		GrPrint(dc,	c->left+i*SLIDER_SPACING+3-FONT_WIDTH/2,
-					c->top+14,
+					c->top+14,
 					"%s", col);
 		//knobs
 		GrRect(dc,	c->left+i*SLIDER_SPACING+i-4,
@@ -91,7 +91,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 	I64 border=size/16;
 
 	dc->color=8;
-	GrRect(dc,0,size,c->win_task->pix_width,(size/3));
+	GrRect(dc,0,c->win_task->pix_height + size*1.5 - size*2 ,c->win_task->pix_width,size*0.75);
 
 	for(i=0;i<16;i++){
 		for (j = 0; j <= size; j++){
@@ -100,36 +100,39 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 				// black borders
 				if(k<border || k>size-border || j < border || j>size-border) tempColor=0x000000;
 				// color preview
-				DrawPixel(c->win_task->pix_left + j + (size*i), c->win_task->pix_top + k, tempColor);
+				DrawPixel(c->win_task->pix_left + j + (size*i), c->win_task->pix_bottom - size*1.5 + k, tempColor);
 			}
 		}
 		// color label and text preview
 		dc->color=BLACK;
 		if(i==15) {
-			GrRect(dc,(size*15)+size/4,(size+size/12),size-size/2,size/6);
+			GrRect(dc,(size*15),c->win_task->pix_height-(size-size/2),size,size*1.5);
 			GrRect(dc,6,(size*2)+65+16*i,80,18);
 		}	
 		dc->color=i;
 		I64 bias=(size/2)-4;
 		if(i >= 9) bias = (size/2)-8;
-		GrPrint(dc,bias+(i*size),size+size/8, "%d", i+1);
+		//	if(i == SELECTED_COLOR){
+		//	blink selected color coroutine?	
+		//}
+		GrPrint(dc,bias+(i*size),c->win_task->pix_height-(size*.6)+(size/4), "%d", i+1);
 		GrPrint(dc,10,(size*2)+70+16*i,"#%d: Test",i+1);
-		
+			
 	}
 
 	// current color box preview
 	dc->color=BLACK;
-	GrPrint(dc,10,size*2,"Preview:");
+	GrPrint(dc,10,10,"Preview:");
 	// pixel loop for current color preview
-	for(i=0; i <=size/5; i++)
-		for(j=0; j<=size/5; j++){			
+	for(i=0; i <=12; i++)
+		for(j=0; j<=12; j++){
 			tempColor = gr_palette[SELECTED_COLOR];
-			if(i<border/2 || i>(size/5)-border/2 || j<border/2 || j>(size/5)-border/2) tempColor = 0x000000;	
-			DrawPixel(c->win_task->pix_left + 78 + i, c->win_task->pix_top + (size*2)-8 + j, tempColor);
+			if(i<border/2 || i>12-border/2 || j<border/2 || j>12-border/2) tempColor = 0x000000;	
+			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
 		}
-	GrPrint(dc,10,(size*2)+20,"Current Color: #%d",	SELECTED_COLOR+1);
+	GrPrint(dc,10,26,"Current Color: #%d",	SELECTED_COLOR+1);
 	dc->color=SELECTED_COLOR;
-	GrPrint(dc,10,(size*2)+40,"#%x%x%x",gr_palette[SELECTED_COLOR].r,
+	GrPrint(dc,95,10,"#%x%x%x",gr_palette[SELECTED_COLOR].r,
 										gr_palette[SELECTED_COLOR].g,
 										gr_palette[SELECTED_COLOR].b);
 
@@ -204,9 +207,9 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 //	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
 //	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
 
-	c->left=c->win_task->pix_width/2;
+	c->left=(c->win_task->pix_width/2)-(SLIDER_SPACING*3+2)/2;
 	c->right=c->left+3*SLIDER_SPACING+2;
-	c->top=c->win_task->pix_height/3;
+	c->top=c->win_task->pix_height/2-(SLIDER_SPACING*2+SLIDER_RANGE)/2;
 	c->bottom=c->top+SLIDER_SPACING*2+SLIDER_RANGE;
 
 	// I used to clamp between 0 and 127 and do math but i changed it to 256 for now.
@@ -277,7 +280,7 @@ U0 SliderDel(CCtrl *c)
 
 //End of autocreated Code
 
-U0 Main()
+public U0 PaletteEditor()
 {
 
 	SettingsPush;
@@ -310,7 +313,13 @@ U0 Main()
 	CCtrl *c=SliderNew;
 
 	I64 arg1,arg2,ch=0,sc=0;
-	
+
+	// windowed	
+	c->win_task->win_left = 92;
+	c->win_task->win_right = c->win_task->win_width - 95;
+	c->win_task->win_top = 40;
+	c->win_task->win_bottom = c->win_task->win_height - 20;
+
 	// init pos for 32bit redraw
 	l=c->win_task->pix_left;
 	r=c->win_task->pix_right;
@@ -361,4 +370,4 @@ U0 Main()
 
 }
 
-Main;
+PaletteEditor;
