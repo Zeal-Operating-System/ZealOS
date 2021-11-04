@@ -115,7 +115,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		//	if(i == SELECTED_COLOR){
 		//	blink selected color coroutine?	
 		//}
-		GrPrint(dc,bias+(i*size),c->win_task->pix_height-(size*.6)+(size/4), "%d", i+1);
+		GrPrint(dc,bias+(i*size),c->win_task->pix_height-(size*.6)+(size/4), "%d", i+1);
 		GrPrint(dc,10,(size*2)+70+16*i,"#%d: Test",i+1);
 			
 	}
@@ -139,7 +139,12 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 }
 
 
-U0 FESave(Bool prompt)
+U0 PELoad(Bool prompt)
+{
+	"TODO: Load A Palette\n";	
+}
+
+U0 PESave(Bool prompt)
 {
 	//U8		 old_draw_it = Fs->draw_it;
 	CDoc	*doc = DocNew;
@@ -297,28 +302,19 @@ public U0 PaletteEditor()
 		"	Help(,,SC_F1);"
 		"}"
 		);
-
-	//AutoComplete;
-	//WinBorder;
-	//WinMax;
-	//WinTileVert;
-	//	WinHorz(50,Fs->win_right);
-	//	WinVert(3, Fs->win_bottom);
-	//dirname=StrNew("~/Palettes");
-
 	MenuPop;
-	DocClear;
 	SettingsPop;
+	DocClear;
 
 	CCtrl *c=SliderNew;
 
 	I64 arg1,arg2,ch=0,sc=0;
 
 	// windowed	
-	c->win_task->win_left = 92;
-	c->win_task->win_right = c->win_task->win_width - 95;
-	c->win_task->win_top = 40;
-	c->win_task->win_bottom = c->win_task->win_height - 20;
+	c->win_task->win_left = 60;
+	c->win_task->win_right = c->win_task->win_width - 65;
+	c->win_task->win_top = 20;
+	c->win_task->win_bottom = c->win_task->win_height;
 
 	// init pos for 32bit redraw
 	l=c->win_task->pix_left;
@@ -326,6 +322,7 @@ public U0 PaletteEditor()
 	t=c->win_task->pix_top;
 	b=c->win_task->pix_bottom;
 
+	SelectColor(0,c);
 
 	try {
 		while(TRUE) {
@@ -349,8 +346,9 @@ public U0 PaletteEditor()
 						case 'w': SelectColor(13,c);break;
 						case 'e': SelectColor(14,c);break;
 						case 'r': SelectColor(15,c);break;
-						case 's': PalettePrint(); 	break;
-						case CH_CTRLA: FESave(TRUE); break;
+						//case 's': PalettePrint;		break;
+						case CH_CTRLO: PELoad(TRUE);break;
+						case CH_CTRLA: PESave(TRUE);break;
 						//case CH_CTRLT: LFBFlush; break;
 						case CH_ESC:
 						case CH_SHIFT_ESC:
