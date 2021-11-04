@@ -96,6 +96,43 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 //	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xFCE94F, 0x000000
 //};
 
+U0 FESave(Bool prompt)
+{
+	//U8		 old_draw_it = Fs->draw_it;
+	CDoc	*doc = DocNew;
+	I64		 i;
+	I64		 name="blue";
+ 
+	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {
+	", name);
+	
+	for (i = 0; i < 16; i++)
+	{
+		if (i == 15) DocPrint(doc, "0x%X", gr_palette[i]);
+		else DocPrint(doc, "0x%X, ", gr_palette[i]);
+
+		if (i == 7) {
+			DocPrint(doc, "
+	");
+		}
+	}
+	
+	DocPrint(doc, "
+};
+
+public U0 PaletteSetBlue(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_%s);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetBlue;
+}",name);
+
+	DocWrite(doc, prompt);
+	DocDel(doc);
+}
+
+
 U0 PaletteSetTemp(Bool persistent=TRUE)
 {//Activate temp palette.
 	GrPaletteSet(gr_palette);
@@ -104,9 +141,9 @@ U0 PaletteSetTemp(Bool persistent=TRUE)
 		fp_set_std_palette = &PaletteSetTemp;
 }
 
-U0 PrintPalette(){
+U0 PalettePrint(){
 	I64 i;	
-	for(i=0; i<=16; i++){
+	for(i=0; i<16; i++){
 		"%d: #%X\n",i,gr_palette[i];
 	}
 }
@@ -155,7 +192,7 @@ U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 
 	// set palette
 	gr_palette[SELECTED_COLOR] = s->preview;
-	PaletteSetTemp;
+	PaletteSetTemp(FALSE);
 	LFBFlush; //why is this used?
 }
 
@@ -241,7 +278,8 @@ U0 Main()
 						case 'w': SelectColor(13,c);break;
 						case 'e': SelectColor(14,c);break;
 						case 'r': SelectColor(15,c);break;
-						case 's': PrintPalette(); break;
+						case 's': PalettePrint(); break;
+						case CH_CTRLA: FESave(TRUE); break;
 						case CH_ESC:
 						case CH_SHIFT_ESC:
 							throw;
