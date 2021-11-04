@@ -12,6 +12,11 @@ See $LK,"CCtrl",A="MN:CCtrl"$.
 
 I64 SELECTED_COLOR = 0;
 
+
+
+I64 l,r,t,b;
+
+
 class CSliderState
 {
 	I64 left_pos;
@@ -24,6 +29,7 @@ class CSliderState
 I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 {
 	text.fb_alias[x + y * GR_WIDTH] = color;
+
 }
 
 U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
@@ -31,9 +37,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 	CSliderState *s=c->state;
 
-
 	//box
-
 	dc->color=LTRED;
 	GrRect(dc,	c->left,
 				c->top,
@@ -46,11 +50,10 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 				SLIDER_SPACING*2+SLIDER_RANGE-2*SLIDER_BORDER);
 
 	//slider
-
 	dc->color=BLACK;
-
 	I64 SLIDER_AMOUNT=3;
 	I64 i,k,j,l;
+
 	for(i=1; i<=3; i++){
 		GrLine(dc,	c->left+i*SLIDER_SPACING+i-1,
 					c->top+SLIDER_SPACING,
@@ -59,7 +62,6 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 	}
 
 	//values
-
 	dc->color=LTRED;
 	I64 pos,col;
 
@@ -85,33 +87,50 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 
 	//color preview
-	I64 size=20;
+	I64 size=(c->win_task->pix_width/16);
+	I64 border=size/16;
+
+	dc->color=8;
+	GrRect(dc,0,size,c->win_task->pix_width,(size/3));
 
 	for(i=0;i<16;i++){
 		for (j = 0; j <= size; j++){
 			for (k = 0; k <= size; k++){
 				CBGR24 tempColor=gr_palette[i];
 				// black borders
-				if(k==0 || k==size || j==0 || j==size) tempColor=0x000000;
+				if(k<border || k>size-border || j < border || j>size-border) tempColor=0x000000;
 				// color preview
-				DrawPixel(size+j+(i*size), c->top + k, tempColor);
+				DrawPixel(c->win_task->pix_left + j + (size*i), c->win_task->pix_top + k, tempColor);
 			}
 		}
-		// label
-		GrPrint(dc,(size/2)+4+(i*size),c->top - 180, "%d", i+1);
+		// color label and text preview
+		dc->color=BLACK;
+		if(i==15) {
+			GrRect(dc,(size*15)+size/4,(size+size/12),size-size/2,size/6);
+			GrRect(dc,6,(size*2)+65+16*i,56,18);
+		}	
+		dc->color=i;
+		I64 bias=(size/2)-4;
+		if(i >= 9) bias = (size/2)-8;
+		GrPrint(dc,bias+(i*size),size+size/8, "%d", i+1);
+		GrPrint(dc,10,(size*2)+70+16*i,"//Test");
+		
 	}
 
 	// current color box preview
-	GrPrint(dc,size,c->top,"Current Color in RGB: %u,%u,%u", gr_palette[SELECTED_COLOR].r,
-														   	 gr_palette[SELECTED_COLOR].g,
-													   		 gr_palette[SELECTED_COLOR].b);
+	dc->color=BLACK;
+	GrPrint(dc,10,size*2,"Preview:");
 	// pixel loop for current color preview
-	for(i=0; i <=size; i++)
-		for(j=0; j<=size; j++){			
+	for(i=0; i <=size/5; i++)
+		for(j=0; j<=size/5; j++){			
 			tempColor = gr_palette[SELECTED_COLOR];
-			if(i==0 || i==size || j==0 || j==size) tempColor = 0x000000;	
-			DrawPixel(300 + i, c->top + 160 + j, tempColor);
+			if(i<border/2 || i>(size/5)-border/2 || j<border/2 || j>(size/5)-border/2) tempColor = 0x000000;	
+			DrawPixel(c->win_task->pix_left + 78 + i, c->win_task->pix_top + (size*2)-8 + j, tempColor);
 		}
+	GrPrint(dc,10,(size*2)+20,"Current Color: #%d",	SELECTED_COLOR+1);
+	GrPrint(dc,10,(size*2)+40,"RGB: #%x%x%x",	gr_palette[SELECTED_COLOR].r,
+										gr_palette[SELECTED_COLOR].g,
+										gr_palette[SELECTED_COLOR].b);
 
 }
 
@@ -196,6 +215,20 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 
 	// add the slider's BGR value to s->preview
 	s->preview = s->left_pos + s->middle_pos << 8 + s->right_pos << 16;
+
+	// cheap way to force redraw 32bit colors
+	// TODO: make this not stupid
+	// can I use *last_task?
+	if (c->win_task->pix_left	!= l	||
+		c->win_task->pix_right	!= r	||
+		c->win_task->pix_bottom != b	||
+		c->win_task->pix_top	!= t){
+		l=c->win_task->pix_left;
+		r=c->win_task->pix_right;
+		t=c->win_task->pix_top;
+		b=c->win_task->pix_bottom;
+		LFBFlush;
+	}
 }
 
 
@@ -247,9 +280,6 @@ U0 Main()
 {
 
 	SettingsPush;
-	WinBorder;
-	WinMax;
-	WinHorz(0, 50, Fs);
 	MenuPush(
 		"File {"
 		"	New(,'.');"
@@ -280,9 +310,12 @@ U0 Main()
 
 	I64 arg1,arg2,ch=0,sc=0;
 	
-	"Change colors 1 to 16 using: 1,2,3,4,5,6,7,8,9,0, -, =, q, w, e, r \n";
-	//"Current Palette: %s \n";
-	//gr_palette;
+	// init pos for 32bit redraw
+	l=c->win_task->pix_left;
+	r=c->win_task->pix_right;
+	t=c->win_task->pix_top;
+	b=c->win_task->pix_bottom;
+
 
 	try {
 		while(TRUE) {
@@ -306,8 +339,9 @@ U0 Main()
 						case 'w': SelectColor(13,c);break;
 						case 'e': SelectColor(14,c);break;
 						case 'r': SelectColor(15,c);break;
-						case 's': PalettePrint(); break;
+						case 's': PalettePrint(); 	break;
 						case CH_CTRLA: FESave(TRUE); break;
+						//case CH_CTRLT: LFBFlush; break;
 						case CH_ESC:
 						case CH_SHIFT_ESC:
 							throw;
@@ -321,8 +355,9 @@ U0 Main()
 		PutExcept;
 
 	
-	//SliderDel(c);
+	SliderDel(c);
 	DocBottom;
+
 }
 
 Main;
