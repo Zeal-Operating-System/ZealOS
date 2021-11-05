@@ -123,38 +123,34 @@ body {background-color:#1f1f1f;}
 <a name="l96"></a>        </span><span class=cF5>BootMHDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
 <a name="l97"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l98"></a>
-<a name="l99"></a>    in_str = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;Sleep(300);In(\&quot;CC\\n%d\\n\\n1024\\n768\\n\\n\\n\&quot;);&quot;</span><span class=cF0>, ata_port);
-<a name="l100"></a>    </span><span class=cF5>OnceDrive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>, in_str);
-<a name="l101"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_str);
-<a name="l102"></a>    in_str = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;BootHDIns;BootMHDIns('c');OnceFlush;&quot;</span><span class=cF0>
-<a name="l103"></a>                    </span><span class=cF6>&quot;Once(\&quot;#include \\\&quot;/Misc/Auto/AutoFullDistro1\\\&quot;;;Auto;\&quot;);Reboot;&quot;</span><span class=cF0>);
-<a name="l104"></a>    </span><span class=cF5>OnceDrive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>, in_str);
-<a name="l105"></a>
-<a name="l106"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
-<a name="l107"></a>
-<a name="l108"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l109"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
-<a name="l110"></a>}
-<a name="l111"></a>
-<a name="l112"></a></span><span class=cF1>Bool</span><span class=cF0> DoInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot)
-<a name="l113"></a>{
-<a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cF3>FALSE</span><span class=cF0>, vm_install = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l115"></a>
-<a name="l116"></a>    vm_install = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l117"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
-<a name="l118"></a>    VMInstallWiz();
-<a name="l119"></a>    res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l120"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cFE>0x501</span><span class=cF0>,</span><span class=cFE>0x31</span><span class=cF0>);
-<a name="l121"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l122"></a>}
-<a name="l123"></a>
-<a name="l124"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l125"></a>{
-<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
-<a name="l127"></a>}
-<a name="l128"></a>
-<a name="l129"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
-<a name="l130"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l131"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l99"></a>    </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Auto/BootMHD2.CC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/System/Boot/BootMHD2.CC&quot;</span><span class=cF0>);
+<a name="l100"></a>
+<a name="l101"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
+<a name="l102"></a>
+<a name="l103"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l104"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
+<a name="l105"></a>}
+<a name="l106"></a>
+<a name="l107"></a></span><span class=cF1>Bool</span><span class=cF0> DoInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot)
+<a name="l108"></a>{
+<a name="l109"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cF3>FALSE</span><span class=cF0>, vm_install = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l110"></a>
+<a name="l111"></a>    vm_install = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l112"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l113"></a>    VMInstallWiz();
+<a name="l114"></a>    res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l115"></a>    </span><span class=cF5>OnceDrive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>, </span><span class=cF6>&quot;PopUp(\&quot;#include \\\&quot;/Misc/Auto/AutoFullDistro0\\\&quot;;\&quot;);&quot;</span><span class=cF0>);
+<a name="l116"></a>    </span><span class=cF5>BootRAM</span><span class=cF0>(</span><span class=cF6>&quot;C:&quot;</span><span class=cF0> </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l117"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l118"></a>}
+<a name="l119"></a>
+<a name="l120"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l121"></a>{
+<a name="l122"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
+<a name="l123"></a>}
+<a name="l124"></a>
+<a name="l125"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
+<a name="l126"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l127"></a>#</span><span class=cF1>endif</span><span class=cF0>
 </span></pre></body>
 </html>

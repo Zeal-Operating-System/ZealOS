@@ -103,7 +103,7 @@ body {background-color:#1f1f1f;}
 <a name="l76"></a>                    </span><span class=cF1>if</span><span class=cF0> (i &gt; drive-&gt;spc)
 <a name="l77"></a>                        i = drive-&gt;spc;
 <a name="l78"></a>                    </span><span class=cF5>BlkRead</span><span class=cF0>(drive, buf, drive-&gt;data_area + c * drive-&gt;spc, i);
-<a name="l79"></a>                    buf+=i &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l79"></a>                    buf += i &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
 <a name="l80"></a>                    c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c, </span><span class=cFE>1</span><span class=cF0>);
 <a name="l81"></a>                    blks -= i;
 <a name="l82"></a>                </span><span class=cF7>}</span><span class=cF0>

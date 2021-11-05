@@ -32,34 +32,32 @@ body {background-color:#1f1f1f;}
 <a name="l5"></a></span><span class=cF2>//first terminal window upon start-up.</span><span class=cF0>
 <a name="l6"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeSys.CC.html#l32"><span class=cF4>Once</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/GuideLines.DD.html#l29"><span class=cF4>Home Files</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l7"></a>
-<a name="l8"></a></span><span class=cF2>//Delete the rest from this file.</span><span class=cF0>
-<a name="l9"></a>
-<a name="l10"></a></span><span class=cF1>U0</span><span class=cF0> Tmp()
-<a name="l11"></a>{
-<a name="l12"></a>    </span><span class=cF5>OnceExe</span><span class=cF0>;
-<a name="l13"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l15"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_ROM</span><span class=cF0>:
-<a name="l16"></a>            </span><span class=cF6>&quot;Continue booting hard drive &quot;</span><span class=cF0>;
-<a name="l17"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l18"></a>            {
-<a name="l19"></a>                </span><span class=cF5>DocBottom</span><span class=cF0>;
-<a name="l20"></a>                </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Once&quot;</span><span class=cF0>);
-<a name="l21"></a>            }
-<a name="l22"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l23"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_DVD</span><span class=cF0>:
-<a name="l24"></a>            </span><span class=cF5>DocBottom</span><span class=cF0>;
-<a name="l25"></a>            </span><span class=cF5>RunFile</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Auto/AutoInstall&quot;</span><span class=cF0>,, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l26"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l27"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_HARDDRIVE</span><span class=cF0>:
-<a name="l28"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_RAM</span><span class=cF0>:
-<a name="l29"></a>            </span><span class=cF6>&quot;\n$PURPLE$$TX+CX,\&quot;Tips of the Day\&quot;$$FG$\n&quot;</span><span class=cF0>;
-<a name="l30"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;</span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l31"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;
-<a name="l32"></a>            </span><span class=cF5>Type</span><span class=cF0>(</span><span class=cF6>&quot;::/Doc/Customize.DD&quot;</span><span class=cF0>);
-<a name="l33"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l35"></a>}
-<a name="l36"></a>Tmp;
+<a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> Tmp()
+<a name="l9"></a>{
+<a name="l10"></a>    </span><span class=cF5>OnceExe</span><span class=cF0>;
+<a name="l11"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l13"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_ROM</span><span class=cF0>:
+<a name="l14"></a>            </span><span class=cF6>&quot;Continue booting hard drive &quot;</span><span class=cF0>;
+<a name="l15"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l16"></a>            {
+<a name="l17"></a>                </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l18"></a>                </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Once&quot;</span><span class=cF0>);
+<a name="l19"></a>            }
+<a name="l20"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l21"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_DVD</span><span class=cF0>:
+<a name="l22"></a>            </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l23"></a>            </span><span class=cF5>RunFile</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Auto/AutoInstall&quot;</span><span class=cF0>,, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l24"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l25"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_HARDDRIVE</span><span class=cF0>:
+<a name="l26"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_RAM</span><span class=cF0>:
+<a name="l27"></a>            </span><span class=cF6>&quot;\n$PURPLE$$TX+CX,\&quot;Tips of the Day\&quot;$$FG$\n&quot;</span><span class=cF0>;
+<a name="l28"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;</span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l29"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;
+<a name="l30"></a>            </span><span class=cF5>Type</span><span class=cF0>(</span><span class=cF6>&quot;::/Doc/Customize.DD&quot;</span><span class=cF0>);
+<a name="l31"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l32"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l33"></a>}
+<a name="l34"></a>Tmp;
 </span></pre></body>
 </html>
