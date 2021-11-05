@@ -3,7 +3,7 @@
 // Used by host OS to create a full Distro ISO synced with GitHub repo.
 
 #define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n1024\n768\n\n\n"
-
+
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
 	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);

@@ -1458,7 +1458,7 @@ CTCPSocket *TCPConnectionCreate(U8 *hostname, U16 port)
 				NetErr("TCP CONNECTION CREATE: Failed to create new TCP Socket.");
 				return NULL;
 			}
-			result->timeout = TCP_TIMEOUT * 3; // generous
+			result->timeout = TCP_TIMEOUT * 3; // generous
 			error = TCPSocketConnect(result, &socket_addr);
 			if (error < 0)
 			{

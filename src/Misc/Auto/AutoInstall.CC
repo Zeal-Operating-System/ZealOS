@@ -114,7 +114,7 @@ Bool DoInstall(Bool prompt_reboot)
 	res = TRUE;
 	OnceDrive('C', "PopUp(\"#include \\\"/Misc/Auto/AutoFullDistro0\\\";\");");
 	BootRAM("C:" BOOT_DIR_KERNEL_BIN_C);
-	return res;
+	return res;
 }
 
 Bool OSInstall(Bool prompt_reboot=TRUE)

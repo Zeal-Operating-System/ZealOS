@@ -39,7 +39,7 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("LstMatch",		ff_mask, fu_flags, "ListMatch");
 	Find("DefineLstLoad",	ff_mask, fu_flags, "DefineListLoad");
 	Find("ExtDft",			ff_mask, fu_flags, "ExtDefault");
-	Find("ExtChg",			ff_mask, fu_flags, "ExtChange");
+	Find("ExtChg",			ff_mask, fu_flags, "ExtChange");
 	Find("RegDft",			ff_mask, fu_flags, "RegDefault");
 	Find("\"HC\"",			ff_mask, fu_flags, "\"CC\"");
 	Find("CDrv",			ff_mask, fu_flags, "CDrive");

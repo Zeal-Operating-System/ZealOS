@@ -74,7 +74,7 @@ BMHD2_HISTART:
 @@5:			MOV 		SI, BMHD2_BOOT_MESSAGE - BMHD2_START
 				CALL		BMHD2_PUTS
 //				CALL		BMHD2_GETCHAR
-				MOV			AL, '1' // go directly to C:/
+				MOV			AL, '1' // go directly to C:/
 				CMP 		AL, '0'
 				JB			@@5
 				CMP 		AL, '8'
