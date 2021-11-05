@@ -46,15 +46,13 @@ I64 GopherOpen(U8 *host, U16 port, U8 *selector, U8 *query)
 	return sock;
 }
 
-#define GOPHER_BUFF_SIZE	BLK_SIZE * 64
-
 public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 *dest)
 {
 	CFile	*f;
 	U8		 buf[BLK_SIZE];
-//	U8		 buf[GOPHER_BUFF_SIZE];
 	I64		 data_len = 0, total_len = 0, got, sock;
 
+	progress4 = 0;
 	f = FOpen(dest, "w");
 	if (!f)
 	{
@@ -74,8 +72,9 @@ public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 
 		got = TCPSocketReceive(sock, buf + data_len, sizeof(buf) - data_len);
 		if (got <= 0)
 		{
+			if (got < 0)
+				PrintErr("Failed to receive TCP data\n");
 			if (data_len != 0 && !FBlkWrite(f, buf))
-//			if (data_len != 0 && !FBlkWrite(f, buf,, GOPHER_BUFF_SIZE))
 			{
 				break;
 			}
@@ -85,11 +84,10 @@ public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 
 		}
 		data_len += got;
 		total_len += got;
+		progress4 += got;
 		if (data_len == BLK_SIZE)
-//		if (data_len == GOPHER_BUFF_SIZE)
 		{
 			if (!FBlkWrite(f, buf))
-//			if (!FBlkWrite(f, buf,, GOPHER_BUFF_SIZE))
 			{
 				break;
 			}
@@ -139,13 +137,21 @@ U8 *GopherBasename(U8 *selector)
 		result = lastslash + 1;
 	}
 
-	//BAD FOR FILENAMES: ? / | = % 
+	//BAD FOR FILENAMES: ? / | = % : ; * + " < > space 
 	result = StrReplace(result, "?", "");
 	result = StrReplace(result, "/", "",, TRUE);
 	result = StrReplace(result, "|", "",, TRUE);
 	result = StrReplace(result, "=", "",, TRUE);
 	result = StrReplace(result, "%", "",, TRUE);
-//	result = StrNew("TEST.TXT");
+	result = StrReplace(result, ":", "",, TRUE);
+	result = StrReplace(result, ";", "",, TRUE);
+	result = StrReplace(result, "*", "",, TRUE);
+	result = StrReplace(result, "+", "",, TRUE);
+	result = StrReplace(result, "\"", "",, TRUE);
+	result = StrReplace(result, "<", "",, TRUE);
+	result = StrReplace(result, ">", "",, TRUE);
+	result = StrReplace(result, " ", "",, TRUE);
+
 	SysLog("%s\n", result);
 
 	return result;
@@ -158,12 +164,17 @@ U0 GopherTextView(U8 *host, U16 port, U8 *selector)
 	
 	DirMake("::/Tmp/Gopher");
 	
-	basename = ExtChange(GopherBasename(selector), "TXT");
+	tmpname = StrNew(selector);
+	if (StrLen(tmpname) > 22)
+		tmpname[21] = 0; // too long, terminate it early
+	basename = ExtChange(GopherBasename(tmpname), "TXT");
+	Free(tmpname);
 	tmpname = StrPrint(NULL, "::/Tmp/Gopher/%s", basename);
 	Free(basename);
 	
-	if (GopherDl(host, port, selector, , tmpname) == 0)
+	if (GopherDl(host, port, selector,, tmpname) == 0)
 	{
+		SysLog("%s\n", tmpname);
 		Plain(tmpname);
 	}
 	else
@@ -293,15 +304,17 @@ U0 GopherDlPrompt(U8 *host, U16 port, U8 *selector)
 {
 	CDlForm	 form;
 	U8		*basename;
-	
+
 	basename = GopherBasename(selector);
-	MemSet(form.name, 0, 256);
+	MemSet(form.name, 0, 256);
 	MemCopy(form.name, basename,
 		MinI64(StrLen(basename), sizeof(form.name) - 1));
 	form.name[255] = 0;
 	if (PopUpForm(&form))
 	{
-		GopherDl(host, port, selector, , form.name);
+		if (StrLen(form.name) >= 26)
+			form.name[25] = 0;
+		GopherDl(host, port, selector,, form.name);
 	}
 }
 
