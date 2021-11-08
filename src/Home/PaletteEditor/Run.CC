@@ -1,0 +1,2 @@
+#include "Load.CC";
+PaletteEditor;

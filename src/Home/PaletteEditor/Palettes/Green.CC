@@ -1,0 +1,12 @@
+public CBGR24 gr_palette_green[COLORS_NUM] = {
+	0xEEFCD7, 0x79824F, 0x336019, 0x297582, 0xB34F4B, 0x8F49, 0xA24D1B, 0x444444, 
+	0x6D6D6D, 0x94BFDE, 0xA1CE97, 0x6DB4BE, 0xE88E88, 0xCA94E8, 0xD4B475, 0x142223
+};
+
+public U0 PaletteSetGreen(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_green);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetGreen;
+}
