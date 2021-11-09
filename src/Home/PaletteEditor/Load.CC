@@ -139,7 +139,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 	// buttons
 
-	//I64 l1 = StrLen("LOAD");
+	//I64 l1 = StrLen("LOAD");
 
 	//GrPrint(dc, 100,30,"$$CM+CX,%d,4$$$$BT,\"%s\",LE=%d$$\n", -l1 / 2, "LOAD", 1);
 	//DocPrint(dc, "$$CM+CX,%d,4$$$$BT,\"%s\",LE=%d$$\n", -l1 / 2, "LOAD", 1);
@@ -156,7 +156,7 @@ U0 PELoad(Bool prompt)
 	
 	//FileExtRemove(file_path);
 	//StrLastRemove(file_path, "/", file_name);
-	//StrFirstRemove(file_name+1, StrLen(file_name), without_first_ch);
+	//StrFirstRemove(file_name+1, StrLen(file_name), without_first_ch);
 	//ToUpper(*upper_case);
 	
 	U8 file = FileRead(file_path);
@@ -171,14 +171,14 @@ U0 PELoad(Bool prompt)
 		gr_palette[i] = Str2I64(temp_file,16);
 	}
 	LFBFlush;
-	// PaletteSetTemp;
+	//	PaletteSetTemp;
 
 }
 
 U0 PESave(Bool prompt, CCtrl *c)
 {
 	//U8		 old_draw_it = c->draw_it;
-	CDoc	*doc = DocNew;
+	CDoc	*doc = DocNew("~/PaletteEditor/Palettes/MyPalette.CC");
 	I64		 i;
 //	U8		 tmp_name= doc->filename.name;
 //	I64		 file_name;
