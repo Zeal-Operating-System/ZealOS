@@ -139,7 +139,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 	// buttons
 
-	//I64 l1 = StrLen("LOAD");
+	//I64 l1 = StrLen("LOAD");
 
 	//GrPrint(dc, 100,30,"$$CM+CX,%d,4$$$$BT,\"%s\",LE=%d$$\n", -l1 / 2, "LOAD", 1);
 	//DocPrint(dc, "$$CM+CX,%d,4$$$$BT,\"%s\",LE=%d$$\n", -l1 / 2, "LOAD", 1);
@@ -148,42 +148,63 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 }
 
 
+
 U0 PELoad(Bool prompt)
 {
-//	"TODO: Load A Palette\n";
-	U8 file = PopUpPickFile("::/Home/PaletteEditor/Palettes");	
-	"file:%s\n",file;	
-//	#include file;
+
+	U8 file_path = PopUpPickFile("::/Home/PaletteEditor/Palettes");
 	
-	//"%s",file;
-//	gr_palette = "gr_palette_%s",file;
-//	PaletteSetTemp;
+	//FileExtRemove(file_path);
+	//StrLastRemove(file_path, "/", file_name);
+	//StrFirstRemove(file_name+1, StrLen(file_name), without_first_ch);
+	//ToUpper(*upper_case);
+	
+	U8 file = FileRead(file_path);
+
+	I64 temp_file;
+
+	I64 i;
+	// StrPrintHex might be better?..
+	for	(i = 0; i < COLORS_NUM; i++)
+	{	
+		StrFirstRemove(file,",", temp_file);
+		gr_palette[i] = Str2I64(temp_file,16);
+	}
+	LFBFlush;
+	// PaletteSetTemp;
+
 }
 
-U0 PESave(Bool prompt)
+U0 PESave(Bool prompt, CCtrl *c)
 {
-	//U8		 old_draw_it = Fs->draw_it;
+	//U8		 old_draw_it = c->draw_it;
 	CDoc	*doc = DocNew;
 	I64		 i;
-	U8		 tmp_name= doc->filename.name;
-	U8		 name;
-	//StrLastRemove(tmp_name,".", name);
-	//StrFirstRemove(tmp_name,"/", name);
+//	U8		 tmp_name= doc->filename.name;
+//	I64		 file_name;
+//	FileExtRemove(tmp_name);
+//	StrLastRemove(tmp_name, "/", file_name);
+
 	
-	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {\n	", name);
+//	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {\n	", file_name);
 	
-	for (i = 0; i < 16; i++)
+	for (i = 0; i < COLORS_NUM; i++)
 	{
-		if (i == 15) DocPrint(doc, "0x%X", gr_palette[i]);
+		if (i == COLORS_NUM-1) DocPrint(doc, "0x%X", gr_palette[i]);
 		else DocPrint(doc, "0x%X, ", gr_palette[i]);
 
-		if (i == 7) {
-			DocPrint(doc, "\n	");
-		}
+//		if (i == 7) {
+//			DocPrint(doc, "\n	");
+//		}
 	}
 	
-	DocPrint(doc,"\n};
-				\n\npublic U0 PaletteSet%s(Bool persistent=TRUE)\n{\n\tGrPaletteSet(gr_palette_%s);\n\tLFBFlush;\n\tif (persistent)\n\t\tfp_set_std_palette = &PaletteSet%s\n}",name,name,name);
+//	StrCopy	
+//	StrFirstRemove(file_name+1, StrLen(file_name));
+
+//	DocPrint(doc,"\n};
+//				\n\npublic U0 PaletteSet%s(Bool persistent=TRUE)\n{\n\tGrPaletteSet(gr_palette_%s);\n\tLFBFlush;\n\tif (persistent)\n\t\tfp_set_std_palette = &PaletteSet%s\n}",
+//				file_name,file_name,file_name);
+	// TODO: supposed to make draw_it null and put it back to blank the window when saving...
 	DocWrite(doc, prompt);
 	DocDel(doc);
 }
@@ -321,12 +342,13 @@ public U0 PaletteEditor()
 	original_right	= c->win_task->win_right;
 	original_top	= c->win_task->win_top;
 	original_bottom	= c->win_task->win_bottom;
-	//PopUp(c);
+	// PopUp(c);
+	
 	// windowed	
 	c->win_task->win_left = (GR_WIDTH/20);
 	c->win_task->win_right = (GR_WIDTH/14);
 	
-//	c->win_task->win_right = c->win_task->win_width - 85;
+	// c->win_task->win_right = c->win_task->win_width - 85;
 	c->win_task->win_top = 20;
 	c->win_task->win_bottom = GR_HEIGHT/14;//c->win_task->win_height;
 
@@ -364,9 +386,9 @@ public U0 PaletteEditor()
 						case 'r': SelectColor(15,c);break;
 						//case 's': PalettePrint;		break;
 						case CH_CTRLO: PELoad(TRUE);break;
-						case CH_CTRLA: PESave(TRUE);break;
+						case CH_CTRLA: PESave(TRUE,c);break;
 						//case CH_CTRLT: LFBFlush; break;
-						case CH_ESC:
+						case CH_ESC: // should make it keep palette on ESC and discard on SHIFT_ESC
 						case CH_SHIFT_ESC:
 							LFBFlush;
 							DocClear;
