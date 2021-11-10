@@ -47,7 +47,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 	GrRect(dc,	c->left+SLIDER_BORDER,
 				c->top+SLIDER_BORDER,
 				SLIDER_SPACING*4+2-2*SLIDER_BORDER,
-				SLIDER_SPACING*2+SLIDER_RANGE-2*SLIDER_BORDER);
+				SLIDER_SPACING*2+SLIDER_RANGE-2*SLIDER_BORDER);
 
 	//slider
 	dc->color=BLACK;
@@ -58,7 +58,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		GrLine(dc,	c->left+i*SLIDER_SPACING+i-1,
 					c->top+SLIDER_SPACING,
 					c->left+i*SLIDER_SPACING+i-1,
-					c->top+SLIDER_SPACING+SLIDER_RANGE-1);
+r					c->top+SLIDER_SPACING+SLIDER_RANGE-1);
 	}
 
 	//values
@@ -156,7 +156,7 @@ U0 PELoad(Bool prompt)
 	
 	//FileExtRemove(file_path);
 	//StrLastRemove(file_path, "/", file_name);
-	//StrFirstRemove(file_name+1, StrLen(file_name), without_first_ch);
+	//StrFirstRemove(file_name+1, StrLen(file_name), without_first_ch);
 	//ToUpper(*upper_case);
 	
 	U8 file = FileRead(file_path);

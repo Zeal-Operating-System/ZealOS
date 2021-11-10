@@ -1,2 +1,2 @@
-#include "~/PaletteEditor/Load.CC";
+#include "~/PaletteEditor/Load.CC";
 PaletteEditor;
