@@ -1,6 +1,5 @@
 
-
-public U0 PaletteSelect()
+public I64 PaletteSelect()
 {
 	CDirEntry	*tmpde1 = NULL, *tmpde2;
 
@@ -35,7 +34,9 @@ public U0 PaletteSelect()
 	DocDel(doc);	
 
 	if (res != (DOCM_CANCEL || 0)) PaletteSet(res, TRUE);
+	
+	return res;
 }
 
 
-PaletteSelect;
+//PaletteSelect;
