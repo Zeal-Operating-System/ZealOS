@@ -61,6 +61,11 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
 		}
 	GrPrint(dc,10,26,"Current Color: #%d", SELECTED_COLOR+1);
+	if(SELECTED_COLOR == 15) dc->color = LTGRAY;	
+	else if(gr_palette[SELECTED_COLOR] > 0xCCCCCC) dc->color=DKGRAY;
+	else dc->color=15;
+	GrRect(dc,94,8,58,12);
+
 	dc->color=SELECTED_COLOR;
 	GrPrint(dc,95,10,"#%x%x%x",	gr_palette[SELECTED_COLOR].r,
 								gr_palette[SELECTED_COLOR].g,
@@ -136,11 +141,17 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 			}
 		}
 		// color label and text preview
-		dc->color=BLACK;
-		if(i==15) {
-			GrRect(dc,(size*15),c->win_task->pix_height-(size-size/2),size,size*1.5);
-			GrRect(dc,6,(size*2)+65+16*i,80,18);
-		}	
+		// TODO: THIS LOGIC DOESNT WORK ON LIGHT THEMES		
+		// if color too light or too dark add bg
+		if(i==15) dc->color = LTGRAY;
+		else if(gr_palette[i] < gr_palette[15]) dc->color=LTGRAY;
+		else if(gr_palette[i] > gr_palette[0]) dc->color=DKGRAY;
+		//else if(i == 7) dc->color=LTRED;	
+		else dc->color=15;
+		GrRect(dc,(size*i),c->win_task->pix_height-(size-size/2),size,size*1.5);
+		GrRect(dc,6,(size*2)+65+16*i,80,18);
+	
+	
 		dc->color=i;
 		I64 bias=(size/2)-4;
 		if(i >= 9) bias = (size/2)-8;
@@ -306,7 +317,7 @@ public U0 PaletteEditor()
 		"	Exit(,CH_ESC);"
 		"}"
 		"About {"
-		"	Info(,CH_CTRLI);"
+		"	Info(,CH_CTRLI);"
 		"}"
 		);
 	DocClear;
@@ -388,5 +399,4 @@ public U0 PaletteEditor()
 	c->win_task->win_right	= original_right;
 	c->win_task->win_top 	= original_top;
 	c->win_task->win_bottom = original_bottom;
-
 }
