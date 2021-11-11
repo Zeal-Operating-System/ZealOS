@@ -61,7 +61,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
 		}
 	GrPrint(dc,10,26,"Current Color: #%d", SELECTED_COLOR+1);
-	if(SELECTED_COLOR == 15) dc->color = LTGRAY;	
+	if(SELECTED_COLOR == 15) dc->color = LTGRAY;	
 	else if(gr_palette[SELECTED_COLOR] > 0xCCCCCC) dc->color=DKGRAY;
 	else dc->color=15;
 	GrRect(dc,94,8,58,12);
@@ -135,7 +135,11 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 			for (k = 0; k <= size; k++){
 				tempColor=gr_palette[i];
 				// black borders
-				if(k<border || k>size-border || j < border || j>size-border) tempColor=0x000000;
+				if(k<border || k>size-border || j < border || j>size-border-1)
+				{
+					if(SELECTED_COLOR==i) tempColor=0xFFFFFF;
+					else tempColor=0x000000;
+				}
 				// color preview
 				DrawPixel(c->win_task->pix_left + j + (size*i), c->win_task->pix_bottom - size*1.5 + k, tempColor);
 			}
@@ -143,16 +147,20 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		// color label and text preview
 		// TODO: THIS LOGIC DOESNT WORK ON LIGHT THEMES		
 		// if color too light or too dark add bg
+
 		if(i==15) dc->color = LTGRAY;
 		else if(gr_palette[i] < gr_palette[15]) dc->color=LTGRAY;
 		else if(gr_palette[i] > gr_palette[0]) dc->color=DKGRAY;
 		//else if(i == 7) dc->color=LTRED;	
 		else dc->color=15;
+		if(i == SELECTED_COLOR)	dc->color=0; GrRect(dc,6,(size*2)+65+16*i,80,18);
 		GrRect(dc,(size*i),c->win_task->pix_height-(size-size/2),size,size*1.5);
+		
 		GrRect(dc,6,(size*2)+65+16*i,80,18);
 	
 	
-		dc->color=i;
+		if(i == SELECTED_COLOR)	dc->color=15;
+		else dc->color=i;
 		I64 bias=(size/2)-4;
 		if(i >= 9) bias = (size/2)-8;
 		//	if(i == SELECTED_COLOR){
@@ -160,7 +168,6 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		//}
 		GrPrint(dc,bias+(i*size),c->win_task->pix_height-(size*.6)+(size/4), "%d", i+1);
 		GrPrint(dc,10,(size*2)+70+16*i,"#%d: Test",i+1);
-			
 	}
 
 
@@ -356,24 +363,21 @@ public U0 PaletteEditor()
 		{
 			switch(KeyGet(&sc))
 			{
-				case '1': SelectColor(0,c); break;
-				case '2': SelectColor(1,c); break;
-				case '3': SelectColor(2,c); break;
-				case '4': SelectColor(3,c); break;	
-				case '5': SelectColor(4,c); break;
-				case '6': SelectColor(5,c); break;
-				case '7': SelectColor(6,c); break;
-				case '8': SelectColor(7,c); break;
-				case '9': SelectColor(8,c); break;
-				case '0': SelectColor(9,c); break;
-				case '-': SelectColor(10,c);break;
-				case '=': SelectColor(11,c);break;
-				case 'q': SelectColor(12,c);break;
-				case 'w': SelectColor(13,c);break;
-				case 'e': SelectColor(14,c);break;
-				case 'r': SelectColor(15,c);break;
+				case 0:
+					switch (sc.u8[0])
+					{
+						case SC_CURSOR_LEFT:
+							if(SELECTED_COLOR==0) SELECTED_COLOR=16;
+							SelectColor(SELECTED_COLOR-1,c);
+							break;
+						case SC_CURSOR_RIGHT:
+							if(SELECTED_COLOR==15) SELECTED_COLOR=-1;
+							SelectColor(SELECTED_COLOR+1,c);
+							break;		
+					}
+				break;
 				case CH_CTRLO: current_palette = PaletteSelect; break;
-				case CH_CTRLI: PopUpOk("Made by y4my4m"); break;$ID,2$
+				case CH_CTRLI: PopUpOk("\n\n Use Left and Right arrows to select color\n\n\n\t\t\tMade by y4my4m"); break;$ID,2$
 				case CH_CTRLA: PESave(TRUE,c);break;
 				case CH_ESC: // should make it keep palette on ESC and discard on SHIFT_ESC
 				case CH_SHIFT_ESC:
