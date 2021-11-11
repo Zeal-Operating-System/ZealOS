@@ -359,6 +359,9 @@ public U0 PaletteEditor()
 
 	SelectColor(0,c);
 
+	
+	//gr_palette[SELECTED_COLOR] = Str2I64(*manual_value);
+					
 	try
 	{
 		while(TRUE)
@@ -366,11 +369,11 @@ public U0 PaletteEditor()
 			switch(KeyGet(&sc))
 			{
 				case '#':
-					PopUpOk("This doesnt work yet");
-					manual_value = StrGet(" Hex Value: #");
-					//gr_palette[SELECTED_COLOR] = manual_value;
-					LFBFlush;
+					manual_value = StrGet(" Hex Value: #");
+					gr_palette[SELECTED_COLOR] = ExePrint("0x%s;", manual_value);
 					Free(manual_value);
+					SelectColor(SELECTED_COLOR,c);
+					LFBFlush;
 					DocClear;
 					break;					
 				case 0:
