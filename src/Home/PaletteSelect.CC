@@ -1,13 +1,11 @@
 
 
-I64 PaletteChange()
+public U0 PaletteSelect()
 {
-	DocClear;
-	
 	CDirEntry	*tmpde1 = NULL, *tmpde2;
-	I64  i = 0;
-	U8 res=0;
+
 	CDoc *doc = DocNew;
+	I64  res  =	0;
 
 	DocPrint(doc, "$$LTBLUE$$\n\n");
 
@@ -23,7 +21,7 @@ I64 PaletteChange()
 
 			FileExtRemove(tmpde1->name);
 
-			DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n",res, tmpde1->name, tmpde1->name);								
+			DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n",res, tmpde1->name, tmpde1->name);								
 			DirEntryDel(tmpde1);
 
 			tmpde1 = tmpde2;
@@ -36,43 +34,8 @@ I64 PaletteChange()
 	res = PopUpMenu(doc);
 	DocDel(doc);	
 
-	return res;
-
+	if (res != (DOCM_CANCEL || 0)) PaletteSet(res, TRUE);
 }
 
 
-public U0 PaletteSelect()
-{
-	I64 sc;
-
-	//CCtrl *c=CAlloc(sizeof(CCtrl));
-	//c->win_task->win_left = (GR_WIDTH/20);
-	//c->win_task->win_right = (GR_WIDTH/14);
-	//c->win_task->win_top = 20;
-	//c->win_task->win_bottom = GR_HEIGHT/14;
-
-	// this is terrible, shouldnt rescan everytime you select...
-	// i guess it'll update the treelist tho lmao
-	I64 pal = PaletteChange;
-	if (pal != DOCM_CANCEL) PaletteSet(pal, TRUE);
-//	PaletteChange;
-	try {
-		while(TRUE) {
-			switch(KeyGet(&sc))
-			{
-				case CH_ESC:
-				case CH_SHIFT_ESC:
-					LFBFlush;
-					throw;
-					break;
-			}		
-			Refresh;
-		}		
-	}
-	catch
-		PutExcept;
-
-}
-
-
-PaletteSelect;
+PaletteSelect;
