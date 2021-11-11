@@ -13,6 +13,8 @@ I64 current_palette = "temp";
 I64 SELECTED_COLOR = 0;
 I64 l,r,t,b;
 
+U8 *manual_value;
+
 
 class CSliderState
 {
@@ -57,7 +59,7 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		for(j=0; j<=12; j++)
 		{
 			tempColor = gr_palette[SELECTED_COLOR];
-			if(i<border || i>12-border || j<border || j>12-border) tempColor = 0x000000;	
+			if(i<border || i>12-border || j<border || j>12-border) tempColor = 0x000000;
 			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
 		}
 	GrPrint(dc,10,26,"Current Color: #%d", SELECTED_COLOR+1);
@@ -363,13 +365,23 @@ public U0 PaletteEditor()
 		{
 			switch(KeyGet(&sc))
 			{
+				case '#':
+					PopUpOk("This doesnt work yet");
+					manual_value = StrGet(" Hex Value: #");
+					//gr_palette[SELECTED_COLOR] = manual_value;
+					LFBFlush;
+					Free(manual_value);
+					DocClear;
+					break;					
 				case 0:
 					switch (sc.u8[0])
 					{
+						case SC_CURSOR_UP:
 						case SC_CURSOR_LEFT:
 							if(SELECTED_COLOR==0) SELECTED_COLOR=16;
 							SelectColor(SELECTED_COLOR-1,c);
 							break;
+						case SC_CURSOR_DOWN:
 						case SC_CURSOR_RIGHT:
 							if(SELECTED_COLOR==15) SELECTED_COLOR=-1;
 							SelectColor(SELECTED_COLOR+1,c);
@@ -377,7 +389,7 @@ public U0 PaletteEditor()
 					}
 				break;
 				case CH_CTRLO: current_palette = PaletteSelect; break;
-				case CH_CTRLI: PopUpOk("\n\n Use Left and Right arrows to select color\n\n\n\t\t\tMade by y4my4m"); break;$ID,2$
+				case CH_CTRLI: PopUpOk("\n\n  Use the arrows to select color\n\n  # to manually input hex value","\n\n\n\t\tMade by y4my4m\n\n"); break;
 				case CH_CTRLA: PESave(TRUE,c);break;
 				case CH_ESC: // should make it keep palette on ESC and discard on SHIFT_ESC
 				case CH_SHIFT_ESC:
