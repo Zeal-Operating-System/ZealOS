@@ -107,9 +107,9 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 	for(i=1; i<=3; i++)
 	{
 
-		if (i==1) { pos=s->left_pos;  col="B";}
+		if (i==1) { pos=s->left_pos;  col="R";}
 		if (i==2) { pos=s->middle_pos;col="G";}
-		if (i==3) { pos=s->right_pos; col="R";}
+		if (i==3) { pos=s->right_pos; col="B";}
 
 		//values
 		GrPrint(dc,	c->left+i*SLIDER_SPACING+i-FONT_WIDTH/2,
@@ -165,9 +165,6 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 		else dc->color=i;
 		I64 bias=(size/2)-4;
 		if(i >= 9) bias = (size/2)-8;
-		//	if(i == SELECTED_COLOR){
-		//	blink selected color coroutine?	
-		//}
 		GrPrint(dc,bias+(i*size),c->win_task->pix_height-(size*.6)+(size/4), "%d", i+1);
 		GrPrint(dc,10,(size*2)+70+16*i,"#%d: Test",i+1);
 	}
@@ -181,34 +178,16 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 
 U0 PESave(Bool prompt, CCtrl *c)
 {
-	//U8		 old_draw_it = c->draw_it;
 	CDoc	*doc = DocNew(PALETTES_PATH);
 	I64		 i;
-//	U8		 tmp_name= doc->filename.name;
-//	I64		 file_name;
-//	FileExtRemove(tmp_name);
-//	StrLastRemove(tmp_name, "/", file_name);
-
-	
-//	DocPrint(doc, "public CBGR24 gr_palette_%s[COLORS_NUM] = {\n	", file_name);
 	
 	for (i = 0; i < COLORS_NUM; i++)
 	{
 		if (i == COLORS_NUM-1) DocPrint(doc, "0x%X", gr_palette[i]);
 		else DocPrint(doc, "0x%X, ", gr_palette[i]);
 
-//		if (i == 7) {
-//			DocPrint(doc, "\n	");
-//		}
 	}
-	
-//	StrCopy	
-//	StrFirstRemove(file_name+1, StrLen(file_name));
 
-//	DocPrint(doc,"\n};
-//				\n\npublic U0 PaletteSet%s(Bool persistent=TRUE)\n{\n\tGrPaletteSet(gr_palette_%s);\n\tLFBFlush;\n\tif (persistent)\n\t\tfp_set_std_palette = &PaletteSet%s\n}",
-//				file_name,file_name,file_name);
-	// TODO: supposed to make draw_it null and put it back to blank the window when saving...
 	DocWrite(doc, prompt);
 	DocDel(doc);
 }
@@ -233,9 +212,9 @@ U0 SelectColor(I64 color_number, CCtrl *c){
 	SELECTED_COLOR = color_number;
 	CSliderState *s=c->state;
 
-	s->left_pos  = gr_palette[SELECTED_COLOR].b;
+	s->left_pos  = gr_palette[SELECTED_COLOR].r;
 	s->middle_pos= gr_palette[SELECTED_COLOR].g;
-	s->right_pos = gr_palette[SELECTED_COLOR].r;
+	s->right_pos = gr_palette[SELECTED_COLOR].b;
 }
 
 U0 UpdateDerivedCtrlSlider(CCtrl *c)
@@ -253,8 +232,8 @@ U0 UpdateDerivedCtrlSlider(CCtrl *c)
 	s->middle_pos=ClampI64(s->middle_pos,0,SLIDER_RANGE);
 	s->right_pos=ClampI64(s->right_pos,0,SLIDER_RANGE);
 
-	// add the slider's BGR value to s->preview
-	s->preview = s->left_pos + s->middle_pos << 8 + s->right_pos << 16;
+	// add the slider's RGB value to s->preview 						// opposite for BGR
+	s->preview = s->right_pos + s->middle_pos << 8 + s->left_pos << 16; //s->left_pos + s->middle_pos << 8 + s->right_pos << 16;
 
 	// cheap way to force redraw 32bit colors
 	// TODO: make this not stupid
@@ -370,10 +349,10 @@ public U0 PaletteEditor()
 			{
 				case '#':
 					manual_value = StrGet(" Hex Value: #");
-					gr_palette[SELECTED_COLOR] = ExePrint("0x%s;", manual_value);
+					gr_palette[SELECTED_COLOR] = Str2I64(manual_value,16);//ExePrint("0x%s;", manual_value);
 					Free(manual_value);
 					SelectColor(SELECTED_COLOR,c);
-					LFBFlush;
+					LFBFlush;
 					DocClear;
 					break;					
 				case 0:
