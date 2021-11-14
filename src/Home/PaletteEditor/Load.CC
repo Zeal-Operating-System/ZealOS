@@ -8,8 +8,7 @@
 
 #include "~/PaletteEditor/PaletteSelect"
 
-I64 current_palette = "temp";
-
+I64 current_palette = "*New Palette";
 I64 SELECTED_COLOR = 0;
 I64 l,r,t,b;
 
@@ -35,9 +34,6 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 {
 
 	CSliderState *s=c->state;
-
-
-	//GrPrint(dc,0,50,"%s", current_palette);
 
 	I64 size=(c->win_task->pix_width/16);
 	I64 border=size/16;
@@ -73,6 +69,9 @@ U0 DrawCtrlSlider(CDC *dc,CCtrl *c)
 								gr_palette[SELECTED_COLOR].g,
 								gr_palette[SELECTED_COLOR].b);
 
+	// palette name
+	dc->color=BLACK;
+	GrPrint(dc,10,43,"Palette: %s", current_palette);
 
 	////////////
 	// SLIDER //
@@ -185,7 +184,6 @@ U0 PESave(Bool prompt, CCtrl *c)
 	{
 		if (i == COLORS_NUM-1) DocPrint(doc, "0x%X", gr_palette[i]);
 		else DocPrint(doc, "0x%X, ", gr_palette[i]);
-
 	}
 
 	DocWrite(doc, prompt);
@@ -269,6 +267,8 @@ U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 	// set palette
 	gr_palette[SELECTED_COLOR] = s->preview;
 	PaletteSetTemp(FALSE);
+
+	current_palette = "*New Palette";
 }
 
 CCtrl *SliderNew()
@@ -323,10 +323,8 @@ public U0 PaletteEditor()
 	// windowed	
 	c->win_task->win_left = (GR_WIDTH/23);
 	c->win_task->win_right = (GR_WIDTH/13);
-	
-	// c->win_task->win_right = c->win_task->win_width - 85;
 	c->win_task->win_top = GR_HEIGHT/80;
-	c->win_task->win_bottom = GR_HEIGHT/10;//c->win_task->win_height;
+	c->win_task->win_bottom = GR_HEIGHT/10;
 
 
 	// init pos for 32bit redraw
@@ -338,9 +336,6 @@ public U0 PaletteEditor()
 
 	SelectColor(0,c);
 
-	
-	//gr_palette[SELECTED_COLOR] = Str2I64(*manual_value);
-					
 	try
 	{
 		while(TRUE)
@@ -349,7 +344,7 @@ public U0 PaletteEditor()
 			{
 				case '#':
 					manual_value = StrGet(" Hex Value: #");
-					gr_palette[SELECTED_COLOR] = Str2I64(manual_value,16);//ExePrint("0x%s;", manual_value);
+					gr_palette[SELECTED_COLOR] = Str2I64(manual_value,16);
 					Free(manual_value);
 					SelectColor(SELECTED_COLOR,c);
 					LFBFlush;
@@ -370,7 +365,10 @@ public U0 PaletteEditor()
 							break;		
 					}
 				break;
-				case CH_CTRLO: current_palette = PaletteSelect; break;
+				case CH_CTRLO:
+					current_palette = "";
+					current_palette = PaletteSelect;
+					break;
 				case CH_CTRLI: PopUpOk("\n\n  Use the arrows to select color\n\n  # to manually input hex value","\n\n\n\t\tMade by y4my4m\n\n"); break;
 				case CH_CTRLA: PESave(TRUE,c);break;
 				case CH_ESC: // should make it keep palette on ESC and discard on SHIFT_ESC
@@ -397,4 +395,4 @@ public U0 PaletteEditor()
 	c->win_task->win_right	= original_right;
 	c->win_task->win_top 	= original_top;
 	c->win_task->win_bottom = original_bottom;
-}
+}

@@ -1,3 +1,4 @@
+#define PALETTES_PATH	"~/PaletteEditor/Palettes/"
 
 public I64 PaletteSelect()
 {
@@ -5,6 +6,7 @@ public I64 PaletteSelect()
 
 	CDoc *doc = DocNew;
 	I64  res  =	0;
+	I64  res2 = 0;
 
 	DocPrint(doc, "$$LTBLUE$$\n\n");
 
@@ -20,7 +22,7 @@ public I64 PaletteSelect()
 
 			FileExtRemove(tmpde1->name);
 
-			DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n",res, tmpde1->name, tmpde1->name);								
+			DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n", res, tmpde1->name, tmpde1->name);	
 			DirEntryDel(tmpde1);
 
 			tmpde1 = tmpde2;
@@ -30,13 +32,9 @@ public I64 PaletteSelect()
 	}
 
 	DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=DOCM_CANCEL$$\n\n");
-	res = PopUpMenu(doc);
+	res2 = PopUpMenu(doc);
 	DocDel(doc);	
 
-	if (res != (DOCM_CANCEL || 0)) PaletteSet(res, TRUE);
-	
-	return res;
+	if (res2 != (DOCM_CANCEL || 0)) PaletteSet(res2, TRUE);
+	return res2;
 }
-
-
-//PaletteSelect;
