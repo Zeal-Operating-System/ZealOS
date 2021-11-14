@@ -30,6 +30,8 @@ U0 NetLogInit()
 	WinFocus(net_log_task);
 
 	DocPrint(net_log_task->put_doc, "$$WW+H,1$$");
+
+	Bts(&net_log_task->win_inhibit, WIf_SELF_FOCUS);
 }
 
 U0 NetLog(U8 *format, ...)

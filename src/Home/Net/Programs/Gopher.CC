@@ -37,7 +37,7 @@ I64 GopherOpen(U8 *host, U16 port, U8 *selector, U8 *query)
 		line = StrPrint(NULL, "%s\t%s\r\n", selector, query);
 	}
 
-	sock(CTCPSocket *)->timeout = TCP_TIMEOUT * 5;
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
 
 //	sendString(sock, line, 0);
 	TCPSocketSendString(sock, line);
@@ -80,6 +80,7 @@ public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 
 			}
 			f->de.size = total_len;
 			FClose(f);
+			TCPSocketClose(sock);
 			return got;
 		}
 		data_len += got;
@@ -95,6 +96,7 @@ public I64 GopherDl(U8 *host, U16 port = 70, U8 *selector, U8 *query = NULL, U8 
 		}
 	}
 
+	TCPSocketClose(sock);
 	PrintErr("Write failed, %s may be corrupted\n", dest);
 	FClose(f);
 	return -1;

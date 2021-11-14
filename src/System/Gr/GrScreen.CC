@@ -413,7 +413,7 @@ U0 GrUpdateScreen()
 	GrUpdateTasks;
 	DCBlotColor8(gr.dc2, gr.dc);
 
-	dc=DCAlias(gr.dc2, Fs);
+	dc = DCAlias(gr.dc2, Fs);
 	dc->flags |= DCF_ON_TOP;
 	if (gr.fp_final_screen_update)
 		(*gr.fp_final_screen_update)(dc);

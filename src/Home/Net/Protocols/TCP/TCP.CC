@@ -1236,25 +1236,18 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 
 	timeout = counts.jiffies + tcp_socket->timeout * JIFFY_FREQ / 1000;
 
-	while ((tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
+	while ((tcp_socket->state == TCP_STATE_ESTABLISHED	||
+			tcp_socket->state == TCP_STATE_FIN_WAIT1	||
+			tcp_socket->state == TCP_STATE_CLOSE_WAIT)	&& // allowing receive during closing state
 		   tcp_socket->read_position == tcp_socket->write_position)
 	{
 		TCPCheckACKQueue(tcp_socket);
 		Sleep(1);
 
 		if (counts.jiffies > timeout)
-		{
-//			if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking receives.
-//				NetErr("TCP SOCKET RECEIVE: Timed out.");
-
-//			return -1;
 			break;
-		}
-
-
 	}
 
-	// Shrine has TODO: Should still be able to receive in closing states ...
 	if ((tcp_socket->state != TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
 		tcp_socket->read_position == tcp_socket->write_position || length == 0)
 		return 0;

@@ -14,6 +14,7 @@ Bool TCPHandleValidSEQ(CTCPSocket *tcp_socket, CTCPHeader *header, U32 segment_s
 		case TCP_STATE_ESTABLISHED:
 		case TCP_STATE_FIN_WAIT1:
 		case TCP_STATE_FIN_WAIT2: // FIN2 check is ommitted in Shrine, yet used in below logic. Adding.
+		case TCP_STATE_CLOSE_WAIT: // allowing data to be pushed to receive buffer during closing state
 
 			NetDebug("TCP HANDLE VALID SEQ: Updating data in receive buffer.");
 
