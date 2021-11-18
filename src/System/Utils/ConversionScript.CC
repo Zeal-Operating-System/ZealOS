@@ -62,7 +62,10 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("DrawStdMs",		ff_mask, fu_flags, "DrawStdMouse");
 	Find("WIG_TASK_DFT",	ff_mask, fu_flags, "WIG_TASK_DEFAULT");
 	Find("DirMk",			ff_mask, fu_flags, "DirMake");
-
+	Find("GetI64",			ff_mask, fu_flags, "I64Get");
+	Find("GetF64",			ff_mask, fu_flags, "F64Get");
+	Find("GetStr",			ff_mask, fu_flags, "StrGet");
+	Find("GetChar",			ff_mask, fu_flags, "CharGet");
 
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
