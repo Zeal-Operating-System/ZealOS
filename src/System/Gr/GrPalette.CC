@@ -90,24 +90,3 @@ public U0 PaletteSetCommander(Bool persistent=TRUE)
 	if (persistent)
 		fp_set_std_palette = &PaletteSetCommander;
 }
-
-
-public U0 PaletteSet(U8 *palette_name="Slate", Bool persistent=TRUE)
-{//Pass filename (without ext) as string to load palette
-	U8 *dir = "~/PaletteEditor/Palettes/";
-	U8 path = MStrPrint("%Q%Q%Q",dir,palette_name,".CC");
-
-	I64 temp_file, i;
-
-	U8 file = FileRead(path);
-
-	for	(i = 0; i < COLORS_NUM; i++)
-	{	
-		StrFirstRemove(file,",", temp_file);
-		gr_palette[i] = Str2I64(temp_file,16);
-	}
-	LFBFlush;	
- 	//this doesn't work yet...
-//	if (persistent)
-//		fp_set_std_palette = &PaletteSet;
-}

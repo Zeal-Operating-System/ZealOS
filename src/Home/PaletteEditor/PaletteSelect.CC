@@ -1,4 +1,26 @@
-#define PALETTES_PATH	"~/PaletteEditor/Palettes/"
+#ifndef PALETTES_PATH
+Cd(__DIR__);;
+#include "Load"
+#endif
+
+public U0 PaletteSet(U8 *palette_name="Slate", Bool persistent=TRUE)
+{//Pass filename (without ext) as string to load palette
+	U8	*dir = PALETTES_PATH,
+		*path = MStrPrint("%Q%Q%Q", dir, palette_name, ".CC");//,
+//		*file = FileRead(path);
+//	I64  temp_file, i;
+
+/*	for	(i = 0; i < COLORS_NUM; i++)
+	{	
+		StrFirstRemove(file, ",", temp_file);
+		gr_palette[i] = Str2I64(temp_file, 16);
+	}*/
+	ExeFile(path);
+	ExePrint("PaletteSet%s;;", palette_name);
+	LFBFlush;
+	if (persistent)
+		ExePrint("fp_set_std_palette = &PaletteSet%s;;", palette_name);
+}
 
 public I64 PaletteSelect()
 {
@@ -11,7 +33,6 @@ public I64 PaletteSelect()
 	DocPrint(doc, "$$LTBLUE$$\n\n");
 
 	tmpde1 = FilesFind("~/PaletteEditor/Palettes/*.CC");
-
 
 	if (tmpde1)
 	{
@@ -28,13 +49,14 @@ public I64 PaletteSelect()
 			tmpde1 = tmpde2;
 		}
 
-
 	}
 
-	DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=DOCM_CANCEL$$\n\n");
+	DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=0$$\n\n");
 	res2 = PopUpMenu(doc);
 	DocDel(doc);	
 
-	if (res2 != (DOCM_CANCEL || 0)) PaletteSet(res2, TRUE);
+	if (res2 != 0)
+		PaletteSet(res2, TRUE);
+
 	return res2;
 }

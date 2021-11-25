@@ -1,2 +1,3 @@
-#include "~/PaletteEditor/Load.CC";
+Cd(__DIR__);;
+#include "Load"
 PaletteEditor;
