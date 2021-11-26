@@ -372,7 +372,7 @@ public U0 PaletteEditor()
 		"	PreviousColor(,,SC_CURSOR_LEFT);"
 		"	PreviousColor(,,SC_CURSOR_UP);"
 		"	NextColor(,,SC_CURSOR_RIGHT);"
-		"	NextColor(,,SC_CURSOR_UP);"
+		"	NextColor(,,SC_CURSOR_DOWN);"
 		"}"
 		"About {"
 		"	Info(,CH_CTRLI);"
