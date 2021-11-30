@@ -44,5 +44,7 @@ sudo rm /tmp/zealtmp/* -r
 sudo sync
 echo "Deleting temp HDD"
 rm ./ZealOS.raw
+echo "Deleting temp mount folder"
+rm -rf /tmp/zealtmp
 echo "Done, build/ contents:"
 ls
