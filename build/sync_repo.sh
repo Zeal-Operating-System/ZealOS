@@ -14,6 +14,7 @@ exit # Comment this line out
 # sudo qemu-nbd -c dev/nbd0 ZealOS.qcow2
 
 sudo partprobe /dev/nbd0
+sudo mkdir /tmp/zealtmp
 sudo mount /dev/nbd0p1 /tmp/zealtmp
 echo "removing src/ files"
 rm -rf ../src/*
@@ -21,12 +22,18 @@ echo "copying src/ files from root of mounted hdd"
 sudo cp -r /tmp/zealtmp/* ../src/
 sudo rm ../src/Boot/BootMHD2.BIN.C
 echo "src/ files copied"
+
+echo "copying docs/ files from HTML/ folder of mounted .vdi"
+sudo cp -r /tmp/zealtmp/HTML/* ../docs/
+echo "docs/ files copied"
+
 echo "unmounting..."
 sudo umount /tmp/zealtmp
+sudo rm -rf /tmp/zealtmp
 sudo qemu-nbd -d /dev/nbd0
 echo "unmounted hdd"
 echo "set perms"
 sudo chown -R $USER:$USER ../src/*
 mv ../src/Tmp/AUTO.ISO.C ./AUTO.ISO
 echo "finished."
-git status
+#git status
