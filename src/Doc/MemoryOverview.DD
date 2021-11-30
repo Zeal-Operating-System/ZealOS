@@ -6,9 +6,9 @@ In ZealOS, the lowest 2Gig of memory is called the $FG,2$code heap$FG$.  ZealOS'
 
 You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlInit"$().	Then, use the $LK,"CHeapCtrl",A="MN:CHeapCtrl"$ as the 2nd arg to $LK,"MAlloc",A="MN:MAlloc"$().	See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 
-Memory alloced by a task will be freed when the task is killed.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is a task that never dies.	His memory is like kernel memory in other operating systems.	See $LK,"SysCAlloc",A="MN:SysCAlloc"$(), $LK,"SysMAlloc",A="MN:SysMAlloc"$(), $LK,"SysMAllocIdent",A="MN:SysMAllocIdent"$() and $LK,"SysStrNew",A="MN:SysStrNew"$().
+Memory alloced by a task will be freed when the task is killed.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is a task that never dies.	It's memory is like kernel memory in other operating systems.	See $LK,"SysCAlloc",A="MN:SysCAlloc"$(), $LK,"SysMAlloc",A="MN:SysMAlloc"$(), $LK,"SysMAllocIdent",A="MN:SysMAllocIdent"$() and $LK,"SysStrNew",A="MN:SysStrNew"$().
 
-All of the regular page tables are marked, "cached".	When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"0100000000",D="DD_UNCACHED_ALIAS"$$FG$.	See $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.CC,dev.uncached_alias"$.
+All of the regular page tables are marked, "cached".	When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01D7800000",D="DD_UNCACHED_ALIAS"$$FG$.	See $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.CC,dev.uncached_alias"$.
 
 During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.	It has never happens to me.
 
@@ -17,29 +17,29 @@ See $LK,"MemRep",A="MN:MemRep"$() and $LK,"::/Demo/MemDemo.CC"$.
 
 $FG,5$$TX+CX,"Single System-wide Memory Map"$
 
-$FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"00037E3F",D="DD_KERNEL_END"$$FG$
+$FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"000370BF",D="DD_KERNEL_END"$$FG$
 $ID,2$Kernel module, placed here by the boot-loader, $LK,"BOOT_RAM_BASE",A="MN:BOOT_RAM_BASE"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00096600",D="DD_BOOT_HIGH_LOC_DVD"$- 0x00$TX,"00096FFF",D="DD_BOOT_HIGH_LOC_DVD_END"$$FG$
 $ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/System/Boot/BootDVD.CC"$ & $LK,"BootHD",A="FI:::/System/Boot/BootHD.CC"$.
 $ID,-2$
-$FG,2$ 0x00$TX,"00097000",D="DD_MP_VECT"$- 0x00$TX,"00097030",D="DD_MP_VECT_END"$$FG$ Multicore start-up vect code, $LK,"MPN_VECT",A="MN:MPN_VECT"$.
+$FG,2$ 0x00$TX,"00097000",D="DD_MP_VECT"$- 0x00$TX,"0009703B",D="DD_MP_VECT_END"$$FG$ Multicore start-up vect code, $LK,"MPN_VECT",A="MN:MPN_VECT"$.
 $FG,2$~0x000009F000- 0x000009FFFF$FG$ Extended BIOS data area.
 $FG,2$ 0x00000A0000- 0x00000BFFFF$FG$ VGA graphics mem with alias at $LK,"text",A="MN:text"$.vga_alias.
 $FG,2$ 0x00$TX,"00100000",D="DD_SYS_FIXED_AREA_BASE"$- 0x00$TX,"00101FFF",D="DD_SYS_FIXED_AREA_END"$$FG$ $LK,"CSysFixedArea",A="MN:CSysFixedArea"$ for misc.
-$FG,2$ 0x00$TX,"00104000",D="DD_MEM_HEAP_BASE"$- 0x00$TX,"7FF7F3FF",D="DD_MEM_HEAP_LIMIT"$$FG$ Code Heap mem.
+$FG,2$ 0x00$TX,"00110000",D="DD_MEM_HEAP_BASE"$- 0x00$TX,"7FFFFFFF",D="DD_MEM_HEAP_LIMIT"$$FG$ Code Heap mem.
 
 $FG,2$ 0x00E0000000- 0x00FFFFFFFF$FG$
 $ID,2$32-bit devices could alloc memory at 0xF0000000 going up, but this is wrong, since some PCs already have devices at 0xF0000000.  PCI devices are supported, so $LK,"Mem32DevAlloc",A="MN:Mem32DevAlloc"$() flaws could become an issue.
 $ID,-2$
 $FG,2$ 0x0080000000-~0x00DFFFFFFF$FG$
-$FG,2$ 0x0100000000-~0x$TX,"00FFFFFFFF",D="DD_PHYSICAL_SPACE_END"$$FG$
+$FG,2$ 0x0100000000-~0x$TX,"01D77FFFFF",D="DD_PHYSICAL_SPACE_END"$$FG$
 $ID,2$Data Heap mem.	(The physical memory that exists in this range is data heap.)
 $ID,-2$
-$FG,2$ 0x$TX,"0100000000",D="DD_UNCACHED_ALIAS"$- 0x$TX,"01FFFFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
+$FG,2$ 0x$TX,"01D7800000",D="DD_UNCACHED_ALIAS"$- 0x$TX,"02D77FFFFF",D="DD_MAPPED_SPACE_END"$$FG$
 $ID,2$Uncached alias of first 4Gig.  (For 32-bit device access.)
 $ID,-2$
-$FG,2$						 - 0x$TX,"01FFFFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
+$FG,2$						 - 0x$TX,"02D77FFFFF",D="DD_MAPPED_SPACE_END"$$FG$
 $ID,2$64-bit devices are alloced with $LK,"Mem64DevAlloc",A="MN:Mem64DevAlloc"$() counting backward$WW,0$.
 $ID,-2$
 
