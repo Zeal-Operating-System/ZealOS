@@ -8,7 +8,6 @@ echo "Making temp HDD, running auto-install"
 qemu-img create -f raw ZealOS.raw 192M
 qemu-system-x86_64 -machine q35,kernel_irqchip=off,accel=kvm -drive format=raw,file=ZealOS.raw -m 2G -smp $(nproc) -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
 echo "Mounting"
-sudo mkdir /tmp/zealtmp
 sudo rm /tmp/zealtmp/* -r
 sudo sync
 sudo modprobe nbd
