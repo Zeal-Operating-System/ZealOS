@@ -156,7 +156,7 @@ $ID,2$A left expression arg, $FG,2$LE=<Exp>$FG$, will return a number when click
 
 See $LK,"PopUpRangeI64",A="MN:PopUpRangeI64"$().
 $ID,-2$$TR,"HX Hex Edit"$
-$ID,2$See $LK,"DocD",A="MN:DocD"$().
+$ID,2$See $LK,"DocDump",A="MN:DocDump"$().
 $ID,-2$$TR,"TR Tree Widget"$
 $ID,2$A tree widget is a branch in a collapsable tree.	The domain of the branch extends from the first +indent until enough -indents bring it back to where it started.	Tree's begin collapsed unless a $FG,2$-C$FG$ flag is present.
 

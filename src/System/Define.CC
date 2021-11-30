@@ -16,7 +16,7 @@ U0 LoadDocDefines()
 
 $TR,"LineRep"$
 $ID,2$DefinePrint("DD_ZEALOS_LOC","95,267");
-$ID,-2$
+$ID,-2$
 	DefinePrint("DD_MP_VECT", "%08X", MP_VECT_ADDR);
 	DefinePrint("DD_MP_VECT_END", "%08X", MP_VECT_ADDR + COREAP_16BIT_INIT_END - COREAP_16BIT_INIT - 1);
 

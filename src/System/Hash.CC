@@ -166,7 +166,7 @@ I64 HashEntriesCompare3(CWho *h1, CWho *h2)
 	}
 }
 
-public U0 Who(U8 *fu_flags=NULL, CHashTable *h=NULL, U8 *idx=NULL, CDoc *doc=NULL)
+public U0 HashTableDump(U8 *fu_flags=NULL, CHashTable *h=NULL, U8 *idx=NULL, CDoc *doc=NULL)
 {	//Dump hash symbol table.
 	// "+p" for only public symbols
 	// "+m" to order by number (normally alphabetical)
@@ -403,7 +403,7 @@ public I64 HashDepthRep(CHashTable *table=NULL)
 
 public U0 DocHelpIdx(CDoc *doc, U8 *idx)
 {//Put to doc report for given help idx.
-	Who("+p",, idx, doc);
+	HashTableDump("+p",, idx, doc);
 }
 
 public U0 PopUpHelpIndex(U8 *idx, CTask *parent=NULL)

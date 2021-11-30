@@ -357,7 +357,7 @@ public Bool DocType(CDoc *doc=NULL, U8 *filename, I64 trailing_new_lines=1)
 		doc2 = DocRead(filename);
 		DocInsDoc(doc, doc2);
 		if (IsRaw)
-			DocDump(doc2, 100000);
+			DocDumpLines(doc2, 100000);
 		DocDel(doc2);
 		res = TRUE;
 	}

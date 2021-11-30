@@ -45,7 +45,7 @@ U0 TCPTest()
 
 	"\n\n";
 
-	D(buffer, buffer_size, FALSE);
+	Dump(buffer, buffer_size, FALSE);
 
 	"\n\n";
 

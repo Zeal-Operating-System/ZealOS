@@ -277,7 +277,7 @@ public U0 DocPrintAtomic(CDoc *doc=NULL, U8 *format, ...)
 	Free(buf);
 }
 
-U0 DocDump(CDoc *doc, I64 uS_delay=0)
+U0 DocDumpLines(CDoc *doc, I64 uS_delay=0)
 {
 	U8			*st;
 	CDocEntry	*doc_e, *doc_e2;
@@ -349,7 +349,7 @@ public CDocEntry *DocPutLine(CDoc *doc=NULL, CDocEntry *doc_e)
 
 #help_index "Debugging/Dump;DolDoc/Cmd Line (Typically);"\
 			"Cmd Line (Typically);DolDoc/Output;StdOut/DolDoc"
-public U0 DocDm(U8 *buf, I64 count=0x80)
+public U0 DocDumpMem(U8 *buf, I64 count=0x80)
 {//Dump live chunk of mem showing addresses. Can be edited.
 	CDocEntry	*doc_e;
 	CDoc		*doc = DocPut;
@@ -363,7 +363,7 @@ public U0 DocDm(U8 *buf, I64 count=0x80)
 		DocUnlock(doc);
 }
 
-public U0 DocD(U8 *buf, I64 count=0x80)
+public U0 DocDump(U8 *buf, I64 count=0x80)
 {//Dump live chunk of mem showing offsets. Can be edited.
 	CDocEntry	*doc_e;
 	CDoc		*doc = DocPut;

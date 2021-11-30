@@ -139,7 +139,7 @@ I64 HtmlGen()
 	progress1		= 0;
 	progress1_max	= FileCount(FilesFind("::/", FUF_RECURSE));
 
-	DirIndex("::/HTML/", "::/", "Who;");
+	DirIndex("::/HTML/", "::/", "HashTableDump;");
 
 	res = Dir2Html("::/", "::/HTML/");
 

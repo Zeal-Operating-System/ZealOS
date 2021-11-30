@@ -448,7 +448,7 @@ public U0 PaletteEditor()
 				case CH_CTRLA:
 					PESave(TRUE, c);
 					break;
-				case CH_ESC:
+				case CH_ESC:
 					MemCopy(&gr_temp_palette, gr_palette, sizeof(CBGR24) * COLORS_NUM);
 					keep_palette = TRUE;
 				case CH_SHIFT_ESC:

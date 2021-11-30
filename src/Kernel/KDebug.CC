@@ -192,9 +192,9 @@ U0 CallerRep(U8 **rbp=NULL, CTask *task=NULL)
 	}
 }
 
-U0 D(U8 *addr, I64 count=0x80, Bool show_offset=TRUE)
+U0 Dump(U8 *addr, I64 count=0x80, Bool show_offset=TRUE)
 {//Dump mem, showing offsets.
-//See $LK,"DocD",A="MN:DocD"$() for a live dump.
+//See $LK,"DocDump",A="MN:DocDump"$() for a live dump.
 	I64 i, j, ch;
 	U8 *ptr = addr;
 
@@ -227,12 +227,12 @@ U0 D(U8 *addr, I64 count=0x80, Bool show_offset=TRUE)
 	}
 }
 
-U0 Dm(U8 *addr, I64 count=0x80)
+U0 DumpMem(U8 *addr, I64 count=0x80)
 {//Show mem address, not offsets.
-	D(addr, count, FALSE);
+	Dump(addr, count, FALSE);
 }
 
-U0 Da(U8 **addr, I64 count=0x10)
+U0 DumpAddress(U8 **addr, I64 count=0x10)
 {//Dump mem, showing symbolic addresses.
 	while (count-- > 0)
 	{
@@ -260,7 +260,7 @@ U0 RawPrint(I64 mS=100, U8 *format, ...)
 	Free(buf);
 }
 
-U0 RawD(I64 mS=100, U8 *addr, I64 count=0x80)
+U0 RawDump(I64 mS=100, U8 *addr, I64 count=0x80)
 {//Dumps a block of mem using $LK,"Raw",A="MN:Raw"$
 //screen output for a fixed length
 	//of time.
@@ -270,7 +270,7 @@ U0 RawD(I64 mS=100, U8 *addr, I64 count=0x80)
 	CLI
 	old_raw = Raw(ON);
 	old_input_filter = LBtr(&Fs->task_flags, TASKf_INPUT_FILTER_TASK);
-	D(addr, count);
+	Dump(addr, count);
 	Busy(mS << 10);
 	POPFD
 
@@ -278,7 +278,7 @@ U0 RawD(I64 mS=100, U8 *addr, I64 count=0x80)
 	Raw(old_raw);
 }
 
-U0 RawDm(I64 mS=100, U8 *addr, I64 count=0x80)
+U0 RawDumpMem(I64 mS=100, U8 *addr, I64 count=0x80)
 {//Dumps a block of mem using $LK,"Raw",A="MN:Raw"$
 //screen output for a fixed length
 	//of time.
@@ -288,7 +288,7 @@ U0 RawDm(I64 mS=100, U8 *addr, I64 count=0x80)
 	CLI
 	old_raw = Raw(ON);
 	old_input_filter = LBtr(&Fs->task_flags, TASKf_INPUT_FILTER_TASK);
-	Dm(addr, count);
+	DumpMem(addr, count);
 	Busy(mS << 10);
 	POPFD
 
@@ -322,7 +322,7 @@ I64 *TaskRegAddr(CTask *task, I64 reg_num)
 
 #define RAWDR_COL 			(text.cols - 40)
 
-U0 RawDr(CTask *task=NULL)
+U0 RawDumpRegs(CTask *task=NULL)
 {
 	I64  i, j, old_col = text.raw_col;
 	Bool old_raw = Raw(ON);
@@ -380,7 +380,7 @@ U0 RawDr(CTask *task=NULL)
 	Raw(old_raw);
 }
 
-U0 Dr(CTask *task=NULL)
+U0 DumpRegs(CTask *task=NULL)
 {//Dump registers
 	I64 i;
 
@@ -599,14 +599,14 @@ U0 DebugHelp()
 	"The cmd line is basically the same as normal.	Here are some common\n"
 	"debugging commands.\n\n"
 	">EdLite(\"FileName\");\t\t\t\t// Edit file.\n"
-	">D(0x100000);\t\t\t\t\t\t// Dump page tables.\n"
-	">Dm(0x100000);\t\t\t\t\t\t// Dump page tables.\n"
-	">Dm(Fs, sizeof(CTask));\t\t\t\t// Dump current task record.\n"
+	">Dump(0x100000);\t\t\t\t\t// Dump page tables.\n"
+	">DumpMem(0x100000);\t\t\t\t\t// Dump page tables.\n"
+	">DumpMem(Fs, sizeof(CTask));\t\t// Dump current task record.\n"
 	">ClassRep(Fs, \"CTask\", 1);\t\t\t// Dump current task record.\n"
 	">ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n"
 	">CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n"
-	">Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n"
-	">Dr;\t\t\t\t\t\t\t\t// Dump Registers.\n"
+	">DumpAddress(_RSP);\t\t\t\t\t// Dump stack.\n"
+	">DumpRegs;\t\t\t\t\t\t\t// Dump Registers.\n"
 	">1 + 2 * 3 + &Print;\t\t\t\t// Show calculation res.\n"
 	">*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n"
 	">_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n"
@@ -647,6 +647,7 @@ U0 Debug2()
 	}
 	else
 		debug.panic = TRUE;
+	"\n";
 	old_waiting_message = LBtr(&Fs->task_flags, TASKf_AWAITING_MESSAGE);
 	old_win_inhibit = Fs->win_inhibit;
 	Fs->win_inhibit = WIG_USER_TASK_DEFAULT;

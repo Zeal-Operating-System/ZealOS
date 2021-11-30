@@ -69,7 +69,7 @@ $ID,2$Binary executable files have export symbols which are loaded into the symb
 $ID,-2$$TR,"Why doesn't assert work?"$
 $ID,2$$FG,2$#assert$FG$ might print a message at COMPILE time, not run time.
 $ID,-2$$TR,"Why doesn't C++ public work?"$
-$ID,2$The word $FG,2$public$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"Who",A="MN:Who"$() to exclude meaningless symbols.	If you wish a full report of public and nonpublic symbols $MA-X+PU,"Click Here",LM="DocMax(1000000);Who;View;\n"$.
+$ID,2$The word $FG,2$public$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"HashTableDump",A="MN:HashTableDump"$() to exclude meaningless symbols.	If you wish a full report of public and nonpublic symbols $MA-X+PU,"Click Here",LM="DocMax(1000000);HashTableDump;View;\n"$.
 $ID,-2$$TR,"How does the debugger do source debugging?"$
 $ID,2$When compilation takes place, the structures used by the compiler stick around.  Data on classes can be accessed.  See $LK,"ClassRep",A="MN:ClassRep"$().
 $ID,-2$$TR,"What is ASCII 5 doing in my text files?"$

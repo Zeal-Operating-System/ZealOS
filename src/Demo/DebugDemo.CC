@@ -4,7 +4,7 @@ Press <CTRL-ALT-c> to break.
 Rerun Program
 
 Press <CTRL-ALT-d> to enter Debug.
-> $LK,"Dr",A="MN:Dr"$;	//Dump Registers
+> $LK,"DumpRegs",A="MN:DumpRegs"$;	//Dump Registers
 > $LK,"G2",A="MN:G2"$;	//Cont program
 
 Press <CTRL-ALT-d> to enter Debug.

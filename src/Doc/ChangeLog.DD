@@ -1,4 +1,21 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----11/30/21 13:40:29----$IV,0$
+* Raised version number to 1.05.
+* $LK,"R",A="MN:R"$("DocDump",	"$LK+PU,"DocDumpLines",A="MN:DocDumpLines"$");
+* $LK,"R",A="MN:R"$("DocDm",	"$LK+PU,"DocDumpMem",A="MN:DocDumpMem"$");
+* $LK,"R",A="MN:R"$("DocD",		"$LK+PU,"DocDump",A="MN:DocDump"$");
+* $LK,"R",A="MN:R"$("Dump(U8",	"$LK+PU,"FileDump",A="MN:FileDump"$(U8");
+* $LK,"R",A="MN:R"$("DClus",	"$LK+PU,"ClusDump",A="MN:ClusDump"$");
+* $LK,"R",A="MN:R"$("DBlk",		"$LK+PU,"BlkDump",A="MN:BlkDump"$");
+* $LK,"R",A="MN:R"$("RawDm",	"$LK+PU,"RawDumpMem",A="MN:RawDumpMem"$");
+* $LK,"R",A="MN:R"$("RawDr",	"$LK+PU,"RawDumpRegs",A="MN:RawDumpRegs"$");
+* $LK,"R",A="MN:R"$("RawD",		"$LK+PU,"RawDump",A="MN:RawDump"$");
+* $LK,"R",A="MN:R"$("Dr",		"$LK+PU,"DumpRegs",A="MN:DumpRegs"$");
+* $LK,"R",A="MN:R"$("Dm",		"$LK+PU,"DumpMem",A="MN:DumpMem"$");
+* $LK,"R",A="MN:R"$("D(",		"$LK+PU,"Dump",A="MN:Dump"$(", "-i");
+* $LK,"R",A="MN:R"$("Who",		"$LK+PU,"HashTableDump",A="MN:HashTableDump"$");
+* $LK,"R",A="MN:R"$("Da",		"$LK+PU,"DumpAddress",A="MN:DumpAddress"$");
+
 $IV,1$----10/30/21 05:02:51----$IV,0$
 * Added column headers to Rep functions.
 * Changed $LK+PU,"ProfRep",A="FF:::/System/Utils/Profiler.CC,ProfSort"$ to sort by hits.
@@ -128,7 +145,7 @@ $IV,1$----07/23/21 16:30:23----$IV,0$
 $IV,1$----07/14/21 13:12:34----$IV,0$
 * Raised version number to 0.08.
 * Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.CC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.CC,CH_CTRLS"$.
-* Added top & right borders to $LK+PU,"RawDr",A="FF:::/Kernel/KDebug.CC,RawDr"$.
+* Added top & right borders to $LK+PU,"RawDumpRegs",A="FF:::/Kernel/KDebug.CC,RawDumpRegs"$.
 * Improved spacing in some debug commands.
 * Fixed $LK+PU,"RawPutChar",A="MN:RawPutChar"$ and $LK+PU,"EdLite",A="MN:EdLite"$ tab width.
 * Fixed $LK+PU,"Ui",A="MN:Ui"$ missing "0x" prefix syntax highlighter bug.
@@ -377,7 +394,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
 * Shortened $LK,"CheckPtr",A="MN:CheckPtr"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
-* $LK,"RawDr",A="MN:RawDr"$() is 40 columns off the right of the screen, instead of fixed at column 40.
+* $LK,"RawDumpRegs",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
 * Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
 * Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.CC"$.
