@@ -1065,7 +1065,7 @@ U0 AHCIInit()
 	CAHCIPort	*port;
 	I64			 i, bdf;
 
-	"컴컴컴컴컴컴컴컴컴컴컴\n";
+	"______________________\n";
 
 	bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0); //0x010601, last byte prog_if, AHCI version 1.0
 
@@ -1125,7 +1125,7 @@ U0 AHCIInit()
 				"Unknown\n";
 		}
 	}
-	"컴컴컴컴컴컴컴컴컴컴컴\n\n";
+	"______________________\n\n";
 }
 
 Bool AHCIBootDVDProbeAll(CBlkDev *bd)
@@ -1135,7 +1135,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 	U8			*buf = CAlloc(DVD_BLK_SIZE);
 	CKernel 	*kernel;
 
-	"컴컴컴컴컴컴컴컴컴컴컴\n";
+	"______________________\n";
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
@@ -1165,7 +1165,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 				if (kernel->compile_time == sys_compile_time)
 				{
 					"AHCI: Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
-					"컴컴컴컴컴컴컴컴컴컴컴\n";
+					"______________________\n";
 					return TRUE;
 				}
 				else

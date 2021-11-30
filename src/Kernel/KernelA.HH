@@ -4261,7 +4261,10 @@ public class CTextGlobals
 };
 
 #define FONT_WIDTH		8
-#define FONT_HEIGHT 	8
+// 8x16 hack
+//#define FONT_HEIGHT 	8
+#define FONT_HEIGHT 	16
+////////////
 
 #help_index "Graphics"
 //z-values less than zero are in front of screen and not drawn.

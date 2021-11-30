@@ -219,7 +219,10 @@ GET_IP: POP 	BX
 
 //Get pointer to 8x8 VGA ROM font.
 		MOV		AX, 0x1130
-		MOV		BH, 3
+		// 8x16 hack
+//		MOV		BH, 3
+		MOV		BH, 6
+		////////////
 		INT		0x10
 		MOV		AX, ES
 		SHL		EAX, 16

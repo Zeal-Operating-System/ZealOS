@@ -184,6 +184,12 @@ U0 GrUpdateTextBG()
 	Bool		 blink_flag = Blink;
 	U8			*dst2 = dst;
 
+	// 8x16 hack
+	CDC *dc = DCAlias(gr.dc2);
+	dc->flags |= DCF_ON_TOP;
+	DCFill(dc, WHITE);
+	////////////
+
 	if (gr.pan_text_x || gr.hide_col)
 	{
 		gr.pan_text_x = ClampI64(gr.pan_text_x, -7, 7);
@@ -252,6 +258,14 @@ U0 GrUpdateTextBG()
 					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
 			}
 			c = gr.to_8_colors[cur_ch.u8[1] >> 4];
+
+			// 8x16 hack
+			dc->color = cur_ch.u8[1] >> 4;
+			GrRect(dc,
+					GR_WIDTH  - col * FONT_WIDTH  - FONT_WIDTH,
+					GR_HEIGHT - row * FONT_HEIGHT - FONT_HEIGHT,
+					FONT_WIDTH, FONT_HEIGHT);
+			/*
 			MOV 			U64 [RSI], R13
 			ADD 			RSI, R12
 			MOV 			U64 [RSI], R13
@@ -267,11 +281,15 @@ U0 GrUpdateTextBG()
 			MOV 			U64 [RSI], R13
 			ADD 			RSI, R12
 			MOV 			U64 [RSI], R13
+			*/
+			////////////
+
 			dst(U8 *) += w2;
 		}
 		src += w4;
 		dst(U8 *) += w3;
 	}
+	DCDel(dc);
 }
 
 U0 GrUpdateTextFG()
@@ -281,6 +299,12 @@ U0 GrUpdateTextFG()
 		 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, row, col;
 	U8	*dst_start = gr.dc2->body, *dst_end = dst_start + w1 * gr.dc2->height - 7 * w1 - 8;
 	Bool blink_flag = Blink;
+
+	// 8x16 hack
+	CDC *dc = DCAlias(gr.dc2);
+	dc->flags |= DCF_ON_TOP;
+	I64 x_shift;
+	////////////
 
 	if (gr.pan_text_x || gr.hide_col)
 	{
@@ -331,15 +355,46 @@ U0 GrUpdateTextFG()
 					i |= ~0x1F;
 				i = w1 * i + j;
 				if (dst_start <= dst(U8 *) + i < dst_end)
-					GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst(U8 *) + i, w1);
+				{
+//					GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst(U8 *) + i, w1);
+				// 8x16 hack
+					dc->color = cur_ch.u8[1] & 0xF;
+					x_shift = cur_ch.u8[2] & 0x1F;
+					GrPutChar(dc,
+								GR_WIDTH  - col * FONT_WIDTH  - FONT_WIDTH + x_shift,
+								GR_HEIGHT - row * FONT_HEIGHT - FONT_HEIGHT,
+								cur_ch(U8));
+					if (Bt(&cur_ch, ATTRf_UNDERLINE))
+						GrHLine(dc,
+								GR_WIDTH  - col * FONT_WIDTH  - FONT_WIDTH,
+								GR_WIDTH  - col * FONT_WIDTH,
+								GR_HEIGHT - row * FONT_HEIGHT - 2);
+				}
+				////////////
 			}
 			else
-				GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst, w1);
+			{
+//				GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst, w1);
+			// 8x16 hack
+				dc->color = cur_ch.u8[1] & 0xF;
+				x_shift = cur_ch.u8[2] & 0x1F;
+				GrPutChar(dc,
+							GR_WIDTH  - col * FONT_WIDTH  - FONT_WIDTH + x_shift,
+							GR_HEIGHT - row * FONT_HEIGHT - FONT_HEIGHT,
+							cur_ch(U8));
+				if (Bt(&cur_ch, ATTRf_UNDERLINE))
+					GrHLine(dc,
+							GR_WIDTH  - col * FONT_WIDTH  - FONT_WIDTH,
+							GR_WIDTH  - col * FONT_WIDTH,
+							GR_HEIGHT - row * FONT_HEIGHT - 2);
+			}
+			////////////
 			dst(U8 *) += 8;
 		}
 		src += w4;
 		dst(U8 *) += w2;
 	}
+	DCDel(dc);
 }
 
 U0 DCBlotColor8(CDC *dc, CDC *img)

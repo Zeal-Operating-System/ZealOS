@@ -149,9 +149,12 @@ _DC_BLOT_COLOR4::
 _IS_PIX_COVERED0::
 				PUSH		RBP
 				MOV 		RBP, RSP
-#assert FONT_WIDTH == FONT_HEIGHT == 8
+// 8x16 hack
+//#assert FONT_WIDTH == FONT_HEIGHT == 8
 				MOV 		RCX, U64 SF_ARG3[RBP]
-				SAR 		RCX, 3
+//				SAR 		RCX, 3
+				SAR 		RCX, 4
+////////////
 				MOV 		RAX, U64 SF_ARG2[RBP]
 				SAR 		RAX, 3
 				MOV 		RDX, U64 SF_ARG1[RBP]

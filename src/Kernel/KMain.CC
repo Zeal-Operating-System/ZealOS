@@ -95,8 +95,11 @@ U0 SysGrInit()
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
 	text.aux_font[255]	= text.font[255]; //Block symbol ÿ
 
-	for (i = 'ณ'; i < 'Û'; i++)
-		text.aux_font[i] = text.font[i];
+// 8x16 hack
+//	for (i = 'ณ'; i < 'Û'; i++)
+//		text.aux_font[i] = text.font[i];
+	SwapI64(&text.font, &text.aux_font);
+////////////
 	
 	text.border_chars[2] (I64) = 'ฤอณบฺษฟป';
 	text.border_chars[10](U32) = 'ภศูผ';
@@ -167,7 +170,7 @@ U0 KMain()
 	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level, RLf_RAW);
 	"\nZealOS V%0.2f\t%D %T\n", sys_os_version, sys_compile_time, sys_compile_time;
-	"อออออออออออออออออออออออออออออออออ\n\n";
+	"_________________________________\n\n";
 
 	"TimerInit;\n";
 	TimerInit;

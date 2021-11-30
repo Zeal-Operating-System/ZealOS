@@ -69,7 +69,10 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;
-		ch_bitmap = text.font[ch & 0xFF];
+		// 8x16 hack
+//		ch_bitmap = text.font[ch & 0xFF];
+		ch_bitmap = text.font[2 * ch & 0xFF];
+		////////////
 		framebuffer = text.fb_alias + sys_vbe_mode.width * y + x;
 
 		PUSHFD
@@ -83,6 +86,10 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 			if (i & (FONT_WIDTH - 1) == FONT_WIDTH - 1)
 				framebuffer += sys_vbe_mode.width - FONT_WIDTH;
 			ch_bitmap >>= 1;
+			// 8x16 hack
+			if (i == FONT_WIDTH * FONT_HEIGHT / 2 - 1)
+				ch_bitmap = text.font[2 * ch & 0xFF + 1];
+			////////////
 		}
 		POPFD
 		text.raw_col++;

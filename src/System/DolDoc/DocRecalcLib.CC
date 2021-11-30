@@ -2,8 +2,13 @@
 
 I64 DocCharDist(CDoc *doc, I64 x, I64 y)
 {
-#assert FONT_WIDTH == FONT_HEIGHT
-	return (SqrI64(doc->x - x) + SqrI64(doc->y - y)) * FONT_WIDTH * FONT_WIDTH;
+// 8x16 hack
+//#assert FONT_WIDTH == FONT_HEIGHT
+//	return (SqrI64(doc->x - x) + SqrI64(doc->y - y)) * FONT_WIDTH * FONT_WIDTH;
+	return (SqrI64(doc->x - x) * FONT_WIDTH + SqrI64(doc->y - y)) * FONT_HEIGHT;
+////////////
+
+
 }
 
 U0 DocDelToNum(CDoc *doc, I64 num)

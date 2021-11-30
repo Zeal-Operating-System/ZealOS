@@ -10,6 +10,14 @@
 U0 Tmp()
 {
 	OnceExe;
+	// 8x16 hack
+	text.font[256] = -1;
+	text.font[257] = -1;
+	text.font[258] = text.font[259] = 0xFFFF0000FFFF0000 & 0x9999999999999999;
+	text.border_chars[2] (I64) = '€€€€';
+	text.border_chars[10](U32) = '€€';
+	////////////
+
 	switch (sys_boot_src.u16[0])
 	{
 		case BOOT_SRC_ROM:
