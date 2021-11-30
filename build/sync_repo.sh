@@ -36,4 +36,4 @@ echo "set perms"
 sudo chown -R $USER:$USER ../src/*
 mv ../src/Tmp/AUTO.ISO.C ./AUTO.ISO
 echo "finished."
-#git status
+git status
