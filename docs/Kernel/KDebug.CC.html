@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -219,9 +219,9 @@ body {background-color:#1f1f1f;}
 <a name="l192"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l193"></a>}
 <a name="l194"></a>
-<a name="l195"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>D</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> show_offset=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l195"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Dump</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> show_offset=</span><span class=cF3>TRUE</span><span class=cF0>)
 <a name="l196"></a>{</span><span class=cF2>//Dump mem, showing offsets.</span><span class=cF0>
-<a name="l197"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l366"><span class=cF4>DocD</span></a><span class=cF2>() for a live dump.</span><span class=cF0>
+<a name="l197"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l366"><span class=cF4>DocDump</span></a><span class=cF2>() for a live dump.</span><span class=cF0>
 <a name="l198"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, ch;
 <a name="l199"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr = addr;
 <a name="l200"></a>
@@ -254,12 +254,12 @@ body {background-color:#1f1f1f;}
 <a name="l227"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l228"></a>}
 <a name="l229"></a>
-<a name="l230"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Dm</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
+<a name="l230"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DumpMem</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
 <a name="l231"></a>{</span><span class=cF2>//Show mem address, not offsets.</span><span class=cF0>
-<a name="l232"></a>    </span><span class=cF5>D</span><span class=cF0>(addr, count, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l232"></a>    </span><span class=cF5>Dump</span><span class=cF0>(addr, count, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l233"></a>}
 <a name="l234"></a>
-<a name="l235"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Da</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l235"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DumpAddress</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x10</span><span class=cF0>)
 <a name="l236"></a>{</span><span class=cF2>//Dump mem, showing symbolic addresses.</span><span class=cF0>
 <a name="l237"></a>    </span><span class=cF1>while</span><span class=cF0> (count-- &gt; </span><span class=cFE>0</span><span class=cF0>)
 <a name="l238"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -287,7 +287,7 @@ body {background-color:#1f1f1f;}
 <a name="l260"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
 <a name="l261"></a>}
 <a name="l262"></a>
-<a name="l263"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawD</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
+<a name="l263"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDump</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
 <a name="l264"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
 <a name="l265"></a></span><span class=cF2>//screen output for a fixed length</span><span class=cF0>
 <a name="l266"></a>    </span><span class=cF2>//of time.</span><span class=cF0>
@@ -297,7 +297,7 @@ body {background-color:#1f1f1f;}
 <a name="l270"></a>    </span><span class=cF1>CLI</span><span class=cF0>
 <a name="l271"></a>    old_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
 <a name="l272"></a>    old_input_filter = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF0>);
-<a name="l273"></a>    </span><span class=cF5>D</span><span class=cF0>(addr, count);
+<a name="l273"></a>    </span><span class=cF5>Dump</span><span class=cF0>(addr, count);
 <a name="l274"></a>    </span><span class=cF5>Busy</span><span class=cF0>(mS &lt;&lt; </span><span class=cFE>10</span><span class=cF0>);
 <a name="l275"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
 <a name="l276"></a>
@@ -305,7 +305,7 @@ body {background-color:#1f1f1f;}
 <a name="l278"></a>    </span><span class=cF5>Raw</span><span class=cF0>(old_raw);
 <a name="l279"></a>}
 <a name="l280"></a>
-<a name="l281"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDm</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
+<a name="l281"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDumpMem</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
 <a name="l282"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
 <a name="l283"></a></span><span class=cF2>//screen output for a fixed length</span><span class=cF0>
 <a name="l284"></a>    </span><span class=cF2>//of time.</span><span class=cF0>
@@ -315,7 +315,7 @@ body {background-color:#1f1f1f;}
 <a name="l288"></a>    </span><span class=cF1>CLI</span><span class=cF0>
 <a name="l289"></a>    old_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
 <a name="l290"></a>    old_input_filter = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF0>);
-<a name="l291"></a>    </span><span class=cF5>Dm</span><span class=cF0>(addr, count);
+<a name="l291"></a>    </span><span class=cF5>DumpMem</span><span class=cF0>(addr, count);
 <a name="l292"></a>    </span><span class=cF5>Busy</span><span class=cF0>(mS &lt;&lt; </span><span class=cFE>10</span><span class=cF0>);
 <a name="l293"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
 <a name="l294"></a>
@@ -349,7 +349,7 @@ body {background-color:#1f1f1f;}
 <a name="l322"></a>
 <a name="l323"></a>#</span><span class=cF1>define</span><span class=cF0> RAWDR_COL           (</span><span class=cFB>text</span><span class=cF0>.cols - </span><span class=cFE>40</span><span class=cF0>)
 <a name="l324"></a>
-<a name="l325"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDr</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l325"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDumpRegs</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l326"></a>{
 <a name="l327"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, j, old_col = </span><span class=cFB>text</span><span class=cF0>.raw_col;
 <a name="l328"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
@@ -407,7 +407,7 @@ body {background-color:#1f1f1f;}
 <a name="l380"></a>    </span><span class=cF5>Raw</span><span class=cF0>(old_raw);
 <a name="l381"></a>}
 <a name="l382"></a>
-<a name="l383"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Dr</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l383"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DumpRegs</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l384"></a>{</span><span class=cF2>//Dump registers</span><span class=cF0>
 <a name="l385"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l386"></a>
@@ -626,14 +626,14 @@ body {background-color:#1f1f1f;}
 <a name="l599"></a>    </span><span class=cF6>&quot;The cmd line is basically the same as normal.</span><span class=cF0>  </span><span class=cF6>Here are some common\n&quot;</span><span class=cF0>
 <a name="l600"></a>    </span><span class=cF6>&quot;debugging commands.\n\n&quot;</span><span class=cF0>
 <a name="l601"></a>    </span><span class=cF6>&quot;&gt;EdLite(\&quot;FileName\&quot;);\t\t\t\t// Edit file.\n&quot;</span><span class=cF0>
-<a name="l602"></a>    </span><span class=cF6>&quot;&gt;D(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
-<a name="l603"></a>    </span><span class=cF6>&quot;&gt;Dm(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
-<a name="l604"></a>    </span><span class=cF6>&quot;&gt;Dm(Fs, sizeof(CTask));\t\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
+<a name="l602"></a>    </span><span class=cF6>&quot;&gt;Dump(0x100000);\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
+<a name="l603"></a>    </span><span class=cF6>&quot;&gt;DumpMem(0x100000);\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
+<a name="l604"></a>    </span><span class=cF6>&quot;&gt;DumpMem(Fs, sizeof(CTask));\t\t// Dump current task record.\n&quot;</span><span class=cF0>
 <a name="l605"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs, \&quot;CTask\&quot;, 1);\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
 <a name="l606"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n&quot;</span><span class=cF0>
 <a name="l607"></a>    </span><span class=cF6>&quot;&gt;CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n&quot;</span><span class=cF0>
-<a name="l608"></a>    </span><span class=cF6>&quot;&gt;Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n&quot;</span><span class=cF0>
-<a name="l609"></a>    </span><span class=cF6>&quot;&gt;Dr;\t\t\t\t\t\t\t\t// Dump Registers.\n&quot;</span><span class=cF0>
+<a name="l608"></a>    </span><span class=cF6>&quot;&gt;DumpAddress(_RSP);\t\t\t\t\t// Dump stack.\n&quot;</span><span class=cF0>
+<a name="l609"></a>    </span><span class=cF6>&quot;&gt;DumpRegs;\t\t\t\t\t\t\t// Dump Registers.\n&quot;</span><span class=cF0>
 <a name="l610"></a>    </span><span class=cF6>&quot;&gt;1 + 2 * 3 + &amp;Print;\t\t\t\t// Show calculation res.\n&quot;</span><span class=cF0>
 <a name="l611"></a>    </span><span class=cF6>&quot;&gt;*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n&quot;</span><span class=cF0>
 <a name="l612"></a>    </span><span class=cF6>&quot;&gt;_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n&quot;</span><span class=cF0>
@@ -674,122 +674,123 @@ body {background-color:#1f1f1f;}
 <a name="l647"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l648"></a>    </span><span class=cF1>else</span><span class=cF0>
 <a name="l649"></a>        </span><span class=cFB>debug</span><span class=cF0>.panic = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l650"></a>    old_waiting_message = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>);
-<a name="l651"></a>    old_win_inhibit = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit;
-<a name="l652"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_USER_TASK_DEFAULT</span><span class=cF0>;
-<a name="l653"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l654"></a>    </span><span class=cFB>kbd</span><span class=cF0>.scan_code = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l655"></a>    old_getstr2 = </span><span class=cFB>fp_getstr2</span><span class=cF0>;
-<a name="l656"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = &amp;</span><span class=cFD>SysGetStr2</span><span class=cF0>;
-<a name="l657"></a>    old_single = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l658"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cFB>mouse_hard</span><span class=cF0>.install_attempts)
-<a name="l659"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l660"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(old_single);
-<a name="l661"></a>    </span><span class=cF5>UserTaskCont</span><span class=cF0>;
-<a name="l662"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = old_getstr2;
-<a name="l663"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = old_win_inhibit;
-<a name="l664"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>, old_waiting_message);
-<a name="l665"></a>}
-<a name="l666"></a>
-<a name="l667"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault3</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
-<a name="l668"></a>{
-<a name="l669"></a>    </span><span class=cF1>no_warn</span><span class=cF0> fault_err_code;
-<a name="l670"></a>
-<a name="l671"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l672"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l673"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp;&amp; </span><span class=cFB>debug</span><span class=cF0>.mp_crash)
-<a name="l674"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l675"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l676"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num     = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
-<a name="l677"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task        = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l678"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip         = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
-<a name="l679"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message     = </span><span class=cFB>debug</span><span class=cF0>.message;
-<a name="l680"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFB>debug</span><span class=cF0>.message_num;
-<a name="l681"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l682"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
-<a name="l683"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l684"></a>
-<a name="l685"></a>    </span><span class=cF6>&quot;\n\tZealOS Debugger\n\n&quot;</span><span class=cF0>
-<a name="l686"></a>    </span><span class=cF6>&quot;  Type Help; for help.\n\n&quot;</span><span class=cF0>;
-<a name="l687"></a>
-<a name="l688"></a>    </span><span class=cF5>Beep</span><span class=cF0>(</span><span class=cFE>62</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l689"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_DEBUG</span><span class=cF0>)
-<a name="l690"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l691"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message)
-<a name="l692"></a>        {
-<a name="l693"></a>            </span><span class=cF6>&quot;\n!!! %s&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message;
-<a name="l694"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message_num)
-<a name="l695"></a>                </span><span class=cF6>&quot;%016X&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message_num;
-<a name="l696"></a>            </span><span class=cF6>&quot; !!!\n\n&quot;</span><span class=cF0>;
-<a name="l697"></a>        }
-<a name="l698"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l699"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
-<a name="l700"></a>        </span><span class=cF5>CallerRep</span><span class=cF0>;
-<a name="l701"></a>    </span><span class=cFD>Debug2</span><span class=cF0>;
-<a name="l702"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l703"></a>}
-<a name="l704"></a>
-<a name="l705"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
-<a name="l706"></a>{</span><span class=cF2>//Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l707"></a></span><span class=cF2>//Be careful not to swap-out and ruin the saved context</span><span class=cF0>
-<a name="l708"></a>    </span><span class=cF1>Bool</span><span class=cF0> was_raw, was_single_user, was_silent, was_in_debug, was_mouse_enabled;
-<a name="l709"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags;
-<a name="l710"></a>
-<a name="l711"></a>    was_single_user = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l712"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsDebugMode</span><span class=cF0>)
-<a name="l713"></a>        </span><span class=cFB>debug</span><span class=cF0>.focus_task = </span><span class=cFB>sys_focus_task</span><span class=cF0>;
-<a name="l714"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l715"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_BPT</span><span class=cF0>)
-<a name="l716"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip--;
-<a name="l717"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;debug_task)
-<a name="l718"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_DEBUG_RESUME</span><span class=cF0>, fault_num, fault_err_code);
-<a name="l719"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l720"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l721"></a>        was_mouse_enabled = </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l722"></a>        was_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l723"></a>        was_silent = </span><span class=cF5>Silent</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l724"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags |= </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>|</span><span class=cF3>RAWF_SCROLL</span><span class=cF0>;
-<a name="l725"></a>
-<a name="l726"></a>        </span><span class=cF6>&quot;Task \&quot;&quot;</span><span class=cF0>;
-<a name="l727"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title;
-<a name="l728"></a>        </span><span class=cF6>&quot;\&quot;\n\n&quot;</span><span class=cF0>;
-<a name="l729"></a>        </span><span class=cF6>&quot;Fault:    0x%02X %Z\n&quot;</span><span class=cF0>, fault_num, fault_num, </span><span class=cF6>&quot;ST_INT_NAMES&quot;</span><span class=cF0>;
-<a name="l730"></a>        </span><span class=cF6>&quot;Err Code: %08X\n&quot;</span><span class=cF0>, fault_err_code;
-<a name="l731"></a>        was_in_debug = </span><span class=cF5>DebugMode</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l732"></a>        </span><span class=cF6>&quot;RIP:      %08X&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip; </span><span class=cF2>//Sometimes crashes on %p, so do this first</span><span class=cF0>
-<a name="l733"></a>        </span><span class=cF6>&quot;:%p\nRSP:      %08X\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rsp;
-<a name="l734"></a>        </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_PAGE_FAULT</span><span class=cF0>)
-<a name="l735"></a>        {
-<a name="l736"></a>            </span><span class=cF1>MOV_RAX_CR2</span><span class=cF0>
-<a name="l737"></a>            i = </span><span class=cF5>RAXGet</span><span class=cF0>;
-<a name="l738"></a>            </span><span class=cF6>&quot;Fault Addr: %08X:%p\n&quot;</span><span class=cF0>, i, i;
-<a name="l739"></a>        }
-<a name="l740"></a>        </span><span class=cFD>Fault3</span><span class=cF0>(fault_num, fault_err_code);
-<a name="l741"></a>        </span><span class=cF5>DebugMode</span><span class=cF0>(was_in_debug);
-<a name="l742"></a>        </span><span class=cF5>Silent</span><span class=cF0>(was_silent);
-<a name="l743"></a>        </span><span class=cF5>Raw</span><span class=cF0>(was_raw);
-<a name="l744"></a>        </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, was_mouse_enabled);
-<a name="l745"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags = old_raw_flags;
-<a name="l746"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l747"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(was_single_user);
-<a name="l748"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_KILL_AFTER_DEBUG</span><span class=cF7>)</span><span class=cF0>)
-<a name="l749"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
-<a name="l750"></a>}
-<a name="l751"></a>
-<a name="l752"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> panic=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l753"></a>{</span><span class=cF2>//Enter the debugger with panic?</span><span class=cF0>
-<a name="l754"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l755"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l756"></a>    </span><span class=cFB>debug</span><span class=cF0>.message       = message;
-<a name="l757"></a>    </span><span class=cFB>debug</span><span class=cF0>.message_num   = message_num;
-<a name="l758"></a>    </span><span class=cFB>debug</span><span class=cF0>.panic         = panic;
-<a name="l759"></a>    </span><span class=cF1>INT</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>
-<a name="l760"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l761"></a>}
-<a name="l762"></a>
-<a name="l763"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l764"></a>{</span><span class=cF2>//Enter debugger, no panic.</span><span class=cF0>
-<a name="l765"></a>    </span><span class=cF5>Panic</span><span class=cF0>(message, message_num, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l766"></a>}
+<a name="l650"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l651"></a>    old_waiting_message = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>);
+<a name="l652"></a>    old_win_inhibit = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit;
+<a name="l653"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_USER_TASK_DEFAULT</span><span class=cF0>;
+<a name="l654"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l655"></a>    </span><span class=cFB>kbd</span><span class=cF0>.scan_code = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l656"></a>    old_getstr2 = </span><span class=cFB>fp_getstr2</span><span class=cF0>;
+<a name="l657"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = &amp;</span><span class=cFD>SysGetStr2</span><span class=cF0>;
+<a name="l658"></a>    old_single = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l659"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cFB>mouse_hard</span><span class=cF0>.install_attempts)
+<a name="l660"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l661"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(old_single);
+<a name="l662"></a>    </span><span class=cF5>UserTaskCont</span><span class=cF0>;
+<a name="l663"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = old_getstr2;
+<a name="l664"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = old_win_inhibit;
+<a name="l665"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>, old_waiting_message);
+<a name="l666"></a>}
+<a name="l667"></a>
+<a name="l668"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault3</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
+<a name="l669"></a>{
+<a name="l670"></a>    </span><span class=cF1>no_warn</span><span class=cF0> fault_err_code;
+<a name="l671"></a>
+<a name="l672"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l673"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l674"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp;&amp; </span><span class=cFB>debug</span><span class=cF0>.mp_crash)
+<a name="l675"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l676"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l677"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num     = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
+<a name="l678"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task        = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l679"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip         = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
+<a name="l680"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message     = </span><span class=cFB>debug</span><span class=cF0>.message;
+<a name="l681"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFB>debug</span><span class=cF0>.message_num;
+<a name="l682"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l683"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
+<a name="l684"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l685"></a>
+<a name="l686"></a>    </span><span class=cF6>&quot;\n\tZealOS Debugger\n\n&quot;</span><span class=cF0>
+<a name="l687"></a>    </span><span class=cF6>&quot;  Type Help; for help.\n\n&quot;</span><span class=cF0>;
+<a name="l688"></a>
+<a name="l689"></a>    </span><span class=cF5>Beep</span><span class=cF0>(</span><span class=cFE>62</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l690"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_DEBUG</span><span class=cF0>)
+<a name="l691"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l692"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message)
+<a name="l693"></a>        {
+<a name="l694"></a>            </span><span class=cF6>&quot;\n!!! %s&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message;
+<a name="l695"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message_num)
+<a name="l696"></a>                </span><span class=cF6>&quot;%016X&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message_num;
+<a name="l697"></a>            </span><span class=cF6>&quot; !!!\n\n&quot;</span><span class=cF0>;
+<a name="l698"></a>        }
+<a name="l699"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l700"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
+<a name="l701"></a>        </span><span class=cF5>CallerRep</span><span class=cF0>;
+<a name="l702"></a>    </span><span class=cFD>Debug2</span><span class=cF0>;
+<a name="l703"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l704"></a>}
+<a name="l705"></a>
+<a name="l706"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
+<a name="l707"></a>{</span><span class=cF2>//Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l708"></a></span><span class=cF2>//Be careful not to swap-out and ruin the saved context</span><span class=cF0>
+<a name="l709"></a>    </span><span class=cF1>Bool</span><span class=cF0> was_raw, was_single_user, was_silent, was_in_debug, was_mouse_enabled;
+<a name="l710"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags;
+<a name="l711"></a>
+<a name="l712"></a>    was_single_user = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l713"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsDebugMode</span><span class=cF0>)
+<a name="l714"></a>        </span><span class=cFB>debug</span><span class=cF0>.focus_task = </span><span class=cFB>sys_focus_task</span><span class=cF0>;
+<a name="l715"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l716"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_BPT</span><span class=cF0>)
+<a name="l717"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip--;
+<a name="l718"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;debug_task)
+<a name="l719"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_DEBUG_RESUME</span><span class=cF0>, fault_num, fault_err_code);
+<a name="l720"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l721"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l722"></a>        was_mouse_enabled = </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l723"></a>        was_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l724"></a>        was_silent = </span><span class=cF5>Silent</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l725"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags |= </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>|</span><span class=cF3>RAWF_SCROLL</span><span class=cF0>;
+<a name="l726"></a>
+<a name="l727"></a>        </span><span class=cF6>&quot;Task \&quot;&quot;</span><span class=cF0>;
+<a name="l728"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title;
+<a name="l729"></a>        </span><span class=cF6>&quot;\&quot;\n\n&quot;</span><span class=cF0>;
+<a name="l730"></a>        </span><span class=cF6>&quot;Fault:    0x%02X %Z\n&quot;</span><span class=cF0>, fault_num, fault_num, </span><span class=cF6>&quot;ST_INT_NAMES&quot;</span><span class=cF0>;
+<a name="l731"></a>        </span><span class=cF6>&quot;Err Code: %08X\n&quot;</span><span class=cF0>, fault_err_code;
+<a name="l732"></a>        was_in_debug = </span><span class=cF5>DebugMode</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l733"></a>        </span><span class=cF6>&quot;RIP:      %08X&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip; </span><span class=cF2>//Sometimes crashes on %p, so do this first</span><span class=cF0>
+<a name="l734"></a>        </span><span class=cF6>&quot;:%p\nRSP:      %08X\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rsp;
+<a name="l735"></a>        </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_PAGE_FAULT</span><span class=cF0>)
+<a name="l736"></a>        {
+<a name="l737"></a>            </span><span class=cF1>MOV_RAX_CR2</span><span class=cF0>
+<a name="l738"></a>            i = </span><span class=cF5>RAXGet</span><span class=cF0>;
+<a name="l739"></a>            </span><span class=cF6>&quot;Fault Addr: %08X:%p\n&quot;</span><span class=cF0>, i, i;
+<a name="l740"></a>        }
+<a name="l741"></a>        </span><span class=cFD>Fault3</span><span class=cF0>(fault_num, fault_err_code);
+<a name="l742"></a>        </span><span class=cF5>DebugMode</span><span class=cF0>(was_in_debug);
+<a name="l743"></a>        </span><span class=cF5>Silent</span><span class=cF0>(was_silent);
+<a name="l744"></a>        </span><span class=cF5>Raw</span><span class=cF0>(was_raw);
+<a name="l745"></a>        </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, was_mouse_enabled);
+<a name="l746"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags = old_raw_flags;
+<a name="l747"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l748"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(was_single_user);
+<a name="l749"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_KILL_AFTER_DEBUG</span><span class=cF7>)</span><span class=cF0>)
+<a name="l750"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l751"></a>}
+<a name="l752"></a>
+<a name="l753"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> panic=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l754"></a>{</span><span class=cF2>//Enter the debugger with panic?</span><span class=cF0>
+<a name="l755"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l756"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l757"></a>    </span><span class=cFB>debug</span><span class=cF0>.message       = message;
+<a name="l758"></a>    </span><span class=cFB>debug</span><span class=cF0>.message_num   = message_num;
+<a name="l759"></a>    </span><span class=cFB>debug</span><span class=cF0>.panic         = panic;
+<a name="l760"></a>    </span><span class=cF1>INT</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>
+<a name="l761"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l762"></a>}
+<a name="l763"></a>
+<a name="l764"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l765"></a>{</span><span class=cF2>//Enter debugger, no panic.</span><span class=cF0>
+<a name="l766"></a>    </span><span class=cF5>Panic</span><span class=cF0>(message, message_num, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l767"></a>}
 </span></pre></body>
 </html>

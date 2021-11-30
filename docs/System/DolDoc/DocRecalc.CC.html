@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -331,7 +331,7 @@ body {background-color:#1f1f1f;}
 <a name="l304"></a>
 <a name="l305"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocRecalc</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> recalc_flags=</span><span class=cF3>RECALCt_NORMAL</span><span class=cF0>)
 <a name="l306"></a>{</span><span class=cF2>//Recalc and format.  Also used by WinMgr to draw on screen.</span><span class=cF0>
-<a name="l307"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, ii, j, k, x, x0, y, y0, </span><span class=cF5>D</span><span class=cF0>, d2, col, col2, best_col = </span><span class=cFE>0</span><span class=cF0>, best_d = </span><span class=cF3>I64_MAX</span><span class=cF0>, xx, yy, zz, 
+<a name="l307"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, ii, j, k, x, x0, y, y0, D, d2, col, col2, best_col = </span><span class=cFE>0</span><span class=cF0>, best_d = </span><span class=cF3>I64_MAX</span><span class=cF0>, xx, yy, zz, 
 <a name="l308"></a>                     num_entries = </span><span class=cFE>0</span><span class=cF0>, i_jif, cur_u8_attr, tmp_u32_attr, 
 <a name="l309"></a>                     cursor_y = </span><span class=cF3>I64_MIN</span><span class=cF0>, left_margin, right_margin, y_plot_top, y_plot_bottom, 
 <a name="l310"></a>                     top, left, bottom, right, width, height, scroll_x, scroll_y, pix_top, pix_left;
@@ -578,7 +578,7 @@ body {background-color:#1f1f1f;}
 <a name="l551"></a>                doc-&gt;min_y = y;
 <a name="l552"></a>            </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l553"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l554"></a>                </span><span class=cF5>D</span><span class=cF0> = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
+<a name="l554"></a>                D = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
 <a name="l555"></a>                col = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l556"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l557"></a>        }
@@ -683,7 +683,7 @@ body {background-color:#1f1f1f;}
 <a name="l656"></a>                }
 <a name="l657"></a>                </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l658"></a>                {
-<a name="l659"></a>                    </span><span class=cF5>D</span><span class=cF0> = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, doc_e-&gt;x, doc_e-&gt;y);
+<a name="l659"></a>                    D = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, doc_e-&gt;x, doc_e-&gt;y);
 <a name="l660"></a>                    col = doc_e-&gt;min_col;
 <a name="l661"></a>                }
 <a name="l662"></a>                col2 = doc_e-&gt;scroll_len; </span><span class=cF2>//TODO This is flawed</span><span class=cF0>
@@ -700,9 +700,9 @@ body {background-color:#1f1f1f;}
 <a name="l673"></a>                            </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l674"></a>                            {
 <a name="l675"></a>                                d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l676"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
+<a name="l676"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
 <a name="l677"></a>                                </span><span class=cF7>{</span><span class=cF0>
-<a name="l678"></a>                                    </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l678"></a>                                    D = d2;
 <a name="l679"></a>                                    col = col2;
 <a name="l680"></a>                                </span><span class=cF7>}</span><span class=cF0>
 <a name="l681"></a>                            }
@@ -738,9 +738,9 @@ body {background-color:#1f1f1f;}
 <a name="l711"></a>                            </span><span class=cF1>while</span><span class=cF0> (k--)
 <a name="l712"></a>                            </span><span class=cF7>{</span><span class=cF0>
 <a name="l713"></a>                                d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l714"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
+<a name="l714"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
 <a name="l715"></a>                                {
-<a name="l716"></a>                                    </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l716"></a>                                    D = d2;
 <a name="l717"></a>                                    col = col2;
 <a name="l718"></a>                                }
 <a name="l719"></a>                                col2++;
@@ -792,9 +792,9 @@ body {background-color:#1f1f1f;}
 <a name="l765"></a>                        </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l766"></a>                        </span><span class=cF7>{</span><span class=cF0>
 <a name="l767"></a>                            d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l768"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
+<a name="l768"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
 <a name="l769"></a>                            {
-<a name="l770"></a>                                </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l770"></a>                                D = d2;
 <a name="l771"></a>                                col = i * </span><span class=cFE>3</span><span class=cF0>;
 <a name="l772"></a>                            }
 <a name="l773"></a>                        </span><span class=cF7>}</span><span class=cF0>
@@ -818,9 +818,9 @@ body {background-color:#1f1f1f;}
 <a name="l791"></a>                            </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l792"></a>                            {
 <a name="l793"></a>                                d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l794"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
+<a name="l794"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
 <a name="l795"></a>                                </span><span class=cF7>{</span><span class=cF0>
-<a name="l796"></a>                                    </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l796"></a>                                    D = d2;
 <a name="l797"></a>                                    col = col2;
 <a name="l798"></a>                                </span><span class=cF7>}</span><span class=cF0>
 <a name="l799"></a>                            }
@@ -846,9 +846,9 @@ body {background-color:#1f1f1f;}
 <a name="l819"></a>                        </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l820"></a>                        </span><span class=cF7>{</span><span class=cF0>
 <a name="l821"></a>                            d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l822"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
+<a name="l822"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
 <a name="l823"></a>                            {
-<a name="l824"></a>                                </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l824"></a>                                D = d2;
 <a name="l825"></a>                                col = col2;
 <a name="l826"></a>                            }
 <a name="l827"></a>                        </span><span class=cF7>}</span><span class=cF0>
@@ -940,8 +940,8 @@ body {background-color:#1f1f1f;}
 <a name="l913"></a>                        </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l914"></a>                        </span><span class=cF7>{</span><span class=cF0>
 <a name="l915"></a>                            d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l916"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
-<a name="l917"></a>                                </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l916"></a>                            </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
+<a name="l917"></a>                                D = d2;
 <a name="l918"></a>                        </span><span class=cF7>}</span><span class=cF0>
 <a name="l919"></a>                        x++;
 <a name="l920"></a>                    }
@@ -962,8 +962,8 @@ body {background-color:#1f1f1f;}
 <a name="l935"></a>                            </span><span class=cF1>while</span><span class=cF0> (k--)
 <a name="l936"></a>                            {
 <a name="l937"></a>                                d2 = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l938"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; </span><span class=cF5>D</span><span class=cF0>)
-<a name="l939"></a>                                    </span><span class=cF5>D</span><span class=cF0> = d2;
+<a name="l938"></a>                                </span><span class=cF1>if</span><span class=cF0> (d2 &lt; D)
+<a name="l939"></a>                                    D = d2;
 <a name="l940"></a>                                x++;
 <a name="l941"></a>                            }
 <a name="l942"></a>                        </span><span class=cF7>}</span><span class=cF0>
@@ -1217,9 +1217,9 @@ body {background-color:#1f1f1f;}
 <a name="l1190"></a>                    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, xx, yy, zz, bptr);
 <a name="l1191"></a>                    dc-&gt;depth_buf = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l1192"></a>                    dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_LOCATE_NEAREST</span><span class=cF0> | </span><span class=cF3>DCF_DONT_DRAW</span><span class=cF0> | </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>);
-<a name="l1193"></a>                    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;nearest_dist &lt;= </span><span class=cF5>D</span><span class=cF0>)
+<a name="l1193"></a>                    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;nearest_dist &lt;= D)
 <a name="l1194"></a>                    {
-<a name="l1195"></a>                        </span><span class=cF5>D</span><span class=cF0> = dc-&gt;nearest_dist;
+<a name="l1195"></a>                        D = dc-&gt;nearest_dist;
 <a name="l1196"></a>                        col = doc_e-&gt;min_col;
 <a name="l1197"></a>                    }
 <a name="l1198"></a>                </span><span class=cF7>}</span><span class=cF0>
@@ -1278,9 +1278,9 @@ body {background-color:#1f1f1f;}
 <a name="l1251"></a>                doc-&gt;max_x = x;
 <a name="l1252"></a>            </span><span class=cF1>if</span><span class=cF0> (y &gt; doc-&gt;max_y)
 <a name="l1253"></a>                doc-&gt;max_y = y;
-<a name="l1254"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D</span><span class=cF0> &lt;= best_d &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_NO_CLICK_ON</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1254"></a>            </span><span class=cF1>if</span><span class=cF0> (D &lt;= best_d &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_NO_CLICK_ON</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1255"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1256"></a>                best_d = </span><span class=cF5>D</span><span class=cF0>;
+<a name="l1256"></a>                best_d = D;
 <a name="l1257"></a>                best_doc_e = doc_e;
 <a name="l1258"></a>                best_col = col;
 <a name="l1259"></a>            </span><span class=cF7>}</span><span class=cF0>
@@ -1395,10 +1395,10 @@ body {background-color:#1f1f1f;}
 <a name="l1368"></a>            doc_e-&gt;type.u8[</span><span class=cFE>1</span><span class=cF0>]       = cur_u8_attr;
 <a name="l1369"></a>            </span><span class=cF1>if</span><span class=cF0> (find_cursor)
 <a name="l1370"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1371"></a>                </span><span class=cF5>D</span><span class=cF0> = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
-<a name="l1372"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>D</span><span class=cF0> &lt; best_d &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_NO_CLICK_ON</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1371"></a>                D = </span><span class=cF5>DocCharDist</span><span class=cF0>(doc, x, y);
+<a name="l1372"></a>                </span><span class=cF1>if</span><span class=cF0> (D &lt; best_d &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_NO_CLICK_ON</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1373"></a>                {
-<a name="l1374"></a>                    best_d = </span><span class=cF5>D</span><span class=cF0>;
+<a name="l1374"></a>                    best_d = D;
 <a name="l1375"></a>                    best_doc_e = doc_e;
 <a name="l1376"></a>                    best_col = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l1377"></a>                }

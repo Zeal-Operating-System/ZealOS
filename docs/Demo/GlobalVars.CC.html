@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -40,7 +40,7 @@ body {background-color:#1f1f1f;}
 <a name="l13"></a>    </span><span class=cF7>{</span><span class=cFE>30</span><span class=cF0>, </span><span class=cF6>&quot;Name3&quot;</span><span class=cF7>}</span><span class=cF0>
 <a name="l14"></a>};
 <a name="l15"></a>
-<a name="l16"></a></span><span class=cF5>D</span><span class=cF0>(g1, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>g1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l16"></a></span><span class=cF5>Dump</span><span class=cF0>(g1, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>g1</span><span class=cF7>)</span><span class=cF0>);
 <a name="l17"></a></span><span class=cF6>&quot;Time 1:%d\n&quot;</span><span class=cF0>, g1[</span><span class=cFE>1</span><span class=cF0>].time;
 <a name="l18"></a>
 <a name="l19"></a></span><span class=cF1>U0</span><span class=cF0> Main1()
@@ -50,7 +50,7 @@ body {background-color:#1f1f1f;}
 <a name="l23"></a>                {(</span><span class=cF5>tS</span><span class=cF0> % </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>, </span><span class=cF6>&quot;Static2&quot;</span><span class=cF0>}, </span><span class=cF2>//Dynamic initialization</span><span class=cF0>
 <a name="l24"></a>                {</span><span class=cFE>30</span><span class=cF0>, </span><span class=cF6>&quot;Static3&quot;</span><span class=cF0>}
 <a name="l25"></a>    </span><span class=cF7>}</span><span class=cF0>;
-<a name="l26"></a>    </span><span class=cF5>D</span><span class=cF0>(s1, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l26"></a>    </span><span class=cF5>Dump</span><span class=cF0>(s1, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s1</span><span class=cF7>)</span><span class=cF0>);
 <a name="l27"></a>    </span><span class=cF6>&quot;Time 2:%d\n&quot;</span><span class=cF0>, s1[</span><span class=cFE>1</span><span class=cF0>].time;
 <a name="l28"></a>}
 <a name="l29"></a>
@@ -81,7 +81,7 @@ body {background-color:#1f1f1f;}
 <a name="l54"></a>    </span><span class=cF7>{</span><span class=cFE>30</span><span class=cF0>, </span><span class=cF6>&quot;name3&quot;</span><span class=cF7>}</span><span class=cF0>
 <a name="l55"></a>};
 <a name="l56"></a>
-<a name="l57"></a></span><span class=cF5>D</span><span class=cF0>(g2, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>g2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l57"></a></span><span class=cF5>Dump</span><span class=cF0>(g2, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>g2</span><span class=cF7>)</span><span class=cF0>);
 <a name="l58"></a></span><span class=cF6>&quot;Time 3:%d\n&quot;</span><span class=cF0>, g2[</span><span class=cFE>1</span><span class=cF0>].time;
 <a name="l59"></a>
 <a name="l60"></a></span><span class=cF1>U0</span><span class=cF0> Main2()
@@ -91,7 +91,7 @@ body {background-color:#1f1f1f;}
 <a name="l64"></a>                {(</span><span class=cF5>tS</span><span class=cF0> % </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>, </span><span class=cF6>&quot;static2&quot;</span><span class=cF0>}, </span><span class=cF2>//No dynamic initialization--converted to const</span><span class=cF0>
 <a name="l65"></a>                {</span><span class=cFE>30</span><span class=cF0>, </span><span class=cF6>&quot;static3&quot;</span><span class=cF0>}
 <a name="l66"></a>    </span><span class=cF7>}</span><span class=cF0>;
-<a name="l67"></a>    </span><span class=cF5>D</span><span class=cF0>(s2, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l67"></a>    </span><span class=cF5>Dump</span><span class=cF0>(s2, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s2</span><span class=cF7>)</span><span class=cF0>);
 <a name="l68"></a>    </span><span class=cF6>&quot;Time 4:%d\n&quot;</span><span class=cF0>, s2[</span><span class=cFE>1</span><span class=cF0>].time;
 <a name="l69"></a>}
 <a name="l70"></a>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -53,7 +53,7 @@ body {background-color:#1f1f1f;}
 <a name="l26"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l27"></a>        blk = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Block to Read: &quot;</span><span class=cF0>, old_offset, </span><span class=cFE>0</span><span class=cF0>, bd-&gt;max_blk);
 <a name="l28"></a>        </span><span class=cF5>BlkRead</span><span class=cF0>(drive, buf, blk, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l29"></a>        </span><span class=cF5>D</span><span class=cF0>(buf, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l29"></a>        </span><span class=cF5>Dump</span><span class=cF0>(buf, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l30"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l31"></a>    </span><span class=cF1>catch</span><span class=cF0>
 <a name="l32"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
@@ -67,6 +67,6 @@ body {background-color:#1f1f1f;}
 <a name="l40"></a>RawAccess;
 <a name="l41"></a>
 <a name="l42"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l37"><span class=cF4>BlkRead</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l87"><span class=cF4>BlkWrite</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l1"><span class=cF4>DriveLock</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l16"><span class=cF4>DriveUnlock</span></a><span class=cF2>()</span><span class=cF0>
-<a name="l43"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l2"><span class=cF4>DBlk</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l24"><span class=cF4>DClus</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlkDev.CC.html#l1"><span class=cF4>BlkDevLock</span></a><span class=cF2>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlkDev.CC.html#l20"><span class=cF4>BlkDevUnlock</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l43"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l2"><span class=cF4>BlkDump</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l24"><span class=cF4>ClusDump</span></a><span class=cF2>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlkDev.CC.html#l1"><span class=cF4>BlkDevLock</span></a><span class=cF2>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlkDev.CC.html#l20"><span class=cF4>BlkDevUnlock</span></a><span class=cF2>().</span><span class=cF0>
 </span></pre></body>
 </html>
