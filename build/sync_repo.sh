@@ -14,15 +14,15 @@ exit # Comment this line out
 # sudo qemu-nbd -c dev/nbd0 ZealOS.qcow2
 
 sudo partprobe /dev/nbd0
-sudo mount /dev/nbd0p1 /mnt
+sudo mount /dev/nbd0p1 /tmp/zealtmp
 echo "removing src/ files"
 rm -rf ../src/*
 echo "copying src/ files from root of mounted hdd"
-sudo cp -r /mnt/* ../src/
+sudo cp -r /tmp/zealtmp/* ../src/
 sudo rm ../src/Boot/BootMHD2.BIN.C
 echo "src/ files copied"
 echo "unmounting..."
-sudo umount /mnt
+sudo umount /tmp/zealtmp
 sudo qemu-nbd -d /dev/nbd0
 echo "unmounted hdd"
 echo "set perms"
