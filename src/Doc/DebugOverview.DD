@@ -10,7 +10,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * You can use $LK,"SysLog",A="MN:SysLog"$() to send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ window.	It works like $LK,"Print",A="MN:Print"$().	You could also use $LK,"RawPrint",A="MN:RawPrint"$().
 
-* $LK,"D",A="MN:D"$(), $LK,"DocDump",A="MN:DocDump"$(), $LK,"RawDump",A="MN:RawDump"$() to do 16 column hex dump mem with numbering from zero.	With $LK,"DocDump",A="MN:DocDump"$ the values are updated continually and you can alter mem by editing.
+* $LK,"Dump",A="MN:Dump"$(), $LK,"DocDump",A="MN:DocDump"$(), $LK,"RawDump",A="MN:RawDump"$() to do 16 column hex dump mem with numbering from zero.	With $LK,"DocDump",A="MN:DocDump"$ the values are updated continually and you can alter mem by editing.
 
 * $LK,"DumpMem",A="MN:DumpMem"$(), $LK,"DocDumpMem",A="MN:DocDumpMem"$(), $LK,"RawDumpMem",A="MN:RawDumpMem"$() to do 16 column hex dump mem with addresses showing.
 
