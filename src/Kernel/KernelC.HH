@@ -183,10 +183,10 @@ public extern Bool Man(U8 *st, I64 edf_dof_flags=0);
 
 #help_index "Debugging/Dump"
 public extern	U0	 CallerRep(U8 **rbp=NULL, CTask *task=NULL);
-public extern	U0	 D( U8  *addr, I64 count=0x80, Bool show_offset=TRUE);
-public extern	U0	 Da(U8 **addr, I64 count=0x10);
-public extern	U0	 Dm(U8  *addr, I64 count=0x80);
-public extern	U0	 Dr(         CTask *task=NULL);
+public extern	U0	 Dump( U8  *addr, I64 count=0x80, Bool show_offset=TRUE);
+public extern	U0	 DumpAddress(U8 **addr, I64 count=0x10);
+public extern	U0	 DumpMem(U8  *addr, I64 count=0x80);
+public extern	U0	 DumpRegs(         CTask *task=NULL);
 public extern	U0	 StackRep(   CTask *task=NULL);
 extern			I64	*TaskRegAddr(CTask *task, I64 reg_num);
 
@@ -203,9 +203,9 @@ public extern CHash *FunSegFind(U8 *addr, I64 *_offset);
 #help_index "Debugging/Raw Output"
 public extern	Bool	IsRaw();
 public extern	Bool	Raw(Bool val);
-public extern	U0		RawD( I64 mS=100, U8 *addr, I64 count=0x80);
-public extern	U0		RawDm(I64 mS=100, U8 *addr, I64 count=0x80);
-extern			U0		RawDr(CTask *task=NULL);
+public extern	U0		RawDump( I64 mS=100, U8 *addr, I64 count=0x80);
+public extern	U0		RawDumpMem(I64 mS=100, U8 *addr, I64 count=0x80);
+extern			U0		RawDumpRegs(CTask *task=NULL);
 public extern	U0		RawPrint(I64 mS=100, U8 *format, ...);
 public extern	U0		RawPutChar(I64 ch);
 public extern	U0		LFBFlush();

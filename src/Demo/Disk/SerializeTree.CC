@@ -15,7 +15,7 @@ U0 SerializeTree()
 	"$$GREEN$$***************$$FG$$\n";
 	ptr = DirTreeSerialize(tmpde, &size);
 	DirTreeDel(tmpde);
-	D(ptr, size);
+	Dump(ptr, size);
 	"$$GREEN$$***************:%7d$$FG$$\n", size;
 	tmpde = DirTreeUnserialize(ptr);
 	LineRep2(DocPut, tmpde); //We don't have $LK,"CDirEntry",A="MN:CDirEntry"$.fullname

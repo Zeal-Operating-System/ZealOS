@@ -98,14 +98,14 @@ U0 MPRadixSortDemo(I64 dummy=0)
 	MemCopy(arg2, arg1, sizeof(I32) * NUM);
 	QuickSort(arg2, NUM, sizeof(I32), &Compare);
 	"Time:%9.6f\n", tS - t0;
-	D(arg2 + NUM / 4);
+	Dump(arg2 + NUM / 4);
 
 	"$$GREEN$$QuickSortU32$$FG$$\n";
 	t0 = tS;
 	MemCopy(arg2, arg1, sizeof(I32)*NUM);
 	QuickSortU32(arg2, NUM);
 	"Time:%9.6f\n", tS - t0;
-	D(arg2 + NUM / 4);
+	Dump(arg2 + NUM / 4);
 
 	for (i = 0; i < my_mp_count; i++)
 	{
@@ -140,7 +140,7 @@ U0 MPRadixSortDemo(I64 dummy=0)
 		j += bn[i];
 	}
 	"Time:%9.6f\n", tS - t0;
-	D(arg2 + NUM / 4);
+	Dump(arg2 + NUM / 4);
 
 	Free(arg1);
 	Free(arg2);

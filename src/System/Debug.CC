@@ -238,7 +238,7 @@ public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_ch
 
 	if (IsRaw)
 	{
-		DocDump(doc, 100000);
+		DocDumpLines(doc, 100000);
 		DocDel(doc);
 	}
 }
@@ -263,7 +263,7 @@ public U0 ClassRepD(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_c
 	DocRecalc(doc);
 	if (IsRaw)
 	{
-		DocDump(doc, 100000);
+		DocDumpLines(doc, 100000);
 		DocDel(doc);
 	}
 }

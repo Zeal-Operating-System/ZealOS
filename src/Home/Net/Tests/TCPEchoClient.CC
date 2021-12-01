@@ -44,7 +44,7 @@ U0 TCPTest()
 
 	"\n\n";
 
-	Dm(buffer, buffer_size);
+	DumpMem(buffer, buffer_size);
 
 	ClassRep(tcp_globals.bound_socket_tree);
 

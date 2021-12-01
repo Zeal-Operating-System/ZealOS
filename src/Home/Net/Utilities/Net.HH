@@ -38,8 +38,6 @@
 #define I_NETHANDLER	I_USER + 4
 */
 
-I64	I_NETHANDLER = IntEntryAlloc;
-// TODO: needed across NetHandler & NetQueue,
-//		 need a dynamic #define.. (I64 allows trashing)
+DefinePrint("I_NETHANDLER", "%d", IntEntryAlloc);
 
 #define INT_DEST_CPU	0

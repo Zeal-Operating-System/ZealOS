@@ -1,5 +1,5 @@
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically)"
-public U8 *DBlk(I64 blk, Bool write=FALSE)
+public U8 *BlkDump(I64 blk, Bool write=FALSE)
 {//Dump disk block. Optionally, write.
 //If you set write to TRUE, the block will
 	//be written when you press <ESC>.
@@ -7,7 +7,7 @@ public U8 *DBlk(I64 blk, Bool write=FALSE)
 	U8 *buf = MAlloc(BLK_SIZE);
 
 	BlkRead(Fs->cur_dv, buf, blk, 1);
-	DocD(buf, BLK_SIZE);
+	DocDump(buf, BLK_SIZE);
 	if (write)
 	{
 		"Edit and press <ESC> to write or <SHIFT-ESC>\n";
@@ -21,7 +21,7 @@ public U8 *DBlk(I64 blk, Bool write=FALSE)
 	return buf;
 }
 
-public U8 *DClus(I64 c, Bool write=FALSE, I64 num=0)
+public U8 *ClusDump(I64 c, Bool write=FALSE, I64 num=0)
 {//Dump disk cluster. Optionally, write.
 //If you set write to TRUE, the cluster will
 	//be written when you press <ESC>.
@@ -32,7 +32,7 @@ public U8 *DClus(I64 c, Bool write=FALSE, I64 num=0)
 	c = ClusNumNext(Fs->cur_dv, c, num);
 	ClusRead(Fs->cur_dv, buf, c, 1);
 	"Clus:%X\n", c;
-	DocD(buf, Fs->cur_dv->spc << BLK_SIZE_BITS);
+	DocDump(buf, Fs->cur_dv->spc << BLK_SIZE_BITS);
 	if (write)
 	{
 		"Edit and press <ESC> to write or <SHIFT-ESC>\n";
@@ -46,7 +46,7 @@ public U8 *DClus(I64 c, Bool write=FALSE, I64 num=0)
 	return buf;
 }
 
-public U8 *Dump(U8 *filename, Bool write=FALSE)
+public U8 *FileDump(U8 *filename, Bool write=FALSE)
 {//Dump file. Optionally, write.
 //If you set write to TRUE, the file will
 	//be written when you press <ESC>.
@@ -55,7 +55,7 @@ public U8 *Dump(U8 *filename, Bool write=FALSE)
 
 	if (buf = FileRead(filename,&size))
 	{
-		DocD(buf, size);
+		DocDump(buf, size);
 		if (write)
 		{
 			"Edit and press <ESC> to write or <SHIFT-ESC>\n";

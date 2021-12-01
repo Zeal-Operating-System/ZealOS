@@ -98,7 +98,7 @@ $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
 * $FG,2$Fs->hash_table$FG$ holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
 
-* To display the contents of a hash table, use the $LK,"Who",A="MN:Who"$() routine or the varients.  $LK,"HashDepthRep",A="MN:HashDepthRep"$() gives a histogram	of how long the chains are, in case you wish to make hash table sizes bigger.
+* To display the contents of a hash table, use the $LK,"HashTableDump",A="MN:HashTableDump"$() routine or the varients.  $LK,"HashDepthRep",A="MN:HashDepthRep"$() gives a histogram	of how long the chains are, in case you wish to make hash table sizes bigger.
 
 
 

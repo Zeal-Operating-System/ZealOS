@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -26,7 +26,7 @@ body {background-color:#1f1f1f;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Cmd Line (Typically);Cmd Line (Typically)&quot;</span><span class=cF0>
-<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DBlk</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>BlkDump</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
 <a name="l3"></a>{</span><span class=cF2>//Dump disk block. Optionally, write.</span><span class=cF0>
 <a name="l4"></a></span><span class=cF2>//If you set write to TRUE, the block will</span><span class=cF0>
 <a name="l5"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
@@ -34,7 +34,7 @@ body {background-color:#1f1f1f;}
 <a name="l7"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l8"></a>
 <a name="l9"></a>    </span><span class=cF5>BlkRead</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, blk, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l10"></a>    </span><span class=cF5>DocD</span><span class=cF0>(buf, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l10"></a>    </span><span class=cF5>DocDump</span><span class=cF0>(buf, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (write)
 <a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l13"></a>        </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;
@@ -48,7 +48,7 @@ body {background-color:#1f1f1f;}
 <a name="l21"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
 <a name="l22"></a>}
 <a name="l23"></a>
-<a name="l24"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DClus</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l24"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ClusDump</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l25"></a>{</span><span class=cF2>//Dump disk cluster. Optionally, write.</span><span class=cF0>
 <a name="l26"></a></span><span class=cF2>//If you set write to TRUE, the cluster will</span><span class=cF0>
 <a name="l27"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
@@ -59,7 +59,7 @@ body {background-color:#1f1f1f;}
 <a name="l32"></a>    c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, c, num);
 <a name="l33"></a>    </span><span class=cF5>ClusRead</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, c, </span><span class=cFE>1</span><span class=cF0>);
 <a name="l34"></a>    </span><span class=cF6>&quot;Clus:%X\n&quot;</span><span class=cF0>, c;
-<a name="l35"></a>    </span><span class=cF5>DocD</span><span class=cF0>(buf, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l35"></a>    </span><span class=cF5>DocDump</span><span class=cF0>(buf, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l36"></a>    </span><span class=cF1>if</span><span class=cF0> (write)
 <a name="l37"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l38"></a>        </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;
@@ -73,7 +73,7 @@ body {background-color:#1f1f1f;}
 <a name="l46"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
 <a name="l47"></a>}
 <a name="l48"></a>
-<a name="l49"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Dump</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l49"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>FileDump</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
 <a name="l50"></a>{</span><span class=cF2>//Dump file. Optionally, write.</span><span class=cF0>
 <a name="l51"></a></span><span class=cF2>//If you set write to TRUE, the file will</span><span class=cF0>
 <a name="l52"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
@@ -82,7 +82,7 @@ body {background-color:#1f1f1f;}
 <a name="l55"></a>
 <a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (buf = </span><span class=cF5>FileRead</span><span class=cF7>(</span><span class=cF0>filename,&amp;size</span><span class=cF7>)</span><span class=cF0>)
 <a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l58"></a>        </span><span class=cF5>DocD</span><span class=cF0>(buf, size);
+<a name="l58"></a>        </span><span class=cF5>DocDump</span><span class=cF0>(buf, size);
 <a name="l59"></a>        </span><span class=cF1>if</span><span class=cF0> (write)
 <a name="l60"></a>        {
 <a name="l61"></a>            </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;

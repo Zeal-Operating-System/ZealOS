@@ -309,7 +309,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Note: We will never put multiple $LK,"Keyboard Tables",A="FI:::/Kernel/SerialDev/Keyboard.CC"$.  Each country must make their own version of ZealOS.	The $LK,"Intel Factory ROM",A="FF:::/Doc/Demands.DD,English"$ will have just English.  Our $LK,"Charter",A="FI:::/Doc/Charter.DD"$ bans multiple country or architectures in the same version.
 
-* 12 border chars in screen font codes 0x02-0x0D.  $LK,"TextBorder",A="MN:TextBorder"$() $LK,"RawDr",A="MN:RawDr"$() $LK,"::/Demo/Games/CharDemo.CC"$. LineFeed shows-up in $FG,2$<CTRL-m>$FG$ PersonalMenu.
+* 12 border chars in screen font codes 0x02-0x0D.  $LK,"TextBorder",A="MN:TextBorder"$() $LK,"RawDumpRegs",A="MN:RawDumpRegs"$() $LK,"::/Demo/Games/CharDemo.CC"$. LineFeed shows-up in $FG,2$<CTRL-m>$FG$ PersonalMenu.
 
 * Super-simple high speed serial needs flow control.	$FG,2$<CTRL-s>$FG$ and $FG,2$<CTRL-q>$FG$?
 

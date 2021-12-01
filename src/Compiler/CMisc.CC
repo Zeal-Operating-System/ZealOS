@@ -162,7 +162,7 @@ U8 *CmdLinePrompt()
 	}
 	'>';
 	if (IsDebugMode && IsRaw)
-		RawDr;
+		RawDumpRegs;
 
 	LBts(&Fs->task_flags, TASKf_CMD_LINE_PROMPT);
 	st = StrGet(,, SGF_SHIFT_ESC_EXIT);

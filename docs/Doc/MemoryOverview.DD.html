@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.04">
+<meta name="generator" content="ZealOS V1.05">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -39,7 +39,7 @@ body {background-color:#1f1f1f;}
 <a name="l12"></a>You can create new, independent heaps using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3567"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
 <a name="l13"></a>for an example.
 <a name="l14"></a>
-<a name="l15"></a>Memory alloced by a task will be freed when the task is killed.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is a task that never dies. His memory is like 
+<a name="l15"></a>Memory alloced by a task will be freed when the task is killed.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is a task that never dies. Its memory is like 
 <a name="l16"></a>kernel memory in other operating systems.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l408"><span class=cF4>SysCAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l394"><span class=cF4>SysMAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l427"><span class=cF4>SysMAllocIdent</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l503"><span class=cF4>SysStrNew</span></a><span class=cF0>().
 <a name="l17"></a>
 <a name="l18"></a>All of the regular page tables are marked, &quot;cached&quot;.    When accessing hardware, however, you need uncached page table.  The 
@@ -54,7 +54,7 @@ body {background-color:#1f1f1f;}
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF5>                                                Single System-wide Memory Map
 <a name="l29"></a>
-<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036F0F</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036F6F</span><span class=cF0>
 <a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4484"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF2> 0x0000096600- 0x0000096FFF</span><span class=cF0>

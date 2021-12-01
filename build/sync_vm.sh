@@ -16,14 +16,15 @@ exit # Comment this line out
 # sudo qemu-nbd -c dev/nbd0 ZealOS.qcow2
 
 sudo partprobe /dev/nbd0
-sudo mount /dev/nbd0p1 /mnt
+sudo mkdir /tmp/zealtmp
+sudo mount /dev/nbd0p1 /tmp/zealtmp
 echo "Merging with src/"
-sudo cp -r ../src/* /mnt/
+sudo cp -r ../src/* /tmp/zealtmp
 sudo sync
 echo "Files copied, unmounting"
-sudo umount /mnt
+sudo umount /tmp/zealtmp
 sudo qemu-nbd -d /dev/nbd0
-sudo rm /mnt/* -r
+sudo rm -rf /tmp/zealtmp
 sudo sync
 echo "finished."
 git status
