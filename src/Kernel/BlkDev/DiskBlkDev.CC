@@ -222,3 +222,32 @@ CBlkDev *Letter2BlkDev(U8 drv_let=0, Bool except=TRUE)
 	else
 		return NULL;
 }
+
+U0 BlkDevRep()
+{ // Block Device Report.
+// blkdev.blkdevs[i].
+	I64 i;
+	CBlkDev *b = blkdev.blkdevs;
+
+	for (i = 0; i < BLKDEVS_NUM; i++)
+	{
+		if (b[i].bd_signature == BD_SIGNATURE_VAL)
+		{
+			"\nBlock Device #%d:\n", i;
+			"\tBlock Device Type:\t%Z\n", b[i].type, "ST_BLKDEV_TYPES";
+			"\tFirst Drive Letter:\t%C\n", b[i].first_drive_let;
+			if (b[i].ahci_port)
+			{
+				"\tAHCI Port number:\t%d\n", b[i].port_num;
+				"\tAHCI Port address:\t0x%X\n", b[i].ahci_port;
+			}
+			if (b[i].RAM_disk)
+				"\tRAM disk address:\t0x%X\n", b[i].RAM_disk;
+			if (b[i].file_disk_name)
+				"\tFile:\t\t\t\t%s\n", b[i].file_disk_name;
+			"\tBlock Size:\t\t\t%d\n", b[i].blk_size;
+			"\tDrive Max Block:\t0x%X\n", b[i].max_blk;
+		}
+	}
+	"\n";
+}

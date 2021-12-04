@@ -305,6 +305,7 @@ public extern	Bool	 BlkDevLock( CBlkDev *bd);
 public extern	CBlkDev	*BlkDevNextFreeSlot(U8 first_drive_let, I64 type);
 public extern	Bool	 BlkDevUnlock(CBlkDev *bd, Bool reset=FALSE);
 public extern	U0		 BlkDevsRelease();
+public extern	U0		 BlkDevRep();
 public extern	Bool	 BlkRead(     CDrive *drive, U8 *buf, I64 blk, I64 count);
 public extern	Bool	 BlkWrite(    CDrive *drive, U8 *buf, I64 blk, I64 count);
 public extern	U0		 BlkWriteZero(CDrive *drive, I64 blk, I64 count);
