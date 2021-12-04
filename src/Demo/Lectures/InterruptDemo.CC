@@ -1,5 +1,5 @@
 //This is the software interrupt num
-//we will use.  See $LK,"Software Int's",A="MN:I_WAKE"$ for
+//we will use.  See $LK,"Software Int's",A="MN:I_USER"$ for
 //picking a num.  Nums are subject to change.
 
 #define I_F_UNARY_MINUS I_USER

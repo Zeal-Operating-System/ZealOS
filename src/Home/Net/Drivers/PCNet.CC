@@ -617,11 +617,6 @@ U0 PCIInterruptsReroute(I64 base)
 
 U0 PCNetInterruptsSetup()
 { // todo: comments explaining process
-/*	IntEntrySet(I_PCNET0, &PCNetIRQ);
-	IntEntrySet(I_PCNET1, &PCNetIRQ);
-	IntEntrySet(I_PCNET2, &PCNetIRQ);
-	IntEntrySet(I_PCNET3, &PCNetIRQ);
-	PCIInterruptsReroute(I_PCNET0);*/
 	I64 irq, i;
 
 	for (i = 0; i < 4; i++)
