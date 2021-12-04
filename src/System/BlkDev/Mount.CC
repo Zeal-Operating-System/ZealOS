@@ -221,11 +221,11 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 							"Enter port number: \n";
 						StrNGet(port_str, STR_LEN);
 					}
-					while ((	type == BDT_ATAPI && AHCIPortSignatureGet(Str2I64(port_str)) != AHCI_PxSIG_ATAPI || 
-								type == BDT_ATA   && AHCIPortSignatureGet(Str2I64(port_str)) != AHCI_PxSIG_ATA || 
-								0 > Str2I64(port_str) || Str2I64(port_str) > num_hints - 1
-						   ) &&
-						   (type != BDT_ATAPI || !boot_drive_let));
+					while ((type == BDT_ATAPI && AHCIPortSignatureGet(Str2I64(port_str)) != AHCI_PxSIG_ATAPI	||
+							type == BDT_ATA   && AHCIPortSignatureGet(Str2I64(port_str)) != AHCI_PxSIG_ATA		||
+							type == BDT_ATA   && !*port_str														||
+							0 > Str2I64(port_str) || Str2I64(port_str) > num_hints - 1
+						   ) && (type != BDT_ATAPI || !boot_drive_let));
 
 					port = Str2I64(port_str);
 					break;

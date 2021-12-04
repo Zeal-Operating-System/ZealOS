@@ -27,4 +27,3 @@ sudo qemu-nbd -d /dev/nbd0
 sudo rm -rf /tmp/zealtmp
 sudo sync
 echo "finished."
-git status
