@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----12/04/21 04:16:45----$IV,0$
+* Raised version number to 1.06.
+* Removed IDE members and padding from CBlkDev and CBlkDevGlobals, added $MA-X+PU,"ins_port",LM="Find(\"ins_port\",\"/*\");View;"$ to return install-drive recognition functionality.
+* Implemented $LK+PU,"BlkDevRep",A="MN:BlkDevRep"$, removed BlkDevRep demo file.
+ 
 $IV,1$----11/30/21 13:40:29----$IV,0$
 * Raised version number to 1.05.
 * $LK,"R",A="MN:R"$("DocDump",	"$LK+PU,"DocDumpLines",A="MN:DocDumpLines"$");

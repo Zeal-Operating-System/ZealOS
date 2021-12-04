@@ -104,6 +104,10 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 						Fs->catch_except = TRUE;
 						"Error at SATA Port %d", i;
 					}
+
+					if (i == blkdev.ins_port)
+						"\t(Drive originally installed from.)\n";
+
 					"\n\t";
 
 					if (temp_blkdev->dev_id_record)

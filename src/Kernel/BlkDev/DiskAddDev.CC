@@ -20,7 +20,7 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 				bd1 = &blkdev.blkdevs[i];
 				if (bd1->bd_signature == BD_SIGNATURE_VAL && bd != bd1 &&
 					(bd1->type == BDT_ATAPI || bd1->type == BDT_ATA) &&
-					bd1->base0 == bd->base0)
+					bd1->port_num == bd->port_num)
 				{
 					bd->lock_fwding = bd1;
 					break;

@@ -3317,16 +3317,12 @@ public class CBlkDev
 	CAHCIPort	*ahci_port;
 	U8			*prd_buf,
 				 first_drive_let,
-				 unit,
-				 pad[2],
 				*RAM_disk,
 				*file_disk_name;
 	CFile		*file_disk;
 	U32 		 bd_signature,
 				 type,
 				 flags,
-			 	 base0,
-				 base1,
 				 blk_size,
 				 max_reads,
 				 max_writes;
@@ -3439,12 +3435,9 @@ public class CBlkDevGlobals
 				write_count,
 				mount_ide_auto_count,
 				cmd_slot_count,
-				ins_base0,
-				ins_base1;	//Install cd/dvd controller.
+				ins_port;// Installed-from CD/DVD controller.
 	Bool		dvd_boot_is_good,
-				ahci64,
-				ins_unit,
-				pad[2];
+				ahci64;
 };
 
 #help_index "File/Internal"

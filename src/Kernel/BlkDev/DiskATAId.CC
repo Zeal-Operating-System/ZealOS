@@ -1,38 +1,3 @@
-/* // TODO: use this for reference in SATARep when fixing AHCI's lack of blkdev.ins_unit, etc
-U0 ATARepEntry(I64 base0, I64 base1, I64 unit, U8 *message, CATARep **_head, I64 *num_hints)
-{
-	I64		 type;
-	base0 &= -8;
-	base1 &= -4;
-	CATARep	*tmpha;
-
-	if (type = IDEATAProbe(base0,base1,unit))
-	{
-		*num_hints += 1;
-		"\n$$PURPLE$$ $$BT+X,\"%d\",LM=\"%d\\n\"$$$$FG$$$$LM,4$$", *num_hints, *num_hints;
-		if (type == BDT_ATA)
-			"$$RED$$Hard Drive   $$LTBLUE$$ATA   ";
-		else
-			"$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI ";
-		"%s$$FG$$\n", message;
-		if (base0 == blkdev.ins_base0 && unit == blkdev.ins_unit)
-			"$$PURPLE$$(Drive originally installed from.)$$FG$$\n";
-		"Base0:0x%04X Base1:0x%04X Unit:%d$$LM,0$$\n", base0, base1, unit;
-		if (_head)
-		{
-			tmpha = CAlloc(sizeof(CATARep));
-			tmpha->next = *_head;
-			*_head = tmpha;
-			tmpha->num = *num_hints;
-			tmpha->type = type;
-			tmpha->base0 = base0;
-			tmpha->base1 = base1;
-			tmpha->unit = unit;
-		}
-	}
-}
-*/
-
 CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 port_num)
 {
 	CBlkDev *res;

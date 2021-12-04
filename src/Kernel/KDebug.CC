@@ -722,7 +722,7 @@ U0 Fault2(I64 fault_num, I64 fault_err_code)
 		was_mouse_enabled = CallExtStr("MouseHardEnable", FALSE);
 		was_raw = Raw(ON);
 		was_silent = Silent(OFF);
-		text.raw_flags |= RAWF_SHOW_DOLLAR|RAWF_SCROLL;
+		text.raw_flags |= RAWF_SHOW_DOLLAR | RAWF_SCROLL;
 
 		"Task \"";
 		"%s", Fs->task_title;

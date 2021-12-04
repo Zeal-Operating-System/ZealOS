@@ -167,7 +167,7 @@ U0 KMain()
 	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level, RLf_RAW);
 	"\nZealOS V%0.2f\t%D %T\n", sys_os_version, sys_compile_time, sys_compile_time;
-	"อออออออออออออออออออออออออออออออออ\n\n";
+	"_________________________________\n\n";
 
 	"TimerInit;\n";
 	TimerInit;
@@ -194,11 +194,9 @@ U0 KMain()
 	#exe
 	{
 		StreamPrint("HomeSet(\"%s\");\n"
-					"blkdev.ins_base0  = %d;"
-					"blkdev.ins_base1  = %d;"
-					"blkdev.ins_unit   = %d;\n",
+					"blkdev.ins_port = %d;",
 					kernel_config->home_dir,
-					blkdev.ins_base0, blkdev.ins_base1, blkdev.ins_unit);
+					blkdev.ins_port);
 	}
 
 	Gs->idle_task->cur_dv = blkdev.let_to_drive[*blkdev.home_dir - 'A'];
@@ -206,11 +204,8 @@ U0 KMain()
 	if (blkdev.dvd_boot_is_good)
 	{
 		bd = Letter2BlkDev(':');
-		if (bd->type == BDT_ATAPI) {
-			blkdev.ins_base0 = bd->base0;
-			blkdev.ins_base1 = bd->base1;
-			blkdev.ins_unit  = bd->unit;
-		}
+		if (bd->type == BDT_ATAPI)
+			blkdev.ins_port = bd->port_num;
 	}
 	LBts(&sys_run_level, RLf_BLKDEV);
 
