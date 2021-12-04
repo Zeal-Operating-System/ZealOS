@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.06">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -25,119 +25,84 @@ body {background-color:#1f1f1f;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF2>/* // TODO: use this for reference in SATARep when fixing AHCI's lack of blkdev.ins_unit, etc</span><span class=cF0>
-<a name="l2"></a></span><span class=cF2>U0 ATARepEntry(I64 base0, I64 base1, I64 unit, U8 *message, CATARep **_head, I64 *num_hints)</span><span class=cF0>
-<a name="l3"></a></span><span class=cF2>{</span><span class=cF0>
-<a name="l4"></a>    </span><span class=cF2>I64</span><span class=cF0>     </span><span class=cF2> type;</span><span class=cF0>
-<a name="l5"></a>    </span><span class=cF2>base0 &amp;= -8;</span><span class=cF0>
-<a name="l6"></a>    </span><span class=cF2>base1 &amp;= -4;</span><span class=cF0>
-<a name="l7"></a>    </span><span class=cF2>CATARep</span><span class=cF0> </span><span class=cF2>*tmpha;</span><span class=cF0>
-<a name="l8"></a>
-<a name="l9"></a>    </span><span class=cF2>if (type = IDEATAProbe(base0,base1,unit))</span><span class=cF0>
-<a name="l10"></a>    </span><span class=cF2>{</span><span class=cF0>
-<a name="l11"></a>        </span><span class=cF2>*num_hints += 1;</span><span class=cF0>
-<a name="l12"></a>        </span><span class=cF2>&quot;\n$PURPLE$ $BT+X,\&quot;%d\&quot;,LM=\&quot;%d\\n\&quot;$$FG$$LM,4$&quot;, *num_hints, *num_hints;</span><span class=cF0>
-<a name="l13"></a>        </span><span class=cF2>if (type == BDT_ATA)</span><span class=cF0>
-<a name="l14"></a>            </span><span class=cF2>&quot;$RED$Hard Drive   $LTBLUE$ATA   &quot;;</span><span class=cF0>
-<a name="l15"></a>        </span><span class=cF2>else</span><span class=cF0>
-<a name="l16"></a>            </span><span class=cF2>&quot;$RED$CD/DVD Drive $LTBLUE$ATAPI &quot;;</span><span class=cF0>
-<a name="l17"></a>        </span><span class=cF2>&quot;%s$FG$\n&quot;, message;</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF2>if (base0 == blkdev.ins_base0 &amp;&amp; unit == blkdev.ins_unit)</span><span class=cF0>
-<a name="l19"></a>            </span><span class=cF2>&quot;$PURPLE$(Drive originally installed from.)$FG$\n&quot;;</span><span class=cF0>
-<a name="l20"></a>        </span><span class=cF2>&quot;Base0:0x%04X Base1:0x%04X Unit:%d$LM,0$\n&quot;, base0, base1, unit;</span><span class=cF0>
-<a name="l21"></a>        </span><span class=cF2>if (_head)</span><span class=cF0>
-<a name="l22"></a>        </span><span class=cF2>{</span><span class=cF0>
-<a name="l23"></a>            </span><span class=cF2>tmpha = CAlloc(sizeof(CATARep));</span><span class=cF0>
-<a name="l24"></a>            </span><span class=cF2>tmpha-&gt;next = *_head;</span><span class=cF0>
-<a name="l25"></a>            </span><span class=cF2>*_head = tmpha;</span><span class=cF0>
-<a name="l26"></a>            </span><span class=cF2>tmpha-&gt;num = *num_hints;</span><span class=cF0>
-<a name="l27"></a>            </span><span class=cF2>tmpha-&gt;type = type;</span><span class=cF0>
-<a name="l28"></a>            </span><span class=cF2>tmpha-&gt;base0 = base0;</span><span class=cF0>
-<a name="l29"></a>            </span><span class=cF2>tmpha-&gt;base1 = base1;</span><span class=cF0>
-<a name="l30"></a>            </span><span class=cF2>tmpha-&gt;unit = unit;</span><span class=cF0>
-<a name="l31"></a>        </span><span class=cF2>}</span><span class=cF0>
-<a name="l32"></a>    </span><span class=cF2>}</span><span class=cF0>
-<a name="l33"></a></span><span class=cF2>}</span><span class=cF0>
-<a name="l34"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l1"></a><span class=cF9>CBlkDev</span><span class=cF0> *</span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>I64</span><span class=cF0> port_num)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *res;
+<a name="l4"></a>
+<a name="l5"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= first_drive_let - </span><span class=cF6>'A'</span><span class=cF0> &lt; </span><span class=cF3>DRIVES_NUM</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>type == </span><span class=cF3>BDT_ATA</span><span class=cF0> || type == </span><span class=cF3>BDT_ATAPI</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= port_num &lt;= </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>)
+<a name="l6"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l7"></a>        res = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(first_drive_let, type);
+<a name="l8"></a>        res-&gt;port_num = port_num;
+<a name="l9"></a>        res-&gt;ahci_port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[port_num];
+<a name="l10"></a>        res-&gt;ahci_port-&gt;cmd_list_base = </span><span class=cF3>NULL</span><span class=cF0>; </span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1021"><span class=cF4>AHCIAtaInit</span></a><span class=cF2> ...</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>BlkDevAdd</span><span class=cF7>(</span><span class=cF0>res,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l12"></a>            </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l13"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l14"></a>
+<a name="l15"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>MountAHCIAuto</span><span class=cF0>()
+<a name="l19"></a>{</span><span class=cF2>//Try to mount hard drives and CD/DVD drives automatically. (Kernel.Config option).</span><span class=cF0>
+<a name="l20"></a></span><span class=cF2>//It uses 'C' and 'T' as first drive letters or whatever you set</span><span class=cF0>
+<a name="l21"></a></span><span class=cF2>//in config when compiling Kernel.BIN.</span><span class=cF0>
+<a name="l22"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *bd     = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l23"></a>    </span><span class=cF9>I64</span><span class=cF0>          res    = </span><span class=cFE>0</span><span class=cF0>, i, ata_port = -</span><span class=cFE>1</span><span class=cF0>, atapi_port = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l24"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l25"></a>
+<a name="l26"></a>    </span><span class=cF6>&quot;MountAHCIAuto;\n&quot;</span><span class=cF0>;
+<a name="l27"></a>    </span><span class=cF1>if</span><span class=cF0> (bd)
+<a name="l28"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l29"></a>        </span><span class=cF2>// if boot-drive blkdev exists, do a SATA port iteration to mount it first</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF6>&quot;( ':' BlkDev at 0x%0X )\n&quot;</span><span class=cF0>, bd;
+<a name="l31"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l32"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l33"></a>            {
+<a name="l34"></a>                port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
 <a name="l35"></a>
-<a name="l36"></a></span><span class=cF9>CBlkDev</span><span class=cF0> *</span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>I64</span><span class=cF0> port_num)
-<a name="l37"></a>{
-<a name="l38"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *res;
-<a name="l39"></a>
-<a name="l40"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= first_drive_let - </span><span class=cF6>'A'</span><span class=cF0> &lt; </span><span class=cF3>DRIVES_NUM</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>type == </span><span class=cF3>BDT_ATA</span><span class=cF0> || type == </span><span class=cF3>BDT_ATAPI</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= port_num &lt;= </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>)
-<a name="l41"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l42"></a>        res = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(first_drive_let, type);
-<a name="l43"></a>        res-&gt;port_num = port_num;
-<a name="l44"></a>        res-&gt;ahci_port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[port_num];
-<a name="l45"></a>        res-&gt;ahci_port-&gt;cmd_list_base = </span><span class=cF3>NULL</span><span class=cF0>; </span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1021"><span class=cF4>AHCIAtaInit</span></a><span class=cF2> ...</span><span class=cF0>
-<a name="l46"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>BlkDevAdd</span><span class=cF7>(</span><span class=cF0>res,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l47"></a>            </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l48"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l49"></a>
-<a name="l50"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l51"></a>}
-<a name="l52"></a>
-<a name="l53"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>MountAHCIAuto</span><span class=cF0>()
-<a name="l54"></a>{</span><span class=cF2>//Try to mount hard drives and CD/DVD drives automatically. (Kernel.Config option).</span><span class=cF0>
-<a name="l55"></a></span><span class=cF2>//It uses 'C' and 'T' as first drive letters or whatever you set</span><span class=cF0>
-<a name="l56"></a></span><span class=cF2>//in config when compiling Kernel.BIN.</span><span class=cF0>
-<a name="l57"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *bd     = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l58"></a>    </span><span class=cF9>I64</span><span class=cF0>          res    = </span><span class=cFE>0</span><span class=cF0>, i, ata_port = -</span><span class=cFE>1</span><span class=cF0>, atapi_port = -</span><span class=cFE>1</span><span class=cF0>;
-<a name="l59"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l60"></a>
-<a name="l61"></a>    </span><span class=cF6>&quot;MountAHCIAuto;\n&quot;</span><span class=cF0>;
-<a name="l62"></a>    </span><span class=cF1>if</span><span class=cF0> (bd)
-<a name="l63"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l64"></a>        </span><span class=cF2>// if boot-drive blkdev exists, do a SATA port iteration to mount it first</span><span class=cF0>
-<a name="l65"></a>        </span><span class=cF6>&quot;( ':' BlkDev at 0x%0X )\n&quot;</span><span class=cF0>, bd;
-<a name="l66"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l67"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l68"></a>            {
-<a name="l69"></a>                port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l70"></a>
-<a name="l71"></a>                </span><span class=cF1>if</span><span class=cF0> (bd-&gt;port_num == i)
-<a name="l72"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l73"></a>                    </span><span class=cF1>if</span><span class=cF0> (ata_port == -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l74"></a>                    {
-<a name="l75"></a>                        </span><span class=cF6>&quot;ATAMount('%C', BDT_ATA, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, i;
-<a name="l76"></a>                        </span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, </span><span class=cF3>BDT_ATA</span><span class=cF0>, i);
-<a name="l77"></a>                        ata_port = i;
-<a name="l78"></a>                        res++;
-<a name="l79"></a>                    }
-<a name="l80"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (atapi_port == -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l81"></a>                    {
-<a name="l82"></a>                        </span><span class=cF6>&quot;ATAMount('%C', BDT_ATAPI, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, i;
-<a name="l83"></a>                        </span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, </span><span class=cF3>BDT_ATAPI</span><span class=cF0>, i);
-<a name="l84"></a>                        atapi_port = i;
-<a name="l85"></a>                        res++;
-<a name="l86"></a>                    }
-<a name="l87"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l88"></a>            }
-<a name="l89"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l90"></a>    </span><span class=cF2>// do a 2nd iteration to mount remaining drives</span><span class=cF0>
-<a name="l91"></a>    </span><span class=cF2>// (we will end up trying to boot off whichever drive/partition ends up at chosen letter)</span><span class=cF0>
-<a name="l92"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l93"></a>        </span><span class=cF1>if</span><span class=cF0> (i != ata_port &amp;&amp; i != atapi_port &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l94"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l95"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l96"></a>
-<a name="l97"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l98"></a>            {
-<a name="l99"></a>                </span><span class=cF6>&quot;ATAMount('%C', BDT_ATA, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, i;
-<a name="l100"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>ATAMount</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, </span><span class=cF3>BDT_ATA</span><span class=cF0>, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l101"></a>                    res++;
-<a name="l102"></a>            }
-<a name="l103"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l104"></a>            {
-<a name="l105"></a>                </span><span class=cF6>&quot;ATAMount('%C', BDT_ATAPI, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, i;
-<a name="l106"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>ATAMount</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, </span><span class=cF3>BDT_ATAPI</span><span class=cF0>, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l107"></a>                    res++;
-<a name="l108"></a>            }
-<a name="l109"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l110"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
-<a name="l111"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.mount_ide_auto_count = res;
-<a name="l112"></a>
-<a name="l113"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l114"></a>}
+<a name="l36"></a>                </span><span class=cF1>if</span><span class=cF0> (bd-&gt;port_num == i)
+<a name="l37"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l38"></a>                    </span><span class=cF1>if</span><span class=cF0> (ata_port == -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l39"></a>                    {
+<a name="l40"></a>                        </span><span class=cF6>&quot;ATAMount('%C', BDT_ATA, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, i;
+<a name="l41"></a>                        </span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, </span><span class=cF3>BDT_ATA</span><span class=cF0>, i);
+<a name="l42"></a>                        ata_port = i;
+<a name="l43"></a>                        res++;
+<a name="l44"></a>                    }
+<a name="l45"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (atapi_port == -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l46"></a>                    {
+<a name="l47"></a>                        </span><span class=cF6>&quot;ATAMount('%C', BDT_ATAPI, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, i;
+<a name="l48"></a>                        </span><span class=cF5>ATAMount</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, </span><span class=cF3>BDT_ATAPI</span><span class=cF0>, i);
+<a name="l49"></a>                        atapi_port = i;
+<a name="l50"></a>                        res++;
+<a name="l51"></a>                    }
+<a name="l52"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l53"></a>            }
+<a name="l54"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l55"></a>    </span><span class=cF2>// do a 2nd iteration to mount remaining drives</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF2>// (we will end up trying to boot off whichever drive/partition ends up at chosen letter)</span><span class=cF0>
+<a name="l57"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l58"></a>        </span><span class=cF1>if</span><span class=cF0> (i != ata_port &amp;&amp; i != atapi_port &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l59"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l61"></a>
+<a name="l62"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l63"></a>            {
+<a name="l64"></a>                </span><span class=cF6>&quot;ATAMount('%C', BDT_ATA, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, i;
+<a name="l65"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>ATAMount</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.first_hd_drive_let, </span><span class=cF3>BDT_ATA</span><span class=cF0>, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l66"></a>                    res++;
+<a name="l67"></a>            }
+<a name="l68"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l69"></a>            {
+<a name="l70"></a>                </span><span class=cF6>&quot;ATAMount('%C', BDT_ATAPI, %d);\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, i;
+<a name="l71"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>ATAMount</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.first_dvd_drive_let, </span><span class=cF3>BDT_ATAPI</span><span class=cF0>, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l72"></a>                    res++;
+<a name="l73"></a>            }
+<a name="l74"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l75"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l76"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.mount_ide_auto_count = res;
+<a name="l77"></a>
+<a name="l78"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l79"></a>}
 </span></pre></body>
 </html>

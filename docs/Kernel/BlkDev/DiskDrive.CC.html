@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.06">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -69,7 +69,7 @@ body {background-color:#1f1f1f;}
 <a name="l42"></a>}
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF9>CDrive</span><span class=cF0> *</span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l311"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l46"></a>    </span><span class=cF9>I64</span><span class=cF0>      i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(drv_let) - </span><span class=cF6>'A'</span><span class=cF0>;
 <a name="l47"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *res;
 <a name="l48"></a>
@@ -82,7 +82,7 @@ body {background-color:#1f1f1f;}
 <a name="l55"></a>}
 <a name="l56"></a>
 <a name="l57"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>DriveNextFreeLet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let=</span><span class=cF6>'C'</span><span class=cF0>)
-<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l311"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l59"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(first_drive_let) - </span><span class=cF6>'A'</span><span class=cF0>, type = </span><span class=cF5>Letter2BlkDevType</span><span class=cF0>(first_drive_let);
 <a name="l60"></a>
 <a name="l61"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; </span><span class=cF3>DRIVES_NUM</span><span class=cF7>)</span><span class=cF0>)

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.06">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -177,7 +177,7 @@ body {background-color:#1f1f1f;}
 <a name="l150"></a>}
 <a name="l151"></a>
 <a name="l152"></a></span><span class=cF9>CBlkDev</span><span class=cF0> *</span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let, </span><span class=cF9>I64</span><span class=cF0> type)
-<a name="l153"></a>{</span><span class=cF2>//Locate free slot for new BlkDev, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l153"></a>{</span><span class=cF2>//Locate free slot for new BlkDev, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l311"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l154"></a>    </span><span class=cF9>I64</span><span class=cF0>      i = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l155"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *res;
 <a name="l156"></a>
@@ -249,5 +249,34 @@ body {background-color:#1f1f1f;}
 <a name="l222"></a>    </span><span class=cF1>else</span><span class=cF0>
 <a name="l223"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l224"></a>}
+<a name="l225"></a>
+<a name="l226"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BlkDevRep</span><span class=cF0>()
+<a name="l227"></a>{ </span><span class=cF2>// Block Device Report.</span><span class=cF0>
+<a name="l228"></a></span><span class=cF2>// blkdev.blkdevs[i].</span><span class=cF0>
+<a name="l229"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l230"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *b = </span><span class=cFB>blkdev</span><span class=cF0>.blkdevs;
+<a name="l231"></a>
+<a name="l232"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>BLKDEVS_NUM</span><span class=cF0>; i++)
+<a name="l233"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l234"></a>        </span><span class=cF1>if</span><span class=cF0> (b[i].bd_signature == </span><span class=cF3>BD_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l235"></a>        {
+<a name="l236"></a>            </span><span class=cF6>&quot;\nBlock Device #%d:\n&quot;</span><span class=cF0>, i;
+<a name="l237"></a>            </span><span class=cF6>&quot;\tBlock Device Type:\t%Z\n&quot;</span><span class=cF0>, b[i].type, </span><span class=cF6>&quot;ST_BLKDEV_TYPES&quot;</span><span class=cF0>;
+<a name="l238"></a>            </span><span class=cF6>&quot;\tFirst Drive Letter:\t%C\n&quot;</span><span class=cF0>, b[i].first_drive_let;
+<a name="l239"></a>            </span><span class=cF1>if</span><span class=cF0> (b[i].ahci_port)
+<a name="l240"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l241"></a>                </span><span class=cF6>&quot;\tAHCI Port number:\t%d\n&quot;</span><span class=cF0>, b[i].port_num;
+<a name="l242"></a>                </span><span class=cF6>&quot;\tAHCI Port address:\t0x%X\n&quot;</span><span class=cF0>, b[i].ahci_port;
+<a name="l243"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l244"></a>            </span><span class=cF1>if</span><span class=cF0> (b[i].RAM_disk)
+<a name="l245"></a>                </span><span class=cF6>&quot;\tRAM disk address:\t0x%X\n&quot;</span><span class=cF0>, b[i].RAM_disk;
+<a name="l246"></a>            </span><span class=cF1>if</span><span class=cF0> (b[i].file_disk_name)
+<a name="l247"></a>                </span><span class=cF6>&quot;\tFile:\t\t\t\t%s\n&quot;</span><span class=cF0>, b[i].file_disk_name;
+<a name="l248"></a>            </span><span class=cF6>&quot;\tBlock Size:\t\t\t%d\n&quot;</span><span class=cF0>, b[i].blk_size;
+<a name="l249"></a>            </span><span class=cF6>&quot;\tDrive Max Block:\t0x%X\n&quot;</span><span class=cF0>, b[i].max_blk;
+<a name="l250"></a>        }
+<a name="l251"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l252"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l253"></a>}
 </span></pre></body>
 </html>
