@@ -13,7 +13,7 @@ U0 ICNot(CIntermediateCode *tmpi, I64 rip)
 	{
 		i = ICModr1(tmpi, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp);
 		ICRex(tmpi, i.u8[1]);
-		ICU16(tmpi, i.u8[2] << 8 + 0xF6); //TEST ?,0xFF
+		ICU16(tmpi, i.u8[2] << 8 + 0xF6); // TEST	?, 0xFF
 		ICModr2(tmpi, i,, tmpi->arg1.disp, rip + 1);
 		ICU8(tmpi, 0xFF);
 	}
@@ -22,8 +22,8 @@ U0 ICNot(CIntermediateCode *tmpi, I64 rip)
 		ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip);
 		ICTest(tmpi, REG_RAX);
 	}
-	ICU24(tmpi, 0xC0940F); 	//SETZ AL
-	ICU32(tmpi, 0xC0B60F48);//MOVZX RAX,AL
+	ICU24(tmpi, 0xC0940F); 	// SETE		AL
+	ICU32(tmpi, 0xC0B60F48);// MOVZX	RAX, AL
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_U64, REG_RAX, 0, rip);
 }
 
@@ -41,10 +41,10 @@ U0 ICAndAnd(CIntermediateCode *tmpi, I64 rip)
 		r2 = tmpi->arg1.reg;
 	ICZero(tmpi, REG_RAX);
 	ICTest(tmpi, r2);
-	ICU16(tmpi, 0x0874);
+	ICU16(tmpi, 0x0874);	// JE	I8 0xA
 	ICTest(tmpi, REG_RCX);
-	ICU16(tmpi, 0x0374);
-	ICU24(tmpi, 0xC0FF48);
+	ICU16(tmpi, 0x0374);	// JE	I8 0x5
+	ICU24(tmpi, 0xC0FF48);	// INC	U64 RAX
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 }
 
@@ -68,8 +68,8 @@ U0 ICOrOr(CIntermediateCode *tmpi, I64 rip)
 	}
 	ICZero(tmpi, REG_RAX);
 	ICU24(tmpi, 0xC80B00 + i + r2 << 16);
-	ICU16(tmpi, 0x0374);
-	ICU24(tmpi, 0xC0FF48);
+	ICU16(tmpi, 0x0374);	// JE	I8 0x5
+	ICU24(tmpi, 0xC0FF48);	// INC	U64 RAX
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 }
 
@@ -87,15 +87,15 @@ U0 ICXorXor(CIntermediateCode *tmpi, I64 rip)
 		r2 = tmpi->arg1.reg;
 	ICZero(tmpi, REG_RBX);
 	ICTest(tmpi, r2);
-	ICU16(tmpi, 0x0374);
-	ICU24(tmpi, 0xC3FF48);
+	ICU16(tmpi, 0x0374);	// JE	I8 0x5
+	ICU24(tmpi, 0xC3FF48);	// INC	U64 RBX
 
 	ICZero(tmpi, REG_RAX);
 	ICTest(tmpi, REG_RCX);
-	ICU16(tmpi, 0x0374);
-	ICU24(tmpi, 0xC0FF48);
+	ICU16(tmpi, 0x0374);	// JE	I8 0x5
+	ICU24(tmpi, 0xC0FF48);	// INC	U64 RAX
 
-	ICU24(tmpi, 0xC33348);
+	ICU24(tmpi, 0xC33348);	// XOR	U64 RAX, U64 RBX
 
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 }
@@ -173,7 +173,7 @@ U0 ICComp(CIntermediateCode *tmpi, I64 us, I64 is, I64 rip)
 		if (tmpi->ic_class->raw_type & RTF_UNSIGNED || tmpi->ic_flags & ICF_USE_UNSIGNED)
 			is = us;
 		ICU16(tmpi, 0x300 + is);
-		ICU24(tmpi, 0xC0FF48);
+		ICU24(tmpi, 0xC0FF48); // INC	U64 RAX
 		ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 	}
 	else
@@ -211,7 +211,7 @@ U0 ICComp(CIntermediateCode *tmpi, I64 us, I64 is, I64 rip)
 		if (tmpi->ic_class->raw_type & RTF_UNSIGNED || tmpi->ic_flags & ICF_USE_UNSIGNED)
 			is = us;
 		ICU16(tmpi, 0x300 + is);
-		ICU24(tmpi, 0xC0FF48);
+		ICU24(tmpi, 0xC0FF48); // INC	U64 RAX
 		ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 	}
 }
@@ -298,11 +298,11 @@ U0 ICBitOps(CIntermediateCode *tmpi, CICArg *arg1, CICArg *arg2, CIntermediateCo
 U0 ICToUpper(CIntermediateCode *tmpi, I64 rip)
 {
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip);
-	ICU32(tmpi, 0x61F88348);
-	ICU16(tmpi, 0x0A7C);
-	ICU32(tmpi, 0x7AF88348);
-	ICU16(tmpi, 0x047F);
-	ICU32(tmpi, 0xE0C08348);
+	ICU32(tmpi, 0x61F88348);	// CMP	U64 RAX, I8 0x61 
+	ICU16(tmpi, 0x0A7C);		// JL	I8 0xC
+	ICU32(tmpi, 0x7AF88348);	// CMP	U64 RAX, I8 0x7A 
+	ICU16(tmpi, 0x047F);		// JG	I8 0x6
+	ICU32(tmpi, 0xE0C08348);	// ADD	U64 RAX, I8 0xE0
 }
 
 U0 ICToI64(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip)
@@ -327,8 +327,8 @@ U0 ICToBool(CCompCtrl *, CIntermediateCode *tmpi, I64 rip)
 		r = REG_RAX;
 	}
 	ICTest(tmpi, r);
-	ICU24(tmpi, 0xC0950F); 	//SETNZ AL
-	ICU32(tmpi, 0xC0B60F48); //MOVZX RAX,AL
+	ICU24(tmpi, 0xC0950F);		// SETNE	AL
+	ICU32(tmpi, 0xC0B60F48);	// MOVZX	RAX, AL
 }
 
 U0 ICPreIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)

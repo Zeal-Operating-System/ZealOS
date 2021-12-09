@@ -24,6 +24,7 @@ I64 LineRep1(CDirEntry *tmpde)
 
 	return res;
 }
+
 U0 LineRep2(CDoc *doc, CDirEntry *tmpde)
 {
 	while (tmpde)
@@ -39,6 +40,7 @@ U0 LineRep2(CDoc *doc, CDirEntry *tmpde)
 		tmpde = tmpde->next;
 	}
 }
+
 public I64 LineRep(U8 *files_find_mask="/*", U8 *fu_flags=NULL)
 {//Source line-of-code count report.
 	I64			 fuf_flags = 0, res = 0;
@@ -79,6 +81,7 @@ I64 SizeRep1(CDirEntry *tmpde)
 
 	return res;
 }
+
 U0 SizeRep2(CDoc *doc,CDirEntry *tmpde)
 {
 	while (tmpde)
@@ -97,6 +100,7 @@ U0 SizeRep2(CDoc *doc,CDirEntry *tmpde)
 		tmpde = tmpde->next;
 	}
 }
+
 public I64 SizeRep(U8 *files_find_mask="/*", U8 *fu_flags=NONE)
 {//Report file sizes.
 	I64			 fuf_flags = 0, res = 0;

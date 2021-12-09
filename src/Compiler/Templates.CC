@@ -26,7 +26,7 @@ CMP_TEMPLATES::
 				MOV 		RBX, RSP
 				FLD 		U64 [RBX]
 				FLD 		U64 8[RBX]
-@@20: 	FPREM
+@@20:			FPREM
 				FSTSW
 				TEST		AX, 0x400
 				JNZ 		@@20

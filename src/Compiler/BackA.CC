@@ -219,7 +219,7 @@ U0 ICSub(CIntermediateCode *tmpi,
 		if (!swap)
 		{
 			op = 0x03;
-			ICU24(tmpi, 0xD8F748);
+			ICU24(tmpi, 0xD8F748); // NEG RAX
 		}
 		i = ICModr1(REG_RAX, t2, r2, d2);
 		if (tmpi->ic_flags & ICF_LOCK)
@@ -257,7 +257,7 @@ U0 ICSub(CIntermediateCode *tmpi,
 		if (swap)
 		{
 			op = 0x03;
-			ICU24(tmpi, 0xD9F748);
+			ICU24(tmpi, 0xD9F748); // NEG	U64 RCX
 		}
 		if (r3 > 7)
 			i++;
@@ -379,11 +379,11 @@ U0 ICMulEqu(CIntermediateCode *tmpi, I64 rip)
 				  MDF_DISP + tmpi->arg1_type_pointed_to, REG_RCX, 0, rip);
 			r = REG_RBX;
 			if (I8_MIN <= i <= I8_MAX)
-				ICU32(tmpi, i << 24 + 0xDB6B48);
+				ICU32(tmpi, i << 24 + 0xDB6B48); // IMUL2 U64 RBX, I8 i
 			else
 			{
-				ICU24(tmpi, 0xDB6948);
-				ICU32(tmpi, i);
+				ICU24(tmpi, 0xDB6948);	//
+				ICU32(tmpi, i);			// IMUL2	U64 RBX, U32 i
 			}
 			ICMov(tmpi, MDF_DISP + tmpi->arg1_type_pointed_to, REG_RCX, 0, MDF_REG + RT_I64, REG_RBX, 0, rip);
 		}
@@ -424,12 +424,12 @@ U0 ICDiv(CIntermediateCode *tmpi, I64 rip)
 	if (tmpi->ic_class->raw_type & RTF_UNSIGNED)
 	{
 		ICZero(tmpi, REG_RDX);
-		ICU24(tmpi, 0xF1F748);
+		ICU24(tmpi, 0xF1F748); // DIV	U64 RCX
 	}
 	else
 	{
-		ICU16(tmpi, 0x9948);
-		ICU24(tmpi, 0xF9F748);
+		ICU16(tmpi, 0x9948);	// CQO
+		ICU24(tmpi, 0xF9F748);	// IDIV		U64 RAX
 	}
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip);
 }
@@ -445,12 +445,12 @@ U0 ICDivEqu(CIntermediateCode *tmpi, Bool is_mod, I64 rip)
 		if (tmpi->ic_class->raw_type & RTF_UNSIGNED)
 		{
 			ICZero(tmpi, REG_RDX);
-			ICU24(tmpi, 0xF1F748);
+			ICU24(tmpi, 0xF1F748); // DIV	U64 RCX
 		}
 		else
 		{
-			ICU16(tmpi, 0x9948);
-			ICU24(tmpi, 0xF9F748);
+			ICU16(tmpi, 0x9948);	// CQO
+			ICU24(tmpi, 0xF9F748);	// IDIV		U64 RAX
 		}
 		if (is_mod)
 			ICMov(tmpi, tmpi->arg1.type & MDG_MASK + tmpi->arg1_type_pointed_to,
@@ -468,12 +468,12 @@ U0 ICDivEqu(CIntermediateCode *tmpi, Bool is_mod, I64 rip)
 		if (tmpi->ic_class->raw_type & RTF_UNSIGNED)
 		{
 			ICZero(tmpi, REG_RDX);
-			ICU24(tmpi, 0xF1F748);
+			ICU24(tmpi, 0xF1F748); // DIV 	U64 RCX
 		}
 		else
 		{
-			ICU16(tmpi, 0x9948);
-			ICU24(tmpi, 0xF9F748);
+			ICU16(tmpi, 0x9948);	// CQO
+			ICU24(tmpi, 0xF9F748);	// IDIV		U64 RAX
 		}
 		if (is_mod)
 			ICMov(tmpi, MDF_DISP + tmpi->arg1_type_pointed_to, REG_RBX, 0, MDF_REG + RT_I64, REG_RDX, 0, rip);
@@ -496,12 +496,12 @@ U0 ICMod(CIntermediateCode *tmpi, I64 rip)
 	if (tmpi->ic_class->raw_type & RTF_UNSIGNED)
 	{
 		ICZero(tmpi, REG_RDX);
-		ICU24(tmpi, 0xF1F748);
+		ICU24(tmpi, 0xF1F748); // DIV	U64 RCX
 	}
 	else
 	{
-		ICU16(tmpi, 0x9948);
-		ICU24(tmpi, 0xF9F748);
+		ICU16(tmpi, 0x9948);	// CQO
+		ICU24(tmpi, 0xF9F748);	// IDIV		U64 RAX
 	}
 	ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RDX, 0, rip);
 }
@@ -601,7 +601,7 @@ U0 ICAddSubEctEqu(CIntermediateCode *tmpi, U8 type_pointed_to,
 					done = TRUE;
 				}
 				else if (op.u8[2] == 0x24)
-				{//AND
+				{ // AND
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RCX, 0, t2, r2, d2, rip);
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, MDF_DISP + type_pointed_to, REG_RCX, 0, rip);
 					res_reg = REG_RAX;
@@ -613,7 +613,7 @@ U0 ICAddSubEctEqu(CIntermediateCode *tmpi, U8 type_pointed_to,
 					done = TRUE;
 				}
 				else if (type_pointed_to < RT_I64)
-				{//OR/XOR
+				{ // OR/XOR
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RCX, 0, t2, r2, d2, rip);
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, MDF_DISP + type_pointed_to, REG_RCX, 0, rip);
 					res_reg = REG_RAX;

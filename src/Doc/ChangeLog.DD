@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----12/09/21 03:21:03----$IV,0$
+* Revert 440Hz 'A'.
+
 $IV,1$----12/04/21 04:16:45----$IV,0$
 * Raised version number to 1.06.
 * Removed IDE members and padding from CBlkDev and CBlkDevGlobals, added $MA-X+PU,"ins_port",LM="Find(\"ins_port\",\"/*\");View;"$ to return install-drive recognition functionality.
@@ -150,7 +153,7 @@ $IV,1$----07/23/21 16:30:23----$IV,0$
 $IV,1$----07/14/21 13:12:34----$IV,0$
 * Raised version number to 0.08.
 * Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.CC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.CC,CH_CTRLS"$.
-* Added top & right borders to $LK+PU,"RawDumpRegs",A="FF:::/Kernel/KDebug.CC,RawDumpRegs"$.
+* Added top & right borders to $LK+PU,"RawDr",A="FF:::/Kernel/KDebug.CC,RawDumpRegs"$.
 * Improved spacing in some debug commands.
 * Fixed $LK+PU,"RawPutChar",A="MN:RawPutChar"$ and $LK+PU,"EdLite",A="MN:EdLite"$ tab width.
 * Fixed $LK+PU,"Ui",A="MN:Ui"$ missing "0x" prefix syntax highlighter bug.
@@ -399,7 +402,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
 * Shortened $LK,"CheckPtr",A="MN:CheckPtr"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
-* $LK,"RawDumpRegs",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
+* $LK,"RawDr",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
 * Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
 * Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.CC"$.

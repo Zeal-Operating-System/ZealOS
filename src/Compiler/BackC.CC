@@ -863,7 +863,7 @@ U0 ICSwitch(CIntermediateCode *tmpi, I64 rip, Bool nobound, CCompCtrl *cc, U8 *b
 
 	if (lb->flags & (CMF_I8_JMP_TABLE | CMF_U8_JMP_TABLE | CMF_I16_JMP_TABLE | CMF_U16_JMP_TABLE))
 	{
-		ICU16(tmpi, 0xC381); //ADD EBX,0x12345678
+		ICU16(tmpi, 0xC381); // ADD EBX, 0x########
 		if (buf && cc->flags & CCF_AOT_COMPILE)
 		{
 			tmpa = CAlloc(sizeof(CAOTAbsAddr));
@@ -886,12 +886,12 @@ U0 ICSwitch(CIntermediateCode *tmpi, I64 rip, Bool nobound, CCompCtrl *cc, U8 *b
 
 U0 ICLocalVarInit(CIntermediateCode *tmpi)
 {
-	ICU24(tmpi, 0xC48B48);
-	ICU16(tmpi, 0x5748);
-	ICU24(tmpi, 0xF88B48);
-	ICU24(tmpi, 0xC1C748);
+	ICU24(tmpi, 0xC48B48);	// MOV	U64 RAX, U64 RSP
+	ICU16(tmpi, 0x5748);	// PUSH	U64 RDI
+	ICU24(tmpi, 0xF88B48);	// MOV	U64 RDI, U64 RAX
+	ICU24(tmpi, 0xC1C748);	// MOV	U64 RCX, I32 0x########
 	ICU32(tmpi, tmpi->ic_data);
-	ICU16(tmpi, sys_var_init_val << 8 + 0xB0);
-	ICU24(tmpi, 0xAA48F3);
-	ICU16(tmpi, 0x5F48);
+	ICU16(tmpi, sys_var_init_val << 8 + 0xB0); // MOV AL, sys_var_init_val
+	ICU24(tmpi, 0xAA48F3);	// REP_STOSB
+	ICU16(tmpi, 0x5F48);	// POP	U64 RDI
 }

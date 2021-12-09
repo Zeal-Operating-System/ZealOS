@@ -2,7 +2,7 @@
 
 class CInternalType
 {
-	U8 type,size, name[8];
+	U8 type, size, name[8];
 } internal_types_table[INTERNAL_TYPES_NUM] = {
 	{RT_I0,  0, "I0i"},
 	{RT_I0,  0, "I0"},

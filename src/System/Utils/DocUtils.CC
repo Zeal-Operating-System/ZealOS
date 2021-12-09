@@ -7,6 +7,7 @@ U0 CursorRemFile(U8 *filename)
 	DocWrite(doc);
 	DocDel(doc);
 }
+
 public U0 CursorRemove(U8 *files_find_mask="*")
 {//Remove ASCII 5 cursor.
 	I64 fuf_flags = 0;
@@ -32,6 +33,7 @@ U0 CollapseFile(U8 *filename, Bool collapse=TRUE)
 	DocWrite(doc);
 	DocDel(doc);
 }
+
 public U0 Collapse(U8 *files_find_mask="*", Bool collapse=TRUE, U8 *fu_flags=NULL)
 {//Collapse $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ trees.
 	I64 fuf_flags = 0;
@@ -74,6 +76,7 @@ I64 DocOptEntry(CDoc *,CDocEntry *doc_e)
 
 	return res;
 }
+
 I64 DocOptDoc(CDoc *doc)
 {//Optimize Doc.
 	Bool		 unlock = DocLock(doc);
@@ -104,6 +107,7 @@ I64 DocOptDoc(CDoc *doc)
 
 	return res;
 }
+
 I64 DocOptFile(U8 *filename)
 {//Optimize file.
 	I64   res;
@@ -118,6 +122,7 @@ I64 DocOptFile(U8 *filename)
 
 	return res;
 }
+
 I64 DocOptList(CDirEntry *tmpde)
 {
 	I64			 res = 0;
@@ -142,6 +147,7 @@ I64 DocOptList(CDirEntry *tmpde)
 
 	return res;
 }
+
 public I64 DocOpt(U8 *files_find_mask="*", U8 *fu_flags=NULL)
 {//Optimize $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ files, eliminating aux_str's and .Z's.
 //+R flag for aggressively risky.
