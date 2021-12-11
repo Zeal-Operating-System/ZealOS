@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -86,8 +86,8 @@ body {background-color:#1f1f1f;}
 <a name="l59"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>eps</span><span class=cF0>         (</span><span class=cFE>0x3CB0000000000000</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>)
 <a name="l60"></a>
 <a name="l61"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Data Types/Simple&quot;</span><span class=cF0>
-<a name="l62"></a></span><span class=cF2>//CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.</span><span class=cF0>
-<a name="l63"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/SubIntAccess.CC.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l62"></a></span><span class=cF2>//ZealC union structure is treated as a whole if no member is specified, similar to bit fields.</span><span class=cF0>
+<a name="l63"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/SubIntAccess.ZC.html#l1"><span class=cF4>::/Demo/SubIntAccess.ZC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF1>U16i</span><span class=cF0> </span><span class=cF1>union</span><span class=cF0> </span><span class=cF9>U16</span><span class=cF0>
 <a name="l66"></a>{
@@ -362,11 +362,11 @@ body {background-color:#1f1f1f;}
 <a name="l335"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_MP_CRASH</span><span class=cF0>      </span><span class=cFE>0x30</span><span class=cF0>
 <a name="l336"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_WAKE</span><span class=cF0>          </span><span class=cFE>0x31</span><span class=cF0>
 <a name="l337"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>         </span><span class=cFE>0x32</span><span class=cF0>
-<a name="l338"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l275"><span class=cF4>ST_INT_NAMES</span></a><span class=cF0>
+<a name="l338"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l275"><span class=cF4>ST_INT_NAMES</span></a><span class=cF0>
 <a name="l339"></a>
 <a name="l340"></a></span><span class=cF2>//You might want to start backward from</span><span class=cF0>
 <a name="l341"></a></span><span class=cF2>//0xFF for your own interrupts.</span><span class=cF0>
-<a name="l342"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l133"><span class=cF4>IntEntryAlloc</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l342"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.ZC.html#l133"><span class=cF4>IntEntryAlloc</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l343"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_USER</span><span class=cF0>          </span><span class=cFE>0x40</span><span class=cF0>
 <a name="l344"></a>
 <a name="l345"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>   </span><span class=cFE>128</span><span class=cF0>
@@ -427,7 +427,7 @@ body {background-color:#1f1f1f;}
 <a name="l400"></a>              boot_cs,
 <a name="l401"></a>              cs32,
 <a name="l402"></a>              cs64,             </span><span class=cF2>//The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Charter.DD.html#l1"><span class=cF4>Charter</span></a><span class=cF2> says just ring-0.</span><span class=cF0>
-<a name="l403"></a>              cs64_ring3, </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Lectures/Ring3.CC.html#l1"><span class=cF4>Ring3</span></a><span class=cF2>, in case you want to play around.</span><span class=cF0>
+<a name="l403"></a>              cs64_ring3, </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Lectures/Ring3.ZC.html#l1"><span class=cF4>Ring3</span></a><span class=cF2>, in case you want to play around.</span><span class=cF0>
 <a name="l404"></a>              ds,
 <a name="l405"></a>              ds_ring3,
 <a name="l406"></a>              tr[</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>],
@@ -475,15 +475,15 @@ body {background-color:#1f1f1f;}
 <a name="l448"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LDF_JUST_LOAD</span><span class=cF0>   </span><span class=cFE>2</span><span class=cF0>
 <a name="l449"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LDF_SILENT</span><span class=cF0>      </span><span class=cFE>4</span><span class=cF0>
 <a name="l450"></a>
-<a name="l451"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BIN_SIGNATURE_VAL</span><span class=cF0>   </span><span class=cF6>'ZCCB'</span><span class=cF0> </span><span class=cF2>//Zeal CosmiC Binary</span><span class=cF0>
+<a name="l451"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BIN_SIGNATURE_VAL</span><span class=cF0>   </span><span class=cF6>'ZCCB'</span><span class=cF0> </span><span class=cF2>//Zeal ZealC Binary</span><span class=cF0>
 <a name="l452"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CBinFile</span><span class=cF0>
-<a name="l453"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.CC.html#l628"><span class=cF4>Bin File Header Generation</span></a><span class=cF2> by compiler.</span><span class=cF0>
+<a name="l453"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.ZC.html#l628"><span class=cF4>Bin File Header Generation</span></a><span class=cF2> by compiler.</span><span class=cF0>
 <a name="l454"></a>    </span><span class=cF9>U16</span><span class=cF0> jmp;
 <a name="l455"></a>    </span><span class=cF1>U8</span><span class=cF0>  module_align_bits,
 <a name="l456"></a>        reserved;
 <a name="l457"></a>    </span><span class=cF9>U32</span><span class=cF0> bin_signature;
 <a name="l458"></a>    </span><span class=cF9>I64</span><span class=cF0> org,
-<a name="l459"></a>        patch_table_offset, </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.CC.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
+<a name="l459"></a>        patch_table_offset, </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.ZC.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
 <a name="l460"></a>        file_size;
 <a name="l461"></a>};
 <a name="l462"></a>
@@ -573,7 +573,7 @@ body {background-color:#1f1f1f;}
 <a name="l546"></a>
 <a name="l547"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Boot&quot;</span><span class=cF0>
 <a name="l548"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CKernel</span><span class=cF0>
-<a name="l549"></a>{</span><span class=cF2>//Must match </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l30"><span class=cF4>OSStartUp</span></a><span class=cF0>
+<a name="l549"></a>{</span><span class=cF2>//Must match </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.ZC.html#l30"><span class=cF4>OSStartUp</span></a><span class=cF0>
 <a name="l550"></a>    </span><span class=cF9>CBinFile</span><span class=cF0>        h;
 <a name="l551"></a>    </span><span class=cF9>U32</span><span class=cF0>             jmp,
 <a name="l552"></a>                    boot_src,
@@ -723,7 +723,7 @@ body {background-color:#1f1f1f;}
 <a name="l696"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CCountsGlobals</span><span class=cF0>
 <a name="l697"></a>{
 <a name="l698"></a>    </span><span class=cF9>I64</span><span class=cF0>     jiffies,                </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l706"><span class=cF4>JIFFY_FREQ</span></a><span class=cF0>
-<a name="l699"></a>            timer,                  </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l708"><span class=cF4>SYS_TIMER_FREQ</span></a><span class=cF2>. Use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l22"><span class=cF4>SysTimerRead</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l699"></a>            timer,                  </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l708"><span class=cF4>SYS_TIMER_FREQ</span></a><span class=cF2>. Use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.ZC.html#l22"><span class=cF4>SysTimerRead</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l700"></a>            time_stamp_freq,
 <a name="l701"></a>            time_stamp_kHz_freq,
 <a name="l702"></a>            time_stamp_freq_initial; </span><span class=cF2>//Initial freq, sampled once at boot time.</span><span class=cF0>
@@ -754,7 +754,7 @@ body {background-color:#1f1f1f;}
 <a name="l727"></a>};
 <a name="l728"></a>
 <a name="l729"></a></span><span class=cF2>//Asm callable function pointers.</span><span class=cF0>
-<a name="l730"></a></span><span class=cF2>//They work with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l39"><span class=cF4>CallExtNum</span></a><span class=cF2>() when calling from CosmiC.</span><span class=cF0>
+<a name="l730"></a></span><span class=cF2>//They work with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l39"><span class=cF4>CallExtNum</span></a><span class=cF2>() when calling from ZealC.</span><span class=cF0>
 <a name="l731"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_WIN_TO_TOP</span><span class=cF0>      </span><span class=cFE>0</span><span class=cF0>
 <a name="l732"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>       </span><span class=cFE>1</span><span class=cF0>
 <a name="l733"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_HEAPLOG_MALLOC</span><span class=cF0>  </span><span class=cFE>2</span><span class=cF0>
@@ -815,7 +815,7 @@ body {background-color:#1f1f1f;}
 <a name="l788"></a>};
 <a name="l789"></a>
 <a name="l790"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Hash/System&quot;</span><span class=cF0>
-<a name="l791"></a></span><span class=cF2>//Hash table types: </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l121"><span class=cF4>ST_HTT_TYPES</span></a><span class=cF0>
+<a name="l791"></a></span><span class=cF2>//Hash table types: </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l121"><span class=cF4>ST_HTT_TYPES</span></a><span class=cF0>
 <a name="l792"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_EXPORT_SYS_SYM</span><span class=cF0>  </span><span class=cFE>0</span><span class=cF0>
 <a name="l793"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_IMPORT_SYS_SYM</span><span class=cF0>  </span><span class=cFE>1</span><span class=cF0>
 <a name="l794"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_DEFINE_STR</span><span class=cF0>      </span><span class=cFE>2</span><span class=cF0>
@@ -998,7 +998,7 @@ body {background-color:#1f1f1f;}
 <a name="l971"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>Cf_INTERNAL_TYPE</span><span class=cF0>                </span><span class=cFE>1</span><span class=cF0>
 <a name="l972"></a>
 <a name="l973"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CHashClass</span><span class=cF0>:</span><span class=cF9>CHashSrcSym</span><span class=cF0>
-<a name="l974"></a>{</span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseLib.CC.html#l43"><span class=cF4>ParseClassNew</span></a><span class=cF2>(). base_class of </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l996"><span class=cF4>CHashFun</span></a><span class=cF0>
+<a name="l974"></a>{</span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseLib.ZC.html#l43"><span class=cF4>ParseClassNew</span></a><span class=cF2>(). base_class of </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l996"><span class=cF4>CHashFun</span></a><span class=cF0>
 <a name="l975"></a>    </span><span class=cF9>I64</span><span class=cF0>          size, neg_offset;
 <a name="l976"></a>    </span><span class=cF9>U32</span><span class=cF0>          member_count;
 <a name="l977"></a>    </span><span class=cF1>U8</span><span class=cF0>           ptr_stars_count, raw_type;
@@ -1021,7 +1021,7 @@ body {background-color:#1f1f1f;}
 <a name="l994"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>Ff_RET1</span><span class=cF0>             </span><span class=cFE>15</span><span class=cF0>
 <a name="l995"></a>
 <a name="l996"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CHashFun</span><span class=cF0>:</span><span class=cF9>CHashClass</span><span class=cF0>
-<a name="l997"></a>{</span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseLib.CC.html#l67"><span class=cF4>ParseFunNew</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l997"></a>{</span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseLib.ZC.html#l67"><span class=cF4>ParseFunNew</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l998"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>      *return_class;
 <a name="l999"></a>    </span><span class=cF9>U32</span><span class=cF0>              arg_count, pad,
 <a name="l1000"></a>                     used_reg_mask, clobbered_reg_mask;
@@ -1172,7 +1172,7 @@ body {background-color:#1f1f1f;}
 <a name="l1145"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_CHECK_COLLAPSABLE</span><span class=cF0> </span><span class=cFE>0x100000000000</span><span class=cF0>
 <a name="l1146"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_REFRESH_DATA</span><span class=cF0>      </span><span class=cFE>0x200000000000</span><span class=cF0>
 <a name="l1147"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_UPDATE_DATA</span><span class=cF0>       </span><span class=cFE>0x400000000000</span><span class=cF0>
-<a name="l1148"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1150"><span class=cF4>DOCEF_DEREF_DATA</span></a><span class=cF2> is confusing. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() makes doc_e-&gt;data point to members</span><span class=cF0>
+<a name="l1148"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1150"><span class=cF4>DOCEF_DEREF_DATA</span></a><span class=cF2> is confusing. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.ZC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() makes doc_e-&gt;data point to members</span><span class=cF0>
 <a name="l1149"></a></span><span class=cF2>//of class. For ints, it derefs doc_e-&gt;data as a ptr.  For strings, it doesn't.</span><span class=cF0>
 <a name="l1150"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_DEREF_DATA</span><span class=cF0>        </span><span class=cFE>0x800000000000</span><span class=cF0>
 <a name="l1151"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_REMALLOC_DATA</span><span class=cF0>     </span><span class=cFE>0x1000000000000</span><span class=cF0>
@@ -1385,7 +1385,7 @@ body {background-color:#1f1f1f;}
 <a name="l1358"></a>#</span><span class=cF1>assert</span><span class=cF0> !($ &amp; </span><span class=cFE>7</span><span class=cF0>)
 <a name="l1359"></a>};
 <a name="l1360"></a>
-<a name="l1361"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocEd.CC.html#l97"><span class=cF4>DocEd</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l411"><span class=cF4>PopUpMenu</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1361"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.ZC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.ZC.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocEd.ZC.html#l97"><span class=cF4>DocEd</span></a><span class=cF2>() </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.ZC.html#l411"><span class=cF4>PopUpMenu</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1362"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_SIZE_MIN</span><span class=cF0>            </span><span class=cFE>0x01</span><span class=cF0>
 <a name="l1363"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_INTERCEPT_TASK_END</span><span class=cF0>  </span><span class=cFE>0x02</span><span class=cF0>
 <a name="l1364"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_DONT_HOME</span><span class=cF0>           </span><span class=cFE>0x04</span><span class=cF0>
@@ -1415,7 +1415,7 @@ body {background-color:#1f1f1f;}
 <a name="l1388"></a>    </span><span class=cF1>U8</span><span class=cF0>          name[</span><span class=cFE>256</span><span class=cF0>] format </span><span class=cF6>&quot;$DA-P,LEN=255,A=\&quot;FileName:%s\&quot;$&quot;</span><span class=cF0>;
 <a name="l1389"></a>};
 <a name="l1390"></a>
-<a name="l1391"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocEd.CC.html#l228"><span class=cF4>Ed</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1391"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocEd.ZC.html#l228"><span class=cF4>Ed</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1392"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_BAIL</span><span class=cF0>        </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l1393"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_COLLAPSE</span><span class=cF0>    </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l1394"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_UNCOLLAPSE</span><span class=cF0>  </span><span class=cFE>0x400</span><span class=cF0>
@@ -1439,9 +1439,9 @@ body {background-color:#1f1f1f;}
 <a name="l1412"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_BORDER_DOC</span><span class=cF0>             </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l1413"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_FORM</span><span class=cF0>                   </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l1414"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_SIZE_MIN</span><span class=cF0>               </span><span class=cFE>0x400</span><span class=cF0>
-<a name="l1415"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HIDE_CURSOR</span><span class=cF0>            </span><span class=cFE>0x800</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l161"><span class=cF4>DocCursor</span></a><span class=cF0>
-<a name="l1416"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>  </span><span class=cFE>0x1000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l168"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
-<a name="l1417"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_NO_SCROLL_BARS</span><span class=cF0>         </span><span class=cFE>0x2000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l175"><span class=cF4>DocScroll</span></a><span class=cF0>
+<a name="l1415"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HIDE_CURSOR</span><span class=cF0>            </span><span class=cFE>0x800</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l161"><span class=cF4>DocCursor</span></a><span class=cF0>
+<a name="l1416"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>  </span><span class=cFE>0x1000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l168"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
+<a name="l1417"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_NO_SCROLL_BARS</span><span class=cF0>         </span><span class=cFE>0x2000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l175"><span class=cF4>DocScroll</span></a><span class=cF0>
 <a name="l1418"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_ALLOW_UNDO</span><span class=cF0>             </span><span class=cFE>0x4000</span><span class=cF0>
 <a name="l1419"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>              </span><span class=cFE>0x8000</span><span class=cF0>
 <a name="l1420"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HAS_SONG</span><span class=cF0>               </span><span class=cFE>0x10000</span><span class=cF0>
@@ -1476,9 +1476,9 @@ body {background-color:#1f1f1f;}
 <a name="l1449"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_BORDER_DOC</span><span class=cF0>             </span><span class=cFE>8</span><span class=cF0>
 <a name="l1450"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_FORM</span><span class=cF0>                   </span><span class=cFE>9</span><span class=cF0>
 <a name="l1451"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_SIZE_MIN</span><span class=cF0>               </span><span class=cFE>10</span><span class=cF0>
-<a name="l1452"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>            </span><span class=cFE>11</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l161"><span class=cF4>DocCursor</span></a><span class=cF0>
-<a name="l1453"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>  </span><span class=cFE>12</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l168"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
-<a name="l1454"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>         </span><span class=cFE>13</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l175"><span class=cF4>DocScroll</span></a><span class=cF0>
+<a name="l1452"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>            </span><span class=cFE>11</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l161"><span class=cF4>DocCursor</span></a><span class=cF0>
+<a name="l1453"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>  </span><span class=cFE>12</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l168"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
+<a name="l1454"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>         </span><span class=cFE>13</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l175"><span class=cF4>DocScroll</span></a><span class=cF0>
 <a name="l1455"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_ALLOW_UNDO</span><span class=cF0>             </span><span class=cFE>14</span><span class=cF0>
 <a name="l1456"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_SHOW</span><span class=cF0>              </span><span class=cFE>15</span><span class=cF0>
 <a name="l1457"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HAS_SONG</span><span class=cF0>               </span><span class=cFE>16</span><span class=cF0>
@@ -1512,7 +1512,7 @@ body {background-color:#1f1f1f;}
 <a name="l1485"></a>    </span><span class=cF1>U8</span><span class=cF0>          *body;
 <a name="l1486"></a>};
 <a name="l1487"></a>
-<a name="l1488"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1488"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.ZC.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1489"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCM_CANCEL</span><span class=cF0>             (-</span><span class=cFE>1</span><span class=cF0>)
 <a name="l1490"></a>
 <a name="l1491"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>       </span><span class=cF6>'DocS'</span><span class=cF0>
@@ -1549,13 +1549,13 @@ body {background-color:#1f1f1f;}
 <a name="l1522"></a>    </span><span class=cF9>I64</span><span class=cF0>            (*left_click_link)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
 <a name="l1523"></a>    </span><span class=cF9>I64</span><span class=cF0>            (*right_click_link)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
 <a name="l1524"></a>
-<a name="l1525"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Apps/Psalmody/JukeBox.CC.html#l1"><span class=cF4>::/Apps/Psalmody/JukeBox.CC</span></a><span class=cF0>
+<a name="l1525"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Apps/Psalmody/JukeBox.ZC.html#l1"><span class=cF4>::/Apps/Psalmody/JukeBox.ZC</span></a><span class=cF0>
 <a name="l1526"></a>    </span><span class=cF1>U8</span><span class=cF0>              *user_put_data; </span><span class=cF2>//Passed to user_put_key() and user_put_s()</span><span class=cF0>
 <a name="l1527"></a>    </span><span class=cF1>Bool</span><span class=cF0>           (*user_put_key)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *data, </span><span class=cF9>I64</span><span class=cF0> ch, </span><span class=cF9>I64</span><span class=cF0> sc);
 <a name="l1528"></a>    </span><span class=cF1>Bool</span><span class=cF0>           (*user_put_s)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *data, </span><span class=cF1>U8</span><span class=cF0> *st);
 <a name="l1529"></a>
 <a name="l1530"></a>    </span><span class=cF9>CDoc</span><span class=cF0>            *parent_doc; </span><span class=cF2>//(When browsing deeper, opening deeper docs.)</span><span class=cF0>
-<a name="l1531"></a>    </span><span class=cF9>U64</span><span class=cF0>              desc; </span><span class=cF2>//8 characters. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l51"><span class=cF4>DocBorderListDraw</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1531"></a>    </span><span class=cF9>U64</span><span class=cF0>              desc; </span><span class=cF2>//8 characters. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l51"><span class=cF4>DocBorderListDraw</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l1532"></a>
 <a name="l1533"></a>    </span><span class=cF9>CDocBin</span><span class=cF0>          bin_head;
 <a name="l1534"></a>    </span><span class=cF9>CDocSettings</span><span class=cF0>     settings_head;
@@ -1696,7 +1696,7 @@ body {background-color:#1f1f1f;}
 <a name="l1669"></a>};
 <a name="l1670"></a>
 <a name="l1671"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Directive&quot;</span><span class=cF0>
-<a name="l1672"></a></span><span class=cF2>//Compiler </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF2>()s</span><span class=cF0>
+<a name="l1672"></a></span><span class=cF2>//Compiler </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.ZC.html#l1"><span class=cF4>Option</span></a><span class=cF2>()s</span><span class=cF0>
 <a name="l1673"></a></span><span class=cF2>//You might need to do #exe {Option();}</span><span class=cF0>
 <a name="l1674"></a></span><span class=cF2>//Note: The #exe statement is lexed-ahead,</span><span class=cF0>
 <a name="l1675"></a></span><span class=cF2>//so it takes effect earlier than you might expect.</span><span class=cF0>
@@ -1719,7 +1719,7 @@ body {background-color:#1f1f1f;}
 <a name="l1692"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTF_ECHO</span><span class=cF0>                   (</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>OPTf_ECHO</span><span class=cF0>)
 <a name="l1693"></a>
 <a name="l1694"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Intermediate Code&quot;</span><span class=cF0>
-<a name="l1695"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CInit.CC.html#l235"><span class=cF4>ST_RAW_TYPES</span></a><span class=cF0>
+<a name="l1695"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CInit.ZC.html#l235"><span class=cF4>ST_RAW_TYPES</span></a><span class=cF0>
 <a name="l1696"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I0</span><span class=cF0>           </span><span class=cFE>2</span><span class=cF0>
 <a name="l1697"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_U0</span><span class=cF0>           </span><span class=cFE>3</span><span class=cF0>
 <a name="l1698"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I8</span><span class=cF0>           </span><span class=cFE>4</span><span class=cF0>
@@ -1829,7 +1829,7 @@ body {background-color:#1f1f1f;}
 <a name="l1802"></a>                 ic_line;
 <a name="l1803"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>  *ic_class, *ic_class2;
 <a name="l1804"></a>    </span><span class=cF9>CICArg</span><span class=cF0>       arg1, arg2, res;
-<a name="l1805"></a>    </span><span class=cF1>U8</span><span class=cF0>           arg1_type_pointed_to; </span><span class=cF2>//Used for </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CompilerA.HH.html#l10"><span class=cF4>IST_ASSIGN</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CompilerA.HH.html#l9"><span class=cF4>IST_DEREF</span></a><span class=cF2> </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CInit.CC.html#l26"><span class=cF4>ic_codes</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l1805"></a>    </span><span class=cF1>U8</span><span class=cF0>           arg1_type_pointed_to; </span><span class=cF2>//Used for </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CompilerA.HH.html#l10"><span class=cF4>IST_ASSIGN</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CompilerA.HH.html#l9"><span class=cF4>IST_DEREF</span></a><span class=cF2> </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CInit.ZC.html#l26"><span class=cF4>ic_codes</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l1806"></a>    </span><span class=cF1>union</span><span class=cF0>
 <a name="l1807"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l1808"></a>        </span><span class=cF1>U8</span><span class=cF0> ic_body[</span><span class=cF3>IC_BODY_SIZE</span><span class=cF0>];
@@ -1911,7 +1911,7 @@ body {background-color:#1f1f1f;}
 <a name="l1884"></a></span><span class=cF2>//Slash value</span><span class=cF0>
 <a name="l1885"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_R_REG</span><span class=cF0>        </span><span class=cFE>8</span><span class=cF0>
 <a name="l1886"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_I_REG</span><span class=cF0>        </span><span class=cFE>9</span><span class=cF0>
-<a name="l1887"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/AsmInit.CC.html#l137"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
+<a name="l1887"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/AsmInit.ZC.html#l137"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
 <a name="l1888"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_NONE</span><span class=cF0>         </span><span class=cFE>11</span><span class=cF0>
 <a name="l1889"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CInst</span><span class=cF0>
 <a name="l1890"></a>{
@@ -1983,7 +1983,7 @@ body {background-color:#1f1f1f;}
 <a name="l1956"></a>};
 <a name="l1957"></a>
 <a name="l1958"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAsmUndefHash</span><span class=cF0>
-<a name="l1959"></a>{</span><span class=cF2>//Only place created is </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseExp.CC.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM expression.</span><span class=cF0>
+<a name="l1959"></a>{</span><span class=cF2>//Only place created is </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseExp.ZC.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM expression.</span><span class=cF0>
 <a name="l1960"></a>    </span><span class=cF9>CAsmUndefHash</span><span class=cF0>   *next;
 <a name="l1961"></a>    </span><span class=cF9>CHashExport</span><span class=cF0>     *hash;
 <a name="l1962"></a>};
@@ -2650,7 +2650,7 @@ body {background-color:#1f1f1f;}
 <a name="l2623"></a>
 <a name="l2624"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Devices;PCI&quot;</span><span class=cF0>
 <a name="l2625"></a>
-<a name="l2626"></a></span><span class=cF2>//PCI Registers, used with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/PCI.CC.html#l38"><span class=cF4>PCIRead</span></a><span class=cF2> functions.</span><span class=cF0>
+<a name="l2626"></a></span><span class=cF2>//PCI Registers, used with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/PCI.ZC.html#l38"><span class=cF4>PCIRead</span></a><span class=cF2> functions.</span><span class=cF0>
 <a name="l2627"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_VENDOR_ID</span><span class=cF0>          </span><span class=cFE>0x00</span><span class=cF0>
 <a name="l2628"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_DEVICE_ID</span><span class=cF0>          </span><span class=cFE>0x02</span><span class=cF0>
 <a name="l2629"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_COMMAND</span><span class=cF0>            </span><span class=cFE>0x04</span><span class=cF0>
@@ -3037,9 +3037,9 @@ body {background-color:#1f1f1f;}
 <a name="l3010"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATAR1_CTRL</span><span class=cF0>  </span><span class=cFE>2</span><span class=cF0>
 <a name="l3011"></a>
 <a name="l3012"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/FileNames&quot;</span><span class=cF0>
-<a name="l3013"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_JIT</span><span class=cF0>    </span><span class=cF6>&quot;*.CC*;*.HH*&quot;</span><span class=cF0>
-<a name="l3014"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_AOT</span><span class=cF0>    </span><span class=cF6>&quot;*.CC*;*.HH*;*.PRJ*&quot;</span><span class=cF0>
-<a name="l3015"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_SRC</span><span class=cF0>    </span><span class=cF6>&quot;*.CC*;*.HH*;*.IN*;*.PRJ*&quot;</span><span class=cF0>
+<a name="l3013"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_JIT</span><span class=cF0>    </span><span class=cF6>&quot;*.ZC*;*.HH*&quot;</span><span class=cF0>
+<a name="l3014"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_AOT</span><span class=cF0>    </span><span class=cF6>&quot;*.ZC*;*.HH*;*.PRJ*&quot;</span><span class=cF0>
+<a name="l3015"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_SRC</span><span class=cF0>    </span><span class=cF6>&quot;*.ZC*;*.HH*;*.IN*;*.PRJ*&quot;</span><span class=cF0>
 <a name="l3016"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_DD</span><span class=cF0>     </span><span class=cF3>FILEMASK_SRC</span><span class=cF0> </span><span class=cF6>&quot;;*.DD*&quot;</span><span class=cF0>
 <a name="l3017"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_TXT</span><span class=cF0>    </span><span class=cF3>FILEMASK_DD</span><span class=cF0> </span><span class=cF6>&quot;;*.TXT*&quot;</span><span class=cF0>
 <a name="l3018"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FILEMASK_GR</span><span class=cF0>     </span><span class=cF6>&quot;*.GR*&quot;</span><span class=cF0>
@@ -3206,7 +3206,7 @@ body {background-color:#1f1f1f;}
 <a name="l3179"></a>};
 <a name="l3180"></a>
 <a name="l3181"></a></span><span class=cF2>//Red Sea Attributes</span><span class=cF0>
-<a name="l3182"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
+<a name="l3182"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
 <a name="l3183"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_READ_ONLY</span><span class=cF0>       </span><span class=cFE>0x01</span><span class=cF0> </span><span class=cF2>//R</span><span class=cF0>
 <a name="l3184"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_HIDDEN</span><span class=cF0>          </span><span class=cFE>0x02</span><span class=cF0> </span><span class=cF2>//H</span><span class=cF0>
 <a name="l3185"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_SYSTEM</span><span class=cF0>          </span><span class=cFE>0x04</span><span class=cF0> </span><span class=cF2>//S</span><span class=cF0>
@@ -3221,12 +3221,12 @@ body {background-color:#1f1f1f;}
 <a name="l3194"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_FIXED</span><span class=cF0>           </span><span class=cFE>0x800</span><span class=cF0> </span><span class=cF2>//F</span><span class=cF0>
 <a name="l3195"></a>
 <a name="l3196"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/CD DVD&quot;</span><span class=cF0>
-<a name="l3197"></a></span><span class=cF2>//Media types for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskCDDVD.CC.html#l167"><span class=cF4>DVDImageWrite</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l3197"></a></span><span class=cF2>//Media types for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskCDDVD.ZC.html#l167"><span class=cF4>DVDImageWrite</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l3198"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MT_CD</span><span class=cF0>                   </span><span class=cFE>1</span><span class=cF0>
 <a name="l3199"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MT_DVD</span><span class=cF0>                  </span><span class=cFE>2</span><span class=cF0>
 <a name="l3200"></a>
 <a name="l3201"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Low Level;File/Program Routines&quot;</span><span class=cF0>
-<a name="l3202"></a></span><span class=cF2>//CDirEntry flags (Used by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/FileMgr.CC.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>())</span><span class=cF0>
+<a name="l3202"></a></span><span class=cF2>//CDirEntry flags (Used by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/FileMgr.ZC.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>())</span><span class=cF0>
 <a name="l3203"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>           </span><span class=cFE>38</span><span class=cF0> </span><span class=cF2>//Must include terminator zero</span><span class=cF0>
 <a name="l3204"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDirEntry</span><span class=cF0>
 <a name="l3205"></a>{
@@ -3244,7 +3244,7 @@ body {background-color:#1f1f1f;}
 <a name="l3217"></a>
 <a name="l3218"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Program Routines&quot;</span><span class=cF0>
 <a name="l3219"></a></span><span class=cF2>//File Util Flags</span><span class=cF0>
-<a name="l3220"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0>
+<a name="l3220"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0>
 <a name="l3221"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_RECURSE</span><span class=cF0>             </span><span class=cFE>0</span><span class=cF0>   </span><span class=cF2>// r</span><span class=cF0>
 <a name="l3222"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_DIFF</span><span class=cF0>                </span><span class=cFE>1</span><span class=cF0>   </span><span class=cF2>// d</span><span class=cF0>
 <a name="l3223"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_DEL</span><span class=cF0>                 </span><span class=cFE>1</span><span class=cF0>   </span><span class=cF2>// d</span><span class=cF0>
@@ -3300,7 +3300,7 @@ body {background-color:#1f1f1f;}
 <a name="l3273"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUG_FILE_FIND</span><span class=cF0>   (</span><span class=cF3>FUF_JUST_DIRS</span><span class=cF0> | </span><span class=cF3>FUF_JUST_FILES</span><span class=cF0> | </span><span class=cF3>FUF_SCAN_PARENTS</span><span class=cF0>)
 <a name="l3274"></a>
 <a name="l3275"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Low Level&quot;</span><span class=cF0>
-<a name="l3276"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l220"><span class=cF4>ST_BLKDEV_TYPES</span></a><span class=cF0>
+<a name="l3276"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l220"><span class=cF4>ST_BLKDEV_TYPES</span></a><span class=cF0>
 <a name="l3277"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_NULL</span><span class=cF0>                </span><span class=cFE>0</span><span class=cF0>
 <a name="l3278"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>                 </span><span class=cFE>1</span><span class=cF0>
 <a name="l3279"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>                 </span><span class=cFE>2</span><span class=cF0>
@@ -3365,7 +3365,7 @@ body {background-color:#1f1f1f;}
 <a name="l3338"></a></span><span class=cF2>//Drive locked_flags</span><span class=cF0>
 <a name="l3339"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DVlf_LOCKED</span><span class=cF0>     </span><span class=cFE>0</span><span class=cF0>
 <a name="l3340"></a>
-<a name="l3341"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l230"><span class=cF4>ST_DRIVE_TYPES</span></a><span class=cF0>
+<a name="l3341"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l230"><span class=cF4>ST_DRIVE_TYPES</span></a><span class=cF0>
 <a name="l3342"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_NULL</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>
 <a name="l3343"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_REDSEA</span><span class=cF0>      </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//Supported</span><span class=cF0>
 <a name="l3344"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_FAT32</span><span class=cF0>       </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Supported except for short names, to some degree</span><span class=cF0>
@@ -3402,7 +3402,7 @@ body {background-color:#1f1f1f;}
 <a name="l3375"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDrive</span><span class=cF0>
 <a name="l3376"></a>{
 <a name="l3377"></a></span><span class=cF2>//Don't access -&gt;drv_let directly in case a drive has been remapped.</span><span class=cF0>
-<a name="l3378"></a>    </span><span class=cF2>//Use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l173"><span class=cF4>Drive2Letter</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l3378"></a>    </span><span class=cF2>//Use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.ZC.html#l173"><span class=cF4>Drive2Letter</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3379"></a>    </span><span class=cF9>I64</span><span class=cF0>                  locked_flags;
 <a name="l3380"></a>    </span><span class=cF9>U32</span><span class=cF0>                  drive_signature;
 <a name="l3381"></a>    </span><span class=cF1>U8</span><span class=cF0>                   drv_let, pad;
@@ -3484,7 +3484,7 @@ body {background-color:#1f1f1f;}
 <a name="l3457"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FF_CONTIGUOUS</span><span class=cF0>           </span><span class=cFE>16</span><span class=cF0>
 <a name="l3458"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FF_USE_OLD_DATETIME</span><span class=cF0>     </span><span class=cFE>32</span><span class=cF0>
 <a name="l3459"></a>
-<a name="l3460"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CFile</span><span class=cF0> </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DataBase.CC.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3460"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CFile</span><span class=cF0> </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DataBase.ZC.html#l1"><span class=cF4>::/Demo/Disk/DataBase.ZC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l3461"></a>{
 <a name="l3462"></a>    </span><span class=cF9>I64</span><span class=cF0>          flags;
 <a name="l3463"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>    de;
@@ -3557,7 +3557,7 @@ body {background-color:#1f1f1f;}
 <a name="l3530"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>            (</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>)
 <a name="l3531"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_HEAP_HASH_SIZE</span><span class=cF0>      </span><span class=cFE>1024</span><span class=cF0>
 <a name="l3532"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0>  </span><span class=cFE>0x100</span><span class=cF0>
-<a name="l3533"></a></span><span class=cF2>//It is common to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>() exact powers of two.</span><span class=cF0> </span><span class=cF2>There is some overhead.</span><span class=cF0>
+<a name="l3533"></a></span><span class=cF2>//It is common to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>() exact powers of two.</span><span class=cF0> </span><span class=cF2>There is some overhead.</span><span class=cF0>
 <a name="l3534"></a></span><span class=cF2>//We add 1 pag, so a request is not rounded-up to next power of two.</span><span class=cF0>
 <a name="l3535"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_EXTRA_HASH2_PAGS</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0>
 <a name="l3536"></a>
@@ -3574,7 +3574,7 @@ body {background-color:#1f1f1f;}
 <a name="l3547"></a>{
 <a name="l3548"></a>    </span><span class=cF9>I64</span><span class=cF0>      locked_flags, alloced_u8s, used_u8s;
 <a name="l3549"></a>    </span><span class=cF9>CMemBlk</span><span class=cF0> *mem_free_list,
-<a name="l3550"></a>            *mem_free_2meg_list, </span><span class=cF2>//This is for Sup1CodeScraps/Mem/Mem2Meg.CC.</span><span class=cF0>
+<a name="l3550"></a>            *mem_free_2meg_list, </span><span class=cF2>//This is for Sup1CodeScraps/Mem/Mem2Meg.ZC.</span><span class=cF0>
 <a name="l3551"></a>            *free_pag_hash[</span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0>],
 <a name="l3552"></a>            *free_pag_hash2[</span><span class=cFE>64</span><span class=cF0> - </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>];
 <a name="l3553"></a>};
@@ -3626,7 +3626,7 @@ body {background-color:#1f1f1f;}
 <a name="l3599"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROP_MONO</span><span class=cF0>        (</span><span class=cF3>ROPB_MONO</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>)
 <a name="l3600"></a>
 <a name="l3601"></a></span><span class=cF2>//These are just for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3608"><span class=cF4>ROPF_PROBABILITY_DITHER</span></a><span class=cF0>
-<a name="l3602"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l3602"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3603"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROPF_HALF_RANGE_COLOR</span><span class=cF0>   </span><span class=cFE>0x1000</span><span class=cF0>
 <a name="l3604"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROPF_TWO_SIDED</span><span class=cF0>          </span><span class=cFE>0x2000</span><span class=cF0>
 <a name="l3605"></a>
@@ -3870,12 +3870,12 @@ body {background-color:#1f1f1f;}
 <a name="l3843"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBf_FREE_ON_COMPLETE</span><span class=cF0>   </span><span class=cFE>7</span><span class=cF0>
 <a name="l3844"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>         </span><span class=cFE>8</span><span class=cF0>
 <a name="l3845"></a>
-<a name="l3846"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_TEXT_INPUT</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l88"><span class=cF4>TaskText</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Feed StdIn</span><span class=cF0>
-<a name="l3847"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l143"><span class=cF4>TaskMessage</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Post message</span><span class=cF0>
-<a name="l3848"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l45"><span class=cF4>TaskExe</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Compile &amp; execute src code text</span><span class=cF0>
+<a name="l3846"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_TEXT_INPUT</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l88"><span class=cF4>TaskText</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Feed StdIn</span><span class=cF0>
+<a name="l3847"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l143"><span class=cF4>TaskMessage</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Post message</span><span class=cF0>
+<a name="l3848"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l45"><span class=cF4>TaskExe</span></a><span class=cF2>() </span><span class=cF0>      </span><span class=cF2>Compile &amp; execute src code text</span><span class=cF0>
 <a name="l3849"></a></span><span class=cF2>//MP cmds</span><span class=cF0>
-<a name="l3850"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>       </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
-<a name="l3851"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF2>() Tell MP to spawn task</span><span class=cF0>
+<a name="l3850"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>       </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.ZC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
+<a name="l3851"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0> </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.ZC.html#l264"><span class=cF4>Spawn</span></a><span class=cF2>() Tell MP to spawn task</span><span class=cF0>
 <a name="l3852"></a>
 <a name="l3853"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CJob</span><span class=cF0>
 <a name="l3854"></a>{
@@ -3903,7 +3903,7 @@ body {background-color:#1f1f1f;}
 <a name="l3876"></a>};
 <a name="l3877"></a>
 <a name="l3878"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Messages&quot;</span><span class=cF0>
-<a name="l3879"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MessageLoop.CC.html#l1"><span class=cF4>::/Demo/MessageLoop.CC</span></a><span class=cF0>
+<a name="l3879"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MessageLoop.ZC.html#l1"><span class=cF4>::/Demo/MessageLoop.ZC</span></a><span class=cF0>
 <a name="l3880"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_NULL</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>
 <a name="l3881"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_CMD</span><span class=cF0>             </span><span class=cFE>1</span><span class=cF0>
 <a name="l3882"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>        </span><span class=cFE>2</span><span class=cF0>  </span><span class=cF2>//(</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4131"><span class=cF4>ASCII</span></a><span class=cF2>,</span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>scan code</span></a><span class=cF2>) Press &lt;CTRL-SHIFT-L&gt;</span><span class=cF0>
@@ -4031,7 +4031,7 @@ body {background-color:#1f1f1f;}
 <a name="l4004"></a>                     scroll_x, scroll_y, scroll_z;
 <a name="l4005"></a>
 <a name="l4006"></a>    </span><span class=cF2>//These must be in this order</span><span class=cF0>
-<a name="l4007"></a>    </span><span class=cF2>//for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Sched.CC.html#l60"><span class=cF4>TASK_CONTEXT_SAVE</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Sched.CC.html#l105"><span class=cF4>_TASK_CONTEXT_RESTORE</span></a><span class=cF0>
+<a name="l4007"></a>    </span><span class=cF2>//for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Sched.ZC.html#l60"><span class=cF4>TASK_CONTEXT_SAVE</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Sched.ZC.html#l105"><span class=cF4>_TASK_CONTEXT_RESTORE</span></a><span class=cF0>
 <a name="l4008"></a>    </span><span class=cF9>I64</span><span class=cF0>              rip, rflags, rsp, rsi, rax, rcx, rdx, rbx, rbp, rdi, r8, r9, r10, r11, r12, r13, r14, r15;
 <a name="l4009"></a>    </span><span class=cF9>CCPU</span><span class=cF0>            *gs;
 <a name="l4010"></a>    </span><span class=cF9>CFPU</span><span class=cF0>            *fpu_mmx;
@@ -4224,7 +4224,7 @@ body {background-color:#1f1f1f;}
 <a name="l4197"></a>
 <a name="l4198"></a></span><span class=cF2>//ZealOS places a 1 in bit 7 for</span><span class=cF0>
 <a name="l4199"></a></span><span class=cF2>//keys with an E0 prefix.</span><span class=cF0>
-<a name="l4200"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>::/Doc/CharOverview.DD</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/SerialDev/Keyboard.CC.html#l511"><span class=cF4>KbdHandler</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4200"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>::/Doc/CharOverview.DD</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/SerialDev/Keyboard.ZC.html#l511"><span class=cF4>KbdHandler</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4201"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_ESC</span><span class=cF0>          </span><span class=cFE>0x01</span><span class=cF0>
 <a name="l4202"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_BACKSPACE</span><span class=cF0>    </span><span class=cFE>0x0E</span><span class=cF0>
 <a name="l4203"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_TAB</span><span class=cF0>          </span><span class=cFE>0x0F</span><span class=cF0>
@@ -4292,15 +4292,15 @@ body {background-color:#1f1f1f;}
 <a name="l4265"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Device Contexts&quot;</span><span class=cF0>
 <a name="l4266"></a></span><span class=cF2>//Low 8 bits reserved for flags that go into saved bitmaps</span><span class=cF0>
 <a name="l4267"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_PALETTE</span><span class=cF0>             </span><span class=cFE>1</span><span class=cF0>
-<a name="l4268"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_NO_TRANSPARENTS</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Can be used to optimized </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l93"><span class=cF4>GrBlot</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4268"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_NO_TRANSPARENTS</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Can be used to optimized </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.ZC.html#l93"><span class=cF4>GrBlot</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4269"></a>
 <a name="l4270"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>      </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l4271"></a>
-<a name="l4272"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.CC.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.CC.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4272"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.ZC.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.ZC.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4273"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>            </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l4274"></a>
 <a name="l4275"></a></span><span class=cF2>//Must be used with DCF_SYMMETRY set also.</span><span class=cF0>
-<a name="l4276"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Games/BigGuns.CC.html#l1"><span class=cF4>::/Demo/Games/BigGuns.CC</span></a><span class=cF0>
+<a name="l4276"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Games/BigGuns.ZC.html#l1"><span class=cF4>::/Demo/Games/BigGuns.ZC</span></a><span class=cF0>
 <a name="l4277"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>         </span><span class=cFE>0x400</span><span class=cF0>
 <a name="l4278"></a>
 <a name="l4279"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_LOCATE_NEAREST</span><span class=cF0>      </span><span class=cFE>0x800</span><span class=cF0>
@@ -4311,7 +4311,7 @@ body {background-color:#1f1f1f;}
 <a name="l4284"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_RECORD_EXTENTS</span><span class=cF0>      </span><span class=cFE>0x10000</span><span class=cF0>
 <a name="l4285"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_ON_TOP</span><span class=cF0>              </span><span class=cFE>0x20000</span><span class=cF0>
 <a name="l4286"></a>
-<a name="l4287"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l318"><span class=cF4>DCSave</span></a><span class=cF2>() flags.</span><span class=cF0>
+<a name="l4287"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l318"><span class=cF4>DCSave</span></a><span class=cF2>() flags.</span><span class=cF0>
 <a name="l4288"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCSF_PALETTE_GET</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0>
 <a name="l4289"></a>
 <a name="l4290"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCS_SIGNATURE_VAL</span><span class=cF0>   </span><span class=cF6>'DvCS'</span><span class=cF0>
@@ -4337,7 +4337,7 @@ body {background-color:#1f1f1f;}
 <a name="l4310"></a>    </span><span class=cF2>//public (Change directly)</span><span class=cF0>
 <a name="l4311"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>     color,
 <a name="l4312"></a>                     bkcolor, </span><span class=cF2>//Set for use with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3598"><span class=cF4>ROP_COLLISION</span></a><span class=cF0>
-<a name="l4313"></a>                     color2; </span><span class=cF2>//Internally used for </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrPrimatives.CC.html#l279"><span class=cF4>GrFloodFill</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4313"></a>                     color2; </span><span class=cF2>//Internally used for </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrPrimatives.ZC.html#l279"><span class=cF4>GrFloodFill</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4314"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>           ls; </span><span class=cF2>//Light source (should be normalized to 65536).</span><span class=cF0>
 <a name="l4315"></a>
 <a name="l4316"></a>    </span><span class=cF2>//dither_probability_u16 is basically a U16.</span><span class=cF0>
@@ -4345,12 +4345,12 @@ body {background-color:#1f1f1f;}
 <a name="l4318"></a>    </span><span class=cF2>//0x0000 =100% color.c0</span><span class=cF0>
 <a name="l4319"></a>    </span><span class=cF2>//0x8000 =50%  color.c0 </span><span class=cF0>    </span><span class=cF2>50% color.c1</span><span class=cF0>
 <a name="l4320"></a>    </span><span class=cF2>//0x10000=100% color.c1</span><span class=cF0>
-<a name="l4321"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/SunMoon.CC.html#l1"><span class=cF4>::/Demo/Graphics/SunMoon.CC</span></a><span class=cF2> and</span><span class=cF0>   </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/Shading.CC.html#l1"><span class=cF4>::/Demo/Graphics/Shading.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4321"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/SunMoon.ZC.html#l1"><span class=cF4>::/Demo/Graphics/SunMoon.ZC</span></a><span class=cF2> and</span><span class=cF0>   </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/Shading.ZC.html#l1"><span class=cF4>::/Demo/Graphics/Shading.ZC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4322"></a>    </span><span class=cF9>U64</span><span class=cF0>              dither_probability_u16;
 <a name="l4323"></a>
 <a name="l4324"></a>    </span><span class=cF9>CDC</span><span class=cF0>             *brush;
 <a name="l4325"></a>
-<a name="l4326"></a>    </span><span class=cF2>//Set with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l51"><span class=cF4>DCMat4x4Set</span></a><span class=cF2>().  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l387"><span class=cF4>Free</span></a><span class=cF2>() before setting.</span><span class=cF0>
+<a name="l4326"></a>    </span><span class=cF2>//Set with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l51"><span class=cF4>DCMat4x4Set</span></a><span class=cF2>().  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l387"><span class=cF4>Free</span></a><span class=cF2>() before setting.</span><span class=cF0>
 <a name="l4327"></a>    </span><span class=cF9>I64</span><span class=cF0>             *r, </span><span class=cF2>//rotation matrix of quads decimal in lo</span><span class=cF0>
 <a name="l4328"></a>                     r_norm; </span><span class=cF2>//shifted 32 bits.</span><span class=cF0> </span><span class=cF2>Used for scaling thick</span><span class=cF0>
 <a name="l4329"></a>
@@ -4358,13 +4358,13 @@ body {background-color:#1f1f1f;}
 <a name="l4331"></a>    </span><span class=cF9>I32</span><span class=cF0>              x, y, z,
 <a name="l4332"></a>                     thick;
 <a name="l4333"></a>
-<a name="l4334"></a>    </span><span class=cF2>//Can be changed from the default </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l18"><span class=cF4>DCTransform</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4334"></a>    </span><span class=cF2>//Can be changed from the default </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l18"><span class=cF4>DCTransform</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4335"></a>    </span><span class=cF1>U0</span><span class=cF0>             (*transform)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> *x, </span><span class=cF9>I64</span><span class=cF0> *y, </span><span class=cF9>I64</span><span class=cF0> *z);
 <a name="l4336"></a>
-<a name="l4337"></a>    </span><span class=cF2>//Can be changed from the default </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4337"></a>    </span><span class=cF2>//Can be changed from the default </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4338"></a>    </span><span class=cF1>U0</span><span class=cF0>             (*lighting)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CD3I32</span><span class=cF0> *p1, </span><span class=cF9>CD3I32</span><span class=cF0> *p2, </span><span class=cF9>CD3I32</span><span class=cF0> *p3, </span><span class=cF9>CColorROPU32</span><span class=cF0> color);
 <a name="l4339"></a>
-<a name="l4340"></a>    </span><span class=cF2>//Set by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.CC.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.CC.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4340"></a>    </span><span class=cF2>//Set by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.ZC.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrMath.ZC.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4341"></a>    </span><span class=cF9>CGrSym</span><span class=cF0>           sym;
 <a name="l4342"></a>
 <a name="l4343"></a>    </span><span class=cF9>I32</span><span class=cF0>              cur_x, cur_y, cur_z, pad;
@@ -4378,7 +4378,7 @@ body {background-color:#1f1f1f;}
 <a name="l4351"></a>    </span><span class=cF9>CDC</span><span class=cF0>             *alias;
 <a name="l4352"></a>    </span><span class=cF1>U8</span><span class=cF0>              *body;
 <a name="l4353"></a>
-<a name="l4354"></a>    </span><span class=cF2>//Set by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l260"><span class=cF4>DCDepthBufAlloc</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4354"></a>    </span><span class=cF2>//Set by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.ZC.html#l260"><span class=cF4>DCDepthBufAlloc</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4355"></a>    </span><span class=cF9>I32</span><span class=cF0>             *depth_buf;
 <a name="l4356"></a>    </span><span class=cF9>I64</span><span class=cF0>              db_z; </span><span class=cF2>//private</span><span class=cF0>
 <a name="l4357"></a>#</span><span class=cF1>assert</span><span class=cF0> !($ &amp; </span><span class=cFE>7</span><span class=cF0>)
@@ -4511,11 +4511,11 @@ body {background-color:#1f1f1f;}
 <a name="l4484"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_SRC_HARDDRIVE</span><span class=cF0>  </span><span class=cFE>3</span><span class=cF0>
 <a name="l4485"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_SRC_DVD</span><span class=cF0>        </span><span class=cFE>4</span><span class=cF0>
 <a name="l4486"></a>
-<a name="l4487"></a></span><span class=cF2>// </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l580"><span class=cF4>In</span></a><span class=cF2>(&quot;&quot;) StdIn for call to </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4487"></a></span><span class=cF2>// </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l580"><span class=cF4>In</span></a><span class=cF2>(&quot;&quot;) StdIn for call to </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.ZC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4488"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>   </span><span class=cF6>&quot;TB\nScale2Mem(2048,0x40000)\nT \n\n\n\n&quot;</span><span class=cF0>
 <a name="l4489"></a>
 <a name="l4490"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Registry&quot;</span><span class=cF0>
-<a name="l4491"></a></span><span class=cF2>//Registry sys_message_flags. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l123"><span class=cF4>RegOneTimePopUp</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4491"></a></span><span class=cF2>//Registry sys_message_flags. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l123"><span class=cF4>RegOneTimePopUp</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4492"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_FLOODFILL</span><span class=cF0>               </span><span class=cFE>0</span><span class=cF0>
 <a name="l4493"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_CSPRITE_INS_CLIP</span><span class=cF0>        </span><span class=cFE>1</span><span class=cF0>
 <a name="l4494"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_PLANAR_SYMMETRY</span><span class=cF0>         </span><span class=cFE>2</span><span class=cF0>

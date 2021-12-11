@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -27,12 +27,12 @@ body {background-color:#1f1f1f;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                    Command Line Overview</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a>The cmd line feeds into the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> compiler line-by-line as you type.   A statement outside a function executes immediately.  
+<a name="l3"></a>The cmd line feeds into the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ZealC.DD.html#l1"><span class=cF4>ZealC</span></a><span class=cF0> compiler line-by-line as you type.    A statement outside a function executes immediately.  
 <a name="l4"></a>Remember to add a semicolon.
 <a name="l5"></a>
 <a name="l6"></a>Look-up the function headers with </span><span class=cF2>AutoComplete</span><span class=cF0> by hitting </span><span class=cF2>&lt;CTRL-SHIFT-F1&gt;</span><span class=cF0> after typing the first few letters.
 <a name="l7"></a></span><span class=cF4>
-<a name="l8"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l120"><span class=cF4>Click Here</span></a><span class=cF0> to see the directory cmd header.  It accepts default args from C++.
+<a name="l8"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.ZC.html#l120"><span class=cF4>Click Here</span></a><span class=cF0> to see the directory cmd header.  It accepts default args from C++.
 <a name="l9"></a>
 <a name="l10"></a>&gt;</span><span class=cF2>Dir(&quot;*.DD&quot;);</span><span class=cF0>
 <a name="l11"></a>
@@ -44,13 +44,13 @@ body {background-color:#1f1f1f;}
 <a name="l17"></a>clude </span><span class=cF0>it.  There are several shortcuts for </span><span class=cF2>#include</span><span class=cF0>ing files.  Right-click or hit </span><span class=cF2>&lt;ENTER&gt;</span><span class=cF0> on a directory listing or press </span><span class=cF2>&lt;F5&gt;</span><span class=cF0> 
 <a name="l18"></a>while editing.
 <a name="l19"></a>
-<a name="l20"></a>&gt;</span><span class=cF2>Ed(&quot;NewFile.CC&quot;);</span><span class=cF0>      Invokes the editor. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocLink.CC.html#l29"><span class=cF4>Doc Link Type</span></a><span class=cF0>.
+<a name="l20"></a>&gt;</span><span class=cF2>Ed(&quot;NewFile.ZC&quot;);</span><span class=cF0>      Invokes the editor. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocLink.ZC.html#l29"><span class=cF4>Doc Link Type</span></a><span class=cF0>.
 <a name="l21"></a>
 <a name="l22"></a>Drives are specified with a letter.  The boot drive is specified with a '</span><span class=cF2>:</span><span class=cF0>'.    The home dir drive is specified with a </span><span class=cF2>'~'</span><span class=cF0>.
 <a name="l23"></a>
 <a name="l24"></a>&gt;</span><span class=cF2>Drive('B');</span><span class=cF0>            B drive
 <a name="l25"></a>
-<a name="l26"></a>The drive can be specified in a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() command as in:
+<a name="l26"></a>The drive can be specified in a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.ZC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() command as in:
 <a name="l27"></a>
 <a name="l28"></a>&gt;</span><span class=cF2>Cd(&quot;B:/Tmp&quot;);</span><span class=cF0>          B drive
 <a name="l29"></a>&gt;</span><span class=cF2>Cd(&quot;::/Demo&quot;);</span><span class=cF0>         Boot drive
@@ -61,9 +61,9 @@ body {background-color:#1f1f1f;}
 <a name="l34"></a>
 <a name="l35"></a>If a file is not found, all parent directories are searched.
 <a name="l36"></a>
-<a name="l37"></a>You can place macros in your </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/PersonalMenu.DD.html#l1"><span class=cF4>PersonalMenu</span></a><span class=cF0> for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() commands.  </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> to access your menu.
+<a name="l37"></a>You can place macros in your </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/PersonalMenu.DD.html#l1"><span class=cF4>PersonalMenu</span></a><span class=cF0> for </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.ZC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() commands.  </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> to access your menu.
 <a name="l38"></a>
-<a name="l39"></a>&gt;</span><span class=cF2>Find(&quot;needle&quot;,&quot;/Demo/*.CC;*.DD;&quot;);</span><span class=cF0> See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/FileUtils.DD.html#l1"><span class=cF4>File Utils</span></a><span class=cF0>.
+<a name="l39"></a>&gt;</span><span class=cF2>Find(&quot;needle&quot;,&quot;/Demo/*.ZC;*.DD;&quot;);</span><span class=cF0> See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/FileUtils.DD.html#l1"><span class=cF4>File Utils</span></a><span class=cF0>.
 <a name="l40"></a></span><span class=cF4>
 <a name="l41"></a><u>Cmd Line Routines</span><span class=cF0>
 <a name="l42"></a></span><span class=cF9>

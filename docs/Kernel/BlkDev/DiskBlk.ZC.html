@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> ZERO_BUF_SIZE   </span><span class=cFE>2048</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BlkWriteZero</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l3"></a>{</span><span class=cF2>//Fill block count with zeros in Drive.</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>  n;
+<a name="l5"></a>    </span><span class=cF1>U8</span><span class=cF0>  *z = </span><span class=cF5>CAlloc</span><span class=cF0>(ZERO_BUF_SIZE &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l6"></a>    </span><span class=cF1>Bool</span><span class=cF0> show_progress;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>if</span><span class=cF0> (count &gt; ZERO_BUF_SIZE &amp;&amp; drive-&gt;bd-&gt;type != </span><span class=cF3>BDT_RAM</span><span class=cF0>)
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>        </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l11"></a>        </span><span class=cFB>progress1_max</span><span class=cF0> = count;
+<a name="l12"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Zeroing&quot;</span><span class=cF0>);
+<a name="l13"></a>        show_progress = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l16"></a>        show_progress = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l18"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l19"></a>        n = count;
+<a name="l20"></a>        </span><span class=cF1>if</span><span class=cF0> (n &gt; ZERO_BUF_SIZE)
+<a name="l21"></a>            n = ZERO_BUF_SIZE;
+<a name="l22"></a>        </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, z, blk, n);
+<a name="l23"></a>        blk += n;
+<a name="l24"></a>        count -= n;
+<a name="l25"></a>        </span><span class=cF1>if</span><span class=cF0> (show_progress)
+<a name="l26"></a>            </span><span class=cFB>progress1</span><span class=cF0> += n;
+<a name="l27"></a>        </span><span class=cF5>Yield</span><span class=cF0>;  </span><span class=cF2>//Prevent locking</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF5>Free</span><span class=cF0>(z);
+<a name="l30"></a>    </span><span class=cF1>if</span><span class=cF0> (show_progress)
+<a name="l31"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>        *</span><span class=cFB>progress1_desc</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l33"></a>        </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>}
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>BlkRead</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l38"></a>{</span><span class=cF2>//Read block count from Drive to buf.</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF1>Bool</span><span class=cF0>     res = </span><span class=cF3>TRUE</span><span class=cF0>, unlock;
+<a name="l40"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd  = drive-&gt;bd;
+<a name="l41"></a>
+<a name="l42"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l43"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l44"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
+<a name="l45"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l46"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l47"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l48"></a>        </span><span class=cFD>BlkDevInit</span><span class=cF0>(bd);
+<a name="l49"></a>        </span><span class=cF1>if</span><span class=cF0> (drive-&gt;drv_offset &amp;&amp; blk &lt; drive-&gt;drv_offset || blk + count &gt; drive-&gt;drv_offset + drive-&gt;size)
+<a name="l50"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l51"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
+<a name="l52"></a>            </span><span class=cFD>RCache</span><span class=cF0>(drive, &amp;buf, &amp;blk, &amp;count);
+<a name="l53"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l54"></a>        {
+<a name="l55"></a>            </span><span class=cF1>switch</span><span class=cF0> (bd-&gt;type)
+<a name="l56"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l57"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
+<a name="l58"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(buf, bd-&gt;RAM_disk + blk &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l59"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l60"></a>
+<a name="l61"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
+<a name="l62"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
+<a name="l63"></a>                    </span><span class=cF5>FBlkRead</span><span class=cF0>(bd-&gt;file_disk, buf, blk, count);
+<a name="l64"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l65"></a>
+<a name="l66"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
+<a name="l67"></a>                    res = </span><span class=cFD>AHCIAtaRBlks</span><span class=cF0>(drive, buf, blk, count);
+<a name="l68"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l69"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
+<a name="l70"></a>                    res = </span><span class=cFD>AHCIAtapiRBlks</span><span class=cF0>(drive, buf, blk, count);
+<a name="l71"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l72"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l73"></a>            bd-&gt;last_time = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l74"></a>            </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
+<a name="l75"></a>                </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, buf, blk, count);
+<a name="l76"></a>        }
+<a name="l77"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l78"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l79"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l80"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l81"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l82"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l85"></a>}
+<a name="l86"></a>
+<a name="l87"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>BlkWrite</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l88"></a>{</span><span class=cF2>//Write block count from buf to Drive.</span><span class=cF0>
+<a name="l89"></a>    </span><span class=cF1>Bool</span><span class=cF0>     res = </span><span class=cF3>TRUE</span><span class=cF0>, unlock;
+<a name="l90"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd  = drive-&gt;bd;
+<a name="l91"></a>
+<a name="l92"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l93"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l94"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
+<a name="l95"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l96"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l98"></a>        </span><span class=cFD>BlkDevInit</span><span class=cF0>(bd);
+<a name="l99"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_ONLY</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_ONLY_OVERRIDE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l100"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'BlkDev'</span><span class=cF0>);
+<a name="l101"></a>        </span><span class=cF1>if</span><span class=cF0> (drive-&gt;drv_offset &amp;&amp; blk&lt;drive-&gt;drv_offset || blk + count&gt;drive-&gt;drv_offset + drive-&gt;size)
+<a name="l102"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l103"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l104"></a>        {
+<a name="l105"></a>            </span><span class=cF1>switch</span><span class=cF0> (bd-&gt;type)
+<a name="l106"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l107"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
+<a name="l108"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(bd-&gt;RAM_disk + blk &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, buf, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l109"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l110"></a>
+<a name="l111"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
+<a name="l112"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
+<a name="l113"></a>                    </span><span class=cF5>FBlkWrite</span><span class=cF0>(bd-&gt;file_disk, buf, blk, count);
+<a name="l114"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l115"></a>
+<a name="l116"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
+<a name="l117"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
+<a name="l118"></a>                    res = </span><span class=cFD>AHCIAtaWBlks</span><span class=cF0>(drive, buf, blk, count);
+<a name="l119"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l120"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l121"></a>            bd-&gt;last_time = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l122"></a>            </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
+<a name="l123"></a>                </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, buf, blk, count);
+<a name="l124"></a>        }
+<a name="l125"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l126"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l127"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l128"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l129"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l130"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l131"></a>
+<a name="l132"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l133"></a>}
+</span></pre></body>
+</html>

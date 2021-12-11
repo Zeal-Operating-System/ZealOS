@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> GRID        </span><span class=cFE>5</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U0</span><span class=cF0> DrawMyMouse(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
+<a name="l4"></a>{
+<a name="l5"></a>    dc-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l6"></a>    dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>);
+<a name="l7"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, x, y, GRID, GRID);
+<a name="l8"></a>}
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF1>U0</span><span class=cF0> GridDemo()
+<a name="l11"></a>{
+<a name="l12"></a>    </span><span class=cF9>CGridGlobals</span><span class=cF0> old_grid;
+<a name="l13"></a>    </span><span class=cF1>U0</span><span class=cF0> (*old_draw_mouse)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y); </span><span class=cF2>//Can't init this type of variable.</span><span class=cF0>
+<a name="l14"></a>
+<a name="l15"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;old_grid, &amp;</span><span class=cFB>mouse_grid</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CGridGlobals</span><span class=cF7>)</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF5>GridInit</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.snap = </span><span class=cF3>TRUE</span><span class=cF0>; </span><span class=cF2>//You can set other </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3726"><span class=cF4>stuff</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.x    = GRID;
+<a name="l19"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.y    = GRID;
+<a name="l20"></a>    old_draw_mouse = </span><span class=cFB>gr</span><span class=cF0>.fp_draw_mouse;
+<a name="l21"></a>    </span><span class=cFB>gr</span><span class=cF0>.fp_draw_mouse = &amp;DrawMyMouse;
+<a name="l22"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cFB>mouse</span><span class=cF0>.lb) 
+<a name="l23"></a>    </span><span class=cF7>{</span><span class=cF2>//Left button to exit.</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF5>GrPlot</span><span class=cF0>(, </span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y);
+<a name="l25"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l26"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l27"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l28"></a>    </span><span class=cFB>gr</span><span class=cF0>.fp_draw_mouse = old_draw_mouse;
+<a name="l29"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;</span><span class=cFB>mouse_grid</span><span class=cF0>, &amp;old_grid, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CGridGlobals</span><span class=cF7>)</span><span class=cF0>);
+<a name="l30"></a>}
+<a name="l31"></a>
+<a name="l32"></a>GridDemo;
+</span></pre></body>
+</html>

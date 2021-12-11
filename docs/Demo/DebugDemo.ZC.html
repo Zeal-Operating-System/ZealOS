@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>Press &lt;CTRL-ALT-c&gt; to break.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>Rerun Program</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF2>Press &lt;CTRL-ALT-d&gt; to enter Debug.</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.ZC.html#l383"><span class=cF4>DumpRegs</span></a><span class=cF2>;</span><span class=cF0> </span><span class=cF2>//Dump Registers</span><span class=cF0>
+<a name="l8"></a></span><span class=cF2>&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.ZC.html#l560"><span class=cF4>G2</span></a><span class=cF2>;</span><span class=cF0>   </span><span class=cF2>//Cont program</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF2>Press &lt;CTRL-ALT-d&gt; to enter Debug.</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Debug.ZC.html#l334"><span class=cF4>Uf</span></a><span class=cF2>(&quot;DebugDemo&quot;);</span><span class=cF0>
+<a name="l12"></a></span><span class=cF2>&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/UAsm.ZC.html#l836"><span class=cF4>U</span></a><span class=cF2>(_RIP);</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF2>See </span><span class=cF4><u>Debugging</span><span class=cF0>
+<a name="l15"></a></u></span><span class=cF2>*/</span><span class=cF0>
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF1>U0</span><span class=cF0> DebugDemo()
+<a name="l18"></a>{
+<a name="l19"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l20"></a>
+<a name="l21"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l22"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>i++ % </span><span class=cFE>2000000</span><span class=cF7>)</span><span class=cF0>)
+<a name="l23"></a>            </span><span class=cF6>&quot;.&quot;</span><span class=cF0>;
+<a name="l24"></a>}
+<a name="l25"></a>
+<a name="l26"></a>DebugDemo;
+<a name="l27"></a>
+</span></pre></body>
+</html>

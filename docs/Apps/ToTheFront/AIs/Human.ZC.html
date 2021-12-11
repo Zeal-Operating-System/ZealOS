@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> PlayerIndirect()
+<a name="l2"></a>{
+<a name="l3"></a>    Unit *tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, remaining = </span><span class=cFE>0</span><span class=cF0>, message_code, arg1, arg2;
+<a name="l5"></a>    </span><span class=cF1>F64</span><span class=cF0>   target_x, target_y;
+<a name="l6"></a>
+<a name="l7"></a>    ViewPlayerSet(cur_player);
+<a name="l8"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &gt; UNITS_NUM; i++)
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>        tmpu = &amp;units[cur_player][i];
+<a name="l11"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;life &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; tmpu-&gt;indirect_fire)
+<a name="l12"></a>            remaining++;
+<a name="l13"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF1>while</span><span class=cF0> (remaining)
+<a name="l15"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF1>if</span><span class=cF0> (!alive_count[</span><span class=cFE>0</span><span class=cF0>] || !alive_count[</span><span class=cFE>1</span><span class=cF0>])
+<a name="l17"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'GameOver'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l18"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>  |
+<a name="l19"></a>                                                </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l20"></a>        </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l21"></a>        {
+<a name="l22"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l23"></a>                CharDo(arg1);
+<a name="l24"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l25"></a>
+<a name="l26"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l27"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l28"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l29"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l30"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l31"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpu = UnitFind</span><span class=cF7>(</span><span class=cF0>cursor_row, cursor_col</span><span class=cF7>)</span><span class=cF0>)
+<a name="l32"></a>                    {
+<a name="l33"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;player == enemy_player || tmpu-&gt;fired || !tmpu-&gt;indirect_fire)
+<a name="l34"></a>                            tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l35"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l36"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>                            RowCol2XY(&amp;fire_radius_x, &amp;fire_radius_y, tmpu-&gt;row, tmpu-&gt;col);
+<a name="l38"></a>                            fire_radius = tmpu-&gt;range * </span><span class=cFE>2</span><span class=cF0> * HEX_RADIUS;
+<a name="l39"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l40"></a>                    }
+<a name="l41"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l43"></a>
+<a name="l44"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
+<a name="l45"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l46"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l47"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l48"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l49"></a>                    RowCol2XY(&amp;target_x, &amp;target_y, cursor_row, cursor_col);
+<a name="l50"></a>                    </span><span class=cF1>if</span><span class=cF0> (!tmpu)
+<a name="l51"></a>                        </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l52"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l53"></a>                    {
+<a name="l54"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Sqrt</span><span class=cF7>(</span><span class=cF5>Sqr</span><span class=cF0>(fire_radius_x - target_x) + </span><span class=cF5>Sqr</span><span class=cF0>(fire_radius_y - target_y)</span><span class=cF7>)</span><span class=cF0> &gt; fire_radius)
+<a name="l55"></a>                            </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l56"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l57"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l58"></a>                            IndirectAdd(tmpu, cursor_row, cursor_col);
+<a name="l59"></a>                            remaining--;
+<a name="l60"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>                    }
+<a name="l62"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l63"></a>                tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l64"></a>                fire_radius = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l65"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l66"></a>
+<a name="l67"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l68"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l69"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l70"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l71"></a>        }
+<a name="l72"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l73"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l74"></a>}
+<a name="l75"></a>
+<a name="l76"></a></span><span class=cF1>U0</span><span class=cF0> PlayerMove()
+<a name="l77"></a>{
+<a name="l78"></a>    Unit *tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l79"></a>    </span><span class=cF9>I64</span><span class=cF0>   message_code, arg1, arg2;
+<a name="l80"></a>
+<a name="l81"></a>    ViewPlayerSet(cur_player);
+<a name="l82"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l83"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l84"></a>        </span><span class=cF1>if</span><span class=cF0> (!alive_count[</span><span class=cFE>0</span><span class=cF0>] || !alive_count[</span><span class=cFE>1</span><span class=cF0>])
+<a name="l85"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'GameOver'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l86"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>  |
+<a name="l87"></a>                                                </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l88"></a>        </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l89"></a>        {
+<a name="l90"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l91"></a>                CharDo(arg1);
+<a name="l92"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l93"></a>
+<a name="l94"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l95"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l96"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l98"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l99"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpu = UnitFind</span><span class=cF7>(</span><span class=cF0>cursor_row, cursor_col</span><span class=cF7>)</span><span class=cF0>)
+<a name="l100"></a>                    {
+<a name="l101"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;player == enemy_player || !tmpu-&gt;remaining_movement)
+<a name="l102"></a>                            tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l103"></a>                    }
+<a name="l104"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l105"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l106"></a>
+<a name="l107"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
+<a name="l108"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l109"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l110"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l111"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l112"></a>                    </span><span class=cF1>if</span><span class=cF0> (!tmpu)
+<a name="l113"></a>                        </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l114"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l115"></a>                    {
+<a name="l116"></a>                        UnitMove(tmpu, arg1, arg2);
+<a name="l117"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l118"></a>                    }
+<a name="l119"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l120"></a>                tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l121"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l122"></a>
+<a name="l123"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l124"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l125"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l126"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l127"></a>        }
+<a name="l128"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l129"></a>}
+<a name="l130"></a>
+<a name="l131"></a></span><span class=cF1>U0</span><span class=cF0> PlayerDirect()
+<a name="l132"></a>{
+<a name="l133"></a>    Unit *tmpu = </span><span class=cF3>NULL</span><span class=cF0>, *target;
+<a name="l134"></a>    </span><span class=cF9>I64</span><span class=cF0>   message_code, arg1, arg2;
+<a name="l135"></a>
+<a name="l136"></a>    ViewPlayerSet(cur_player);
+<a name="l137"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l138"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l139"></a>        </span><span class=cF1>if</span><span class=cF0> (!alive_count[</span><span class=cFE>0</span><span class=cF0>] || !alive_count[</span><span class=cFE>1</span><span class=cF0>])
+<a name="l140"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'GameOver'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l141"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>  |
+<a name="l142"></a>                                                </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l143"></a>        </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l144"></a>        {
+<a name="l145"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l146"></a>                CharDo(arg1);
+<a name="l147"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l148"></a>
+<a name="l149"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l150"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l151"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l152"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l153"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l154"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpu = UnitFind</span><span class=cF7>(</span><span class=cF0>cursor_row, cursor_col</span><span class=cF7>)</span><span class=cF0>)
+<a name="l155"></a>                    {
+<a name="l156"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;player == enemy_player || tmpu-&gt;fired || tmpu-&gt;indirect_fire)
+<a name="l157"></a>                            tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l158"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l159"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l160"></a>                            VRSetUp(cur_player);
+<a name="l161"></a>                            RowCol2XY(&amp;fire_radius_x, &amp;fire_radius_y, tmpu-&gt;row, tmpu-&gt;col);
+<a name="l162"></a>                            fire_radius = tmpu-&gt;range * </span><span class=cFE>2</span><span class=cF0> * HEX_RADIUS;
+<a name="l163"></a>                            VisRecalc(VR_ONE_FRIENDLY_UNIT, tmpu);
+<a name="l164"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l165"></a>                    }
+<a name="l166"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l167"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l168"></a>
+<a name="l169"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
+<a name="l170"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l171"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l172"></a>                    arg1 -= x0; arg2 -= y0;
+<a name="l173"></a>                    CursorUpdate(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2);
+<a name="l174"></a>                    target = UnitFind(cursor_row, cursor_col);
+<a name="l175"></a>                    </span><span class=cF1>if</span><span class=cF0> (!tmpu)
+<a name="l176"></a>                        </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l177"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l178"></a>                    {
+<a name="l179"></a>                        </span><span class=cF1>if</span><span class=cF0> (!target || target-&gt;player != enemy_player || !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;target-&gt;vis, </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l180"></a>                            </span><span class=cF5>Beep</span><span class=cF0>;
+<a name="l181"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l182"></a>                            UnitDirectFire(tmpu, target);
+<a name="l183"></a>                        VisRecalc(VR_UPDATE_FRIENDLY_UNIT, tmpu);
+<a name="l184"></a>                    }
+<a name="l185"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l186"></a>                tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l187"></a>                fire_radius = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l188"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l189"></a>
+<a name="l190"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l191"></a>                </span><span class=cF1>if</span><span class=cF0> (CursorInWin</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>, arg1, arg2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l192"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l193"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l194"></a>        }
+<a name="l195"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l196"></a>}
+</span></pre></body>
+</html>

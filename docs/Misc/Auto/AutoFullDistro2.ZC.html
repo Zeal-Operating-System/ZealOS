@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>   </span><span class=cF6>&quot;TB\nScale2Mem(2048,0x40000)\nT\n\n1024\n768\n\n\n&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U0</span><span class=cF0> MakeMyISO()
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF1>U8</span><span class=cF0> *_out_iso_filename = </span><span class=cF6>&quot;/Tmp/MyDistro.ISO.C&quot;</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF1>U8</span><span class=cF0> *out_iso_filename = </span><span class=cF5>FileNameAbs</span><span class=cF0>(_out_iso_filename);
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0> line_count = </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-r&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/System/*&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/Compiler/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-S+$&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/Kernel/*&quot;</span><span class=cF0>);
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>DriveIsWritable</span><span class=cF0>)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF6>&quot;Drive must be writable.</span><span class=cF0>    </span><span class=cF6>Install on Hard drive, first.\n&quot;</span><span class=cF0>;
+<a name="l12"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l13"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l14"></a>
+<a name="l15"></a>    </span><span class=cF5>DocTreeFWrite</span><span class=cF0>(</span><span class=cF6>&quot;/System/Define.ZC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;LineRep&quot;</span><span class=cF0>, </span><span class=cF6>&quot;DefinePrint(\&quot;DD_ZEALOS_LOC\&quot;,\&quot;%,d\&quot;);\n&quot;</span><span class=cF0>, line_count);
+<a name="l16"></a>    </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_ZEALOS_LOC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%,d&quot;</span><span class=cF0>, line_count);
+<a name="l17"></a>
+<a name="l18"></a>    </span><span class=cF6>&quot;Total LOC:%12,d\n\n&quot;</span><span class=cF0>, line_count;
+<a name="l19"></a>
+<a name="l20"></a>    </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0>);
+<a name="l21"></a>    </span><span class=cF5>Del</span><span class=cF0>(out_iso_filename);
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
+<a name="l24"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>14</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Copying files to /Distro&quot;</span><span class=cF0>);
+<a name="l26"></a>
+<a name="l27"></a>    </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0>);
+<a name="l28"></a>    </span><span class=cF5>In</span><span class=cF0>(</span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>);
+<a name="l29"></a>    </span><span class=cF5>BootDVDIns</span><span class=cF0>;
+<a name="l30"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l31"></a>
+<a name="l32"></a>    </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0>);
+<a name="l33"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l34"></a>    </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0> </span><span class=cF3>BOOT_DIR</span><span class=cF0>);
+<a name="l35"></a>    </span><span class=cF5>Move</span><span class=cF0>(</span><span class=cF3>BOOT_DIR_DVD_KERNEL_BIN_C</span><span class=cF0>, </span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0> </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l37"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>,       </span><span class=cF6>&quot;/Distro/Home&quot;</span><span class=cF0>);
+<a name="l38"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l39"></a>    </span><span class=cF5>Del</span><span class=cF0>(</span><span class=cF6>&quot;/Distro/Home/Registry.ZC&quot;</span><span class=cF0>);
+<a name="l40"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/System&quot;</span><span class=cF0>,     </span><span class=cF6>&quot;/Distro/System&quot;</span><span class=cF0>);
+<a name="l41"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l42"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Apps&quot;</span><span class=cF0>,       </span><span class=cF6>&quot;/Distro/Apps&quot;</span><span class=cF0>);
+<a name="l43"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l44"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Compiler&quot;</span><span class=cF0>,   </span><span class=cF6>&quot;/Distro/Compiler&quot;</span><span class=cF0>);
+<a name="l45"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l46"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo&quot;</span><span class=cF0>,       </span><span class=cF6>&quot;/Distro/Demo&quot;</span><span class=cF0>);
+<a name="l47"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l48"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Doc&quot;</span><span class=cF0>,        </span><span class=cF6>&quot;/Distro/Doc&quot;</span><span class=cF0>);
+<a name="l49"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l50"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Kernel&quot;</span><span class=cF0>,     </span><span class=cF6>&quot;/Distro/Kernel&quot;</span><span class=cF0>);
+<a name="l51"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l52"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Misc&quot;</span><span class=cF0>,       </span><span class=cF6>&quot;/Distro/Misc&quot;</span><span class=cF0>);
+<a name="l53"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l54"></a>
+<a name="l55"></a>    </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Downloads&quot;</span><span class=cF0>, </span><span class=cF6>&quot;/Distro/Downloads&quot;</span><span class=cF0>);
+<a name="l56"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l57"></a>    </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Distro/Tmp&quot;</span><span class=cF0>);
+<a name="l58"></a>    </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Distro/Tmp/ScreenShots&quot;</span><span class=cF0>);
+<a name="l59"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l60"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Building ISO&quot;</span><span class=cF0>);
+<a name="l61"></a>    </span><span class=cF5>RedSeaISO</span><span class=cF0>(out_iso_filename, </span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0>, </span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0> </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l62"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l63"></a>
+<a name="l64"></a>    </span><span class=cF2>//If CD-ROM use MT_CD instead of MT_DVD.</span><span class=cF0>
+<a name="l65"></a>    </span><span class=cF2>//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.</span><span class=cF0>
+<a name="l66"></a>
+<a name="l67"></a>    </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Distro&quot;</span><span class=cF0>);
+<a name="l68"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
+<a name="l69"></a>    </span><span class=cF5>Free</span><span class=cF0>(out_iso_filename);
+<a name="l70"></a>}
+<a name="l71"></a>MakeMyISO;
+<a name="l72"></a></span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cFE>0x501</span><span class=cF0>,</span><span class=cFE>0x31</span><span class=cF0>);
+</span></pre></body>
+</html>

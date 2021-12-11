@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> SFT_GENERIC         </span><span class=cFE>1</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> **StrFileRead(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> *_max_num=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> **_colors=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> no_nums=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocRead</span><span class=cF0>(name, </span><span class=cF3>DOCF_DBL_DOLLARS</span><span class=cF0> | </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
+<a name="l6"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc-&gt;head.next;
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, max_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr, **res, *colors;
+<a name="l9"></a>
+<a name="l10"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l11"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l13"></a>        {
+<a name="l14"></a>            </span><span class=cF1>if</span><span class=cF0> (no_nums)
+<a name="l15"></a>                i = ++max_num;
+<a name="l16"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l17"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>                i = </span><span class=cF5>Str2I64</span><span class=cF0>(doc_e-&gt;tag,, &amp;ptr);
+<a name="l19"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt; max_num)
+<a name="l20"></a>                    max_num = i;
+<a name="l21"></a>                </span><span class=cF1>if</span><span class=cF0> (*ptr == </span><span class=cF6>', '</span><span class=cF0>)
+<a name="l22"></a>                    ptr++;
+<a name="l23"></a>                ptr = </span><span class=cF5>StrNew</span><span class=cF0>(ptr);
+<a name="l24"></a>                </span><span class=cF5>Free</span><span class=cF0>(doc_e-&gt;tag);
+<a name="l25"></a>                doc_e-&gt;tag = ptr;
+<a name="l26"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l27"></a>            doc_e-&gt;user_data = i;
+<a name="l28"></a>        }
+<a name="l29"></a>        doc_e = doc_e-&gt;next;
+<a name="l30"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l31"></a>
+<a name="l32"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>  * </span><span class=cF7>(</span><span class=cF0>max_num + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l33"></a>    colors = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>max_num + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l34"></a>    doc_e = doc-&gt;head.next;
+<a name="l35"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l36"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= doc_e-&gt;user_data &lt;= max_num)
+<a name="l38"></a>        {
+<a name="l39"></a>            res[doc_e-&gt;user_data] = doc_e-&gt;tag;
+<a name="l40"></a>            doc_e-&gt;tag = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l41"></a>            colors[doc_e-&gt;user_data] = doc_e-&gt;type.u8[</span><span class=cFE>1</span><span class=cF0>] &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l42"></a>        }
+<a name="l43"></a>        doc_e = doc_e-&gt;next;
+<a name="l44"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l47"></a>    </span><span class=cF1>if</span><span class=cF0> (_max_num)
+<a name="l48"></a>        *_max_num = max_num;
+<a name="l49"></a>    </span><span class=cF1>if</span><span class=cF0> (_colors)
+<a name="l50"></a>        *_colors = colors;
+<a name="l51"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l52"></a>        </span><span class=cF5>Free</span><span class=cF0>(colors);
+<a name="l53"></a>
+<a name="l54"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l55"></a>}
+<a name="l56"></a>
+<a name="l57"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> StrFileArrDel(</span><span class=cF1>U8</span><span class=cF0> **a, </span><span class=cF9>I64</span><span class=cF0> max_num)
+<a name="l58"></a>{
+<a name="l59"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l60"></a>
+<a name="l61"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= max_num; i++)
+<a name="l62"></a>        </span><span class=cF5>Free</span><span class=cF0>(a[i]);
+<a name="l63"></a>    </span><span class=cF5>Free</span><span class=cF0>(a);
+<a name="l64"></a>}
+<a name="l65"></a>
+<a name="l66"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> StrFileAdd(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> *_num, </span><span class=cF9>CHashTable</span><span class=cF0> *table, </span><span class=cF9>I64</span><span class=cF0> color=</span><span class=cF3>COLOR_INVALID</span><span class=cF0>)
+<a name="l67"></a>{
+<a name="l68"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
+<a name="l69"></a>
+<a name="l70"></a>    </span><span class=cF1>if</span><span class=cF0> (!st)
+<a name="l71"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l72"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmph = </span><span class=cF5>HashFind</span><span class=cF0>(st, table, SFT_GENERIC)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l73"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l74"></a>        tmph = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0>);
+<a name="l75"></a>        tmph-&gt;type          = SFT_GENERIC;
+<a name="l76"></a>        tmph-&gt;str           = </span><span class=cF5>StrNew</span><span class=cF0>(st);
+<a name="l77"></a>        tmph-&gt;user_data0    = (*_num)++;
+<a name="l78"></a>        </span><span class=cF5>HashAdd</span><span class=cF0>(tmph, table);
+<a name="l79"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l80"></a>    </span><span class=cF1>if</span><span class=cF0> (color != </span><span class=cF3>COLOR_INVALID</span><span class=cF0>)
+<a name="l81"></a>        tmph-&gt;user_data1 = color;
+<a name="l82"></a>
+<a name="l83"></a>    </span><span class=cF1>return</span><span class=cF0> tmph-&gt;user_data0;
+<a name="l84"></a>}
+<a name="l85"></a>
+<a name="l86"></a></span><span class=cF9>I64</span><span class=cF0> StrEntriesCompare(</span><span class=cF9>CHashGeneric</span><span class=cF0> *h1, </span><span class=cF9>CHashGeneric</span><span class=cF0> *h2)
+<a name="l87"></a>{
+<a name="l88"></a>    </span><span class=cF1>return</span><span class=cF0> h1-&gt;user_data0 - h2-&gt;user_data0;
+<a name="l89"></a>}
+<a name="l90"></a>
+<a name="l91"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> StrFileWrite(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>CHashTable</span><span class=cF0> *table, </span><span class=cF1>Bool</span><span class=cF0> no_nums=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l92"></a>{
+<a name="l93"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, count, color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l94"></a>    </span><span class=cF9>CDoc</span><span class=cF0>            *doc = </span><span class=cF5>DocNew</span><span class=cF0>(name);
+<a name="l95"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0>    *tmph, **a;
+<a name="l96"></a>
+<a name="l97"></a>    </span><span class=cF1>if</span><span class=cF0> (table)
+<a name="l98"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l99"></a>        count = </span><span class=cFE>0</span><span class=cF0>;      </span><span class=cF2>//Count Strings</span><span class=cF0>
+<a name="l100"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= table-&gt;mask; i++)
+<a name="l101"></a>            count += </span><span class=cF5>LinkedListCount</span><span class=cF0>(table-&gt;body[i]);
+<a name="l102"></a>        a = </span><span class=cF5>MAlloc</span><span class=cF0>(count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>);
+<a name="l103"></a>        j = </span><span class=cFE>0</span><span class=cF0>;              </span><span class=cF2>//Load Strings</span><span class=cF0>
+<a name="l104"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= table-&gt;mask; i++)
+<a name="l105"></a>        {
+<a name="l106"></a>            tmph = table-&gt;body[i];
+<a name="l107"></a>            </span><span class=cF1>while</span><span class=cF0> (tmph)
+<a name="l108"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l109"></a>                a[j++] = tmph;
+<a name="l110"></a>                tmph = tmph-&gt;next;
+<a name="l111"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>        }
+<a name="l113"></a>        </span><span class=cF5>QuickSortI64</span><span class=cF0>(a, count, &amp;StrEntriesCompare);
+<a name="l114"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l115"></a>        {
+<a name="l116"></a>            tmph = a[i];
+<a name="l117"></a>            </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;user_data1 &amp; </span><span class=cFE>15</span><span class=cF0> != color)
+<a name="l118"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l119"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$FG,%d$&quot;</span><span class=cF0>, tmph-&gt;user_data1 &amp; </span><span class=cFE>15</span><span class=cF0>);
+<a name="l120"></a>                color = tmph-&gt;user_data1 &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l121"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l122"></a>            </span><span class=cF1>if</span><span class=cF0> (no_nums)
+<a name="l123"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, tmph-&gt;str);
+<a name="l124"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l125"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%d,%s\n&quot;</span><span class=cF0>, tmph-&gt;user_data0, tmph-&gt;str);
+<a name="l126"></a>        }
+<a name="l127"></a>        </span><span class=cF5>Free</span><span class=cF0>(a);
+<a name="l128"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l129"></a>    doc-&gt;flags |= </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>;
+<a name="l130"></a>    </span><span class=cF5>DocWrite</span><span class=cF0>(doc);
+<a name="l131"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l132"></a>}
+<a name="l133"></a>
+<a name="l134"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> StrFileDel(</span><span class=cF9>CHashTable</span><span class=cF0> *table)
+<a name="l135"></a>{
+<a name="l136"></a>    </span><span class=cF9>I64</span><span class=cF0>           i;
+<a name="l137"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph, *tmph1;
+<a name="l138"></a>
+<a name="l139"></a>    </span><span class=cF1>if</span><span class=cF0> (!table)
+<a name="l140"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l141"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= table-&gt;mask; i++)
+<a name="l142"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l143"></a>        tmph = table-&gt;body[i];
+<a name="l144"></a>        </span><span class=cF1>while</span><span class=cF0> (tmph)
+<a name="l145"></a>        {
+<a name="l146"></a>            tmph1=tmph-&gt;next;
+<a name="l147"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;str);
+<a name="l148"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmph);
+<a name="l149"></a>            tmph = tmph1;
+<a name="l150"></a>        }
+<a name="l151"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l152"></a>    </span><span class=cF5>Free</span><span class=cF0>(table-&gt;body);
+<a name="l153"></a>    </span><span class=cF5>Free</span><span class=cF0>(table);
+<a name="l154"></a>}
+</span></pre></body>
+</html>

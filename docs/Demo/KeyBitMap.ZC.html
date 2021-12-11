@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cFA>
+<a name="l2"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a>
+<a name="l5"></a>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF9>I64</span><span class=cF0> x = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l10"></a>{
+<a name="l11"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x % </span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
+<a name="l12"></a>}
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF1>U0</span><span class=cF0> KeyDownBitMapDemo()
+<a name="l15"></a>{
+<a name="l16"></a></span><span class=cF2>//This conversion routine is slow.</span><span class=cF0>
+<a name="l17"></a>    </span><span class=cF9>I64</span><span class=cF0> i_sc = </span><span class=cF5>Char2ScanCode</span><span class=cF0>(</span><span class=cF6>'i'</span><span class=cF0>);
+<a name="l18"></a>
+<a name="l19"></a>    </span><span class=cF6>&quot;Press and hold $GREEN$'i'$FG$.\n&quot;</span><span class=cF0>;
+<a name="l20"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, i_sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l21"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.ZC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l24"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l25"></a>
+<a name="l26"></a>    </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3668"><span class=cF4>kbd.down_bitmap</span></a><span class=cF2> is indexed with the</span><span class=cF0>
+<a name="l27"></a>    </span><span class=cF2>//merged scan code.  (left shift and</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF2>//right shift combined for example.)</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3668"><span class=cF4>kbd.down_bitmap2</span></a><span class=cF2> is indexed with the</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF2>//distinct scan code.  See </span><span class=cF4><u>Char</u></span><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4219"><span class=cF4>Scan Codes</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l31"></a>
+<a name="l32"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, i_sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l33"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l34"></a>        x++;
+<a name="l35"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l37"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l38"></a>    </span><span class=cF5>FlushMessages</span><span class=cF0>;
+<a name="l39"></a>}
+<a name="l40"></a>
+<a name="l41"></a>KeyDownBitMapDemo;
+</span></pre></body>
+</html>

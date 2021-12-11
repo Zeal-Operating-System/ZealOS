@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;AutoComplete/Dictionary&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDDictWordsAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l3"></a>{
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l5"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr;
+<a name="l6"></a>
+<a name="l7"></a>    </span><span class=cF1>if</span><span class=cF0> (st &amp;&amp; *st &amp;&amp; </span><span class=cF7>(</span><span class=cF0>ptr = </span><span class=cF5>ACDWordPtAt</span><span class=cF0>(st)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l8"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l9"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>ACD_FILLINS_NUM</span><span class=cF0>; i++)
+<a name="l10"></a>        {
+<a name="l11"></a>            </span><span class=cF1>if</span><span class=cF0> (*ptr++ != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l12"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l13"></a>            </span><span class=cF1>if</span><span class=cF0> (i)
+<a name="l14"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l15"></a>            </span><span class=cFB>acd</span><span class=cF0>.fillins[i] = ptr - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l16"></a>            </span><span class=cF6>&quot;$GREEN$'%d'$FG$ $BLACK$%-23ts$FG$&quot;</span><span class=cF0>, i, ptr;
+<a name="l17"></a>            ptr += </span><span class=cF5>StrLen</span><span class=cF0>(ptr) + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l18"></a>        }
+<a name="l19"></a>        </span><span class=cFB>acd</span><span class=cF0>.num_fillins = i;
+<a name="l20"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>}
+<a name="l22"></a>
+<a name="l23"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;AutoComplete&quot;</span><span class=cF0>
+<a name="l24"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> left, </span><span class=cF9>I64</span><span class=cF0> top)
+<a name="l25"></a>{
+<a name="l26"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF5>DocReset</span><span class=cF0>(doc, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l29"></a>    doc-&gt;flags |= </span><span class=cF3>DOCF_SIZE_MIN</span><span class=cF0>;
+<a name="l30"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src  = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
+<a name="l31"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_attr = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>) &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l32"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr   = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF0>);
+<a name="l34"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(left, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_right);
+<a name="l35"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(top,  </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l36"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l37"></a>}
+<a name="l38"></a>
+<a name="l39"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ACSkipCrap</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF9>I64</span><span class=cF0> len)
+<a name="l40"></a>{
+<a name="l41"></a>    </span><span class=cF9>I64</span><span class=cF0> j;
+<a name="l42"></a>
+<a name="l43"></a>    j = len - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l44"></a>    </span><span class=cF1>while</span><span class=cF0> (j &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l45"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l46"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>char_bmp_alpha_numeric</span><span class=cF0>, src[j]</span><span class=cF7>)</span><span class=cF0>)
+<a name="l47"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l48"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l49"></a>            j--;
+<a name="l50"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF1>return</span><span class=cF0> j + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l52"></a>}
+<a name="l53"></a>
+<a name="l54"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ACPriorWordInStr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF9>I64</span><span class=cF0> len, </span><span class=cF9>I64</span><span class=cF0> buf_size)
+<a name="l55"></a>{
+<a name="l56"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j = </span><span class=cFE>0</span><span class=cF0>, k;
+<a name="l57"></a>
+<a name="l58"></a>    i = len - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l59"></a>    </span><span class=cF1>while</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l60"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>char_bmp_alpha_numeric</span><span class=cF0>, src[i]</span><span class=cF7>)</span><span class=cF0>)
+<a name="l61"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l62"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l63"></a>            i--;
+<a name="l64"></a>    </span><span class=cF1>if</span><span class=cF0> (i &gt;= -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; len &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l65"></a>        </span><span class=cF1>for</span><span class=cF0> (k = i + </span><span class=cFE>1</span><span class=cF0>; k &lt; len &amp;&amp; j &lt; buf_size - </span><span class=cFE>1</span><span class=cF0>; k++)
+<a name="l66"></a>            dst[j++] = src[k];
+<a name="l67"></a>    dst[j] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l68"></a>    </span><span class=cF1>return</span><span class=cF0> i + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l69"></a>}
+<a name="l70"></a>
+<a name="l71"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACFillInAdd</span><span class=cF0>(</span><span class=cF9>CHashAC</span><span class=cF0> *tmpw)
+<a name="l72"></a>{
+<a name="l73"></a>    </span><span class=cF9>I64</span><span class=cF0> k;
+<a name="l74"></a>
+<a name="l75"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>ac</span><span class=cF0>.num_fillins &lt; </span><span class=cF3>AC_FILLINS_NUM</span><span class=cF0> || tmpw-&gt;hits &gt; </span><span class=cFB>ac</span><span class=cF0>.fillin_hits[</span><span class=cFB>ac</span><span class=cF0>.num_fillins - </span><span class=cFE>1</span><span class=cF0>])
+<a name="l76"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l77"></a>        </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFB>ac</span><span class=cF0>.num_fillins - </span><span class=cFE>1</span><span class=cF0>; k &gt;= </span><span class=cFE>0</span><span class=cF0>; k--)
+<a name="l78"></a>        {
+<a name="l79"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpw-&gt;hits &lt;= </span><span class=cFB>ac</span><span class=cF0>.fillin_hits[k])
+<a name="l80"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l81"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l82"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l83"></a>                </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[k + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[k];
+<a name="l84"></a>                </span><span class=cFB>ac</span><span class=cF0>.fillin_hits[k + </span><span class=cFE>1</span><span class=cF0>]    = </span><span class=cFB>ac</span><span class=cF0>.fillin_hits[k];
+<a name="l85"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l86"></a>        }
+<a name="l87"></a>        </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[k + </span><span class=cFE>1</span><span class=cF0>] = tmpw;
+<a name="l88"></a>        </span><span class=cFB>ac</span><span class=cF0>.fillin_hits[k + </span><span class=cFE>1</span><span class=cF0>]    = tmpw-&gt;hits;
+<a name="l89"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>ac</span><span class=cF0>.num_fillins &lt; </span><span class=cF3>AC_FILLINS_NUM</span><span class=cF0>)
+<a name="l90"></a>            </span><span class=cFB>ac</span><span class=cF0>.num_fillins++;
+<a name="l91"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l92"></a>}
+<a name="l93"></a>
+<a name="l94"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACPutChoices</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *focus_l, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e, </span><span class=cF9>CTask</span><span class=cF0> *focus_task, </span><span class=cF1>Bool</span><span class=cF0> force_refresh)
+<a name="l95"></a>{
+<a name="l96"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, data_col;
+<a name="l97"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf, *buf1, *src = </span><span class=cF3>NULL</span><span class=cF0>, *st;
+<a name="l98"></a>    </span><span class=cF9>CHashAC</span><span class=cF0>     *tmpw;
+<a name="l99"></a>    </span><span class=cF1>F64</span><span class=cF0>          timeout_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>;
+<a name="l100"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph;
+<a name="l101"></a>
+<a name="l102"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>ac</span><span class=cF0>.flags, </span><span class=cF3>ACf_LAST_WAS_KEYMAP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l103"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l104"></a>        </span><span class=cFB>ac</span><span class=cF0>.col = </span><span class=cFB>ac</span><span class=cF0>.old_col;
+<a name="l105"></a>        </span><span class=cFB>ac</span><span class=cF0>.row = </span><span class=cFB>ac</span><span class=cF0>.old_row;
+<a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l108"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l109"></a>        </span><span class=cFB>ac</span><span class=cF0>.col = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_left;
+<a name="l110"></a>        </span><span class=cFB>ac</span><span class=cF0>.row = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top;
+<a name="l111"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>
+<a name="l113"></a>    src = </span><span class=cF5>DocScanLine</span><span class=cF0>(focus_l, doc_e, &amp;data_col);
+<a name="l114"></a>    </span><span class=cF5>DocUnlock</span><span class=cF0>(focus_l);
+<a name="l115"></a>    i = </span><span class=cF5>StrLen</span><span class=cF0>(src);
+<a name="l116"></a>    buf  = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>MaxI64</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF7>)</span><span class=cF0>);
+<a name="l117"></a>    buf1 = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>MaxI64</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF7>)</span><span class=cF0>);
+<a name="l118"></a>    </span><span class=cF1>if</span><span class=cF0> (data_col == -</span><span class=cFE>1</span><span class=cF0>)
+<a name="l119"></a>        data_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l120"></a>    data_col = </span><span class=cF5>ACPriorWordInStr</span><span class=cF0>(src, buf, data_col, </span><span class=cFE>256</span><span class=cF0>);
+<a name="l121"></a>    </span><span class=cFB>ac</span><span class=cF0>.partial_len = </span><span class=cF5>StrLen</span><span class=cF0>(buf);
+<a name="l122"></a>    data_col = </span><span class=cF5>ACSkipCrap</span><span class=cF0>(src, data_col);
+<a name="l123"></a>    data_col = </span><span class=cF5>ACPriorWordInStr</span><span class=cF0>(src, buf1, data_col, </span><span class=cFE>256</span><span class=cF0>);
+<a name="l124"></a>
+<a name="l125"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFB>ac</span><span class=cF0>.cur_word || </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.cur_word, buf</span><span class=cF7>)</span><span class=cF0> || force_refresh)
+<a name="l126"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l127"></a>        st = </span><span class=cFB>ac</span><span class=cF0>.cur_word;
+<a name="l128"></a>        </span><span class=cFB>ac</span><span class=cF0>.cur_word = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf);
+<a name="l129"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l130"></a>        </span><span class=cFB>ac</span><span class=cF0>.num_fillins = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l131"></a>        </span><span class=cF1>if</span><span class=cF0> (*</span><span class=cFB>ac</span><span class=cF0>.cur_word)
+<a name="l132"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= </span><span class=cFB>ac</span><span class=cF0>.hash_table-&gt;mask &amp;&amp; </span><span class=cF5>tS</span><span class=cF0> &lt; timeout_time; i++)
+<a name="l133"></a>            {
+<a name="l134"></a>                tmpw = </span><span class=cFB>ac</span><span class=cF0>.hash_table-&gt;body[i];
+<a name="l135"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpw)
+<a name="l136"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l137"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>MemCompare</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.cur_word, tmpw-&gt;str, </span><span class=cF5>StrLen</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.cur_word)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l138"></a>                        </span><span class=cF5>ACFillInAdd</span><span class=cF0>(tmpw);
+<a name="l139"></a>                    tmpw = tmpw-&gt;next;
+<a name="l140"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l141"></a>            }
+<a name="l142"></a>        </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.col, </span><span class=cFB>ac</span><span class=cF0>.row);
+<a name="l143"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>ac</span><span class=cF0>.cur_word &amp;&amp; *</span><span class=cFB>ac</span><span class=cF0>.cur_word)
+<a name="l144"></a>        {
+<a name="l145"></a>            </span><span class=cF6>&quot;$RED$Word:%s$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>ac</span><span class=cF0>.cur_word;
+<a name="l146"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>ac</span><span class=cF0>.num_fillins; i++)
+<a name="l147"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l148"></a>                st = </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[i]-&gt;str;
+<a name="l149"></a>                </span><span class=cF6>&quot;$GREEN$F%02d$FG$$HL$ &quot;</span><span class=cF0>, i + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l150"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>tmph = </span><span class=cF5>HashFind</span><span class=cF0>(st, focus_task-&gt;hash_table, </span><span class=cF3>HTG_SRC_SYM</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmph-&gt;src_link)
+<a name="l151"></a>                {
+<a name="l152"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTF_PUBLIC</span><span class=cF0>)
+<a name="l153"></a>                        </span><span class=cF6>&quot;$IV$&quot;</span><span class=cF0>;
+<a name="l154"></a>                    </span><span class=cF6>&quot;$TX+UL+L+PU,\&quot;%$Q\&quot;,A=\&quot;%s\&quot;$$IV,0$\n&quot;</span><span class=cF0>, st, tmph-&gt;src_link;
+<a name="l155"></a>                }
+<a name="l156"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l157"></a>                    </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, st;
+<a name="l158"></a>                </span><span class=cF6>&quot;$HL,0$&quot;</span><span class=cF0>;
+<a name="l159"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l160"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>acd</span><span class=cF0>.has_words)
+<a name="l161"></a>                </span><span class=cF5>ACDDictWordsAdd</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.cur_word);
+<a name="l162"></a>        }
+<a name="l163"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF6>&quot;::/Doc/StandBy.DD&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l164"></a>            </span><span class=cF5>Type</span><span class=cF0>(</span><span class=cF6>&quot;::/Doc/StandBy.DD&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l165"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l166"></a>    </span><span class=cF5>Free</span><span class=cF0>(src);
+<a name="l167"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l168"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf1);
+<a name="l169"></a>}
+<a name="l170"></a>
+<a name="l171"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACTaskNormal</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc, </span><span class=cF9>I64</span><span class=cF0> last_sc, </span><span class=cF9>CTask</span><span class=cF0> *focus_task, </span><span class=cF9>CTask</span><span class=cF0> *original_focus_task)
+<a name="l172"></a>{
+<a name="l173"></a>    </span><span class=cF9>CDoc</span><span class=cF0>      *doc;
+<a name="l174"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
+<a name="l175"></a>
+<a name="l176"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>doc=</span><span class=cF5>DocPut</span><span class=cF0>(focus_task)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; focus_task != </span><span class=cF5>Fs</span><span class=cF0> &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;focus_task-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l177"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l178"></a>        </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l179"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l180"></a>            original_focus_task == </span><span class=cFB>sys_focus_task</span><span class=cF0> &amp;&amp;
+<a name="l181"></a>            doc &amp;&amp;
+<a name="l182"></a>            doc == </span><span class=cF5>DocPut</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l183"></a>            </span><span class=cF7>(</span><span class=cF0>doc_e = doc-&gt;cur_entry</span><span class=cF7>)</span><span class=cF0>)
+<a name="l184"></a>        {
+<a name="l185"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e == doc)
+<a name="l186"></a>                doc_e = doc_e-&gt;last;
+<a name="l187"></a>            </span><span class=cF1>while</span><span class=cF0> (doc_e-&gt;last != doc &amp;&amp; </span><span class=cF7>(</span><span class=cF0>doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0> || doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_SOFT_NEW_LINE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l188"></a>                doc_e = doc_e-&gt;last;
+<a name="l189"></a>            </span><span class=cF1>while</span><span class=cF0> (doc_e-&gt;last-&gt;type_u8 != </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0> &amp;&amp; doc_e-&gt;last != doc)
+<a name="l190"></a>                doc_e = doc_e-&gt;last;
+<a name="l191"></a>            </span><span class=cF5>ACPutChoices</span><span class=cF0>(doc, doc_e, focus_task, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>sc != last_sc</span><span class=cF7>)</span><span class=cF0>);
+<a name="l192"></a>        }
+<a name="l193"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l194"></a>            </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l195"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l196"></a>
+<a name="l197"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l198"></a>        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l199"></a>}
+<a name="l200"></a>
+<a name="l201"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACTaskCtrl</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc, </span><span class=cF9>I64</span><span class=cF0> last_sc, </span><span class=cF9>CTask</span><span class=cF0> *focus_task, </span><span class=cF9>CTask</span><span class=cF0> *original_focus_task)
+<a name="l202"></a>{
+<a name="l203"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>focus_task-&gt;scroll_x || focus_task-&gt;scroll_y</span><span class=cF7>)</span><span class=cF0>)
+<a name="l204"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l205"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l206"></a>            </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l207"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l208"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l209"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l210"></a>        </span><span class=cF1>if</span><span class=cF0> (sc != last_sc)
+<a name="l211"></a>        {
+<a name="l212"></a>            </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>ac</span><span class=cF0>.flags, </span><span class=cF3>ACf_LAST_WAS_KEYMAP</span><span class=cF0>);
+<a name="l213"></a>            </span><span class=cFB>ac</span><span class=cF0>.old_col = </span><span class=cFB>ac</span><span class=cF0>.col;
+<a name="l214"></a>            </span><span class=cFB>ac</span><span class=cF0>.old_row = </span><span class=cFB>ac</span><span class=cF0>.row;
+<a name="l215"></a>            </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_ALT</span><span class=cF0>)
+<a name="l216"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l217"></a>                </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l218"></a>
+<a name="l219"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>original_focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;original_focus_task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l220"></a>                    </span><span class=cF5>KeyMapFamily</span><span class=cF0>(original_focus_task, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>!(sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l221"></a>
+<a name="l222"></a>                </span><span class=cF5>KeyMapCtrlAltFamily</span><span class=cF0>(</span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>!(sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l223"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l224"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>original_focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;original_focus_task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l225"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l226"></a>                </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l227"></a>                </span><span class=cF5>KeyMapFamily</span><span class=cF0>(original_focus_task, </span><span class=cF3>SCF_CTRL</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>!(sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l228"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l229"></a>        }
+<a name="l230"></a>
+<a name="l231"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l232"></a>            </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l233"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l234"></a>}
+<a name="l235"></a>
+<a name="l236"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACTaskAlt</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc, </span><span class=cF9>I64</span><span class=cF0> last_sc, </span><span class=cF9>CTask</span><span class=cF0> *, </span><span class=cF9>CTask</span><span class=cF0> *original_focus_task)
+<a name="l237"></a>{
+<a name="l238"></a>    </span><span class=cF1>if</span><span class=cF0> (sc != last_sc &amp;&amp; </span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>original_focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;original_focus_task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l239"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l240"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>ac</span><span class=cF0>.flags, </span><span class=cF3>ACf_LAST_WAS_KEYMAP</span><span class=cF0>);
+<a name="l241"></a>        </span><span class=cFB>ac</span><span class=cF0>.old_col = </span><span class=cFB>ac</span><span class=cF0>.col;
+<a name="l242"></a>        </span><span class=cFB>ac</span><span class=cF0>.old_row = </span><span class=cFB>ac</span><span class=cF0>.row;
+<a name="l243"></a>
+<a name="l244"></a>        </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l245"></a>        </span><span class=cF5>KeyMapFamily</span><span class=cF0>(original_focus_task, </span><span class=cF3>SCF_ALT</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>!(sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>ToBool</span><span class=cF7>(</span><span class=cF0>sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l246"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l247"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l248"></a>        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l249"></a>}
+<a name="l250"></a>
+<a name="l251"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACTaskEndCB</span><span class=cF0>()
+<a name="l252"></a>{
+<a name="l253"></a>    </span><span class=cFB>ac</span><span class=cF0>.task = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l254"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;AutoComplete&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ac.col=%d;ac.row=%d;&quot;</span><span class=cF0>, </span><span class=cFB>ac</span><span class=cF0>.col, </span><span class=cFB>ac</span><span class=cF0>.row);
+<a name="l255"></a>    </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l256"></a>}
+<a name="l257"></a>
+<a name="l258"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACTask</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0>)
+<a name="l259"></a>{
+<a name="l260"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *focus_task, *original_focus_task;
+<a name="l261"></a>    </span><span class=cF9>I64</span><span class=cF0>      ch, scan_code = </span><span class=cFE>0</span><span class=cF0>, last_scan_code = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l262"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc;
+<a name="l263"></a>
+<a name="l264"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;</span><span class=cF5>ACTaskEndCB</span><span class=cF0>;
+<a name="l265"></a>    </span><span class=cF5>DocTermNew</span><span class=cF0>;
+<a name="l266"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF0>);
+<a name="l267"></a>    </span><span class=cF5>ACDocReset</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.col, </span><span class=cFB>ac</span><span class=cF0>.row);
+<a name="l268"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_WIN_ON_TOP</span><span class=cF0>);
+<a name="l269"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_NO_FOCUS_TASK_DEFAULT</span><span class=cF0>;
+<a name="l270"></a>    </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.cur_word);
+<a name="l271"></a>    </span><span class=cFB>ac</span><span class=cF0>.cur_word = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l272"></a>
+<a name="l273"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l274"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l275"></a>        </span><span class=cF1>if</span><span class=cF0> (scan_code &amp; </span><span class=cF7>(</span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF7>)</span><span class=cF0> || </span><span class=cF5>TSCGet</span><span class=cF0> &gt; </span><span class=cF5>KbdMouseEventTime</span><span class=cF0> + </span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq &gt;&gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l276"></a>        {
+<a name="l277"></a>            last_scan_code = scan_code;
+<a name="l278"></a>            scan_code = </span><span class=cFB>kbd</span><span class=cF0>.scan_code;
+<a name="l279"></a>        }
+<a name="l280"></a>        original_focus_task = focus_task = </span><span class=cFB>sys_focus_task</span><span class=cF0>;
+<a name="l281"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;focus_task-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF7>)</span><span class=cF0>)
+<a name="l282"></a>            focus_task = focus_task-&gt;parent_task;
+<a name="l283"></a>        </span><span class=cF1>if</span><span class=cF0> (scan_code &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)
+<a name="l284"></a>            </span><span class=cF5>ACTaskCtrl</span><span class=cF0>(scan_code, last_scan_code, focus_task, original_focus_task);
+<a name="l285"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>focus_task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l286"></a>        {
+<a name="l287"></a>            </span><span class=cF1>if</span><span class=cF0> (scan_code &amp; </span><span class=cF3>SCF_ALT</span><span class=cF0>)
+<a name="l288"></a>                </span><span class=cF5>ACTaskAlt</span><span class=cF0>(scan_code, last_scan_code, focus_task, original_focus_task);
+<a name="l289"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l290"></a>                </span><span class=cF5>ACTaskNormal</span><span class=cF0>(scan_code, last_scan_code, focus_task, original_focus_task);
+<a name="l291"></a>        }
+<a name="l292"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>333</span><span class=cF0>);
+<a name="l293"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;ch,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l294"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l295"></a>        doc = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l296"></a>        </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l297"></a>        </span><span class=cF1>if</span><span class=cF0> (doc-&gt;cur_entry-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LINK</span><span class=cF0>)
+<a name="l298"></a>        {
+<a name="l299"></a>            </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l300"></a>            doc-&gt;cur_entry = doc;
+<a name="l301"></a>        }
+<a name="l302"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l303"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l304"></a>}
+<a name="l305"></a>
+<a name="l306"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>AutoComplete</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>OFF</span><span class=cF0>)
+<a name="l307"></a>{</span><span class=cF2>//Turn AutoComplete OFF or ON.</span><span class=cF0>
+<a name="l308"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_val = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l309"></a>
+<a name="l310"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>ac</span><span class=cF0>.flags, </span><span class=cF3>ACf_INIT_IN_PROGRESS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l311"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
+<a name="l312"></a>    </span><span class=cF1>if</span><span class=cF0> (val)
+<a name="l313"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l314"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_AUTOCOMPLETE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l315"></a>        {
+<a name="l316"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l317"></a>                old_val = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l318"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l319"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l320"></a>                </span><span class=cFB>ac</span><span class=cF0>.task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>ACTask</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;AutoComplete&quot;</span><span class=cF0>);
+<a name="l321"></a>                </span><span class=cF5>TaskWait</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.task);
+<a name="l322"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l323"></a>            </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.task);
+<a name="l324"></a>        }
+<a name="l325"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l326"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l327"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l328"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l329"></a>        {
+<a name="l330"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_AUTOCOMPLETE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l331"></a>                old_val = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l332"></a>            </span><span class=cF5>Kill</span><span class=cF0>(</span><span class=cFB>ac</span><span class=cF0>.task);
+<a name="l333"></a>        }
+<a name="l334"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l335"></a>    </span><span class=cF1>return</span><span class=cF0> old_val;
+<a name="l336"></a>}
+</span></pre></body>
+</html>

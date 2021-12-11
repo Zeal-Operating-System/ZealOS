@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -36,20 +36,20 @@ body {background-color:#1f1f1f;}
 <a name="l9"></a> Therefore, ZealOS keeps all code in the lowest 2Gig memory addresses including what would normally be called &quot;the kernel&quot;.  
 <a name="l10"></a>Two Gig is plenty for code, don't worry.
 <a name="l11"></a>
-<a name="l12"></a>You can create new, independent heaps using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3560"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
+<a name="l12"></a>You can create new, independent heaps using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/HeapCtrl.ZC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3560"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.ZC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
 <a name="l13"></a>for an example.
 <a name="l14"></a>
 <a name="l15"></a>Memory alloced by a task will be freed when the task is killed.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is a task that never dies. Its memory is like 
-<a name="l16"></a>kernel memory in other operating systems.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l408"><span class=cF4>SysCAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l394"><span class=cF4>SysMAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l427"><span class=cF4>SysMAllocIdent</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l503"><span class=cF4>SysStrNew</span></a><span class=cF0>().
+<a name="l16"></a>kernel memory in other operating systems.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l408"><span class=cF4>SysCAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l394"><span class=cF4>SysMAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l427"><span class=cF4>SysMAllocIdent</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l503"><span class=cF4>SysStrNew</span></a><span class=cF0>().
 <a name="l17"></a>
 <a name="l18"></a>All of the regular page tables are marked, &quot;cached&quot;.    When accessing hardware, however, you need uncached page table.  The 
 <a name="l19"></a>lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, </span><span class=cF2>0x01D7800000</span><span class=cF0>.    See </span><span class=cF4>
-<a name="l20"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
+<a name="l20"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.ZC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
 <a name="l21"></a>
 <a name="l22"></a>During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.  It has never 
 <a name="l23"></a>happens to me.
 <a name="l24"></a>
-<a name="l25"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MemDemo.CC.html#l1"><span class=cF4>::/Demo/MemDemo.CC</span></a><span class=cF0>.
+<a name="l25"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.ZC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MemDemo.ZC.html#l1"><span class=cF4>::/Demo/MemDemo.ZC</span></a><span class=cF0>.
 <a name="l26"></a>
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF5>                                                Single System-wide Memory Map
@@ -58,17 +58,17 @@ body {background-color:#1f1f1f;}
 <a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4477"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF2> 0x0000096600- 0x0000096FFF</span><span class=cF0>
-<a name="l34"></a>  Boot block relocated here before loading the Kernel module, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.CC.html#l1"><span class=cF4>BootDVD</span></a><span class=cF0> &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.CC.html#l1"><span class=cF4>BootHD</span></a><span class=cF0>.
+<a name="l34"></a>  Boot block relocated here before loading the Kernel module, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.ZC.html#l1"><span class=cF4>BootDVD</span></a><span class=cF0> &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.ZC.html#l1"><span class=cF4>BootHD</span></a><span class=cF0>.
 <a name="l35"></a>
 <a name="l36"></a></span><span class=cF2> 0x0000097000- 0x000009703B</span><span class=cF0> Multicore start-up vect code, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF0>.
 <a name="l37"></a></span><span class=cF2>~0x000009F000- 0x000009FFFF</span><span class=cF0> Extended BIOS data area.
-<a name="l38"></a></span><span class=cF2> 0x00000A0000- 0x00000BFFFF</span><span class=cF0> VGA graphics mem with alias at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l30"><span class=cF4>text</span></a><span class=cF0>.vga_alias.
+<a name="l38"></a></span><span class=cF2> 0x00000A0000- 0x00000BFFFF</span><span class=cF0> VGA graphics mem with alias at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.ZC.html#l30"><span class=cF4>text</span></a><span class=cF0>.vga_alias.
 <a name="l39"></a></span><span class=cF2> 0x0000100000- 0x0000101FFF</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4120"><span class=cF4>CSysFixedArea</span></a><span class=cF0> for misc.
 <a name="l40"></a></span><span class=cF2> 0x0000110000- 0x007FFFFFFF</span><span class=cF0> Code Heap mem.
 <a name="l41"></a>
 <a name="l42"></a></span><span class=cF2> 0x00E0000000- 0x00FFFFFFFF</span><span class=cF0>
 <a name="l43"></a>  32-bit devices could alloc memory at 0xF0000000 going up, but this is wrong, since some PCs already have devices at 
-<a name="l44"></a>  0xF0000000.  PCI devices are supported, so </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l64"><span class=cF4>Mem32DevAlloc</span></a><span class=cF0>() flaws could become an issue.
+<a name="l44"></a>  0xF0000000.  PCI devices are supported, so </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.ZC.html#l64"><span class=cF4>Mem32DevAlloc</span></a><span class=cF0>() flaws could become an issue.
 <a name="l45"></a>
 <a name="l46"></a></span><span class=cF2> 0x0080000000-~0x00DFFFFFFF</span><span class=cF0>
 <a name="l47"></a></span><span class=cF2> 0x0100000000-~0x01D77FFFFF</span><span class=cF0>
@@ -78,15 +78,15 @@ body {background-color:#1f1f1f;}
 <a name="l51"></a>  Uncached alias of first 4Gig.  (For 32-bit device access.)
 <a name="l52"></a>
 <a name="l53"></a></span><span class=cF2>                         - 0x02D77FFFFF</span><span class=cF0>
-<a name="l54"></a>  64-bit devices are alloced with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l122"><span class=cF4>Mem64DevAlloc</span></a><span class=cF0>() counting backward.
+<a name="l54"></a>  64-bit devices are alloced with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.ZC.html#l122"><span class=cF4>Mem64DevAlloc</span></a><span class=cF0>() counting backward.
 <a name="l55"></a>
 <a name="l56"></a>
 <a name="l57"></a>
 <a name="l58"></a>* Note: There is a break in the data-heap block pool.  This has no effect except the obvious effect that fragmentation has on 
-<a name="l59"></a>contiguous requests.    You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() an 8Gig chunk on a 12Gig machine.  You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() a 32Gig chunk on a 64Gig machine.
+<a name="l59"></a>contiguous requests.    You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() an 8Gig chunk on a 12Gig machine.  You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() a 32Gig chunk on a 64Gig machine.
 <a name="l60"></a>
 <a name="l61"></a>* Note: For systems with less than 2Gig RAM, the code and data heap block pools are the same.  For systems with 2-4Gig of RAM, 
-<a name="l62"></a>the code heap is 1/4 of the total.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/BlkPool.CC.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF0>().
+<a name="l62"></a>the code heap is 1/4 of the total.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/BlkPool.ZC.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF0>().
 <a name="l63"></a>
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF5>                                                           History</span><span class=cF0>
@@ -106,16 +106,16 @@ body {background-color:#1f1f1f;}
 <a name="l79"></a>
 <a name="l80"></a>In 2016, Terry came-up with an alternate idea.  He double mapped the lowest memory with an alias that was uncached. Accessing 
 <a name="l81"></a>the lowest 2Meg area directly was cached but the alias he created up at the top of address space was uncached.  See </span><span class=cF4>
-<a name="l82"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many 
+<a name="l82"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.ZC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many 
 <a name="l83"></a>of the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the 
-<a name="l84"></a>easy-to-understand numbers of A0000-BFFFF, but must access the relocated alias location.    See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l113"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no 
+<a name="l84"></a>easy-to-understand numbers of A0000-BFFFF, but must access the relocated alias location.    See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.ZC.html#l113"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no 
 <a name="l85"></a>longer cause a fault when dereferencing NULL.
 <a name="l86"></a>
 <a name="l87"></a>Then, Terry switched to 1Gig page sizes.    For the lowest 4Gig, he set-up an alias up at the top of address space. See </span><span class=cF4>
-<a name="l88"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().   Not all computers support 1Gig page tables, however, so he also supported 2Meg.
+<a name="l88"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.ZC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().   Not all computers support 1Gig page tables, however, so he also supported 2Meg.
 <a name="l89"></a>
 <a name="l90"></a>Terry's original plan was to allow changing the page tables as needed, so he had code for taking control of 2Meg pages and 
 <a name="l91"></a>marking them uncached or whatever.  When he did an HDAudio driver, he requested some 32-bit address space as uncached.  Today, 
-<a name="l92"></a>all of the first 4Gig can be accessed without caching at the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
+<a name="l92"></a>all of the first 4Gig can be accessed without caching at the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.ZC.html#l152"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
 </span></pre></body>
 </html>

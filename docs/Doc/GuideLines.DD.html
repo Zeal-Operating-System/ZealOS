@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -30,20 +30,20 @@ body {background-color:#1f1f1f;}
 <a name="l3"></a></span><span class=cF2>/Home</span><span class=cF0> All your user data should be placed in here to ease backing-up your data.  When you install an application it will 
 <a name="l4"></a>create a subdirectory of your </span><span class=cF2>/Home</span><span class=cF0> directory for storage.
 <a name="l5"></a>
-<a name="l6"></a></span><span class=cF2>/Apps</span><span class=cF0> Applications are placed in subdirectories of </span><span class=cF2>/Apps</span><span class=cF0>.  Applications should have a file called </span><span class=cF2>Install.CC</span><span class=cF0> which will 
-<a name="l7"></a>install the app, possibly making files or directories in </span><span class=cF2>/Home</span><span class=cF0>.  The file, </span><span class=cF2>Load.CC</span><span class=cF0> will load the application into mem.  The 
-<a name="l8"></a>file, </span><span class=cF2>Run.CC</span><span class=cF0>, will usually load and execute the app.    To add an app to your PersonalMenu, use </span><span class=cF2>&lt;CTRL-l&gt;</span><span class=cF0>, insert a macro with 
-<a name="l9"></a>the PopUp option checked and invoke the </span><span class=cF2>Run.CC</span><span class=cF0> file.
+<a name="l6"></a></span><span class=cF2>/Apps</span><span class=cF0> Applications are placed in subdirectories of </span><span class=cF2>/Apps</span><span class=cF0>.  Applications should have a file called </span><span class=cF2>Install.ZC</span><span class=cF0> which will 
+<a name="l7"></a>install the app, possibly making files or directories in </span><span class=cF2>/Home</span><span class=cF0>.  The file, </span><span class=cF2>Load.ZC</span><span class=cF0> will load the application into mem.  The 
+<a name="l8"></a>file, </span><span class=cF2>Run.ZC</span><span class=cF0>, will usually load and execute the app.    To add an app to your PersonalMenu, use </span><span class=cF2>&lt;CTRL-l&gt;</span><span class=cF0>, insert a macro with 
+<a name="l9"></a>the PopUp option checked and invoke the </span><span class=cF2>Run.ZC</span><span class=cF0> file.
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF2>/Demo</span><span class=cF0> Here you can find lots of sample code to do various things.
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF2>/Doc</span><span class=cF0> Here you can find documentation.
 <a name="l14"></a>
 <a name="l15"></a></span><span class=cF2>/Kernel</span><span class=cF0> The core of the operating system is found here.  Since priviledge levels are not used, calling it a </span><span class=cF2>kernel</span><span class=cF0> is 
-<a name="l16"></a>deceptive.  It is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>().  It is loaded by the boot loader and must fit in 640K.
+<a name="l16"></a>deceptive.  It is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.ZC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>().  It is loaded by the boot loader and must fit in 640K.
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF2>/Compiler</span><span class=cF0> The compiler module src code is found here.  The compiler is </span><span class=cF2>AOT</span><span class=cF0> compiled to produce a binary file which is loaded 
-<a name="l19"></a>at boot.  It, too, is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>().
+<a name="l19"></a>at boot.  It, too, is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.ZC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>().
 <a name="l20"></a>
 <a name="l21"></a></span><span class=cF2>/System</span><span class=cF0> The non-kernel part of the operating system is found here.  It is </span><span class=cF2>JIT</span><span class=cF0> compiled during boot.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is the 
 <a name="l22"></a>most important task. It never dies.
@@ -55,20 +55,20 @@ body {background-color:#1f1f1f;}
 <a name="l28"></a>
 <a name="l29"></a></span><span class=cF5>                                                        ::/Home Files</span><span class=cF0>
 <a name="l30"></a>
-<a name="l31"></a>The home dir is specified with </span><span class=cF2>'~'</span><span class=cF0>.  The home dir is </span><span class=cF2>::/Home</span><span class=cF0> unless you change it with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l1"><span class=cF4>HomeSet</span></a><span class=cF0>() or compile the kernel with a 
+<a name="l31"></a>The home dir is specified with </span><span class=cF2>'~'</span><span class=cF0>.  The home dir is </span><span class=cF2>::/Home</span><span class=cF0> unless you change it with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.ZC.html#l1"><span class=cF4>HomeSet</span></a><span class=cF0>() or compile the kernel with a 
 <a name="l32"></a>config option.  An empty </span><span class=cF2>/Home</span><span class=cF0> dir should be valid because it will get default files from the root dir.
 <a name="l33"></a></span><span class=cF4>
 <a name="l34"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/PersonalMenu.DD.html#l1"><span class=cF4>~/PersonalMenu.DD</span></a><span class=cF0> a menu viewed with the </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> key or by clicking &quot;</span><span class=cF2>MENU</span><span class=cF0>&quot; in the upper left border area of a window.
 <a name="l35"></a></span><span class=cF4>
 <a name="l36"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/PersonalNotes.DD.html#l1"><span class=cF4>~/PersonalNotes.DD</span></a><span class=cF0> a personal note file viewed with the </span><span class=cF2>&lt;CTRL-SHIFT-M&gt;</span><span class=cF0> key.
 <a name="l37"></a></span><span class=cF4>
-<a name="l38"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/MakeHome.CC.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0> a file compiled by the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> during </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.CC.html#l41"><span class=cF4>StartOS</span></a><span class=cF0>.
+<a name="l38"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/MakeHome.ZC.html#l1"><span class=cF4>~/MakeHome.ZC</span></a><span class=cF0> a file compiled by the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> during </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.ZC.html#l41"><span class=cF4>StartOS</span></a><span class=cF0>.
 <a name="l39"></a>
 <a name="l40"></a></span><span class=cF4>~/Home*</span><span class=cF0> Copy </span><span class=cF2>Home*</span><span class=cF0> files from the root into </span><span class=cF2>~</span><span class=cF0> and customize them.  These files are invoked when the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> starts-up.
 <a name="l41"></a></span><span class=cF4>
-<a name="l42"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Once.CC.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0> a file invoked at the start-up of the first user. Customize this!
+<a name="l42"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Once.ZC.html#l1"><span class=cF4>~/Once.ZC</span></a><span class=cF0> a file invoked at the start-up of the first user. Customize this!
 <a name="l43"></a></span><span class=cF4>
-<a name="l44"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
+<a name="l44"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.ZC.html#l1"><span class=cF4>~/Registry.ZC</span></a><span class=cF0> can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
 <a name="l45"></a>
 <a name="l46"></a>
 <a name="l47"></a>
@@ -76,14 +76,14 @@ body {background-color:#1f1f1f;}
 <a name="l49"></a>
 <a name="l50"></a>* Place applications in their own </span><span class=cF2>/Apps</span><span class=cF0> subdirectory.
 <a name="l51"></a>
-<a name="l52"></a>* Make a file called </span><span class=cF2>Load.CC</span><span class=cF0> to load the application.
+<a name="l52"></a>* Make a file called </span><span class=cF2>Load.ZC</span><span class=cF0> to load the application.
 <a name="l53"></a>
-<a name="l54"></a>* Make a file called </span><span class=cF2>Run.CC</span><span class=cF0> to load and run the application, preferable by </span><span class=cF2>#include</span><span class=cF0>ing the </span><span class=cF2>Load.CC</span><span class=cF0> file.
+<a name="l54"></a>* Make a file called </span><span class=cF2>Run.ZC</span><span class=cF0> to load and run the application, preferable by </span><span class=cF2>#include</span><span class=cF0>ing the </span><span class=cF2>Load.ZC</span><span class=cF0> file.
 <a name="l55"></a>
 <a name="l56"></a>* Place user data in a subdirectory of </span><span class=cF2>/Home</span><span class=cF0>, preferably naming the subdirectory the same as the </span><span class=cF2>/Apps</span><span class=cF0> subdirectory.    Or, 
-<a name="l57"></a>place data in the </span><span class=cF2>Registry.CC</span><span class=cF0> file.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/RegistryDemo.CC.html#l1"><span class=cF4>::/Demo/RegistryDemo.CC</span></a><span class=cF0>.
+<a name="l57"></a>place data in the </span><span class=cF2>Registry.ZC</span><span class=cF0> file.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/RegistryDemo.ZC.html#l1"><span class=cF4>::/Demo/RegistryDemo.ZC</span></a><span class=cF0>.
 <a name="l58"></a>
-<a name="l59"></a>* If the app needs files in the </span><span class=cF2>/Home</span><span class=cF0> directory, make an </span><span class=cF2>/Apps</span><span class=cF0> file called </span><span class=cF2>Install.CC</span><span class=cF0> or </span><span class=cF2>Install.IN</span><span class=cF0> to create the </span><span class=cF2>/Home</span><span class=cF0> 
+<a name="l59"></a>* If the app needs files in the </span><span class=cF2>/Home</span><span class=cF0> directory, make an </span><span class=cF2>/Apps</span><span class=cF0> file called </span><span class=cF2>Install.ZC</span><span class=cF0> or </span><span class=cF2>Install.IN</span><span class=cF0> to create the </span><span class=cF2>/Home</span><span class=cF0> 
 <a name="l60"></a>subdirectory.
 <a name="l61"></a>
 <a name="l62"></a> 
@@ -91,16 +91,16 @@ body {background-color:#1f1f1f;}
 <a name="l64"></a></span><span class=cF5>                                                    Programming Guidelines</span><span class=cF0>
 <a name="l65"></a>
 <a name="l66"></a>* Virtual mem/Paging is not used -- it is identity mapped in </span><span class=cF2>x86_64</span><span class=cF0> mode.  The stack does not grow, so alloc enough when the 
-<a name="l67"></a>task (process) is </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>ed and use the heap for most things. (The </span><span class=cF2>heap</span><span class=cF0> refers to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l387"><span class=cF4>Free</span></a><span class=cF0>().)
+<a name="l67"></a>task (process) is </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.ZC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>ed and use the heap for most things. (The </span><span class=cF2>heap</span><span class=cF0> refers to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l387"><span class=cF4>Free</span></a><span class=cF0>().)
 <a name="l68"></a>
-<a name="l69"></a>* You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l387"><span class=cF4>Free</span></a><span class=cF0>(</span><span class=cF2>NULL</span><span class=cF0>).
+<a name="l69"></a>* You can </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l387"><span class=cF4>Free</span></a><span class=cF0>(</span><span class=cF2>NULL</span><span class=cF0>).
 <a name="l70"></a>
 <a name="l71"></a>* See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l261"><span class=cF4>Naming Convention</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l3"><span class=cF4>Abbreviations</span></a><span class=cF0>.
 <a name="l72"></a>
 <a name="l73"></a>* There are two modes of compiling, </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l179"><span class=cF4>AOT Compile Mode</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l188"><span class=cF4>JIT Compile Mode</span></a><span class=cF0>.  Compilation is done in both -- neither is 
 <a name="l74"></a>&quot;interpreted&quot;.  Use </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l188"><span class=cF4>JIT Mode</span></a><span class=cF0>.
 <a name="l75"></a>
-<a name="l76"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0>
+<a name="l76"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ZealC.DD.html#l1"><span class=cF4>ZealC</span></a><span class=cF0>
 <a name="l77"></a>
 <a name="l78"></a>* Use </span><span class=cF2>I64</span><span class=cF0> instead of smaller int sizes because the compiler converts everything to 64-bit.  Don't use unsigned unless it 
 <a name="l79"></a>actually breaks.  A policy of signed keeps it simple so you don't have to agonize over choices.
@@ -127,7 +127,7 @@ body {background-color:#1f1f1f;}
 <a name="l100"></a>against multiple cores, you need a locked semaphore.  Semaphores might need to be in their own cache line.  Lock bits are used 
 <a name="l101"></a>in a lot of places not aligned.
 <a name="l102"></a>
-<a name="l103"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l247"><span class=cF4>SysDebug</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.CC.html#l252"><span class=cF4>IsSysDebug</span></a><span class=cF0>() are really handy when working on the compiler or kernel.  It's just a bit you can set and test.
+<a name="l103"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.ZC.html#l247"><span class=cF4>SysDebug</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMisc.ZC.html#l252"><span class=cF4>IsSysDebug</span></a><span class=cF0>() are really handy when working on the compiler or kernel.  It's just a bit you can set and test.
 <a name="l104"></a>
 <a name="l105"></a>* </span><span class=cF2>U0 *</span><span class=cF0> is not used because the size is zero for pointer arithmetic.
 <a name="l106"></a>
@@ -137,18 +137,18 @@ body {background-color:#1f1f1f;}
 <a name="l110"></a>
 <a name="l111"></a></span><span class=cF5>                                                       Hash Sym Tables</span><span class=cF0>
 <a name="l112"></a>
-<a name="l113"></a>* See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l1"><span class=cF4>::/System/Hash.CC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and 
+<a name="l113"></a>* See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.ZC.html#l1"><span class=cF4>::/System/Hash.ZC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and 
 <a name="l114"></a>child process hash tables are chained to parents.   This provides scopes for variables and functions.
 <a name="l115"></a>
-<a name="l116"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> symbols loaded in on start-up.
+<a name="l116"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ZealC.DD.html#l1"><span class=cF4>ZealC</span></a><span class=cF0> symbols loaded in on start-up.
 <a name="l117"></a>
-<a name="l118"></a>* </span><span class=cF2>Fs-&gt;hash_table</span><span class=cF0> holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added 
+<a name="l118"></a>* </span><span class=cF2>Fs-&gt;hash_table</span><span class=cF0> holds user ZealC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added 
 <a name="l119"></a>to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, 
 <a name="l120"></a>make changes and reinclude it.  Old symbols are overshadowed but they are still there.  Periodically, kill the TASK and start 
-<a name="l121"></a>fresh when mem is low.  If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to 
+<a name="l121"></a>fresh when mem is low.  If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to 
 <a name="l122"></a>run the application and kill it when it's done.
 <a name="l123"></a>
-<a name="l124"></a>* To display the contents of a hash table, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l169"><span class=cF4>HashTableDump</span></a><span class=cF0>() routine or the varients.  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.CC.html#l370"><span class=cF4>HashDepthRep</span></a><span class=cF0>() gives a histogram   
+<a name="l124"></a>* To display the contents of a hash table, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.ZC.html#l169"><span class=cF4>HashTableDump</span></a><span class=cF0>() routine or the varients.  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Hash.ZC.html#l370"><span class=cF4>HashDepthRep</span></a><span class=cF0>() gives a histogram   
 <a name="l125"></a>of how long the chains are, in case you wish to make hash table sizes bigger.
 <a name="l126"></a>
 <a name="l127"></a>
@@ -161,12 +161,12 @@ body {background-color:#1f1f1f;}
 <a name="l134"></a>
 <a name="l135"></a>* </span><span class=cF2>GS</span><span class=cF0> must always point to the cur </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4096"><span class=cF4>CCPU</span></a><span class=cF0>.
 <a name="l136"></a>
-<a name="l137"></a>* Don't change the segment registers unless interrupts are off. It's hard to do, anyway.    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l546"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l532"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
+<a name="l137"></a>* Don't change the segment registers unless interrupts are off. It's hard to do, anyway.    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.ZC.html#l546"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.ZC.html#l532"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
 <a name="l138"></a>
-<a name="l139"></a>* When interacting with </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> compiled code, preserve </span><span class=cF2>RBP, RSI, RDI, R10-R15</span><span class=cF0> because the compiler uses these for register 
+<a name="l139"></a>* When interacting with </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ZealC.DD.html#l1"><span class=cF4>ZealC</span></a><span class=cF0> compiled code, preserve </span><span class=cF2>RBP, RSI, RDI, R10-R15</span><span class=cF0> because the compiler uses these for register 
 <a name="l140"></a>variables.  You are free to clobber </span><span class=cF2>RAX, RBX, RCX, RDX</span><span class=cF0>, </span><span class=cF2>R8</span><span class=cF0> and </span><span class=cF2>R9</span><span class=cF0>.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>Compiler Reg Masks</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1911"><span class=cF4>PUSH_C_REGS</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1912"><span class=cF4>POP_C_REGS</span></a><span class=cF0>
 <a name="l141"></a>
-<a name="l142"></a>* It is recommended to use the standard stack frame for functions because </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l53"><span class=cF4>Caller</span></a><span class=cF0>() is used to display the call stack, such as 
+<a name="l142"></a>* It is recommended to use the standard stack frame for functions because </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.ZC.html#l53"><span class=cF4>Caller</span></a><span class=cF0>() is used to display the call stack, such as 
 <a name="l143"></a>for the wallpaper.
 <a name="l144"></a></span><span class=cF2>                PUSH        RBP
 <a name="l145"></a>                MOV         RBP, RSP

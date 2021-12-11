@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -29,7 +29,7 @@ body {background-color:#1f1f1f;}
 <a name="l2"></a>
 <a name="l3"></a>&lt;format_arg&gt; := </span><span class=cF2>%</span><span class=cF0>[</span><span class=cF2>-</span><span class=cF0>][</span><span class=cF2>0</span><span class=cF0>][&lt;width&gt;][</span><span class=cF2>.</span><span class=cF0>&lt;decimals&gt;][&lt;flags&gt;][</span><span class=cF2>h</span><span class=cF0>&lt;aux_format_num&gt;]&lt;format_code&gt;
 <a name="l4"></a>
-<a name="l5"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.CC.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF0>().
+<a name="l5"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.ZC.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF0>().
 <a name="l6"></a>
 <a name="l7"></a>&lt;flags&gt;:
 <a name="l8"></a>
@@ -42,7 +42,7 @@ body {background-color:#1f1f1f;}
 <a name="l15"></a>
 <a name="l16"></a>  For </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>, </span><span class=cF2>&quot;%d&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%u&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; causes thousands mode.  </span><span class=cF2>&quot;%h?n&quot;</span><span class=cF0> will pick a variable exponent multiples of three 
 <a name="l17"></a>  unit, while </span><span class=cF2>&quot;%h-3n&quot;</span><span class=cF0> will display milli units or </span><span class=cF2>&quot;%h6n&quot;</span><span class=cF0> will display mega units.  The </span><span class=cF2>'k'</span><span class=cF0> flag is always on for </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>.  See </span><span class=cF4>
-<a name="l18"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Print.CC.html#l1"><span class=cF4>::/Demo/Print.CC</span></a><span class=cF0>.
+<a name="l18"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Print.ZC.html#l1"><span class=cF4>::/Demo/Print.ZC</span></a><span class=cF0>.
 <a name="l19"></a>  
 <a name="l20"></a>For </span><span class=cF2>&quot;%c&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%C&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; repeats the char that many times.
 <a name="l21"></a>
@@ -51,7 +51,7 @@ body {background-color:#1f1f1f;}
 <a name="l24"></a>  </span><span class=cF2>&quot;%n&quot;</span><span class=cF0> floating point in engineering notation, exponents being multiples of three.  If it has a &lt;aux_format&gt; code, it will 
 <a name="l25"></a>  display scientific units letters.
 <a name="l26"></a>  
-<a name="l27"></a>  </span><span class=cF2>&quot;%S&quot;</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l57"><span class=cF4>Define</span></a><span class=cF0>() entry.
+<a name="l27"></a>  </span><span class=cF2>&quot;%S&quot;</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l57"><span class=cF4>Define</span></a><span class=cF0>() entry.
 <a name="l28"></a>  
 <a name="l29"></a>  </span><span class=cF2>&quot;%C&quot;</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l42"><span class=cF4>ToUpper</span></a><span class=cF0>() character.
 <a name="l30"></a>  
@@ -75,9 +75,9 @@ body {background-color:#1f1f1f;}
 <a name="l48"></a>  
 <a name="l49"></a>  </span><span class=cF2>&quot;%T&quot;</span><span class=cF0> time.    Pass a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l209"><span class=cF4>CDate</span></a><span class=cF0>.
 <a name="l50"></a>  
-<a name="l51"></a>  </span><span class=cF2>&quot;%z&quot;</span><span class=cF0> sub_entry of an enumerated list of text entries.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrA.CC.html#l377"><span class=cF4>ListSub</span></a><span class=cF0>().  Pass sub_entry_num first, list second.
+<a name="l51"></a>  </span><span class=cF2>&quot;%z&quot;</span><span class=cF0> sub_entry of an enumerated list of text entries.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrA.ZC.html#l377"><span class=cF4>ListSub</span></a><span class=cF0>().  Pass sub_entry_num first, list second.
 <a name="l52"></a>  
-<a name="l53"></a>  </span><span class=cF2>&quot;%Z&quot;</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l16"><span class=cF4>DefineListLoad</span></a><span class=cF0>() subentry.   Pass sub_entry_num first, define_name second.
+<a name="l53"></a>  </span><span class=cF2>&quot;%Z&quot;</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l16"><span class=cF4>DefineListLoad</span></a><span class=cF0>() subentry.   Pass sub_entry_num first, define_name second.
 <a name="l54"></a>  
 <a name="l55"></a>  </span><span class=cF2>&quot;%Q&quot;</span><span class=cF0> convert &quot;\&quot; to &quot;\\&quot; and quote to backslash quote. (For use in creating strs in strs.)
 <a name="l56"></a>  
@@ -86,45 +86,45 @@ body {background-color:#1f1f1f;}
 <a name="l59"></a>
 <a name="l60"></a></span><span class=cF5>                                                         Print Family</span><span class=cF0>
 <a name="l61"></a></span><span class=cF4>
-<a name="l62"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.CC.html#l1119"><span class=cF4>MStrPrint</span></a><span class=cF0>(U8 *format, ...) is like </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.CC.html#l1094"><span class=cF4>StrPrint</span></a><span class=cF0>(U8 *dst,U8 *format,...) but it returns a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>ated str.  It is vary handy because 
+<a name="l62"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.ZC.html#l1119"><span class=cF4>MStrPrint</span></a><span class=cF0>(U8 *format, ...) is like </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.ZC.html#l1094"><span class=cF4>StrPrint</span></a><span class=cF0>(U8 *dst,U8 *format,...) but it returns a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.ZC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>ated str.  It is vary handy because 
 <a name="l63"></a>you don't have to worry about overflow.
 <a name="l64"></a></span><span class=cF4>
-<a name="l65"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.CC.html#l1099"><span class=cF4>CatPrint</span></a><span class=cF0>(U8 *_dst, U8 *format, ...) concatenates a formated string.
+<a name="l65"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.ZC.html#l1099"><span class=cF4>CatPrint</span></a><span class=cF0>(U8 *_dst, U8 *format, ...) concatenates a formated string.
 <a name="l66"></a></span><span class=cF4>
-<a name="l67"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l580"><span class=cF4>In</span></a><span class=cF0>(U8 *format, ...) sends text to the current task's input buffer.</span><span class=cF4>
-<a name="l68"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l561"><span class=cF4>InStr</span></a><span class=cF0>(U8 *format, ...) sends text of an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l220"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of the current TASK but can also do mouse cmds.
+<a name="l67"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l580"><span class=cF4>In</span></a><span class=cF0>(U8 *format, ...) sends text to the current task's input buffer.</span><span class=cF4>
+<a name="l68"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l561"><span class=cF4>InStr</span></a><span class=cF0>(U8 *format, ...) sends text of an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l220"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of the current TASK but can also do mouse cmds.
 <a name="l69"></a></span><span class=cF4>
-<a name="l70"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l542"><span class=cF4>XTalk</span></a><span class=cF0>(CTask *task, U8 *format, ...) and text to another task's input buffer.</span><span class=cF4>
-<a name="l71"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l588"><span class=cF4>XTalkStr</span></a><span class=cF0>(CTask *task, U8 *format, ...) sends text of an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l220"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of another TASK but can also do mouse 
+<a name="l70"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l542"><span class=cF4>XTalk</span></a><span class=cF0>(CTask *task, U8 *format, ...) and text to another task's input buffer.</span><span class=cF4>
+<a name="l71"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l588"><span class=cF4>XTalkStr</span></a><span class=cF0>(CTask *task, U8 *format, ...) sends text of an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l220"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of another TASK but can also do mouse 
 <a name="l72"></a>cmds.
 <a name="l73"></a></span><span class=cF4>
-<a name="l74"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l164"><span class=cF4>DocPrint</span></a><span class=cF0>(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the 
-<a name="l75"></a>functionality of </span><span class=cF2>fprintf</span><span class=cF0>.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/FPrintF.CC.html#l1"><span class=cF4>::/Demo/Disk/FPrintF.CC</span></a><span class=cF0>.
+<a name="l74"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPutS.ZC.html#l164"><span class=cF4>DocPrint</span></a><span class=cF0>(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the 
+<a name="l75"></a>functionality of </span><span class=cF2>fprintf</span><span class=cF0>.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/FPrintF.ZC.html#l1"><span class=cF4>::/Demo/Disk/FPrintF.ZC</span></a><span class=cF0>.
 <a name="l76"></a></span><span class=cF4>
-<a name="l77"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l485"><span class=cF4>Sys</span></a><span class=cF0>(U8 *format, ...) sends text to the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be compiled and run.</span><span class=cF4>
-<a name="l78"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l507"><span class=cF4>SysLog</span></a><span class=cF0>(U8 *format, ...) and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l530"><span class=cF4>SysErr</span></a><span class=cF0>(U8 *format,...) send text to the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be displayed.
+<a name="l77"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l485"><span class=cF4>Sys</span></a><span class=cF0>(U8 *format, ...) sends text to the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be compiled and run.</span><span class=cF4>
+<a name="l78"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l507"><span class=cF4>SysLog</span></a><span class=cF0>(U8 *format, ...) and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l530"><span class=cF4>SysErr</span></a><span class=cF0>(U8 *format,...) send text to the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be displayed.
 <a name="l79"></a></span><span class=cF4>
-<a name="l80"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l71"><span class=cF4>StreamPrint</span></a><span class=cF0>(U8 *format, ...) sends text to the stream of code being compiled and must reside in a </span><span class=cF2>#exe{}</span><span class=cF0> block.
+<a name="l80"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.ZC.html#l71"><span class=cF4>StreamPrint</span></a><span class=cF0>(U8 *format, ...) sends text to the stream of code being compiled and must reside in a </span><span class=cF2>#exe{}</span><span class=cF0> block.
 <a name="l81"></a></span><span class=cF4>
-<a name="l82"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1194"><span class=cF4>GrPrint</span></a><span class=cF0>(CDC *dc, I64 x, I64 y, U8 *format,...) and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1205"><span class=cF4>GrVPrint</span></a><span class=cF0>() plots text in graphics mode.
+<a name="l82"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.ZC.html#l1194"><span class=cF4>GrPrint</span></a><span class=cF0>(CDC *dc, I64 x, I64 y, U8 *format,...) and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.ZC.html#l1205"><span class=cF4>GrVPrint</span></a><span class=cF0>() plots text in graphics mode.
 <a name="l83"></a></span><span class=cF4>
-<a name="l84"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrTextBase.CC.html#l324"><span class=cF4>TextPrint</span></a><span class=cF0>(CTask *task, I64 x, I64 y, I64 attr, U8 *format, ...) plots to </span><span class=cF4><u>gr.text_base</u></span><span class=cF0>.
+<a name="l84"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrTextBase.ZC.html#l324"><span class=cF4>TextPrint</span></a><span class=cF0>(CTask *task, I64 x, I64 y, I64 attr, U8 *format, ...) plots to </span><span class=cF4><u>gr.text_base</u></span><span class=cF0>.
 <a name="l85"></a></span><span class=cF4>
-<a name="l86"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.CC.html#l700"><span class=cF4>ExePrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string.    Note: It returns the res of the last executed expression.
+<a name="l86"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMain.ZC.html#l700"><span class=cF4>ExePrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string.    Note: It returns the res of the last executed expression.
 <a name="l87"></a></span><span class=cF4>
-<a name="l88"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l168"><span class=cF4>Once</span></a><span class=cF0>(U8 *format, ...) Writes User code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>Registry</span></a><span class=cF0> to be executed next boot.
+<a name="l88"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l168"><span class=cF4>Once</span></a><span class=cF0>(U8 *format, ...) Writes User code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.ZC.html#l1"><span class=cF4>Registry</span></a><span class=cF0> to be executed next boot.
 <a name="l89"></a></span><span class=cF4>
-<a name="l90"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l158"><span class=cF4>SysOnce</span></a><span class=cF0>(U8 *format, ...) Writes System code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>Registry</span></a><span class=cF0> to be executed next boot.
+<a name="l90"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l158"><span class=cF4>SysOnce</span></a><span class=cF0>(U8 *format, ...) Writes System code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.ZC.html#l1"><span class=cF4>Registry</span></a><span class=cF0> to be executed next boot.
 <a name="l91"></a></span><span class=cF4>
-<a name="l92"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/InFile.CC.html#l32"><span class=cF4>InPrint</span></a><span class=cF0>(I64 mS, U8 *format, ...) </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KeyDev.CC.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>()s one at a time with a delay.
+<a name="l92"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/InFile.ZC.html#l32"><span class=cF4>InPrint</span></a><span class=cF0>(I64 mS, U8 *format, ...) </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KeyDev.ZC.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>()s one at a time with a delay.
 <a name="l93"></a></span><span class=cF4>
-<a name="l94"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l244"><span class=cF4>RawPrint</span></a><span class=cF0>(I64 mS, U8 *format, ...) sends direct to screen memory, bypassing window manager.
+<a name="l94"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.ZC.html#l244"><span class=cF4>RawPrint</span></a><span class=cF0>(I64 mS, U8 *format, ...) sends direct to screen memory, bypassing window manager.
 <a name="l95"></a></span><span class=cF4>
-<a name="l96"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l475"><span class=cF4>User</span></a><span class=cF0>(U8 *format, ...) Spawns a user and execute a string on start-up.
+<a name="l96"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.ZC.html#l475"><span class=cF4>User</span></a><span class=cF0>(U8 *format, ...) Spawns a user and execute a string on start-up.
 <a name="l97"></a></span><span class=cF4>
-<a name="l98"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l475"><span class=cF4>PopUpPrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string in a pop-up win.  Note: It returns the res of the last executed 
+<a name="l98"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l475"><span class=cF4>PopUpPrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string in a pop-up win.  Note: It returns the res of the last executed 
 <a name="l99"></a>expression.</span><span class=cF4>
-<a name="l100"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPopUp.CC.html#l13"><span class=cF4>PopUpViewPrint</span></a><span class=cF0>(U8 *format, ...) creates a pop-up window and views text.
+<a name="l100"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPopUp.ZC.html#l13"><span class=cF4>PopUpViewPrint</span></a><span class=cF0>(U8 *format, ...) creates a pop-up window and views text.
 <a name="l101"></a>
 <a name="l102"></a><blink>Note:</blink> Use </span><span class=cF2>Print(&quot;%s&quot;,src)</span><span class=cF0> if you need an unmodified string.
 </span></pre></body>

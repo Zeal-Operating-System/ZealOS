@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//This is a drawing program</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> SpeedLineDemo()
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>  message_code, count, x1, y1, x2, y2, arg1, arg2, color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l7"></a>
+<a name="l8"></a>    dc-&gt;color = color;
+<a name="l9"></a>
+<a name="l10"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.ZC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l11"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0>;
+<a name="l12"></a>
+<a name="l13"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l15"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l16"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l18"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l20"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l21"></a>        </span><span class=cF1>switch</span><span class=cF0> (message_code)
+<a name="l22"></a>        {
+<a name="l23"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l24"></a>                color = </span><span class=cF5>PopUpColor</span><span class=cF0>;
+<a name="l25"></a>                </span><span class=cF1>if</span><span class=cF0> (color &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l26"></a>                    dc-&gt;color = color;
+<a name="l27"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l28"></a>
+<a name="l29"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l30"></a>                x1 = arg1;
+<a name="l31"></a>                y1 = arg2;
+<a name="l32"></a>                x2 = arg1;
+<a name="l33"></a>                y2 = arg2;
+<a name="l34"></a>                count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l35"></a>                </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>)
+<a name="l36"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>                    dc-&gt;thick = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>04</span><span class=cF0> * </span><span class=cFB>mouse</span><span class=cF0>.speed;
+<a name="l38"></a>                    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l39"></a>                    message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l40"></a>                    x1 = x2;
+<a name="l41"></a>                    y1 = y2;
+<a name="l42"></a>                    x2 = arg1;
+<a name="l43"></a>                    y2 = arg2;
+<a name="l44"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l45"></a>                </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l46"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l47"></a>
+<a name="l48"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l49"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l50"></a>        }
+<a name="l51"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> || !arg1);
+<a name="l53"></a>
+<a name="l54"></a>    </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l55"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l56"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l57"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l58"></a>}
+<a name="l59"></a>
+<a name="l60"></a>SpeedLineDemo;  </span><span class=cF2>//Execute when #included</span><span class=cF0>
+</span></pre></body>
+</html>

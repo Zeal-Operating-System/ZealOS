@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U8</span><span class=cF0> dst_mac[</span><span class=cFE>6</span><span class=cF0>] = {</span><span class=cFE>0xF0</span><span class=cF0>, </span><span class=cFE>0x0D</span><span class=cF0>, </span><span class=cFE>0xBE</span><span class=cF0>, </span><span class=cFE>0xAD</span><span class=cF0>, </span><span class=cFE>0xDE</span><span class=cF0>, </span><span class=cFE>0xAF</span><span class=cF0>};
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF9>U32</span><span class=cF0> dst_ip = </span><span class=cFE>0x01020304</span><span class=cF0>;
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> DHCPTest()
+<a name="l6"></a>{ </span><span class=cF2>// DHCPConfigure (if not already configured), then send UDP test data.</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0> *udp_payload;
+<a name="l9"></a>    </span><span class=cF9>I64</span><span class=cF0> de_index;
+<a name="l10"></a>
+<a name="l11"></a>    ARPCachePut(dst_ip, dst_mac); </span><span class=cF2>// Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet</span><span class=cF0>
+<a name="l12"></a>
+<a name="l13"></a>    </span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l14"></a>        DHCPConfigure;
+<a name="l15"></a>
+<a name="l16"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l17"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>
+<a name="l19"></a>        de_index = UDPPacketAllocate(&amp;udp_payload, ipv4_globals.local_ip, </span><span class=cFE>0xDEAD</span><span class=cF0>, dst_ip, </span><span class=cFE>0xBEEF</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l20"></a>
+<a name="l21"></a>        *(udp_payload</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xDEADBEEFC0DEFADE</span><span class=cF0>);
+<a name="l22"></a>
+<a name="l23"></a>        UDPPacketFinish(de_index);
+<a name="l24"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l25"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l26"></a>}
+<a name="l27"></a>
+<a name="l28"></a>DHCPTest;
+</span></pre></body>
+</html>

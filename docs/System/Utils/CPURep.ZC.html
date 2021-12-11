@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Info;Time/CPU Cycles;Processor&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CCPURep</span><span class=cF0>
+<a name="l3"></a>{
+<a name="l4"></a>    </span><span class=cF1>Bool</span><span class=cF0>  mp_start, mp_end;
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>   mp_not_done_flags,
+<a name="l6"></a>        **swaps,
+<a name="l7"></a>        **cycles;
+<a name="l8"></a>};
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPCPURep</span><span class=cF0>(</span><span class=cF9>CCPURep</span><span class=cF0> *cr)
+<a name="l11"></a>{
+<a name="l12"></a>    </span><span class=cF9>I64</span><span class=cF0> swaps = </span><span class=cFE>0</span><span class=cF0>, cycles_0, cycles_f;
+<a name="l13"></a>
+<a name="l14"></a>    </span><span class=cF1>while</span><span class=cF0> (!cr-&gt;mp_start)
+<a name="l15"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l16"></a>    cycles_0 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cF1>while</span><span class=cF0> (!cr-&gt;mp_end)
+<a name="l18"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l19"></a>        swaps++;
+<a name="l20"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l21"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l22"></a>    cycles_f = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l23"></a>    cr-&gt;swaps[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num]  = swaps;
+<a name="l24"></a>    cr-&gt;cycles[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num] = cycles_f - cycles_0;
+<a name="l25"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;cr-&gt;mp_not_done_flags, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num);
+<a name="l26"></a>}
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CPURep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> full=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l29"></a>{</span><span class=cF2>//Report name, number of cores and clock freq.</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF9>I64</span><span class=cF0>     i, total_swaps, total_cycles;
+<a name="l31"></a>    </span><span class=cF1>F64</span><span class=cF0>     t0, tf;
+<a name="l32"></a>    </span><span class=cF9>CCPURep</span><span class=cF0> cr;
+<a name="l33"></a>
+<a name="l34"></a>    </span><span class=cF5>SysRep</span><span class=cF0>(</span><span class=cF3>SMBIOSt_PROCESSOR</span><span class=cF0>);
+<a name="l35"></a>
+<a name="l36"></a>    </span><span class=cF1>if</span><span class=cF0> (!full)
+<a name="l37"></a>        </span><span class=cF6>&quot;%03X Active Cores at %6h?nHz\n&quot;</span><span class=cF0>, </span><span class=cFB>mp_count</span><span class=cF0>, </span><span class=cF5>ToF64</span><span class=cF0>(</span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq);
+<a name="l38"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l40"></a>        cr.swaps    = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFB>mp_count</span><span class=cF0>);
+<a name="l41"></a>        cr.cycles   = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFB>mp_count</span><span class=cF0>);
+<a name="l42"></a>        cr.mp_start = cr.mp_end = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l43"></a>        cr.mp_not_done_flags = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFB>mp_count</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l44"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>mp_count</span><span class=cF0>; i++)
+<a name="l45"></a>            </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>MPCPURep</span><span class=cF0>, &amp;cr, </span><span class=cF3>NULL</span><span class=cF0>, i);
+<a name="l46"></a>
+<a name="l47"></a>        t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l48"></a>        cr.mp_start = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l49"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>);
+<a name="l50"></a>        cr.mp_end = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l51"></a>        </span><span class=cF1>while</span><span class=cF0> (cr.mp_not_done_flags)
+<a name="l52"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l53"></a>        tf = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l54"></a>
+<a name="l55"></a>        </span><span class=cF6>&quot;\n%03X Cores %6h?nHz\n&quot;</span><span class=cF0>, </span><span class=cFB>mp_count</span><span class=cF0>, </span><span class=cF5>ToF64</span><span class=cF0>(</span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq);
+<a name="l56"></a>        </span><span class=cF6>&quot;\n         Context\n&quot;</span><span class=cF0>
+<a name="l57"></a>                    </span><span class=cF6>&quot;CPU     Swaps/s         Cycles\n&quot;</span><span class=cF0>
+<a name="l58"></a>                    </span><span class=cF6>&quot;--- ------------- -----------------\n&quot;</span><span class=cF0>;
+<a name="l59"></a>        total_swaps = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l60"></a>        total_cycles = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l61"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>mp_count</span><span class=cF0>; i++)
+<a name="l62"></a>        {
+<a name="l63"></a>            </span><span class=cF6>&quot; %02X %13,d %17,d\n&quot;</span><span class=cF0>, i, </span><span class=cF5>ToI64</span><span class=cF0>(cr.swaps[i] / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0>), </span><span class=cF5>ToI64</span><span class=cF0>(cr.cycles[i] / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0>);
+<a name="l64"></a>            total_swaps += cr.swaps[i];
+<a name="l65"></a>            total_cycles += cr.cycles[i];
+<a name="l66"></a>        }
+<a name="l67"></a>        </span><span class=cF6>&quot;--- ------------- -----------------\n&quot;</span><span class=cF0>;
+<a name="l68"></a>        </span><span class=cF6>&quot;%03X %13,d %17,d\n&quot;</span><span class=cF0>, i, </span><span class=cF5>ToI64</span><span class=cF0>(total_swaps / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0>), </span><span class=cF5>ToI64</span><span class=cF0>(total_cycles / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0>);
+<a name="l69"></a>        </span><span class=cF6>&quot;Avg %13,d %17,d\n\n&quot;</span><span class=cF0>, </span><span class=cF5>ToI64</span><span class=cF0>(total_swaps / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0> / i), </span><span class=cF5>ToI64</span><span class=cF0>(total_cycles / </span><span class=cF7>(</span><span class=cF0>tf - t0</span><span class=cF7>)</span><span class=cF0> / i);
+<a name="l70"></a>        </span><span class=cF6>&quot;Avg Cycles/Swap: %12.6f\n&quot;</span><span class=cF0>, </span><span class=cF5>ToF64</span><span class=cF0>(total_cycles) / total_swaps;
+<a name="l71"></a>        </span><span class=cF6>&quot;Avg Time/Swap  : %12.6fns\n\n&quot;</span><span class=cF0>, (tf - t0) * </span><span class=cFE>1000000000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * i / total_swaps;
+<a name="l72"></a>        </span><span class=cF5>Free</span><span class=cF0>(cr.swaps);
+<a name="l73"></a>        </span><span class=cF5>Free</span><span class=cF0>(cr.cycles);
+<a name="l74"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l75"></a>}
+</span></pre></body>
+</html>

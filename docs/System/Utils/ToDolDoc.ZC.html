@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Cmd Line (Typically);DolDoc/Conversion;DolDoc/Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ToDolDoc</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l4"></a>{</span><span class=cF2>//Convert text file to </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> by making double $'s.</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc;
+<a name="l6"></a>    </span><span class=cF9>I64</span><span class=cF0>          fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l7"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde, *tmpde1;
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r+f+F&quot;</span><span class=cF0>);
+<a name="l10"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l11"></a>    tmpde = tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(files_find_mask, fuf_flags);
+<a name="l12"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, tmpde-&gt;full_name;
+<a name="l15"></a>        doc = </span><span class=cF5>DocRead</span><span class=cF0>(tmpde-&gt;full_name, </span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_DBL_DOLLARS</span><span class=cF0>);
+<a name="l16"></a>        </span><span class=cF5>DocWrite</span><span class=cF0>(doc);
+<a name="l17"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l18"></a>        tmpde = tmpde-&gt;next;
+<a name="l19"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l21"></a>}
+</span></pre></body>
+</html>

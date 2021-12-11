@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF9>I64</span><span class=cF0> mp_n;
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF9>I64</span><span class=cF0> MPSum(</span><span class=cF9>I64</span><span class=cF0> my_mp_count)
+<a name="l4"></a>{</span><span class=cF2>//We could use the formula n*(n+1)/2</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0> lo = mp_n * </span><span class=cF5>Gs</span><span class=cF0>-&gt;num / my_mp_count, 
+<a name="l6"></a>        hi = mp_n * (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num + </span><span class=cFE>1</span><span class=cF0>) / my_mp_count, 
+<a name="l7"></a>        res = </span><span class=cFE>0</span><span class=cF0>, i;
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF1>for</span><span class=cF0> (i = lo; i &lt; hi; i++)
+<a name="l10"></a>        res += i;
+<a name="l11"></a>
+<a name="l12"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l13"></a>}
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF9>I64</span><span class=cF0> Sum(</span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF9>I64</span><span class=cF0> my_mp_count)
+<a name="l16"></a>{
+<a name="l17"></a>    </span><span class=cF9>CJob</span><span class=cF0> *tmpm[</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>];
+<a name="l18"></a>    </span><span class=cF9>I64</span><span class=cF0>   res = </span><span class=cFE>0</span><span class=cF0>, i;
+<a name="l19"></a>
+<a name="l20"></a>    mp_n = n + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l21"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l22"></a>        tmpm[i] = </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;MPSum, my_mp_count, i, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l23"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l24"></a>        res += </span><span class=cF5>JobResGet</span><span class=cF0>(tmpm[i]);
+<a name="l25"></a>
+<a name="l26"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l27"></a>}
+<a name="l28"></a>
+<a name="l29"></a>#</span><span class=cF1>define</span><span class=cF0> SAMPLE_SIZE </span><span class=cFE>100</span><span class=cF0>
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF1>F64</span><span class=cF0> Test(</span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF9>I64</span><span class=cF0> my_mp_count)
+<a name="l32"></a>{
+<a name="l33"></a>    </span><span class=cF9>I64</span><span class=cF0> i, val = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l34"></a>    </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>, </span><span class=cF1>end</span><span class=cF0>;
+<a name="l35"></a>
+<a name="l36"></a>    </span><span class=cF1>start</span><span class=cF0> = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l37"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; SAMPLE_SIZE; i++)
+<a name="l38"></a>        val += Sum(n, my_mp_count);
+<a name="l39"></a>    </span><span class=cF1>end</span><span class=cF0> = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l40"></a>    </span><span class=cF6>&quot;Val:%,d\n&quot;</span><span class=cF0>, val / SAMPLE_SIZE;
+<a name="l41"></a>    </span><span class=cF6>&quot;$RED$N:%12,d Time:%10.8f$FG$\n&quot;</span><span class=cF0>, n, (</span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF0>) / SAMPLE_SIZE;
+<a name="l42"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF1>end</span><span class=cF0> - </span><span class=cF1>start</span><span class=cF0>;
+<a name="l43"></a>}
+<a name="l44"></a>
+<a name="l45"></a>#</span><span class=cF1>define</span><span class=cF0> VAL_MIN         </span><span class=cFE>1000</span><span class=cF0>
+<a name="l46"></a>#</span><span class=cF1>define</span><span class=cF0> TEST_MIN        </span><span class=cFE>3</span><span class=cF0>
+<a name="l47"></a>#</span><span class=cF1>define</span><span class=cF0> TEST_MAX        </span><span class=cFE>7</span><span class=cF0>
+<a name="l48"></a>#</span><span class=cF1>define</span><span class=cF0> TESTS_NUM       (TEST_MAX - TEST_MIN + </span><span class=cFE>1</span><span class=cF0>)
+<a name="l49"></a>#</span><span class=cF1>define</span><span class=cF0> PERCENT_MAX     </span><span class=cFE>200</span><span class=cF0>
+<a name="l50"></a>
+<a name="l51"></a></span><span class=cF1>U0</span><span class=cF0> MPAdd()
+<a name="l52"></a>{
+<a name="l53"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, n, 
+<a name="l54"></a>         h = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width, 
+<a name="l55"></a>         v = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height;
+<a name="l56"></a>    </span><span class=cF1>F64</span><span class=cF0>  t1, t2, ress[TESTS_NUM];
+<a name="l57"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l58"></a>
+<a name="l59"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>, n = VAL_MIN; i &lt; TESTS_NUM; i++, n *= </span><span class=cFE>10</span><span class=cF0>)
+<a name="l60"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l61"></a>        t1 = Test(n, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l62"></a>        t2 = Test(n, </span><span class=cFB>mp_count</span><span class=cF0>);
+<a name="l63"></a>        ress[i] = t2 * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / t1;
+<a name="l64"></a>        </span><span class=cF6>&quot;$GREEN$%8.4f%%$FG$\n\n&quot;</span><span class=cF0>, ress[i];
+<a name="l65"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>    </span><span class=cF5>PressAKey</span><span class=cF0>;
+<a name="l67"></a>
+<a name="l68"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l69"></a>
+<a name="l70"></a>    dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l71"></a>    </span><span class=cF1>for</span><span class=cF0> (i = PERCENT_MAX / </span><span class=cFE>10</span><span class=cF0>; i &lt; PERCENT_MAX; i += PERCENT_MAX / </span><span class=cFE>10</span><span class=cF0>)
+<a name="l72"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l73"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, v - </span><span class=cF5>ToF64</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0> / PERCENT_MAX * v - </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, </span><span class=cF6>&quot;%3d%%&quot;</span><span class=cF0>, i);
+<a name="l74"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>,  v - </span><span class=cF5>ToF64</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0> / PERCENT_MAX * v, h, v - </span><span class=cF5>ToF64</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0> / PERCENT_MAX * v);
+<a name="l75"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l76"></a>
+<a name="l77"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TESTS_NUM - </span><span class=cFE>1</span><span class=cF0>; i++)
+<a name="l78"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l79"></a>        dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l80"></a>        dc-&gt;thick = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l81"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, i * h / </span><span class=cF7>(</span><span class=cF0>TESTS_NUM - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>,        v - ress[i]     / PERCENT_MAX * v, </span><span class=cFE>0</span><span class=cF0>, 
+<a name="l82"></a>                    </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * h / </span><span class=cF7>(</span><span class=cF0>TESTS_NUM - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>,  v - ress[i + </span><span class=cFE>1</span><span class=cF0>] / PERCENT_MAX * v, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l83"></a>        dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l84"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, i * h / </span><span class=cF7>(</span><span class=cF0>TESTS_NUM - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, v - </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, </span><span class=cF6>&quot;10e%d&quot;</span><span class=cF0>, i + TEST_MIN);
+<a name="l85"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(dc,  i * h / </span><span class=cF7>(</span><span class=cF0>TESTS_NUM - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, i * h / </span><span class=cF7>(</span><span class=cF0>TESTS_NUM - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, v);
+<a name="l86"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l87"></a>    </span><span class=cF5>PressAKey</span><span class=cF0>;
+<a name="l88"></a>
+<a name="l89"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l90"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l91"></a>}
+<a name="l92"></a>
+<a name="l93"></a>MPAdd;
+</span></pre></body>
+</html>

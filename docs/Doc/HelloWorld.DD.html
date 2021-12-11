@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.06">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -27,11 +27,11 @@ body {background-color:#1f1f1f;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF2>//Press F5 in the editor to compile and run.</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a></span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l4"></a></span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>;
 <a name="l5"></a>
 <a name="l6"></a>
-<a name="l7"></a></span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> Main()
 <a name="l9"></a>{
 <a name="l10"></a>    </span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>;
@@ -39,7 +39,7 @@ body {background-color:#1f1f1f;}
 <a name="l12"></a>Main;
 <a name="l13"></a>
 <a name="l14"></a>
-<a name="l15"></a></span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l15"></a></span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l16"></a></span><span class=cF1>U0</span><span class=cF0> MyPrint(</span><span class=cF1>U8</span><span class=cF0> *st)
 <a name="l17"></a>{
 <a name="l18"></a>    </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, st;
@@ -47,7 +47,7 @@ body {background-color:#1f1f1f;}
 <a name="l20"></a>MyPrint(</span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>);
 <a name="l21"></a>
 <a name="l22"></a>
-<a name="l23"></a></span><span class=cF2>// --------Hello.CC--------- // </span><span class=cF0>
+<a name="l23"></a></span><span class=cF2>// --------Hello.ZC--------- // </span><span class=cF0>
 <a name="l24"></a></span><span class=cF1>U0</span><span class=cF0> MyPrint2(</span><span class=cF1>U8</span><span class=cF0> *st1, </span><span class=cF1>U8</span><span class=cF0> *st2) </span><span class=cF2>//Any number of args.</span><span class=cF0>
 <a name="l25"></a>{
 <a name="l26"></a>    </span><span class=cF6>&quot;%s %s\n&quot;</span><span class=cF0>, st1, st2; </span><span class=cF2>//Any number of args.</span><span class=cF0>
@@ -55,7 +55,7 @@ body {background-color:#1f1f1f;}
 <a name="l28"></a>MyPrint2(</span><span class=cF6>&quot;Hello&quot;</span><span class=cF0>, </span><span class=cF6>&quot;World&quot;</span><span class=cF0>);
 <a name="l29"></a>
 <a name="l30"></a>
-<a name="l31"></a></span><span class=cF2>// --------Hello.CC--------- // </span><span class=cF0>
+<a name="l31"></a></span><span class=cF2>// --------Hello.ZC--------- // </span><span class=cF0>
 <a name="l32"></a></span><span class=cF1>U0</span><span class=cF0> MyPrint(</span><span class=cF1>U8</span><span class=cF0> *st)
 <a name="l33"></a>{
 <a name="l34"></a>    </span><span class=cF6>&quot;&quot;</span><span class=cF0> st; </span><span class=cF2>//Empty with no comma means first is format str.</span><span class=cF0>
@@ -63,7 +63,7 @@ body {background-color:#1f1f1f;}
 <a name="l36"></a>MyPrint(</span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>);
 <a name="l37"></a>
 <a name="l38"></a>
-<a name="l39"></a></span><span class=cF2>// --------Hello.CC--------- // </span><span class=cF0>
+<a name="l39"></a></span><span class=cF2>// --------Hello.ZC--------- // </span><span class=cF0>
 <a name="l40"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l41"></a>MESSAGE:                </span><span class=cF1>DU8</span><span class=cF0> </span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l42"></a>
@@ -80,7 +80,7 @@ body {background-color:#1f1f1f;}
 <a name="l53"></a></span><span class=cF5>Call</span><span class=cF0>(_HELLO_WORLD1);
 <a name="l54"></a>
 <a name="l55"></a>
-<a name="l56"></a></span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l56"></a></span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l57"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l58"></a>_HELLO_WORLD2::
 <a name="l59"></a></span><span class=cF2>//You can only clobber RAX,RBX,RCX,RDX</span><span class=cF0>
@@ -93,7 +93,7 @@ body {background-color:#1f1f1f;}
 <a name="l66"></a></span><span class=cF5>Call</span><span class=cF0>(_HELLO_WORLD2);
 <a name="l67"></a>
 <a name="l68"></a>
-<a name="l69"></a></span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l69"></a></span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l70"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l71"></a>_MY_PRINT1::
 <a name="l72"></a></span><span class=cF2>//You can only clobber RAX,RBX,RCX,RDX</span><span class=cF0>
@@ -110,7 +110,7 @@ body {background-color:#1f1f1f;}
 <a name="l83"></a>MyPrint(</span><span class=cF6>&quot;Hello World\n&quot;</span><span class=cF0>);
 <a name="l84"></a>
 <a name="l85"></a>
-<a name="l86"></a> </span><span class=cF2>// --------Hello.CC--------- //</span><span class=cF0>
+<a name="l86"></a> </span><span class=cF2>// --------Hello.ZC--------- //</span><span class=cF0>
 <a name="l87"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l88"></a>_MY_PRINT2::
 <a name="l89"></a></span><span class=cF2>//You can only clobber RAX,RBX,RCX,RDX</span><span class=cF0>
