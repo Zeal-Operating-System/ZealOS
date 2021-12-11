@@ -1,10 +1,10 @@
 $HL,1$//Press F5 in the editor to compile and run.
 
-// --------Hello.CC--------- //
+// --------Hello.ZC--------- //
 "Hello World\n";
 
 
-// --------Hello.CC--------- //
+// --------Hello.ZC--------- //
 U0 Main()
 {
 	"Hello World\n";
@@ -12,7 +12,7 @@ U0 Main()
 Main;
 
 
-// --------Hello.CC--------- //
+// --------Hello.ZC--------- //
 U0 MyPrint(U8 *st)
 {
 	"%s", st;
@@ -20,7 +20,7 @@ U0 MyPrint(U8 *st)
 MyPrint("Hello World\n");
 
 
-// --------Hello.CC--------- // 
+// --------Hello.ZC--------- // 
 U0 MyPrint2(U8 *st1, U8 *st2) //Any number of args.
 {
 	"%s %s\n", st1, st2; //Any number of args.
@@ -28,7 +28,7 @@ U0 MyPrint2(U8 *st1, U8 *st2) //Any number of args.
 MyPrint2("Hello", "World");
 
 
-// --------Hello.CC--------- // 
+// --------Hello.ZC--------- // 
 U0 MyPrint(U8 *st)
 {
 	"" st; //Empty with no comma means first is format str.
@@ -36,7 +36,7 @@ U0 MyPrint(U8 *st)
 MyPrint("Hello World\n");
 
 
-// --------Hello.CC--------- // 
+// --------Hello.ZC--------- // 
 asm {
 MESSAGE:				DU8 "Hello World\n", 0;
 
@@ -53,7 +53,7 @@ _HELLO_WORLD1::
 Call(_HELLO_WORLD1);
 
 
-// --------Hello.CC--------- //
+// --------Hello.ZC--------- //
 asm {
 _HELLO_WORLD2::
 //You can only clobber RAX,RBX,RCX,RDX
@@ -66,7 +66,7 @@ _HELLO_WORLD2::
 Call(_HELLO_WORLD2);
 
 
-// --------Hello.CC--------- //
+// --------Hello.ZC--------- //
 asm {
 _MY_PRINT1::
 //You can only clobber RAX,RBX,RCX,RDX
@@ -83,7 +83,7 @@ _extern _MY_PRINT1 U0 MyPrint(U8 *st);
 MyPrint("Hello World\n");
 
 
- // --------Hello.CC--------- //
+ // --------Hello.ZC--------- //
 asm {
 _MY_PRINT2::
 //You can only clobber RAX,RBX,RCX,RDX

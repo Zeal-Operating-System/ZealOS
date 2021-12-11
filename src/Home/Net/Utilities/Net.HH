@@ -20,9 +20,9 @@
 
 #define IP_ADDRESS_LENGTH	4
 
-/*	NICs reroute PCI interrupts to software. See $LK,"PCNet",A="FF:C:/Home/Net/Drivers/PCNet.CC,irq = "$.
+/*	NICs reroute PCI interrupts to software. See $LK,"PCNet",A="FF:C:/Home/Net/Drivers/PCNet.ZC,irq = "$.
 	Net Handler interrupt is generated whenever an entry is
-	pushed to the NetQueue. See $LK,"NetHandler",A="FF:C:/Home/Net/Utilities/NetHandler.CC,I_NETHANDLER"$. */
+	pushed to the NetQueue. See $LK,"NetHandler",A="FF:C:/Home/Net/Utilities/NetHandler.ZC,I_NETHANDLER"$. */
 
 DefinePrint("I_NETHANDLER", "%d", IntEntryAlloc);
 

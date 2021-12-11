@@ -2,7 +2,7 @@
 Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\nCd(\"::/Demo/Games\");Dir;\n";
 
-TourPut(	"Now, we're going to add the CastleFrankenstein.CC program "
+TourPut(	"Now, we're going to add the CastleFrankenstein.ZC program "
 			"to your PersonalMenu.\n\n"
 			"Press $$GREEN$$<CTRL-m>$$FG$$ to get to your PersonalMenu.\n");
 InCharGet(CH_CTRLM);

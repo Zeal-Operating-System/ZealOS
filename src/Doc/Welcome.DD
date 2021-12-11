@@ -13,45 +13,45 @@ It's a kayak, not a Titanic -- it will crash if you do something wrong.  You qui
 
 Conventional thinking is "failure is not an option" for general purpose operating systems.	Since this OS is used in addition to Windows or Linux, however, failure is an option -- just use Windows or Linux if you can't do something.	We cherry-pick what it will and won't do, to make it maximally beautiful.	The following applications more or less form a basis that spans the range of use that ZealOS is intended for:
 
-$LK,"/Demo/Games/BattleLines.CC",A="FI:::/Demo/Games/BattleLines.CC"$
-$LK,"/Demo/Games/BigGuns.CC",A="FI:::/Demo/Games/BigGuns.CC"$
-$LK,"/Demo/Games/BlackDiamond.CC",A="FI:::/Demo/Games/BlackDiamond.CC"$
-$LK,"/Demo/Games/BomberGolf.CC",A="FI:::/Demo/Games/BomberGolf.CC"$
-$LK,"/Demo/Games/CastleFrankenstein.CC",A="FI:::/Demo/Games/CastleFrankenstein.CC"$
-$LK,"/Demo/Games/CharDemo.CC",A="FI:::/Demo/Games/CharDemo.CC"$
-$LK,"/Demo/Games/CircleTrace.CC",A="FI:::/Demo/Games/CircleTrace.CC"$
-$LK,"/Demo/Games/Collision.CC",A="FI:::/Demo/Games/Collision.CC"$
-$LK,"/Demo/Games/Digits.CC",A="FI:::/Demo/Games/Digits.CC"$
-$LK,"/Demo/Games/DunGen.CC",A="FI:::/Demo/Games/DunGen.CC"$
-$LK,"/Demo/Games/Talons.CC",A="FI:::/Demo/Games/Talons.CC"$
-$LK,"/Demo/Games/ElephantWalk.CC",A="FI:::/Demo/Games/ElephantWalk.CC"$
-$LK,"/Demo/Games/FlapBat.CC",A="FI:::/Demo/Games/FlapBat.CC"$
-$LK,"/Demo/Games/FlatTops.CC",A="FI:::/Demo/Games/FlatTops.CC"$
-$LK,"/Demo/Games/Halogen.CC",A="FI:::/Demo/Games/Halogen.CC"$
-$LK,"/Demo/Games/MassSpring.CC",A="FI:::/Demo/Games/MassSpring.CC"$
-$LK,"/Demo/Games/Maze.CC",A="FI:::/Demo/Games/Maze.CC"$
-$LK,"/Demo/Games/RainDrops.CC",A="FI:::/Demo/Games/RainDrops.CC"$
-$LK,"/Demo/Games/RawHide.CC",A="FI:::/Demo/Games/RawHide.CC"$
-$LK,"/Demo/Games/Rocket.CC",A="FI:::/Demo/Games/Rocket.CC"$
-$LK,"/Demo/Games/RocketScience.CC",A="FI:::/Demo/Games/RocketScience.CC"$
-$LK,"/Demo/Games/Squirt.CC",A="FI:::/Demo/Games/Squirt.CC"$
-$LK,"/Demo/Games/TheDead.CC",A="FI:::/Demo/Games/TheDead.CC"$
-$LK,"/Demo/Games/TicTacToe.CC",A="FI:::/Demo/Games/TicTacToe.CC"$
-$LK,"/Demo/Games/TreeCheckers.CC",A="FI:::/Demo/Games/TreeCheckers.CC"$
-$LK,"/Demo/Games/Varoom.CC",A="FI:::/Demo/Games/Varoom.CC"$
-$LK,"/Demo/Games/Wenceslas.CC",A="FI:::/Demo/Games/Wenceslas.CC"$
-$LK,"/Demo/Games/Whap.CC",A="FI:::/Demo/Games/Whap.CC"$
-$LK,"/Demo/Games/Zing.CC",A="FI:::/Demo/Games/Zing.CC"$
-$LK,"/Demo/Games/ZoneOut.CC",A="FI:::/Demo/Games/ZoneOut.CC"$
-$LK,"/Apps/Psalmody/Examples/childish.CC",A="FI:::/Apps/Psalmody/Examples/childish.CC"$
-$LK,"/Apps/Psalmody/Examples/night.CC",A="FI:::/Apps/Psalmody/Examples/night.CC"$
-$LK,"/Apps/Psalmody/Examples/prosper.CC",A="FI:::/Apps/Psalmody/Examples/prosper.CC"$
+$LK,"/Demo/Games/BattleLines.ZC",A="FI:::/Demo/Games/BattleLines.ZC"$
+$LK,"/Demo/Games/BigGuns.ZC",A="FI:::/Demo/Games/BigGuns.ZC"$
+$LK,"/Demo/Games/BlackDiamond.ZC",A="FI:::/Demo/Games/BlackDiamond.ZC"$
+$LK,"/Demo/Games/BomberGolf.ZC",A="FI:::/Demo/Games/BomberGolf.ZC"$
+$LK,"/Demo/Games/CastleFrankenstein.ZC",A="FI:::/Demo/Games/CastleFrankenstein.ZC"$
+$LK,"/Demo/Games/CharDemo.ZC",A="FI:::/Demo/Games/CharDemo.ZC"$
+$LK,"/Demo/Games/CircleTrace.ZC",A="FI:::/Demo/Games/CircleTrace.ZC"$
+$LK,"/Demo/Games/Collision.ZC",A="FI:::/Demo/Games/Collision.ZC"$
+$LK,"/Demo/Games/Digits.ZC",A="FI:::/Demo/Games/Digits.ZC"$
+$LK,"/Demo/Games/DunGen.ZC",A="FI:::/Demo/Games/DunGen.ZC"$
+$LK,"/Demo/Games/Talons.ZC",A="FI:::/Demo/Games/Talons.ZC"$
+$LK,"/Demo/Games/ElephantWalk.ZC",A="FI:::/Demo/Games/ElephantWalk.ZC"$
+$LK,"/Demo/Games/FlapBat.ZC",A="FI:::/Demo/Games/FlapBat.ZC"$
+$LK,"/Demo/Games/FlatTops.ZC",A="FI:::/Demo/Games/FlatTops.ZC"$
+$LK,"/Demo/Games/Halogen.ZC",A="FI:::/Demo/Games/Halogen.ZC"$
+$LK,"/Demo/Games/MassSpring.ZC",A="FI:::/Demo/Games/MassSpring.ZC"$
+$LK,"/Demo/Games/Maze.ZC",A="FI:::/Demo/Games/Maze.ZC"$
+$LK,"/Demo/Games/RainDrops.ZC",A="FI:::/Demo/Games/RainDrops.ZC"$
+$LK,"/Demo/Games/RawHide.ZC",A="FI:::/Demo/Games/RawHide.ZC"$
+$LK,"/Demo/Games/Rocket.ZC",A="FI:::/Demo/Games/Rocket.ZC"$
+$LK,"/Demo/Games/RocketScience.ZC",A="FI:::/Demo/Games/RocketScience.ZC"$
+$LK,"/Demo/Games/Squirt.ZC",A="FI:::/Demo/Games/Squirt.ZC"$
+$LK,"/Demo/Games/TheDead.ZC",A="FI:::/Demo/Games/TheDead.ZC"$
+$LK,"/Demo/Games/TicTacToe.ZC",A="FI:::/Demo/Games/TicTacToe.ZC"$
+$LK,"/Demo/Games/TreeCheckers.ZC",A="FI:::/Demo/Games/TreeCheckers.ZC"$
+$LK,"/Demo/Games/Varoom.ZC",A="FI:::/Demo/Games/Varoom.ZC"$
+$LK,"/Demo/Games/Wenceslas.ZC",A="FI:::/Demo/Games/Wenceslas.ZC"$
+$LK,"/Demo/Games/Whap.ZC",A="FI:::/Demo/Games/Whap.ZC"$
+$LK,"/Demo/Games/Zing.ZC",A="FI:::/Demo/Games/Zing.ZC"$
+$LK,"/Demo/Games/ZoneOut.ZC",A="FI:::/Demo/Games/ZoneOut.ZC"$
+$LK,"/Apps/Psalmody/Examples/childish.ZC",A="FI:::/Apps/Psalmody/Examples/childish.ZC"$
+$LK,"/Apps/Psalmody/Examples/night.ZC",A="FI:::/Apps/Psalmody/Examples/night.ZC"$
+$LK,"/Apps/Psalmody/Examples/prosper.ZC",A="FI:::/Apps/Psalmody/Examples/prosper.ZC"$
 
 Two things to know about ZealOS are that $UL,1$tasks$UL,0$ have $LK,"MAlloc",A="MN:MAlloc"$/$LK,"Free",A="MN:Free"$ heap memory, not applications, and tasks have compiler symbol tables that persist at a scope like environment variables in other operating systems, and the symbols can include functions.
 
 With $FG,2$ZealOS$FG$, the command line feeds right into the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ compiler, line by line, and it places code into memory it $LK,"MAlloc",A="MN:MAlloc"$()s.	The compiler is paused at the command line, waiting for input.	Naturally, you $FG,2$#include$FG$ a program to load it into memory and, usually, start it.
 
-During the boot process, many files get $LK,"compiled",A="FI:::/StartOS.CC"$ before you have access to the command line.	(Don't worry, booting takes only two seconds.)	All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.	Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
+During the boot process, many files get $LK,"compiled",A="FI:::/StartOS.ZC"$ before you have access to the command line.	(Don't worry, booting takes only two seconds.)	All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.	Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
 
 Statements at the global scope -- outside the scope of functions -- execute immediately.	There is no $FG,2$main()$FG$ function.	Instead, you give meaningful names to what would be $FG,2$main()$FG$ functions and you invoke them by calling them with a statement in the global scope, usually at the bottom of your file.
 
@@ -73,7 +73,7 @@ Once Terry was no longer using standard C/C++ syntax, he decided to change every
 
 There are no object files in ZealOS and, normally, you don't make executable files either, but you can.  That's known as $LK,"Ahead-of-Time",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ compilation.  Instead, you $LK,"Just in Time",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ compile.
 
-Tasks have no priority and are never removed from the queue.	Instead, they often poll whatever they are waiting on and swap-out.  (Swapping tasks takes half a microsecond and does not involve disk activity or memory maps.)  See $LK,"Scheduler",A="FL:::/Kernel/Sched.CC,1"$.	Polling keeps it simple.	It might be a problem if you had lots of tasks busy, which rarely happens on a home computer.  The order of the tasks in the queue determines front-to-back window order.
+Tasks have no priority and are never removed from the queue.	Instead, they often poll whatever they are waiting on and swap-out.  (Swapping tasks takes half a microsecond and does not involve disk activity or memory maps.)  See $LK,"Scheduler",A="FL:::/Kernel/Sched.ZC,1"$.	Polling keeps it simple.	It might be a problem if you had lots of tasks busy, which rarely happens on a home computer.  The order of the tasks in the queue determines front-to-back window order.
 
 The $FG,2$FAT32$FG$ filesystem is supported to makes exchanging files with a dual booted other operating system easy and there is the simple, 64-bit ZealOS $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ filesystem.  The $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ has allocation bitmap for clusters and all files are stored contiguously.	You can't grow files.
 
@@ -85,9 +85,9 @@ ZealOS is for hobbyist programmers on single user (at a time) home computers, no
 
 There is no distinction between the terms $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2$thread$FG$.	All have a task record, $LK,"CTask",A="MN:CTask"$, pointed to by the $FG,2$FS$FG$ segment register and are accessed with $FG,4$Fs->$FG$ while $FG,4$Gs->$FG$ points to a $LK,"CCPU",A="MN:CCPU"$ for the current CPU core.  Each task can have just one window, but a task can have children with windows.  (The segment registers are just used as extra registers -- there is nothing segmented about ZealOS' memory.)  It is approximately the case that $FG,2$ZealOS$FG$ is multi-threading, single-processing.
 
-In $FG,2$ZealOS$FG$, $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ refers to the father of all tasks.	It's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$System$FG$.  Its heap is like kernel memory in other operating systems.  Since $FG,2$System$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$System$FG$'s heap.  It stays in a server mode, taking requests, so you can ask it to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally Terry Davis called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)	$FG,2$System$FG$ executes $LK,"::/StartOS.CC"$ at boot time.
+In $FG,2$ZealOS$FG$, $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ refers to the father of all tasks.	It's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$System$FG$.  Its heap is like kernel memory in other operating systems.  Since $FG,2$System$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$System$FG$'s heap.  It stays in a server mode, taking requests, so you can ask it to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally Terry Davis called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)	$FG,2$System$FG$ executes $LK,"::/StartOS.ZC"$ at boot time.
 
-For easy back-ups, place everything you author in your $FG,2$/Home$FG$ directory and subdirectories.	Then, use $LK,"CopyTree",A="MN:CopyTree"$().	That should make upgrading easy, too.  Customizable start-up scripts go in your $FG,2$/Home$FG$ directory.	The default start-up scripts are in the root directory.  Copy the start-up files you wish to customize into $FG,2$/Home$FG$ and modify them.	See $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.	You can make your own distro that includes everything and is a bootable live CD with $LK,"::/Misc/DoDistro.CC"$.
+For easy back-ups, place everything you author in your $FG,2$/Home$FG$ directory and subdirectories.	Then, use $LK,"CopyTree",A="MN:CopyTree"$().	That should make upgrading easy, too.  Customizable start-up scripts go in your $FG,2$/Home$FG$ directory.	The default start-up scripts are in the root directory.  Copy the start-up files you wish to customize into $FG,2$/Home$FG$ and modify them.	See $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.	You can make your own distro that includes everything and is a bootable live CD with $LK,"::/Misc/DoDistro.ZC"$.
 
 Typically, your usage pattern through the day will be repeatedly left or right clicking on filenames in a cmd line $LK,"Dir",A="MN:Dir"$() listing.  You left-click files to edit them and right-click to $FG,2$#include$FG$ them.	To begin a project, type $LK,"Ed",A="MN:Ed"$("filename");, supplying a filename.	You can also run programs with $FG,2$<F5>$FG$ when in the editor. $FG,2$<ESC>$FG$ to save and exit the file.	You'll need to do a new $LK,"Dir",A="MN:Dir"$() cmd, periodically, so make a macro on your PersonalMenu.	Access your PersonalMenu by pressing $FG,2$<CTRL-m>$FG$, cursoring until you are on top of it and pressing $FG,2$<SPACE>$FG$.
 
@@ -102,13 +102,13 @@ $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.
 $FG,2$<ALT-a>$FG$ brings back AutoComplete.
 $FG,2$<ALT-v>$FG$ vertically tiles windows.
 $FG,2$<ALT-h>$FG$ horizontally tiles windows.
-The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.CC"$.  You can customize them.
+The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.ZC"$.  You can customize them.
 
 $FG,2$<CTRL-ALT-t>$FG$ new terminal window.
 $FG,2$<CTRL-ALT-n>$FG$ switches to the next window.
 $FG,2$<CTRL-ALT-x>$FG$ kills a window.
 
-$LK,"Find",A="MN:Find"$() is your best friend.	There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/HomeWrappers.CC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.	By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.	You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
+$LK,"Find",A="MN:Find"$() is your best friend.	There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/HomeWrappers.ZC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.	By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.	You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
 
 As you browse code, use the $FG,2$AutoComplete$FG$ window to look-up functions, etc.	$FG,2$<CTRL-SHIFT-F1>$FG$ (or whatever number) to follow a symbol to it's source.	You can browse deeper and deeper.  You go back with $FG,2$<SHIFT-ESC>$FG$.
 

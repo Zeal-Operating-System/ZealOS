@@ -16,8 +16,8 @@ sudo qemu-nbd -c dev/nbd0 -f raw ./ZealOS.raw
 sudo partprobe /dev/nbd0
 echo "Merging with src/"
 sudo mount /dev/nbd0p1 /tmp/zealtmp
-rm ../src/Home/Registry.CC # we use Registry for auto-iso process, don't want to overwrite
-rm ../src/Home/MakeHome.CC # unneeded file
+rm ../src/Home/Registry.ZC # we use Registry for auto-iso process, don't want to overwrite
+rm ../src/Home/MakeHome.ZC # unneeded file
 sudo cp -r ../src/* /tmp/zealtmp/
 sudo sync
 echo "Files copied, unmounting"

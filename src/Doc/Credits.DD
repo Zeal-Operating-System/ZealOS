@@ -4,9 +4,9 @@ $FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D
 
 *) $LK,"ATA Reg and Cmd Definitions",A="MN:ATA_NOP"$ are originally from Linux.  Later, Terry got the spec.
 
-*) The heap algorithm, $LK,"::/Kernel/Memory/MAllocFree.CC"$, is adapted from one Terry saw at Ticketmaster when he worked on their VAX operating system.
+*) The heap algorithm, $LK,"::/Kernel/Memory/MAllocFree.ZC"$, is adapted from one Terry saw at Ticketmaster when he worked on their VAX operating system.
 
-*) The adaptive-step-size-Runge-Kutta algorithm, $LK,"::/System/MathODE.CC"$, is adapted from the book, $UL,1$Numerical Recipes in C$UL,0$.
+*) The adaptive-step-size-Runge-Kutta algorithm, $LK,"::/System/MathODE.ZC"$, is adapted from the book, $UL,1$Numerical Recipes in C$UL,0$.
 
 *) The mountain in some games is from $FG,4$$TX,"http://www.public-domain-photos.com",HTML="http://www.public-domain-photos.com"$$FG$.	The wolf in BlackDiamond is also from there.	Terry took watermarked photos and converted to 16 color.
 
@@ -16,7 +16,7 @@ $FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D
 
 *) Terry included $LK,"PCIDevice List File",A="FI:::/Misc/PCIDevices.DD",HTML="http://www.pcidatabase.com/reports.php?type=tab-delimeted"$.
 
-*) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.CC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  Terry was a novice on web stuff and you helped him with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
+*) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.ZC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  Terry was a novice on web stuff and you helped him with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.ZC"$.
 
 *) Terry looked at bootable CD boot sectors, but didn't learn anything, finding it easier to make his own.
 

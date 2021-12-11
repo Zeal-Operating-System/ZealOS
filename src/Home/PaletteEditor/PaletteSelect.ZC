@@ -1,0 +1,62 @@
+#ifndef PALETTES_PATH
+Cd(__DIR__);;
+#include "Load"
+#endif
+
+public U0 PaletteSet(U8 *palette_name="Slate", Bool persistent=TRUE)
+{//Pass filename (without ext) as string to load palette
+	U8	*dir = PALETTES_PATH,
+		*path = MStrPrint("%Q%Q%Q", dir, palette_name, ".ZC");//,
+//		*file = FileRead(path);
+//	I64  temp_file, i;
+
+/*	for	(i = 0; i < COLORS_NUM; i++)
+	{	
+		StrFirstRemove(file, ",", temp_file);
+		gr_palette[i] = Str2I64(temp_file, 16);
+	}*/
+	ExeFile(path);
+	ExePrint("PaletteSet%s;;", palette_name);
+	LFBFlush;
+	if (persistent)
+		ExePrint("fp_set_std_palette = &PaletteSet%s;;", palette_name);
+}
+
+public I64 PaletteSelect()
+{
+	CDirEntry	*tmpde1 = NULL, *tmpde2;
+
+	CDoc *doc = DocNew;
+	I64  res  =	0;
+	I64  res2 = 0;
+
+	DocPrint(doc, "$$LTBLUE$$\n\n");
+
+	tmpde1 = FilesFind("~/PaletteEditor/Palettes/*.ZC");
+
+	if (tmpde1)
+	{
+		while (tmpde1)
+		{
+			tmpde2 = tmpde1->next;
+			res++;
+
+			FileExtRemove(tmpde1->name);
+
+			DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n", res, tmpde1->name, tmpde1->name);	
+			DirEntryDel(tmpde1);
+
+			tmpde1 = tmpde2;
+		}
+
+	}
+
+	DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=0$$\n\n");
+	res2 = PopUpMenu(doc);
+	DocDel(doc);	
+
+	if (res2 != 0)
+		PaletteSet(res2, TRUE);
+
+	return res2;
+}

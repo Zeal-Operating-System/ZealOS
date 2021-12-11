@@ -1,0 +1,34 @@
+
+// Custom temporary Once.ZC used by Auto ISO process.
+
+//This file is executed by the
+//first terminal window upon start-up.
+//See $LK,"Once",A="FF:~/HomeSys.ZC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
+
+U0 Tmp()
+{
+	OnceExe;
+	switch (sys_boot_src.u16[0])
+	{
+		case BOOT_SRC_ROM:
+			"Continue booting hard drive ";
+			if (YorN)
+			{
+				DocBottom;
+				ExeFile("C:/Home/Once");
+			}
+			break;
+		case BOOT_SRC_DVD:
+			DocBottom;
+			RunFile("::/Misc/Auto/AutoInstall",, TRUE);
+			break;
+		case BOOT_SRC_HARDDRIVE:
+		case BOOT_SRC_RAM:
+			"\n$$PURPLE$$$$TX+CX,\"Tips of the Day\"$$$$FG$$\n";
+			TipOfDay;Yield;
+			TipOfDay;
+			Type("::/Doc/Customize.DD");
+			break;
+	}
+}
+Tmp;
