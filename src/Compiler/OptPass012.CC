@@ -93,7 +93,7 @@ in int<-->F64 conversions of function args.
 				}
 				break;
 
-			case IC_HOLYC_TYPECAST:
+			case IC_POSTFIX_TYPECAST:
 				if (tmpi1->ic_code == IC_IMM_I64 || tmpi1->ic_code == IC_IMM_F64)
 				{
 					if (tmpi->ic_class->raw_type == RT_F64)

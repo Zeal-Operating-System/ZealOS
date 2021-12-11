@@ -20,7 +20,7 @@ Features in development include:
   - VBE graphics with variable resolutions
   - Reformatted code for readability
   - Added comments and documentation
-  - HolyC -> CosmiC
+  - HolyC -> ZealC
   - System-wide renaming for clarity
 
 ## Getting started

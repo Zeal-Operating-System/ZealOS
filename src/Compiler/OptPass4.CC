@@ -672,7 +672,7 @@ p4_sib:
 				case IC_RBP:
 				case IC_REG:
 				case IC_COM:
-				case IC_HOLYC_TYPECAST:
+				case IC_POSTFIX_TYPECAST:
 				case IC_NOT:
 				case IC_UNARY_MINUS:
 				case IC_PUSH_CMP:

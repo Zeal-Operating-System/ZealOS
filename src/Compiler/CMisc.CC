@@ -97,7 +97,7 @@ U0 StreamDir()
 }
 
 CD2I32 *LexD2I32(CCompCtrl *cc, CD2I32 *p)
-{//Not CosmiC. Sprite-like lex 2D point.
+{//Not ZealC. Sprite-like lex 2D point.
 	if (cc->token != '(')
 		LexExcept(cc, "Expecting '(' at ");
 	Lex(cc); // Skip (
@@ -114,7 +114,7 @@ CD2I32 *LexD2I32(CCompCtrl *cc, CD2I32 *p)
 }
 
 CD3I32 *LexD3I32(CCompCtrl *cc,CD3I32 *p)
-{//Not CosmiC. Sprite-like lex 3D point.
+{//Not ZealC. Sprite-like lex 3D point.
 	if (cc->token != '(')
 		LexExcept(cc, "Expecting '(' at ");
 	Lex(cc); // Skip (

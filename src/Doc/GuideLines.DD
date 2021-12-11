@@ -60,7 +60,7 @@ $FG,5$$TX+CX,"Programming Guidelines"$$FG$
 
 * There are two modes of compiling, $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ and $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	Compilation is done in both -- neither is "interpreted".	Use $FG,2$$LK,"JIT Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$$FG$.
 
-* $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$
+* $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$
 
 * Use $FG,2$I64$FG$ instead of smaller int sizes because the compiler converts everything to 64-bit.	Don't use unsigned$FG$ unless it actually breaks.  A policy of signed keeps it simple so you don't have to agonize over choices.
 
@@ -94,9 +94,9 @@ $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
 * See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
 
-* $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ symbols loaded in on start-up.
+* $FG,2$sys_task->hash_table$FG$ holds the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ symbols loaded in on start-up.
 
-* $FG,2$Fs->hash_table$FG$ holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
+* $FG,2$Fs->hash_table$FG$ holds user ZealC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
 
 * To display the contents of a hash table, use the $LK,"HashTableDump",A="MN:HashTableDump"$() routine or the varients.  $LK,"HashDepthRep",A="MN:HashDepthRep"$() gives a histogram	of how long the chains are, in case you wish to make hash table sizes bigger.
 
@@ -112,7 +112,7 @@ See $LK,"::/Doc/Asm.DD"$.
 
 * Don't change the segment registers unless interrupts are off.	It's hard to do, anyway.	$LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$ and $LK,"SET_GS_BASE",A="MN:SET_GS_BASE"$.
 
-* When interacting with $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for register variables.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
+* When interacting with $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for register variables.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
 
 * It is recommended to use the standard stack frame for functions because $LK,"Caller",A="MN:Caller"$() is used to display the call stack, such as for the wallpaper.
 $FG,2$				PUSH		RBP

@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"Credits"$$FG$
 
-$FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D="DD_TEMPLEOS_AGE"$$FG$ years (full-time).	ZealOS, written over a span of $FG,2$$TX,"2.1",D="DD_ZEALOS_AGE"$$FG$ years, is a fork of ZenithOS, which itself is a fork of TempleOS.	It can run on some bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.	Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.	It is independent and stands alone.  100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!	It is public domain, not GPL.
+$FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D="DD_TEMPLEOS_AGE"$$FG$ years (full-time).	ZealOS, written over a span of $FG,2$$TX,"2.3",D="DD_ZEALOS_AGE"$$FG$ years, is a fork of TempleOS.	It can run on some bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.	Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.	It is independent and stands alone.  100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!	It is public domain, not GPL.
 
 *) $LK,"ATA Reg and Cmd Definitions",A="MN:ATA_NOP"$ are originally from Linux.  Later, Terry got the spec.
 

@@ -59,7 +59,7 @@ extern class CTask;
 #define eps 		(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
-//CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.
+//ZealC union structure is treated as a whole if no member is specified, similar to bit fields.
 //See $LK,"::/Demo/SubIntAccess.CC"$.
 
 U16i union U16
@@ -448,7 +448,7 @@ class CMemE820
 #define LDF_JUST_LOAD 	2
 #define LDF_SILENT		4
 
-#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal CosmiC Binary
+#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal ZealC Binary
 class CBinFile
 {//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.CC,16 ALIGN"$ by compiler.
 	U16 jmp;
@@ -727,7 +727,7 @@ class CRAXRBXRCXRDX
 };
 
 //Asm callable function pointers.
-//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from CosmiC.
+//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from ZealC.
 #define EXT_WIN_TO_TOP		0
 #define EXT_WIN_FOCUS 		1
 #define EXT_HEAPLOG_MALLOC	2

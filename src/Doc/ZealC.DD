@@ -1,4 +1,7 @@
-$WW,1$$FG,5$$TX+CX,"CosmiC"$$FG$
+$WW,1$$FG,5$$TX+CX,"ZealC"$$FG$
+
+ZealC is a fork of HolyC. The only changes to Terry's HolyC compiler are reformatting, label renames, bugfixes, and additions. Little to no functionality is removed, and nothing is fundamentally altered. Code incompatibilities are usually due to Kernel, System, or user methods changing in name and/or functionality, rather than any differences in the Compiler. See the $LK,"Conversion Script",A="FI:::/System/Utils/ConversionScript.CC"$ for help porting HolyC code to ZealC.
+
 
 * See $LK,"::/Doc/CompilerOverview.DD"$.
 
@@ -43,7 +46,7 @@ $ID,2$$FG,2$void DemoC(char drv, char *format, char *name, int age)
 	putchar('*');
 }
 
-U0 DemoCosmiC(U8 drive, U8 *format, U8 *name, I64 age)
+U0 DemoZealC(U8 drive, U8 *format, U8 *name, I64 age)
 {
 	"Hello World!\n";
 	"%s age %d\n", name, age;
@@ -226,7 +229,7 @@ $FG$$ID,-2$
 
 * Can't use $FG,2$<>$FG$ with $FG,2$#include$FG$, use $FG,2$""$FG$.
 
-* "$FG,2$$$$FG$" is an escape character.	Two dollar signs signify an ordinary $$.	See $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$.	In $FG,2$asm$FG$ or $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ code, it also refers to the instruction's address or the offset in a $FG,2$class$FG$ definition.
+* "$FG,2$$$$FG$" is an escape character.	Two dollar signs signify an ordinary $$.	See $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$.	In $FG,2$asm$FG$ or $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ code, it also refers to the instruction's address or the offset in a $FG,2$class$FG$ definition.
 
 * $FG,2$union$FG$ is more like a class, so you don't reference it with a $FG,2$union$FG$ label after you define it.  Some common unions are declared in $LK,"KernelA.HH",A="MN:U16"$ for 1,2,4 and 8 byte objects.	If you place a type in front of a union declaration, that is the type when used by itself.	See $LK,"::/Demo/SubIntAccess.CC"$.
 

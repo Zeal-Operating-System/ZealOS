@@ -1,9 +1,9 @@
-/*The ~/Registry.CC file is CosmiC code.
+/*The ~/Registry.CC file is ZealC code.
 You can execute a tree branch of it.  The System
 branch is executed in the System task boot phase.
 Normally, you will place variable declarations
 in the branch you make, but since an arthmetic expression
-is valid in CosmiC you can place simple expressions
+is valid in ZealC you can place simple expressions
 without variables.
 */
 

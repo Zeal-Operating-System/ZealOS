@@ -7,7 +7,7 @@ instead of dollars with a float.
 Fixed-point used to be much $TX,"faster",HTML="http://en.wikipedia.org/wiki/X87"$,
 but modern processors do well with
 floats.  It also depends on the compiler
-and the CosmiC compiler is poor with floats.
+and the ZealC compiler is poor with floats.
 
 Terry often used 64-bit ints with upper 32-bits
 as int and lower 32-bits as fraction.
@@ -16,7 +16,7 @@ See $LK,"::/Demo/SubIntAccess.CC"$ for how
 to access upper or lower 32-bits.
 
 For a complete list of nonstandard compiler
-features, see $LK,"::/Doc/CosmiC.DD"$.
+features, see $LK,"::/Doc/ZealC.DD"$.
 */
 
 U0 Main()
@@ -70,7 +70,7 @@ place i into a register, so there is a
 penalty.
 
 For a complete list of nonstandard compiler
-features, see $LK,"::/Doc/CosmiC.DD"$.
+features, see $LK,"::/Doc/ZealC.DD"$.
 */
 
 	"i.u32[0]\t=%X\n", i.u32[0];

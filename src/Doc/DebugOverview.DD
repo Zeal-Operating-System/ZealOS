@@ -4,7 +4,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * $LK,"U",A="MN:U"$(&FunName+offset) to unassemble mem or $LK,"Uf",A="MN:Uf"$("FunName") to unassemble a function. $LK,"U",A="MN:U"$($LK,"_RIP",A="MN:_RIP"$-16);
 
-* While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
+* While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
 
 * You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int variables.
 
@@ -30,7 +30,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 $ID,2$
 $LK,"Echo",A="MN:Echo"$() turns on or off raw data going into the lexical analyzer.
 
-$LK,"Trace",A="MN:Trace"$() unassembles code generated from the CosmiC compiler.
+$LK,"Trace",A="MN:Trace"$() unassembles code generated from the ZealC compiler.
 
 $LK,"PassTrace",A="MN:PassTrace"$() shows intermediate code coming-out after optimization.	The bits ctrl which passes are displayed.
 $ID,-2$

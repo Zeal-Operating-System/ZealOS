@@ -22,7 +22,7 @@ U0 PutKey(I64 ch=0, I64 sc=0)
 
 U0 PutChars(U64 ch)
 {//Output chars. Up to 8 chars in a single U64.
-//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
+//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/ZealC.DD,DemoZealC"$
 	while (ch)
 	{
 		PutKey(ch & 255, 0);
@@ -32,7 +32,7 @@ U0 PutChars(U64 ch)
 
 U0 PutS(U8 *st)
 {//Use $LK,"Print",A="MN:Print"$(). See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
-//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
+//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/ZealC.DD,DemoZealC"$
 	I64				 ch;
 	U8				*ptr;
 	Bool			 cont = TRUE;

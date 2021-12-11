@@ -1109,10 +1109,10 @@ U8 *CatPrint(U8 *_dst, U8 *format, ...)
 
 U0 Print(U8 *format, ...)
 {//$LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.  See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
-//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
+//Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/ZealC.DD,DemoZealC"$
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	PutS(buf);//Don't use PutS().  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
+	PutS(buf);//Don't use PutS().  $LK,"See Print() shortcut.",A="FF:::/Doc/ZealC.DD,DemoZealC"$
 	Free(buf);
 }
 

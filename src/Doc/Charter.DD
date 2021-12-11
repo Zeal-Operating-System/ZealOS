@@ -8,7 +8,7 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"95,190",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
 
-* The metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ language should be changed to optimize this metric, as Terry Davis did when he changed type casting from prefix standard C to postfix $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$, but we need a rule to prevent degenerating into a brainfuck language.
+* The metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language should be changed to optimize this metric, as Terry Davis did when he changed type casting from prefix standard C to postfix $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$, but we need a rule to prevent degenerating into a brainfuck language.
  
 * Minimal abstraction is a goal. Sheep are fools. They always respect a design that is more complicated than another.  Any genius can make it complicated.	Like in physics, it takes a supra-genius to make it simple.
 

@@ -19,7 +19,7 @@ $ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ instru
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
 $ID,2$$LK,"Fs",A="MN:Fs"$ is a segment register, not $FG,2$file system$FG$.	($LK,"Fs",A="MN:Fs"$ is kept pointing to the current task's record.)	There is no memory segmentation.	It is 64-bit and flat. FS and GS are used as general purpose registers, more or less.
 $ID,-2$$TR,"Is it Pascal?"$
-$ID,2$ZealOS uses a dialect of C/C++ called $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.	It is not $FG,2$Pascal$FG$.  The syntax was altered making parenthesis optional on function calls with no parameters.
+$ID,2$ZealOS uses a dialect of C/C++ called $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$.	It is not $FG,2$Pascal$FG$.  The syntax was altered making parenthesis optional on function calls with no parameters.
 $ID,-2$$TR,"Why doesn't Sleep() make my laptop hibernate?"$
 $ID,2$$LK,"Sleep",A="MN:Sleep"$() makes a program pause.	It is not hibernation for a laptop.
 $ID,-2$$TR,"What is Yield() for in loops?"$
@@ -69,7 +69,7 @@ $ID,2$Binary executable files have export symbols which are loaded into the symb
 $ID,-2$$TR,"Why doesn't assert work?"$
 $ID,2$$FG,2$#assert$FG$ might print a message at COMPILE time, not run time.
 $ID,-2$$TR,"Why doesn't C++ public work?"$
-$ID,2$The word $FG,2$public$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"HashTableDump",A="MN:HashTableDump"$() to exclude meaningless symbols.	If you wish a full report of public and nonpublic symbols $MA-X+PU,"Click Here",LM="DocMax(1000000);HashTableDump;View;\n"$.
+$ID,2$The word $FG,2$public$FG$ in $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ does very little except allow the $LK,"Help & Index",A="FI:::/Doc/HelpIndex.DD"$ and $LK,"HashTableDump",A="MN:HashTableDump"$() to exclude meaningless symbols.	If you wish a full report of public and nonpublic symbols $MA-X+PU,"Click Here",LM="DocMax(1000000);HashTableDump;View;\n"$.
 $ID,-2$$TR,"How does the debugger do source debugging?"$
 $ID,2$When compilation takes place, the structures used by the compiler stick around.  Data on classes can be accessed.  See $LK,"ClassRep",A="MN:ClassRep"$().
 $ID,-2$$TR,"What is ASCII 5 doing in my text files?"$

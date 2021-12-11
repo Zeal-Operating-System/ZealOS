@@ -55,7 +55,7 @@ CIntermediateStruct intermediate_code_table[IC_ICS_NUM] = {
 	{IS_1_ARG, 0, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "TO_F64"},
 	{IS_1_ARG, 0, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "TO_BOOL"},
 	{IS_1_ARG, 0, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "TOUPPER"},
-	{IS_1_ARG, 1, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "HOLYC_TYPECAST"},
+	{IS_1_ARG, 1, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "POSTFIX_TYPECAST"},
 	{IS_1_ARG, 1, IST_NULL,		FALSE,	TRUE,	0, 0, 0, "ADDR"},
 	{IS_1_ARG, 1, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "COM"},
 	{IS_1_ARG, 1, IST_NULL,		FALSE,	FALSE,	0, 0, 0, "NOT"},

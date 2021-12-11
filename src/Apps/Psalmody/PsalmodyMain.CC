@@ -687,7 +687,7 @@ mo_got_message:
 											"$$GREEN$$<SHIFT-ESC>$$FG$$ to load it into Psalmody.\n\n"
 											ST_WARN_ST " Graphics and other embelishments\n"
 											"will be lost because Psalmody can't\n"
-											"parse CosmiC programs completely.\n");
+											"parse ZealC programs completely.\n");
 								Free(filename);
 								filename = NULL;
 								JukeBox(dirname, &filename);

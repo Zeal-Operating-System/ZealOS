@@ -539,7 +539,7 @@ here1:
 				case IC_PUSH_CMP:
 				case IC_REG:
 				case IC_COM:
-				case IC_HOLYC_TYPECAST:
+				case IC_POSTFIX_TYPECAST:
 				case IC_NOT:
 				case IC_UNARY_MINUS:
 				case IC_POWER:

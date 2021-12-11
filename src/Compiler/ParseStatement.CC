@@ -389,7 +389,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 							if (cc->token == '=')
 								LexExcept(cc, "Can't init global variable on data heap in AOT module ");
 							tmpg = CAlloc(sizeof(CHashGlobalVar));
-							tmphg = tmpg->heap_global=CAlloc(sizeof(CAOTHeapGlobal));
+							tmphg = tmpg->heap_global = CAlloc(sizeof(CAOTHeapGlobal));
 							tmphg->size = j;
 							tmphg->str = StrNew(st);
 							tmphg->next = aotc->heap_globals;

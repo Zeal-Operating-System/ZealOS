@@ -504,7 +504,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						  REG_RAX, tmpi->ic_data, rip2);
 					break;
 
-				case IC_HOLYC_TYPECAST:
+				case IC_POSTFIX_TYPECAST:
 					ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;

@@ -7,7 +7,7 @@ instead of dollars with a float.
 Fixed-point used to be much $TX,"faster",HTML="http://en.wikipedia.org/wiki/X87"$,
 but modern processors do well with
 floats.  It also depends on the compiler
-and the CosmiC compiler is poor with floats.
+and the ZealC compiler is poor with floats.
 
 Terry often use 64-bit ints with upper 32-bits
 as int and lower 32-bits as fraction.

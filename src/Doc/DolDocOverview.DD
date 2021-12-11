@@ -122,29 +122,29 @@ Examples: <CTRL-t> to see
 $ID,-2$$TR,"BT Button"$
 $ID,2$See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$$TR,"DA Data"$
-$ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$, $LK,"::/Demo/Disk/DataBase.CC"$, and $LK,"::/System/DolDoc/DocWidgetWiz.CC"$.
+$ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$, $LK,"::/Demo/Disk/DataBase.CC"$, and $LK,"::/System/DolDoc/DocWidgetWiz.CC"$.
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
-The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 
 The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the print/scan format string.
 
-The default field length is $FG,2$LEN=64$FG$ characters.	For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition.  The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
+The default field length is $FG,2$LEN=64$FG$ characters.	For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's definition.  The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
 
 The space after the first ':' in the format string marks the first valid cursor pos.	See $LK,"Data Tag Width",A="FA:::/System/DolDoc/DocPlain.CC,DataTagWidth"$.
 $ID,-2$$TR,"CB Check Box"$
-$ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$$FG$ and $LK,"CEdFindText",A="MN:CEdFindText"$.
+$ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$$FG$ and $LK,"CEdFindText",A="MN:CEdFindText"$.
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
-The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.	Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.	See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.	Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.	See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"LS List Widget"$
-$ID,2$Used for forms that prompt for data.	You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$.
+$ID,2$Used for forms that prompt for data.	You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$.
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
-The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"MA Macro"$
 $ID,2$A left macro arg, $FG,2$LM=""$FG$, will send text when the left mouse is clicked.
 
@@ -223,7 +223,7 @@ $ID,-2$
 $TR,"T=\"\" Tag Str"$
 $ID,2$Some cmds have a tag by default.	See $LK,"TX+T",A="FF:::/System/DolDoc/DocInit.CC,TX+T"$.	You can code $FG,2$T="tag_text"$FG$ as just $FG,2$"tag_text"$FG$ with no $FG,2$T=$FG$.
 $ID,-2$$TR,"LEN=\"\" Field Length"$
-$ID,2$The default field length for $FG,2$$$DA...$$$FG$ commands is $FG,2$LEN=64$FG$ characters.  For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition.	The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
+$ID,2$The default field length for $FG,2$$$DA...$$$FG$ commands is $FG,2$LEN=64$FG$ characters.  For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ $FG,2$class$FG$ member's definition.	The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
 
 The space after the first ':' in the format string marks the first valid cursor pos.	See $LK,"Data Tag Width",A="FA:::/System/DolDoc/DocPlain.CC,DataTagWidth"$.
 $ID,-2$$TR,"A=\"\" Auxilliary Str"$

@@ -251,7 +251,7 @@ $ID,-5$
 
 
 $FG,5$$TX+CX,"Committee Needed"$$FG$
-* Make binary tree look-up using FUN_SEG symbol addresses, so we can eliminate fun_seg cache and wall-paper kludge?  All CosmiC functions and global vars would have left-right for address search.
+* Make binary tree look-up using FUN_SEG symbol addresses, so we can eliminate fun_seg cache and wall-paper kludge?  All ZealC functions and global vars would have left-right for address search.
 
 * Should we get rid of drive mapping.  It's ugly.
 
@@ -336,7 +336,7 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 * Make use of flag potential in $LK,"FilesFind",A="MN:FilesFind"$() and possibly $LK,"DirContextNew",A="MN:DirContextNew"$().
 * Sort options for $LK,"FilesFind",A="MN:FilesFind"$()?
 
-* New $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ language features?
+* New $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language features?
 
 * Better $LK,"Debugging",A="HI:Debugging"$?
 

@@ -1,6 +1,6 @@
 /*
 
-The CosmiC assembler currently has partial SSE support.
+The ZealC assembler currently has partial SSE support.
 
 SSE instructions with no prefix are fully supported,
 but instructions prefixed with 0x66, 0xF2, or F3

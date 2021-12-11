@@ -25,7 +25,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global variable in a start-up file. Its units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$. See $LK,"local time",A="FF:~/HomeLocalize.CC,local_time"$.
 
-* $FG,2$<CTRL-SHIFT-L>$FG$ in the editor to reindent a $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function or renumber an asm routine's local labels.
+* $FG,2$<CTRL-SHIFT-L>$FG$ in the editor to reindent a $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ function or renumber an asm routine's local labels.
 
 * You can use $FG,2$filter_lines$FG$ in the editor text search form ($FG,2$<CTRL-f>$FG$) to temporarily display just lines near each match. A value of $FG,2$filter lines$FG$ set to $FG,2$5$FG$ will display lines within 5 lines of matches. Then, you can do another find to a different string and achieve a $FG,2$AND$FG$ search. When finished, press $FG,2$<ESC>$FG$.
  
@@ -139,6 +139,6 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * With $FG,2$start$FG$/$FG,2$end$FG$, common trailing code is fast. Common leading code is slow.$FG$
 
-* The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$(). The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$. The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$(). You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$. You can press $FG,2$<DEL>$FG$ to delete songs.
+* The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$(). The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$. The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$(). You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$. You can press $FG,2$<DEL>$FG$ to delete songs.
 
 * $FG,8$"Linux" is a trademark owned by Linus Torvalds.$FG$

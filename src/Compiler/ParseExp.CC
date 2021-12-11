@@ -1204,7 +1204,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var,
 				tmpc++;
 			tmpi = cc->coc.coc_head.last;
 			tmpi->ic_class = tmpc;
-			ICAdd(cc, IC_HOLYC_TYPECAST, was_paren, tmpc);
+			ICAdd(cc, IC_POSTFIX_TYPECAST, was_paren, tmpc);
 			if (cc->token != ')')
 				LexExcept(cc, "Missing ')' at ");
 			Lex(cc);

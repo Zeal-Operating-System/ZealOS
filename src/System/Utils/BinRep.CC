@@ -39,7 +39,7 @@ public Bool BinRep(U8 *filename)
 		goto br_done1;
 	if (bf->bin_signature != BIN_SIGNATURE_VAL)
 	{
-		"Not a CosmiC Binary File.\n";
+		"Not a ZealC Binary File.\n";
 		goto br_done2;
 	}
 
