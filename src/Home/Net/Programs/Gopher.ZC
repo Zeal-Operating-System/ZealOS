@@ -154,6 +154,9 @@ U8 *GopherBasename(U8 *selector)
 	result = StrReplace(result, ">", "",, TRUE);
 	result = StrReplace(result, " ", "",, TRUE);
 
+	if (StrLen(result) > 22)
+		result[21] = 0; // truncate filename len
+
 	SysLog("%s\n", result);
 
 	return result;
@@ -166,11 +169,7 @@ U0 GopherTextView(U8 *host, U16 port, U8 *selector)
 	
 	DirMake("::/Tmp/Gopher");
 	
-	tmpname = StrNew(selector);
-	if (StrLen(tmpname) > 22)
-		tmpname[21] = 0; // too long, terminate it early
-	basename = ExtChange(GopherBasename(tmpname), "TXT");
-	Free(tmpname);
+	basename = ExtChange(GopherBasename(selector), "TXT");
 	tmpname = StrPrint(NULL, "::/Tmp/Gopher/%s", basename);
 	Free(basename);
 	
