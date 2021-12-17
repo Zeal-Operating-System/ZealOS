@@ -19,7 +19,14 @@ ZEALDISK=
 [ ! -f "$ZEALDISK" ] && echo "\$ZEALDISK is not a path to a file." && exit 1
 
 TMPMOUNT=/tmp/zealtmp
-USAGE="Usage: $0 [ repo | vm ] \n\n repo - overwrites src/ with virtual disk contents.\n vm - overwrites virtual disk with src/ contents.\n"
+
+print_usage() {
+	echo "Usage: $0 [ repo | vm ]"
+	echo
+	echo " repo - overwrites src/ with virtual disk contents."
+	echo " vm - overwrites virtual disk with src/ contents."
+	echo
+}
 
 mount_vdisk() {
 	echo "Mounting virtual disk..."
@@ -38,7 +45,7 @@ umount_vdisk() {
 
 if [ -z $1 ]
 then
-	echo $USAGE
+	print_usage
 else
 	sudo modprobe nbd
 	[ ! -d $TMPMOUNT ] && mkdir $TMPMOUNT
@@ -71,7 +78,7 @@ else
 			;;
 		*)
 			echo "Unknown action."
-			echo $USAGE
+			print_usage
 			;;
 	esac
 fi
