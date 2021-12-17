@@ -23,8 +23,8 @@ TMPMOUNT=/tmp/zealtmp
 print_usage() {
 	echo "Usage: $0 [ repo | vm ]"
 	echo
-	echo "repo - overwrites src/ with virtual disk contents."
-	echo "vm - overwrites virtual disk with src/ contents."
+	echo " repo - overwrites src/ with virtual disk contents."
+	echo " vm - overwrites virtual disk with src/ contents."
 	echo
 }
 
