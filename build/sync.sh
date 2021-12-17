@@ -9,16 +9,21 @@
 #alias sudo=doas
 
 # Set this
-ZEALDISK=""
+ZEALDISK=
+# Examples:
+#ZEALDISK=~/VirtualBox\ VMs/ZealOS/ZealOS.vdi
+#ZEALDISK=~/vmware/ZealOS/ZealOS.vmdk
+#ZEALDISK=ZealOS.qcow2
 
-[ -z $ZEALDISK ] && echo "Please edit this script with the full path to your ZealOS virtual disk." && exit 1
+[ -z "$ZEALDISK" ] && echo "Please edit this script with the full path to your ZealOS virtual disk." && exit 1
+[ ! -f "$ZEALDISK" ] && echo "\$ZEALDISK is not a path to a file." && exit 1
 
 TMPMOUNT=/tmp/zealtmp
-USAGE="Usage: $0 [ repo | vm ]"
+USAGE="Usage: $0 [ repo | vm ] \n\n repo - overwrites src/ with virtual disk contents.\n vm - overwrites virtual disk with src/ contents.\n"
 
 mount_vdisk() {
 	echo "Mounting virtual disk..."
-	sudo qemu-nbd -c /dev/nbd0 $ZEALDISK
+	sudo qemu-nbd -c /dev/nbd0 "$ZEALDISK"
 	sudo partprobe /dev/nbd0       
 	sudo mount /dev/nbd0p1 $TMPMOUNT
 }
@@ -28,6 +33,7 @@ umount_vdisk() {
 	sync
 	sudo umount $TMPMOUNT
 	sudo qemu-nbd -d /dev/nbd0
+	sudo rm -rf $TMPMOUNT
 }
 
 if [ -z $1 ]

@@ -28,7 +28,7 @@ umount_tempdisk() {
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 512M -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
 
 echo "Mounting vdisk and copying src/..."
 rm ../src/Home/Registry.ZC 2> /dev/null
@@ -38,7 +38,7 @@ sudo cp -r ../src/* $TMPMOUNT
 umount_tempdisk
 
 echo "Generating ISO..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 512M -rtc base=localtime -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
 
 echo "Extracting ISO from vdisk..."
 rm ./ZealOS-*.iso 2> /dev/null # comment this line if you want lingering old ISOs
