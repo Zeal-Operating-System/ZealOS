@@ -6,7 +6,7 @@ Here are example instruction formats:
 $HL,1$		ADD 	RAX, I64 FS:DISP[RSI + RDI * 8]
 $HL,0$$HL,1$		ADD 	RAX, I64 [DISP]
 $HL,0$
-$FG,2$$$$FG$ Current compiler output pos (instruction pointer).	Even works in CosmiC expressions.
+$FG,2$$$$FG$ Current compiler output pos (instruction pointer).	Even works in ZealC expressions.
 
 $FG,2$$$$FG$ works in $FG,2$class$FG$es.
 	$FG,2$class MyFun
@@ -44,4 +44,4 @@ $FG,2$ORG$FG$ $FG,4$num$FG$
 
 $FG,2$BINFILE$FG,4$ "FileName.BIN"$FG$;
 
-See $LK,"Assembly Language",A="FF:::/Doc/GuideLines.DD,Assembly Language"$, $LK,"::/Demo/Asm/AsmAndC1.CC"$, $LK,"::/Demo/Asm/AsmAndC2.CC"$ and $LK,"::/Demo/Asm/AsmAndC3.CC"$.
+See $LK,"Assembly Language",A="FF:::/Doc/GuideLines.DD,Assembly Language"$, $LK,"::/Demo/Asm/AsmAndC1.ZC"$, $LK,"::/Demo/Asm/AsmAndC2.ZC"$ and $LK,"::/Demo/Asm/AsmAndC3.ZC"$.

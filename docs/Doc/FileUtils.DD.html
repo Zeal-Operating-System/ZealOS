@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -27,7 +27,7 @@ body {background-color:#1f1f1f;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                          File Utils</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a>File util </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF0>() wildcard mask consists of a single base dir with multiple file masks separated by </span><span class=cF2>';'</span><span class=cF0>.    The </span><span class=cF2>'*'</span><span class=cF0> and </span><span class=cF2>'?
+<a name="l3"></a>File util </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.ZC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF0>() wildcard mask consists of a single base dir with multiple file masks separated by </span><span class=cF2>';'</span><span class=cF0>.    The </span><span class=cF2>'*'</span><span class=cF0> and </span><span class=cF2>'?
 <a name="l4"></a>'</span><span class=cF0> wildcard chars are accepted.  The </span><span class=cF2>'~'</span><span class=cF0> is your home directory and </span><span class=cF2>'!'</span><span class=cF0> indicates an exclusion mask.
 <a name="l5"></a>
 <a name="l6"></a> 
@@ -35,7 +35,7 @@ body {background-color:#1f1f1f;}
 <a name="l8"></a></span><span class=cF2>&quot;/Demo/*.BMP*;*.GR*&quot;</span><span class=cF0>    BaseDir: </span><span class=cF2>/Demo</span><span class=cF0>              Mask: </span><span class=cF2>*.BMP*</span><span class=cF0> | </span><span class=cF2>*.GR*</span><span class=cF0>
 <a name="l9"></a></span><span class=cF2>&quot;/*.DD*;!*/Bible*&quot;</span><span class=cF0>      BaseDir: </span><span class=cF2>Root</span><span class=cF0>               Mask: </span><span class=cF2>*.DD*</span><span class=cF0> but not </span><span class=cF2>*/Bible*</span><span class=cF0>
 <a name="l10"></a>
-<a name="l11"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskStrA.CC.html#l38"><span class=cF4>FilesFindMatch</span></a><span class=cF0>().
+<a name="l11"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskStrA.ZC.html#l38"><span class=cF4>FilesFindMatch</span></a><span class=cF0>().
 <a name="l12"></a>
 <a name="l13"></a>Flags are either text or int values.
 <a name="l14"></a>
@@ -52,6 +52,6 @@ body {background-color:#1f1f1f;}
 <a name="l25"></a>    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3262"><span class=cF4>FUF_JUST_JIT</span></a><span class=cF0>        </span><span class=cF2>+J</span><span class=cF0> just jit files       : </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3013"><span class=cF4>FILEMASK_JIT</span></a><span class=cF0>
 <a name="l26"></a>    </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3263"><span class=cF4>FUF_JUST_GR</span></a><span class=cF0>         </span><span class=cF2>+G</span><span class=cF0> just graphic files   : </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3018"><span class=cF4>FILEMASK_GR</span></a><span class=cF0>
 <a name="l27"></a>
-<a name="l28"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0> when used in calling program taking text flags.
+<a name="l28"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.ZC.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0> when used in calling program taking text flags.
 </span></pre></body>
 </html>

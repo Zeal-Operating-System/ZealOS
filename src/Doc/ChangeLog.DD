@@ -1,4 +1,24 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+
+$IV,1$----12/11/21 05:57:44----$IV,0$
+* Raised version number to 1.07.
+* $UL,1$Rename CosmiC -> ZealC.$UL,0$
+* $UL$Renamed all files from .CC -> .ZC to reflect language name change.$UL,0$
+* $LK,"R",A="MN:R"$("HOLYC_TYPECAST", "POSTFIX_TYPECAST", "-i");
+* $LK,"R",A="MN:R"$("CosmiC", "ZealC", "-i");
+* Rename Doc/CosmiC.DD to $LK+PU,"Doc/ZealC.DD",A="FI:::/Doc/ZealC.DD"$.
+* $LK,"R",A="MN:R"$("\"CC\", "\"ZC\"");
+* $LK,"R",A="MN:R"$(".CC", ".ZC", "-i");
+* $LK,"FR",A="MN:FR"$(".CC", ".ZC");
+
+$IV,1$----12/09/21 03:21:03----$IV,0$
+* Revert 440Hz 'A'.
+
+$IV,1$----12/04/21 04:16:45----$IV,0$
+* Raised version number to 1.06.
+* Removed IDE members and padding from CBlkDev and CBlkDevGlobals, added $MA-X+PU,"ins_port",LM="Find(\"ins_port\",\"/*\");View;"$ to return install-drive recognition functionality.
+* Implemented $LK+PU,"BlkDevRep",A="MN:BlkDevRep"$, removed BlkDevRep demo file.
+ 
 $IV,1$----11/30/21 13:40:29----$IV,0$
 * Raised version number to 1.05.
 * $LK,"R",A="MN:R"$("DocDump",	"$LK+PU,"DocDumpLines",A="MN:DocDumpLines"$");
@@ -18,22 +38,22 @@ $IV,1$----11/30/21 13:40:29----$IV,0$
 
 $IV,1$----10/30/21 05:02:51----$IV,0$
 * Added column headers to Rep functions.
-* Changed $LK+PU,"ProfRep",A="FF:::/System/Utils/Profiler.CC,ProfSort"$ to sort by hits.
+* Changed $LK+PU,"ProfRep",A="FF:::/System/Utils/Profiler.ZC,ProfSort"$ to sort by hits.
 
 $IV,1$----10/26/21 12:38:12----$IV,0$
 * Raised version number to 1.04.
 * Optimized $LK+PU,"MemCopy",A="MN:_MEMCOPY"$ to use SSE instructions. Large performance boost on bare-metal.
 * Reverted $LK+PU,"RawPutChar",A="MN:RawPutChar"$ scrolling functionality now that MemCopy is faster.
 * Removed all kludge MyNoise functions from Apps and Demos now that MemCopy is faster.
-* Added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"SettingsPop2",A="FF:::/System/TaskSettings.CC,LFBFlush"$ to fix task-swap palette bugs.
-* Improved $LK+PU,"ToTheFront",A="FF:::/Apps/ToTheFront/ToTheFront.CC,Squares"$ game explanation.
+* Added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"SettingsPop2",A="FF:::/System/TaskSettings.ZC,LFBFlush"$ to fix task-swap palette bugs.
+* Improved $LK+PU,"ToTheFront",A="FF:::/Apps/ToTheFront/ToTheFront.ZC,Squares"$ game explanation.
 
 $IV,1$----10/18/21 01:16:10----$IV,0$
 * Raised version number to 1.03.
 * Increased $LK+PU,"CInst",A="MN:CInst"$ opcode size from 4 to 8.
 * $MA-X+PU,"Added 3 operand support to assembler",LM="Find(\"arg3\", \"::/Compiler/\");View;"$.
 * Added almost all SSE instructions to OpCodes.DD. SSE instructions operating on MMX registers were not implemented.
-* Fixed $LK+PU,"0x66 prefix unassembly opcode reporting",A="FF:::/Compiler/UAsm.CC,OC_OP_SIZE_PREFIX"$, assembler now $LK+PU,"prevents duplicate REX",A="FF:::/Compiler/Asm.CC,tmpins->opcode[0] == 0x66"$ for prefixed SSE instructions. The tradeoff for fixing this is that 0x66, 0xF2, or 0xF3 prefixed SSE opcodes can only use XMM0-XMM7 RAX-RDI.
+* Fixed $LK+PU,"0x66 prefix unassembly opcode reporting",A="FF:::/Compiler/UAsm.ZC,OC_OP_SIZE_PREFIX"$, assembler now $LK+PU,"prevents duplicate REX",A="FF:::/Compiler/Asm.ZC,tmpins->opcode[0] == 0x66"$ for prefixed SSE instructions. The tradeoff for fixing this is that 0x66, 0xF2, or 0xF3 prefixed SSE opcodes can only use XMM0-XMM7 RAX-RDI.
 
 $IV,1$----10/09/21 04:05:32----$IV,0$
 * Added MOVQ, PMOVMSKB, MINPS, MAXPS, XORPS, CVTSI2SD, and CVTSD2SI assembly opcodes to OpCodes.DD.
@@ -43,39 +63,39 @@ $IV,1$----10/07/21 18:06:15----$IV,0$
 * Fixed Std Font characters after char 128.
 * Added links to ZealOS-specific applications in PersonalMenu.
 * Removed all files from ::/Downloads.
-* Started initial work integrating SSE instructions into assembler. $MA-X+PU,"See changes here.",LM="Find(\"XMM\", \"::/Compiler/OpCodes.DD\", \"-i\");\"\n\n\";Find(\"XMM\", \"::/Compiler/Asm.CC\", \"-i\");\"\n\";Find(\" == 128\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"XMM\", \"::/Compiler/UAsm.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[16]\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"size_arg_mask[0]  = 0xF\", \"::/Compiler/AsmInit.CC\", \"-i\");\"\n\";Find(\"arg_mask[17\", \"::/Kernel/KernelA.HH\", \"-i\");\"\n\";Find(\"SSE\", \"::/Kernel/MultiProc.CC\", \"-i\");View;"$ Only added 2 arg opcodes and only added instructions <= 4 bytes. $TX+IV,"Current bugs"$: unassembling SSE instructions that use non-128-bit vars will incorrectly report U128, MOVHLPS and MOVLHPS 2nd operand is defined XMM128 to hack ModrM order but operands should be XMM XMM, due to MOVSD name clash we define opcode as MOVSD_SSE. $TX+IV,"TODO"$: add CosmiC U128 and XMM register allocation support, find way to ensure 16-byte aligned stack to use aligned SSE instructions.
+* Started initial work integrating SSE instructions into assembler. $MA-X+PU,"See changes here.",LM="Find(\"XMM\", \"::/Compiler/OpCodes.DD\", \"-i\");\"\n\n\";Find(\"XMM\", \"::/Compiler/Asm.ZC\", \"-i\");\"\n\";Find(\" == 128\", \"::/Compiler/UAsm.ZC\", \"-i\");\"\n\";Find(\"XMM\", \"::/Compiler/UAsm.ZC\", \"-i\");\"\n\";Find(\"size_arg_mask[16]\", \"::/Compiler/AsmInit.ZC\", \"-i\");\"\n\";Find(\"size_arg_mask[0]  = 0xF\", \"::/Compiler/AsmInit.ZC\", \"-i\");\"\n\";Find(\"arg_mask[17\", \"::/Kernel/KernelA.HH\", \"-i\");\"\n\";Find(\"SSE\", \"::/Kernel/MultiProc.ZC\", \"-i\");View;"$ Only added 2 arg opcodes and only added instructions <= 4 bytes. $TX+IV,"Current bugs"$: unassembling SSE instructions that use non-128-bit vars will incorrectly report U128, MOVHLPS and MOVLHPS 2nd operand is defined XMM128 to hack ModrM order but operands should be XMM XMM, due to MOVSD name clash we define opcode as MOVSD_SSE. $TX+IV,"TODO"$: add U128 and XMM register allocation support, find way to ensure 16-byte aligned stack to use aligned SSE instructions.
 
 $IV,1$----09/21/21 23:35:00----$IV,0$
 * Raised version number to 1.01.
-* Fixed $LK+PU,"GrZoomInScreen",A="MN:GrZoomInScreen"$, added to $LK+PU,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$ to factor in zoom, added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"CtrlAltZ",A="FF:::/System/Gr/GrEnd.CC,LFBFlush"$.
+* Fixed $LK+PU,"GrZoomInScreen",A="MN:GrZoomInScreen"$, added to $LK+PU,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$ to factor in zoom, added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"CtrlAltZ",A="FF:::/System/Gr/GrEnd.ZC,LFBFlush"$.
 
 $IV,1$----09/15/21 20:33:11----$IV,0$
 * Added $LK+PU,"WinMax",A="FF:::/Doc/EdPullDown.DD,Maximize"$ to EdPullDown menu.
 
 $IV,1$----08/23/21 02:28:07----$IV,0$
-* Added recognition of Linux swap and ext2/3/4 filesystem type in $LK+PU,"BlkDevAdd",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,LINUX"$, added $LK+PU,"MBR_PT_LINUX",A="MN:MBR_PT_LINUX"$ and $LK+PU,"MBR_PT_SWAP",A="MN:MBR_PT_SWAP"$, removed MBR_PT_FAT12, added "LINUX" and "SWAP" to $LK+PU,"ST_DRIVE_TYPES",A="FF:::/Kernel/KDefine.CC,LINUX"$.
+* Added recognition of Linux swap and ext2/3/4 filesystem type in $LK+PU,"BlkDevAdd",A="FF:::/Kernel/BlkDev/DiskAddDev.ZC,LINUX"$, added $LK+PU,"MBR_PT_LINUX",A="MN:MBR_PT_LINUX"$ and $LK+PU,"MBR_PT_SWAP",A="MN:MBR_PT_SWAP"$, removed MBR_PT_FAT12, added "LINUX" and "SWAP" to $LK+PU,"ST_DRIVE_TYPES",A="FF:::/Kernel/KDefine.ZC,LINUX"$.
 
 $IV,1$----08/17/21 02:42:53----$IV,0$
 * Raised version number to 1.00.
-* Added progress bars to $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,progress1"$.
+* Added progress bars to $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.ZC,progress1"$.
 
 $IV,1$----08/16/21 20:35:44----$IV,0$
 * Raised version number to 0.17.
-* Fixed $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,max_blk + 1"$ block count.
-* Changed left window border text to use $LK+PU,"inverted color attribute",A="FF:::/System/DolDoc/DocRecalcLib.CC,attr >> 8"$.
-* Fixed $LK+PU,"ISOInit",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,id - 4"$ to account for non-ZealOS CISOPriDesc.
+* Fixed $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.ZC,max_blk + 1"$ block count.
+* Changed left window border text to use $LK+PU,"inverted color attribute",A="FF:::/System/DolDoc/DocRecalcLib.ZC,attr >> 8"$.
+* Fixed $LK+PU,"ISOInit",A="FF:::/Kernel/BlkDev/DiskCDDVD.ZC,id - 4"$ to account for non-ZealOS CISOPriDesc.
 
 $IV,1$----08/16/21 00:17:55----$IV,0$
 * Added $LK+PU,"CAtapiCloseCmd",A="MN:CAtapiCloseCmd"$.
-* Added try-catch blocks to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,try"$ and $LK+PU,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$.
+* Added try-catch blocks to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.ZC,try"$ and $LK+PU,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$.
 
 $IV,1$----08/15/21 01:51:08----$IV,0$
 * Raised version number to 0.16.
-* Changed $LK+PU,"DVDImageWrite",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,buf = MAlloc"$ to single-buffer single-threaded instead of dual-buffer multi-threaded.
+* Changed $LK+PU,"DVDImageWrite",A="FF:::/Kernel/BlkDev/DiskCDDVD.ZC,buf = MAlloc"$ to single-buffer single-threaded instead of dual-buffer multi-threaded.
 * Added $LK+PU,"CAtapiWriteCmd",A="MN:CAtapiWriteCmd"$.
 
 $IV,1$----08/13/21 18:26:14----$IV,0$
-* Fixed padding byte amount in $LK+PU,"CISOPriDesc",A="MN:CISOPriDesc"$, added preparer_id member and set in $LK+PU,"RedSeaISO9660",A="FF:::/System/Boot/DiskISORedSea.CC,preparer_id"$.
+* Fixed padding byte amount in $LK+PU,"CISOPriDesc",A="MN:CISOPriDesc"$, added preparer_id member and set in $LK+PU,"RedSeaISO9660",A="FF:::/System/Boot/DiskISORedSea.ZC,preparer_id"$.
 
 $IV,1$----08/13/21 15:57:12----$IV,0$
 * Changed $LK+PU,"Merge2",A="MN:Merge2"$, $LK+PU,"DiffSel",A="MN:DiffSel"$, and $LK+PU,"PopUpDiffMenu",A="MN:PopUpDiffMenu"$ colors, added printing source and destination files along with some explanatory text in the popup window.
@@ -92,15 +112,15 @@ $IV,1$----08/08/21 20:30:08----$IV,0$
 * Implemented $LK+PU,"AHCIAtapiBlank",A="MN:AHCIAtapiBlank"$, default is minimal disc blank.
 
 $IV,1$----08/06/21 00:11:02----$IV,0$
-* Fixed $LK+PU,"Mount2",A="FF:::/System/BlkDev/Mount.CC,port = -1"$ AHCI port value not being cleared on loop.
+* Fixed $LK+PU,"Mount2",A="FF:::/System/BlkDev/Mount.ZC,port = -1"$ AHCI port value not being cleared on loop.
 * Fixed OSUpgrade not asking to update the master boot record.
 * Changed ordering of some links in the PersonalMenu.
 * Increased Raw mode screen scrolling from 1 line to 8 lines to improve bare-metal performance.
 * Fixed Raw mode $$ printing in $LK+PU,"MemBIOSRep",A="MN:MemBIOSRep"$, $LK+PU,"TaskRep",A="MN:TaskRep"$, $LK+PU,"PCIRep",A="MN:PCIRep"$, $LK+PU,"VideoRep",A="MN:VideoRep"$, $LK+PU,"MemPageRep",A="MN:MemPageRep"$.
 
 $IV,1$----08/04/21 14:29:24----$IV,0$
-* Changed $LK+PU,"DriveRep",A="FF:::/Kernel/BlkDev/DiskDrive.CC,port_num"$ to report AHCI SATA port number where IDE base0, base1, and unit were displayed.
-* Improved $LK+PU,"Lex",A="FF:::/Compiler/Lex.CC,Assert Failed"$ assert failure warning to give exact line number.
+* Changed $LK+PU,"DriveRep",A="FF:::/Kernel/BlkDev/DiskDrive.ZC,port_num"$ to report AHCI SATA port number where IDE base0, base1, and unit were displayed.
+* Improved $LK+PU,"Lex",A="FF:::/Compiler/Lex.ZC,Assert Failed"$ assert failure warning to give exact line number.
 * Removed some deprecated IDE functions.
 * Added default arg to $LK+PU,"Drive",A="MN:Drive"$, so running $FG,2$Drive;$FG,0$ will bring you to the root of the current drive.
 * Fixed printing $$'s in Raw mode in $LK+PU,"StackRep",A="MN:StackRep"$, $LK+PU,"DriveRep",A="MN:DriveRep"$, $LK+PU,"SATARep",A="MN:SATARep"$, $LK+PU,"Mount2",A="MN:Mount2"$, and $LK+PU,"CharGet",A="MN:CharGet"$.
@@ -112,19 +132,19 @@ $IV,1$----08/03/21 21:57:44----$IV,0$
 
 $IV,1$----08/02/21 16:23:34----$IV,0$
 * Raised version number to 0.13.
-* Fixed $LK+PU,"Mount",A="FF:::/System/BlkDev/Mount.CC,AHCIPortSig"$ allowing ATAPI<-->ATA BlkDev<-->AHCI Port misconfiguration.
-* Added arg to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,switch (bd_type)"$ to specify drive types to show.
+* Fixed $LK+PU,"Mount",A="FF:::/System/BlkDev/Mount.ZC,AHCIPortSig"$ allowing ATAPI<-->ATA BlkDev<-->AHCI Port misconfiguration.
+* Added arg to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.ZC,switch (bd_type)"$ to specify drive types to show.
 * Added checks in $LK+PU,"AHCIPortInit",A="MN:AHCIPortInit"$ to throw to Debug if invalid port signatures are detected.
 
 $IV,1$----08/02/21 00:54:40----$IV,0$
 * Raised version number to 0.12.
-* Fixed EdLite dropping $LK+PU,"RAWF_SCROLL",A="FF:::/Kernel/EdLite.CC,RAWF_SCROLL:2"$.
+* Fixed EdLite dropping $LK+PU,"RAWF_SCROLL",A="FF:::/Kernel/EdLite.ZC,RAWF_SCROLL:2"$.
 * Fixed incorrect src_link for $LK+PU,"DefineLoad",A="MN:DefineLoad"$ variables: added caller_num arg for when it's run from $LK+PU,"DefinePrint",A="MN:DefinePrint"$.
-* Added $LK+PU,"PCIDevFind",A="FF:::/System/Externs.CC,PCIDevFind"$ to System externs: fixes $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,PCIDevFind"$ compiling crash, now displays AHCI controller information from PCI data.
-* Added $LK+PU,"raw-mode screen clearing",A="FF:::/System/DolDoc/DocRecalcLib.CC,text.raw_col"$: can use either $LK+PU,"DocClear",A="MN:DocClear"$ or $LK+PU,"Cls",A="MN:Cls"$, useful for clearing the screen in debug mode.
+* Added $LK+PU,"PCIDevFind",A="FF:::/System/Externs.ZC,PCIDevFind"$ to System externs: fixes $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.ZC,PCIDevFind"$ compiling crash, now displays AHCI controller information from PCI data.
+* Added $LK+PU,"raw-mode screen clearing",A="FF:::/System/DolDoc/DocRecalcLib.ZC,text.raw_col"$: can use either $LK+PU,"DocClear",A="MN:DocClear"$ or $LK+PU,"Cls",A="MN:Cls"$, useful for clearing the screen in debug mode.
 
 $IV,1$----07/29/21 14:35:17----$IV,0$
-* Altered $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.CC,framebuffer_u64["$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
+* Altered $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.ZC,framebuffer_u64["$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
 
 $IV,1$----07/28/21 21:46:46----$IV,0$
 * Raised version number to 0.11.
@@ -133,7 +153,7 @@ $IV,1$----07/28/21 21:46:46----$IV,0$
 
 $IV,1$----07/25/21 02:19:17----$IV,0$
 * Raised version number to 0.10.
-* Unify Kernel binary location at /Boot/Kernel.BIN.C, alter $LK+PU,"BootDVDIns",A="MN:BootDVDIns"$ to create DVDKernel.BIN.C which gets moved in $LK+PU,"DoDistro",A="FF:::/Home/DoDistro.CC,DVDKernel"$, update boot documentation.
+* Unify Kernel binary location at /Boot/Kernel.BIN.C, alter $LK+PU,"BootDVDIns",A="MN:BootDVDIns"$ to create DVDKernel.BIN.C which gets moved in $LK+PU,"DoDistro",A="FF:::/Home/DoDistro.ZC,DVDKernel"$, update boot documentation.
 
 $IV,1$----07/24/21 00:07:05----$IV,0$
 * Raised version number to 0.09.
@@ -144,8 +164,8 @@ $IV,1$----07/23/21 16:30:23----$IV,0$
 
 $IV,1$----07/14/21 13:12:34----$IV,0$
 * Raised version number to 0.08.
-* Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.CC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.CC,CH_CTRLS"$.
-* Added top & right borders to $LK+PU,"RawDumpRegs",A="FF:::/Kernel/KDebug.CC,RawDumpRegs"$.
+* Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.ZC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.ZC,CH_CTRLS"$.
+* Added top & right borders to $LK+PU,"RawDr",A="FF:::/Kernel/KDebug.ZC,RawDumpRegs"$.
 * Improved spacing in some debug commands.
 * Fixed $LK+PU,"RawPutChar",A="MN:RawPutChar"$ and $LK+PU,"EdLite",A="MN:EdLite"$ tab width.
 * Fixed $LK+PU,"Ui",A="MN:Ui"$ missing "0x" prefix syntax highlighter bug.
@@ -167,7 +187,7 @@ $IV,1$----07/06/21 15:04:12----$IV,0$
 
 $IV,1$----07/05/21 22:24:03----$IV,0$
 * $LK,"R",A="MN:R"$("inst", "instruction");
-* Updated $LK+PU,"line counts",A="FF:::/System/Define.CC,DD_ZEALOS_LOC"$.
+* Updated $LK+PU,"line counts",A="FF:::/System/Define.ZC,DD_ZEALOS_LOC"$.
 
 $IV,1$----07/05/21 14:58:59----$IV,0$
 * Raised version number to 0.06.
@@ -181,9 +201,9 @@ $IV,1$----07/03/21 00:01:32----$IV,0$
 
 $IV,1$----07/02/21 19:30:19----$IV,0$
 * Raised version number to 0.04.
-* Implemented default NULL filename args for $LK+PU,"Ed",A="FF:::/System/DolDoc/DocEd.CC,Ed(U"$, $LK+PU,"PopUpEd",A="FF:::/System/DolDoc/DocEd.CC,PopUpEd(U"$.
+* Implemented default NULL filename args for $LK+PU,"Ed",A="FF:::/System/DolDoc/DocEd.ZC,Ed(U"$, $LK+PU,"PopUpEd",A="FF:::/System/DolDoc/DocEd.ZC,PopUpEd(U"$.
 * Removed some deprecated IDE functions.
-* Changed window borders. Added color to $LK+PU,"[X]",A="FF:::/System/DolDoc/DocTerm.CC,[X]"$ and $LK+PU,"MENU",A="FF:::/System/DolDoc/DocTerm.CC,MENU"$, hide for System Task and AutoComplete Task.
+* Changed window borders. Added color to $LK+PU,"[X]",A="FF:::/System/DolDoc/DocTerm.ZC,[X]"$ and $LK+PU,"MENU",A="FF:::/System/DolDoc/DocTerm.ZC,MENU"$, hide for System Task and AutoComplete Task.
 
 $IV,1$----07/02/21 03:58:09----$IV,0$
 * Raised version number to 0.03.
@@ -217,21 +237,21 @@ $IV,1$----06/28/21 06:20:21----$IV,0$
 $IV,1$----06/24/21 01:01:06----$IV,0$
 * Raised version number to ZenithOS 2.1.
 * Implemented PCI fall-back functions for when PCIBIOS is unsupported, to improve bare-metal support.
-* Abstracted $LK+PU,"PCI functions",A="FI:::/Kernel/PCI.CC"$ out from $LK+PU,"PCIBIOS",A="FI:::/Kernel/PCIBIOS.CC"$ file.
+* Abstracted $LK+PU,"PCI functions",A="FI:::/Kernel/PCI.ZC"$ out from $LK+PU,"PCIBIOS",A="FI:::/Kernel/PCIBIOS.ZC"$ file.
 
 $IV,1$----06/01/21 16:02:38----$IV,0$
 $BK,1$* Raised version number to ZenithOS 2.0.$BK,0$
 * Overhauled entire OS to use AHCI routines instead of IDE.
 
 $IV,1$----05/24/21 05:08:09----$IV,0$
-* Fixed $LK+PU,"Chess",A="FF:::/Demo/Games/Chess.CC,JobQueue"$ crashing when only one CPU core available.
+* Fixed $LK+PU,"Chess",A="FF:::/Demo/Games/Chess.ZC,JobQueue"$ crashing when only one CPU core available.
 
 $IV,1$----05/24/21 04:24:00----$IV,0$
 * Fixed Titanium crashing due to a broken sprite mesh.
 
 $IV,1$----05/12/21 15:42:22----$IV,0$
 * Renamed PaletteSetTomLight() to $LK,"PaletteSetLight",A="MN:PaletteSetLight"$(), brightened LTRED, PURPLE, and LTPURPLE.
-* Lowered $LK,"double-click wait time",A="FF:::/Kernel/SerialDev/Mouse.CC,mouse.dbl_time"$ from 0.350 to 0.175 to improve system response time.
+* Lowered $LK,"double-click wait time",A="FF:::/Kernel/SerialDev/Mouse.ZC,mouse.dbl_time"$ from 0.350 to 0.175 to improve system response time.
 
 $IV,1$----02/07/21 10:20:33----$IV,0$
 * $LK,"R",A="MN:R"$("MSRGet", "$LK,"MSRRead",A="MN:MSRRead"$");
@@ -253,13 +273,13 @@ $IV,1$----06/04/20 18:01:46----$IV,0$
 * Added $LK,"BIOSRep",A="MN:BIOSRep"$() as convenience function to view BIOS info from $LK,"SysRep",A="MN:SysRep"$().
 
 $IV,1$----04/27/20 15:34:42----$IV,0$
-* Changed $LK+PU,"GrBitMap",A="FI:::/System/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.
+* Changed $LK+PU,"GrBitMap",A="FI:::/System/Gr/GrBitMap.ZC"$ to use non-timer rand for drawing speed improvement on multicore.
 
 $IV,1$----04/21/20 18:54:47----$IV,0$
-* Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.CC,PaletteSetDark"$ for better visibility.
+* Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.ZC,PaletteSetDark"$ for better visibility.
 
 $IV,1$----04/21/20 16:13:01----$IV,0$
-* Added start-up intro $LK+PU,"Splash",A="FI:::/System/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/HomeSys.CC,PopUp"$, after performing a full boot (excludes soft reboots).
+* Added start-up intro $LK+PU,"Splash",A="FI:::/System/ZSplash.ZC"$ as a PopUp in $LK+PU,"Once",A="FF:::/HomeSys.ZC,PopUp"$, after performing a full boot (excludes soft reboots).
 
 $IV,1$----04/13/20 13:48:15----$IV,0$
 * Added $LK,"PIC_INIT",A="MN:PIC_INIT"$ and comments to $LK,"IntPICInit",A="MN:IntPICInit"$().
@@ -267,7 +287,7 @@ $IV,1$----04/13/20 13:48:15----$IV,0$
 * $LK,"R",A="MN:R"$("LAPIC_ARIBITRATION_PRIORITY", "$LK,"LAPIC_ARBITRATION_PRIORITY",A="MN:LAPIC_ARBITRATION_PRIORITY"$"); 
 
 $IV,1$----04/12/20 17:06:38----$IV,0$
-* Added $LK,"CIDTEntry",A="MN:CIDTEntry"$ and rewrote $LK,"IntEntryGet",A="MN:IntEntryGet"$() and $LK,"IntEntrySet",A="MN:IntEntrySet"$(). $LK,"dev",A="MN:CDevGlobals"$.idt is now $LK,"allocated",A="FF:::/Kernel/KInterrupts.CC,CAllocAligned"$ on an 8-byte boundary as per Intel SDM recommendation.
+* Added $LK,"CIDTEntry",A="MN:CIDTEntry"$ and rewrote $LK,"IntEntryGet",A="MN:IntEntryGet"$() and $LK,"IntEntrySet",A="MN:IntEntrySet"$(). $LK,"dev",A="MN:CDevGlobals"$.idt is now $LK,"allocated",A="FF:::/Kernel/KInterrupts.ZC,CAllocAligned"$ on an 8-byte boundary as per Intel SDM recommendation.
 * Updated $LK,"OS version",A="MN:sys_os_version"$.
 * Changed $LK,"BIN_SIGNATURE_VAL",A="MN:BIN_SIGNATURE_VAL"$ from 'TOSB' to 'ZCCB'.
 
@@ -281,7 +301,7 @@ $IV,1$----04/10/20 07:44:08----$IV,0$
 * $LK,"R",A="MN:R"$("PIT2", "$LK,"PIT_2",A="MN:PIT_2"$");
 
 $IV,1$----04/09/20 19:33:16----$IV,0$
-* Added $LK,"Chess",A="FI:::/Demo/Games/Chess.CC"$ game from Sup1 disc.
+* Added $LK,"Chess",A="FI:::/Demo/Games/Chess.ZC"$ game from Sup1 disc.
 * $LK,"R",A="MN:R"$("ScanFlags", "$LK,"FlagsScan",A="MN:FlagsScan"$");
 * $LK,"R",A="MN:R"$("StrPrintFlags", "$LK,"FlagsStrPrint",A="MN:FlagsStrPrint"$");
 * $LK,"R",A="MN:R"$("ScanMessage", "$LK,"MessageScan",A="MN:MessageScan"$");
@@ -290,20 +310,20 @@ $IV,1$----04/04/20 19:15:21----$IV,0$
 * Added $LK,"SysRep",A="MN:SysRep"$(). Various $LK,"CSM*Info",A="MN:CSMBIOSBIOSInfo"$ classes added. Pass in a $LK,"SMBIOSt_*",A="MN:SMBIOSt_BIOS"$ to get info for that specific structure type. It parses SMBIOS structures located in low memory. Question-colon operator would have saved many lines of code.
 
 $IV,1$----04/02/20 03:27:03----$IV,0$
-* Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/System/Gr/SpriteMesh.CC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/System/Ctrls/CtrlsA.CC,VIEWANGLES_RANGE"$ crashed it.
+* Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/System/Gr/SpriteMesh.ZC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/System/Ctrls/CtrlsA.ZC,VIEWANGLES_RANGE"$ crashed it.
 
 $IV,1$----04/02/20 01:50:52----$IV,0$
-* 'Fixed' $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ window lock up on exit. Brute-forcing zero, but somewhere $LK,"mp_not_done_flags",A="FF:::/Demo/Games/Varoom.CC,mp_not_done_flags"$ isn't getting cleared when shift-esc is entered with the new key implementation.
+* 'Fixed' $LK,"Varoom",A="FF:::/Demo/Games/Varoom.ZC,kbd.down_bitmap"$ window lock up on exit. Brute-forcing zero, but somewhere $LK,"mp_not_done_flags",A="FF:::/Demo/Games/Varoom.ZC,mp_not_done_flags"$ isn't getting cleared when shift-esc is entered with the new key implementation.
 
 $IV,1$----04/01/20 01:49:47----$IV,0$
-* Changed boat color in $LK,"Talons",A="FI:::/Demo/Games/Talons.CC"$ from black to brown.
+* Changed boat color in $LK,"Talons",A="FI:::/Demo/Games/Talons.ZC"$ from black to brown.
 
 $IV,1$----04/01/20 01:42:55----$IV,0$
-* Cleaned up $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ control fix some. Bug remains: run from Menu, ESC out, ESC again; a window locks up.
+* Cleaned up $LK,"Varoom",A="FF:::/Demo/Games/Varoom.ZC,kbd.down_bitmap"$ control fix some. Bug remains: run from Menu, ESC out, ESC again; a window locks up.
   Added set/unset task idle between Yield to lower CPU use.
 
 $IV,1$----03/29/20 14:07:00----$IV,0$
-* Modified $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ to use kbd bitmap for instant keypress response.
+* Modified $LK,"Varoom",A="FF:::/Demo/Games/Varoom.ZC,kbd.down_bitmap"$ to use kbd bitmap for instant keypress response.
 * Modified $LK,"FlagsStrPrint",A="MN:FlagsStrPrint"$() to print unset flags as well.
 * Modified $LK,"StrReplace",A="MN:StrReplace"$() to free given str if free_str is set.
 * Exported $LK,"Seg2Linear",A="FF:::/Kernel/KernelC.HH,Seg2Linear"$() from kernel.
@@ -344,7 +364,7 @@ $IV,1$----03/19/20 01:51:36----$IV,0$
 * $LK,"R",A="MN:R"$("IC_SET_RFLAGS", "$LK,"IC_RFLAGS_SET",A="MN:IC_RFLAGS_SET"$");
 * $LK,"R",A="MN:R"$("GetTSC", "$LK,"TSCGet",A="MN:TSCGet"$");
 * $LK,"R",A="MN:R"$("GetS", "$LK,"StrNGet",A="MN:StrNGet"$");
-* Modified characters '_' and 'c' in $LK,"FontStd",A="FI:::/Kernel/FontStd.CC"$.
+* Modified characters '_' and 'c' in $LK,"FontStd",A="FI:::/Kernel/FontStd.ZC"$.
 
 $IV,1$----03/16/20 14:44:00----$IV,0$
 * $LK,"R",A="MN:R"$("GetStr", "$LK,"StrGet",A="MN:StrGet"$");
@@ -363,28 +383,28 @@ $IV,1$----02/23/20 23:59:37----$IV,0$
 
 $IV,1$----02/23/20 02:36:28----$IV,0$
 * $LK,"R",A="MN:R"$("err", "error");
-* Removed compression from kernel. Compress.CC, CArcCtrl, CArcCompress, ExpandBuf(), CompressBuf(), DCSF_COMPRESSED, etc. Updated $LK,"::/Demo/Disk/SerializeTree.CC",A="FI:::/Demo/Disk/SerializeTree.CC"$ to not use compression.
+* Removed compression from kernel. Compress.CC, CArcCtrl, CArcCompress, ExpandBuf(), CompressBuf(), DCSF_COMPRESSED, etc. Updated $LK,"::/Demo/Disk/SerializeTree.ZC",A="FI:::/Demo/Disk/SerializeTree.ZC"$ to not use compression.
 * Removed RS_ATTR_COMPRESSED from $LK,"RedSea attributes",A="MN:RS_ATTR_READ_ONLY"$.
 * Refactored $LK,"FU flags",A="MN:FUf_RECURSE"$. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. $LK,"DocOptEntry",A="MN:DocOptEntry"$(), $LK,"Size",A="MN:Size"$(), $LK,"Size1",A="MN:Size1"$(), $LK,"SizeRep",A="MN:SizeRep"$(), and $LK,"SizeRep1",A="MN:SizeRep1"$() have been updated accordingly.
 * Removed IsDotZ(), ToggleZOrNotZ(). Cleaned up $LK,"FileRead",A="MN:FileRead"$(), $LK,"FileWrite",A="MN:FileWrite"$(), and $LK,"FileFind",A="MN:FileFind"$() accordingly.
 * Added XMM8-XMM15 to $LK,"OpCodes.DD",A="FF:::/Compiler/OpCodes.DD,XMM8"$.
-* Added $LK,"::/Demo/Graphics/32BitColor.CC",A="FI:::/Demo/Graphics/32BitColor.CC"$.
+* Added $LK,"::/Demo/Graphics/32BitColor.ZC",A="FI:::/Demo/Graphics/32BitColor.ZC"$.
 
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
-* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into ::/System/Divination.CC. Functions renamed from $LK,"God*",A="MN:GodWord"$() to Divine*(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
+* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into ::/System/Divination.CC. Functions renamed from $LK,"God*",A="MN:GodWord"$() to Divine*(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.ZC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$
 * $LK,"R",A="MN:R"$("IRQ's", "IRQs");
 * Updated $LK,"MemBIOSRep",A="MN:MemBIOSRep"$() to report on VBE Linear Framebuffer size. E820 memory ranges are color-coded. It now shows the total memory reported by $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$().
 * Updated AutoComplete shortcuts from old WordStat <ALT(-SHIFT-)-W> to $FG,2$<ALT(-SHIFT-)-A>$FG$ in $LK,"::/Doc/Tips.DD",A="FI:::/Doc/Tips.DD"$.
-* Added $LK,"check",A="FF:::/Kernel/KStart16.CC,E801:3"$ for invalid results of BIOS function 15:E801. BIOSes either return results in AX/BX or CX/DX. You have to make sure which pair of registers it is.
+* Added $LK,"check",A="FF:::/Kernel/KStart16.ZC,E801:3"$ for invalid results of BIOS function 15:E801. BIOSes either return results in AX/BX or CX/DX. You have to make sure which pair of registers it is.
 * Renamed BIOSTotalMem() -> $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$(), rewritten and commented for clarity, exported from kernel. Neat function.
 
 $IV,1$----02/20/20 17:40:10----$IV,0$
-* Replaced old standard font with new $LK,"FontStd",A="FI:::/Kernel/FontStd.CC"$. The auxilliary font is now the VGA ROM Font.
+* Replaced old standard font with new $LK,"FontStd",A="FI:::/Kernel/FontStd.ZC"$. The auxilliary font is now the VGA ROM Font.
 * $UL,1$We now use 1 Tab (4 spaces wide) for indentation.$UL,0$ All spaces used for indentation have been converted to tabs. Header files are messy. $LK,"PCILookUpSingle",A="MN:PCILookUpSingle"$() was fixed according to this change. $LK,"EdCodeTools",A="MN:EdCodeTools"$ re-indentation feature needs to be updated.
 
 $IV,1$----02/19/20 21:46:17----$IV,0$
@@ -392,36 +412,36 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * $LK,"GRScreenCaptureWrite",A="MN:GRScreenCaptureWrite"$() and $LK,"GRScreenCaptureRead",A="MN:GRScreenCaptureRead"$() are broken. $LK,"DCLoad",A="MN:DCLoad"$() and $LK,"DCSave",A="MN:DCSave"$() use DCF_COMPRESSED. It also saves the palette as $LK,"CBGR48",A="MN:CBGR48"$, which is a problem.
 * Updated $LK,"MemRep",A="MN:MemRep"$() to report on VBE variables.
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
-* Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
+* Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.ZC"$ to use current palette environment.
 * Shortened $LK,"CheckPtr",A="MN:CheckPtr"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
-* $LK,"RawDumpRegs",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
-* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
+* $LK,"RawDr",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
+* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.ZC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.ZC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
-* Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.CC"$.
+* Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.ZC"$.
 * Added $MA-X+PU,"screen resolution selection",LM="F(\"->screen_w\");View;"$ to kernel configuration procedure.
-* Added $LK,"VideoRep",A="MN:VideoRep"$() to report on VBE modes and info, added test case to the $LK,"OSTestSuite",A="FF:::/Misc/OSTestSuite.CC,VideoRep"$.
-* $UL$Added VBE graphics support.$UL,0$ Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but the graphics library is still 4-bit (16 color) internally. $LK,"MiniGrLib",A="FI:/Demo/Lectures/MiniGrLib.CC"$ broken for obvious reasons. Keeping it because its intention is to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
+* Added $LK,"VideoRep",A="MN:VideoRep"$() to report on VBE modes and info, added test case to the $LK,"OSTestSuite",A="FF:::/Misc/OSTestSuite.ZC,VideoRep"$.
+* $UL$Added VBE graphics support.$UL,0$ Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but the graphics library is still 4-bit (16 color) internally. $LK,"MiniGrLib",A="FI:/Demo/Lectures/MiniGrLib.ZC"$ broken for obvious reasons. Keeping it because its intention is to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
 	Rundown:
 	- Added classes $LK,"CVBEInfo",A="MN:CVBEInfo"$, $LK,"CVBEMode",A="MN:CVBEMode"$, $LK,"CVBEModeShort",A="MN:CVBEModeShort"$
-	- $LK,"real-mode assembly",A="FF:::/Kernel/KStart16.CC,CVBEInfo:2"$ -- $MA-X+PU,"added kernel symbols",LM="F(\"SYS_VBE\", \"+lb\");View;"$.
+	- $LK,"real-mode assembly",A="FF:::/Kernel/KStart16.ZC,CVBEInfo:2"$ -- $MA-X+PU,"added kernel symbols",LM="F(\"SYS_VBE\", \"+lb\");View;"$.
 	- Added $FG,2$screen_size$FG$, $FG,2$buffer_size$FG$, $FG,2$fb_alias$FG$ members to $LK,"CTextGlobals",A="MN:CTextGlobals"$.
-	- $LK,"SysGrInit",A="FF:::/Kernel/KMain.CC,text.screen_size"$() -- using $LK,"Seg2Linear",A="FF:::/Kernel/KMain.CC,Seg2Linear"$() to convert pointers.
-	- $LK,"raw text drawing routine",A="FF:::/Kernel/Display.CC,text.fb_alias"$ updated. $LK,"BLACK32, WHITE32",A="MN:BLACK32"$.
-	- Dynamic definition of $LK,"GR_WIDTH and GR_HEIGHT",A="FF:::/System/Gr/GrGlobals.CC,GR_WIDTH:2"$.
+	- $LK,"SysGrInit",A="FF:::/Kernel/KMain.ZC,text.screen_size"$() -- using $LK,"Seg2Linear",A="FF:::/Kernel/KMain.ZC,Seg2Linear"$() to convert pointers.
+	- $LK,"raw text drawing routine",A="FF:::/Kernel/Display.ZC,text.fb_alias"$ updated. $LK,"BLACK32, WHITE32",A="MN:BLACK32"$.
+	- Dynamic definition of $LK,"GR_WIDTH and GR_HEIGHT",A="FF:::/System/Gr/GrGlobals.ZC,GR_WIDTH:2"$.
 	- $LK,"GrUpdateScreen32",A="MN:GrUpdateScreen32"$() -- $LK,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$() is used to reduce CPU usage. Added $FG,2$screen_cache$FG$ member to $LK,"CGrGlobals",A="MN:CGrGlobals"$.
-	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.CC",A="FI:::/System/Gr/GrPalette.CC"$.
+	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.ZC",A="FI:::/System/Gr/GrPalette.ZC"$.
 
 * Added $LK,"BinRep",A="MN:BinRep"$() from Sup1 ISO.
 * $LK,"R",A="MN:R"$("sys_pci_busses", "$LK,"sys_pci_buses",A="MN:sys_pci_buses"$");
 * Renamed RWF flags -> $LK,"RAWF",A="MN:RAWF_IN_DOLLAR"$.
 * Renamed mon_start_days1 and mon_start_days2 -> $LK,"month_start_days",A="MN:month_start_days"$ and $LK,"month_start_days_leap",A="MN:month_start_days_leap"$, respectively.
 * Moved random number generation algorithm into $LK,"seperate function",A="MN:RandInt"$ to reduce line count. Added $LK,"RandU8",A="MN:RandU8"$().
-* Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/System/DolDoc/DocHighlight.CC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
-* Removed unnecessary checks for the presence of the $LK,"APIC",A="MN:LAPIC_BASE"$ in $LK,"MultiProc.CC",A="FI:::/Kernel/MultiProc.CC"$, as it is present on all x86 CPUs after the P5 microarchitecture.
+* Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/System/DolDoc/DocHighlight.ZC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
+* Removed unnecessary checks for the presence of the $LK,"APIC",A="MN:LAPIC_BASE"$ in $LK,"MultiProc.ZC",A="FI:::/Kernel/MultiProc.ZC"$, as it is present on all x86 CPUs after the P5 microarchitecture.
 * Added untested $LK,"ReAlloc",A="MN:ReAlloc"$(), as it could be useful for certain programs.
 * Added definitions for the $LK,"PCI registers",A="MN:PCIR_VENDOR_ID"$. Expanded the $LK,"CPCIDev",A="MN:CPCIDev"$ class to contain the values of the read-only registers. Added $LK,"PCIDevFind",A="MN:PCIDevFind"$() as a simpler/abstracted alternative to $LK,"PCIClassFind",A="MN:PCIClassFind"$().
 * Removed the unpolished HPET implementation from the kernel.
-* $LK,"Enabled the execution of SSE instructions",A="FF:::/Kernel/KStart64.CC,CR4f_OSFXSR"$. No actual SSE implementation in assembler yet, however.
+* $LK,"Enabled the execution of SSE instructions",A="FF:::/Kernel/KStart64.ZC,CR4f_OSFXSR"$. No actual SSE implementation in assembler yet, however.
 * Added definitions for the $MA-X+PU,"various flags",LM="F(\"CR0F_\", \"+lb\");F(\"CR4F_\", \"+lb\");View;"$ in the Control Registers.
 * Added definitions for the $MA-X+PU,"PIT",LM="F(\"PIT_0\", \"+l-i\");F(\"PIT_2\",\"+l-i\");F(\"PIT_CMD\");View;"$, and a $LK,"document",A="FI:::/Doc/PIT.DD"$ describing its usage in the OS.
 * Added definition for the $MA-X+PU,"PC speaker",LM="F(\"PCSPKR\");View;"$.
@@ -437,7 +457,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * AutoComplete now stays where you move it instead of snapping back to a fixed location, and that location persists after rebooting by using the Registry to save the window location. Increased number of symbol links shown to 12, so you can use all the functions keys F1-F12. It does syntax highlighting on the symbols now, so you know what type they are. Public symbols are $IV$inverted$IV,0$. Dictionary words are BLACK to differentiate between symbols.
 * Added more keyboard shortcuts to the AutoComplete $LK,"standby doc",A="FI:::/Doc/StandBy.DD"$.
 * Removed "TOS Staff" and "InsReg" related code.
-* Renamed /Kernel/KInts.CC to $LK,"KInterrupts.CC",A="FI:::/Kernel/KInterrupts.CC"$.
+* Renamed /Kernel/KInts.CC to $LK,"KInterrupts.ZC",A="FI:::/Kernel/KInterrupts.ZC"$.
 * Date section of status bar shows the year now.
 * Increased the length of the part of the status bar that shows the last keys pressed, so the longest combination (CTRL+ALT+SHIFT+ENTER) can be shown. It is always at the rightmost part of the screen instead of being fixed at column 55.
 * $LK,"ClassRep",A="MN:ClassRep"$() does not show ASCII values for U8/I8 members by default now. Added argument "u8_chars" to enable that.
@@ -538,11 +558,11 @@ $IV,1$----02/05/17 16:37:39----$IV,0$
 * Added $LK,"::/Doc/BlkChain.DD"$.
 
 $IV,1$----02/03/17 17:27:36----$IV,0$
-* Added multicore $LK,"::/System/MathODE.CC"$.
+* Added multicore $LK,"::/System/MathODE.ZC"$.
 * Improved support for sub and super scripts.
 
 $IV,1$----01/31/17 10:22:10----$IV,0$
-* Added $LK,"::/Demo/Graphics/LightTable.CC"$.
+* Added $LK,"::/Demo/Graphics/LightTable.ZC"$.
 * Added $LK,"TOS Linux Setup",A="FF:::/Demo/AcctExample/TOS/TOSPolicies.DD,TOS Linux Setup"$.
 
 $IV,1$----01/27/17 08:13:37----$IV,0$
@@ -569,7 +589,7 @@ $IV,1$----01/25/17 20:44:17----$IV,0$
 
 
 $IV,1$----01/24/17 21:56:06----$IV,0$
-* Improved $LK,"::/Apps/Psalmody/JukeBox.CC"$
+* Improved $LK,"::/Apps/Psalmody/JukeBox.ZC"$
 * $LK,"R",A="MN:R"$("TreeBranch","Tree");
 * Added $LK,"DocTreeWrite",A="MN:DocTreeWrite"$() and $LK,"DocTreeAppend",A="MN:DocTreeAppend"$().
 
@@ -596,14 +616,14 @@ $IV,1$----01/14/17 19:16:51----$IV,0$
 
 $IV,1$----01/14/17 09:43:12----$IV,0$
 * Improved $LK,"::/Demo/AcctExample/TOS/TOSHolySpirit.HC"$.
-* Added cmp $LK,"U0 Expression",A="FF:::/Compiler/ParseExp.CC,U0 Expression"$ warn.
+* Added cmp $LK,"U0 Expression",A="FF:::/Compiler/ParseExp.ZC,U0 Expression"$ warn.
 * Improved syntax highlighting.
 
 $IV,1$----01/11/17 03:33:33----$IV,0$
 * $BK,1$TempleOS version 5.01 Released$BK,0$
 * $LK,"R",A="MN:R"$("ChangeLog","ChgLog");
 * Added show mouse pos to $FG,2$<CTRL-ALT-G>$FG$.
-* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.CC,TOSRegen("$().
+* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.ZC,TOSRegen("$().
 * Added $LK,"Let2Let",A="MN:Letter2Letter"$().
 
 $IV,1$----01/10/17 14:27:58----$IV,0$
@@ -636,7 +656,7 @@ $IV,1$----01/09/17 02:30:59----$IV,0$
 
 $IV,1$----01/06/17 06:07:19----$IV,0$
 * Fixed $LK,"DskChg",A="MN:DiskChange"$().
-* Improved $LK,"::/Misc/OSTestSuite.CC"$.
+* Improved $LK,"::/Misc/OSTestSuite.ZC"$.
 
 $IV,1$----01/05/17 04:53:21----$IV,0$
 * No longer support ASCII#12, <CTRL-l> CH_FORM_FEED.
@@ -651,12 +671,12 @@ $IV,1$----01/04/17 18:06:14----$IV,0$
 * $LK,"R",A="MN:R"$("Handler","Hndlr");
 * $LK,"R",A="MN:R"$("InputPointer","Mouse");
 * Improved $LK,"MemRep",A="MN:MemRep"$().
-* Changed $LK,"::/System/WallPaper.CC"$.
+* Changed $LK,"::/System/WallPaper.ZC"$.
 
 $IV,1$----01/03/17 12:23:49----$IV,0$
 * $LK,"R",A="MN:R"$("chars_cmp...","char_bmp...");
-* Added chk for $LK,"Profanity",A="FF:::/Demo/AcctExample/TOS/TOSMisc.CC,Profanity"$.
-* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.CC,TOSRegen"$.
+* Added chk for $LK,"Profanity",A="FF:::/Demo/AcctExample/TOS/TOSMisc.ZC,Profanity"$.
+* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.ZC,TOSRegen"$.
 * Removed $TX,"TempleOSBooks1.ISO",HTML="http://www.templeos.org/files/TempleOSBooks1.ISO"$ and $TX,"TempleOSBooks2.ISO",HTML="http://www.templeos.org/files/TempleOSBooks2.ISO"$ out of $TX,"TempleOSSup1.ISO",HTML="http://www.templeos.org/TempleOSSup1.ISO"$.
 
 $IV,1$----01/01/17 17:16:16----$IV,0$
@@ -672,7 +692,7 @@ $IV,1$----12/31/16 07:21:20----$IV,0$
 
 $IV,1$----12/30/16 23:42:20----$IV,0$
 * $LK,"R",A="MN:R"$("Pages512","Pags");
-* Overhauled $LK,"::/Kernel/Memory/PageTables.CC"$.
+* Overhauled $LK,"::/Kernel/Memory/PageTables.ZC"$.
 * $LK,"R",A="MN:R"$("BusyWait()","$LK,"Busy",A="MN:Busy"$()");
 
 $IV,1$----12/29/16 10:21:44----$IV,0$
@@ -689,7 +709,7 @@ $IV,1$----12/03/16 13:19:58----$IV,0$
 * $LK,"R",A="MN:R"$("SpriteX3B()","$LK,"Sprite3XB",A="MN:Sprite3XB"$()");
 * $LK,"R",A="MN:R"$("SpriteY3B()","$LK,"Sprite3YB",A="MN:Sprite3YB"$()");
 * $LK,"R",A="MN:R"$("SpriteZ3B()","$LK,"Sprite3ZB",A="MN:Sprite3ZB"$()");
-* Improved $LK,"::/Demo/Games/Talons.CC"$.
+* Improved $LK,"::/Demo/Games/Talons.ZC"$.
 
 $IV,1$----12/03/16 10:16:26----$IV,0$
 * Changed $LK,"__CMD_LINE__",A="MN:__CMD_LINE__"$.
@@ -701,46 +721,46 @@ $IV,1$----11/30/16 22:44:35----$IV,0$
 * Added $LK,"SpriteTransform",A="MN:SpriteTransform"$().
 
 $IV,1$----11/28/16 07:11:41----$IV,0$
-* Improved $LK,"::/Apps/Titanium/Titanium.CC"$.
+* Improved $LK,"::/Apps/Titanium/Titanium.ZC"$.
 
 $IV,1$----11/26/16 22:43:51----$IV,0$
-* Added solar storms to $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.
+* Added solar storms to $LK,"::/Apps/X-Caliber/X-Caliber.ZC"$.
 * $LK,"R",A="MN:R"$("TimeOut","Titanium");
 
 $IV,1$----11/20/16 19:46:43----$IV,0$
 * $BK,1$TempleOS version 4.13 Released$BK,0$
-* Improved $LK,"::/Apps/Titanium/Titanium.CC"$.
-* Improved $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.
+* Improved $LK,"::/Apps/Titanium/Titanium.ZC"$.
+* Improved $LK,"::/Apps/X-Caliber/X-Caliber.ZC"$.
 
 $IV,1$----11/19/16 08:19:51----$IV,0$
 * Improved Budget application.
 
 $IV,1$----11/17/16 18:49:51----$IV,0$
 * $LK,"R",A="MN:R"$("EagleDive","Talons");
-* Improved $LK,"::/Demo/Games/RocketScience.CC"$.
-* Improved $LK,"::/Demo/Games/Rocket.CC"$.
+* Improved $LK,"::/Demo/Games/RocketScience.ZC"$.
+* Improved $LK,"::/Demo/Games/Rocket.ZC"$.
 
 $IV,1$----10/28/16 05:54:27----$IV,0$
-* Added $LK,"::/Demo/RadixSort.CC"$.
+* Added $LK,"::/Demo/RadixSort.ZC"$.
 
 $IV,1$----10/26/16 00:21:06----$IV,0$
 * Added $LK,"CProgress",A="MN:CProgress"$.t0.
 * Improved $LK,"::/Doc/Boot.DD"$.
 
 $IV,1$----10/25/16 18:02:44----$IV,0$
-* Improved $LK,"::/System/Gr/SpriteEd.CC"$.
+* Improved $LK,"::/System/Gr/SpriteEd.ZC"$.
 * Improved $LK,"::/Demo/AcctExample/TOS/TOSHolySpirit.HC"$.
 
 $IV,1$----10/12/16 10:55:26----$IV,0$
 * Added $LK,"CCF_NO_CHAR_CONST",A="MN:CCF_NO_CHAR_CONST"$.
-* Improved $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
+* Improved $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.ZC"$.
 
 $IV,1$----10/03/16 01:09:35----$IV,0$
 * Changed $LK,"GodWord",A="MN:GodWord"$().
 
 $IV,1$----09/30/16 18:29:59----$IV,0$
 * Improved $LK,"Rand",A="MN:Rand"$()'s.
-* Improved $LK,"::/System/Utils/ToTXT.CC"$.
+* Improved $LK,"::/System/Utils/ToTXT.ZC"$.
 
 $IV,1$----09/29/16 10:13:14----$IV,0$
 * $BK,1$TempleOS version 4.12 Released$BK,0$
@@ -750,10 +770,10 @@ $IV,1$----09/29/16 10:13:14----$IV,0$
 
 $IV,1$----09/27/16 12:40:21----$IV,0$
 * Added $LK,"SndRst",A="MN:SoundReset"$().
-* Got rid of crappy reverb in $LK,"::/Apps/Psalmody/PsalmodyMain.CC"$.
+* Got rid of crappy reverb in $LK,"::/Apps/Psalmody/PsalmodyMain.ZC"$.
 
 $IV,1$----09/27/16 11:09:25----$IV,0$
-* Improved $LK,"::/Misc/OSTestSuite.CC"$.
+* Improved $LK,"::/Misc/OSTestSuite.ZC"$.
 * Fixed bug in $LK,"EdCharIns",A="MN:EdCharIns"$() printing $$ cmds.
 * Added $LK,"FUF_JUST_DD",A="MN:FUF_JUST_DD"$ and $LK,"FILEMASK_DD",A="MN:FILEMASK_DD"$.
 
@@ -764,14 +784,14 @@ $IV,1$----09/27/16 01:05:52----$IV,0$
 * $LK,"R",A="MN:R"$("Temp","Tmp");
 
 $IV,1$----09/26/16 00:44:42----$IV,0$
-* Added CloseAssault and OverRun to $LK,"::/Apps/ToTheFront/ToTheFront.CC"$.
+* Added CloseAssault and OverRun to $LK,"::/Apps/ToTheFront/ToTheFront.ZC"$.
 
 $IV,1$----09/22/16 07:53:20----$IV,0$
-* Improved $LK,"::/Demo/Graphics/Box.CC"$.
-* Improved $LK,"::/Demo/Graphics/SpritePlot3D.CC"$.
+* Improved $LK,"::/Demo/Graphics/Box.ZC"$.
+* Improved $LK,"::/Demo/Graphics/SpritePlot3D.ZC"$.
 
 $IV,1$----09/21/16 17:09:40----$IV,0$
-* Fixed bug in $LK,"::/Demo/Games/BomberGolf.CC"$.
+* Fixed bug in $LK,"::/Demo/Games/BomberGolf.ZC"$.
 
 $IV,1$----09/20/16 15:57:30----$IV,0$
 * $LK,"R",A="MN:R"$("Screen","Scrn");
@@ -803,11 +823,11 @@ $IV,1$----09/06/16 13:01:42----$IV,0$
 * Got rid of $FG,4$MSG_FOCUS$FG$, $FG,4$MSG_MOVE$FG$, and $FG,4$MSG_SIZE$FG$.  There are no longer messages for moving and sizing windows.
 
 $IV,1$----09/06/16 02:40:43----$IV,0$
-* Improved $LK,"::/Demo/MagicPairs.CC"$.
+* Improved $LK,"::/Demo/MagicPairs.ZC"$.
 
 $IV,1$----08/27/16 09:45:39----$IV,0$
 * Improved $LK,"CPURep",A="MN:CPURep"$().
-* Improved $LK,"::/Misc/OSTestSuite.CC"$.
+* Improved $LK,"::/Misc/OSTestSuite.ZC"$.
 * Added $LK,"BirthWait",A="MN:BirthWait"$() and $LK,"DeathWait",A="MN:DeathWait"$().
 
 $IV,1$----08/22/16 04:14:47----$IV,0$
@@ -817,11 +837,11 @@ $IV,1$----07/17/16 13:03:12----$IV,0$
 * Improved $LK,"DocOpt",A="MN:DocOpt"$().
 
 $IV,1$----07/17/16 03:23:53----$IV,0$
-* Improved $LK,"::/Demo/Games/RawHide.CC"$.
+* Improved $LK,"::/Demo/Games/RawHide.ZC"$.
 
 $IV,1$----07/15/16 10:11:10----$IV,0$
 * $BK,1$TempleOS version 4.10 Released$BK,0$
-* Improved $LK,"::/Demo/Games/Talons.CC"$.
+* Improved $LK,"::/Demo/Games/Talons.ZC"$.
 
 $IV,1$----07/15/16 05:17:24----$IV,0$
 * Created $LK,"CDevGlbls",A="MN:CDevGlobals"$.uncached_alias.
@@ -831,7 +851,7 @@ $IV,1$----07/13/16 17:21:19----$IV,0$
 * Added multicore report to $LK,"CPURep",A="MN:CPURep"$().
 
 $IV,1$----07/09/16 08:46:36----$IV,0$
-* Changed scoring in $LK,"::/Demo/Games/Talons.CC"$.
+* Changed scoring in $LK,"::/Demo/Games/Talons.ZC"$.
 * Replaced many $FG,2$"%Q"$FG$ with $FG,2$"%$$Q"$FG$.
 * Fixed $FG,2$'\x24'$FG$.
 * Added $FG,2$'\d'$FG$ for $FG,2$'$$'$FG$.
@@ -846,11 +866,11 @@ $IV,1$----07/07/16 07:21:03----$IV,0$
 
 $IV,1$----07/06/16 23:45:30----$IV,0$
 * Fixed multicore bug in $LK,"Sprite3",A="MN:Sprite3"$().
-* Improved $LK,"::/Demo/Games/Talons.CC"$.
+* Improved $LK,"::/Demo/Games/Talons.ZC"$.
 
 $IV,1$----07/05/16 06:03:47----$IV,0$
 * $BK,1$TempleOS version 4.09 Released$BK,0$
-* Improved $LK,"::/Demo/Games/Talons.CC"$.
+* Improved $LK,"::/Demo/Games/Talons.ZC"$.
 * Improved $LK,"GrFillTri0",A="MN:GrFillTri0"$().
 
 $IV,1$----07/03/16 04:30:05----$IV,0$
@@ -859,18 +879,18 @@ $IV,1$----07/03/16 04:30:05----$IV,0$
 * Added $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$.
 
 $IV,1$----07/01/16 05:29:08----$IV,0$
-* Made underscore mandatory on $LK,"HolyC",A="FI:::/Doc/CosmiC.DD"$ callable asm functions.
+* Made underscore mandatory on $LK,"HolyC",A="FI:::/Doc/ZealC.DD"$ callable asm functions.
 
 $IV,1$----06/28/16 13:15:08----$IV,0$
 * Changed $LK,"TaskRep",A="MN:TaskRep"$() and $LK,"MemRep",A="MN:MemRep"$().
-* Changed $LK,"::/System/WallPaper.CC"$.
+* Changed $LK,"::/System/WallPaper.ZC"$.
 
 $IV,1$----06/26/16 14:01:16----$IV,0$
 * Added $LK,"LastFun",A="MN:LastFun"$(), $LK,"RunFile",A="MN:RunFile"$(), $LK,"RunFile2",A="MN:RunFile2"$() and $LK,"PopUpRunFile",A="MN:PopUpRunFile"$().
 * Made boot code modular.
 
 $IV,1$----06/24/16 14:15:13----$IV,0$
-* Added A.I. to $LK,"::/Apps/KeepAway/KeepAway.CC"$ and changed scoring.
+* Added A.I. to $LK,"::/Apps/KeepAway/KeepAway.ZC"$ and changed scoring.
 
 $IV,1$----06/24/16 02:55:42----$IV,0$
 * $BK,1$TempleOS version 4.08 Released$BK,0$
@@ -897,10 +917,10 @@ $IV,1$----06/16/16 20:59:41----$IV,0$
 * $FG,2$<CTRL-ALT-n>$FG$ is next task.
 
 $IV,1$----06/16/16 19:49:39----$IV,0$
-* Added $LK,"::/Doc/Comm.CC"$.
+* Added $LK,"::/Doc/Comm.ZC"$.
 * Added $LK,"::/Doc/StdTempleOSPC.DD"$.
 * Added $LK,"::/Kernel/FontCyrillic.HC"$. $FG,2$<CTRL-ALT-f>$FG$
 
 $IV,1$----06/02/16 03:20:56----$IV,0$
 * $BK,1$TempleOS version 4.07 Released$BK,0$
-* Added claws to $LK,"::/Demo/Games/Talons.CC"$.
+* Added claws to $LK,"::/Demo/Games/Talons.ZC"$.

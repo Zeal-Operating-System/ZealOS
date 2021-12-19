@@ -147,15 +147,15 @@ $ID,2$There is no distinction between $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2
 
 Since there is not friendly disk sharing and all tasks have the same address map, it might be accurate to call ZealOS, "multi-thread/single-process".  You run a single application process on $FG,2$Core0$FG$ and it can create threads on the same core or others.	If you run multiple processes, it should be safe, but one process will wait until another completely finishes a long disk access.
 $ID,-2$$TR,"System Task"$
-$ID,2$The System task is immortal. The system task is created at start-up and appears in the small window at the top beneath the user terminal windows.  Since the System task is immortal, on its heap go all memory objects which you don't want destroyed by any single task's death.  When created, the System task runs the file $LK,"::/StartOS.CC"$.  When start-up is finished, the system task enters a server mode where it accepts requests from other tasks.	The $LK,"Sys",A="MN:Sys"$("") routine will make the System task compile and run text src code.  $FG,2$#include$FG$ statements can be sent to $LK,"Sys",A="MN:Sys"$(""), creating system-wide code and data which are immortal.
+$ID,2$The System task is immortal. The system task is created at start-up and appears in the small window at the top beneath the user terminal windows.  Since the System task is immortal, on its heap go all memory objects which you don't want destroyed by any single task's death.  When created, the System task runs the file $LK,"::/StartOS.ZC"$.  When start-up is finished, the system task enters a server mode where it accepts requests from other tasks.	The $LK,"Sys",A="MN:Sys"$("") routine will make the System task compile and run text src code.  $FG,2$#include$FG$ statements can be sent to $LK,"Sys",A="MN:Sys"$(""), creating system-wide code and data which are immortal.
 $ID,-2$$TR,"Executive Tasks"$
 $ID,2$Each CPU core has an $FG,2$Executive$FG$ task that is immortal.  The System task on $FG,2$Core0$FG$ is also its $FG,2$Executive$FG$ task.
 $ID,-2$$TR,"Code and Data Heaps"$
 $ID,2$ZealOS uses the asm $FG,2$CALL$FG$ instruction, exclusively, and that instruction is limited to calling routines $FG,2$+/-2Gig$FG$ from the current code location.	To prevent out-of-range issues, code and data are separated, placing all code within the lowest $FG,2$2Gig$FG$ of memory, addresses $FG,2$00000000$FG$-$FG,2$7FFFFFFF$FG$.	The compiler and $LK,"Load",A="MN:Load"$()er alloc memory from the code heap to store code and global variables, unless the compiler option $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$ is used.  When programs call $LK,"MAlloc",A="MN:MAlloc"$() is from the data heap, which in not limited in size, except by physical RAM memory.  You can alloc from any heap in any task at any time on any core, even making $LK,"independent",A="MN:MemPagAlloc"$ heaps.
 $ID,-2$$TR,"Parent, Child and PopUp Tasks"$
 $ID,2$Often a task will $LK,"Spawn",A="MN:Spawn"$() or $LK,"PopUp",A="MN:PopUp"$() a task as a helper.	The helper is known as a child Task, though you can $LK,"Spawn",A="MN:Spawn"$ a task and assign it a different parent... like $FG,2$System$FG$.  Links are kept as to who's whose child, so when one task is $LK,"Kill",A="MN:Kill"$()ed the child helper tasks die, too.  You can get a report of current system tasks with $LK,"TaskRep",A="MN:TaskRep"$().  There is just one window per task, so child tasks are needed for pop-ups.
-$ID,-2$$TR,"CosmiC"$
-$ID,2$$LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ is more than $FG,2$C$FG$ and less than $FG,2$C++$FG$.  It has the default args of $FG,2$C++$FG$ and uses $FG,2$class$FG$ in place of $FG,2$struct$FG$.	It uses $FG,2$U0,U8,U16,U32,I64$FG$ and $FG,2$I0,I8,I16,I32,I64$FG$ for signed and unsigned ints.  It has different $LK,"operator precedence",A="FF:::/Doc/CosmiC.DD,operator precedence"$.  It has $FG,2$PASCAL$FG$-like function calls with no parens, but requires an $FG,2$&$FG,2$$FG$ when referring to function addresses.
+$ID,-2$$TR,"ZealC"$
+$ID,2$$LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ is more than $FG,2$C$FG$ and less than $FG,2$C++$FG$.  It has the default args of $FG,2$C++$FG$ and uses $FG,2$class$FG$ in place of $FG,2$struct$FG$.	It uses $FG,2$U0,U8,U16,U32,I64$FG$ and $FG,2$I0,I8,I16,I32,I64$FG$ for signed and unsigned ints.  It has different $LK,"operator precedence",A="FF:::/Doc/ZealC.DD,operator precedence"$.  It has $FG,2$PASCAL$FG$-like function calls with no parens, but requires an $FG,2$&$FG,2$$FG$ when referring to function addresses.
 $ID,-2$$TR,"AOT Compile Mode"$
 $ID,2$$FG,2$Ahead-of-Time$FG$ compiling is conventional compilation mode.  Do not use $FG,2$AOT$FG$, use $FG,2$JIT$FG$ compiling.
 
@@ -205,12 +205,12 @@ $ID,2$$FG,5$$FG,5$*.???.C$FG$
 	Contiguous files - not fragmented on disk.
 $FG,5$*.DD$FG$
 	Text Files
-$FG,5$*.CC$FG$
-	CosmiC src files.  The default CosmiC compiler type is $FG,2$.CC$FG$.
+$FG,5$*.ZC$FG$
+	ZealC src files.  The default ZealC compiler type is $FG,2$.ZC$FG$.
 $FG,5$*.PRJ$FG$
-	CosmiC src files to be compiled $FG,2$AOT$FG$.
+	ZealC src files to be compiled $FG,2$AOT$FG$.
 $FG,5$*.HH$FG$
-	CosmiC src header files.
+	ZealC src header files.
 $FG,5$*.MAP$FG$
 	Compiler "map" files
 $FG,5$*.BIN;*.BIN.C$FG$
@@ -220,7 +220,7 @@ $FG,5$*.DATA$FG$
 $FG,5$*.ISO;*.ISO.C$FG$
 	CD/DVD image file.
 $FG,5$*.IN$FG$
-	$FG,2$InFile$FG$ Basically a CosmiC program whose stdout goes to the input of a task when $LK,"InFile",A="MN:InFile"$() is called.
+	$FG,2$InFile$FG$ Basically a ZealC program whose stdout goes to the input of a task when $LK,"InFile",A="MN:InFile"$() is called.
 $FG,5$*.GR$FG$
 	Graphics file
 
@@ -236,10 +236,10 @@ $FG,5$ALL_CAPS$FG$
 	Assembly Language labels are capitalized with underscores between words.	So are $FG,2$#define$FG$'s.
 
 $FG,5$_ALL_CAPS$FG$
-	Asm routines which are $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ callable must have a leading underscore.
+	Asm routines which are $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ callable must have a leading underscore.
 
 $FG,5$MixedCaps$FG$
-	$LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ Functions and class names are MixedCaps.
+	$LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ Functions and class names are MixedCaps.
 
 $FG,5$lower_case$FG$
 	Local function variables and global variables are lower case.  Class member names are also lower_case.

@@ -2,7 +2,7 @@ $WW,1$$FG,5$$TX+CX,"DolDoc Widget Help"$$FG$
 
 $LK,"DolDoc",A="::/Doc/DolDocOverview.DD"$ is a ZealOS document type.
 
-$FG,2$"Expression"$FG$ a num or CosmiC algebraic term with operators and CosmiC symbols can be entered.
+$FG,2$"Expression"$FG$ a num or ZealC algebraic term with operators and ZealC symbols can be entered.
 $FG,2$"Macro"$FG$ Most entries can behave like macro entries if you assign them macro strs.
 $FG,2$"InStr"$FG$ Like a macro except it is an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$.	You can't have both an in_str and macro text defined.
 
@@ -39,4 +39,4 @@ $FG,5$Escape$FG$ For macro's, send an $FG,2$<ESC>$FG$ char to exit before runnin
 
 $FG,5$Refresh Data$FG$	updates $FG,2$$$DA...$$$FG$ entry continuously.
 
-$FG,5$Html Link$FG$  stores a link which will be embedded if you generate a html version of a document with $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
+$FG,5$Html Link$FG$  stores a link which will be embedded if you generate a html version of a document with $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.ZC"$.

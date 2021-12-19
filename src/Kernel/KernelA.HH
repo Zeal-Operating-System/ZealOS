@@ -59,8 +59,8 @@ extern class CTask;
 #define eps 		(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
-//CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.
-//See $LK,"::/Demo/SubIntAccess.CC"$.
+//ZealC union structure is treated as a whole if no member is specified, similar to bit fields.
+//See $LK,"::/Demo/SubIntAccess.ZC"$.
 
 U16i union U16
 {
@@ -400,7 +400,7 @@ class CGDT
 			  boot_cs,
 			  cs32,
 			  cs64, 			//The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring-0.
-			  cs64_ring3, //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, in case you want to play around.
+			  cs64_ring3, //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.ZC"$, in case you want to play around.
 			  ds,
 			  ds_ring3,
 			  tr[MP_PROCESSORS_NUM],
@@ -448,15 +448,15 @@ class CMemE820
 #define LDF_JUST_LOAD 	2
 #define LDF_SILENT		4
 
-#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal CosmiC Binary
+#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal ZealC Binary
 class CBinFile
-{//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.CC,16 ALIGN"$ by compiler.
+{//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.ZC,16 ALIGN"$ by compiler.
 	U16 jmp;
 	U8	module_align_bits,
 		reserved;
 	U32 bin_signature;
 	I64 org,
-		patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.CC,IET_ABS_ADDR"$
+		patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.ZC,IET_ABS_ADDR"$
 		file_size;
 };
 
@@ -546,7 +546,7 @@ class CVBEModeShort
 
 #help_index "Boot"
 class CKernel
-{//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.CC,MEM_BOOT_BASE"$
+{//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$
 	CBinFile		h;
 	U32				jmp,
 					boot_src,
@@ -727,7 +727,7 @@ class CRAXRBXRCXRDX
 };
 
 //Asm callable function pointers.
-//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from CosmiC.
+//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from ZealC.
 #define EXT_WIN_TO_TOP		0
 #define EXT_WIN_FOCUS 		1
 #define EXT_HEAPLOG_MALLOC	2
@@ -788,7 +788,7 @@ public class CHashTable
 };
 
 #help_index "Hash/System"
-//Hash table types: $LK,"ST_HTT_TYPES",A="FF:::/Kernel/KDefine.CC,ST_HTT_TYPES"$
+//Hash table types: $LK,"ST_HTT_TYPES",A="FF:::/Kernel/KDefine.ZC,ST_HTT_TYPES"$
 #define HTt_EXPORT_SYS_SYM	0
 #define HTt_IMPORT_SYS_SYM	1
 #define HTt_DEFINE_STR		2
@@ -1522,7 +1522,7 @@ public class CDoc //Linked Text File header
 	I64			   (*left_click_link)(CDoc *doc, CDocEntry *doc_e);
 	I64 		   (*right_click_link)(CDoc *doc, CDocEntry *doc_e);
 
-	//See $LK,"::/Apps/Psalmody/JukeBox.CC"$
+	//See $LK,"::/Apps/Psalmody/JukeBox.ZC"$
 	U8				*user_put_data; //Passed to user_put_key() and user_put_s()
 	Bool		   (*user_put_key)(CDoc *doc, U8 *data, I64 ch, I64 sc);
 	Bool		   (*user_put_s)(CDoc *doc, U8 *data, U8 *st);
@@ -1884,7 +1884,7 @@ class CCodeMisc
 //Slash value
 #define SV_R_REG		8
 #define SV_I_REG		9
-#define SV_STI_LIKE 	10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
+#define SV_STI_LIKE 	10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.ZC,uasm_slash_val"$ only.
 #define SV_NONE 		11
 class CInst
 {
@@ -1956,7 +1956,7 @@ I64 class CAbsCountsI64
 };
 
 class CAsmUndefHash
-{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.CC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM expression.
+{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.ZC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM expression.
 	CAsmUndefHash	*next;
 	CHashExport 	*hash;
 };
@@ -3010,9 +3010,9 @@ class CAtapiModeWriteList
 #define ATAR1_CTRL	2
 
 #help_index "File/FileNames"
-#define FILEMASK_JIT	"*.CC*;*.HH*"
-#define FILEMASK_AOT	"*.CC*;*.HH*;*.PRJ*"
-#define FILEMASK_SRC	"*.CC*;*.HH*;*.IN*;*.PRJ*"
+#define FILEMASK_JIT	"*.ZC*;*.HH*"
+#define FILEMASK_AOT	"*.ZC*;*.HH*;*.PRJ*"
+#define FILEMASK_SRC	"*.ZC*;*.HH*;*.IN*;*.PRJ*"
 #define FILEMASK_DD 	FILEMASK_SRC ";*.DD*"
 #define FILEMASK_TXT	FILEMASK_DD ";*.TXT*"
 #define FILEMASK_GR 	"*.GR*"
@@ -3317,16 +3317,12 @@ public class CBlkDev
 	CAHCIPort	*ahci_port;
 	U8			*prd_buf,
 				 first_drive_let,
-				 unit,
-				 pad[2],
 				*RAM_disk,
 				*file_disk_name;
 	CFile		*file_disk;
 	U32 		 bd_signature,
 				 type,
 				 flags,
-			 	 base0,
-				 base1,
 				 blk_size,
 				 max_reads,
 				 max_writes;
@@ -3439,12 +3435,9 @@ public class CBlkDevGlobals
 				write_count,
 				mount_ide_auto_count,
 				cmd_slot_count,
-				ins_base0,
-				ins_base1;	//Install cd/dvd controller.
+				ins_port;// Installed-from CD/DVD controller.
 	Bool		dvd_boot_is_good,
-				ahci64,
-				ins_unit,
-				pad[2];
+				ahci64;
 };
 
 #help_index "File/Internal"
@@ -3464,7 +3457,7 @@ public class CDirContext
 #define FF_CONTIGUOUS 			16
 #define FF_USE_OLD_DATETIME 	32
 
-public class CFile //See $LK,"::/Demo/Disk/DataBase.CC"$.
+public class CFile //See $LK,"::/Demo/Disk/DataBase.ZC"$.
 {
 	I64			 flags;
 	CDirEntry	 de;
@@ -3554,7 +3547,7 @@ public class CBlkPool
 {
 	I64 	 locked_flags, alloced_u8s, used_u8s;
 	CMemBlk	*mem_free_list,
-			*mem_free_2meg_list, //This is for Sup1CodeScraps/Mem/Mem2Meg.CC.
+			*mem_free_2meg_list, //This is for Sup1CodeScraps/Mem/Mem2Meg.ZC.
 			*free_pag_hash[MEM_FREE_PAG_HASH_SIZE],
 			*free_pag_hash2[64 - MEM_PAG_BITS];
 };
@@ -3883,7 +3876,7 @@ class CJobCtrl
 };
 
 #help_index "Messages"
-//See $LK,"::/Demo/MessageLoop.CC"$
+//See $LK,"::/Demo/MessageLoop.ZC"$
 #define MESSAGE_NULL			0
 #define MESSAGE_CMD 			1
 #define MESSAGE_KEY_DOWN		2  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
@@ -4011,7 +4004,7 @@ public class CTask //The Fs segment register points to current CTask.
 					 scroll_x, scroll_y, scroll_z;
 
 	//These must be in this order
-	//for $LK,"TASK_CONTEXT_SAVE",A="FF:::/Kernel/Sched.CC,TASK_CONTEXT_SAVE"$ and $LK,"_TASK_CONTEXT_RESTORE",A="FF:::/Kernel/Sched.CC,_TASK_CONTEXT_RESTORE"$
+	//for $LK,"TASK_CONTEXT_SAVE",A="FF:::/Kernel/Sched.ZC,TASK_CONTEXT_SAVE"$ and $LK,"_TASK_CONTEXT_RESTORE",A="FF:::/Kernel/Sched.ZC,_TASK_CONTEXT_RESTORE"$
 	I64				 rip, rflags, rsp, rsi, rax, rcx, rdx, rbx, rbp, rdi, r8, r9, r10, r11, r12, r13, r14, r15;
 	CCPU			*gs;
 	CFPU			*fpu_mmx;
@@ -4283,7 +4276,7 @@ public class CTextGlobals
 #define DCF_SYMMETRY			0x200
 
 //Must be used with DCF_SYMMETRY set also.
-//See $LK,"::/Demo/Games/BigGuns.CC"$
+//See $LK,"::/Demo/Games/BigGuns.ZC"$
 #define DCF_JUST_MIRROR 		0x400
 
 #define DCF_LOCATE_NEAREST		0x800
@@ -4328,7 +4321,7 @@ public class CDC
 	//0x0000 =100% color.c0
 	//0x8000 =50%  color.c0 	50% color.c1
 	//0x10000=100% color.c1
-	//See $LK,"::/Demo/Graphics/SunMoon.CC"$ and	$LK,"::/Demo/Graphics/Shading.CC"$.
+	//See $LK,"::/Demo/Graphics/SunMoon.ZC"$ and	$LK,"::/Demo/Graphics/Shading.ZC"$.
 	U64				 dither_probability_u16;
 
 	CDC				*brush;

@@ -2,7 +2,7 @@ $WW,1$$FG,5$$TX+CX,"Directory Structure"$$FG$
 
 $FG,2$/Home$FG$ All your user data should be placed in here to ease backing-up your data.  When you install an application it will create a subdirectory of your $FG,2$/Home$FG$ directory for storage.
 
-$FG,2$/Apps$FG$ Applications are placed in subdirectories of $FG,2$/Apps$FG$.  Applications should have a file called $FG,2$Install.CC$FG$ which will install the app, possibly making files or directories in $FG,2$/Home$FG$.  The file, $FG,2$Load.CC$FG$ will load the application into mem.	The file, $FG,2$Run.CC$FG$, will usually load and execute the app.	To add an app to your PersonalMenu, use $FG,2$<CTRL-l>$FG$, insert a macro with the PopUp option checked and invoke the $FG,2$Run.CC$FG$ file.
+$FG,2$/Apps$FG$ Applications are placed in subdirectories of $FG,2$/Apps$FG$.  Applications should have a file called $FG,2$Install.ZC$FG$ which will install the app, possibly making files or directories in $FG,2$/Home$FG$.  The file, $FG,2$Load.ZC$FG$ will load the application into mem.	The file, $FG,2$Run.ZC$FG$, will usually load and execute the app.	To add an app to your PersonalMenu, use $FG,2$<CTRL-l>$FG$, insert a macro with the PopUp option checked and invoke the $FG,2$Run.ZC$FG$ file.
 
 $FG,2$/Demo$FG$ Here you can find lots of sample code to do various things.
 
@@ -26,13 +26,13 @@ $LK,"~/PersonalMenu.DD"$ a menu viewed with the $FG,2$<CTRL-m>$FG$ key or by cli
 
 $LK,"~/PersonalNotes.DD"$ a personal note file viewed with the $FG,2$<CTRL-SHIFT-M>$FG$ key.
 
-$LK,"~/MakeHome.CC"$ a file compiled by the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ during $LK,"StartOS",A="FF:::/StartOS.CC,MakeHome"$.
+$LK,"~/MakeHome.ZC"$ a file compiled by the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ during $LK,"StartOS",A="FF:::/StartOS.ZC,MakeHome"$.
 
 $FG,4$~/Home*$FG$ Copy $FG,2$Home*$FG$ files from the root into $FG,2$~$FG$ and customize them.  These files are invoked when the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ starts-up.
 
-$LK,"~/Once.CC"$ a file invoked at the start-up of the first user.	Customize this!
+$LK,"~/Once.ZC"$ a file invoked at the start-up of the first user.	Customize this!
 
-$LK,"~/Registry.CC"$ can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
+$LK,"~/Registry.ZC"$ can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
 
 
 
@@ -40,13 +40,13 @@ $FG,5$$TX+CX,"Application Policies"$$FG$
 
 * Place applications in their own $FG,2$/Apps$FG$ subdirectory.
 
-* Make a file called $FG,2$Load.CC$FG$ to load the application.
+* Make a file called $FG,2$Load.ZC$FG$ to load the application.
 
-* Make a file called $FG,2$Run.CC$FG$ to load and run the application, preferable by $FG,2$#include$FG$ing the $FG,2$Load.CC$FG$ file.
+* Make a file called $FG,2$Run.ZC$FG$ to load and run the application, preferable by $FG,2$#include$FG$ing the $FG,2$Load.ZC$FG$ file.
 
-* Place user data in a subdirectory of $FG,2$/Home$FG$, preferably naming the subdirectory the same as the $FG,2$/Apps$FG$ subdirectory.	Or, place data in the $FG,2$Registry.CC$FG$ file.  See $LK,"::/Demo/RegistryDemo.CC"$.
+* Place user data in a subdirectory of $FG,2$/Home$FG$, preferably naming the subdirectory the same as the $FG,2$/Apps$FG$ subdirectory.	Or, place data in the $FG,2$Registry.ZC$FG$ file.  See $LK,"::/Demo/RegistryDemo.ZC"$.
 
-* If the app needs files in the $FG,2$/Home$FG$ directory, make an $FG,2$/Apps$FG$ file called $FG,2$Install.CC$FG$ or $FG,2$Install.IN$FG$ to create the $FG,2$/Home$FG$ subdirectory.
+* If the app needs files in the $FG,2$/Home$FG$ directory, make an $FG,2$/Apps$FG$ file called $FG,2$Install.ZC$FG$ or $FG,2$Install.IN$FG$ to create the $FG,2$/Home$FG$ subdirectory.
 
  
 
@@ -60,7 +60,7 @@ $FG,5$$TX+CX,"Programming Guidelines"$$FG$
 
 * There are two modes of compiling, $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ and $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	Compilation is done in both -- neither is "interpreted".	Use $FG,2$$LK,"JIT Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$$FG$.
 
-* $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$
+* $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$
 
 * Use $FG,2$I64$FG$ instead of smaller int sizes because the compiler converts everything to 64-bit.	Don't use unsigned$FG$ unless it actually breaks.  A policy of signed keeps it simple so you don't have to agonize over choices.
 
@@ -92,11 +92,11 @@ $ID,-5$
 
 $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
-* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
+* See $LK,"::/System/Hash.ZC"$ for examples of how the hash tables are set-up.  Basically, symbols are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
 
-* $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ symbols loaded in on start-up.
+* $FG,2$sys_task->hash_table$FG$ holds the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ symbols loaded in on start-up.
 
-* $FG,2$Fs->hash_table$FG$ holds user CosmiC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
+* $FG,2$Fs->hash_table$FG$ holds user ZealC symbols and if a symbol is not found, it checks parents.  When a duplicate symbol is added to the table, it overshadows the prev symbol.  When developing software, typically you include the file at the cmd prompt, make changes and reinclude it.  Old symbols are overshadowed but they are still there.	Periodically, kill the TASK and start fresh when mem is low.	If you wish your applications to free themselves instead of staying in mem, spawn or $LK,"PopUp",A="MN:PopUp"$() a task to run the application and kill it when it's done.
 
 * To display the contents of a hash table, use the $LK,"HashTableDump",A="MN:HashTableDump"$() routine or the varients.  $LK,"HashDepthRep",A="MN:HashDepthRep"$() gives a histogram	of how long the chains are, in case you wish to make hash table sizes bigger.
 
@@ -112,7 +112,7 @@ See $LK,"::/Doc/Asm.DD"$.
 
 * Don't change the segment registers unless interrupts are off.	It's hard to do, anyway.	$LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$ and $LK,"SET_GS_BASE",A="MN:SET_GS_BASE"$.
 
-* When interacting with $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for register variables.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
+* When interacting with $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for register variables.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
 
 * It is recommended to use the standard stack frame for functions because $LK,"Caller",A="MN:Caller"$() is used to display the call stack, such as for the wallpaper.
 $FG,2$				PUSH		RBP

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> LASER_TEMP_MAX          </span><span class=cFE>30</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> LASER_THRESHOLD_TEMP    </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>
+<a name="l3"></a>#</span><span class=cF1>define</span><span class=cF0> MASS_TEMP_MAX           </span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>class</span><span class=cF0> CtrlPanelState
+<a name="l6"></a>{
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0>  shot_radius, fuse_time;
+<a name="l8"></a>    </span><span class=cF1>F64</span><span class=cF0>  laser_temperature;
+<a name="l9"></a>    </span><span class=cF1>Bool</span><span class=cF0> spacewalk;
+<a name="l10"></a>
+<a name="l11"></a>} ctrl_panel;
+<a name="l12"></a>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> CTRL_PANEL_SPACING      </span><span class=cFE>33</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> CTRL_PANEL_RANGE        </span><span class=cFE>30</span><span class=cF0>
+<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> CTRL_PANEL_BORDER       </span><span class=cFE>2</span><span class=cF0>
+<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> CTRL_PANEL_BTTN_SIZE    </span><span class=cFE>12</span><span class=cF0>
+<a name="l17"></a>
+<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> TMP_Y   (+</span><span class=cFE>2</span><span class=cF0>)
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF1>U0</span><span class=cF0> DrawCtrlPanelCtrl(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CCtrl</span><span class=cF0> *c)
+<a name="l21"></a>{
+<a name="l22"></a>    CtrlPanelState *s = c-&gt;state;
+<a name="l23"></a>    </span><span class=cF1>F64</span><span class=cF0>             d, d_range;
+<a name="l24"></a>
+<a name="l25"></a>    dc-&gt;color = </span><span class=cF3>LTRED</span><span class=cF0>;
+<a name="l26"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left, c-&gt;top, CTRL_PANEL_SPACING * </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l27"></a>                CTRL_PANEL_SPACING * </span><span class=cFE>2</span><span class=cF0> + CTRL_PANEL_RANGE + CTRL_PANEL_BTTN_SIZE);
+<a name="l28"></a>    dc-&gt;color = </span><span class=cF3>DKGRAY</span><span class=cF0>;
+<a name="l29"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + CTRL_PANEL_BORDER, c-&gt;top + CTRL_PANEL_BORDER, 
+<a name="l30"></a>                CTRL_PANEL_SPACING * </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_BORDER, 
+<a name="l31"></a>                CTRL_PANEL_SPACING * </span><span class=cFE>2</span><span class=cF0> + CTRL_PANEL_RANGE + CTRL_PANEL_BTTN_SIZE
+<a name="l32"></a>                -</span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_BORDER);
+<a name="l33"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l34"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, c-&gt;left + CTRL_PANEL_SPACING, </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> +
+<a name="l35"></a>                CTRL_PANEL_SPACING, c-&gt;left + CTRL_PANEL_SPACING, 
+<a name="l36"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING+CTRL_PANEL_RANGE-</span><span class=cFE>1</span><span class=cF0>);
+<a name="l37"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> +
+<a name="l38"></a>                CTRL_PANEL_SPACING, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0>, 
+<a name="l39"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING + CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l40"></a>
+<a name="l41"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l42"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>c-&gt;left + c-&gt;right + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>9</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l43"></a>                c-&gt;top + CTRL_PANEL_BORDER + </span><span class=cF7>(</span><span class=cF0>CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l44"></a>                </span><span class=cFE>9</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> + </span><span class=cFE>6</span><span class=cF0>, </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> + </span><span class=cFE>6</span><span class=cF0>);
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF1>if</span><span class=cF0> (s-&gt;spacewalk)
+<a name="l47"></a>        dc-&gt;color =</span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l48"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l49"></a>        dc-&gt;color = </span><span class=cF3>DKGRAY</span><span class=cF0>;
+<a name="l50"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>c-&gt;left + c-&gt;right + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>9</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l51"></a>                c-&gt;top + CTRL_PANEL_BORDER + </span><span class=cFE>1</span><span class=cF0> + </span><span class=cF7>(</span><span class=cF0>CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l52"></a>                </span><span class=cFE>9</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>);
+<a name="l53"></a>
+<a name="l54"></a>    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l55"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>c-&gt;left + c-&gt;right + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>9</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l56"></a>                c-&gt;top + CTRL_PANEL_BORDER + </span><span class=cFE>3</span><span class=cF0> +
+<a name="l57"></a>                </span><span class=cF7>(</span><span class=cF0>CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>&quot;SpaceWalk&quot;</span><span class=cF0>);
+<a name="l58"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + CTRL_PANEL_SPACING - </span><span class=cFE>4</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l59"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> +
+<a name="l60"></a>                CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>&quot;Size&quot;</span><span class=cF0>);
+<a name="l61"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>4</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l62"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> +
+<a name="l63"></a>                CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>&quot;Fuse&quot;</span><span class=cF0>);
+<a name="l64"></a>    dc-&gt;color = </span><span class=cF3>LTRED</span><span class=cF0>;
+<a name="l65"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + CTRL_PANEL_SPACING - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l66"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING + CTRL_PANEL_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l67"></a>                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;shot_radius * </span><span class=cFE>10</span><span class=cF0> / CTRL_PANEL_RANGE);
+<a name="l68"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l69"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING + CTRL_PANEL_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l70"></a>                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;fuse_time * </span><span class=cFE>10</span><span class=cF0> / CTRL_PANEL_RANGE);
+<a name="l71"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + CTRL_PANEL_SPACING - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l72"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING +
+<a name="l73"></a>                CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;shot_radius - </span><span class=cFE>2</span><span class=cF0> , </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l74"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l75"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING +
+<a name="l76"></a>                CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;fuse_time - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l77"></a>    dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l78"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + CTRL_PANEL_SPACING - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l79"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING +
+<a name="l80"></a>                CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;shot_radius - </span><span class=cFE>1</span><span class=cF0> , </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l81"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * CTRL_PANEL_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l82"></a>                </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0> + CTRL_PANEL_SPACING +
+<a name="l83"></a>                CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;fuse_time - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l84"></a>
+<a name="l85"></a>    d_range = c-&gt;right - c-&gt;left - </span><span class=cFE>5</span><span class=cF0> - </span><span class=cFE>5</span><span class=cF0>;
+<a name="l86"></a>    d = s-&gt;laser_temperature * d_range / LASER_TEMP_MAX;
+<a name="l87"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l88"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>5</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, c-&gt;bottom + TMP_Y - </span><span class=cFE>2</span><span class=cF0>, d_range + </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l89"></a>    </span><span class=cF1>if</span><span class=cF0> (d &gt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l90"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l91"></a>        dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l92"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>5</span><span class=cF0>, c-&gt;bottom + TMP_Y - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF5>Min</span><span class=cF7>(</span><span class=cF0>d, d_range / </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l93"></a>        </span><span class=cF1>if</span><span class=cF0> (d &gt;= d_range / </span><span class=cFE>3</span><span class=cF0>)
+<a name="l94"></a>        {
+<a name="l95"></a>            dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l96"></a>            </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>5</span><span class=cF0> + d_range / </span><span class=cFE>3</span><span class=cF0>, c-&gt;bottom + TMP_Y - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF5>Min</span><span class=cF7>(</span><span class=cF0>d, </span><span class=cFE>2</span><span class=cF0> * d_range/</span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>-d_range / </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l97"></a>            </span><span class=cF1>if</span><span class=cF0> (d &gt;= </span><span class=cFE>2</span><span class=cF0> * d_range / </span><span class=cFE>3</span><span class=cF0>)
+<a name="l98"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l99"></a>                dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l100"></a>                </span><span class=cF5>GrRect</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>5</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0> * d_range / </span><span class=cFE>3</span><span class=cF0>, c-&gt;bottom + TMP_Y - </span><span class=cFE>1</span><span class=cF0>, d - </span><span class=cFE>2</span><span class=cF0> * d_range / </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l101"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l102"></a>        }
+<a name="l103"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l104"></a>}
+<a name="l105"></a>
+<a name="l106"></a></span><span class=cF1>U0</span><span class=cF0> UpdateDerivedCtrlPanelCtrl(</span><span class=cF9>CCtrl</span><span class=cF0> *c)
+<a name="l107"></a>{
+<a name="l108"></a>    CtrlPanelState *s = c-&gt;state;
+<a name="l109"></a>
+<a name="l110"></a>    c-&gt;left     = c-&gt;win_task-&gt;pix_width - (CTRL_PANEL_SPACING * </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l111"></a>    c-&gt;right    = c-&gt;left + CTRL_PANEL_SPACING * </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>;
+<a name="l112"></a>    c-&gt;top      = c-&gt;win_task-&gt;pix_height - (CTRL_PANEL_SPACING * </span><span class=cFE>2</span><span class=cF0> + CTRL_PANEL_RANGE + CTRL_PANEL_BTTN_SIZE);
+<a name="l113"></a>    c-&gt;bottom   = c-&gt;top + CTRL_PANEL_SPACING * </span><span class=cFE>2</span><span class=cF0> + CTRL_PANEL_RANGE;
+<a name="l114"></a>
+<a name="l115"></a>    s-&gt;shot_radius  = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;shot_radius, </span><span class=cFE>0</span><span class=cF0>, CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l116"></a>    s-&gt;fuse_time    = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;fuse_time,   </span><span class=cFE>0</span><span class=cF0>, CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l117"></a>}
+<a name="l118"></a>
+<a name="l119"></a></span><span class=cF1>U0</span><span class=cF0> LeftClickCtrlPanel(</span><span class=cF9>CCtrl</span><span class=cF0> *c, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>Bool</span><span class=cF0>)
+<a name="l120"></a>{
+<a name="l121"></a>    CtrlPanelState *s = c-&gt;state;
+<a name="l122"></a>
+<a name="l123"></a>    </span><span class=cF1>if</span><span class=cF0> (y &lt; c-&gt;top + CTRL_PANEL_BORDER + </span><span class=cF7>(</span><span class=cF0>CTRL_PANEL_SPACING - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> + </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> + </span><span class=cFE>6</span><span class=cF0>)
+<a name="l124"></a>        s-&gt;spacewalk = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l125"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l126"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l127"></a>        </span><span class=cF1>if</span><span class=cF0> (x &lt; </span><span class=cF7>(</span><span class=cF0>c-&gt;right + c-&gt;left</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>)
+<a name="l128"></a>            s-&gt;shot_radius = CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_SPACING + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l129"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l130"></a>            s-&gt;fuse_time = CTRL_PANEL_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + CTRL_PANEL_SPACING + CTRL_PANEL_BTTN_SIZE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l131"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l132"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;update_derived_vals)
+<a name="l133"></a>        (*c-&gt;update_derived_vals)(c);
+<a name="l134"></a>}
+<a name="l135"></a>
+<a name="l136"></a></span><span class=cF9>CCtrl</span><span class=cF0> *CtrlPanelNew()
+<a name="l137"></a>{
+<a name="l138"></a>    </span><span class=cF9>CCtrl</span><span class=cF0> *c = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCtrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l139"></a>
+<a name="l140"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;ctrl_panel, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>ctrl_panel</span><span class=cF7>)</span><span class=cF0>);
+<a name="l141"></a>    c-&gt;win_task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l142"></a>    c-&gt;flags = </span><span class=cF3>CTRLF_SHOW</span><span class=cF0> | </span><span class=cF3>CTRLF_CAPTURE_LEFT_MS</span><span class=cF0>;
+<a name="l143"></a>    c-&gt;type = </span><span class=cF3>CTRLT_GENERIC</span><span class=cF0>;
+<a name="l144"></a>    c-&gt;state = &amp;ctrl_panel;
+<a name="l145"></a>    c-&gt;draw_it = &amp;DrawCtrlPanelCtrl;
+<a name="l146"></a>    c-&gt;left_click = &amp;LeftClickCtrlPanel;
+<a name="l147"></a>    c-&gt;update_derived_vals = &amp;UpdateDerivedCtrlPanelCtrl;
+<a name="l148"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(c, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ctrl);
+<a name="l149"></a>    </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>;
+<a name="l150"></a>
+<a name="l151"></a>    </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l152"></a>}
+<a name="l153"></a>
+<a name="l154"></a></span><span class=cF1>U0</span><span class=cF0> CtrlPanelDel(</span><span class=cF9>CCtrl</span><span class=cF0> *c)
+<a name="l155"></a>{
+<a name="l156"></a>    </span><span class=cF5>QueueRemove</span><span class=cF0>(c);
+<a name="l157"></a>    </span><span class=cF5>Free</span><span class=cF0>(c);
+<a name="l158"></a>}
+</span></pre></body>
+</html>

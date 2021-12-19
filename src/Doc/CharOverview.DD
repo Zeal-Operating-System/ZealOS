@@ -19,7 +19,7 @@ The upper 4-bytes are copied from lower 4-bytes.
 	$FG,2$Byte 4$FG$	 is the code.  Left, Right and NumPad keys distinct.
 	$FG,2$Byte 5-7$FG$ are $LK,"flags",A="MN:SCf_KEY_UP"$
 
-Run the program $LK,"::/Demo/MessageLoop.CC"$ to examine scan code.  Press $FG,2$<CTRL-SHIFT-l>$FG$ and "Insert ASCII/ScanCode".$FG$
+Run the program $LK,"::/Demo/MessageLoop.ZC"$ to examine scan code.  Press $FG,2$<CTRL-SHIFT-l>$FG$ and "Insert ASCII/ScanCode".$FG$
 
 See $LK,"Key Allocations",A="FI:::/Doc/KeyAlloc.DD"$ and $LK,"CKbdStateGlobals",A="MN:CKbdStateGlobals"$.
 

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>import</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0>           *</span><span class=cF5>Doc2PlainText</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
+<a name="l2"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>            </span><span class=cF5>DocBinsValidate</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc);
+<a name="l3"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>            </span><span class=cF5>DocDel</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc);
+<a name="l4"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>            </span><span class=cF5>DocLoad</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *src2, </span><span class=cF9>I64</span><span class=cF0> size);
+<a name="l5"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0>         *</span><span class=cF5>DocNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>);
+<a name="l6"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF9>CDocEntry</span><span class=cF0>    *</span><span class=cF5>DocPrint</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...);
+<a name="l7"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF9>CDocEntry</span><span class=cF0>    *</span><span class=cF5>DocPutLine</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
+<a name="l8"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>           </span><span class=cF5>DocSize</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc);
+<a name="l9"></a></span><span class=cF1>import</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0>          </span><span class=cF5>DocWrite</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>Bool</span><span class=cF0> prompt=</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l10"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0>  *</span><span class=cFD>CmdLinePrompt</span><span class=cF0>();
+<a name="l11"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>  </span><span class=cF5>HashEntrySize2</span><span class=cF0>(</span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph);
+<a name="l12"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>IsLexExpression2Bin</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> **_machine_code);
+<a name="l13"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>  </span><span class=cF5>Lex</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l14"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>  </span><span class=cF5>LexExpression</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l15"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>  </span><span class=cF5>LexCharGet</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l16"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CCodeMisc</span><span class=cF0>            *</span><span class=cFD>OptLabelFwd</span><span class=cF0>(</span><span class=cF9>CCodeMisc</span><span class=cF0> *lb);
+<a name="l17"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CIntermediateCode</span><span class=cF0>    *</span><span class=cFD>OptPass012</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l18"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                    </span><span class=cFD>OptPass3</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>COptReg</span><span class=cF0> *reg_offsets);
+<a name="l19"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                    </span><span class=cFD>OptPass4</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>COptReg</span><span class=cF0> *reg_offsets, </span><span class=cF9>I64</span><span class=cF0> *_type);
+<a name="l20"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                    </span><span class=cFD>OptPass5</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l21"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                    </span><span class=cFD>OptPass6</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l22"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>                   </span><span class=cFD>OptPass789A</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>COptReg</span><span class=cF0> *reg_offsets, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>CDebugInfo</span><span class=cF0> **_debug);
+<a name="l23"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CHashClass</span><span class=cF0>   *</span><span class=cFD>ParseClass</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> keyword, </span><span class=cF9>I64</span><span class=cF0> fsp_flags, </span><span class=cF1>Bool</span><span class=cF0> is_extern);
+<a name="l24"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CHashFun</span><span class=cF0>     *</span><span class=cFD>ParseFunJoin</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CHashClass</span><span class=cF0> *tmp_return, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> fsp_flags);
+<a name="l25"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>           </span><span class=cF5>ParseKeyWord</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l26"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0>          </span><span class=cFD>ParseStatement</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> try_count=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CCodeMisc</span><span class=cF0> *lb_break=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> comp_flags=</span><span class=cF3>CMPF_PRS_SEMICOLON</span><span class=cF0>);
+<a name="l27"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>            </span><span class=cFD>ParseStreamBlk</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc);
+<a name="l28"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CHashClass</span><span class=cF0>   *</span><span class=cFD>ParseType</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CHashClass</span><span class=cF0> **_tmpc1,
+<a name="l29"></a>                               </span><span class=cF9>I64</span><span class=cF0> *_mode, </span><span class=cF9>CMemberList</span><span class=cF0> *tmpm, </span><span class=cF1>U8</span><span class=cF0> **_ident, </span><span class=cF9>CHashFun</span><span class=cF0> **_fun_ptr,
+<a name="l30"></a>                               </span><span class=cF9>CHashExport</span><span class=cF0> **_tmpex, </span><span class=cF9>CArrayDim</span><span class=cF0> *tmpad, </span><span class=cF9>I64</span><span class=cF0> fsp_flags);
+<a name="l31"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>           </span><span class=cFD>ParseUnaryModifier</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CParseStack</span><span class=cF0> *ps,
+<a name="l32"></a>                                       </span><span class=cF9>CMemberList</span><span class=cF0> **_local_var, </span><span class=cF9>CArrayDim</span><span class=cF0> **_tmpad, </span><span class=cF9>I64</span><span class=cF0> *unary_post_prec);
+<a name="l33"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>           </span><span class=cFD>ParseUnaryTerm</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CParseStack</span><span class=cF0> *ps, </span><span class=cF9>CMemberList</span><span class=cF0> **_local_var, </span><span class=cF9>CArrayDim</span><span class=cF0> **_tmpad,
+<a name="l34"></a>                                   </span><span class=cF9>I64</span><span class=cF0> *max_prec, </span><span class=cF9>I64</span><span class=cF0> *unary_pre_prec, </span><span class=cF9>I64</span><span class=cF0> *paren_prec);
+<a name="l35"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>            </span><span class=cFD>ParseVarInit2</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> **_dst, </span><span class=cF9>CHashClass</span><span class=cF0> *tmpc,
+<a name="l36"></a>                                  </span><span class=cF9>CArrayDim</span><span class=cF0> *tmpad, </span><span class=cF1>U8</span><span class=cF0> *data_addr_rip, </span><span class=cF1>U8</span><span class=cF0> **_base, </span><span class=cF1>Bool</span><span class=cF0> data_heap, </span><span class=cF9>I64</span><span class=cF0> pass);
+<a name="l37"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>CMP_TEMPLATES</span><span class=cF0>               </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFD>comp_templates</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l38"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>CMP_TEMPLATES_DONT_POP</span><span class=cF0>      </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFD>comp_templates_dont_pop</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l39"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>CMP_TEMPLATES_DONT_PUSH2</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFD>comp_templates_dont_push2</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l40"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>CMP_TEMPLATES_DONT_PUSH</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFD>comp_templates_dont_push</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l41"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>CMP_TEMPLATES_DONT_PUSH_POP</span><span class=cF0> </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFD>comp_templates_dont_push_pop</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>];
+</span></pre></body>
+</html>

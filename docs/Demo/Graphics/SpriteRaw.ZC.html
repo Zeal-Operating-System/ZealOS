@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Normally, you make sprites with &lt;CTRL-r&gt;.</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//This shows how to build a sprite by hand.</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>//See </span><span class=cF9><u>::/Apps/GrModels</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>class</span><span class=cF0> MySprite
+<a name="l6"></a>{ </span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/Gr.HH.html#l130"><span class=cF4>Sprite Elem Types</span></a><span class=cF0>
+<a name="l7"></a>    </span><span class=cF9>CSpriteColor</span><span class=cF0>    color;
+<a name="l8"></a>    </span><span class=cF9>CSpritePtPt</span><span class=cF0>     line1;
+<a name="l9"></a>    </span><span class=cF9>CSpritePtPt</span><span class=cF0>     line2;
+<a name="l10"></a>    </span><span class=cF9>CSpritePtPt</span><span class=cF0>     line3;
+<a name="l11"></a>    </span><span class=cF9>CSpritePt</span><span class=cF0>       fill;
+<a name="l12"></a>    </span><span class=cF9>CSpriteBase</span><span class=cF0>     </span><span class=cF1>end</span><span class=cF0>;
+<a name="l13"></a>};
+<a name="l14"></a>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF1>U0</span><span class=cF0> SpriteRawDemo()
+<a name="l17"></a>{
+<a name="l18"></a>    MySprite s;
+<a name="l19"></a>
+<a name="l20"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;s, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s</span><span class=cF7>)</span><span class=cF0>);
+<a name="l21"></a>    s.color.type    = </span><span class=cF3>SPT_COLOR</span><span class=cF0>;
+<a name="l22"></a>    s.color.color   = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>    s.line1.type    = </span><span class=cF3>SPT_LINE</span><span class=cF0>;
+<a name="l25"></a>    s.line1.x2      = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l26"></a>    s.line1.y2      = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l27"></a>
+<a name="l28"></a>    s.line2.type    = </span><span class=cF3>SPT_LINE</span><span class=cF0>;
+<a name="l29"></a>    s.line2.x2      = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l30"></a>    s.line2.y2      = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l31"></a>
+<a name="l32"></a>    s.line3.type    = </span><span class=cF3>SPT_LINE</span><span class=cF0>;
+<a name="l33"></a>    s.line3.x1      = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l34"></a>    s.line3.y1      = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l35"></a>    s.line3.x2      = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l36"></a>    s.line3.y2      = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l37"></a>
+<a name="l38"></a>    s.fill.type     = </span><span class=cF3>SPT_FLOOD_FILL</span><span class=cF0>;
+<a name="l39"></a>    s.fill.x1       = </span><span class=cFE>20</span><span class=cF0>;
+<a name="l40"></a>    s.fill.y1       = </span><span class=cFE>20</span><span class=cF0>;
+<a name="l41"></a>
+<a name="l42"></a>    s.</span><span class=cF1>end</span><span class=cF0>.type      = </span><span class=cF3>SPT_END</span><span class=cF0>;
+<a name="l43"></a>
+<a name="l44"></a>    </span><span class=cF5>Sprite</span><span class=cF0>(&amp;s);
+<a name="l45"></a>    </span><span class=cF6>&quot;%h13c&quot;</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l46"></a>}
+<a name="l47"></a>
+<a name="l48"></a>SpriteRawDemo;
+</span></pre></body>
+</html>

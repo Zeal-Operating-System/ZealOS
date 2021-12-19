@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -26,17 +26,24 @@ body {background-color:#1f1f1f;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                        Compiler Index</span><span class=cF0>
-<a name="l2"></a></span><span class=cF4>
-<a name="l3"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Asm.DD.html#l1"><span class=cF4>::/Doc/Asm.DD</span></a><span class=cF0>
-<a name="l4"></a></span><span class=cF4>
-<a name="l5"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Directives.DD.html#l1"><span class=cF4>::/Doc/Directives.DD</span></a><span class=cF0>
-<a name="l6"></a></span><span class=cF4>
-<a name="l7"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Options.DD.html#l1"><span class=cF4>::/Doc/Options.DD</span></a><span class=cF0>
-<a name="l8"></a></span><span class=cF4>
-<a name="l9"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/PreProcessor.DD.html#l1"><span class=cF4>::/Doc/PreProcessor.DD</span></a><span class=cF0>
-<a name="l10"></a></span><span class=cF4>
-<a name="l11"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ScopingLinkage.DD.html#l1"><span class=cF4>::/Doc/ScopingLinkage.DD</span></a><span class=cF0>
-<a name="l12"></a>
-<a name="l13"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/HelloWorld.DD.html#l1"><span class=cF4>Hello World</span></a><span class=cF0>.
+<a name="l2"></a>
+<a name="l3"></a>The compiler lexes and parses code into </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CompilerA.HH.html#l20"><span class=cF4>Intermediate Codes</span></a><span class=cF0> which are then made into JIT or AOT machine code. The compiler 
+<a name="l4"></a>preprocesses during lexing, and optimizes after Intermediate Code generation.
+<a name="l5"></a>
+<a name="l6"></a>For parser reference, see </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseExp.ZC.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseStatement.ZC.html#l1020"><span class=cF4>ParseStatement</span></a><span class=cF0>().
+<a name="l7"></a>For Intermediate Code reference, see </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/BackLib.ZC.html#l1"><span class=cF4>BackLib</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CInit.ZC.html#l26"><span class=cF4>Intermediate Code Attributes</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OptPass012.ZC.html#l373"><span class=cF4>Combining Consts</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OptPass3.ZC.html#l627"><span class=cF4>Choosing Reg Vars</span></a><span class=cF0>.
+<a name="l8"></a>For machine code backend reference, see </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1798"><span class=cF4>IC Struct</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/ParseLib.ZC.html#l289"><span class=cF4>COCCompile</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OptPass789A.ZC.html#l596"><span class=cF4>OptPass789A</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/BackA.ZC.html#l273"><span class=cF4>BackEnd</span></a><span class=cF0>.
+<a name="l9"></a></span><span class=cF4>
+<a name="l10"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Asm.DD.html#l1"><span class=cF4>::/Doc/Asm.DD</span></a><span class=cF0>
+<a name="l11"></a></span><span class=cF4>
+<a name="l12"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Directives.DD.html#l1"><span class=cF4>::/Doc/Directives.DD</span></a><span class=cF0>
+<a name="l13"></a></span><span class=cF4>
+<a name="l14"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Options.DD.html#l1"><span class=cF4>::/Doc/Options.DD</span></a><span class=cF0>
+<a name="l15"></a></span><span class=cF4>
+<a name="l16"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/PreProcessor.DD.html#l1"><span class=cF4>::/Doc/PreProcessor.DD</span></a><span class=cF0>
+<a name="l17"></a></span><span class=cF4>
+<a name="l18"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/ScopingLinkage.DD.html#l1"><span class=cF4>::/Doc/ScopingLinkage.DD</span></a><span class=cF0>
+<a name="l19"></a>
+<a name="l20"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/HelloWorld.DD.html#l1"><span class=cF4>Hello World</span></a><span class=cF0>.
 </span></pre></body>
 </html>

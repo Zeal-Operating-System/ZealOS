@@ -3,4 +3,4 @@ $WW,1$ZealOS has an advanced algorithm for integrating ordinary differential equ
 See $LK,"CMathODE",A="MN:CMathODE"$ and $LK,"ODEsUpdate",A="MN:ODEsUpdate"$ for an overview.
 See $LK,"ODECallDerivative",A="MN:ODECallDerivative"$ to see what support there is for masses and springs.
 
-See $LK,"::/Demo/Games/Whap.CC"$, $LK,"::/Demo/Games/Rocket.CC"$, $LK,"::/Demo/Games/MassSpring.CC"$, $LK,"::/Apps/Span/SpanMain.CC"$ or $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.
+See $LK,"::/Demo/Games/Whap.ZC"$, $LK,"::/Demo/Games/Rocket.ZC"$, $LK,"::/Demo/Games/MassSpring.ZC"$, $LK,"::/Apps/Span/SpanMain.ZC"$ or $LK,"::/Apps/X-Caliber/X-Caliber.ZC"$.

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Help System&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>KeyMapKeyMStrPrint</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc, </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_handler</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF0> sc</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *desc, </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>          i = </span><span class=cFE>9</span><span class=cF0>, k, c;
+<a name="l6"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st, *st2, *res, *ptr;
+<a name="l7"></a>    </span><span class=cF9>CHashTable</span><span class=cF0>  *old_hash = </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table;
+<a name="l8"></a>
+<a name="l9"></a>    st = </span><span class=cF5>ScanCode2KeyName</span><span class=cF0>(sc);
+<a name="l10"></a>    </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0>)                   i += </span><span class=cFE>5</span><span class=cF0>;
+<a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_ALT</span><span class=cF0>)                    i += </span><span class=cFE>4</span><span class=cF0>;
+<a name="l12"></a>    </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF7>(</span><span class=cF3>SCF_SHIFT</span><span class=cF0> | </span><span class=cF3>SCF_NO_SHIFT</span><span class=cF7>)</span><span class=cF0>) i += </span><span class=cFE>6</span><span class=cF0>;
+<a name="l13"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l14"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table = task-&gt;hash_table;
+<a name="l15"></a>    st2 = </span><span class=cF5>SrcEdLink</span><span class=cF0>(fp_handler, </span><span class=cFE>256</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table = old_hash;
+<a name="l17"></a>
+<a name="l18"></a>    k = *desc(</span><span class=cF9>U32</span><span class=cF0> *);
+<a name="l19"></a>    </span><span class=cF1>if</span><span class=cF0> (k == </span><span class=cF6>'Edit'</span><span class=cF0>)        c = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l20"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (k == </span><span class=cF6>'Dol '</span><span class=cF0>)   c = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l21"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (k == </span><span class=cF6>'Cmd '</span><span class=cF0>)   c = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l22"></a>    </span><span class=cF1>else</span><span class=cF0>                    c = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>    res = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%-*s $FG,%d$$TX+UL+L+PU,\&quot;%$Q\&quot;,A=\&quot;%s\&quot;$$FG$\n&quot;</span><span class=cF0>, i, st, c, desc, st2);
+<a name="l25"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l26"></a>    </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l27"></a>
+<a name="l28"></a>    ptr = res;
+<a name="l29"></a>    </span><span class=cF1>while</span><span class=cF0> (*ptr)
+<a name="l30"></a>        ptr++;
+<a name="l31"></a>    
+<a name="l32"></a>
+<a name="l33"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l34"></a>}
+<a name="l35"></a>
+<a name="l36"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc, </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_handler</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF0> sc</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *desc, </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l37"></a>{
+<a name="l38"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>KeyMapKeyMStrPrint</span><span class=cF0>(sc, fp_handler, desc, task);
+<a name="l39"></a>
+<a name="l40"></a>    </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, st;
+<a name="l41"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l42"></a>}
+<a name="l43"></a>
+<a name="l44"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyMapCtrlAltFamily</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> no_shift, </span><span class=cF1>Bool</span><span class=cF0> shift)
+<a name="l45"></a>{
+<a name="l46"></a>    </span><span class=cF9>I64</span><span class=cF0> i, no_shift_f;
+<a name="l47"></a>
+<a name="l48"></a>    </span><span class=cF1>if</span><span class=cF0> (no_shift &amp;&amp; shift)
+<a name="l49"></a>        no_shift_f = </span><span class=cF3>SCF_NO_SHIFT</span><span class=cF0>;
+<a name="l50"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l51"></a>        no_shift_f = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l52"></a>    </span><span class=cF1>if</span><span class=cF0> (no_shift)
+<a name="l53"></a>        </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF3>SC_DELETE</span><span class=cF0> + </span><span class=cF3>SCF_CTRL</span><span class=cF0> + </span><span class=cF3>SCF_ALT</span><span class=cF0> + no_shift_f, &amp;</span><span class=cF5>Reboot</span><span class=cF0>, </span><span class=cF6>&quot;Cmd /Reboot&quot;</span><span class=cF0>);
+<a name="l54"></a>    </span><span class=cF1>if</span><span class=cF0> (no_shift)
+<a name="l55"></a>        </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF3>SC_ESC</span><span class=cF0> + </span><span class=cF3>SCF_CTRL</span><span class=cF0> + </span><span class=cF3>SCF_ALT</span><span class=cF0> + no_shift_f, &amp;</span><span class=cF5>User</span><span class=cF0>, </span><span class=cF6>&quot;Cmd /Terminal Window&quot;</span><span class=cF0>);
+<a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (no_shift)
+<a name="l57"></a>        </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF3>SC_TAB</span><span class=cF0> + </span><span class=cF3>SCF_CTRL</span><span class=cF0> + </span><span class=cF3>SCF_ALT</span><span class=cF0> + no_shift_f, &amp;</span><span class=cF5>WinToTop</span><span class=cF0>, </span><span class=cF6>&quot;Cmd /Next Focus Task&quot;</span><span class=cF0>);
+<a name="l58"></a>
+<a name="l59"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>26</span><span class=cF0>; i++)
+<a name="l60"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>keydev</span><span class=cF0>.fp_ctrl_alt_cbs[i])
+<a name="l61"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l62"></a>            </span><span class=cF1>if</span><span class=cF0> (no_shift &amp;&amp; </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[i])
+<a name="l63"></a>                </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF5>Char2ScanCode</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF6>'a'</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>SCF_CTRL</span><span class=cF0> + </span><span class=cF3>SCF_ALT</span><span class=cF0> + no_shift_f,
+<a name="l64"></a>                            </span><span class=cFB>keydev</span><span class=cF0>.fp_ctrl_alt_cbs[i], </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[i]);
+<a name="l65"></a>            </span><span class=cF1>if</span><span class=cF0> (shift &amp;&amp; </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[i])
+<a name="l66"></a>                </span><span class=cF5>KeyMapKeyPrint</span><span class=cF0>(</span><span class=cF5>Char2ScanCode</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF6>'a'</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>SCF_CTRL</span><span class=cF0> + </span><span class=cF3>SCF_ALT</span><span class=cF0> + </span><span class=cF3>SCF_SHIFT</span><span class=cF0>,
+<a name="l67"></a>                            </span><span class=cFB>keydev</span><span class=cF0>.fp_ctrl_alt_cbs[i], </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[i]);
+<a name="l68"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l69"></a>}
+<a name="l70"></a>
+<a name="l71"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KMComparePrepare</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> *src)
+<a name="l72"></a>{
+<a name="l73"></a>    </span><span class=cF9>I64</span><span class=cF0> i, *dst = buf;
+<a name="l74"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr;
+<a name="l75"></a>
+<a name="l76"></a>    </span><span class=cF1>if</span><span class=cF0> (src)
+<a name="l77"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l78"></a>        *dst++ = *src++;
+<a name="l79"></a>        *dst++ = *src++;
+<a name="l80"></a>        *dst++ = *src++;
+<a name="l81"></a>        *dst++ = *src++;
+<a name="l82"></a>        *dst(</span><span class=cF1>U8</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l83"></a>        </span><span class=cF1>if</span><span class=cF0> (ptr = </span><span class=cF5>StrMatch</span><span class=cF7>(</span><span class=cF6>&quot;SHIFT&quot;</span><span class=cF0>, buf</span><span class=cF7>)</span><span class=cF0>)
+<a name="l84"></a>        {
+<a name="l85"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>5</span><span class=cF0>; i++)
+<a name="l86"></a>                ptr[i] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l87"></a>            </span><span class=cF1>if</span><span class=cF0> (ptr = </span><span class=cF5>StrMatch</span><span class=cF7>(</span><span class=cF6>&quot;$&quot;</span><span class=cF0>, buf</span><span class=cF7>)</span><span class=cF0>)
+<a name="l88"></a>                *ptr = </span><span class=cFE>255</span><span class=cF0>;
+<a name="l89"></a>        }
+<a name="l90"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l91"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l92"></a>        *buf=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l93"></a>}
+<a name="l94"></a>
+<a name="l95"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>KMCompare</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *e1, </span><span class=cF1>U8</span><span class=cF0> *e2)
+<a name="l96"></a>{
+<a name="l97"></a>    </span><span class=cF1>U8</span><span class=cF0> buf1[</span><span class=cF3>STR_LEN</span><span class=cF0>], buf2[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l98"></a>
+<a name="l99"></a>    </span><span class=cF5>KMComparePrepare</span><span class=cF0>(buf1, e1);
+<a name="l100"></a>    </span><span class=cF5>KMComparePrepare</span><span class=cF0>(buf2, e2);
+<a name="l101"></a>
+<a name="l102"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrCompare</span><span class=cF0>(buf1, buf2);
+<a name="l103"></a>}
+<a name="l104"></a>
+<a name="l105"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyMapFamily2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **entries, </span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> scf)
+<a name="l106"></a>{
+<a name="l107"></a>    </span><span class=cF9>I64</span><span class=cF0> i, arg1, arg2;
+<a name="l108"></a>
+<a name="l109"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l110"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l111"></a>        arg2 = scf | i | </span><span class=cF3>SCF_KEY_DESC</span><span class=cF0>;
+<a name="l112"></a>        arg1 = </span><span class=cF5>ScanCode2Char</span><span class=cF0>(arg2);
+<a name="l113"></a>        *</span><span class=cFB>keydev</span><span class=cF0>.desc = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l114"></a>        </span><span class=cFB>keydev</span><span class=cF0>.handler = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l115"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l116"></a>        {
+<a name="l117"></a>            </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cF5>Fs</span><span class=cF0>)
+<a name="l118"></a>                </span><span class=cF5>PutKey</span><span class=cF0>(arg1, arg2);
+<a name="l119"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l120"></a>                </span><span class=cF5>MessagePost</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, arg1, arg2);
+<a name="l121"></a>            </span><span class=cF5>Refresh</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l122"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>); </span><span class=cF2>//Open loop because might be no response.  TODO: Drops messages.</span><span class=cF0>
+<a name="l123"></a>        }
+<a name="l124"></a>        </span><span class=cF1>if</span><span class=cF0> (*</span><span class=cFB>keydev</span><span class=cF0>.desc &amp;&amp; </span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cFB>keydev</span><span class=cF0>.desc, </span><span class=cF6>&quot;Char  /&quot;</span><span class=cF0>,</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0>)
+<a name="l125"></a>            entries[i] = </span><span class=cF5>KeyMapKeyMStrPrint</span><span class=cF0>(arg2, </span><span class=cFB>keydev</span><span class=cF0>.handler, </span><span class=cFB>keydev</span><span class=cF0>.desc, task);
+<a name="l126"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l127"></a>}
+<a name="l128"></a>
+<a name="l129"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyMapFamily</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> scf, </span><span class=cF1>Bool</span><span class=cF0> no_shift, </span><span class=cF1>Bool</span><span class=cF0> shift)
+<a name="l130"></a>{
+<a name="l131"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, count=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l132"></a>    </span><span class=cF1>U8</span><span class=cF0> **entries = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>), **ptr = entries;
+<a name="l133"></a>
+<a name="l134"></a>    </span><span class=cF1>if</span><span class=cF0> (no_shift)
+<a name="l135"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l136"></a>        </span><span class=cF1>if</span><span class=cF0> (shift)
+<a name="l137"></a>            </span><span class=cF5>KeyMapFamily2</span><span class=cF0>(ptr, task, scf + </span><span class=cF3>SCF_NO_SHIFT</span><span class=cF0>);
+<a name="l138"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l139"></a>            </span><span class=cF5>KeyMapFamily2</span><span class=cF0>(ptr, task, scf);
+<a name="l140"></a>        ptr += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l141"></a>        count += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l142"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l143"></a>    </span><span class=cF1>if</span><span class=cF0> (shift)
+<a name="l144"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l145"></a>        </span><span class=cF5>KeyMapFamily2</span><span class=cF0>(ptr, task, scf + </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
+<a name="l146"></a>        ptr += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l147"></a>        count += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l148"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l149"></a>    </span><span class=cF5>QuickSortI64</span><span class=cF0>(entries,count, &amp;</span><span class=cF5>KMCompare</span><span class=cF0>);
+<a name="l150"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>;i &lt; count; i++)
+<a name="l151"></a>        </span><span class=cF1>if</span><span class=cF0> (entries[i])
+<a name="l152"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l153"></a>            </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, entries[i];
+<a name="l154"></a>            </span><span class=cF5>Free</span><span class=cF0>(entries[i]);
+<a name="l155"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l156"></a>    </span><span class=cF5>Free</span><span class=cF0>(entries);
+<a name="l157"></a>}
+<a name="l158"></a>
+<a name="l159"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyMap</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l160"></a>{</span><span class=cF2>//Report description of all keys.</span><span class=cF0>
+<a name="l161"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_key_desc;
+<a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (!task) task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l163"></a>    old_key_desc = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>);
+<a name="l164"></a>    </span><span class=cF5>DocMax</span><span class=cF0>;
+<a name="l165"></a>    </span><span class=cF5>KeyMapFamily</span><span class=cF0>(task, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l166"></a>    </span><span class=cF5>KeyMapFamily</span><span class=cF0>(task, </span><span class=cF3>SCF_CTRL</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l167"></a>    </span><span class=cF5>KeyMapFamily</span><span class=cF0>(task, </span><span class=cF3>SCF_ALT</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l168"></a>    </span><span class=cF5>KeyMapCtrlAltFamily</span><span class=cF0>(</span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l169"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>, old_key_desc);
+<a name="l170"></a>    </span><span class=cF6>&quot;\nKeyMap Completed.\n&quot;</span><span class=cF0>;
+<a name="l171"></a>}
+<a name="l172"></a>
+<a name="l173"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Help System/Training&quot;</span><span class=cF0>
+<a name="l174"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TipOfDay</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *tip_file = </span><span class=cF6>&quot;::/Doc/Tips.DD&quot;</span><span class=cF0>)
+<a name="l175"></a>{</span><span class=cF2>//Print random tip-of-day from ::/Doc/Tips.DD.</span><span class=cF0>
+<a name="l176"></a>    </span><span class=cF9>I64</span><span class=cF0>          i = </span><span class=cF5>RandU16</span><span class=cF0>;
+<a name="l177"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocRead</span><span class=cF0>(tip_file), *doc2 = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l178"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc-&gt;head.next;
+<a name="l179"></a>
+<a name="l180"></a>    </span><span class=cF6>&quot;$WW,1$\n&quot;</span><span class=cF0>;
+<a name="l181"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l182"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l183"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; *doc_e-&gt;tag == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l184"></a>            </span><span class=cF1>if</span><span class=cF0> (!i--) </span><span class=cF1>break</span><span class=cF0>;
+<a name="l185"></a>        doc_e = doc_e-&gt;next;
+<a name="l186"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l187"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; *doc_e-&gt;tag == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l188"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l189"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l190"></a>        {
+<a name="l191"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_ERROR</span><span class=cF0>)
+<a name="l192"></a>                </span><span class=cF5>DocInsEntry</span><span class=cF0>(doc2, </span><span class=cF5>DocEntryCopy</span><span class=cF7>(</span><span class=cF0>doc2, doc_e</span><span class=cF7>)</span><span class=cF0>);
+<a name="l193"></a>            doc_e = doc_e-&gt;next;
+<a name="l194"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; *doc_e-&gt;tag == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l195"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l196"></a>        }
+<a name="l197"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>    </span><span class=cF5>DocInsDoc</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, doc2);
+<a name="l199"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc2);
+<a name="l200"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l201"></a>}
+</span></pre></body>
+</html>

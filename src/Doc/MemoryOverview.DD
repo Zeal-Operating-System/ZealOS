@@ -8,11 +8,11 @@ You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlIni
 
 Memory alloced by a task will be freed when the task is killed.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is a task that never dies.	Its memory is like kernel memory in other operating systems.	See $LK,"SysCAlloc",A="MN:SysCAlloc"$(), $LK,"SysMAlloc",A="MN:SysMAlloc"$(), $LK,"SysMAllocIdent",A="MN:SysMAllocIdent"$() and $LK,"SysStrNew",A="MN:SysStrNew"$().
 
-All of the regular page tables are marked, "cached".	When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01D7800000",D="DD_UNCACHED_ALIAS"$$FG$.	See $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.CC,dev.uncached_alias"$.
+All of the regular page tables are marked, "cached".	When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01D7800000",D="DD_UNCACHED_ALIAS"$$FG$.	See $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.ZC,dev.uncached_alias"$.
 
 During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.	It has never happens to me.
 
-See $LK,"MemRep",A="MN:MemRep"$() and $LK,"::/Demo/MemDemo.CC"$.
+See $LK,"MemRep",A="MN:MemRep"$() and $LK,"::/Demo/MemDemo.ZC"$.
 
 
 $FG,5$$TX+CX,"Single System-wide Memory Map"$
@@ -21,7 +21,7 @@ $FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"000370BF",D="DD_KERNEL_END"$$
 $ID,2$Kernel module, placed here by the boot-loader, $LK,"BOOT_RAM_BASE",A="MN:BOOT_RAM_BASE"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00096600",D="DD_BOOT_HIGH_LOC_DVD"$- 0x00$TX,"00096FFF",D="DD_BOOT_HIGH_LOC_DVD_END"$$FG$
-$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/System/Boot/BootDVD.CC"$ & $LK,"BootHD",A="FI:::/System/Boot/BootHD.CC"$.
+$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/System/Boot/BootDVD.ZC"$ & $LK,"BootHD",A="FI:::/System/Boot/BootHD.ZC"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00097000",D="DD_MP_VECT"$- 0x00$TX,"0009703B",D="DD_MP_VECT_END"$$FG$ Multicore start-up vect code, $LK,"MPN_VECT",A="MN:MPN_VECT"$.
 $FG,2$~0x000009F000- 0x000009FFFF$FG$ Extended BIOS data area.
@@ -55,8 +55,8 @@ In 2003, Terry Davis wanted to make a no-paging ring-0-only 64-bit operating sys
 
 Terry needed VGA A0000-BFFFF memory to be write-through and 0xE0000000-0xFFFFFFFF to be uncached for various devices.  All 64-bit computers allow stopping address translation at 2Meg page size, not using 4K.  He wanted to use 2Meg for everything because it's faster, with one less level of page tables.  He had to make A0000-BFFFF write-through, though, so he could not use 2Meg size on the lowest page.	He did the lowest 2Meg area as 4K pages.  He also unmapped the first 4K to cause a fault when dereferencing NULL.
 
-In 2016, Terry came-up with an alternate idea.	He double mapped the lowest memory with an alias that was uncached.	Accessing the lowest 2Meg area directly was cached but the alias he created up at the top of address space was uncached.  See $LK,"UncachedAliasAlloc",A="MN:UncachedAliasAlloc"$().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many of the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the easy-to-understand numbers of A0000-BFFFF, but must access the relocated alias location.	See $LK,"text.vga_alias",A="FF:::/Kernel/KMain.CC,text.vga_alias"$.  We also no longer cause a fault when dereferencing NULL.
+In 2016, Terry came-up with an alternate idea.	He double mapped the lowest memory with an alias that was uncached.	Accessing the lowest 2Meg area directly was cached but the alias he created up at the top of address space was uncached.  See $LK,"UncachedAliasAlloc",A="MN:UncachedAliasAlloc"$().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many of the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the easy-to-understand numbers of A0000-BFFFF, but must access the relocated alias location.	See $LK,"text.vga_alias",A="FF:::/Kernel/KMain.ZC,text.vga_alias"$.  We also no longer cause a fault when dereferencing NULL.
 
 Then, Terry switched to 1Gig page sizes.	For the lowest 4Gig, he set-up an alias up at the top of address space.	See $LK,"UncachedAliasAlloc",A="MN:UncachedAliasAlloc"$().	Not all computers support 1Gig page tables, however, so he also supported 2Meg.
 
-Terry's original plan was to allow changing the page tables as needed, so he had code for taking control of 2Meg pages and marking them uncached or whatever.  When he did an HDAudio driver, he requested some 32-bit address space as uncached.	Today, all of the first 4Gig can be accessed without caching at the $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.CC,dev.uncached_alias"$.
+Terry's original plan was to allow changing the page tables as needed, so he had code for taking control of 2Meg pages and marking them uncached or whatever.  When he did an HDAudio driver, he requested some 32-bit address space as uncached.	Today, all of the first 4Gig can be accessed without caching at the $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.ZC,dev.uncached_alias"$.

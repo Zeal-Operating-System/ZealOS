@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -35,7 +35,7 @@ body {background-color:#1f1f1f;}
 <a name="l8"></a>comes with a restore disk that does not allow repartitioning.  It's recommended to connect a spare additional hard drive and 
 <a name="l9"></a>use the </span><span class=cF2>BIOS</span><span class=cF0> to select which drive to boot.
 <a name="l10"></a>
-<a name="l11"></a>The </span><a href="https://zeal-operating-system.github.io/ZealOS/Misc/OSInstall.CC.html#l1"><span class=cF4>::/Misc/OSInstall.CC</span></a><span class=cF0> script will automate much of this. It runs if you boot the CD/DVD-ROM.
+<a name="l11"></a>The </span><a href="https://zeal-operating-system.github.io/ZealOS/Misc/OSInstall.ZC.html#l1"><span class=cF4>::/Misc/OSInstall.ZC</span></a><span class=cF0> script will automate much of this. It runs if you boot the CD/DVD-ROM.
 <a name="l12"></a>
 <a name="l13"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Boot.DD.html#l1"><span class=cF4>Boot.DD</span></a><span class=cF0> for an overview of booting. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Requirements.DD.html#l1"><span class=cF4>Requirements</span></a><span class=cF0> for supported hardware.
 <a name="l14"></a>
@@ -43,38 +43,38 @@ body {background-color:#1f1f1f;}
 <a name="l16"></a>you only need a couple gigabytes for your ZealOS partitions.
 <a name="l17"></a>
 <a name="l18"></a>1)
-<a name="l19"></a></span><span class=cF4>  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF0>() use if the drive is partitioned.
+<a name="l19"></a></span><span class=cF4>  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.ZC.html#l311"><span class=cF4>Mount</span></a><span class=cF0>() use if the drive is partitioned.
 <a name="l20"></a>    This command mounts a drive making it accessible.  For simplicity, sel </span><span class=cF2>'C'</span><span class=cF0> as the first drive letter for your hard drive.  
 <a name="l21"></a>    The first partition will be </span><span class=cF2>'C'</span><span class=cF0>, second, </span><span class=cF2>'D'</span><span class=cF0>, etc.  ZealOS needs only 1 number to utilize a hard drive -- port.
 <a name="l22"></a>  </span><span class=cF4>
-<a name="l23"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/DiskPart.CC.html#l13"><span class=cF4>DiskPart</span></a><span class=cF0>(</span><span class=cF2>'C'</span><span class=cF0>) use if drive is not partitioned
+<a name="l23"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/DiskPart.ZC.html#l13"><span class=cF4>DiskPart</span></a><span class=cF0>(</span><span class=cF2>'C'</span><span class=cF0>) use if drive is not partitioned
 <a name="l24"></a>  
-<a name="l25"></a>    This will perform a special </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF0>() automatically.
+<a name="l25"></a>    This will perform a special </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.ZC.html#l311"><span class=cF4>Mount</span></a><span class=cF0>() automatically.
 <a name="l26"></a>    
 <a name="l27"></a>    <blink>WARNING:</blink>    This command erases everything on a hard drive.  It repartitions a whole drive and formats the partitions.  Th
 <a name="l28"></a>    is command should be skipped if you already have your hard drive partitioned.
 <a name="l29"></a>    
 <a name="l30"></a>    
-<a name="l31"></a>    <blink>WARNING:</blink>    This command doesn't play well with other operating systems.    You'll need to do a </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l58"><span class=cF4>BootMHDZero</span></a><span class=cF0>() to restore 
+<a name="l31"></a>    <blink>WARNING:</blink>    This command doesn't play well with other operating systems.    You'll need to do a </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.ZC.html#l58"><span class=cF4>BootMHDZero</span></a><span class=cF0>() to restore 
 <a name="l32"></a>    your drive to a state where other operating systems can partition it.
 <a name="l33"></a>  
-<a name="l34"></a>2) </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFormat.CC.html#l67"><span class=cF4>Format</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>,</span><span class=cF2> TRUE</span><span class=cF0>,</span><span class=cF2> FALSE</span><span class=cF0>,</span><span class=cF2> FSt_FAT32</span><span class=cF0>)
+<a name="l34"></a>2) </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFormat.ZC.html#l67"><span class=cF4>Format</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>,</span><span class=cF2> TRUE</span><span class=cF0>,</span><span class=cF2> FALSE</span><span class=cF0>,</span><span class=cF2> FSt_FAT32</span><span class=cF0>)
 <a name="l35"></a>  This command formats a drive with </span><span class=cF2>FAT32</span><span class=cF0> or the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system type.   Use the drive letter of the partition in place of </span><span class=cF2>
 <a name="l36"></a>  'D'</span><span class=cF0>.
 <a name="l37"></a>  
 <a name="l38"></a>  <blink>WARNING:</blink>  If you are upgrading, be sure not to lose the file, </span><span class=cF2>/Boot/OldMBR.BIN.C</span><span class=cF0>.
 <a name="l39"></a>  
-<a name="l40"></a>3) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l145"><span class=cF4>CopyTree</span></a><span class=cF0>(</span><span class=cF2>&quot;T:/&quot;</span><span class=cF0>,</span><span class=cF2> &quot;D:/&quot;</span><span class=cF0>)
+<a name="l40"></a>3) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.ZC.html#l145"><span class=cF4>CopyTree</span></a><span class=cF0>(</span><span class=cF2>&quot;T:/&quot;</span><span class=cF0>,</span><span class=cF2> &quot;D:/&quot;</span><span class=cF0>)
 <a name="l41"></a>  This command is used to copy files onto a hard drive partition from the CD/DVD.  Use the drive letter of the partition in 
 <a name="l42"></a>  place of </span><span class=cF2>'D'</span><span class=cF0>.
 <a name="l43"></a>  
-<a name="l44"></a>4) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>)
-<a name="l45"></a>  This command recompiles the source code on a drive and writes to the <u>drive's</u> boot record.  You'll need to reenter the </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF0> 
+<a name="l44"></a>4) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.ZC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>)
+<a name="l45"></a>  This command recompiles the source code on a drive and writes to the <u>drive's</u> boot record.  You'll need to reenter the </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.ZC.html#l311"><span class=cF4>Mount</span></a><span class=cF0> 
 <a name="l46"></a>  information so it can be stored in the kernel.
 <a name="l47"></a>  
-<a name="l48"></a>5) Use Linux's Grub or ZealOS' </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>)
+<a name="l48"></a>5) Use Linux's Grub or ZealOS' </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.ZC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>)
 <a name="l49"></a>  
-<a name="l50"></a>  The </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>() command places a boot loader on a drive. It saves the old master boot record to </span><span class=cF2>/Boot/OldMBR.BIN.C</span><span class=cF0> and 
+<a name="l50"></a>  The </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootMHDIns.ZC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>() command places a boot loader on a drive. It saves the old master boot record to </span><span class=cF2>/Boot/OldMBR.BIN.C</span><span class=cF0> and 
 <a name="l51"></a>  replaces it.  When you boot, you will have the option of booting the old master boot record.  This command can be skipped if 
 <a name="l52"></a>  you already have a boot loader.   Be sure not to lose the copy of the old boot record, like if you reformat the drive.
 <a name="l53"></a>  

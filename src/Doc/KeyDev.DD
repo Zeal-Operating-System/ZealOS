@@ -11,4 +11,4 @@ $FG,2$0x80000000$FG$ $LK,"KDDocPutKey",A="MN:KDDocPutKey"$() standard document c
 
 Since handling individual keys is slow, ZealOS supports PutS() as well.  If no puts handler is defined, individual keys are sent.
 
-$LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_key$FG$ and $LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_s$FG$ are call back routines which offer some neat tricks.	See $LK,"::/Apps/Psalmody/JukeBox.CC"$.  There is a variable $LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_data$FG$ which gets passed to them.
+$LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_key$FG$ and $LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_s$FG$ are call back routines which offer some neat tricks.	See $LK,"::/Apps/Psalmody/JukeBox.ZC"$.  There is a variable $LK,"CDoc",A="MN:CDoc"$$FG,2$.user_put_data$FG$ which gets passed to them.

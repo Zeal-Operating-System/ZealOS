@@ -2,5 +2,3 @@
 *.MAP
 Boot/
 ZealOS-*.iso
-sync_repo.sh
-sync_vm.sh

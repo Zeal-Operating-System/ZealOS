@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Task;StdOut/Task&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocBorderNew</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *pdoc)
+<a name="l3"></a>{</span><span class=cF2>//Make new std border doc.</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l5"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *bdoc;
+<a name="l6"></a>
+<a name="l7"></a>    bdoc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l8"></a>    bdoc-&gt;flags |= </span><span class=cF3>DOCF_BORDER_DOC</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF1>if</span><span class=cF0> (pdoc)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$CM+H+BY+RX+NC,-7,1$&quot;</span><span class=cF0>);
+<a name="l12"></a>        doc_e=</span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$TX+H+BD+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
+<a name="l13"></a>        doc_e-&gt;user_data = pdoc;
+<a name="l14"></a>        doc_e-&gt;tag_cb    = &amp;</span><span class=cF5>EdFilterCB</span><span class=cF0>;
+<a name="l15"></a>        doc_e=</span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$TX+H+BD+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
+<a name="l16"></a>        doc_e-&gt;user_data = pdoc;
+<a name="l17"></a>        doc_e-&gt;tag_cb    = &amp;</span><span class=cF5>EdOverStrikeCB</span><span class=cF0>;
+<a name="l18"></a>        doc_e=</span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$TX+H+BD+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
+<a name="l19"></a>        doc_e-&gt;user_data = pdoc;
+<a name="l20"></a>        doc_e-&gt;tag_cb    = &amp;</span><span class=cF5>EdDollarCB</span><span class=cF0>;
+<a name="l21"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$CM+H+BY+RX+NC,-18,1$&quot;</span><span class=cF0>);
+<a name="l22"></a>        doc_e=</span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$TX+BD+TC,\&quot;     \&quot;$&quot;</span><span class=cF0>);
+<a name="l23"></a>        doc_e-&gt;user_data = pdoc;
+<a name="l24"></a>        doc_e-&gt;tag_cb    = &amp;</span><span class=cF5>EdMoreCB</span><span class=cF0>;
+<a name="l25"></a>        doc_e=</span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$TX+H+BD+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
+<a name="l26"></a>        doc_e-&gt;user_data = pdoc;
+<a name="l27"></a>        doc_e-&gt;tag_cb    = &amp;</span><span class=cF5>EdDollarTypeCB</span><span class=cF0>;
+<a name="l28"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$CM+H+TY+NC,0,-1$&quot;</span><span class=cF0>);
+<a name="l30"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$DA+H-TRM-P+BD+RD+CX+IV,LEN=STR_LEN-1,A=\&quot;%%s...\&quot;,SCX=15$&quot;</span><span class=cF0>);
+<a name="l31"></a>    doc_e-&gt;data = &amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title;
+<a name="l32"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(bdoc, doc_e);
+<a name="l33"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$CM+H+NC,1,0$$TX+H+BD+IV,\&quot;%X\&quot;$&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l34"></a>    </span><span class=cF1>if</span><span class=cF0> (pdoc-&gt;win_task != </span><span class=cFB>sys_task</span><span class=cF0>)
+<a name="l35"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$BG+H,LTRED$$LTGRAY+H$$TX+H+RX+BD,\&quot;[X]\&quot;$$BG+H$$FG+H$&quot;</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cF1>if</span><span class=cF0> (pdoc-&gt;win_task != </span><span class=cFB>sys_task</span><span class=cF0> &amp;&amp; pdoc-&gt;win_task != </span><span class=cFB>ac</span><span class=cF0>.task)
+<a name="l37"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(bdoc, </span><span class=cF6>&quot;$BG+H,BROWN$$YELLOW+H$$TX+H+LX+BD,\&quot;MENU\&quot;$$FG+H$$BG+H$&quot;</span><span class=cF0>);
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF1>return</span><span class=cF0> bdoc;
+<a name="l40"></a>}
+<a name="l41"></a>
+<a name="l42"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocTermNew</span><span class=cF0>()
+<a name="l43"></a>{</span><span class=cF2>//Make into term win task with Put/Display/Border docs.</span><span class=cF0>
+<a name="l44"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *pdoc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l45"></a>
+<a name="l46"></a>    pdoc-&gt;right_click_link  = &amp;</span><span class=cF5>TermRightClickLink</span><span class=cF0>;
+<a name="l47"></a>    pdoc-&gt;max_entries       = </span><span class=cFE>4096</span><span class=cF0>;
+<a name="l48"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src  = </span><span class=cF3>BDS_CUR_DRIVE</span><span class=cF0>;
+<a name="l49"></a>    pdoc-&gt;desc              = </span><span class=cF6>'Term'</span><span class=cF0>;
+<a name="l50"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;put_doc     = </span><span class=cF5>Fs</span><span class=cF0>-&gt;display_doc = pdoc;
+<a name="l51"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_doc  = </span><span class=cF5>DocBorderNew</span><span class=cF0>(pdoc);
+<a name="l52"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_menu    = </span><span class=cF5>MenuFile</span><span class=cF0>(</span><span class=cF6>&quot;::/Doc/EdPullDown.DD&quot;</span><span class=cF0>);
+<a name="l53"></a>    </span><span class=cF5>WinScrollsInit</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l54"></a>    </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l55"></a>}
+<a name="l56"></a>
+<a name="l57"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
+<a name="l58"></a>
+<a name="l59"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_INCLUDE</span><span class=cF0>   </span><span class=cFE>0</span><span class=cF0>
+<a name="l60"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_AINCLUDE</span><span class=cF0>  </span><span class=cFE>1</span><span class=cF0>
+<a name="l61"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_COPY</span><span class=cF0>      </span><span class=cFE>2</span><span class=cF0>
+<a name="l62"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_MOVE</span><span class=cF0>      </span><span class=cFE>3</span><span class=cF0>
+<a name="l63"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_DELETE</span><span class=cF0>    </span><span class=cFE>4</span><span class=cF0>
+<a name="l64"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_TYPE</span><span class=cF0>      </span><span class=cFE>5</span><span class=cF0>
+<a name="l65"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_ED</span><span class=cF0>        </span><span class=cFE>6</span><span class=cF0>
+<a name="l66"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_MOUNT</span><span class=cF0>     </span><span class=cFE>7</span><span class=cF0>
+<a name="l67"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_PLAIN</span><span class=cF0>     </span><span class=cFE>8</span><span class=cF0>
+<a name="l68"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RIGHT_INFILE</span><span class=cF0>    </span><span class=cFE>9</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpTermRight</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header)
+<a name="l71"></a>{
+<a name="l72"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l73"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l74"></a>
+<a name="l75"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l76"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l77"></a>
+<a name="l78"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>
+<a name="l79"></a>                  </span><span class=cF6>&quot;TXT=%s\nDD =%s\nJIT=%s\nGR =%s&quot;</span><span class=cF0>
+<a name="l80"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;Include           JIT\&quot;,LE=RIGHT_INCLUDE$&quot;</span><span class=cF0>
+<a name="l81"></a>                  </span><span class=cF6>&quot;$CM+LX,25,0$$BT,\&quot;System Include    JIT\&quot;,LE=RIGHT_AINCLUDE$&quot;</span><span class=cF0>
+<a name="l82"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;Copy                 \&quot;,LE=RIGHT_COPY$&quot;</span><span class=cF0>
+<a name="l83"></a>                  </span><span class=cF6>&quot;$CM+LX,25,0$$BT,\&quot;Move or Rename       \&quot;,LE=RIGHT_MOVE$&quot;</span><span class=cF0>
+<a name="l84"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;Delete               \&quot;,LE=RIGHT_DELETE$&quot;</span><span class=cF0>
+<a name="l85"></a>                  </span><span class=cF6>&quot;$CM+LX,25,0$$BT,\&quot;Type           TXT;GR\&quot;,LE=RIGHT_TYPE$&quot;</span><span class=cF0>
+<a name="l86"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;DolDoc Edit        DD\&quot;,LE=RIGHT_ED$&quot;</span><span class=cF0>
+<a name="l87"></a>                  </span><span class=cF6>&quot;$CM+LX,25,0$$BT,\&quot;Mount           ISO.C\&quot;,LE=RIGHT_MOUNT$&quot;</span><span class=cF0>
+<a name="l88"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;Plain Text Edit   TXT\&quot;,LE=RIGHT_PLAIN$&quot;</span><span class=cF0>
+<a name="l89"></a>                  </span><span class=cF6>&quot;$CM+LX,25,0$$BT,\&quot;Infile             IN\&quot;,LE=RIGHT_INFILE$&quot;</span><span class=cF0>
+<a name="l90"></a>                  </span><span class=cF6>&quot;$CM+LX,1,3 $$BT,\&quot;Cancel               \&quot;,LE=DOCM_CANCEL$\n&quot;</span><span class=cF0>,
+<a name="l91"></a>                  </span><span class=cF3>FILEMASK_TXT</span><span class=cF0>, </span><span class=cF3>FILEMASK_DD</span><span class=cF0>, </span><span class=cF3>FILEMASK_JIT</span><span class=cF0>, </span><span class=cF3>FILEMASK_GR</span><span class=cF0>);
+<a name="l92"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l93"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l94"></a>
+<a name="l95"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l96"></a>}
+<a name="l97"></a>
+<a name="l98"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>EdLeftClickLink</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e)
+<a name="l99"></a>{</span><span class=cF2>//Called with doc locked, exit unlocked</span><span class=cF0>
+<a name="l100"></a>    </span><span class=cF1>Bool</span><span class=cF0> res;
+<a name="l101"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
+<a name="l102"></a>
+<a name="l103"></a>    </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>DocEntryLink</span><span class=cF7>(</span><span class=cF0>doc, doc_e</span><span class=cF7>)</span><span class=cF0>)
+<a name="l104"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l105"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l106"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_POPUP</span><span class=cF0>)
+<a name="l107"></a>            res = </span><span class=cF5>PopUpEd</span><span class=cF0>(st);
+<a name="l108"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l109"></a>            res = </span><span class=cF5>Ed</span><span class=cF0>(st);
+<a name="l110"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l111"></a>
+<a name="l112"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l113"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l114"></a>}
+<a name="l115"></a>
+<a name="l116"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>TermRightClickLink</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e)
+<a name="l117"></a>{</span><span class=cF2>//Called with doc locked, exit unlocked</span><span class=cF0>
+<a name="l118"></a>    </span><span class=cF1>Bool</span><span class=cF0>         send_new_line = </span><span class=cF3>FALSE</span><span class=cF0>, res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l119"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st, *st2;
+<a name="l120"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
+<a name="l121"></a>    </span><span class=cF9>CEdFileName</span><span class=cF0>  fn;
+<a name="l122"></a>
+<a name="l123"></a>    </span><span class=cF1>if</span><span class=cF0> (st2 = </span><span class=cF5>DocEntryLink</span><span class=cF7>(</span><span class=cF0>doc, doc_e</span><span class=cF7>)</span><span class=cF0>)
+<a name="l124"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l125"></a>        </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>DocLinkFile</span><span class=cF7>(</span><span class=cF0>st2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l126"></a>        {
+<a name="l127"></a>            </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l128"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>i = </span><span class=cF5>PopUpTermRight</span><span class=cF0>(st)</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l129"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l130"></a>                </span><span class=cF5>DocBottom</span><span class=cF0>(doc);
+<a name="l131"></a>                </span><span class=cF1>switch</span><span class=cF0> (i)
+<a name="l132"></a>                {
+<a name="l133"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_INCLUDE</span><span class=cF0>:
+<a name="l134"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileExtDot</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF3>FILEMASK_JIT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l135"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l136"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .ZC File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l137"></a>                            {
+<a name="l138"></a>                                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l139"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l140"></a>                            }
+<a name="l141"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l142"></a>                        </span><span class=cF6>&quot;#include \&quot;%s\&quot;;\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l143"></a>                        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l144"></a>                        </span><span class=cF5>ExeFile</span><span class=cF0>(st, </span><span class=cF3>CCF_CMD_LINE</span><span class=cF0>);
+<a name="l145"></a>                        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l146"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l147"></a>
+<a name="l148"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_AINCLUDE</span><span class=cF0>:
+<a name="l149"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileExtDot</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF3>FILEMASK_JIT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l150"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l151"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .ZC File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l152"></a>                            {
+<a name="l153"></a>                                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l154"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l155"></a>                            }
+<a name="l156"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l157"></a>                        </span><span class=cF6>&quot;Sys(\&quot;#include \\\&quot;%s\\\&quot;\&quot; );\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l158"></a>                        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l159"></a>                        </span><span class=cF5>SysFile</span><span class=cF0>(st, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l160"></a>                        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l161"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l162"></a>
+<a name="l163"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_COPY</span><span class=cF0>:
+<a name="l164"></a>                        </span><span class=cF5>StrCopy</span><span class=cF0>(fn.name, st);
+<a name="l165"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>DocForm</span><span class=cF7>(</span><span class=cF0>&amp;fn</span><span class=cF7>)</span><span class=cF0>)
+<a name="l166"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l167"></a>                            res = </span><span class=cF5>ToBool</span><span class=cF0>(</span><span class=cF5>Copy</span><span class=cF7>(</span><span class=cF0>st, fn.name</span><span class=cF7>)</span><span class=cF0>);
+<a name="l168"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l169"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l170"></a>                            send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l171"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l172"></a>
+<a name="l173"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_MOVE</span><span class=cF0>:
+<a name="l174"></a>                        </span><span class=cF5>StrCopy</span><span class=cF0>(fn.name, st);
+<a name="l175"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>DocForm</span><span class=cF7>(</span><span class=cF0>&amp;fn</span><span class=cF7>)</span><span class=cF0>)
+<a name="l176"></a>                            res = </span><span class=cF5>Move</span><span class=cF0>(st, fn.name);
+<a name="l177"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l178"></a>                            send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l179"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l180"></a>
+<a name="l181"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_DELETE</span><span class=cF0>:
+<a name="l182"></a>                        res = </span><span class=cF5>ToBool</span><span class=cF0>(</span><span class=cF5>Del</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>);
+<a name="l183"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l184"></a>
+<a name="l185"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_TYPE</span><span class=cF0>:
+<a name="l186"></a>                        res = </span><span class=cF5>Type</span><span class=cF0>(st);
+<a name="l187"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l188"></a>
+<a name="l189"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_ED</span><span class=cF0>:
+<a name="l190"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileExtDot</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF3>FILEMASK_DD</span><span class=cF7>)</span><span class=cF0>)
+<a name="l191"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l192"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not DolDoc File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l193"></a>                            {
+<a name="l194"></a>                                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l195"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l196"></a>                            }
+<a name="l197"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>                        </span><span class=cF6>&quot;Ed(\&quot;%s\&quot;);\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l199"></a>                        res = </span><span class=cF5>Ed</span><span class=cF0>(st);
+<a name="l200"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l201"></a>
+<a name="l202"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_MOUNT</span><span class=cF0>:
+<a name="l203"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileExtDot</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF6>&quot;*.ISO.C&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l204"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l205"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .ISO.C File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l206"></a>                            {
+<a name="l207"></a>                                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l208"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l209"></a>                            }
+<a name="l210"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l211"></a>                        </span><span class=cF6>&quot;MountFile(\&quot;%s\&quot;);\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l212"></a>                        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l213"></a>                        </span><span class=cF5>MountFile</span><span class=cF0>(st);
+<a name="l214"></a>                        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l215"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l216"></a>
+<a name="l217"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_PLAIN</span><span class=cF0>:
+<a name="l218"></a>                        </span><span class=cF6>&quot;Plain(\&quot;%s\&quot;);\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l219"></a>                        res = </span><span class=cF5>Plain</span><span class=cF0>(st);
+<a name="l220"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l221"></a>
+<a name="l222"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>RIGHT_INFILE</span><span class=cF0>:
+<a name="l223"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileExtDot</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF6>&quot;*.IN*&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l224"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l225"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .IN File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l226"></a>                            {
+<a name="l227"></a>                                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l228"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l229"></a>                            }
+<a name="l230"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l231"></a>                        </span><span class=cF6>&quot;InFile(\&quot;%s\&quot;);\n$PT$$FG$$BG$&quot;</span><span class=cF0>, st;
+<a name="l232"></a>                        </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l233"></a>                        </span><span class=cF5>InFile</span><span class=cF0>(st);
+<a name="l234"></a>                        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l235"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l236"></a>                }
+<a name="l237"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l238"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l239"></a>                send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l240"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l241"></a>        }
+<a name="l242"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l243"></a>            send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l244"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l245"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l246"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l247"></a>        send_new_line = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l248"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>(doc);
+<a name="l249"></a>    </span><span class=cF6>&quot;$PT$$FG$$BG$&quot;</span><span class=cF0>;
+<a name="l250"></a>    </span><span class=cF1>if</span><span class=cF0> (send_new_line)
+<a name="l251"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l252"></a>
+<a name="l253"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l254"></a>}
+</span></pre></body>
+</html>

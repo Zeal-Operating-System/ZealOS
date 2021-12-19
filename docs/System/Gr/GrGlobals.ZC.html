@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CGrGlobals</span><span class=cF0>
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>         *to_8_bits, *to_8_colors;
+<a name="l6"></a>    </span><span class=cF9>CDC</span><span class=cF0>         *screen_image,  </span><span class=cF2>//Read only.</span><span class=cF0>
+<a name="l7"></a>                *dc,            </span><span class=cF2>//Persistent</span><span class=cF0>
+<a name="l8"></a>                *dc1,
+<a name="l9"></a>                *dc2,           </span><span class=cF2>//Updated every refresh</span><span class=cF0>
+<a name="l10"></a>                *dc_cache,
+<a name="l11"></a>                *zoomed_dc;
+<a name="l12"></a>    </span><span class=cF9>U32</span><span class=cF0>         *text_base;     </span><span class=cF2>//See </span><span class=cF4><u>TextBase Layer</u></span><span class=cF2>. (Similar to 0xB8000 but 32 bits)</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF9>U16</span><span class=cF0>         *win_z_buf;
+<a name="l14"></a>
+<a name="l15"></a>    #</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPHT_ELEM_CODE</span><span class=cF0>      </span><span class=cFE>1</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cF9>CHashTable</span><span class=cF0>  *sprite_hash;
+<a name="l17"></a>
+<a name="l18"></a>    </span><span class=cF9>U16</span><span class=cF0>         *win_uncovered_bitmap;
+<a name="l19"></a>    </span><span class=cF9>I64</span><span class=cF0>          highest_uncovered;
+<a name="l20"></a>    </span><span class=cF9>I64</span><span class=cF0>          pan_text_x, pan_text_y;    </span><span class=cF2>//[-7,7]</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF1>U0</span><span class=cF0>         (*fp_final_screen_update)(</span><span class=cF9>CDC</span><span class=cF0> *dc);</span><span class=cF2>//Mouse cursor is handled here.</span><span class=cF0>
+<a name="l22"></a>    </span><span class=cF1>U0</span><span class=cF0>         (*fp_wall_paper)(</span><span class=cF9>CTask</span><span class=cF0> *task);
+<a name="l23"></a>    </span><span class=cF1>U0</span><span class=cF0>         (*fp_draw_mouse)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y);
+<a name="l24"></a>    </span><span class=cF1>U0</span><span class=cF0>         (*fp_draw_grab_mouse)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>Bool</span><span class=cF0> closed);
+<a name="l25"></a>    </span><span class=cF1>U8</span><span class=cF0>          *empty_sprite; </span><span class=cF2>//Gets assigned </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Mouse.ZC.html#l5"><span class=cF4>gr.empty_sprite</span></a><span class=cF0>
+<a name="l26"></a>
+<a name="l27"></a>    #</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>  </span><span class=cFE>64</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF9>CDC</span><span class=cF0>         *pen_brushes            [</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>],
+<a name="l29"></a>                *collision_pen_brushes  [</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>],
+<a name="l30"></a>                *even_pen_brushes       [</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>],
+<a name="l31"></a>                *odd_pen_brushes        [</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>];
+<a name="l32"></a>    </span><span class=cF1>I8</span><span class=cF0>           circle_lo[</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>][</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>],
+<a name="l33"></a>                 circle_hi[</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>][</span><span class=cF3>GR_PEN_BRUSHES_NUM</span><span class=cF0>];
+<a name="l34"></a>
+<a name="l35"></a>    #</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_SCREEN_ZOOM_MAX</span><span class=cF0>  </span><span class=cFE>8</span><span class=cF0>
+<a name="l36"></a>    </span><span class=cF1>U8</span><span class=cF0>          *screen_zoom_tables[</span><span class=cF3>GR_SCREEN_ZOOM_MAX</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>], *screen_cache;
+<a name="l37"></a>    </span><span class=cF9>I64</span><span class=cF0>          screen_zoom, sx, sy;
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF2>//When zoomed, this keeps the mouse centered.</span><span class=cF0>
+<a name="l40"></a>    </span><span class=cF1>Bool</span><span class=cF0>         continuous_scroll,
+<a name="l41"></a>                 hide_row, hide_col;
+<a name="l42"></a>} </span><span class=cFB>gr</span><span class=cF0>;
+<a name="l43"></a>
+<a name="l44"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CBGR24</span><span class=cF0> </span><span class=cFB>gr_palette</span><span class=cF0>[</span><span class=cF3>COLORS_NUM</span><span class=cF0>];
+<a name="l45"></a>
+<a name="l46"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.ZC.html#l217"><span class=cF4>RLf_VESA</span></a><span class=cF0>
+<a name="l47"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.ZC.html#l82"><span class=cF4>SysGrInit</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l48"></a></span><span class=cF2>//Allows consts to be used instead of variables.</span><span class=cF0>
+<a name="l49"></a></span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF6>&quot;GR_WIDTH&quot;</span><span class=cF0>, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>);;
+<a name="l50"></a></span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;GR_WIDTH&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width);
+<a name="l51"></a></span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF6>&quot;GR_HEIGHT&quot;</span><span class=cF0>, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>);;
+<a name="l52"></a></span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;GR_HEIGHT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.height);
+<a name="l53"></a>
+<a name="l54"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Char;TextBase Layer/Char&quot;</span><span class=cF0>
+<a name="l55"></a></span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;TEXT_ROWS&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.rows);;
+<a name="l56"></a></span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF6>&quot;TEXT_ROWS&quot;</span><span class=cF0>, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>);;
+<a name="l57"></a></span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;TEXT_COLS&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.cols);;
+<a name="l58"></a></span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF6>&quot;TEXT_COLS&quot;</span><span class=cF0>, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>);;
+</span></pre></body>
+</html>

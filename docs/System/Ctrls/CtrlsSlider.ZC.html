@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.07">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CTemplateCSSlider</span><span class=cF0>
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CTemplateCSSlider</span><span class=cF0>   *next, *last;
+<a name="l4"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *name;
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>                  num;
+<a name="l6"></a>};
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CTemplateCS</span><span class=cF0>
+<a name="l9"></a>{
+<a name="l10"></a>    </span><span class=cF9>CTemplateCSSlider</span><span class=cF0>   *next_slider, *last_slider;
+<a name="l11"></a>    </span><span class=cF9>I64</span><span class=cF0>                  num_sliders, range, spacing, border;
+<a name="l12"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *global_name;
+<a name="l13"></a>};
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF9>CTemplateCS</span><span class=cF0> *</span><span class=cF5>CtrlSliderGet</span><span class=cF0>()
+<a name="l16"></a>{
+<a name="l17"></a>    </span><span class=cF9>CTemplateCSSlider</span><span class=cF0>   *tmps;
+<a name="l18"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *st, prompt[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l19"></a>    </span><span class=cF9>CTemplateCS</span><span class=cF0>         *res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CTemplateCS</span><span class=cF7>)</span><span class=cF0>);
+<a name="l20"></a>
+<a name="l21"></a>    </span><span class=cF6>&quot;$PURPLE$Ctrl Slider$FG$\n\n&quot;</span><span class=cF0>;
+<a name="l22"></a>
+<a name="l23"></a>    res-&gt;global_name    = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Global Struct Name (ENTER for No Global):&quot;</span><span class=cF0>);
+<a name="l24"></a>    res-&gt;range          = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Range </span><span class=cF0>    </span><span class=cF6>(%4d):&quot;</span><span class=cF0>, </span><span class=cFE>30</span><span class=cF0>);
+<a name="l25"></a>    res-&gt;spacing        = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Spacing (%4d):&quot;</span><span class=cF0>, </span><span class=cFE>20</span><span class=cF0>);
+<a name="l26"></a>    res-&gt;border         = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Border  (%4d):&quot;</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l27"></a>
+<a name="l28"></a>    res-&gt;next_slider = res-&gt;last_slider = &amp;res-&gt;next_slider;
+<a name="l29"></a>
+<a name="l30"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l31"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(prompt, </span><span class=cF6>&quot;Slider #%d Name:&quot;</span><span class=cF0>, res-&gt;num_sliders + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l33"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>(prompt);
+<a name="l34"></a>        </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l35"></a>        {
+<a name="l36"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l37"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l38"></a>        }
+<a name="l39"></a>        tmps = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CTemplateCSSlider</span><span class=cF7>)</span><span class=cF0>);
+<a name="l40"></a>        tmps-&gt;name = st;
+<a name="l41"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmps, res-&gt;last_slider);
+<a name="l42"></a>        tmps-&gt;num = res-&gt;num_sliders++;
+<a name="l43"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l44"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TemplateCtrlSlider</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l48"></a>{
+<a name="l49"></a>    </span><span class=cF9>CTask</span><span class=cF0>               *task;
+<a name="l50"></a>    </span><span class=cF9>CTemplateCS</span><span class=cF0>         *m = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l51"></a>    </span><span class=cF9>CTemplateCSSlider</span><span class=cF0>   *tmps;
+<a name="l52"></a>    </span><span class=cF9>I64</span><span class=cF0>                  i;
+<a name="l53"></a>
+<a name="l54"></a>    </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l55"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l56"></a>    </span><span class=cF5>DocCaptureUndo</span><span class=cF0>(doc, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l57"></a>
+<a name="l58"></a>    task = </span><span class=cF5>User</span><span class=cF0>(</span><span class=cF6>&quot;CTemplateCS **_m = 0x%X; *_m = CtrlSliderGet;\n&quot;</span><span class=cF0>, &amp;m);
+<a name="l59"></a>    </span><span class=cF1>while</span><span class=cF0> (!m)
+<a name="l60"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l61"></a>
+<a name="l62"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l63"></a></span><span class=cF6>&quot;#define SLIDER_RANGE\t%d</span><span class=cF0>
+<a name="l64"></a></span><span class=cF6>#define SLIDER_SPACING\t%d</span><span class=cF0>
+<a name="l65"></a></span><span class=cF6>#define SLIDER_BORDER\t%d</span><span class=cF0>
+<a name="l66"></a>
+<a name="l67"></a></span><span class=cF6>class CSliderState</span><span class=cF0>
+<a name="l68"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l69"></a></span><span class=cF6>&quot;</span><span class=cF0>, m-&gt;range, m-&gt;spacing, m-&gt;border);
+<a name="l70"></a>
+<a name="l71"></a>    tmps = m-&gt;next_slider;
+<a name="l72"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l73"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l74"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>I64 %s;\n&quot;</span><span class=cF0>, tmps-&gt;name);
+<a name="l75"></a>        tmps = tmps-&gt;next;
+<a name="l76"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l77"></a>    </span><span class=cF1>if</span><span class=cF0> (*m-&gt;global_name)
+<a name="l78"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;} %s;\n&quot;</span><span class=cF0>, m-&gt;global_name);
+<a name="l79"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l80"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;};\n&quot;</span><span class=cF0>);
+<a name="l81"></a>
+<a name="l82"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l83"></a></span><span class=cF6>&quot;</span><span class=cF0>
+<a name="l84"></a></span><span class=cF6>U0 DrawCtrlSlider(CDC *dc, CCtrl *c)</span><span class=cF0>
+<a name="l85"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l86"></a>    </span><span class=cF6>CSliderState *s = c-&gt;state;</span><span class=cF0>
+<a name="l87"></a>
+<a name="l88"></a>    </span><span class=cF6>dc-&gt;color = LTRED;</span><span class=cF0>
+<a name="l89"></a>    </span><span class=cF6>GrRect(dc, c-&gt;left, c-&gt;top, %d * SLIDER_SPACING + %d, SLIDER_SPACING * 2 + SLIDER_RANGE);</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF6>dc-&gt;color = BLUE;</span><span class=cF0>
+<a name="l91"></a>    </span><span class=cF6>GrRect(dc, c-&gt;left + SLIDER_BORDER, c-&gt;top + SLIDER_BORDER,</span><span class=cF0>
+<a name="l92"></a>            </span><span class=cF6>   %d * SLIDER_SPACING + %d - 2 * SLIDER_BORDER,</span><span class=cF0>
+<a name="l93"></a>            </span><span class=cF6>   SLIDER_SPACING * 2 + SLIDER_RANGE - 2 * SLIDER_BORDER);</span><span class=cF0>
+<a name="l94"></a>    </span><span class=cF6>dc-&gt;color = BLACK;</span><span class=cF0>
+<a name="l95"></a></span><span class=cF6>&quot;</span><span class=cF0>, m-&gt;num_sliders + </span><span class=cFE>1</span><span class=cF0>, m-&gt;num_sliders, m-&gt;num_sliders + </span><span class=cFE>1</span><span class=cF0>, m-&gt;num_sliders);
+<a name="l96"></a>
+<a name="l97"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; m-&gt;num_sliders; i++)
+<a name="l98"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l99"></a></span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>GrLine(dc, c-&gt;left + %d * SLIDER_SPACING + %d, c-&gt;top + SLIDER_SPACING,</span><span class=cF0>
+<a name="l100"></a>            </span><span class=cF6>   c-&gt;left + %d * SLIDER_SPACING + %d, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - 1);</span><span class=cF0>
+<a name="l101"></a></span><span class=cF6>&quot;</span><span class=cF0>, i + </span><span class=cFE>1</span><span class=cF0>, i, i + </span><span class=cFE>1</span><span class=cF0>, i);
+<a name="l102"></a>
+<a name="l103"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>dc-&gt;color = LTRED;\n&quot;</span><span class=cF0>);
+<a name="l104"></a>
+<a name="l105"></a>    tmps = m-&gt;next_slider;
+<a name="l106"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l107"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l108"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l109"></a></span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>GrPrint(dc, c-&gt;left + %d * SLIDER_SPACING + %d - FONT_WIDTH / 2,</span><span class=cF0>
+<a name="l110"></a>                </span><span class=cF6>c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + 3,</span><span class=cF0>
+<a name="l111"></a>                </span><span class=cF6>\&quot;%%d\&quot;, s-&gt;%s * 10 / SLIDER_RANGE);\n&quot;</span><span class=cF0>, tmps-&gt;num + </span><span class=cFE>1</span><span class=cF0>, tmps-&gt;num, tmps-&gt;name);
+<a name="l112"></a>        tmps = tmps-&gt;next;
+<a name="l113"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l114"></a>
+<a name="l115"></a>    tmps = m-&gt;next_slider;
+<a name="l116"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l117"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l118"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l119"></a>                </span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>GrRect(dc, c-&gt;left + %d * SLIDER_SPACING + %d - 3, &quot;</span><span class=cF0>
+<a name="l120"></a>                              </span><span class=cF6>&quot;c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - 1 - s-&gt;%s - 2, 7, 5);\n&quot;</span><span class=cF0>,
+<a name="l121"></a>                    tmps-&gt;num + </span><span class=cFE>1</span><span class=cF0>, tmps-&gt;num, tmps-&gt;name);
+<a name="l122"></a>        tmps = tmps-&gt;next;
+<a name="l123"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l124"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>dc-&gt;color = YELLOW;\n&quot;</span><span class=cF0>);
+<a name="l125"></a>
+<a name="l126"></a>    tmps = m-&gt;next_slider;
+<a name="l127"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l128"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l129"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>GrRect(dc, c-&gt;left + %d * SLIDER_SPACING + %d - 2, &quot;</span><span class=cF0>
+<a name="l130"></a>                                  </span><span class=cF6>&quot;c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - 1 - s-&gt;%s - 1, 5, 3);\n&quot;</span><span class=cF0>,
+<a name="l131"></a>                        tmps-&gt;num + </span><span class=cFE>1</span><span class=cF0>, tmps-&gt;num, tmps-&gt;name);
+<a name="l132"></a>        tmps = tmps-&gt;next;
+<a name="l133"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l134"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l135"></a></span><span class=cF6>&quot;}</span><span class=cF0>
+<a name="l136"></a>
+<a name="l137"></a></span><span class=cF6>U0 UpdateDerivedCtrlSlider(CCtrl *c)</span><span class=cF0>
+<a name="l138"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l139"></a>    </span><span class=cF6>CSliderState *s = c-&gt;state;</span><span class=cF0>
+<a name="l140"></a>
+<a name="l141"></a>    </span><span class=cF6>c-&gt;left   = c-&gt;win_task-&gt;pix_width / 2 - (SLIDER_SPACING * 3 + 2) / 2;</span><span class=cF0>
+<a name="l142"></a>    </span><span class=cF6>c-&gt;right  = c-&gt;left + %d * SLIDER_SPACING + %d;</span><span class=cF0>
+<a name="l143"></a>    </span><span class=cF6>c-&gt;top    = c-&gt;win_task-&gt;pix_height / 2 - (SLIDER_SPACING * 2 + SLIDER_RANGE) / 2;</span><span class=cF0>
+<a name="l144"></a>    </span><span class=cF6>c-&gt;bottom = c-&gt;top + SLIDER_SPACING * 2 + SLIDER_RANGE;</span><span class=cF0>
+<a name="l145"></a></span><span class=cF6>&quot;</span><span class=cF0>, m-&gt;num_sliders + </span><span class=cFE>1</span><span class=cF0>, m-&gt;num_sliders);
+<a name="l146"></a>
+<a name="l147"></a>    tmps = m-&gt;next_slider;
+<a name="l148"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l149"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l150"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>s-&gt;%s = ClampI64(s-&gt;%s, 0, SLIDER_RANGE - 1);\n&quot;</span><span class=cF0>, tmps-&gt;name, tmps-&gt;name);
+<a name="l151"></a>        tmps = tmps-&gt;next;
+<a name="l152"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l153"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l154"></a></span><span class=cF6>&quot;}</span><span class=cF0>
+<a name="l155"></a>
+<a name="l156"></a></span><span class=cF6>U0 LeftClickSlider(CCtrl *c, I64 x, I64 y, Bool down)</span><span class=cF0>
+<a name="l157"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l158"></a>    </span><span class=cF6>no_warn down;</span><span class=cF0>
+<a name="l159"></a>    </span><span class=cF6>CSliderState *s = c-&gt;state;</span><span class=cF0>
+<a name="l160"></a></span><span class=cF6>&quot;</span><span class=cF0>);
+<a name="l161"></a>
+<a name="l162"></a>    tmps = m-&gt;next_slider;
+<a name="l163"></a>    </span><span class=cF1>while</span><span class=cF0> (tmps != &amp;m-&gt;next_slider)
+<a name="l164"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l165"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>&quot;</span><span class=cF0>);
+<a name="l166"></a>        </span><span class=cF1>if</span><span class=cF0> (tmps != m-&gt;next_slider)
+<a name="l167"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;else &quot;</span><span class=cF0>);
+<a name="l168"></a>        </span><span class=cF1>if</span><span class=cF0> (tmps-&gt;next == &amp;m-&gt;next_slider)
+<a name="l169"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l170"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l171"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;if (x &lt; c-&gt;left + %d * SLIDER_SPACING + %d + SLIDER_SPACING / 2)\n&quot;</span><span class=cF0>, tmps-&gt;num + </span><span class=cFE>1</span><span class=cF0>, tmps-&gt;num);
+<a name="l172"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0>     </span><span class=cF6>s-&gt;%s = SLIDER_RANGE - 1 - (y - (c-&gt;top + SLIDER_SPACING));\n&quot;</span><span class=cF0>, tmps-&gt;name);
+<a name="l173"></a>        tmps = tmps-&gt;next;
+<a name="l174"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l175"></a> 
+<a name="l176"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l177"></a></span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>if (c-&gt;update_derived_vals)</span><span class=cF0>
+<a name="l178"></a>        </span><span class=cF6>(*c-&gt;update_derived_vals)(c);</span><span class=cF0>
+<a name="l179"></a></span><span class=cF6>}</span><span class=cF0>
+<a name="l180"></a>
+<a name="l181"></a></span><span class=cF6>CCtrl *SliderNew()</span><span class=cF0>
+<a name="l182"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l183"></a>    </span><span class=cF6>CCtrl *c = CAlloc(sizeof(CCtrl));</span><span class=cF0>
+<a name="l184"></a>
+<a name="l185"></a>    </span><span class=cF6>c-&gt;win_task = Fs;</span><span class=cF0>
+<a name="l186"></a>    </span><span class=cF6>c-&gt;flags    = CTRLF_SHOW | CTRLF_CAPTURE_LEFT_MS;</span><span class=cF0>
+<a name="l187"></a>    </span><span class=cF6>c-&gt;type     = CTRLT_GENERIC;</span><span class=cF0>
+<a name="l188"></a></span><span class=cF6>&quot;</span><span class=cF0>);
+<a name="l189"></a>    </span><span class=cF1>if</span><span class=cF0> (*m-&gt;global_name)
+<a name="l190"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,</span><span class=cF6>&quot;</span><span class=cF0>  </span><span class=cF6>c-&gt;state = &amp;%s;\n&quot;</span><span class=cF0>
+<a name="l191"></a>                </span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>MemSet(&amp;%s, 0, sizeof(CSliderState));\n&quot;</span><span class=cF0>, m-&gt;global_name, m-&gt;global_name);
+<a name="l192"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l193"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>c-&gt;state = CAlloc(sizeof(CSliderState));\n&quot;</span><span class=cF0>);
+<a name="l194"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l195"></a></span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>c-&gt;draw_it             = &amp;DrawCtrlSlider;</span><span class=cF0>
+<a name="l196"></a>    </span><span class=cF6>c-&gt;left_click          = &amp;LeftClickSlider;</span><span class=cF0>
+<a name="l197"></a>    </span><span class=cF6>c-&gt;update_derived_vals = &amp;UpdateDerivedCtrlSlider;</span><span class=cF0>
+<a name="l198"></a>    </span><span class=cF6>QueueInsert(c, Fs-&gt;last_ctrl);</span><span class=cF0>
+<a name="l199"></a>    </span><span class=cF6>TaskDerivedValsUpdate;</span><span class=cF0>
+<a name="l200"></a>
+<a name="l201"></a>    </span><span class=cF6>return c;</span><span class=cF0>
+<a name="l202"></a></span><span class=cF6>}</span><span class=cF0>
+<a name="l203"></a>
+<a name="l204"></a></span><span class=cF6>U0 SliderDel(CCtrl *c)</span><span class=cF0>
+<a name="l205"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l206"></a>    </span><span class=cF6>QueueRemove(c);</span><span class=cF0>
+<a name="l207"></a></span><span class=cF6>&quot;</span><span class=cF0>);
+<a name="l208"></a>    </span><span class=cF1>if</span><span class=cF0> (!*m-&gt;global_name)
+<a name="l209"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;</span><span class=cF0> </span><span class=cF6>Free(c-&gt;state);\n&quot;</span><span class=cF0>);
+<a name="l210"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l211"></a></span><span class=cF6>&quot;</span><span class=cF0>   </span><span class=cF6>Free(c);</span><span class=cF0>
+<a name="l212"></a></span><span class=cF6>}</span><span class=cF0>
+<a name="l213"></a></span><span class=cF6>&quot;</span><span class=cF0>);
+<a name="l214"></a>
+<a name="l215"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);  </span><span class=cF2>//This frees memory.</span><span class=cF0>
+<a name="l216"></a>
+<a name="l217"></a>    </span><span class=cF5>RegOneTimePopUp</span><span class=cF0>(</span><span class=cF3>ARf_MANAGE_SLIDER</span><span class=cF0>,
+<a name="l218"></a>        </span><span class=cF6>&quot;Modify the code to your heart's content.\n&quot;</span><span class=cF0>
+<a name="l219"></a>        </span><span class=cF6>&quot;The code is no longer managed.\n&quot;</span><span class=cF0>);
+<a name="l220"></a>
+<a name="l221"></a>    </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l222"></a>}
+</span></pre></body>
+</html>

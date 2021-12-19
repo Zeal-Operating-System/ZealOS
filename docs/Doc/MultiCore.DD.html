@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -29,20 +29,20 @@ body {background-color:#1f1f1f;}
 <a name="l2"></a>computational jobs to other cores and the ZealOS scheduler does not move tasks between cores.
 <a name="l3"></a>
 <a name="l4"></a>There are multicore safe locks for file access and heap allocations, however, so ZealOS is symmetrical in some sense.  See </span><span class=cF4>
-<a name="l5"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MultiCore/LoadTest.CC.html#l1"><span class=cF4>::/Demo/MultiCore/LoadTest.CC</span></a><span class=cF0>.
+<a name="l5"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MultiCore/LoadTest.ZC.html#l1"><span class=cF4>::/Demo/MultiCore/LoadTest.ZC</span></a><span class=cF0>.
 <a name="l6"></a>
 <a name="l7"></a>Only tasks on </span><span class=cF2>Core0</span><span class=cF0> can have windows, but other cores can help render them.
 <a name="l8"></a>
 <a name="l9"></a>Each core has an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> which is the father of all tasks on that core.  </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System</span></a><span class=cF0> is the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> on </span><span class=cF2>Core0</span><span class=cF0>.
 <a name="l10"></a>
-<a name="l11"></a>You give a job to an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF0>() and get the result with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l242"><span class=cF4>JobResGet</span></a><span class=cF0>().  You spawn a task on any core with </span><span class=cF4>
-<a name="l12"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
+<a name="l11"></a>You give a job to an </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l161"><span class=cF4>Executive Task</span></a><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.ZC.html#l229"><span class=cF4>JobQueue</span></a><span class=cF0>() and get the result with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.ZC.html#l242"><span class=cF4>JobResGet</span></a><span class=cF0>().  You spawn a task on any core with </span><span class=cF4>
+<a name="l12"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.ZC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
 <a name="l13"></a>
 <a name="l14"></a>Note: You must use the </span><span class=cF2>LOCK</span><span class=cF0> asm prefix when changing shared structures in a multicore environment.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l17"><span class=cF4>LBts</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l16"><span class=cF4>LBtr</span></a><span class=cF0>() and </span><span class=cF4>
 <a name="l15"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l15"><span class=cF4>LBtc</span></a><span class=cF0>() insts have </span><span class=cF2>LOCK</span><span class=cF0> prefixes.    The compiler has a </span><span class=cF2>lock{}</span><span class=cF0> feature but it doesn't work well.  See </span><span class=cF4>
-<a name="l16"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MultiCore/Lock.CC.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>.
+<a name="l16"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MultiCore/Lock.ZC.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.ZC</span></a><span class=cF0>.
 <a name="l17"></a>
-<a name="l18"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/Transform.CC.html#l1"><span class=cF4>::/Demo/Graphics/Transform.CC</span></a><span class=cF0>.
-<a name="l19"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l1"><span class=cF4>::/Kernel/MultiProc.CC</span></a><span class=cF0>.
+<a name="l18"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/Transform.ZC.html#l1"><span class=cF4>::/Demo/Graphics/Transform.ZC</span></a><span class=cF0>.
+<a name="l19"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.ZC.html#l1"><span class=cF4>::/Kernel/MultiProc.ZC</span></a><span class=cF0>.
 </span></pre></body>
 </html>

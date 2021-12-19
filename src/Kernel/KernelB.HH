@@ -1,7 +1,7 @@
 /*	Kernel ASM symbols.
 $LK,"KernelB",A="FF:::/Kernel/Kernel.PRJ,KernelB"$ Kernel.PRJ
 $LK,"KernelB",A="FF:::/Compiler/Compiler.PRJ,KernelB"$ Compiler.PRJ
-$LK,"KernelB",A="FF:::/StartOS.CC,KernelB"$ StartOS.CC
+$LK,"KernelB",A="FF:::/StartOS.ZC,KernelB"$ StartOS.ZC
 */
 
 #help_index "Bit"
@@ -200,7 +200,7 @@ public _intern IC_GS CCPU *Gs(); //GS points to current $LK,"CCPU",A="MN:CCPU"$.
 public _extern SYS_PCI_BUSES U16 sys_pci_buses; //Number of PCI buses.
 
 #help_index "Processor"
-public _intern IC_CARRY I64 Carry(); //See $LK,"::/Demo/Carry.CC"$
+public _intern IC_CARRY I64 Carry(); //See $LK,"::/Demo/Carry.ZC"$
 public _intern IC_RAX_GET		I64		RAXGet(); //Get RAX register value.
 public _intern IC_RBP_GET		U8	   *RBPGet(); //Get RBP register value.
 public _intern IC_RFLAGS_GET	I64		RFlagsGet(); //Get RFlags register value.

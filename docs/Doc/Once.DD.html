@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -25,19 +25,19 @@ body {background-color:#1f1f1f;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l143"><span class=cF4>KMain</span></a><span class=cF0>()
-<a name="l2"></a>    includes </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0>
-<a name="l3"></a>        includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/MakeHome.CC.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0>
-<a name="l4"></a>            includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeSys.CC.html#l1"><span class=cF4>~/HomeSys.CC</span></a><span class=cF0>
-<a name="l5"></a>                calls </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeSys.CC.html#l22"><span class=cF4>StartUpTasks</span></a><span class=cF0>()
-<a name="l6"></a>                    includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Once.CC.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0>
-<a name="l7"></a>                        calls </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>().
+<a name="l1"></a><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.ZC.html#l143"><span class=cF4>KMain</span></a><span class=cF0>()
+<a name="l2"></a>    includes </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.ZC.html#l1"><span class=cF4>::/StartOS.ZC</span></a><span class=cF0>
+<a name="l3"></a>        includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/MakeHome.ZC.html#l1"><span class=cF4>~/MakeHome.ZC</span></a><span class=cF0>
+<a name="l4"></a>            includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeSys.ZC.html#l1"><span class=cF4>~/HomeSys.ZC</span></a><span class=cF0>
+<a name="l5"></a>                calls </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeSys.ZC.html#l22"><span class=cF4>StartUpTasks</span></a><span class=cF0>()
+<a name="l6"></a>                    includes </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Once.ZC.html#l1"><span class=cF4>~/Once.ZC</span></a><span class=cF0>
+<a name="l7"></a>                        calls </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>().
 <a name="l8"></a></span><span class=cF4>
-<a name="l9"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l158"><span class=cF4>SysOnce</span></a><span class=cF0>() appends src code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> </span><span class=cF2>Once/System</span><span class=cF0> tree, executed at next boot by </span><span class=cF2>System</span><span class=cF0>.
+<a name="l9"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l158"><span class=cF4>SysOnce</span></a><span class=cF0>() appends src code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.ZC.html#l1"><span class=cF4>~/Registry.ZC</span></a><span class=cF0> </span><span class=cF2>Once/System</span><span class=cF0> tree, executed at next boot by </span><span class=cF2>System</span><span class=cF0>.
 <a name="l10"></a></span><span class=cF4>
-<a name="l11"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l168"><span class=cF4>Once</span></a><span class=cF0>()  appends src code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> </span><span class=cF2>Once/User</span><span class=cF0> tree, executed at next boot by first </span><span class=cF2>User</span><span class=cF0> term.
+<a name="l11"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l168"><span class=cF4>Once</span></a><span class=cF0>()  appends src code to </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.ZC.html#l1"><span class=cF4>~/Registry.ZC</span></a><span class=cF0> </span><span class=cF2>Once/User</span><span class=cF0> tree, executed at next boot by first </span><span class=cF2>User</span><span class=cF0> term.
 <a name="l12"></a>
-<a name="l13"></a>At boot, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>(), executes </span><span class=cF2>Once/System</span><span class=cF0> tree, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l148"><span class=cF4>SysOnceFlush</span></a><span class=cF0>()s it,
-<a name="l14"></a>executes </span><span class=cF2>Once/User</span><span class=cF0> tree and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l153"><span class=cF4>OnceFlush</span></a><span class=cF0>()s.
+<a name="l13"></a>At boot, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>(), executes </span><span class=cF2>Once/System</span><span class=cF0> tree, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l148"><span class=cF4>SysOnceFlush</span></a><span class=cF0>()s it,
+<a name="l14"></a>executes </span><span class=cF2>Once/User</span><span class=cF0> tree and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.ZC.html#l153"><span class=cF4>OnceFlush</span></a><span class=cF0>()s.
 </span></pre></body>
 </html>

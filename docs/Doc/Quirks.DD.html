@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.05">
+<meta name="generator" content="ZealOS V1.07">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -32,24 +32,24 @@ body {background-color:#1f1f1f;}
 <a name="l5"></a>
 <a name="l6"></a>* When using </span><span class=cF2>FAT32</span><span class=cF0>, ZealOS does not generate unique short-entry names, the ones with the </span><span class=cF2>~</span><span class=cF0>s.    Not all </span><span class=cF2>FAT32</span><span class=cF0> filenames are 
 <a name="l7"></a>valid ZealOS names and it will complain.    Do not access </span><span class=cF2>FAT32</span><span class=cF0> drives not dedicated to ZealOS.  Disable them with </span><span class=cF4>
-<a name="l8"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.CC.html#l209"><span class=cF4>DriveEnable</span></a><span class=cF0>(OFF), or they will generate error messages. </span><span class=cF2>FAT32</span><span class=cF0> involves a long and short name for each file.
+<a name="l8"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.ZC.html#l209"><span class=cF4>DriveEnable</span></a><span class=cF0>(OFF), or they will generate error messages. </span><span class=cF2>FAT32</span><span class=cF0> involves a long and short name for each file.
 <a name="l9"></a>
 <a name="l10"></a>* The stack does not grow because virtual mem is not used.  It is recommended that you allocate large local variables from the 
-<a name="l11"></a>heap.   You can change </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3547"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
+<a name="l11"></a>heap.   You can change </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3540"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.ZC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
 <a name="l12"></a>
 <a name="l13"></a>* The syntax highlighting occassionally glitches.  The compiler doesn't.
 <a name="l14"></a>
-<a name="l15"></a>* Call </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() when you insert a new removable media.
+<a name="l15"></a>* Call </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.ZC.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() when you insert a new removable media.
 <a name="l16"></a>
-<a name="l17"></a>* Accessing CD/DVD's is flacky.  Try </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l286"><span class=cF4>Drive</span></a><span class=cF0>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() twice.
+<a name="l17"></a>* Accessing CD/DVD's is flacky.  Try </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.ZC.html#l286"><span class=cF4>Drive</span></a><span class=cF0>() or </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.ZC.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() twice.
 <a name="l18"></a>
-<a name="l19"></a>* You can only </span><span class=cF2>extern</span><span class=cF0> something once.  There is a varient called </span><span class=cF2>_extern</span><span class=cF0> which binds a CosmiC definition to a asm symbol.   Th
+<a name="l19"></a>* You can only </span><span class=cF2>extern</span><span class=cF0> something once.  There is a varient called </span><span class=cF2>_extern</span><span class=cF0> which binds a ZealC definition to a asm symbol.    Th
 <a name="l20"></a>is, too, can only be done once.
 <a name="l21"></a>
 <a name="l22"></a>* A terminal task has a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> document structure that remains active even when you change </span><span class=cF4>Fs-&gt;draw_it</span><span class=cF0>.   To prevent links in 
 <a name="l23"></a>the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> from being activated when the user clicks in the window, do one of three things:
 <a name="l24"></a>  
-<a name="l25"></a>  A) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l122"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l136"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
+<a name="l25"></a>  A) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l122"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.ZC.html#l136"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
 <a name="l26"></a>  
 <a name="l27"></a>  B) Disable window mgr button click checking with </span><span class=cF4>Fs-&gt;win_inhibit</span><span class=cF0> set to mask </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1552"><span class=cF4>WIF_SELF_MS_L</span></a><span class=cF0>|</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1566"><span class=cF4>WIF_FOCUS_TASK_MS_L_D</span></a><span class=cF0>|</span><span class=cF4>
 <a name="l28"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1554"><span class=cF4>WIF_SELF_MS_R</span></a><span class=cF0>|</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1568"><span class=cF4>WIF_FOCUS_TASK_MS_R_D</span></a><span class=cF0>.  This inhibits window mgr operations but still generates messages from bttn clicks.
@@ -63,7 +63,7 @@ body {background-color:#1f1f1f;}
 <a name="l36"></a>
 <a name="l37"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l135"><span class=cF4>MemCopy</span></a><span class=cF0>() only goes forward.
 <a name="l38"></a>
-<a name="l39"></a>* A </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() cmd must be followed by two semicolons if a </span><span class=cF2>#include</span><span class=cF0> is after it.  This is because the preprocessor processes the 
+<a name="l39"></a>* A </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.ZC.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() cmd must be followed by two semicolons if a </span><span class=cF2>#include</span><span class=cF0> is after it.  This is because the preprocessor processes the 
 <a name="l40"></a>next token ahead.
 <a name="l41"></a>
 <a name="l42"></a>* The assembler's error messages are often off by a line and undefines are cryptic.
