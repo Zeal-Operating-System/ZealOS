@@ -30,11 +30,11 @@ Features in development include:
 - For running in a VM: Intel VT-x/AMD-V acceleration enabled in your BIOS settings. (Required to virtualize any 64-bit operating system properly.)
 - Working knowledge of the C programming language.
 
-To create a Distro ISO, run `build_iso.sh` in the `build/` directory. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
+To create a Distro ISO, run `build-iso.sh` in the `build/` directory. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
 
 ### Contributing
 
-There are two ways to contribute. The first way involves everything happening inside the OS, as intended by Terry. After you've built the latest ISO, installed to a VM, made your changes, and powered off the VM, you can run the `sync_repo.sh` script to merge your changes to the repo. 
+There are two ways to contribute. The first way involves everything happening inside the OS, as intended by Terry. After you've built the latest ISO, installed to a VM, made your changes, and powered off the VM, you can run the `sync.sh` script to merge your changes to the repo. 
 
 Alternatively, you can edit repo files using an external editor, outside of the OS.
 
