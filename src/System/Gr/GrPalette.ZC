@@ -13,80 +13,9 @@ public U0 GrPaletteSet(CBGR24 *bgr24)
 	MemCopy(&gr_palette, bgr24, sizeof(CBGR24) * COLORS_NUM);
 }
 
-//********************************************************************************
-public CBGR24 gr32_palette_std[COLORS_NUM] = {
-	0x000000, 0x0000AA, 0x00AA00, 0x00AAAA, 0xAA0000, 0xAA00AA, 0xAA5500, 0xAAAAAA,
-	0x555555, 0x5555FF, 0x55FF55, 0x55FFFF, 0xFF5555, 0xFF55FF, 0xFFFF55, 0xFFFFFF
-};
-
-public U0 PaletteSetStd(Bool persistent=TRUE)
-{//Activate std palette.
-	GrPaletteSet(gr32_palette_std);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetStd;
-}
-//********************************************************************************
-public CBGR24 gr_palette_gray[COLORS_NUM] = {
-	0x000000, 0x4A4A4A, 0x6B6B6B, 0x6F6F6F, 0x626262, 0x696969, 0x868686, 0xB5B5B5,
-	0x565656, 0x8B8B8B, 0xACACAC, 0x878787, 0x919191, 0x8F8F8F, 0xADADAD, 0xFFFFFF
-};
-
-public U0 PaletteSetGray(Bool persistent=TRUE)
-{//Activate gray palette.
-	GrPaletteSet(gr_palette_gray);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetGray;
-}
-//********************************************************************************
-public CBGR24 gr_palette_dark[COLORS_NUM] = {
-	0xFFFFFF, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x9969A1, 0xCE982F, 0xBCC0B9,
-	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xC994C3, 0xFCE94F, 0x000000
-};
-
-public U0 PaletteSetDark(Bool persistent=TRUE)
-{//Activate Dark palette.
-	GrPaletteSet(gr_palette_dark);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetDark;
-	//*(drv_text_attr(U8 *) + 1) = BROWN;
-}
-//********************************************************************************
-public CBGR24 gr_palette_light[COLORS_NUM] = {
-	0x000000, 0x0148A4, 0x3B7901, 0x057C7E, 0xBB2020, 0x9E42AE, 0xB57901, 0xB2B6AF,
-	0x555753, 0x678FBB, 0x82BC49, 0x0097A2, 0xE26A6A, 0xC671BC, 0xC7AB00, 0xFEF1F0
-};
-
-public U0 PaletteSetLight(Bool persistent=TRUE)
-{//Activate Light palette.
-	GrPaletteSet(gr_palette_light);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetLight;
-}
-//********************************************************************************
-public CBGR24 gr_palette_slate[COLORS_NUM] = {
-	0xE3E3E3, 0x4F84A6, 0x73A255, 0x297582, 0xB34F4B, 0x8A52C3, 0xB7822F, 0x444444,
-	0x6D6D6D, 0x94BFDE, 0xA1CE97, 0x6DB4BE, 0xE88E88, 0xCA94E8, 0xD4B475, 0x1F1F1F
-};
-public U0 PaletteSetSlate(Bool persistent=TRUE)
-{//Activate Slate palette.
-	GrPaletteSet(gr_palette_slate);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetSlate;
-}
-//********************************************************************************
-public CBGR24 gr_palette_commander[COLORS_NUM] = {
-	0xFFFFFF, 0x867ADE, 0x00CC55, 0x5A878B, 0xB80000, 0xCC44CC, 0xDD8855, 0xBBBBBB,
-	0x777777, 0x0088FF, 0xAAFF66, 0xAAFFEE, 0xFF7777, 0xCA94E8, 0xEEEE77, 0x483AAA
-};
-public U0 PaletteSetCommander(Bool persistent=TRUE)
-{//Activate Slate palette.
-	GrPaletteSet(gr_palette_commander);
-	LFBFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetCommander;
-}
+#include "Palettes/PaletteStd.ZC"
+#include "Palettes/PaletteGray.ZC"
+#include "Palettes/PaletteLight.ZC"
+#include "Palettes/PaletteDark.ZC"
+#include "Palettes/PaletteSlate.ZC"
+#include "Palettes/PaletteCommander.ZC"

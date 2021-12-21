@@ -1,0 +1,13 @@
+public CBGR24 gr_palette_dark[COLORS_NUM] = {
+	0xFFFFFF, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x9969A1, 0xCE982F, 0xBCC0B9,
+	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xC994C3, 0xFCE94F, 0x000000
+};
+
+public U0 PaletteSetDark(Bool persistent=TRUE)
+{//Activate Dark palette.
+	GrPaletteSet(gr_palette_dark);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetDark;
+	//*(drv_text_attr(U8 *) + 1) = BROWN;
+}

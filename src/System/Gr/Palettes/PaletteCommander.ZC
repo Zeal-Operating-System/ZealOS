@@ -1,0 +1,11 @@
+public CBGR24 gr_palette_commander[COLORS_NUM] = {
+	0xFFFFFF, 0x867ADE, 0x00CC55, 0x5A878B, 0xB80000, 0xCC44CC, 0xDD8855, 0xBBBBBB,
+	0x777777, 0x0088FF, 0xAAFF66, 0xAAFFEE, 0xFF7777, 0xCA94E8, 0xEEEE77, 0x483AAA
+};
+public U0 PaletteSetCommander(Bool persistent=TRUE)
+{//Activate Commander palette.
+	GrPaletteSet(gr_palette_commander);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetCommander;
+}
