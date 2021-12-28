@@ -13,6 +13,27 @@ class CICMPHeader
 };
 
 
+U16 ICMPChecksum(U8 *buf, I64 size)
+{
+	U64 i, sum = 0;
+
+	for (i = 0; i < size; i += 2)
+	{
+		sum += *buf(U16 *);
+		buf += 2;
+	}
+
+	if (size - i > 0)
+		sum += *buf;
+
+	while (sum >> 16 != 0)
+		sum = sum & 0xFFFF + sum >> 16;
+
+	return ~sum(U16);
+
+}
+
+
 U0 ICMPReplySend(U32 destination_ip_address,
 				  U16 identifier,
 				  U16 sequence_number,
@@ -45,6 +66,44 @@ U0 ICMPReplySend(U32 destination_ip_address,
 	// TODO: header checksum is awful. Shrine says hack alert.
 
 	MemCopy(icmp_frame + sizeof(CICMPHeader), payload, length);
+
+	IPV4PacketFinish(de_index);
+}
+
+U0 ICMPRequestSend(U32 destination_ip_address,
+				   U16 identifier,
+				   U16 sequence_number,
+				   U16 request_checksum,
+				   U8 *payload,
+				   I64 length)
+{
+	U8			*icmp_frame;
+	I64			 de_index;
+	CICMPHeader	*header;
+	no_warn request_checksum; // TODO: needed? remove arg?
+
+	de_index = IPV4PacketAllocate(&icmp_frame,
+								  IP_PROTOCOL_ICMP,
+								  IPV4AddressGet,
+								  destination_ip_address,
+								  sizeof(CICMPHeader) + length);
+	if (de_index < 0)
+	{
+		NetErr("ICMP SEND REQUEST: Failed to allocate IPV4 packet.");
+		return;
+	}
+
+	header = icmp_frame;
+
+	header->type				= ICMP_TYPE_ECHO_REQUEST;
+	header->code				= 0;	// why is 0 okay?
+	header->checksum			= 0;
+	header->identifier			= identifier;
+	header->sequence_number		= sequence_number;
+
+	MemCopy(icmp_frame + sizeof(CICMPHeader), payload, length);
+
+	header->checksum = ICMPChecksum(header, sizeof(CICMPHeader) + length);
 
 	IPV4PacketFinish(de_index);
 }
