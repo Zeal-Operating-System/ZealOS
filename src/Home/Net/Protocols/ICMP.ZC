@@ -13,6 +13,19 @@ class CICMPHeader
 };
 
 
+/*	global variable containing last reply ICMP header received,
+	Ping() checks this to make ping report.
+*/
+CICMPHeader icmp_reply;
+
+
+U0 ICMPInit()
+{
+	MemSet(&icmp_reply, 0, sizeof(CICMPHeader));
+}
+
+NetQueueInit;
+
 U16 ICMPChecksum(U8 *buf, I64 size)
 {
 	U64 i, sum = 0;
@@ -73,14 +86,12 @@ U0 ICMPReplySend(U32 destination_ip_address,
 U0 ICMPRequestSend(U32 destination_ip_address,
 				   U16 identifier,
 				   U16 sequence_number,
-				   U16 request_checksum,
 				   U8 *payload,
 				   I64 length)
 {
 	U8			*icmp_frame;
 	I64			 de_index;
 	CICMPHeader	*header;
-	no_warn request_checksum; // TODO: needed? remove arg?
 
 	de_index = IPV4PacketAllocate(&icmp_frame,
 								  IP_PROTOCOL_ICMP,
@@ -131,6 +142,10 @@ I64 ICMPHandler(CIPV4Packet *packet)
 					  packet->data   + sizeof(CICMPHeader),	// Data payload at IPV4Packet data location after the ICMP header
 					  packet->length - sizeof(CICMPHeader));// Payload length is size of packet after dropping header.
 	}
+	else if (header->type == ICMP_TYPE_ECHO_REPLY && header->code == ICMP_CODE_ECHO)
+	{ // save the reply to the global ICMP reply header
+		MemCopy(&icmp_reply, header, sizeof(CICMPHeader));
+	}
 	else
 		NetWarn("ICMP HANDLER: Unhandled ICMP packet. type, code: 0x%X, 0x%X", header->type, header->code);
 
@@ -138,3 +153,5 @@ I64 ICMPHandler(CIPV4Packet *packet)
 
 	return 0;
 }
+
+ICMPInit;

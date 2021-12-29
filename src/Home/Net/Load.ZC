@@ -18,6 +18,7 @@ Cd(__DIR__);;
 #include "Utilities/BST"
 #include "Protocols/UDP/MakeUDP"
 #include "Protocols/DNS"
+#include "Utilities/Ping"
 
 #include "Protocols/TCP/MakeTCP"
 

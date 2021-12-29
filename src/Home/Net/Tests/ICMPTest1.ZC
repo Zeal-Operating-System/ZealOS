@@ -7,7 +7,7 @@ U0 ICMPTest()
 	for (i = 0; i < 64; i++)
 		b[i] = RandU8;
 
-	ICMPRequestSend(a, 0, 0, 0, b, 64);
+	ICMPRequestSend(a, 0, 0, b, 64);
 }
 
 ICMPTest;
