@@ -304,8 +304,8 @@ body {background-color:#1f1f1f;}
 <a name="l277"></a>
 <a name="l278"></a>    </span><span class=cF2>// review RFC Reset-Generation ...</span><span class=cF0>
 <a name="l279"></a>
-<a name="l280"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;header-&gt;flags, TCPf_RST</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;header-&gt;flags, TCPf_ACK</span><span class=cF7>)</span><span class=cF0>)
-<a name="l281"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>// bail: we probably sent an RST earlier, and this is the acknowledgement</span><span class=cF0>
+<a name="l280"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;header-&gt;flags, TCPf_RST</span><span class=cF7>)</span><span class=cF0>)
+<a name="l281"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>// bail: don't respond to a reset for a connection that doesn't exist</span><span class=cF0>
 <a name="l282"></a>
 <a name="l283"></a>    de_index = TCPSend(packet-&gt;destination_ip_address,
 <a name="l284"></a>                       </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cF0>header-&gt;destination_port</span><span class=cF7>)</span><span class=cF0>,

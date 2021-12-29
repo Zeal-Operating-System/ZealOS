@@ -40,70 +40,146 @@ body {background-color:#1f1f1f;}
 <a name="l13"></a>};
 <a name="l14"></a>
 <a name="l15"></a>
-<a name="l16"></a></span><span class=cF1>U0</span><span class=cF0> ICMPReplySend(</span><span class=cF9>U32</span><span class=cF0> destination_ip_address,
-<a name="l17"></a>                  </span><span class=cF9>U16</span><span class=cF0> identifier,
-<a name="l18"></a>                  </span><span class=cF9>U16</span><span class=cF0> sequence_number,
-<a name="l19"></a>                  </span><span class=cF9>U16</span><span class=cF0> request_checksum,
-<a name="l20"></a>                  </span><span class=cF1>U8</span><span class=cF0> *payload,
-<a name="l21"></a>                  </span><span class=cF9>I64</span><span class=cF0> length)
-<a name="l22"></a>{
-<a name="l23"></a>    </span><span class=cF1>U8</span><span class=cF0>          *icmp_frame;
-<a name="l24"></a>    </span><span class=cF9>I64</span><span class=cF0>          de_index;
-<a name="l25"></a>    CICMPHeader *header;
+<a name="l16"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>global variable containing last reply ICMP header received,</span><span class=cF0>
+<a name="l17"></a>    </span><span class=cF2>Ping() checks this to make ping report.</span><span class=cF0>
+<a name="l18"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l19"></a>CICMPHeader icmp_reply;
+<a name="l20"></a>
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF1>U0</span><span class=cF0> ICMPInit()
+<a name="l23"></a>{
+<a name="l24"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;icmp_reply, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>);
+<a name="l25"></a>}
 <a name="l26"></a>
-<a name="l27"></a>    de_index = IPV4PacketAllocate(&amp;icmp_frame,
-<a name="l28"></a>                                  IP_PROTOCOL_ICMP,
-<a name="l29"></a>                                  IPV4AddressGet,
-<a name="l30"></a>                                  destination_ip_address,
-<a name="l31"></a>                                  </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0> + length);
-<a name="l32"></a>    </span><span class=cF1>if</span><span class=cF0> (de_index &lt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l33"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l34"></a>        NetErr(</span><span class=cF6>&quot;ICMP SEND REPLY: Failed to allocate IPV4 packet.&quot;</span><span class=cF0>);
-<a name="l35"></a>        </span><span class=cF1>return</span><span class=cF0>;
-<a name="l36"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l37"></a>
-<a name="l38"></a>    header = icmp_frame;
-<a name="l39"></a>
-<a name="l40"></a>    header-&gt;type                = ICMP_TYPE_ECHO_REPLY;
-<a name="l41"></a>    header-&gt;code                = </span><span class=cFE>0</span><span class=cF0>;    </span><span class=cF2>// why is 0 okay?</span><span class=cF0>
-<a name="l42"></a>    header-&gt;checksum            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cF0>request_checksum</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>0x0800</span><span class=cF0>);
-<a name="l43"></a>    header-&gt;identifier          = identifier;
-<a name="l44"></a>    header-&gt;sequence_number     = sequence_number;
-<a name="l45"></a>    </span><span class=cF2>// TODO: header checksum is awful. Shrine says hack alert.</span><span class=cF0>
+<a name="l27"></a>NetQueueInit;
+<a name="l28"></a>
+<a name="l29"></a></span><span class=cF9>U16</span><span class=cF0> ICMPChecksum(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> size)
+<a name="l30"></a>{
+<a name="l31"></a>    </span><span class=cF9>U64</span><span class=cF0> i, sum = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l32"></a>
+<a name="l33"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; size; i += </span><span class=cFE>2</span><span class=cF0>)
+<a name="l34"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l35"></a>        sum += *buf(</span><span class=cF9>U16</span><span class=cF0> *);
+<a name="l36"></a>        buf += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l37"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF1>if</span><span class=cF0> (size - i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l40"></a>        sum += *buf;
+<a name="l41"></a>
+<a name="l42"></a>    </span><span class=cF1>while</span><span class=cF0> (sum &gt;&gt; </span><span class=cFE>16</span><span class=cF0> != </span><span class=cFE>0</span><span class=cF0>)
+<a name="l43"></a>        sum = sum &amp; </span><span class=cFE>0xFFFF</span><span class=cF0> + sum &gt;&gt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l44"></a>
+<a name="l45"></a>    </span><span class=cF1>return</span><span class=cF0> ~sum(</span><span class=cF9>U16</span><span class=cF0>);
 <a name="l46"></a>
-<a name="l47"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(icmp_frame + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>, payload, length);
+<a name="l47"></a>}
 <a name="l48"></a>
-<a name="l49"></a>    IPV4PacketFinish(de_index);
-<a name="l50"></a>}
-<a name="l51"></a>
-<a name="l52"></a></span><span class=cF9>I64</span><span class=cF0> ICMPHandler(CIPV4Packet *packet)
-<a name="l53"></a>{
-<a name="l54"></a>    CICMPHeader *header;
-<a name="l55"></a>
-<a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (packet-&gt;length &lt; </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>)
-<a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l58"></a>        NetErr(</span><span class=cF6>&quot;ICMP HANDLER: Caught wrong IPV4 length.&quot;</span><span class=cF0>);
-<a name="l59"></a>        </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
-<a name="l60"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l61"></a>
-<a name="l62"></a>    header = packet-&gt;data;
-<a name="l63"></a>
-<a name="l64"></a>    </span><span class=cF1>if</span><span class=cF0> (header-&gt;type == ICMP_TYPE_ECHO_REQUEST &amp;&amp; header-&gt;code == ICMP_CODE_ECHO)
-<a name="l65"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l66"></a>        ARPCachePut(packet-&gt;source_ip_address, packet-&gt;ethernet_frame-&gt;source_address);
-<a name="l67"></a>
-<a name="l68"></a>        ICMPReplySend(packet-&gt;source_ip_address,
-<a name="l69"></a>                      header-&gt;identifier,
-<a name="l70"></a>                      header-&gt;sequence_number,
-<a name="l71"></a>                      header-&gt;checksum,
-<a name="l72"></a>                      packet-&gt;data   + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF2>// Data payload at IPV4Packet data location after the ICMP header</span><span class=cF0>
-<a name="l73"></a>                      packet-&gt;length - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>);</span><span class=cF2>// Payload length is size of packet after dropping header.</span><span class=cF0>
-<a name="l74"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l75"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l76"></a>        NetWarn(</span><span class=cF6>&quot;ICMP HANDLER: Unhandled ICMP packet. type, code: 0x%X, 0x%X&quot;</span><span class=cF0>, header-&gt;type, header-&gt;code);
-<a name="l77"></a>
-<a name="l78"></a>    NetLog(</span><span class=cF6>&quot;ICMP HANDLER: Exiting.&quot;</span><span class=cF0>);
-<a name="l79"></a>
-<a name="l80"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l81"></a>}</span></pre></body>
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>U0</span><span class=cF0> ICMPReplySend(</span><span class=cF9>U32</span><span class=cF0> destination_ip_address,
+<a name="l51"></a>                  </span><span class=cF9>U16</span><span class=cF0> identifier,
+<a name="l52"></a>                  </span><span class=cF9>U16</span><span class=cF0> sequence_number,
+<a name="l53"></a>                  </span><span class=cF9>U16</span><span class=cF0> request_checksum,
+<a name="l54"></a>                  </span><span class=cF1>U8</span><span class=cF0> *payload,
+<a name="l55"></a>                  </span><span class=cF9>I64</span><span class=cF0> length)
+<a name="l56"></a>{
+<a name="l57"></a>    </span><span class=cF1>U8</span><span class=cF0>          *icmp_frame;
+<a name="l58"></a>    </span><span class=cF9>I64</span><span class=cF0>          de_index;
+<a name="l59"></a>    CICMPHeader *header;
+<a name="l60"></a>
+<a name="l61"></a>    de_index = IPV4PacketAllocate(&amp;icmp_frame,
+<a name="l62"></a>                                  IP_PROTOCOL_ICMP,
+<a name="l63"></a>                                  IPV4AddressGet,
+<a name="l64"></a>                                  destination_ip_address,
+<a name="l65"></a>                                  </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0> + length);
+<a name="l66"></a>    </span><span class=cF1>if</span><span class=cF0> (de_index &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l67"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l68"></a>        NetErr(</span><span class=cF6>&quot;ICMP SEND REPLY: Failed to allocate IPV4 packet.&quot;</span><span class=cF0>);
+<a name="l69"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l70"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l71"></a>
+<a name="l72"></a>    header = icmp_frame;
+<a name="l73"></a>
+<a name="l74"></a>    header-&gt;type                = ICMP_TYPE_ECHO_REPLY;
+<a name="l75"></a>    header-&gt;code                = </span><span class=cFE>0</span><span class=cF0>;    </span><span class=cF2>// why is 0 okay?</span><span class=cF0>
+<a name="l76"></a>    header-&gt;checksum            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cF0>request_checksum</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>0x0800</span><span class=cF0>);
+<a name="l77"></a>    header-&gt;identifier          = identifier;
+<a name="l78"></a>    header-&gt;sequence_number     = sequence_number;
+<a name="l79"></a>    </span><span class=cF2>// TODO: header checksum is awful. Shrine says hack alert.</span><span class=cF0>
+<a name="l80"></a>
+<a name="l81"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(icmp_frame + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>, payload, length);
+<a name="l82"></a>
+<a name="l83"></a>    IPV4PacketFinish(de_index);
+<a name="l84"></a>}
+<a name="l85"></a>
+<a name="l86"></a></span><span class=cF1>U0</span><span class=cF0> ICMPRequestSend(</span><span class=cF9>U32</span><span class=cF0> destination_ip_address,
+<a name="l87"></a>                   </span><span class=cF9>U16</span><span class=cF0> identifier,
+<a name="l88"></a>                   </span><span class=cF9>U16</span><span class=cF0> sequence_number,
+<a name="l89"></a>                   </span><span class=cF1>U8</span><span class=cF0> *payload,
+<a name="l90"></a>                   </span><span class=cF9>I64</span><span class=cF0> length)
+<a name="l91"></a>{
+<a name="l92"></a>    </span><span class=cF1>U8</span><span class=cF0>          *icmp_frame;
+<a name="l93"></a>    </span><span class=cF9>I64</span><span class=cF0>          de_index;
+<a name="l94"></a>    CICMPHeader *header;
+<a name="l95"></a>
+<a name="l96"></a>    de_index = IPV4PacketAllocate(&amp;icmp_frame,
+<a name="l97"></a>                                  IP_PROTOCOL_ICMP,
+<a name="l98"></a>                                  IPV4AddressGet,
+<a name="l99"></a>                                  destination_ip_address,
+<a name="l100"></a>                                  </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0> + length);
+<a name="l101"></a>    </span><span class=cF1>if</span><span class=cF0> (de_index &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l102"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l103"></a>        NetErr(</span><span class=cF6>&quot;ICMP SEND REQUEST: Failed to allocate IPV4 packet.&quot;</span><span class=cF0>);
+<a name="l104"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l105"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l106"></a>
+<a name="l107"></a>    header = icmp_frame;
+<a name="l108"></a>
+<a name="l109"></a>    header-&gt;type                = ICMP_TYPE_ECHO_REQUEST;
+<a name="l110"></a>    header-&gt;code                = </span><span class=cFE>0</span><span class=cF0>;    </span><span class=cF2>// why is 0 okay?</span><span class=cF0>
+<a name="l111"></a>    header-&gt;checksum            = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l112"></a>    header-&gt;identifier          = identifier;
+<a name="l113"></a>    header-&gt;sequence_number     = sequence_number;
+<a name="l114"></a>
+<a name="l115"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(icmp_frame + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>, payload, length);
+<a name="l116"></a>
+<a name="l117"></a>    header-&gt;checksum = ICMPChecksum(header, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0> + length);
+<a name="l118"></a>
+<a name="l119"></a>    IPV4PacketFinish(de_index);
+<a name="l120"></a>}
+<a name="l121"></a>
+<a name="l122"></a></span><span class=cF9>I64</span><span class=cF0> ICMPHandler(CIPV4Packet *packet)
+<a name="l123"></a>{
+<a name="l124"></a>    CICMPHeader *header;
+<a name="l125"></a>
+<a name="l126"></a>    </span><span class=cF1>if</span><span class=cF0> (packet-&gt;length &lt; </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>)
+<a name="l127"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l128"></a>        NetErr(</span><span class=cF6>&quot;ICMP HANDLER: Caught wrong IPV4 length.&quot;</span><span class=cF0>);
+<a name="l129"></a>        </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l130"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l131"></a>
+<a name="l132"></a>    header = packet-&gt;data;
+<a name="l133"></a>
+<a name="l134"></a>    </span><span class=cF1>if</span><span class=cF0> (header-&gt;type == ICMP_TYPE_ECHO_REQUEST &amp;&amp; header-&gt;code == ICMP_CODE_ECHO)
+<a name="l135"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l136"></a>        ARPCachePut(packet-&gt;source_ip_address, packet-&gt;ethernet_frame-&gt;source_address);
+<a name="l137"></a>
+<a name="l138"></a>        ICMPReplySend(packet-&gt;source_ip_address,
+<a name="l139"></a>                      header-&gt;identifier,
+<a name="l140"></a>                      header-&gt;sequence_number,
+<a name="l141"></a>                      header-&gt;checksum,
+<a name="l142"></a>                      packet-&gt;data   + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF2>// Data payload at IPV4Packet data location after the ICMP header</span><span class=cF0>
+<a name="l143"></a>                      packet-&gt;length - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>);</span><span class=cF2>// Payload length is size of packet after dropping header.</span><span class=cF0>
+<a name="l144"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l145"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (header-&gt;type == ICMP_TYPE_ECHO_REPLY &amp;&amp; header-&gt;code == ICMP_CODE_ECHO)
+<a name="l146"></a>    </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>// save the reply to the global ICMP reply header</span><span class=cF0>
+<a name="l147"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;icmp_reply, header, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CICMPHeader</span><span class=cF7>)</span><span class=cF0>);
+<a name="l148"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l149"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l150"></a>        NetWarn(</span><span class=cF6>&quot;ICMP HANDLER: Unhandled ICMP packet. type, code: 0x%X, 0x%X&quot;</span><span class=cF0>, header-&gt;type, header-&gt;code);
+<a name="l151"></a>
+<a name="l152"></a>    NetLog(</span><span class=cF6>&quot;ICMP HANDLER: Exiting.&quot;</span><span class=cF0>);
+<a name="l153"></a>
+<a name="l154"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l155"></a>}
+<a name="l156"></a>
+<a name="l157"></a>ICMPInit;</span></pre></body>
 </html>
