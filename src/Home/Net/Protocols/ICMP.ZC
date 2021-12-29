@@ -24,8 +24,6 @@ U0 ICMPInit()
 	MemSet(&icmp_reply, 0, sizeof(CICMPHeader));
 }
 
-NetQueueInit;
-
 U16 ICMPChecksum(U8 *buf, I64 size)
 {
 	U64 i, sum = 0;
