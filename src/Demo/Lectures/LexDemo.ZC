@@ -1,0 +1,37 @@
+
+// See $LK+PU,"Tokens",A="MN:TK_EOF"$.
+
+U0 Main()
+{
+	U8			*src;
+	CCompCtrl	*cc;
+	I64			 tk;
+
+	"\nThis will Lex an expression,\n"
+	"reporting token-by-token.\n\n";
+
+	while (TRUE)
+	{
+		"\n";
+		src = StrGet;
+		if (*src)
+		{
+			cc = CompCtrlNew(src);
+
+			while (tk = Lex(cc))
+			{
+				"TOKEN: 0x%04X %d\n", tk, tk;
+			}
+
+			CompCtrlDel(cc);
+		}
+		else
+		{
+			Free(src);
+			break;
+		}
+	}
+}
+
+Main;
+

@@ -61,6 +61,7 @@ else
 			then
 			        echo "Copying HTML docs to docs/..."
 			        cp -r $TMPMOUNT/HTML/* ../docs
+			        rm -rf ../src/HTML/
 			else
 			        echo "No HTML docs to copy."
 			fi

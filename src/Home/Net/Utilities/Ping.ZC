@@ -36,6 +36,7 @@ I64 Ping(U8 *hostname, I64 timeout=JIFFY_FREQ)
 		return -1;
 	}
 
+	"\n";
 	while (!CharScan)
 	{
 		payload = MAlloc(64);
