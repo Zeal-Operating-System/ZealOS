@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.07">
+<meta name="generator" content="ZealOS V1.08">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -522,7 +522,7 @@ body {background-color:#1f1f1f;}
 <a name="l495"></a>                c = </span><span class=cFE>1</span><span class=cF0>;
 <a name="l496"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (c &gt; </span><span class=cFE>4</span><span class=cF0>)
 <a name="l497"></a>                c = </span><span class=cFE>4</span><span class=cF0>;
-<a name="l498"></a>            vert_size = (</span><span class=cF3>TEXT_ROWS</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>) / c;
+<a name="l498"></a>            vert_size = (</span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) / c;
 <a name="l499"></a>
 <a name="l500"></a>            </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
 <a name="l501"></a>            </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>i &amp; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0> * vert_size + </span><span class=cFE>2</span><span class=cF0> - no_border, </span><span class=cF7>(</span><span class=cF0>i &amp; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * vert_size + no_border, task);
@@ -584,62 +584,113 @@ body {background-color:#1f1f1f;}
 <a name="l557"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
 <a name="l558"></a>}
 <a name="l559"></a>
-<a name="l560"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>WinMax</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l561"></a>{</span><span class=cF2>//Maximize task's window</span><span class=cF0>
-<a name="l562"></a>    </span><span class=cF9>I64</span><span class=cF0> no_border;
-<a name="l563"></a>
-<a name="l564"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
-<a name="l565"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l566"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
-<a name="l567"></a>        </span><span class=cF1>return</span><span class=cF0>;
-<a name="l568"></a>
-<a name="l569"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l570"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//TODO Multiprocessor safe</span><span class=cF0>
-<a name="l571"></a>    no_border = </span><span class=cF5>Bt</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
-<a name="l572"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
-<a name="l573"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
-<a name="l574"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(task);
-<a name="l575"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l576"></a>}
-<a name="l577"></a>
-<a name="l578"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val = </span><span class=cF3>OFF</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l579"></a>{</span><span class=cF2>//Turn off (or on) window border.</span><span class=cF0>
-<a name="l580"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_has_border;
-<a name="l581"></a>
-<a name="l582"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
-<a name="l583"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l584"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
-<a name="l585"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l586"></a>
-<a name="l587"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l588"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//TODO Multiprocessor safe</span><span class=cF0>
-<a name="l589"></a>    old_has_border = !</span><span class=cF5>Bt</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
-<a name="l590"></a>    </span><span class=cF1>if</span><span class=cF0> (val)
-<a name="l591"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l592"></a>        </span><span class=cF1>if</span><span class=cF0> (!old_has_border)
-<a name="l593"></a>        {
-<a name="l594"></a>            </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
-<a name="l595"></a>            task-&gt;win_left++;
-<a name="l596"></a>            task-&gt;win_right--;
-<a name="l597"></a>            task-&gt;win_top++;
-<a name="l598"></a>            task-&gt;win_bottom--;
-<a name="l599"></a>            </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l600"></a>        }
-<a name="l601"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l602"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l603"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l604"></a>        </span><span class=cF1>if</span><span class=cF0> (old_has_border) {
-<a name="l605"></a>            </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
-<a name="l606"></a>            task-&gt;win_left--;
-<a name="l607"></a>            task-&gt;win_right++;
-<a name="l608"></a>            task-&gt;win_top--;
-<a name="l609"></a>            task-&gt;win_bottom++;
-<a name="l610"></a>            </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l611"></a>        }
-<a name="l612"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l613"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l560"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>WinTileGrid</span><span class=cF0>()
+<a name="l561"></a>{</span><span class=cF2>//Tile windows in a grid.</span><span class=cF0>
+<a name="l562"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task, *last_task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l563"></a>    </span><span class=cF9>I64</span><span class=cF0>      count, c, i, j, horz_size, vert_size, no_border;
+<a name="l564"></a>
+<a name="l565"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l566"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//TODO Multiprocessor safe</span><span class=cF0>
+<a name="l567"></a>    task = </span><span class=cFB>sys_winmgr_task</span><span class=cF0>;
+<a name="l568"></a>    count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l569"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l570"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l571"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_FOCUS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l572"></a>            count++;
+<a name="l573"></a>        task = task-&gt;last_task;
+<a name="l574"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l575"></a>    </span><span class=cF1>while</span><span class=cF0> (task != </span><span class=cFB>sys_winmgr_task</span><span class=cF0>);
+<a name="l576"></a>
+<a name="l577"></a>    task = </span><span class=cFB>sys_winmgr_task</span><span class=cF0>;
+<a name="l578"></a>    i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l579"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l580"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l581"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_FOCUS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l582"></a>        {
+<a name="l583"></a>            no_border = </span><span class=cF5>Bt</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
+<a name="l584"></a>
+<a name="l585"></a>            c = </span><span class=cFE>1</span><span class=cF0> + i % </span><span class=cFE>2</span><span class=cF0>;
+<a name="l586"></a>            vert_size = (</span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) / c;
+<a name="l587"></a>            horz_size = </span><span class=cF3>TEXT_COLS</span><span class=cF0> / c;
+<a name="l588"></a>
+<a name="l589"></a>            j = i % </span><span class=cFE>4</span><span class=cF0>;
+<a name="l590"></a>            </span><span class=cF1>if</span><span class=cF0> (j &lt; </span><span class=cFE>2</span><span class=cF0>)      </span><span class=cF2>// top half of screen</span><span class=cF0>
+<a name="l591"></a>                </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_ROWS</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0> + no_border, task);
+<a name="l592"></a>            </span><span class=cF1>else</span><span class=cF0>            </span><span class=cF2>// bottom half of screen</span><span class=cF0>
+<a name="l593"></a>                </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF3>TEXT_ROWS</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
+<a name="l594"></a>
+<a name="l595"></a>            </span><span class=cF1>if</span><span class=cF0> (j % </span><span class=cFE>2</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0>) </span><span class=cF2>// left half of screen</span><span class=cF0>
+<a name="l596"></a>                </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_COLS</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0> + no_border, task); 
+<a name="l597"></a>            </span><span class=cF1>else</span><span class=cF0>            </span><span class=cF2>// right half of screen</span><span class=cF0>
+<a name="l598"></a>                </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cF3>TEXT_COLS</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
+<a name="l599"></a>
+<a name="l600"></a>            last_task = task;
+<a name="l601"></a>            i++;
+<a name="l602"></a>        }
+<a name="l603"></a>        task = task-&gt;last_task;
+<a name="l604"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l605"></a>    </span><span class=cF1>while</span><span class=cF0> (task != </span><span class=cFB>sys_winmgr_task</span><span class=cF0>);
+<a name="l606"></a>
+<a name="l607"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l608"></a>}
+<a name="l609"></a>
+<a name="l610"></a>
+<a name="l611"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>WinMax</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l612"></a>{</span><span class=cF2>//Maximize task's window</span><span class=cF0>
+<a name="l613"></a>    </span><span class=cF9>I64</span><span class=cF0> no_border;
 <a name="l614"></a>
-<a name="l615"></a>    </span><span class=cF1>return</span><span class=cF0> old_has_border;
-<a name="l616"></a>}
+<a name="l615"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l616"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l617"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l618"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l619"></a>
+<a name="l620"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l621"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//TODO Multiprocessor safe</span><span class=cF0>
+<a name="l622"></a>    no_border = </span><span class=cF5>Bt</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
+<a name="l623"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_COLS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
+<a name="l624"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0> - no_border, </span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> + no_border, task);
+<a name="l625"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(task);
+<a name="l626"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l627"></a>}
+<a name="l628"></a>
+<a name="l629"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val = </span><span class=cF3>OFF</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l630"></a>{</span><span class=cF2>//Turn off (or on) window border.</span><span class=cF0>
+<a name="l631"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_has_border;
+<a name="l632"></a>
+<a name="l633"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l634"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l635"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l636"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l637"></a>
+<a name="l638"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l639"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//TODO Multiprocessor safe</span><span class=cF0>
+<a name="l640"></a>    old_has_border = !</span><span class=cF5>Bt</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
+<a name="l641"></a>    </span><span class=cF1>if</span><span class=cF0> (val)
+<a name="l642"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l643"></a>        </span><span class=cF1>if</span><span class=cF0> (!old_has_border)
+<a name="l644"></a>        {
+<a name="l645"></a>            </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
+<a name="l646"></a>            task-&gt;win_left++;
+<a name="l647"></a>            task-&gt;win_right--;
+<a name="l648"></a>            task-&gt;win_top++;
+<a name="l649"></a>            task-&gt;win_bottom--;
+<a name="l650"></a>            </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l651"></a>        }
+<a name="l652"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l653"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l654"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l655"></a>        </span><span class=cF1>if</span><span class=cF0> (old_has_border) {
+<a name="l656"></a>            </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF0>);
+<a name="l657"></a>            task-&gt;win_left--;
+<a name="l658"></a>            task-&gt;win_right++;
+<a name="l659"></a>            task-&gt;win_top--;
+<a name="l660"></a>            task-&gt;win_bottom++;
+<a name="l661"></a>            </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l662"></a>        }
+<a name="l663"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l664"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l665"></a>
+<a name="l666"></a>    </span><span class=cF1>return</span><span class=cF0> old_has_border;
+<a name="l667"></a>}
 </span></pre></body>
 </html>
