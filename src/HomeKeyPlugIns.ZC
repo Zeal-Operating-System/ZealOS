@@ -135,6 +135,13 @@ Bool MyPutKey(I64 ch, I64 sc)
 					AutoComplete;
 				return TRUE;
 
+			case 'g':
+				if (sc & SCF_KEY_DESC)
+					KeyDescSet("Cmd /WinTileGrid");
+				else
+					WinTileGrid;
+				return TRUE;
+
 			case 'h':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Cmd /WinTileHorz");

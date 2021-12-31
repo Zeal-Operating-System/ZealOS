@@ -495,7 +495,7 @@ public U0 WinTileHorz()
 				c = 1;
 			else if (c > 4)
 				c = 4;
-			vert_size = (TEXT_ROWS -1) / c;
+			vert_size = (TEXT_ROWS - 1) / c;
 
 			WinHorz(1 - no_border, TEXT_COLS - 2 + no_border, task);
 			WinVert((i & 3) * vert_size + 2 - no_border, (i & 3 + 1) * vert_size + no_border, task);
@@ -556,6 +556,57 @@ public U0 WinTileVert()
 	WinHorz(last_task->win_left, TEXT_COLS - 2, last_task);
 	POPFD
 }
+
+public U0 WinTileGrid()
+{//Tile windows in a grid.
+	CTask	*task, *last_task = Fs;
+	I64		 count, c, i, j, horz_size, vert_size, no_border;
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	task = sys_winmgr_task;
+	count = 0;
+	do
+	{
+		if (!Bt(&task->win_inhibit, WIf_SELF_FOCUS))
+			count++;
+		task = task->last_task;
+	}
+	while (task != sys_winmgr_task);
+
+	task = sys_winmgr_task;
+	i = 0;
+	do
+	{
+		if (!Bt(&task->win_inhibit, WIf_SELF_FOCUS))
+		{
+			no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+
+			c = 1 + i % 2;
+			vert_size = (TEXT_ROWS - 1) / c;
+			horz_size = TEXT_COLS / c;
+
+			j = i % 4;
+			if (j < 2)		// top half of screen
+				WinVert(2 - no_border, TEXT_ROWS / 2 - 1 + no_border, task);
+			else			// bottom half of screen
+				WinVert(TEXT_ROWS / 2 + 1 - no_border, TEXT_ROWS - 2 + no_border, task);
+
+			if (j % 2 == 0)	// left half of screen
+				WinHorz(1 - no_border, TEXT_COLS / 2 - 1 + no_border, task); 
+			else			// right half of screen
+				WinHorz(TEXT_COLS / 2 + 1 - no_border, TEXT_COLS - 2 + no_border, task);
+
+			last_task = task;
+			i++;
+		}
+		task = task->last_task;
+	}
+	while (task != sys_winmgr_task);
+
+	POPFD
+}
+
 
 public U0 WinMax(CTask *task = NULL)
 {//Maximize task's window

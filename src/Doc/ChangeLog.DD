@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----12/30/21 22:08:17----$IV,0$
+* Raised version number to 1.08.
+* Implemented $LK+PU,"WinTileGrid",A="MN:WinTileGrid"$.
+
 $IV,1$----12/30/21 17:12:01----$IV,0$
 * Added $LK+PU,"LexDemo",A="FI:::/Demo/Lectures/LexDemo.ZC"$.
 
