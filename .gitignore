@@ -1,4 +1,5 @@
 *.BIN*
 *.MAP
-Boot/
+src/Boot/
+docs/Boot/
 ZealOS-*.iso
