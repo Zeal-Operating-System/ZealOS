@@ -304,6 +304,8 @@ I64 TCPSendFlags(CTCPSocket *tcp_socket, U8 flags)
 			NetErr("TCP SEND FLAGS: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
+
+	return 0;
 }
 
 I64 TCPSendData(CTCPSocket *tcp_socket, U8 flags, U8 *data, I64 length)
