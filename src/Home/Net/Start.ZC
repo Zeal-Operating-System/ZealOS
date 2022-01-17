@@ -2,6 +2,7 @@
 Cd(__DIR__);;
 #include "Load"
 I64 retries = 5;
+NetConfigure;
 while (ipv4_globals.local_ip == 0 && retries--)  // local_ip is set if NetConfigure is successful
 {
 	"\nNetConfigure unsuccessful. Retrying...\n";
