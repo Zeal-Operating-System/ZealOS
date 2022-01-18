@@ -1,4 +1,11 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----01/18/22 00:35:45----$IV,0$
+* Raised version number to 1.09.
+* Integrated HolyMath into OS (from https://github.com/TempleProgramming/HolyMath).
+	- Created new folder System/Math/, moved $LK+PU,"Math",A="FI:::/System/Math/Math.ZC"$ and $LK+PU,"MathODE",A="FI:::/System/Math/MathODE.ZC"$ there.
+	- Added HolyMath files to System/Math/.
+	- Changed $LK+PU,"MakeSystem",A="FF:::/System/MakeSystem.ZC,Math/MakeMath"$ to #include $LK+PU,"Math/MakeMath",A="FI:::/System/Math/MakeMath.ZC"$.
+
 $IV,1$----12/30/21 22:08:17----$IV,0$
 * Raised version number to 1.08.
 * Implemented $LK+PU,"WinTileGrid",A="MN:WinTileGrid"$.

@@ -1,9 +1,8 @@
 Cd(__DIR__);;
 #include "Externs"
-#include "Math"
 #include "Training"
 #include "Memory"
-#include "MathODE"
+#include "Math/MakeMath"
 #include "Gr/MakeGr"
 #include "Sound"
 #include "BlkDev/MakeZBlkDev"
