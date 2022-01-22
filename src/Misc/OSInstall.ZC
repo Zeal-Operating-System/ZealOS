@@ -10,7 +10,7 @@ CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 	return NULL;
 }
 
-U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 *_df_flags)
+U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 *_df_flags, Bool auto)
 {
 	CDirEntry	*tmpde;
 	U8			*new;
@@ -29,17 +29,21 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 		else
 		{
 			if (tmpde1->attr & RS_ATTR_DIR)
-				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _fuf_flags, _df_flags);
+				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _fuf_flags, _df_flags, auto);
 			else
 			{
 				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) {//slop
 					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
-					"$$LTGREEN$$%s$$FG$$", tmpde1->full_name;
-					'\n';
+					"$$LTGREEN$$%s$$FG$$\n", tmpde1->full_name;
 					if (Bt(_fuf_flags, FUf_DIFF))
 					{
 						if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
-							Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
+						{
+							if (!auto)
+								Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
+							else
+								Copy(tmpde1->full_name, tmpde->full_name);
+						}
 					}
 				}
 			}
@@ -50,7 +54,7 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 
 U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *fu_flags=NULL)
 { // See $LK+PU,"Merge",A="FF:::/System/Utils/Merge.ZC,public U0 Merge"$.
-	I64			 df_flags = 0, fuf_flags = 0;
+	I64			 df_flags = 0, fuf_flags = 0, ch;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r");
@@ -61,21 +65,33 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	tmpde1 = FilesFind(src_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	tmpde2 = FilesFind(dst_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	fuf_flags &= FUF_DIFF;
-	OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags);
+
+	"\n\nManual or Automatic Upgrade? (M/A): ";
+	do
+		ch = ToUpper(CharGet(, FALSE));
+	while (ch != 'M' && ch != 'A');
+	if (ch == 'M')
+	{
+		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
+				"$$LTRED$$FILE1$$FG$$ is from existing install.");
+		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, FALSE);
+	}
+	else
+		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, TRUE);
+
 	DirTreeDel(tmpde1);
 	DirTreeDel(tmpde2);
 }
-
 
 U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 {
 	U8 *dst = MStrPrint("%C:/", dst_drv);
 	U8 *src = MStrPrint("%C:/", src_drv);
 
-	CopyTree(src, "B:/");
-	OSFilesMerge("B:/", dst, "+d");
-	"Format %C:/ ? ", dst_drv;
-	Format(dst_drv);
+	CopyTree(dst, "B:/");
+	Copy(MStrPrint("%C:/Misc/Bible.TXT", src_drv), "B:/Misc/Bible.TXT");
+	Copy(MStrPrint("%C:/Misc/Clementine.TXT", src_drv), "B:/Misc/Clementine.TXT");
+	OSFilesMerge("B:/", src, "+d");
 	CopyTree("B:/", dst);
 }
 
@@ -129,9 +145,6 @@ U0 OSUpgrade()
 
 	'\n';
 
-	PopUpOk("\n$$LTRED$$FILE1$$FG$$ is new changes.\n"
-			"$$LTGREEN$$FILE2$$FG$$ is from existing install.\n\n"
-			"You can hold $$GREEN$$SPACE$$FG$$ down to just merge everything.");
 	OSMerge(drv_let); // src_drv needed?
 
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
@@ -213,8 +226,6 @@ U0 VMInstallWiz()
 	WinVert(task->win_bottom + 3, Fs->win_bottom);
 	WinToTop(Fs);
 
-
-	////////////////////////////////////
 	SATARep;
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
@@ -247,8 +258,6 @@ U0 VMInstallWiz()
 		VMInstallDrive(task, 'D', ata_port, atapi_port);
 		BootMHDIns('C');
 	}
-
-	////////////////////////////////////
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
@@ -372,10 +381,7 @@ Bool DoInstall(Bool prompt_reboot)
 		while (ch != 'U' && ch != 'I');
 
 		if (ch == 'U')
-		{
 			OSUpgrade;
-			prompt_reboot = FALSE;
-		}
 		else
 			VMInstallWiz();
 
@@ -402,7 +408,6 @@ Bool DoInstall(Bool prompt_reboot)
 			else
 			{
 				OSUpgrade;
-				prompt_reboot = FALSE;
 				res = TRUE;
 			}
 		}
