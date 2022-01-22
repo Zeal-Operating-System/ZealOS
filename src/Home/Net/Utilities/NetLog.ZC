@@ -9,6 +9,12 @@ U0 NetLogTask(I64)
 	}
 }
 
+U0 NetLogSave()
+{
+	StrCopy(net_log_task->put_doc->filename.name, "::/Home/Net/Log.DD");
+	DocWrite(net_log_task->put_doc);
+}
+
 U0 NetLogInit()
 {
 	net_log_task = Spawn(&ServerCmdLine, NULL, "Network Log");
@@ -18,12 +24,6 @@ U0 NetLogInit()
 	net_log_task->border_attr	= DKGRAY << 4 + LTGRAY;
 	net_log_task->text_attr		= WHITE  << 4 + LTGRAY;
 	DocClear(net_log_task->border_doc, TRUE);
-
-/*
-	if (Fs == sys_task)
-		WinFocus(sys_task->next_task);
-	else
-		WinFocus;*/
 
 	WinHorz(TEXT_COLS / 3, 2 * TEXT_COLS / 3, net_log_task);
 	WinVert(2 * TEXT_ROWS / 3, 5 * TEXT_ROWS / 6, net_log_task);
