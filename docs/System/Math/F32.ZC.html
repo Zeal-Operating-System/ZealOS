@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.09">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>
+<a name="l2"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cFB>F64_QUADRANT_CONSTANT_ARRAY</span><span class=cF0>[</span><span class=cFE>2</span><span class=cF0>] = {</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>pi</span><span class=cF0>};
+<a name="l3"></a>
+<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1</span><span class=cF0>                   </span><span class=cFE>0x3FF0000000000000</span><span class=cF0>
+<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_2_FACTORIAL</span><span class=cF0>  </span><span class=cFE>0x3FE0000000000000</span><span class=cF0>  </span><span class=cF2>// 1/2!</span><span class=cF0>
+<a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_4_FACTORIAL</span><span class=cF0>  </span><span class=cFE>0x3FA5555555555555</span><span class=cF0>  </span><span class=cF2>// 1/4!</span><span class=cF0>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_6_FACTORIAL</span><span class=cF0>  </span><span class=cFE>0x3F56C16C16C16C17</span><span class=cF0>  </span><span class=cF2>// 1/6!</span><span class=cF0>
+<a name="l8"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_8_FACTORIAL</span><span class=cF0>  </span><span class=cFE>0x3EFA01A01A01A01A</span><span class=cF0>  </span><span class=cF2>// 1/8!</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_10_FACTORIAL</span><span class=cF0> </span><span class=cFE>0x3E927E4FB7789F5C</span><span class=cF0>  </span><span class=cF2>// 1/10!</span><span class=cF0>
+<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_12_FACTORIAL</span><span class=cF0> </span><span class=cFE>0x3E21EED8EFF8D898</span><span class=cF0>  </span><span class=cF2>// 1/12!</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_1_OVER_14_FACTORIAL</span><span class=cF0> </span><span class=cFE>0x3DA93974A8C07C9D</span><span class=cF0>  </span><span class=cF2>// 1/14!</span><span class=cF0>
+<a name="l12"></a>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_2_OVER_PI</span><span class=cF0>   </span><span class=cFE>0x3FE45F306DC9C883</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_PI_OVER_2</span><span class=cF0>   </span><span class=cFE>0x3FF921FB54442D18</span><span class=cF0>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF1>asm</span><span class=cF0>
+<a name="l17"></a>{
+<a name="l18"></a></span><span class=cFD>_F32_COS</span><span class=cF0>::
+<a name="l19"></a>    </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBX</span><span class=cF0>
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>CVTSS2SD</span><span class=cF0>    </span><span class=cFC>XMM0</span><span class=cF0>, </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]</span><span class=cF2>//XMM0: theta</span><span class=cF0>
+<a name="l24"></a>
+<a name="l25"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l26"></a>    </span><span class=cF2>I64 quadrant = theta * (2.0 / pi);</span><span class=cF0>
+<a name="l27"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l28"></a>
+<a name="l29"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_2_OVER_PI</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: 2.0 / Pi</span><span class=cF0>
+<a name="l31"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: (2.0 / pi) * theta</span><span class=cF0>
+<a name="l32"></a>    </span><span class=cF1>CVTSD2SI</span><span class=cF0>    </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFC>XMM1</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : quadrant = (I64) ((2.0 / pi) * theta)</span><span class=cF0>
+<a name="l33"></a>
+<a name="l34"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l35"></a>    </span><span class=cF2>theta = theta - (F32) quadrant * (pi / 2.0);</span><span class=cF0>
+<a name="l36"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l37"></a>
+<a name="l38"></a>    </span><span class=cF1>CVTSI2SD</span><span class=cF0>    </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>RBX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: (F32) quadrant</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_PI_OVER_2</span><span class=cF0>
+<a name="l40"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: pi / 2.0</span><span class=cF0>
+<a name="l41"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>XMM1</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (pi / 2.0) * (F32) quadrant</span><span class=cF0>
+<a name="l42"></a>    </span><span class=cF1>SUBSD</span><span class=cF0>       </span><span class=cFC>XMM0</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM0: theta = theta - ((pi / 2.0) * (F32) quadrant)</span><span class=cF0>
+<a name="l43"></a>
+<a name="l44"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l45"></a>    </span><span class=cF2>quadrant += 1;</span><span class=cF0>
+<a name="l46"></a>    </span><span class=cF2>theta = gTrigQuadrantConstants[(quadrant &gt;&gt; 1) &amp; 1] - theta;</span><span class=cF0>
+<a name="l47"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l48"></a>
+<a name="l49"></a>    </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>             </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : quadrant += 1</span><span class=cF0>
+<a name="l50"></a>    </span><span class=cF1>SHR</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>          </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : quadrant &gt;&gt; 1</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF1>AND</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>          </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : (quadrant &gt;&gt; 1) &amp; 1</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF1>SHL</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>          </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : ((quadrant &gt;&gt; 1) &amp; 1) * sizeof(F64)</span><span class=cF0>
+<a name="l53"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, &amp;</span><span class=cFB>F64_QUADRANT_CONSTANT_ARRAY</span><span class=cF0>
+<a name="l54"></a>    </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>        </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>RBX : constants + ((quadrant &gt;&gt; 1) &amp; 1)</span><span class=cF0>
+<a name="l55"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM1</span><span class=cF0>, [</span><span class=cFC>RBX</span><span class=cF0>]     </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: constants[(quadrant &gt;&gt; 1) &amp; 1]</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF1>SUBSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: theta = constants[(quadrant &gt;&gt; 1) &amp; 1] - theta</span><span class=cF0>
+<a name="l57"></a>
+<a name="l58"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l59"></a>    </span><span class=cF2>theta2 = -(theta * theta);</span><span class=cF0>
+<a name="l60"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l61"></a>
+<a name="l62"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM1</span><span class=cF0>      </span><span class=cF2>// </span><span class=cF0> </span><span class=cF2>XMM1: theta * theta</span><span class=cF0>
+<a name="l63"></a>    </span><span class=cF1>XORPS</span><span class=cF0>       </span><span class=cFC>XMM0</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM0: {0.0, 0.0}</span><span class=cF0>
+<a name="l64"></a>    </span><span class=cF1>SUBSD</span><span class=cF0>       </span><span class=cFC>XMM0</span><span class=cF0>, </span><span class=cFC>XMM1</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM0: theta2 = -(theta * theta)</span><span class=cF0>
+<a name="l65"></a>
+<a name="l66"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l67"></a>    </span><span class=cF2>F64 r = (1/14!) * theta2;</span><span class=cF0>
+<a name="l68"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_14_FACTORIAL</span><span class=cF0>
+<a name="l71"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l72"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>
+<a name="l73"></a>
+<a name="l74"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l75"></a>    </span><span class=cF2>r += (1/n!);</span><span class=cF0>
+<a name="l76"></a>    </span><span class=cF2>r *= theta2;</span><span class=cF0>
+<a name="l77"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l78"></a>
+<a name="l79"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_12_FACTORIAL</span><span class=cF0>
+<a name="l80"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/6!)</span><span class=cF0>
+<a name="l81"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/6!)</span><span class=cF0>
+<a name="l82"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_10_FACTORIAL</span><span class=cF0>
+<a name="l85"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/4!)</span><span class=cF0>
+<a name="l86"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/4!)</span><span class=cF0>
+<a name="l87"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l88"></a>
+<a name="l89"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_8_FACTORIAL</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/2!)</span><span class=cF0>
+<a name="l91"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/2!)</span><span class=cF0>
+<a name="l92"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l93"></a>
+<a name="l94"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_6_FACTORIAL</span><span class=cF0>
+<a name="l95"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/2!)</span><span class=cF0>
+<a name="l96"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/2!)</span><span class=cF0>
+<a name="l97"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l98"></a>
+<a name="l99"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_4_FACTORIAL</span><span class=cF0>
+<a name="l100"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/2!)</span><span class=cF0>
+<a name="l101"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/2!)</span><span class=cF0>
+<a name="l102"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l103"></a>
+<a name="l104"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1_OVER_2_FACTORIAL</span><span class=cF0>
+<a name="l105"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: (1/2!)</span><span class=cF0>
+<a name="l106"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += (1/2!)</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF1>MULSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r *= theta</span><span class=cF0>
+<a name="l108"></a>
+<a name="l109"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l110"></a>    </span><span class=cF2>return (F32) (r + 1.0)</span><span class=cF0>
+<a name="l111"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l112"></a>
+<a name="l113"></a>    </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>F64_1</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>XMM2</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>       </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM2: 1.0</span><span class=cF0>
+<a name="l115"></a>    </span><span class=cF1>ADDSD</span><span class=cF0>       </span><span class=cFC>XMM1</span><span class=cF0>, </span><span class=cFC>XMM2</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM1: r += 1.0</span><span class=cF0>
+<a name="l116"></a>    </span><span class=cF1>CVTSD2SS</span><span class=cF0>    </span><span class=cFC>XMM0</span><span class=cF0>, </span><span class=cFC>XMM1</span><span class=cF0>      </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>XMM0: (F32) r</span><span class=cF0>
+<a name="l117"></a>    </span><span class=cF1>MOVQ</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>XMM0</span><span class=cF0>
+<a name="l118"></a>
+<a name="l119"></a>    </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>
+<a name="l120"></a>    </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>
+<a name="l121"></a>    </span><span class=cF1>RET1</span><span class=cF0>        </span><span class=cFE>8</span><span class=cF0>
+<a name="l122"></a>}
+<a name="l123"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l124"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l125"></a>    </span><span class=cF2>@brief Calculate single precision cosine.</span><span class=cF0>
+<a name="l126"></a>
+<a name="l127"></a>    </span><span class=cF2>Note that it isn't correct for all values of theta yet.</span><span class=cF0>
+<a name="l128"></a>
+<a name="l129"></a>    </span><span class=cF2>Based on the paper:</span><span class=cF0>
+<a name="l130"></a>    </span><span class=cF2>Fast Trigonometric Functions using Intel's SSE2 Instructions. 2003.</span><span class=cF0>
+<a name="l131"></a>    </span><span class=cF2>L. Nyland, M. Snyder </span><span class=cF0>
+<a name="l132"></a>
+<a name="l133"></a>    </span><span class=cF2>@param[in] theta</span><span class=cF0>    </span><span class=cF2>Angle in radians.</span><span class=cF0>
+<a name="l134"></a>    </span><span class=cF2>@return</span><span class=cF0>             </span><span class=cF2>sin(theta).</span><span class=cF0>
+<a name="l135"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l136"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>_F32_COS</span><span class=cF0> </span><span class=cF9>F32</span><span class=cF0> </span><span class=cF5>CosF32</span><span class=cF0>(</span><span class=cF9>F32</span><span class=cF0> theta);</span></pre></body>
+</html>

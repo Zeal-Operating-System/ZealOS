@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.08">
+<meta name="generator" content="ZealOS V1.09">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -28,23 +28,22 @@ body {background-color:#1f1f1f;}
 <a name="l1"></a><span class=cF0>
 <a name="l2"></a></span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
 <a name="l3"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;Load&quot;</span><span class=cF0>
-<a name="l4"></a>NetConfigure;
-<a name="l5"></a>
-<a name="l6"></a></span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0> != </span><span class=cFB>sys_task</span><span class=cF0>)
+<a name="l4"></a></span><span class=cF9>I64</span><span class=cF0> retries = </span><span class=cFE>5</span><span class=cF0>;
+<a name="l5"></a>NetConfigure;
+<a name="l6"></a></span><span class=cF1>while</span><span class=cF0> (ipv4_globals.local_ip == </span><span class=cFE>0</span><span class=cF0> &amp;&amp; retries--)  </span><span class=cF2>// local_ip is set if NetConfigure is successful</span><span class=cF0>
 <a name="l7"></a>{
-<a name="l8"></a>    </span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip != </span><span class=cFE>0</span><span class=cF0>) </span><span class=cF2>// is set if NetConfigure is successful</span><span class=cF0>
-<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l10"></a>        NetRep;
-<a name="l11"></a>
-<a name="l12"></a>        </span><span class=cF6>&quot;\nNow run one of the </span><span class=cF9><u>Tests</u></span><span class=cF6> or </span><span class=cF9><u>Programs</u></span><span class=cF6>.\n&quot;</span><span class=cF0>;
-<a name="l13"></a>
-<a name="l14"></a>        </span><span class=cF6>&quot;\nIf a test crashes to Debug, try typing G2;\n\n&quot;</span><span class=cF0>;
-<a name="l15"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l16"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l17"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF6>&quot;\nNetConfigure unsuccessful. See Network Log for details.\n\n&quot;</span><span class=cF0>;
-<a name="l19"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l20"></a>
-<a name="l21"></a>}
+<a name="l8"></a>    </span><span class=cF6>&quot;\nNetConfigure unsuccessful. Retrying...\n&quot;</span><span class=cF0>;
+<a name="l9"></a>    NetConfigure;
+<a name="l10"></a>}
+<a name="l11"></a></span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l12"></a>    </span><span class=cF6>&quot;\nNetConfigure unsuccessful. See Network Log for details.\n\n&quot;</span><span class=cF0>;
+<a name="l13"></a></span><span class=cF1>else</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF6>&quot;\nNetConfigure successful!\n\n&quot;</span><span class=cF0>;
+<a name="l15"></a>NetRep;
+<a name="l16"></a></span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip != </span><span class=cFE>0</span><span class=cF0> &amp;&amp; </span><span class=cF5>Fs</span><span class=cF0> != </span><span class=cFB>sys_task</span><span class=cF0>)
+<a name="l17"></a>{
+<a name="l18"></a>    </span><span class=cF6>&quot;\nNow run one of the </span><span class=cF9><u>Programs</u></span><span class=cF6>.\n&quot;</span><span class=cF0>;
+<a name="l19"></a>    </span><span class=cF6>&quot;\nIf anything crashes to Debug, try typing G2;\n\n&quot;</span><span class=cF0>;
+<a name="l20"></a>}
 </span></pre></body>
 </html>

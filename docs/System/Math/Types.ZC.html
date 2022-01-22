@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.09">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/**</span><span class=cF0>
+<a name="l2"></a>    </span><span class=cF2>@defgroup Math Matrix Math</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF2>@brief SSE accelerated matrix math.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l7"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF2>@brief Integer 2D bounding box.</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l10"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CBoundingBox2D</span><span class=cF0>
+<a name="l11"></a>{
+<a name="l12"></a>    </span><span class=cF9>I32</span><span class=cF0> x0, y0, x1, y1;
+<a name="l13"></a>};
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l17"></a>    </span><span class=cF2>@brief Single-precision float.</span><span class=cF0>
+<a name="l18"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l19"></a></span><span class=cF9>I32</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>F32</span><span class=cF0> {};
+<a name="l20"></a>
+<a name="l21"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l22"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l23"></a>    </span><span class=cF2>@brief Single-precision floating point 2D vector.</span><span class=cF0>
+<a name="l24"></a>
+<a name="l25"></a>    </span><span class=cF2>Must be kept on 16-byte alignment in memory.</span><span class=cF0>
+<a name="l26"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l27"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CVector2D</span><span class=cF0>
+<a name="l28"></a>{
+<a name="l29"></a>    </span><span class=cF9>I32</span><span class=cF0> x, y, z, w;
+<a name="l30"></a>};
+<a name="l31"></a>
+<a name="l32"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l34"></a>    </span><span class=cF2>@brief Single-precision floating point 3D vector.</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a>    </span><span class=cF2>Must be kept on 16-byte alignment in memory.</span><span class=cF0>
+<a name="l37"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l38"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CVector3D</span><span class=cF0>
+<a name="l39"></a>{
+<a name="l40"></a>    </span><span class=cF9>I32</span><span class=cF0> x, y, z, w;
+<a name="l41"></a>};
+<a name="l42"></a>
+<a name="l43"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l44"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l45"></a>    </span><span class=cF2>@brief Single-precision floating point 4D vector.</span><span class=cF0>
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF2>Must be kept on 16-byte alignment in memory.</span><span class=cF0>
+<a name="l48"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l49"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CVector4D</span><span class=cF0>
+<a name="l50"></a>{
+<a name="l51"></a>    </span><span class=cF9>I32</span><span class=cF0> x, y, z, w;
+<a name="l52"></a>};
+<a name="l53"></a>
+<a name="l54"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l55"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF2>@brief Single-precision floating point 4x4 matrix.</span><span class=cF0>
+<a name="l57"></a>
+<a name="l58"></a>    </span><span class=cF2>Stored in column-major. Must be kept on 16 byte alignment in memory.</span><span class=cF0>
+<a name="l59"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l60"></a></span><span class=cF1>union</span><span class=cF0> </span><span class=cF9>CMatrix4D</span><span class=cF0>
+<a name="l61"></a>{
+<a name="l62"></a>    </span><span class=cF9>I32</span><span class=cF0> e[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l63"></a>    </span><span class=cF9>CVector4D</span><span class=cF0> vec[</span><span class=cFE>4</span><span class=cF0>];
+<a name="l64"></a>};
+<a name="l65"></a>
+<a name="l66"></a></span><span class=cF2>// Commonly used constants</span><span class=cF0>
+<a name="l67"></a>
+<a name="l68"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_NEGATE_MASK</span><span class=cF0> </span><span class=cFE>0x80000000</span><span class=cF0>  </span><span class=cF2>// Xor (^) with F32 to negate</span><span class=cF0>
+<a name="l69"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_ZERO</span><span class=cF0>        </span><span class=cFE>0x00000000</span><span class=cF0>
+<a name="l70"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_ONE</span><span class=cF0>         </span><span class=cFE>0x3F800000</span><span class=cF0>
+<a name="l71"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_PI</span><span class=cF0>          </span><span class=cFE>0x40490FDB</span><span class=cF0>
+<a name="l72"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_PI_OVER_180</span><span class=cF0> </span><span class=cFE>0x3C8EFA35</span><span class=cF0>
+<a name="l73"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_180_OVER_PI</span><span class=cF0> </span><span class=cFE>0x42652EE1</span><span class=cF0>
+<a name="l74"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_PI_OVER_2</span><span class=cF0>   </span><span class=cFE>0x3FC90FDB</span><span class=cF0>  </span><span class=cF2>// Pi / 2</span><span class=cF0>
+<a name="l75"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F32_2_OVER_PI</span><span class=cF0>   </span><span class=cFE>0x3F22F983</span><span class=cF0>  </span><span class=cF2>// 2 / Pi</span><span class=cF0>
+<a name="l76"></a>
+<a name="l77"></a></span><span class=cF2>// Indexes into CMatrix4D element array (CMatrix4D.e[16]).</span><span class=cF0>
+<a name="l78"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_00</span><span class=cF0>         </span><span class=cFE>0</span><span class=cF0>
+<a name="l79"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_01</span><span class=cF0>         </span><span class=cFE>4</span><span class=cF0>
+<a name="l80"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_02</span><span class=cF0>         </span><span class=cFE>8</span><span class=cF0>
+<a name="l81"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_03</span><span class=cF0>         </span><span class=cFE>12</span><span class=cF0>
+<a name="l82"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_10</span><span class=cF0>         </span><span class=cFE>1</span><span class=cF0>
+<a name="l83"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_11</span><span class=cF0>         </span><span class=cFE>5</span><span class=cF0>
+<a name="l84"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_12</span><span class=cF0>         </span><span class=cFE>9</span><span class=cF0>
+<a name="l85"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_13</span><span class=cF0>         </span><span class=cFE>13</span><span class=cF0>
+<a name="l86"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_20</span><span class=cF0>         </span><span class=cFE>2</span><span class=cF0>
+<a name="l87"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_21</span><span class=cF0>         </span><span class=cFE>6</span><span class=cF0>
+<a name="l88"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_22</span><span class=cF0>         </span><span class=cFE>10</span><span class=cF0>
+<a name="l89"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_23</span><span class=cF0>         </span><span class=cFE>14</span><span class=cF0>
+<a name="l90"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_30</span><span class=cF0>         </span><span class=cFE>3</span><span class=cF0>
+<a name="l91"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_31</span><span class=cF0>         </span><span class=cFE>7</span><span class=cF0>
+<a name="l92"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_32</span><span class=cF0>         </span><span class=cFE>11</span><span class=cF0>
+<a name="l93"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MAT4_33</span><span class=cF0>         </span><span class=cFE>15</span><span class=cF0>
+<a name="l94"></a>
+<a name="l95"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SSE_SIZE</span><span class=cF0>        </span><span class=cFE>4</span><span class=cF0>
+<a name="l96"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>AVX_SIZE</span><span class=cF0>        </span><span class=cFE>8</span><span class=cF0>
+<a name="l97"></a>
+<a name="l98"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>NDARRAY_I32</span><span class=cF0>     </span><span class=cFE>0</span><span class=cF0>
+<a name="l99"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>NDARRAY_I64</span><span class=cF0>     </span><span class=cFE>1</span><span class=cF0>
+<a name="l100"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>NDARRAY_F32</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0>
+<a name="l101"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>NDARRAY_F64</span><span class=cF0>     </span><span class=cFE>3</span><span class=cF0>
+<a name="l102"></a>
+<a name="l103"></a></span><span class=cF2>/**</span><span class=cF0>
+<a name="l104"></a>    </span><span class=cF2>@ingroup Math</span><span class=cF0>
+<a name="l105"></a>    </span><span class=cF2>@brief N-Dimensional array.</span><span class=cF0>
+<a name="l106"></a>
+<a name="l107"></a>    </span><span class=cF2>Array stored in column-major on 16 byte alignment in memory.</span><span class=cF0>
+<a name="l108"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l109"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CArray</span><span class=cF0>
+<a name="l110"></a>{
+<a name="l111"></a>    </span><span class=cF9>U16</span><span class=cF0> dims;       </span><span class=cF2>// Dimensions</span><span class=cF0>
+<a name="l112"></a>    </span><span class=cF9>U16</span><span class=cF0> type;       </span><span class=cF2>// See NDARRAY_ macros</span><span class=cF0>
+<a name="l113"></a>    </span><span class=cF9>U64</span><span class=cF0> *dimLens;   </span><span class=cF2>// Dimension lengths</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF9>U64</span><span class=cF0> size;       </span><span class=cF2>// Total elements</span><span class=cF0>
+<a name="l115"></a>    </span><span class=cF9>I32</span><span class=cF0> *I32Buf;
+<a name="l116"></a>    </span><span class=cF9>I64</span><span class=cF0> *I64Buf;
+<a name="l117"></a>    </span><span class=cF9>F32</span><span class=cF0> *F32Buf;
+<a name="l118"></a>    </span><span class=cF1>F64</span><span class=cF0> *F64Buf;
+<a name="l119"></a>};
+<a name="l120"></a>
+<a name="l121"></a></span><span class=cF9>CVector4D</span><span class=cF0> *</span><span class=cFB>gVec4Temp0</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CVector4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l122"></a></span><span class=cF9>CVector4D</span><span class=cF0> *</span><span class=cFB>gVec4Temp1</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CVector4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l123"></a></span><span class=cF9>CVector4D</span><span class=cF0> *</span><span class=cFB>gVec4Temp2</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CVector4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l124"></a></span><span class=cF9>CVector4D</span><span class=cF0> *</span><span class=cFB>gVec4Temp3</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CVector4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l125"></a>
+<a name="l126"></a></span><span class=cF9>CMatrix4D</span><span class=cF0> *</span><span class=cFB>gMat4Temp1</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMatrix4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l127"></a></span><span class=cF9>CMatrix4D</span><span class=cF0> *</span><span class=cFB>gMat4Temp2</span><span class=cF0> = </span><span class=cF5>MAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMatrix4D</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+</span></pre></body>
+</html>

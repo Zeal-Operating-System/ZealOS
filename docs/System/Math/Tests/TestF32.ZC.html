@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V1.09">
+<style type="text/css">
+body {background-color:#1f1f1f;}
+.cF0{color:#e3e3e3;background-color:#1f1f1f;}
+.cF1{color:#4f84a6;background-color:#1f1f1f;}
+.cF2{color:#73a255;background-color:#1f1f1f;}
+.cF3{color:#297582;background-color:#1f1f1f;}
+.cF4{color:#b34f4b;background-color:#1f1f1f;}
+.cF5{color:#8a52c3;background-color:#1f1f1f;}
+.cF6{color:#b7822f;background-color:#1f1f1f;}
+.cF7{color:#444444;background-color:#1f1f1f;}
+.cF8{color:#6d6d6d;background-color:#1f1f1f;}
+.cF9{color:#94bfde;background-color:#1f1f1f;}
+.cFA{color:#a1ce97;background-color:#1f1f1f;}
+.cFB{color:#6db4be;background-color:#1f1f1f;}
+.cFC{color:#e88e88;background-color:#1f1f1f;}
+.cFD{color:#ca94e8;background-color:#1f1f1f;}
+.cFE{color:#d4b475;background-color:#1f1f1f;}
+.cFF{color:#1f1f1f;background-color:#1f1f1f;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>
+<a name="l2"></a></span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>//-----------------------------------------------------------------------------</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>// CosF32</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>/* This test depends on the HolyGL library for graphing. */</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF9>F32</span><span class=cF0> q0 = </span><span class=cF5>CosF32</span><span class=cF0>(</span><span class=cF5>F64ToF32</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>785398</span><span class=cF7>)</span><span class=cF0>);
+<a name="l9"></a></span><span class=cF9>F32</span><span class=cF0> q1 = </span><span class=cF5>CosF32</span><span class=cF0>(</span><span class=cF5>F64ToF32</span><span class=cF7>(</span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>35619</span><span class=cF7>)</span><span class=cF0>);
+<a name="l10"></a></span><span class=cF9>F32</span><span class=cF0> q2 = </span><span class=cF5>CosF32</span><span class=cF0>(</span><span class=cF5>F64ToF32</span><span class=cF7>(</span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>92699</span><span class=cF7>)</span><span class=cF0>);
+<a name="l11"></a></span><span class=cF9>F32</span><span class=cF0> q3 = </span><span class=cF5>CosF32</span><span class=cF0>(</span><span class=cF5>F64ToF32</span><span class=cF7>(</span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>49779</span><span class=cF7>)</span><span class=cF0>);
+<a name="l12"></a></span><span class=cF6>&quot;Cos(45deg)  CosF32: %n | Cos: %n\n&quot;</span><span class=cF0>, </span><span class=cF5>F32ToF64</span><span class=cF0>(q0), </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>785398</span><span class=cF0>);
+<a name="l13"></a></span><span class=cF6>&quot;Cos(135deg) CosF32: %n | Cos: %n\n&quot;</span><span class=cF0>, </span><span class=cF5>F32ToF64</span><span class=cF0>(q1), </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>35619</span><span class=cF0>);
+<a name="l14"></a></span><span class=cF6>&quot;Cos(225deg) CosF32: %n | Cos: %n\n&quot;</span><span class=cF0>, </span><span class=cF5>F32ToF64</span><span class=cF0>(q2), </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>92699</span><span class=cF0>);
+<a name="l15"></a></span><span class=cF6>&quot;Cos(315deg) CosF32: %n | Cos: %n\n&quot;</span><span class=cF0>, </span><span class=cF5>F32ToF64</span><span class=cF0>(q3), </span><span class=cF5>Cos</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>49779</span><span class=cF0>);
+<a name="l16"></a>
+<a name="l17"></a>CGLTex2D graph;
+<a name="l18"></a>GLTex2DInit(&amp;graph, GL_TEX2D_RAW, </span><span class=cFE>600</span><span class=cF0>, </span><span class=cFE>512</span><span class=cF0>);
+<a name="l19"></a>GLTex2DColorFill(&amp;graph, </span><span class=cFE>0xFFFFFF</span><span class=cF0>);
+<a name="l20"></a>GLBindColorTarget(&amp;graph);
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF1>F64</span><span class=cF0> temp = (</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l23"></a>GLDrawLine(temp, </span><span class=cFE>0</span><span class=cF0>, temp, </span><span class=cFE>512</span><span class=cF0>, </span><span class=cFE>0x00FF00</span><span class=cF0>);
+<a name="l24"></a>
+<a name="l25"></a></span><span class=cF1>F64</span><span class=cF0> temp = (</span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l26"></a>GLDrawLine(temp, </span><span class=cFE>0</span><span class=cF0>, temp, </span><span class=cFE>512</span><span class=cF0>, </span><span class=cFE>0x00FF00</span><span class=cF0>);
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF1>F64</span><span class=cF0> temp = (</span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l29"></a>GLDrawLine(temp, </span><span class=cFE>0</span><span class=cF0>, temp, </span><span class=cFE>512</span><span class=cF0>, </span><span class=cFE>0x00FF00</span><span class=cF0>);
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l32"></a></span><span class=cF1>F64</span><span class=cF0> angle;
+<a name="l33"></a></span><span class=cF1>F64</span><span class=cF0> result;
+<a name="l34"></a></span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>600</span><span class=cF0>; i++)
+<a name="l35"></a>{
+<a name="l36"></a>    angle = i * </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>01</span><span class=cF0>;
+<a name="l37"></a>    
+<a name="l38"></a>    result = </span><span class=cF5>Cos</span><span class=cF0>(angle);
+<a name="l39"></a>    result *= -</span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l40"></a>    result += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l41"></a>    GLDrawPixel(i, result, </span><span class=cFE>0xFF0000</span><span class=cF0>);
+<a name="l42"></a>
+<a name="l43"></a>    result = </span><span class=cF5>F32ToF64</span><span class=cF0>(</span><span class=cF5>CosF32</span><span class=cF7>(</span><span class=cF5>F64ToF32</span><span class=cF0>(angle)</span><span class=cF7>)</span><span class=cF0>);
+<a name="l44"></a>    result *= -</span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l45"></a>    result += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l46"></a>    GLDrawPixel(i, result, </span><span class=cFE>0x0000FF</span><span class=cF0>);
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a></span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>CharScan</span><span class=cF7>()</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l50"></a>{
+<a name="l51"></a>    GLTex2DDebugDisp(&amp;graph, </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l52"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l53"></a>}
+<a name="l54"></a></span><span class=cF2>//-----------------------------------------------------------------------------</span></pre></body>
+</html>

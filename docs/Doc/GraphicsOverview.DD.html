@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V1.08">
+<meta name="generator" content="ZealOS V1.09">
 <style type="text/css">
 body {background-color:#1f1f1f;}
 .cF0{color:#e3e3e3;background-color:#1f1f1f;}
@@ -115,7 +115,7 @@ body {background-color:#1f1f1f;}
 <a name="l88"></a>routines, but not those with pens.
 <a name="l89"></a>
 <a name="l90"></a>* There is a mechanism built-in for generating motion based on differential equations, which allows realistic physics.  You 
-<a name="l91"></a>create an </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l281"><span class=cF4>CMathODE</span></a><span class=cF0> struct with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/MathODE.ZC.html#l31"><span class=cF4>ODENew</span></a><span class=cF0>(), passing it the num of variables in the state vect. For realistic physics, you usually 
+<a name="l91"></a>create an </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l281"><span class=cF4>CMathODE</span></a><span class=cF0> struct with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Math/MathODE.ZC.html#l31"><span class=cF4>ODENew</span></a><span class=cF0>(), passing it the num of variables in the state vect. For realistic physics, you usually 
 <a name="l92"></a>have 2 state variables for each dimension (for each mass) because motion is governed by F=mA which is a 2nd order equation.  
 <a name="l93"></a>The two states are pos and velocity and to solve these you need to supply the derivative of pos and velocity.   The derivative 
 <a name="l94"></a>of pos is usually simply the current velocity and the derivative of velocity is the acceleration (the sum of forces on a mass 
