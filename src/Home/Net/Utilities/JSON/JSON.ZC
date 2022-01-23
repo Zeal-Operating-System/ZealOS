@@ -9,7 +9,7 @@
 
 #define JSON_HASHTABLE_SIZE	1024
 
-#define HTT_JSON	0x00100 //identical to HTT_DICT_WORD
+#define HTT_JSON	0x00100 // identical to HTT_DICT_WORD
 
 class CJSONDataEntry:CQueue
 {
@@ -28,45 +28,37 @@ class CJSONDataHash:CHash
 	CJSONDataEntry	*data;
 };
 
-U8 **JSONGetKeys(CHashTable *table)
+U8 **JSONKeysGet(CHashTable *table)
 {
 	I64		  i, count = 0;
 	CHash	 *temp_hash;
 	U8		**keys;
 	I64		  key_index = 0;
 
-	for (i = 0; i <= table->mask; i++) //mask is table length 0-based
-		if (temp_hash = table->body[i]) //if temp_hash exists
+	for (i = 0; i <= table->mask; i++) // mask is table length 0-based
+		if (temp_hash = table->body[i]) // if temp_hash exists
 			count++;
 
 	keys = CAlloc(sizeof(U8*) * count); // alloc string list
 	for (i = 0; i <= table->mask; i++)
 		if (temp_hash = table->body[i])
 		{
-			keys[key_index] = StrNew(temp_hash->str);//add key string to list
+			keys[key_index] = StrNew(temp_hash->str); // add key string to list
 			key_index++;
 		}
 
 	return keys;
 }
 
-U0 JSONIndentLine(I64 indent)
-{
-	I64 i;
-//	for (i = 0; i < indent; i++) {"  ";}
-	for (i = 0; i < indent; i++) {"	";}
-
-}
-
 U0 JSONDataRep(CJSONDataEntry *data, I64 indent=0)
 {
-	U8				**keys;// = JSONGetKeys(data->hash_table);
+	U8				**keys;
 	I64				  index;
-	I64				  count;// = MSize(keys) / sizeof(U8*);
-	CJSONDataEntry	 *entry;// = data->list_data->next;//one after head.
+	I64				  count;
+	CJSONDataEntry	 *entry;
 	CJSONDataHash	 *temp_hash;
 
-	JSONIndentLine(indent);
+	"%h*c", indent, '\t';
 
 	switch (data->type)
 	{
@@ -96,50 +88,101 @@ U0 JSONDataRep(CJSONDataEntry *data, I64 indent=0)
 
 		case JSONT_ARRAY:
 			"Array:\n";
-			JSONIndentLine(indent);
+			"%h*c", indent, '\t';
 			"[\n";
-			entry = data->list_data->next;//one after head.
-			while (entry != data->list_data)//head ignored, stop on head.
+			entry = data->list_data->next; // one after head.
+			while (entry != data->list_data) // head ignored, stop on head.
 			{
 				JSONDataRep(entry, indent + 1); // recursive Rep on the list entry
 				entry = entry->next;
 			}
-			JSONIndentLine(indent);
+			"%h*c", indent, '\t';
 			"]\n";
 			break;
 
 		case JSONT_OBJ:
 			"Object.\n";
-			JSONIndentLine(indent);
+			"%h*c", indent, '\t';
 			"{\n";
 
-			keys = JSONGetKeys(data->hash_table);
+			keys = JSONKeysGet(data->hash_table);
 			count = MSize(keys) / sizeof(U8*);
 
 			for (index = 0; index < count; index++)
 			{
-				JSONIndentLine(indent);
+				"%h*c", indent, '\t';
 				"Key: %s\n", keys[index];
 				temp_hash = HashFind(keys[index], data->hash_table, HTT_JSON);
 				JSONDataRep(temp_hash->data, indent + 1);
 			}
-			JSONIndentLine(indent);
+			"%h*c", indent, '\t';
 			"}\n";
 			break;
 	}
 }
+
+CJSONDataEntry *JSONKeyValueGet(CJSONDataEntry *data, U8 *key)
+{
+	U8				**keys;
+	I64				  index;
+	I64				  count;
+
+	CJSONDataHash	 *temp_hash;
+
+	switch (data->type)
+	{
+		case JSONT_OBJ:
+			keys = JSONKeysGet(data->hash_table);
+			count = MSize(keys) / sizeof(U8*);
+
+			for (index = 0; index < count; index++)
+			{
+				temp_hash = HashFind(keys[index], data->hash_table, HTT_JSON);
+				if (!StrCompare(key, keys[index]) && temp_hash)
+					return temp_hash->data;
+			}
+			break;
+		default:
+			break;
+	}
+
+	return NULL;
+}
+
+CJSONDataEntry *JSONIndexValueGet(CJSONDataEntry *data, U64 list_index)
+{
+	CJSONDataEntry	*entry;
+	U64				 i = 0;
+
+	switch (data->type)
+	{
+		case JSONT_ARRAY:
+			entry = data->list_data->next; // one after head.
+			while (entry != data->list_data) // head ignored, stop on head.
+			{
+				if (i++ == list_index)
+					return entry;
+				entry = entry->next;
+			}
+			break;
+		default:
+			break;
+	}
+
+	return NULL;
+}
+
 
 CJSONDataEntry *JSONParse(CCompCtrl *cc)
 {
 	CJSONDataEntry	*result = CAlloc(sizeof(CJSONDataEntry));
 	I64				 tk, last_tk;
 	Bool			 is_done = FALSE;
-	CJSONDataEntry	*temp_entry;// = JSONParse(cc);
+	CJSONDataEntry	*temp_entry;
 	CJSONDataHash	*temp_hash = CAlloc(sizeof(CJSONDataHash));
 
 	while (tk = Lex(cc))
 	{
-//		ClassRep(cc);
 		switch (tk)
 		{
 
@@ -155,11 +198,6 @@ CJSONDataEntry *JSONParse(CCompCtrl *cc)
 			case TK_I64: //todo, LexExcept on 0x or 0b vals.
 				result->type	 = JSONT_INTEGER;
 				result->int_data = cc->cur_i64;
-
-//				LexPush(cc);
-//				"got hex val, token string is %s\n",cc->cur_str;
-//				ClassRep(cc);
-//				Break;
 
 				is_done = TRUE;
 				break;
@@ -200,12 +238,6 @@ CJSONDataEntry *JSONParse(CCompCtrl *cc)
 				QueueInit(result->list_data);
 
 lex_listitem:
-/*
-				CCompCtrl* temp_cc = NULL;
-				MemCopy(temp_cc, cc, CompCtrlSize(cc));
-				tk = Lex(temp_cc);
-//				CompCtrlDel(temp_cc);
-*/
 				last_tk = tk;
 				LexPush(cc);
 				tk = Lex(cc);
@@ -229,7 +261,6 @@ lex_listitem:
 
 lex_listdone:
 
-//				LexPopNoRestore(cc);
 				is_done = TRUE;
 				break;
 
@@ -238,7 +269,7 @@ lex_listdone:
 				result->hash_table	= HashTableNew(JSON_HASHTABLE_SIZE);
 
 lex_objkey:
-				//lex next. expect TK_STR. Make a temp_hash.
+				// lex next. expect TK_STR. Make a temp_hash.
 				last_tk = tk;
 				tk = Lex(cc);
 
@@ -253,33 +284,29 @@ lex_objkey:
 
 				temp_hash = CAlloc(sizeof(CJSONDataHash));
 
-				//set hash type and StrNew with cc->cur_str into hash str.
+				// set hash type and StrNew with cc->cur_str into hash str.
 				temp_hash->type = HTT_JSON;
 				temp_hash->str  = StrNew(cc->cur_str);
 
-				//lex next. expect ':'. 
+				// lex next. expect ':'. 
 				tk = Lex(cc);
 				if (tk != ':')
 					LexExcept(cc, "Expected ':' after Key String.");
 
-				//now expect JSONDataEntry-able value next.
-				//Recursive JSONParse into hash data member.
+				// now expect JSONDataEntry-able value next.
+				// Recursive JSONParse into hash data member.
 				temp_hash->data = JSONParse(cc);
 
-				//JSONParse leaves off on the last token. e.g. int, tk will
-				//still be TK_I64.
+				// JSONParse leaves off on the last token. e.g. int, tk will
+				// still be TK_I64.
 
-				//add hash to result hash_table.
+				// add hash to result hash_table.
 				HashAdd(temp_hash, result->hash_table);
-//				"Debugging.\nHash added with str:%s.\n",temp_hash->str;
-//				ClassRep(temp_hash->data);
 
-				//lex next. expect ',' or '}'.
+				// lex next. expect ',' or '}'.
 				tk = Lex(cc);
 				if (tk != ',' && tk != '}')
 					LexExcept(cc, "Expected ',' or '}' after Object Value.");
-				//if ',' ... Terry's parsing code would imply labels and gotos.
-				//i wonder if there's a better, less BASIC way.
 				if (tk == ',')
 					goto lex_objkey;
 lex_objdone:
@@ -295,13 +322,173 @@ lex_objdone:
 	return result;
 }
 
-U0 Test(U8 *filename)
+U0 JSONFileRep(U8 *filename)
 {
 	CCompCtrl		*cc		= CompCtrlNew(MStrPrint("#include \"%s\"", filename));
-	CJSONDataEntry	*result	= JSONParse(cc);
-
-	JSONDataRep(result);
+	CJSONDataEntry	*data	= JSONParse(cc);
+	JSONDataRep(data);
+	ClassRep((data = JSONKeyValueGet(data, "floats")));
+//	ClassRep((data = JSONIndexValueGet(data, 3)));
+	CompCtrlDel(cc);
 }
 
+
+
+
+"\n";
+class CTestClass
+{
+	CTestClass	*next, *last;
+	U8		 field1;
+	I64		 field2;
+	U8		*buffer;
+};
+
+CTestClass *head = CAlloc(sizeof(CTestClass));
+QueueInit(head); // works since CTestClass has next & last members 
+head->field1 = 2;
+head->field2 = 1234567890; // DONT DO THIS ONLY DOING FOR DEBUG REASONS
+
+CTestClass *test_class1 = CAlloc(sizeof(CTestClass));
+CTestClass *test_class2 = CAlloc(sizeof(CTestClass));
+CTestClass *test_class3 = CAlloc(sizeof(CTestClass));
+QueueInsertRev(test_class1, head);
+QueueInsertRev(test_class2, head);
+QueueInsertRev(test_class3, head);
+
+test_class1->field1 = 45;
+test_class1->field2 = 123;
+test_class1->buffer = MAlloc(1024);
+
+test_class2->field1 = 11;
+test_class2->field2 = -456;
+test_class2->buffer = MAlloc(1024);
+
+test_class3->field1 = 22;
+test_class3->field2 = 999;
+test_class3->buffer = MAlloc(1024);
+
+
+CTestClass *temp_test_class = head->next;
+
+while (temp_test_class != head)
+{
+	"test_class entry = field1:%d field2:%d\n", temp_test_class->field1, temp_test_class->field2;
+	temp_test_class = temp_test_class->next;
+}
+"\n\n";
+
+ClassRep(head);
+
+
+// WIP, TODO: FIX/REWRITE this method 
+U8 *JSONString(U8 *obj, U8 *class_name=lastclass, Bool is_base=FALSE, Bool is_list=FALSE,
+			   U8 *head=NULL)
+{ // convert some struct in memory to a JSON string. See $LK+PU,"ClassRep",A="MN:ClassRep2"$.
+	U8			*ptr, *temp_obj;
+	CMemberList *ml;
+	CHashClass	*tmpc, *tmpc2;
+	I64			 i, stars;
+
+	if (!(tmpc = HashFind(class_name, Fs->hash_table, HTG_ALL)))
+		return NULL;
+	if (!CheckPtr(obj) || !CheckPtr(obj(U8 *) + tmpc->size))
+		return NULL;
+
+	if (tmpc->base_class)
+		JSONString(obj, tmpc->base_class->str, TRUE);
+
+	ml = tmpc->member_list_and_root;
+
+	if (ml && !StrCompare(ml->str, "next") && !is_base)
+	{
+		"[";
+		is_list = TRUE;
+		tmpc2 = ml->member_class;
+		stars = tmpc2->ptr_stars_count;
+		tmpc2 = OptClassFwd(tmpc2);
+		tmpc2 -= tmpc2->ptr_stars_count;
+		ptr = obj + ml->offset;
+		temp_obj = *ptr(I64 *);
+		if (stars)
+		{
+			while (temp_obj != obj && temp_obj != NULL)
+			{
+				JSONString(temp_obj, tmpc2->str, TRUE);
+				temp_obj = *(temp_obj + ml->offset)(I64 *);
+				if (temp_obj != obj && temp_obj != NULL)
+					", ";
+			}
+		}
+		ml = NULL;
+//		ml = ml->next;
+//		if (ml && !StrCompare(ml->str, "last"))
+//			ml = ml->next;
+	}
+	else
+		"{";
+
+	while (ml)
+	{
+		tmpc2 = ml->member_class;
+		stars = tmpc2->ptr_stars_count;
+		tmpc2 = OptClassFwd(tmpc2);
+		tmpc2 -= tmpc2->ptr_stars_count;
+
+		ptr = obj + ml->offset;
+
+		"\"%s\":", ml->str;
+
+		switch (tmpc2->raw_type)
+		{
+			case RT_I0:
+			case RT_U0:
+				break;
+
+			case RT_I8:
+			case RT_U8:
+				"%d", *ptr++;
+				break;
+
+			case RT_I16:
+			case RT_U16:
+				"%d", *ptr(I16 *)++;
+				break;
+
+			case RT_I32:
+			case RT_U32:
+				"%d", *ptr(I32 *)++;
+				break;
+
+			case RT_I64: // RT_PTR
+			case RT_U64:
+				"%d", *ptr(I64 *)++;
+				break;
+
+			case RT_F64:
+				break;
+		}
+
+		ml = ml->next;
+		if (ml)
+			", ";
+	}
+
+	if (is_list && !is_base)
+		"]";
+	else
+		"}";
+
+	return NULL;
+}
+
+"\n\nRESULT OF JSONString(head):\n\n";
+JSONString(head);
+"\n\n";
+
+
+
+
+
 Cd(__DIR__);
-Test("JSON1.TXT");
+JSONFileRep("JSON1.TXT");
