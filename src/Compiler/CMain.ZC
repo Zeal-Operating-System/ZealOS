@@ -492,11 +492,11 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 }
 
 I64 Comp(U8 *filename, U8 *map_name=NULL, U8 *out_name=NULL, U8 mapfile_drive_let=0)
-{//AOT Compile CC or PRJ file a and output BIN file. Returns err_count.
+{//AOT Compile ZC or PRJ file and output ZXE file. Returns err_count.
 	U8					*ptr, *fbuf = NULL, *fbuf2 = NULL, *fbuf3 = NULL, *patch_table = MAlloc(0x20000);
 	CAOT				*tmpaot;
 	I64					 i, count, size = 0, error_count = 0, warning_count = 0, aot_U8s = 0;
-	CBinFile			*bfh;
+	CZXE				*zxe;
 	CAOTImportExport	*tmpie, *tmpie1;
 	CAOTAbsAddr			*tmpa, *tmpa1;
 	CAOTHeapGlobalRef	*tmphgr, *tmphgr1;
@@ -626,25 +626,25 @@ I64 Comp(U8 *filename, U8 *map_name=NULL, U8 *out_name=NULL, U8 mapfile_drive_le
 		MemSet(ptr, 0, 16);
 		i = ptr - patch_table;
 //Needs 16 ALIGN
-		size = (sizeof(CBinFile) + aot_U8s + i + 15) & -16;
-		bfh = MAlloc(size);
-		bfh->jmp = 0xEB + 256 * (sizeof(CBinFile) - 2);
-#assert sizeof(CBinFile) - 2 <= I8_MAX
-		bfh->reserved = 0;
-		bfh->bin_signature = BIN_SIGNATURE_VAL;
-		bfh->org = tmpaot->org;
-		bfh->module_align_bits = tmpaot->max_align_bits;
-		bfh->patch_table_offset = sizeof(CBinFile)+aot_U8s;
-		bfh->file_size = size;
-		MemCopy(bfh(U8 *) + sizeof(CBinFile), tmpaot->buf, aot_U8s);
-		MemCopy(bfh(U8 *) + sizeof(CBinFile) + aot_U8s, patch_table, size - aot_U8s - sizeof(CBinFile));
+		size = (sizeof(CZXE) + aot_U8s + i + 15) & -16;
+		zxe = MAlloc(size);
+		zxe->jmp = 0xEB + 256 * (sizeof(CZXE) - 2);
+#assert sizeof(CZXE) - 2 <= I8_MAX
+		zxe->reserved = 0;
+		zxe->signature = ZXE_SIGNATURE_VAL;
+		zxe->org = tmpaot->org;
+		zxe->module_align_bits = tmpaot->max_align_bits;
+		zxe->patch_table_offset = sizeof(CZXE) + aot_U8s;
+		zxe->file_size = size;
+		MemCopy(zxe(U8 *) + sizeof(CZXE), tmpaot->buf, aot_U8s);
+		MemCopy(zxe(U8 *) + sizeof(CZXE) + aot_U8s, patch_table, size - aot_U8s - sizeof(CZXE));
 		Free(fbuf2);
 		if (out_name)
-			fbuf2 = ExtDefault(out_name, "BIN");
+			fbuf2 = ExtDefault(out_name, "ZXE");
 		else
-			fbuf2 = ExtChange(fbuf, "BIN");
-		FileWrite(fbuf2, bfh, size);
-		Free(bfh);
+			fbuf2 = ExtChange(fbuf, "ZXE");
+		FileWrite(fbuf2, zxe, size);
+		Free(zxe);
 		Free(tmpaot->buf);
 		QueueDel(tmpaot);
 		Free(tmpaot);

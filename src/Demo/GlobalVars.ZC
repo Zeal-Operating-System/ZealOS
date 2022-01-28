@@ -42,7 +42,7 @@ point, but might res in odd differences, perhaps
 from the order things are evaluated.
 
 Data heap globals are good for AOT modules
-because they don't take-up room in the .BIN file.
+because they don't take-up room in the .ZXE file.
 */
 
 #ifjit

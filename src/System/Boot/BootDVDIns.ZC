@@ -6,9 +6,9 @@
 
 #help_index "Install"
 
-#define KERNEL_BIN_C				"Kernel.BIN.C"
+#define KERNEL_ZXE				"Kernel.ZXE"
 #define BOOT_DIR					"/Boot"
-#define BOOT_DIR_DVD_KERNEL_BIN_C	BOOT_DIR "/DVD" KERNEL_BIN_C
+#define BOOT_DIR_DVD_KERNEL_ZXE	BOOT_DIR "/DVD" KERNEL_ZXE
 
 U0 MakeAll()
 {
@@ -25,7 +25,7 @@ public U0 BootDVDIns(U8 drv_let=0)
 		if (!Drive(drv_let))
 			throw;
 		MakeAll;
-		Move("/Kernel/Kernel.BIN", BOOT_DIR_DVD_KERNEL_BIN_C);
+		Move("/Kernel/Kernel.ZXE", BOOT_DIR_DVD_KERNEL_ZXE);
 	}
 	catch
 	{

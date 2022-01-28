@@ -18,7 +18,7 @@ CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 port_num)
 I64 MountAHCIAuto()
 {//Try to mount hard drives and CD/DVD drives automatically. (Kernel.Config option).
 //It uses 'C' and 'T' as first drive letters or whatever you set
-//in config when compiling Kernel.BIN.
+//in config when compiling Kernel.ZXE.
 	CBlkDev		*bd		= Letter2BlkDev(':', FALSE);
 	I64			 res	= 0, i, ata_port = -1, atapi_port = -1;
 	CAHCIPort	*port;

@@ -205,58 +205,58 @@ U0 LoadPass2(U8 *src, U8 *module_base, I64)
 	}
 }
 
-CBinFile *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR)
-{//Load a .BIN file module into memory.
-//bfh_addr==INVALID_PTR means don't care what load address.
+CZXE *Load(U8 *filename, I64 ld_flags=0, CZXE *zxe_addr=INVALID_PTR)
+{//Load a .ZXE file module into memory.
+//zxe_addr==INVALID_PTR means don't care what load address.
 	U8			*fbuf, *module_base, *absname;
 	I64			 size, module_align, misalignment;
-	CBinFile	*bfh;
+	CZXE		*zxe;
 
-	fbuf = ExtDefault(filename, "BIN");
-	if (!(bfh = FileRead(fbuf, &size)))
+	fbuf = ExtDefault(filename, "ZXE");
+	if (!(zxe = FileRead(fbuf, &size)))
 	{
 		Free(fbuf);
 		return NULL;
 	}
 
 	//See $LK,"Patch Table Generation",A="FF:::/Compiler/CMain.ZC,IET_ABS_ADDR"$
-	module_align = 1 << bfh->module_align_bits;
-	if (!module_align || bfh->bin_signature != BIN_SIGNATURE_VAL)
+	module_align = 1 << zxe->module_align_bits;
+	if (!module_align || zxe->signature != ZXE_SIGNATURE_VAL)
 	{
-		Free(bfh);
+		Free(zxe);
 		Free(fbuf);
-		throw('BinModul');
+		throw('ZXEModul');
 	}
 
-	if (bfh_addr == INVALID_PTR)
+	if (zxe_addr == INVALID_PTR)
 	{
-		if (bfh->org == INVALID_PTR)
+		if (zxe->org == INVALID_PTR)
 		{
-			misalignment = module_align - sizeof(CBinFile);
+			misalignment = module_align - sizeof(CZXE);
 			if (misalignment < 0)
 				misalignment &= module_align - 1;
 			if (Fs->code_heap != Fs->data_heap)
 			{
 				if (module_align < 16)
 					module_align = 16;
-				bfh_addr = MAllocAligned(size, module_align, Fs->code_heap, misalignment);
+				zxe_addr = MAllocAligned(size, module_align, Fs->code_heap, misalignment);
 			}
 			else if (module_align > 8)
-				bfh_addr = MAllocAligned(size, module_align,, misalignment);
+				zxe_addr = MAllocAligned(size, module_align,, misalignment);
 			else
 			{//Less than 2Gig system memory
-				bfh_addr = bfh;
+				zxe_addr = zxe;
 				goto lo_skip; //File is already in code heap area, don't copy.
 			}
 		}
 		else
-			bfh_addr = bfh->org;
+			zxe_addr = zxe->org;
 	}
-	MemCopy(bfh_addr, bfh, size);
-	Free(bfh);
+	MemCopy(zxe_addr, zxe, size);
+	Free(zxe);
 
 	lo_skip:
-	module_base = bfh_addr(U8 *) + sizeof(CBinFile);
+	module_base = zxe_addr(U8 *) + sizeof(CZXE);
 
 	absname = FileNameAbs(fbuf);
 	Free(fbuf);
@@ -264,21 +264,21 @@ CBinFile *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR)
 
 	FileExtRemove(fbuf);
 	if (fbuf[1] == ':' && StrLen(fbuf) > 2)
-		HashGenericAdd(fbuf + 2, HTT_MODULE | HTF_PUBLIC, bfh_addr);
+		HashGenericAdd(fbuf + 2, HTT_MODULE | HTF_PUBLIC, zxe_addr);
 
-	LoadPass1(bfh_addr(U8 *) + bfh_addr->patch_table_offset, module_base, ld_flags);
+	LoadPass1(zxe_addr(U8 *) + zxe_addr->patch_table_offset, module_base, ld_flags);
 	if (!(ld_flags & LDF_JUST_LOAD))
-		LoadPass2(bfh_addr(U8 *) + bfh_addr->patch_table_offset, module_base, ld_flags);
+		LoadPass2(zxe_addr(U8 *) + zxe_addr->patch_table_offset, module_base, ld_flags);
 
 	Free(absname);
 	Free(fbuf);
 
-	return bfh_addr;
+	return zxe_addr;
 }
 
 U0 LoadKernel()
 {
-	HashGenericAdd(KERNEL_MODULE_NAME, HTT_MODULE | HTF_PUBLIC, mem_boot_base - sizeof(CBinFile));
+	HashGenericAdd(KERNEL_MODULE_NAME, HTT_MODULE | HTF_PUBLIC, mem_boot_base - sizeof(CZXE));
 
 	//Abs patches done here $LK,"CPatchTableAbsAddr",A="FF:::/Kernel/KStart32.ZC,CPatchTableAbsAddr"$.
 	LoadPass1(sys_boot_patch_table_base, mem_boot_base, LDF_NO_ABSS | LDF_SILENT);

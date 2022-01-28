@@ -92,7 +92,7 @@ U8 *friendly_imgs[4] = {$IB,"<5>",BI=5$, $IB,"<4>",BI=4$, $IB,"<5>",BI=5$, $IB,"
 
 
 
-U8 *CIA_neeger_imgs[4] = {$IB,"<8>",BI=8$, $IB,"<7>",BI=7$, $IB,"<8>",BI=8$, $IB,"<9>",BI=9$};
+U8 *CIA_agent_imgs[4] = {$IB,"<8>",BI=8$, $IB,"<7>",BI=7$, $IB,"<8>",BI=8$, $IB,"<9>",BI=9$};
 
 
 
@@ -334,7 +334,7 @@ U0 MPMenDraw(CDC *dc2)
 						if (tmpu->friendly)
 						{
 							if (tmpu->CIA && Blink)
-								_tmps = CIA_neeger_imgs;
+								_tmps = CIA_agent_imgs;
 							else
 								_tmps = friendly_imgs;
 						}

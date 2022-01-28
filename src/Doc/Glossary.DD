@@ -159,9 +159,9 @@ $ID,2$$LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ is more than $FG,2$C$FG$ and less than
 $ID,-2$$TR,"AOT Compile Mode"$
 $ID,2$$FG,2$Ahead-of-Time$FG$ compiling is conventional compilation mode.  Do not use $FG,2$AOT$FG$, use $FG,2$JIT$FG$ compiling.
 
-In $FG,2$AOT$FG$ mode, $FG,2$.PRJ$FG$ files are compiled to $FG,2$.BIN$FG$ files, skipping $FG,2$.OBJ$FG$ files.	After compiling, $FG,2$.BIN$FG$ files are $LK,"Load",A="MN:Load"$()ed.
+In $FG,2$AOT$FG$ mode, $FG,2$.PRJ$FG$ files are compiled to $FG,2$.ZXE$FG$ files, skipping $FG,2$.OBJ$FG$ files.	After compiling, $FG,2$.ZXE$FG$ files are $LK,"Load",A="MN:Load"$()ed.
 
-There is no $FG,2$main()$FG$ routine.  Instead, statements outside functions are automatically executed upon loading.  There is no way to unload except by killing the task.	To invoke $FG,2$AOT Compiled Mode$FG$, $LK,"Comp",A="MN:Comp"$() is used.  The $FG,2$Kernel$FG$ module and compiler are made in $FG,2$AOT$FG$ compiled mode.	See $LK,"BootHDIns",A="MN:BootHDIns"$()  which calls $LK,"MakeAll",A="MN:MakeAll"$() where $LK,"::/Boot/Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.BIN",A="FI:::/Compiler/Compiler.PRJ"$ are created.
+There is no $FG,2$main()$FG$ routine.  Instead, statements outside functions are automatically executed upon loading.  There is no way to unload except by killing the task.	To invoke $FG,2$AOT Compiled Mode$FG$, $LK,"Comp",A="MN:Comp"$() is used.  The $FG,2$Kernel$FG$ module and compiler are made in $FG,2$AOT$FG$ compiled mode.	See $LK,"BootHDIns",A="MN:BootHDIns"$()  which calls $LK,"MakeAll",A="MN:MakeAll"$() where $LK,"::/Boot/Kernel.ZXE",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.ZXE",A="FI:::/Compiler/Compiler.PRJ"$ are created.
 $ID,-2$$TR,"JIT Compile Mode"$
 $ID,2$In $FG,2$just-in-time$FG$ mode, the compiler places code and data in memory alloced from the heap, incrementally, making them immediately ready for in-place execution.  This mode is used during cmd line operations.	When you $FG,2$#include$FG$ a file, it is compiled function by function and code ends-up all over in the memory, at least in the first 2Gig of memory.	The $LK,"ExeFile",A="MN:ExeFile"$() routine is the same as $FG,2$#include$FG$ but can be used in programs.	$LK,"ExePrint",A="MN:ExePrint"$() routine will compile and run a string.
 $ID,-2$$TR,"Compiler Intermediate Code"$
@@ -213,7 +213,7 @@ $FG,5$*.HH$FG$
 	ZealC src header files.
 $FG,5$*.MAP$FG$
 	Compiler "map" files
-$FG,5$*.BIN;*.BIN.C$FG$
+$FG,5$*.ZXE;*.ZXE$FG$
 	Binary executable files, created by $LK,"Comp",A="MN:Comp"$() and read by $LK,"Load",A="MN:Load"$().
 $FG,5$*.DATA$FG$
 	Data files

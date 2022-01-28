@@ -1,7 +1,7 @@
 I64 HashEntrySize(CHashSrcSym *tmph)
 {//Logical size of a std system hash entry.
 	CDebugInfo	*debug_info;
-	CBinFile	*bfh;
+	CZXE		*zxe;
 
 	switch (HashTypeNum(tmph))
 	{
@@ -27,8 +27,8 @@ I64 HashEntrySize(CHashSrcSym *tmph)
 				return MSize(tmph(CHashGeneric *)->user_data0);
 			else
 			{
-				bfh = mem_boot_base - sizeof(CBinFile);
-				return bfh->file_size;
+				zxe = mem_boot_base - sizeof(CZXE);
+				return zxe->file_size;
 			}
 
 		case HTt_WORD:
@@ -59,7 +59,7 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
 		{
 			res += MemberListSize(tmph);
 			if (debug_info = tmph->debug_info)
-//This should be $LK,"MSize",A="MN:MSize"$() but it would crash on AOT .BIN file functions.
+//This should be $LK,"MSize",A="MN:MSize"$() but it would crash on AOT .ZXE file functions.
 				res += debug_info->body[debug_info->max_line + 1 - debug_info->min_line] - debug_info->body[0];
 		}
 		else if (tmph->type & HTT_DEFINE_STR)

@@ -448,13 +448,13 @@ class CMemE820
 #define LDF_JUST_LOAD 	2
 #define LDF_SILENT		4
 
-#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal ZealC Binary
-class CBinFile
-{//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.ZC,16 ALIGN"$ by compiler.
+#define ZXE_SIGNATURE_VAL 	'ZXE' // Zeal Executable
+class CZXE
+{// $LK,"ZXE Header Generation",A="FF:::/Compiler/CMain.ZC,16 ALIGN"$ by compiler.
 	U16 jmp;
 	U8	module_align_bits,
 		reserved;
-	U32 bin_signature;
+	U32 signature;
 	I64 org,
 		patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.ZC,IET_ABS_ADDR"$
 		file_size;
@@ -547,7 +547,7 @@ class CVBEModeShort
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$
-	CBinFile		h;
+	CZXE			h;
 	U32				jmp,
 					boot_src,
 					boot_blk,

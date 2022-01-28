@@ -112,7 +112,7 @@ public extern CTextGlobals text;
 public extern U0 HashSrcFileSet(CCompCtrl *cc, CHashSrcSym *h, I64 line_num_offset=0);
 
 #help_index "Compiler;Cmd Line (Typically)"
-extern U8 *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR); //INVALID_PTR=don't care what load address
+extern U8 *Load(U8 *filename, I64 ld_flags=0, CZXE *zxe_addr=INVALID_PTR); //INVALID_PTR=don't care what load address
 
 #help_index "Data Types/Circular Queue"
 public extern I64 		 QueueCount(CQueue *head);

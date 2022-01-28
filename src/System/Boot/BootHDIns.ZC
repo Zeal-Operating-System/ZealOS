@@ -5,9 +5,9 @@
 
 #help_index "Install"
 
-#define KERNEL_BIN_C			"Kernel.BIN.C"
+#define KERNEL_ZXE			"Kernel.ZXE"
 #define BOOT_DIR				"/Boot"
-#define BOOT_DIR_KERNEL_BIN_C	BOOT_DIR "/" KERNEL_BIN_C
+#define BOOT_DIR_KERNEL_ZXE	BOOT_DIR "/" KERNEL_ZXE
 
 U0 CompComp()
 {
@@ -41,10 +41,10 @@ public U0 BootHDIns(U8 drv_let=0)
 		{
 			case BDT_RAM:
 			case BDT_ATA:
-				Move("/Kernel/Kernel.BIN", BOOT_DIR_KERNEL_BIN_C);
+				Move("/Kernel/Kernel.ZXE", BOOT_DIR_KERNEL_ZXE);
 
-				if (!FileFind(BOOT_DIR_KERNEL_BIN_C, &de, FUF_JUST_FILES))
-					"No Kernel.BIN.C\n";
+				if (!FileFind(BOOT_DIR_KERNEL_ZXE, &de, FUF_JUST_FILES))
+					"No Kernel.ZXE\n";
 				else
 				{
 					Free(de.full_name);

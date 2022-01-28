@@ -77,7 +77,7 @@ U0 KConfigOptions(CKConfig *c)
 			"$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 			"$$PURPLE$$NoMP$$FG$$ No multicore.\n"
 			"$$PURPLE$$MountAHCIAuto$$FG$$ Auto Mount AHCI drives to 'C' and 'T'.\n"
-			"$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.BIN.\n"
+			"$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.ZXE.\n"
 			"\n";
 		else
 			if (0 <= i < CONFIG_OPTIONS_NUM)

@@ -221,12 +221,12 @@ public U0 MemRep()
 	I64			 i;
 	CTask		*task;
 	CCPU		*c;
-	CBinFile	*bfh = mem_boot_base - sizeof(CBinFile);
+	CZXE		*zxe = mem_boot_base - sizeof(CZXE);
 
-	bfh(I64) += bfh->file_size - 1;
+	zxe(I64) += zxe->file_size - 1;
 
 	"$$BLACK$$Low Memory\t:00100000$$FG$$\n$$ID,2$$";
-	"Kernel\t:%08X-%08X\n", mem_boot_base - sizeof(CBinFile), bfh;
+	"Kernel\t:%08X-%08X\n", mem_boot_base - sizeof(CZXE), zxe;
 
 	"$$ID,-2$$$$BLACK$$High Memory\t:00100000-%08X$$FG$$\n", mem_heap_limit;
 	"$LK,"SYS_FIXED_AREA",A="MN:CSysFixedArea"$\t:%08X-%08X\n", SYS_FIXED_AREA, SYS_FIXED_AREA + sizeof(CSysFixedArea) - 1;

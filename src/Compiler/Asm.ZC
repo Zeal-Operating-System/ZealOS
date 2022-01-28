@@ -1145,7 +1145,7 @@ U0 ParseAsmDefine(CCompCtrl *cc, I64 U8_count)
 	Lex(cc);
 }
 
-U0 ParseBinFile(CCompCtrl *cc)
+U0 ParseBinLoad(CCompCtrl *cc)
 {
 	I64 i, size;
 	U8 *buf, *st;
@@ -1259,8 +1259,8 @@ U0 ParseAsmBlk(CCompCtrl *cc, I64 comp_flags)
 						ParseAsmDefine(cc, 8);
 						break;
 
-					case AKW_BINFILE:
-						ParseBinFile(cc);
+					case AKW_BINLOAD:
+						ParseBinLoad(cc);
 						break;
 
 					case AKW_LIST:

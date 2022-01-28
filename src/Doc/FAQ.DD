@@ -29,7 +29,7 @@ $ID,2$The term $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"
 $ID,-2$$TR,"Is it open source? How do I build it?"$
 $ID,2$ZealOS is 100% open source.	All the source code is included in the distro.  Use $LK,"BootHDIns",A="MN:BootHDIns"$() to compile the kernel and compiler.	The rest is $LK,"JIT Compiled",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ during boot.  See $LK,"::/StartOS.ZC"$.
 $ID,-2$$TR,"Where are object files?  How do I link?"$
-$ID,2$ZealOS does not use object files or a linker.  $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ is used to directly create flat binary files, $LK,"::/Boot/Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.BIN",A="FI:::/Compiler/Compiler.PRJ"$ with no object files and linking.$FG$	$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ place code in memory, ready to run, with no object files or linking.  Linking is done when $FG,2$BIN$FG$ modules are $LK,"Load",A="MN:Load"$()ed.
+$ID,2$ZealOS does not use object files or a linker.  $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ is used to directly create flat binary files, $LK,"::/Boot/Kernel.ZXE",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.ZXE",A="FI:::/Compiler/Compiler.PRJ"$ with no object files and linking.$FG$	$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ place code in memory, ready to run, with no object files or linking.  Linking is done when $FG,2$ZXE$FG$ modules are $LK,"Load",A="MN:Load"$()ed.
 $ID,-2$$TR,"What is the FPS refresh rate?"$
 $ID,2$The refresh rate is $TX,"(60000.0 / 1001)",D="WINMGR_FPS"$ frames-per-second.  That is how often ZealOS updates screen mem.  It is not synchronized to the hardware.
 $ID,-2$$TR,"How does a task own the speaker?"$
@@ -52,7 +52,7 @@ $ID,-2$$TR,"How do I set the PATH?"$
 $ID,2$There is no $FG,2$PATH$FG$.  You do not enter filenames at the command-line and expect them to run.  You enter C-like code.  $LK,"Get Started Here",A="FI:::/Doc/CmdLineOverview.DD"$.
 $ID,-2$$TR,"How do I boot it with Grub?"$
 $ID,2$If you use Grub, you $FG,2$chain-load$FG$ like Windows.  See $LK,"Boot",A="FI:::/Doc/Boot.DD"$.  You can use the ZealOS boot-loader.	$LK,"Master-Boot-Loader-Stage1",A="FI:::/System/Boot/BootMHD.ZC"$, $LK,"Master-Boot-Loader-Stage2",A="FI:::/System/Boot/BootMHD2.ZC"$, $LK,"Partition-Boot-Loader",A="FI:::/System/Boot/BootHD.ZC"$, $LK,"CD-DVD-Boot-Loader",A="FI:::/System/Boot/BootDVD.ZC"$.
-$ID,-2$$TR,"How do I get Kernel.BIN to boot?"$
+$ID,-2$$TR,"How do I get Kernel.ZXE to boot?"$
 $ID,2$The boot-loaders must be patched by you running $LK,"BootHDIns",A="MN:BootHDIns"$() or $LK,"BootMHDIns",A="MN:BootMHDIns"$().  Those will write the block address into the boot-loader because the boot-loaders do not navigate file systems to find the $LK,"Stage2",A="FI:::/Kernel/KStart16.ZC"$ if you relocate it.
 $ID,-2$$TR,"Why is there some 16-Bit code?"$
 $ID,2$ZealOS is 64-bit.  Like all PC operating systems, the boot-loader starts in 16-bit real-mode.  ZealOS calls a few $FG,2$BIOS$FG$ info routines, switches to VGA-640x480x4bit, switches to 32-bit, then, 64-bit mode.	There is an odd thing called a $FG,2$$TX,"PCI BIOS",HTML="http://www.o3one.org/hwdocs/bios_doc/pci_bios_21.pdf"$$FG$ which is 32-bit used for $FG,2$PCI$FG$ config space access.	If supported, ZealOS calls $LK,"that",A="FI:::/Kernel/PCIBIOS.ZC"$ a couple times, otherwise using Port I/O for PCI.	It must temporarily drop-out-of 64-bit mode for that and stop multi-tasking.
@@ -63,7 +63,7 @@ $ID,2$$FG,2$XOR EAX,EAX$FG$ : Operations on 32-bit registers clear the high 32-b
 $ID,-2$$TR,"How do you use the FS and GS segment registers."$
 $ID,2$$FG,2$MOV RAX,FS:[RAX]$FG$ : FS can be set with a $FG,2$WRMSR$FG$, but displacement is RIP relative, so it's tricky to use.  FS is used for the current $LK,"CTask",A="MN:CTask"$, GS for $LK,"CCPU",A="MN:CCPU"$.
 $ID,-2$$TR,"How do I set ORG for position of code?"$
-$ID,2$The compiler creates $FG,2$pos independent$FG$ code.	Don't create code which is loaded at a fixed, specified location.  Code in a BIN file is $FG,2$pos independent$FG$ by virtue of a table in the BIN file for patching absolute addresses.
+$ID,2$The compiler creates $FG,2$pos independent$FG$ code.	Don't create code which is loaded at a fixed, specified location.  Code in a ZXE file is $FG,2$pos independent$FG$ by virtue of a table in the ZXE file for patching absolute addresses.
 $ID,-2$$TR,"How are symbols loaded?"$
 $ID,2$Binary executable files have export symbols which are loaded into the symbol tables.	The operating system $FG,2$Kernel$FG$ has such an export table.  In addition, some map files are processed to provide more information on symbols -- src file links.  This is how the $LK,"Man",A="MN:Man"$()/$FG,2$AutoComplete$FG$ feature can find src lines.
 $ID,-2$$TR,"Why doesn't assert work?"$
@@ -79,7 +79,7 @@ $ID,2$Binary sprite data is stored beyond the terminating $FG,2$NULL$FG$ in text
 $ID,-2$$TR,"Why are sprites so small?"$
 $ID,2$Sprites can be stored as vector graphics so they might take shockingly little room.  They can be converted to bitmaps.
 $ID,-2$$TR,"Why don't I need to recompile /System and /Home files?"$
-$ID,2$If you change code in the $FG,2$/System$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	There is no $FG,2$.BIN$FG$ file for $FG,2$JIT$FG$ compilation.	See $LK,"::/StartOS.ZC"$.
+$ID,2$If you change code in the $FG,2$/System$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	There is no $FG,2$.ZXE$FG$ file for $FG,2$JIT$FG$ compilation.	See $LK,"::/StartOS.ZC"$.
 $ID,-2$$TR,"Why does it finds files that aren't there?"$
 $ID,2$If a file is not found, the parent directories are searched for a file of the same name.
 $ID,-2$

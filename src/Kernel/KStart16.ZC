@@ -2,7 +2,7 @@ asm {/* See $LK,"::/Doc/Boot.DD"$.
 ZealOS starts in real, calls some BIOS routines, switches to 32 bit, and 64 bit mode and continues in $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ at $LK,"KMain",A="MN:KMain"$().
 
 The boot loader jumps here in real-mode (16-bit).
-It actually jumps to the $LK,"CBinFile",A="MN:CBinFile"$ header which is placed just before this by $LK,"the compiler",A="FF:::/Compiler/CMain.ZC,16 ALIGN"$.
+It actually jumps to the $LK,"CZXE",A="MN:CZXE"$ header which is placed just before this by $LK,"the compiler",A="FF:::/Compiler/CMain.ZC,16 ALIGN"$.
 The header begins with a short jmp to the start of this file's code which begins with the following small jump past some data.
 
 This file is first in the Kernel image because it is #included first.  $LK,"Kernel.PRJ",A="FF:::/Kernel/Kernel.PRJ,KStart16:1"$
@@ -25,7 +25,7 @@ SYS_RUN_LEVEL::				DU32	0;
 	StreamPrint("SYS_COMPILE_TIME:: DU64 0x%X;", Now); //See $LK,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$
 };
 
-#assert SYS_COMPILE_TIME + sizeof(CDate) + sizeof(CBinFile) < DVD_BLK_SIZE
+#assert SYS_COMPILE_TIME + sizeof(CDate) + sizeof(CZXE) < DVD_BLK_SIZE
 
 MEM_BOOT_BASE::			DU32	0;	//Offset from start used by reboot
 MEM_E801::				DU16	0, 0;
@@ -56,7 +56,7 @@ SYS_VBE_INFO::			DU8 	sizeof(CVBEInfo)						DUP(0);
 SYS_VBE_MODES::			DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM	DUP(0);
 SYS_VBE_FINAL_MODE::	DU8 	sizeof(CVBEMode)						DUP(0);
 SYS_VBE_FINAL_MODE_NUM::DU16	0; //mode number of final mode set
-#assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CBinFile)
+#assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
 TEMP_VBE_MODE:		DU8 	sizeof(CVBEMode)		DUP(0);
 MAX_VBE_MODE:		DU8 	sizeof(CVBEModeShort)	DUP(0);
@@ -320,13 +320,13 @@ GET_IP: POP 	BX
 		MOV		U32 [MEM_BOOT_BASE], EAX
 
 		MOV 	DX, CS
-		SUB 	DX, sizeof(CBinFile) / 16
-#assert !(sizeof(CBinFile) & 0xF)
+		SUB 	DX, sizeof(CZXE) / 16
+#assert !(sizeof(CZXE) & 0xF)
 		MOV 	GS, DX
 
 		MOV		EDX, EAX
-		ADD		EDX, U32 GS:[CBinFile.patch_table_offset]
-		SUB		EDX, sizeof(CBinFile)
+		ADD		EDX, U32 GS:[CZXE.patch_table_offset]
+		SUB		EDX, sizeof(CZXE)
 		MOV		U32 [SYS_BOOT_PATCH_TABLE_BASE], EDX
 
 		ADD		U32 [GDT_BOOT_DS+2], EAX

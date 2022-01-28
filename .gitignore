@@ -1,4 +1,5 @@
-*.BIN*
+*.BIN
+*.ZXE
 *.MAP
 src/Boot/
 docs/Boot/

@@ -103,7 +103,7 @@ U0 DebugDistroFilePrep()
 	Format('A',, FALSE, FSt_REDSEA);
 
 	DirMake("A:/Compiler");
-	Copy("C:/Compiler/Compiler.BIN",	"A:/Compiler");
+	Copy("C:/Compiler/Compiler.ZXE",	"A:/Compiler");
 	Copy("C:/Compiler/OpCodes.DD",		"A:/Compiler");
 	Copy("C:/Compiler/CompilerA.HH",	"A:/Compiler");
 	Copy("C:/Compiler/CompilerB.HH",	"A:/Compiler");
@@ -138,14 +138,14 @@ U0 StdDistroPrep()
 	CopyTree("C:/", TOS_DISTRO_DIR "/");
 	DelTree(TOS_DISTRO_DIR "/Home");
 	DirMake(TOS_DISTRO_DIR "/Home");
-	Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
-	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
-	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
+	Del(TOS_DISTRO_DIR "/" KERNEL_ZXE);
+	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN");
+	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN");
 }
 U0 MakeStdDistro()
 {
 	StdDistroPrep;
-	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_ZXE);
 	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
@@ -165,9 +165,9 @@ U0 LiteDistroPrep()
 	DelTree(TOS_DISTRO_DIR "/Apps");
 	DelTree(TOS_DISTRO_DIR "/Demo");
 	Copy(TOS_DISTRO_DIR "/Demo/Games/Talons.ZC", TOS_DISTRO_DIR "/Home");
-	Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
-	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
-	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
+	Del(TOS_DISTRO_DIR "/" KERNEL_ZXE);
+	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN");
+	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN");
 	Del(TOS_DISTRO_DIR "/System/AutoComplete/ACDefs.DATA");
 	Del(TOS_DISTRO_DIR "/System/AutoComplete/ACWords.DATA");
 	Del(TOS_DISTRO_DIR "/Misc/Bible.TXT");
@@ -175,7 +175,7 @@ U0 LiteDistroPrep()
 U0 MakeLiteDistro()
 {
 	LiteDistroPrep;
-	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_ZXE);
 	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
@@ -193,14 +193,14 @@ U0 DebugDistroPrep()
 	CopyTree("C:/", TOS_DISTRO_DIR "/");
 	DelTree(TOS_DISTRO_DIR "/Home");
 	DirMake(TOS_DISTRO_DIR "/Home");
-	Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
-	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
-	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
+	Del(TOS_DISTRO_DIR "/" KERNEL_ZXE);
+	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN");
+	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN");
 }
 U0 MakeDebugDistro()
 {
 	DebugDistroPrep;
-	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_ZXE);
 	DefinePrint("DD_TEMPLEOS_DEBUG_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
@@ -218,12 +218,12 @@ U0 StaffDistroPrep()
 	DelTree(TOS_DISTRO_DIR "/Home/Sup1");
 	DelTree(TOS_DISTRO_DIR "/Home/Sup2");
 	DelTree(TOS_DISTRO_DIR "/Home/Sup3");
-	Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
+	Del(TOS_DISTRO_DIR "/" KERNEL_ZXE);
 }
 U0 MakeStaffDistro()
 {
 	StaffDistroPrep;
-	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_ZXE);
 	DefinePrint("DD_TEMPLEOS_STAFF_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
@@ -383,6 +383,6 @@ public U0 TOSRegen()
 {//Generate distro ISO's
 	TOSBootHDIns('C');
 	Once("PopUp(\"TOSRegen2;\");");
-//	BootRAM("C:/Kernel/" KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.ZC,TOS_CONFIG"$.
-	BootRAM("::" BOOT_DIR_KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.ZC,TOS_CONFIG"$.
+//	BootRAM("C:/Kernel/" KERNEL_ZXE); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.ZC,TOS_CONFIG"$.
+	BootRAM("::" BOOT_DIR_KERNEL_ZXE); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.ZC,TOS_CONFIG"$.
 }

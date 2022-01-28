@@ -1,6 +1,6 @@
 #help_index "Compiler"
 
-DefineListLoad("ST_BIN_FILE_TYPES",	"END\0"
+DefineListLoad("ST_ZXE_FILE_TYPES",	"END\0"
 									" \0"
 									"REL_I0\0"
 									"IMM_U0\0"
@@ -24,22 +24,22 @@ DefineListLoad("ST_BIN_FILE_TYPES",	"END\0"
 									"ZEROED_DATA_HEAP\0"
 									"MAIN");
 
-public Bool BinRep(U8 *filename)
-{//Reports imports, exports, etc for a .BIN file
+public Bool ZXERep(U8 *filename)
+{//Reports imports, exports, etc for a .ZXE file
 //See $LK,"Patch Table Generation",A="FF:::/Compiler/CMain.ZC,IET_ABS_ADDR"$ and $LK,"Load",A="MN:Load"$().
 	U8			*fbuf, *ptr, *sptr, *absname;
 	I64			 i, j, size, etype;
 	Bool		 res = FALSE;
-	CBinFile	*bf;
+	CZXE		*zxe;
 	CHashExport	*saved_hash_ptr = NULL;
 
-	fbuf = ExtDefault(filename, "BIN");
+	fbuf = ExtDefault(filename, "ZXE");
 
-	if (!(bf = FileRead(fbuf, &size)))
+	if (!(zxe = FileRead(fbuf, &size)))
 		goto br_done1;
-	if (bf->bin_signature != BIN_SIGNATURE_VAL)
+	if (zxe->signature != ZXE_SIGNATURE_VAL)
 	{
-		"Not a ZealC Binary File.\n";
+		"Not a ZealC Executable file.\n";
 		goto br_done2;
 	}
 
@@ -52,18 +52,18 @@ public Bool BinRep(U8 *filename)
 	else
 		"NO MODULE NAME\n";
 
-	if (bf->org != INVALID_PTR)
-		"      ORG:%X\n", bf->org;
+	if (zxe->org != INVALID_PTR)
+		"      ORG:%X\n", zxe->org;
 
-	"    MODULE_ALIGN:%X\n", 1 << bf->module_align_bits;
+	"    MODULE_ALIGN:%X\n", 1 << zxe->module_align_bits;
 
-	ptr = bf(U8 *) + bf->patch_table_offset;
+	ptr = zxe(U8 *) + zxe->patch_table_offset;
 	while (etype = *ptr++)
 	{
 		i = *ptr(U32 *)++;
 		sptr = ptr;
 		ptr += StrLen(sptr) + 1;
-		"$$LTCYAN$$%16Z:$$GREEN$$%s$$FG$$:%X ", etype, "ST_BIN_FILE_TYPES", sptr, i;
+		"$$LTCYAN$$%16Z:$$GREEN$$%s$$FG$$:%X ", etype, "ST_ZXE_FILE_TYPES", sptr, i;
 		switch (etype)
 		{
 			case IET_REL_I0 ... IET_IMM_I64:
@@ -98,7 +98,7 @@ public Bool BinRep(U8 *filename)
 	res = TRUE;
 	Free(absname);
 br_done2:
-	Free(bf);
+	Free(zxe);
 br_done1:
 	Free(fbuf);
 

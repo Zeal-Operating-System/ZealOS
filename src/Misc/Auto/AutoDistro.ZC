@@ -21,7 +21,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
 	Copy("/*","/Distro");
 	DirMake("/Distro" BOOT_DIR);
-	Move(BOOT_DIR_DVD_KERNEL_BIN_C, "/Distro" BOOT_DIR_KERNEL_BIN_C);
+	Move(BOOT_DIR_DVD_KERNEL_ZXE, "/Distro" BOOT_DIR_KERNEL_ZXE);
 
 	CopyTree("/Home", 		"/Distro/Home");
 	Del("/Distro/Home/Registry.ZC");
@@ -39,7 +39,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	Del("/Distro/Misc/Bible.TXT");
 	Del("/Distro/Misc/Clementine.TXT");
 
-	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_ZXE);
 
 	DelTree("/Distro");
 	Free(out_iso_filename);

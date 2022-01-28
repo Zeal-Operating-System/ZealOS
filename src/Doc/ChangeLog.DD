@@ -1,4 +1,24 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----01/28/22 02:22:37----$IV,0$
+* Raised version number to 1.10.
+* Removed .C suffix on non-executable binary files.
+	- $LK,"R",A="MN:R"$("BOOT_DIR_OLDMBR_BIN_C", "$LK+PU,"BOOT_DIR_OLDMBR_BIN",A="MN:BOOT_DIR_OLDMBR_BIN"$");
+	- $LK,"R",A="MN:R"$("BOOT_DIR_BOOTMHD2_BIN_C", "$LK+PU,"BOOT_DIR_BOOTMHD2_BIN",A="MN:BOOT_DIR_BOOTMHD2_BIN"$");
+	- $LK,"R",A="MN:R"$("\"CC\", "\"ZC\"");
+* Renamed executable binary file format .BIN to .ZXE (Binary -> Zeal Executable).
+	- $LK,"R",A="MN:R"$("CBinFile", "$LK+PU,"CZXE",A="MN:CZXE"$");
+	- $LK,"R",A="MN:R"$("BINFILE", "BINLOAD", "-i");
+	- $LK,"R",A="MN:R"$("ParseBinFile", "$LK+PU,"ParseBinLoad",A="MN:ParseBinLoad"$");
+	- $LK,"R",A="MN:R"$("\".BIN\", "\".ZXE\""); // carefully...
+	- $LK,"R",A="MN:R"$("\"BIN\", "\"ZXE\""); // carefully...
+	- $LK,"R",A="MN:R"$(".BIN", ".ZXE"); // carefully...
+	- $LK,"R",A="MN:R"$("KERNEL_BIN_C", "$LK+PU,"KERNEL_ZXE",A="MN:KERNEL_ZXE"$");
+	- $LK,"R",A="MN:R"$("BOOT_DIR_KERNEL_BIN_C", "$LK+PU,"BOOT_DIR_KERNEL_ZXE",A="MN:BOOT_DIR_KERNEL_ZXE"$");
+	- $LK,"R",A="MN:R"$("BOOT_DIR_DVD_KERNEL_BIN_C", "$LK+PU,"BOOT_DIR_DVD_KERNEL_ZXE",A="MN:BOOT_DIR_DVD_KERNEL_ZXE"$");
+	- $LK,"R",A="MN:R"$("BIN_SIGNATURE_VAL", "$LK+PU,"ZXE_SIGNATURE_VAL",A="MN:ZXE_SIGNATURE_VAL"$");
+	- $LK,"R",A="MN:R"$("BinRep", "$LK+PU,"ZXERep",A="MN:ZXERep"$");
+	- $LK,"R",A="MN:R"$("ST_BIN_FILE_TYPES", "$LK+PU,"ST_ZXE_FILE_TYPES",A="MN:ST_ZXE_FILE_TYPES"$");
+
 $IV,1$----01/18/22 00:35:45----$IV,0$
 * Raised version number to 1.09.
 * Integrated HolyMath into OS (from https://github.com/TempleProgramming/HolyMath).

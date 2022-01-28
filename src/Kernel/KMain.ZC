@@ -256,8 +256,8 @@ asm
 SYS_KERNEL_END::
 #exe {
 	if (kernel_config->opts[CONFIG_DEBUG_DISTRO])
-		StreamPrint("DU8 0x%X - (SYS_KERNEL_END-SYS_KERNEL + BOOT_RAM_BASE + sizeof(CBinFile)) DUP (0);"
-					"BINFILE \"%s\";",
+		StreamPrint("DU8 0x%X - (SYS_KERNEL_END-SYS_KERNEL + BOOT_RAM_BASE + sizeof(CZXE)) DUP (0);"
+					"BINLOAD \"%s\";",
 					kernel_config->debug_distro_start, kernel_config->debug_distro_file);
 };
 

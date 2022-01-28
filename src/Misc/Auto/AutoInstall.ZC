@@ -113,7 +113,7 @@ Bool DoInstall(Bool prompt_reboot)
 	VMInstallWiz();
 	res = TRUE;
 	OnceDrive('C', "PopUp(\"#include \\\"/Misc/Auto/AutoFullDistro0\\\";\");");
-	BootRAM("C:" BOOT_DIR_KERNEL_BIN_C);
+	BootRAM("C:" BOOT_DIR_KERNEL_ZXE);
 	return res;
 }
 

@@ -19,9 +19,9 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	BootDVDIns;
 
 	Copy("/*","/Distro");
-//	Del("/Distro/" KERNEL_BIN_C);
+//	Del("/Distro/" KERNEL_ZXE);
 	DirMake("/Distro" BOOT_DIR);
-	Move(BOOT_DIR_DVD_KERNEL_BIN_C, "/Distro" BOOT_DIR_KERNEL_BIN_C);
+	Move(BOOT_DIR_DVD_KERNEL_ZXE, "/Distro" BOOT_DIR_KERNEL_ZXE);
 
 //	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
 	CopyTree("/Home", 		"/Distro/Home");
@@ -39,7 +39,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	CopyTree("/Downloads", "/Distro/Downloads"); 		//You can leave this out.
 	DirMake("/Distro/Tmp");
 	DirMake("/Distro/Tmp/ScreenShots");
-	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_ZXE);
 
 	//If CD-ROM use MT_CD instead of MT_DVD.
 	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.

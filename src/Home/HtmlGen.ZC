@@ -85,8 +85,8 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 
 			if (!(tmpde1->attr & RS_ATTR_DIR))
 			{
-				if (StrCompare(dest_ext, "BIN.C")	&&
-					StrCompare(dest_ext, "BIN")		&&
+				if (StrCompare(dest_ext, "ZXE")	&&
+					StrCompare(dest_ext, "ZXE")		&&
 					StrCompare(dest_ext, "ISO.C")	&&
 					StrCompare(dest_ext, "html")	&&
 					StrCompare(dest_ext, "DATA")	&&
