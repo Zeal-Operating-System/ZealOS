@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----02/13/22 21:44:55----$IV,0$
+* Raised version number to 1.11.
+* Updated $LK+PU,"WallPaper",A="FF:::/System/WallPaper.ZC,k = TaskCaller"$ to print full task caller report.
+* Increased $LK+PU,"CTask.wallpaper_data",A="FF:::/Kernel/KernelA.HH,wallpaper_data"$ size from $LK+PU,"STR_LEN",A="MN:STR_LEN"$ to 4096.
+
 $IV,1$----01/28/22 02:22:37----$IV,0$
 * Raised version number to 1.10.
 * Removed .C suffix on non-executable binary files.

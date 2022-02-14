@@ -81,8 +81,6 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 * Good spell checker.
 * Good Bible search.
 
-* Can $LK,"MEM_EXTRA_HASH2_PAGS",A="MN:MEM_EXTRA_HASH2_PAGS"$ be just one?
-
 * Bible ranges in $LK,"BibleVerse",A="MN:BibleVerse"$().
 
 * $LK,"::/Demo/Games/FlatTops.ZC"$ is torpedo, not bombs.

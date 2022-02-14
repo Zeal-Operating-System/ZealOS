@@ -4014,7 +4014,7 @@ public class CTask //The Fs segment register points to current CTask.
 
 	U8				 task_title[STR_LEN],
 					 task_name[TASK_NAME_LEN],
-					 wallpaper_data[STR_LEN],
+					 wallpaper_data[4096],
 
 					 title_src, border_src,
 					 text_attr, border_attr;

@@ -56,7 +56,7 @@ else
 			mount_vdisk
 			echo "Copying vdisk root to src..."
 			cp -r $TMPMOUNT/* ../src
-			rm ../src/Boot/BootMHD2.BIN.C
+			rm ../src/Boot/BootMHD2.BIN
 			if [ -d $TMPMOUNT/HTML ]
 			then
 			        echo "Copying HTML docs to docs/..."
