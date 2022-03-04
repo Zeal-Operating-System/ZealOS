@@ -179,7 +179,7 @@ U8 *TOSLinkConvert1(U8 *link_st)
 public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL, 
 					  U8 *body_footer=NULL, U8 *html_footer=NULL, Bool line_anchors=TRUE, 
 					  U8 (*link_convert)(U8 *link_st)=&TOSLinkConvert1, Bool line_nums=FALSE)
-{//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$doc to HTML file.
+{//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ doc to HTML file.
 	CDocEntry	*doc_e, *style, *doc_e2;
 	I64			 i, y, old_y = I64_MIN, col, old_u32_attr = DOCET_UNDEF_COLOR, old_attr, digits;
 	U32			*hl, *src;
@@ -204,10 +204,11 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 	doc_out->flags |= DOCF_PLAIN_TEXT | DOCF_NO_CURSOR;
 
 	if (!html_header)
-		html_header =
+		html_header = 
 					"<!DOCTYPE HTML>\n"
 					"<html>\n"
 					"<head>\n"
+					"<title>ZealOS</title>"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
 					"<meta name=\"generator\" content=\"$TX,"ZealOS V1.11",D="DD_OS_NAME_VERSION"$\">\n";
