@@ -1,9 +1,11 @@
 #!/bin/sh
-
+#
 # Sync VM <--> Repo.
 # Run this script inside build/ directory.
-
+#
 # On copying from virtual disk to src/, the directory is emptied before copy. Comment out "rm -rf ../src/*" to copy onto src.
+#
+#
 
 # Uncomment if you use doas instead of sudo
 #alias sudo=doas
@@ -17,6 +19,13 @@ ZEALDISK=
 
 [ -z "$ZEALDISK" ] && echo "Please edit this script with the full path to your ZealOS virtual disk." && exit 1
 [ ! -f "$ZEALDISK" ] && echo "\$ZEALDISK is not a path to a file." && exit 1
+
+# Set this if updating organization homepage github.io docs
+DOCS_DIR=
+# Example:
+#DOCS_DIR=../../zeal-operating-system.github.io/
+
+[ ! -z "$DOCS_DIR" ] && [ ! -d "$DOCS_DIR" ] && echo "\$DOCS_DIR ($DOCS_DIR) does not exist!" && exit 1
 
 TMPMOUNT=/tmp/zealtmp
 
@@ -57,13 +66,12 @@ else
 			echo "Copying vdisk root to src..."
 			cp -r $TMPMOUNT/* ../src
 			rm ../src/Boot/BootMHD2.BIN
-			if [ -d $TMPMOUNT/HTML ]
+			if [ -d $TMPMOUNT/HTML ] && [ ! -z $DOCS_DIR ]
 			then
-			        echo "Copying HTML docs to docs/..."
-			        cp -r $TMPMOUNT/HTML/* ../docs
+			        echo "Copying HTML docs to \$DOCS_DIR ($DOCS_DIR)..."
+			        rm -rf $DOCS_DIR/*
+			        cp -r $TMPMOUNT/HTML/* $DOCS_DIR
 			        rm -rf ../src/HTML/
-			else
-			        echo "No HTML docs to copy."
 			fi
 			umount_vdisk
 			[ -f ../src/Tmp/AUTO.ISO.C ] && mv ../src/Tmp/AUTO.ISO.C ./AUTO.ISO
