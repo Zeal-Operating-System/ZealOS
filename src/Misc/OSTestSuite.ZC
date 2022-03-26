@@ -1741,7 +1741,7 @@ U0 OSTestSuite()
 	TS("FPrintF");			if (DriveIsWritable('~')) DoFPrintF;
 	TS("SerializeTree");	TSFile("::/Demo/Disk/SerializeTree");
 	TS("Exceptions"); 		DoExceptions;
-	TS("ScreenDCodes"); 	TSFileChar("::/Demo/ScreenCodes");
+	TS("ScreenCodes");		TSFileChar("::/Demo/ScreenCodes");
 	TS("ExtChars"); 		TSFile("::/Demo/ExtChars");
 	TS("PanText");			TSFile("::/Demo/Graphics/PanText", 0);
 	TS("CharAnimation");	TSFile("::/Demo/Graphics/CharAnimation");

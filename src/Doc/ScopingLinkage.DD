@@ -79,7 +79,7 @@ C 	goto	$FG,2$label:$FG$		F C   FG   N
 			variable	F S   FR   N
 $FG,2$static$FG$		variable	F C   FR D N
 			variable	G C G TR D D
-			variable			G D G TR S D
+			variable	G D G TR S D
 			$FG,2$class$FG$		G 	C TR   D
 class 		member		G	  TR   P
 $FG,2$extern		class$FG$		G 	C TR   D

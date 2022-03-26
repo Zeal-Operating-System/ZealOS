@@ -1156,7 +1156,7 @@ rc_adjust_xy:
 					dc->bkcolor = i;
 					if (doc_e->de_flags & DOCEF_FROM_START)
 					{
-						xx = (x -k - x0) * FONT_WIDTH; //TODO: scrolling text is not length k
+						xx = (x - k - x0) * FONT_WIDTH; //TODO: scrolling text is not length k
 						yy = (y - y0) * FONT_HEIGHT;
 						zz = 0;
 					}

@@ -3,7 +3,7 @@
 The ZealC assembler currently has partial SSE support.
 
 SSE instructions with no prefix are fully supported,
-but instructions prefixed with 0x66, 0xF2, or F3
+but instructions prefixed with 0x66, 0xF2, or 0xF3
 can only be assembled using the lower registers,
 XMM0-XMM7 and RAX-RDI.
 
