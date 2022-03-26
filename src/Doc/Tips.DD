@@ -135,8 +135,6 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * You can use $FG,2$<CTRL-SHIFT-L>$FG$ to do a check for compile errors.
 
-* You can use $LK,"DocOpt",A="MN:DocOpt"$() to optimize links.
-
 * With $FG,2$start$FG$/$FG,2$end$FG$, common trailing code is fast. Common leading code is slow.$FG$
 
 * The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.ZC,JukeBox"$(). The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$. The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.ZC,JukeBox"$(). You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.ZC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$. You can press $FG,2$<DEL>$FG$ to delete songs.

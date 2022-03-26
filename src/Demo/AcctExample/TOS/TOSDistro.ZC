@@ -86,7 +86,7 @@ U0 DistroPrep()
 	CursorRemove("/*");
 	DelTree("/Demo/*.BI*");
 	S2T("/*", "+r+S");
-	DocOpt("/*", "+R");
+//	DocOpt("/*", "+R");
 //	Move(ACD_DEF_FILENAME, ACD_DEF_FILENAME_Z);
 }
 

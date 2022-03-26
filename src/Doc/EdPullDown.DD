@@ -73,6 +73,7 @@ View
 Help
 {
 	Menu(,CH_CTRLM,0x43200000432);
+	AutoComplete(,'a',0x281E0000281E);
 	Help(,,0x3B0000003B);
 	About(,,0x23B0000023B);
 }

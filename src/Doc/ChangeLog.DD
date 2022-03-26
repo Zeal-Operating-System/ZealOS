@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/25/22 12:55:27----$IV,0$
+* Raised version number to 1.12.
+* Removed DocOpt, DocOptList, DocOptFile, DocOptDoc, and DocOptEntry.
+* Added $LK+PU,"AutoComplete",A="FF:::/Doc/EdPullDown.DD,AutoComplete"$ to EdPullDown menu, under Help section.
+
 $IV,1$----02/13/22 21:44:55----$IV,0$
 * Raised version number to 1.11.
 * Updated $LK+PU,"WallPaper",A="FF:::/System/WallPaper.ZC,k = TaskCaller"$ to print full task caller report.
