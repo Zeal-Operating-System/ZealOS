@@ -163,7 +163,7 @@ I0 Paint32()
 			"$$BLUE$$Ctrl-S$$FG$$ to save image.\n"
 			"$$BLUE$$Ctrl-L$$FG$$ to load image.\n\n"
 			"$$GREEN$$Left-click or SPACE$$FG$$ to draw.\n\n"
-			"$$RED$$ENTER$$FG$$ to clear image.\n"
+			"$$RED$$END$$FG$$ to clear image.\n"
 			"$$RED$$Shift-Esc or Double Right-Click$$FG$$ to exit.");
 	Sleep(250); // help ensure SPACE press doesn't draw early
 
@@ -215,17 +215,25 @@ I0 Paint32()
 						break;
 
 					case SC_CURSOR_LEFT:
+						mouse.pos.x--;
 						break;
 
 					case SC_CURSOR_RIGHT:
+						mouse.pos.x++;
 						break;
 
 					case SC_CURSOR_UP:
+						mouse.pos.y--;
 						break;
 
 					case SC_CURSOR_DOWN:
+						mouse.pos.y++;
 						break;
 
+					case SC_END:
+						MemSet(paint.fb,		WHITE32, text.buffer_size);
+						MemSet(text.fb_alias,	WHITE32, text.buffer_size);
+						break;
 				}
 				break;
 
@@ -258,11 +266,6 @@ I0 Paint32()
 
 			case '0'...'9':
 				paint.color = gr_palette[ch - '0'];
-				break;
-
-			case '\n':
-				MemSet(paint.fb,		WHITE32, text.buffer_size);
-				MemSet(text.fb_alias,	WHITE32, text.buffer_size);
 				break;
 
 			case CH_CTRLS:
