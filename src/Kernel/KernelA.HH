@@ -110,6 +110,17 @@ I64i union I64
 	U32	u32[2];
 };
 
+U128i union U128
+{
+	I8i	i8[16];
+	U8i	u8[16];
+	I16	i16[8];
+	U16	u16[8];
+	I32	i32[4];
+	U32	u32[4];
+	U64 u64[2];
+	I64 i64[2];
+};
 #help_index "Math/Complex;Data Types/Complex"
 public class Complex
 {
@@ -1708,7 +1719,8 @@ public class CAutoCompleteDictGlobals
 #define RT_UF32 		13 //Not implemented, Fictitious
 #define RT_F64			14
 #define RT_UF64 		15 //Fictitious
-#define RT_RTS_NUM		16
+#define RT_U128 		16
+#define RT_RTS_NUM		17
 #define RTF_UNSIGNED	1
 #define RTG_MASK		0xFF
 
