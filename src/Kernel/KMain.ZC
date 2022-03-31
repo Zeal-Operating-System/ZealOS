@@ -97,6 +97,8 @@ U0 SysGrInit()
 
 	for (i = '³'; i < 'Û'; i++)
 		text.aux_font[i] = text.font[i];
+
+	text.aux_font['©'] = text.font['©'];
 	
 	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32) = 'ÀÈÙ¼';
