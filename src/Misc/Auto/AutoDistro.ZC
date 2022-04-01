@@ -19,22 +19,27 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	In(STD_DISTRO_DVD_CONFIG);
 	BootDVDIns;
 
-	Copy("/*","/Distro");
+	Copy("/*", "/Distro");
 	DirMake("/Distro" BOOT_DIR);
 	Move(BOOT_DIR_DVD_KERNEL_ZXE, "/Distro" BOOT_DIR_KERNEL_ZXE);
 
-	CopyTree("/Home", 		"/Distro/Home");
-	Del("/Distro/Home/Registry.ZC");
+	DirMake("/Distro/Home");
+
 	CopyTree("/System", 	"/Distro/System");
 	Del("/Distro/System/AutoComplete/ACDefs.DATA");
+	Del("/Distro/System/AutoComplete/ACWords.DATA");
+
 	CopyTree("/Compiler",	"/Distro/Compiler");
 	CopyTree("/Kernel", 	"/Distro/Kernel");
 	CopyTree("/Misc", 		"/Distro/Misc");
+
 	DirMake("/Distro/Doc");
 	Copy("/Doc/EdPullDown.DD", "/Distro/Doc/EdPullDown.DD");
 	Copy("/Doc/Tips.DD", "/Distro/Doc/Tips.DD");
+
 	Copy("/Misc/Auto/Once.ZC", "/Distro/Once.ZC");
 	Copy("/Misc/Auto/HomeSys.ZC", "/Distro/HomeSys.ZC");
+
 	Del("/Distro/Misc/PCIDevices.DD");
 	Del("/Distro/Misc/Bible.TXT");
 	Del("/Distro/Misc/Clementine.TXT");

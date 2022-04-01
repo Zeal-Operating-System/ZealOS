@@ -49,7 +49,6 @@ U0 VMInstallWiz()
 	CTask		*task;
 	I64			 i, atapi_port = -1, ata_port = -1;
 	CAHCIPort	*port;
-	U8			*in_str;
 
 	task = User;
 	TaskWait(task);
@@ -104,7 +103,7 @@ U0 VMInstallWiz()
 	Kill(task);
 }
 
-Bool DoInstall(Bool prompt_reboot)
+Bool DoInstall()
 {
 	I64 res = FALSE, vm_install = TRUE;
 
@@ -117,11 +116,11 @@ Bool DoInstall(Bool prompt_reboot)
 	return res;
 }
 
-Bool OSInstall(Bool prompt_reboot=TRUE)
+Bool OSInstall()
 {
-	return DoInstall(prompt_reboot);
+	return DoInstall();
 }
 
 #if __CMD_LINE__
-OSInstall(TRUE);
+OSInstall();
 #endif
