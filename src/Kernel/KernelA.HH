@@ -1594,6 +1594,7 @@ tries to do something.
 #define WIf_FOCUS_TASK_MS_WHEEL		23
 #define WIf_FOCUS_TASK_BORDER		24
 #define WIf_FOCUS_TASK_GRAB_SCROLL	25
+#define WIf_FLAGS_NUM				26
 
 class CWinMgrTimingGlobals
 {
@@ -3932,6 +3933,7 @@ public class CTaskSettings
 #define TTS_CUR_LEX 		4
 
 //CTask.task_flags
+//See $LK,"ST_TASK_FLAGS",A="MN:ST_TASK_FLAGS"$
 #define TASKf_TASK_LOCK 			0
 #define TASKf_KILL_TASK 			1
 #define TASKf_SUSPENDED 			2
@@ -3946,8 +3948,8 @@ public class CTaskSettings
 #define TASKf_PENDING_BREAK 		11
 #define TASKf_BREAK_TO_SHIFT_ESC	12
 #define TASKf_KILL_AFTER_DEBUG		13
-
 #define TASKf_NONTIMER_RAND 		14
+#define TASKf_FLAGS_NUM				15
 
 //CTask.display_flags
 #define DISPLAYf_SHOW 					0
@@ -3956,6 +3958,7 @@ public class CTaskSettings
 #define DISPLAYf_NO_BORDER				3
 #define DISPLAYf_WIN_ON_TOP 			4
 #define DISPLAYf_CHILDREN_NOT_ON_TOP	5
+#define DISPLAYf_FLAGS_NUM				6
 
 #define TASK_SIGNATURE_VAL		'TskS'
 #define TASK_NAME_LEN 			32

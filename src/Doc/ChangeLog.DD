@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/01/22 00:20:08----$IV,0$
+* Added $LK+PU,"ST_WIN_INHIBIT_FLAGS",A="MN:ST_WIN_INHIBIT_FLAGS"$, $LK+PU,"ST_TASK_FLAGS",A="MN:ST_TASK_FLAGS"$, $LK+PU,"ST_DISPLAY_FLAGS",A="MN:ST_DISPLAY_FLAGS"$, $LK+PU,"WIf_FLAGS_NUM",A="MN:WIf_FLAGS_NUM"$, $LK+PU,"TASKf_FLAGS_NUM",A="MN:TASKf_FLAGS_NUM"$, $LK+PU,"DISPLAYf_FLAGS_NUM",A="MN:DISPLAYf_FLAGS_NUM"$.
+* Added verbose Bool argument to $LK+PU,"TaskRep",A="MN:TaskRep"$, add logic to $LK+PU,"TaskRepTask",A="MN:TaskRepTask"$ to print out detailed task information. Default parameter value is FALSE.
+
 $IV,1$----03/25/22 12:55:27----$IV,0$
 * Raised version number to 1.12.
 * Removed DocOpt, DocOptList, DocOptFile, DocOptDoc, and DocOptEntry.

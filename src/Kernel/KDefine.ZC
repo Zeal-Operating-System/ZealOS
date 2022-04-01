@@ -227,6 +227,59 @@ U0 SysDefinesLoad()
 						"SWAP\0"
 						"UNKNOWN\0");
 
+	DefineListLoad("ST_TASK_FLAGS",
+						"Task Lock\0"
+						"Kill Task\0"
+						"Suspended\0"
+						"Idle\0"
+						"Cmd Line Prompt\0"
+						"Input Filter Task\0"
+						"Filter Input\0"
+						"Has Song\0"
+						"Disable Breakpoints\0"
+						"Awaiting Message\0"
+						"Break Locked\0"
+						"Pending Break\0"
+						"Break to Shift Esc\0"
+						"Kill After Debug\0"
+						"Non-Timer Rand\0");
+
+	DefineListLoad("ST_DISPLAY_FLAGS",
+						"Show\0"
+						"Not Raw\0"
+						"Silent\0"
+						"No Border\0"
+						"Window on Top\0"
+						"Children Not on Top\0");
+
+	DefineListLoad("ST_WIN_INHIBIT_FLAGS",
+						"Self Focus\0"
+						"Self Menu\0"
+						"Self Ctrls\0"
+						"Self Mouse Left\0"
+						"Self Mouse Left Pressed\0"
+						"Self Mouse Right\0"
+						"Self Mouse Right Pressed\0"
+						"Self Mouse Wheel\0"
+						"Self Border\0"
+						"Self Grab-Scroll\0"
+						"Self Doc\0"
+						"Self ODE\0"
+						"Self Key Description\0"
+						" \0"
+						" \0"
+						" \0"
+						" \0"
+						"Focus Task Menu\0"
+						"Focus Task Ctrls\0"
+						"Focus Task Mouse Left\0"
+						"Focus Task Mouse Left Pressed\0"
+						"Focus Task Mouse Right\0"
+						"Focus Task Mouse Right Pressed\0"
+						"Focus Task Mouse Wheel\0"
+						"Focus Task Border\0"
+						"Focus Task Grab-Scroll\0");
+
 	DefineListLoad("ST_COLORS",
 						"BLACK\0"
 						"BLUE\0"

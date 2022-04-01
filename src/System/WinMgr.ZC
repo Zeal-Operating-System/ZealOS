@@ -885,7 +885,7 @@ wmt_start:
 				}
 			}
 
-			if (!Bt(&task->win_inhibit,WIf_SELF_MS_R)&&
+			if (!Bt(&task->win_inhibit, WIf_SELF_MS_R) &&
 				(!TaskValidate(sys_focus_task) ||
 				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MS_R)))
 			{
@@ -928,7 +928,7 @@ wmt_start:
 				}
 			}
 
-			if (!Bt(&task->win_inhibit,WIf_SELF_BORDER) && has_border &&
+			if (!Bt(&task->win_inhibit, WIf_SELF_BORDER) && has_border &&
 				(!TaskValidate(sys_focus_task) ||
 				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_BORDER)))
 			{
