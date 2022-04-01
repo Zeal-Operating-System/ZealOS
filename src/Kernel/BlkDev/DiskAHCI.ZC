@@ -1153,23 +1153,23 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 					AHCIPortInit(bd, port, i);
 
 					AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1, FALSE);
+
+					kernel = buf + sys_boot_src.u16[1] << BLK_SIZE_BITS;
+
+					if (kernel->compile_time == sys_compile_time)
+					{
+						"AHCI: Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
+						"______________________\n";
+						return TRUE;
+					}
+					else
+						"AHCI: Did not find matching sys_compile_time on Port %d\n", i;
 				}
 				catch
 				{
 					Fs->catch_except = TRUE;
-					"AHCI: Error at Port %d", i;
+					"AHCI: Error at Port %d\n", i;
 				}
-
-				kernel = buf + sys_boot_src.u16[1] << BLK_SIZE_BITS;
-
-				if (kernel->compile_time == sys_compile_time)
-				{
-					"AHCI: Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
-					"______________________\n";
-					return TRUE;
-				}
-				else
-					"AHCI: Did not find matching sys_compile_time on Port %d\n", i;
 			}
 		}
 	}
