@@ -80,7 +80,7 @@ extern I64 StrNGet(U8 *buf, I64 size, Bool allow_ext=TRUE);
 extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL, CTask *task=NULL, CBlkPool *bp);
 
 extern Bool ISOInit(CDrive *drive, I64 blk);
-
+extern Bool ISOFileFind(CDrive *drive, I64 cur_dir_clus, U8 *name, CDirEntry *_res, I64 fuf_flags=0);
 extern Bool IsDebugMode();
 extern Bool IsDir(U8 *dir_name);
 extern Bool IsRaw();

@@ -68,7 +68,9 @@ Bool Cd(U8 *dirname=NULL, Bool make_dirs=FALSE)
 				case FSt_REDSEA:
 					res = RedSeaCd(buf, cur_dir_clus);
 					break;
-
+				case FSt_ISO9660:
+					res = ISOCd(buf,cur_dir_clus);
+					break;
 				case FSt_FAT32:
 					res = FAT32Cd(buf, cur_dir_clus);
 					break;

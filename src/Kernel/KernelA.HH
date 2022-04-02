@@ -3144,6 +3144,30 @@ class CPalindromeU32
 	U32 	little, big;
 };
 
+class CISODate
+{
+	U8	year, mon, day, hour, min, sec, sec100;
+};
+
+class CISODirEntry
+{
+	U8				len, ext_attr_len;
+	CPalindromeU32	loc;
+	CPalindromeU32	size;
+	CISODate		date;
+	U8				flags, file_unit_size, interleave;
+	CPalindromeU16	vol_seq_num;
+	U8				name_len, name;
+};
+
+class CISOPathEntry
+{
+	U8	name_len, zero;
+	U32	blk;
+	U16	parent_entry_num,
+		name[1]; //Aligned to U16 boundaries
+};
+
 //ISO9660
 #define ISOT_BOOT_RECORD		0
 #define ISOT_PRI_VOL_DESC 		1
@@ -3151,33 +3175,36 @@ class CPalindromeU32
 #define ISOT_VOL_DRIVE_DESC 	3
 #define ISOT_TERMINATOR 		255
 
-class CISODirEntry
-{
-	U8				pad[2];
-	CPalindromeU32	loc;
-	U8				pad[24];
-};
-
 class CISOPriDesc
 {
 	U8				type,
 					id[5],
 					version,
-					pad[73];
+					unused1,
+					system_id[32],
+					vol_id[32],
+					unused2[8];
 	CPalindromeU32	vol_space_size;
-	U8				pad[32];
+	U8				unused3[32];
 	CPalindromeU16	vol_set_size;
 	CPalindromeU16	vol_seq_num;
 	CPalindromeU16	log_block_size;
-	U8				pad[24];
+	CPalindromeU32	path_table_size;
+	U32				type_l_path_table,
+					opt_type_l_path_table,
+					type_m_path_table,
+					opt_type_m_path_table;
 	CISODirEntry	root_dir_record;
-	U8				pad[128],
+	U8				vol_set_id[128],
 					publisher_id[128],
 					preparer_id[128],
 					pad[307],
 					file_structure_version,
 					pad[1166];
 };
+
+#define ISO_BASE_YEAR	1900
+#define ISO_ATTR_DIR	2
 
 //Red Sea Attributes
 //See $LK,"ST_FILE_ATTRS",A="MN:ST_FILE_ATTRS"$
@@ -3343,7 +3370,7 @@ public class CBlkDev
 #define FSt_NULL		0
 #define FSt_REDSEA		1 //Supported
 #define FSt_FAT32 		2 //Supported except for short names, to some degree
-#define FSt_ISO9660 	3 //Not Supported
+#define FSt_ISO9660 	3 //Supported (CD/DVD)
 #define FSt_NTFS		4 //Not Supported
 #define FSt_LINUX		5 //Not Supported
 #define FSt_SWAP		6 //Not Supported
