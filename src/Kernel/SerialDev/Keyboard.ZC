@@ -419,6 +419,8 @@ U0 KbdBuildSC(U8 raw_byte, Bool in_irq, U8 *_last_raw_byte, I64 *_last_sc)
 		{
 			if (sc & 255 == SC_DELETE && !(sc_flags & SCF_SHIFT))
 				CtrlAltDel(sc);
+			else if (sc & 255 == SC_ENTER && !(sc_flags & SCF_SHIFT))
+                                LBts(sys_ctrl_alt_flags, CTRL_ALT_X);
 			else
 			{
 				if (sc & 255 == SC_ESC)
