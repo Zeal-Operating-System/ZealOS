@@ -1,0 +1,458 @@
+
+asm
+{
+_VECTOR_4D_INIT::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG5[RBP]	// = *dest
+
+	CVTSD2SS	XMM0, SF_ARG1[RBP]
+	MOVSS		[RAX], XMM0
+
+	CVTSD2SS	XMM0, SF_ARG2[RBP]
+	MOVSS		4[RAX], XMM0
+
+	CVTSD2SS	XMM0, SF_ARG3[RBP]
+	MOVSS		8[RAX], XMM0
+
+	CVTSD2SS	XMM0, SF_ARG4[RBP]
+	MOVSS		12[RAX], XMM0
+
+	POP			RBP
+	RET1		40
+}
+/**
+	@ingroup gfxmath
+	@brief Initialize members of a vector with double-precision floats.
+
+	@param[in]     x	X component.
+	@param[in]     y	Y component.
+	@param[in]     z	Z component.
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_INIT U0 Vector4DInit(F64 x, F64 y, F64 z, F64 w, CVector4D *dest);
+
+#define MATH_VECTOR_4D_STR "%n\t%n\t%n\t%n\n\n"
+
+/**
+	@ingroup gfxmath
+	@brief Print members of a vector.
+
+	@param[in] v	Vector
+*/
+U0 Vector4DPrint(CVector4D *v)
+{
+	U8 reg R15 str = "%n\t%n\t%n\t%n\n\n";
+asm
+{
+	MOV			RAX, SF_ARG1[RBP]	// = *v
+	SUB			RSP, 32
+
+	CVTSS2SD	XMM0, 12[RAX]
+	MOVSD_SSE	24[RSP], XMM0
+
+	CVTSS2SD	XMM0, 8[RAX]
+	MOVSD_SSE	16[RSP], XMM0
+
+	CVTSS2SD	XMM0, 4[RAX]
+	MOVSD_SSE	8[RSP], XMM0
+
+	CVTSS2SD	XMM0, [RAX]
+	MOVSD_SSE	[RSP], XMM0
+
+	PUSH		4					// # of varargs
+	PUSH		R15
+	CALL		&Print
+	ADD			RSP, 48
+}
+}
+
+asm
+{
+_VECTOR_4D_COPY::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]	// = *src
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]	// = *dest
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup gfxmath
+	@brief Copy all members of a vector to destination.
+
+	@param[in]     src	Source
+	@param[in,out] dest	Destination 
+*/
+_extern _VECTOR_4D_COPY U0 Vector4DCopy(CVector4D *src, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_IS_EQUAL::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]	// = *a
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]	// = *b
+	MOVAPS		XMM1, [RAX]
+	CMPPS		XMM0, XMM1, 0		// CMPEQPS
+
+	PMOVMSKB	RAX, XMM0
+
+	AND			RAX, 0xFFFF
+	CMP			RAX, 0xFFFF
+	JNZ			_is_not_equal
+	MOV			RAX, 1
+	JMP			_return
+_is_not_equal:
+	MOV			RAX, 0
+
+_return:
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup gfxmath
+	@brief Checks if two vectors are equal.
+
+	@param[in] a	Vector 1
+	@param[in] b	Vector 2
+	@return			TRUE if equal.
+*/
+_extern _VECTOR_4D_IS_EQUAL Bool Vector4DIsEqual(CVector4D *a, CVector4D *b);
+
+asm
+{
+_VECTOR_4D_ADD::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	ADDPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Sum of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_ADD U0 Vector4DAdd(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_ADDS::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVSS		XMM1, SF_ARG2[RBP]
+	SHUFPS		XMM1, XMM1, 0
+	ADDPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Add a scalar to a vector.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_ADDS U0 Vector4DAddS(CVector4D *v, F32 *s, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_SUB::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	SUBPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Difference of two vectors.
+	
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_SUB U0 Vector4DSub(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_SUBS::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVSS		XMM1, SF_ARG2[RBP]
+	SHUFPS		XMM1, XMM1, 0
+	SUBPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Subtract a scalar from a vector.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_SUBS U0 Vector4DSubS(CVector4D *v, F32 *s, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_MUL::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	MULPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Product of two vectors (element multiplication).
+	
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MUL U0 Vector4DMul(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_MULS::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVSS		XMM1, SF_ARG2[RBP]
+	SHUFPS		XMM1, XMM1, 0
+	MULPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Scale a vector by a scalar.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MULS U0 Vector4DMulS(CVector4D *v, F32 *s, CVector4D *dest);
+
+
+asm
+{
+_VECTOR_4D_DIV::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	DIVPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Quotient of two vectors.
+	
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_DIV U0 Vector4DDiv(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_DIVS::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVSS		XMM1, SF_ARG2[RBP]
+	SHUFPS		XMM1, XMM1, 0
+	DIVPS		XMM0, XMM1
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup gfxmath
+	@brief Scale a vector by a scalar.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_DIVS U0 Vector4DDivS(CVector4D *v, F32 *s, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_MIN::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS 		XMM0, [RAX]
+	MOV 		RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	MINPS 		XMM0, XMM1
+	MOV 		RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24	
+}
+/**
+	@ingroup gfxmath
+	@brief Min of two vectors (element-wise).
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MIN U0 Vector4DMin(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_MAX::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS 		XMM0, [RAX]
+	MOV 		RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	MAXPS 		XMM0, XMM1
+	MOV 		RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24		
+
+}
+/**
+	@ingroup gfxmath
+	@brief Max of two vectors (element-wise).
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination 
+*/
+_extern _VECTOR_4D_MAX U0 Vector4DMax(CVector4D *a, CVector4D *b, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_NEGATE::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM1,[RAX]
+	XORPS		XMM0, XMM0
+	SUBPS		XMM0, XMM1
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup gfxmath
+	@brief Negate a vector (elements = -elements).
+
+	@param[in]     v	Vector
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_NEGATE U0 Vector4DNegate(CVector4D *v, CVector4D *dest);
+
+asm
+{
+_VECTOR_4D_DOT::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	MULPS		XMM0, XMM1
+
+	MOVHLPS		XMM1, XMM0
+	ADDPS		XMM0, XMM1
+	MOVSS		XMM1, XMM0
+	SHUFPS		XMM0, XMM0, 0x55	// (1, 1, 1, 1)
+	ADDSS		XMM0, XMM1
+	MOVQ		RAX, XMM0
+
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup gfxmath
+	@brief Dot product of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@return				Dot product.
+*/
+_extern _VECTOR_4D_DOT I32 Vector4DDot(CVector4D *a, CVector4D *b);
+

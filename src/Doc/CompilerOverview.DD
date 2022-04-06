@@ -1,5 +1,11 @@
 $WW,1$$FG,5$$TX+CX,"Compiler Index"$$FG$
 
+The compiler lexes and parses code into $LK,"Intermediate Codes",A="FF:::/Compiler/CompilerA.HH,IC_END"$ which are then made into JIT or AOT machine code. The compiler preprocesses during lexing, and optimizes after Intermediate Code generation.
+
+For parser reference, see $LK,"ParseExpression",A="MN:ParseExpression"$(), $LK,"ParseExpression2",A="MN:ParseExpression2"$(), $LK,"ParseStatement",A="MN:ParseStatement"$().
+For Intermediate Code reference, see $LK,"BackLib",A="FI:::/Compiler/BackLib.ZC"$, $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.ZC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.ZC,cmp.num_reg_vars"$.
+For machine code backend reference, see $LK,"IC Struct",A="MN:CIntermediateCode"$, $LK,"COCCompile",A="MN:COCCompile"$ and $LK,"OptPass789A",A="FF:::/Compiler/OptPass789A.ZC,IC_MUL"$(), $LK,"BackEnd",A="FF:::/Compiler/BackA.ZC,ICMul"$.
+
 $LK,"::/Doc/Asm.DD"$
 
 $LK,"::/Doc/Directives.DD"$

@@ -1,0 +1,328 @@
+
+asm
+{
+_VECTOR_3D_INIT::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG4[RBP]	// = *dest
+
+	CVTSD2SS	XMM0, SF_ARG1[RBP]
+	MOVSS		[RAX], XMM0
+
+	CVTSD2SS	XMM0, SF_ARG2[RBP]
+	MOVSS		4[RAX], XMM0
+
+	CVTSD2SS	XMM0, SF_ARG3[RBP]
+	MOVSS		8[RAX], XMM0
+
+	POP			RBP
+	RET1		32
+}
+/**
+	@ingroup Math
+	@brief Initialize members of a vector with double-precision floats.
+
+	@param[in]     x	X component.
+	@param[in]     y	Y component.
+	@param[in]     z	Z component.
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_3D_INIT U0 Vector3DInit(F64 x, F64 y, F64 z, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Print members of a vector.
+
+	@param[in] v	Vector
+*/
+U0 Vector3DPrint(CVector3D *v)
+{
+	U8 reg R15 str = "%n\t%n\t%n\n\n";
+asm
+{
+	MOV			RAX, SF_ARG1[RBP]	// = *v
+	SUB			RSP, 24
+
+	CVTSS2SD	XMM0, 8[RAX]
+	MOVSD_SSE	16[RSP], XMM0
+
+	CVTSS2SD	XMM0, 4[RAX]
+	MOVSD_SSE	8[RSP], XMM0
+
+	CVTSS2SD	XMM0, [RAX]
+	MOVSD_SSE	[RSP], XMM0
+
+	PUSH		3					// # of varargs
+	PUSH		R15
+	CALL		&Print
+	ADD			RSP, 40
+}
+}
+
+/**
+	@ingroup Math
+	@brief Copy all members of a vector to destination.
+
+	@param[in]     src	Source
+	@param[in,out] dest	Destination 
+*/
+_extern _VECTOR_4D_COPY U0 Vector3DCopy(CVector3D *src, CVector3D *dest);
+
+asm
+{
+_VECTOR_3D_IS_EQUAL::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]	// = *a
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]	// = *b
+	MOVAPS		XMM1, [RAX]
+	CMPPS		XMM0, XMM1, 0		// CMPEQPS
+
+	PMOVMSKB	RAX, XMM0
+	AND			RAX, 0xFFF
+	CMP			RAX, 0xFFF
+	JNZ			_is_not_equal
+	MOV			RAX, 1
+	JMP			_return
+_is_not_equal:
+	MOV			RAX, 0
+
+_return:
+	POP		RBP
+	RET1	16
+}
+/**
+	@ingroup Math
+	@brief Checks if two vectors are equal.
+
+	@param[in] a	Vector 1
+	@param[in] b	Vector 2
+*/
+_extern _VECTOR_3D_IS_EQUAL Bool Vector3DIsEqual(CVector3D *a, CVector3D *b);
+
+/**
+	@ingroup Math
+	@brief Sum of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_ADD U0 Vector3DAdd(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Add a scalar to a vector.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_ADDS U0 Vector3DAddS(CVector3D *v, I32 *s, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Difference of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_SUB U0 Vector3DSub(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Subtract a scalar from a vector.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_SUBS U0 Vector3DSubS(CVector3D *v, I32 *s, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Product  of two vectors (element multiplication).
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MUL U0 Vector3DMul(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Scale a vector by a scalar.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MULS U0 Vector3DMulS(CVector3D *v, I32 *s, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Quotient of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_DIV U0 Vector3DDiv(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Divide a vector by a scalar.
+
+	@param[in]     v	Vector
+	@param[in]     s	Scalar
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_DIVS U0 Vector3DDivS(CVector3D *v, I32 *s, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Min of two vectors (element-wise).
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MIN U0 Vector3DMin(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Max of two vectors (element-wise).
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_MAX U0 Vector3DMax(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+/**
+	@ingroup Math
+	@brief Negate a vector (elements = -elements).
+
+	@param[in]     v	Vector
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_4D_NEGATE U0 Vector3DNegate(CVector3D *v, CVector3D *dest);
+
+asm
+{
+_VECTOR_3D_NORMALIZE::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVAPS		XMM2, XMM0
+	MULPS		XMM0, XMM2
+
+	MOVHLPS		XMM1, XMM0
+	ADDSS		XMM1, XMM0
+	SHUFPS		XMM0, XMM0, 0x55	// (1, 1, 1, 1)
+	ADDSS		XMM0, XMM1
+	SQRTSS		XMM0, XMM0
+	SHUFPS		XMM0, XMM0, 0x00	// (0, 0, 0, 0)
+	DIVPS		XMM2, XMM0
+
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		[RAX], XMM2
+
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup Math
+	@brief Normalize a vector (length = 1.0).
+
+	@param[in]     v	Vector
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_3D_NORMALIZE U0 Vector3DNormalize(CVector3D *v, CVector3D *dest);
+
+asm
+{
+_VECTOR_3D_DOT::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM1, [RAX]
+	MULPS		XMM0, XMM1
+
+	MOVHLPS		XMM1, XMM0
+	ADDSS		XMM1, XMM0
+	SHUFPS		XMM0, XMM0, 0x55	// (1, 1, 1, 1)
+	ADDSS		XMM0, XMM1
+	MOVQ		RAX, XMM0
+
+	POP			RBP
+	RET1		16
+}
+/**
+	@ingroup Math
+	@brief Dot product of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@return				Dot product.
+*/
+_extern _VECTOR_3D_DOT I32 Vector3DDot(CVector3D *a, CVector3D *b);
+
+asm
+{
+_VECTOR_3D_CROSS::
+	PUSH		RBP
+	MOV			RBP, RSP
+
+	MOV			RAX, SF_ARG1[RBP]
+	MOVAPS		XMM0, [RAX]
+	MOVAPS		XMM1, XMM0
+	MOV			RAX, SF_ARG2[RBP]
+	MOVAPS		XMM2, [RAX]
+	MOVAPS		XMM3, XMM2
+
+	SHUFPS		XMM0, XMM0, 0xC9	// (1, 2, 0, 3)  [Ay Az Ax]
+	SHUFPS		XMM1, XMM1, 0xD2	// (2, 0, 1, 3)  [Az Ax Ay]
+	SHUFPS		XMM2, XMM2, 0xD2	// (2, 0, 1, 3)  [Bz Bx By]
+	SHUFPS		XMM3, XMM3, 0xC9	// (1, 2, 0, 3)  [By Bz Bx]
+
+	MULPS		XMM0, XMM2
+	MULPS		XMM1, XMM3
+	SUBPS		XMM0, XMM1
+
+	MOV			RAX, SF_ARG3[RBP]
+	MOVAPS		[RAX], XMM0
+
+	POP			RBP
+	RET1		24
+}
+/**
+	@ingroup Math
+	@brief Cross product of two vectors.
+
+	@param[in]     a	Vector 1
+	@param[in]     b	Vector 2
+	@param[in,out] dest	Destination
+*/
+_extern _VECTOR_3D_CROSS U0 Vector3DCross(CVector3D *a, CVector3D *b, CVector3D *dest);
+
+
+
+
+
+
+
+
+
+
+
+

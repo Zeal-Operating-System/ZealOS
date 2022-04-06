@@ -16,6 +16,7 @@ $FG,2$     <CTRL-F>$FG$ Find
 $FG,2$      <ALT-M>$FG$ Max Window
 $FG,2$      <ALT-H>$FG$ Horz Tile
 $FG,2$      <ALT-V>$FG$ Vert Tile
+$FG,2$      <ALT-G>$FG$ Grid Tile
 $FG,2$     <CTRL-L>$FG$ Text Menu
 $FG,2$         <F7>$FG$ God Word
 $FG,2$   <SHIFT-F7>$FG$ God Passage

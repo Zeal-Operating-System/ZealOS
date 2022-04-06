@@ -1,0 +1,13 @@
+U0 ICMPTest()
+{
+	U32 a = 0x08080808;
+	U8 *b = MAlloc(64);
+	I64 i;
+
+	for (i = 0; i < 64; i++)
+		b[i] = RandU8;
+
+	ICMPRequestSend(a, 0, 0, b, 64);
+}
+
+ICMPTest;

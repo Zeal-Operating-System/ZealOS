@@ -1,0 +1,254 @@
+asm {
+INT_MP_CRASH_ADDR:: //Forward reference to work around compiler
+		DU32	&IntMPCrash;
+
+INT_WAKE::
+		PUSH	RDX
+		PUSH	RAX
+		MOV 	EAX, &dev
+		MOV 	EDX, U32 LAPIC_EOI
+		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
+		MOV 	U32 [RAX+RDX], 0
+		POP 	RAX
+		POP 	RDX
+		IRET
+
+IRQ_TIMER::  //I_TIMER
+		CALL	TASK_CONTEXT_SAVE
+		CLD
+
+		MOV 	RAX, U64 [RSP]
+		MOV 	U64 CTask.rip[RSI], RAX
+		MOV 	RAX, U64 16[RSP]
+		MOV 	U64 CTask.rflags[RSI], RAX
+		MOV 	RAX, U64 24[RSP]
+		MOV 	U64 CTask.rsp[RSI], RAX
+
+		XOR 	RAX, RAX
+		MOV 	RDI, U64 GS:CCPU.addr[RAX]
+		LOCK
+		INC 	U64 CCPU.total_jiffies[RDI]
+
+		BT		U64 CTask.task_flags[RSI], TASKf_IDLE
+		JNC		@@05
+		LOCK
+		INC 	U64 CCPU.idle_pt_hits[RDI]
+
+@@05: 	MOV		RAX, U64 CCPU.profiler_timer_irq[RDI]
+		TEST	RAX, RAX
+		JZ		@@10
+		PUSH	RSI
+		CALL	RAX 		//See $LK,"ProfTimerInt",A="MN:ProfTimerInt"$().
+		JMP 	@@15
+@@10: 	ADD 	RSP, 8
+@@15: 	CLI
+		MOV		RAX, U64 CCPU.num[RDI]
+		TEST	RAX, RAX
+		JZ		@@20
+
+		MOV 	EAX, &dev
+		MOV 	EDX, U32 LAPIC_EOI
+		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
+		MOV 	U32 [RAX + RDX], 0
+		JMP 	@@25
+
+@@20: 	CALL	&IntCore0TimerHandler 	//Only Core 0 calls this.
+@@25: 	XOR 	RAX, RAX
+		CMP 	RSI, U64 GS:CCPU.idle_task[RAX]
+		JE		I32 RESTORE_EXECUTIVE_TASK_IF_READY
+		JMP 	I32 RESTORE_RSI_TASK
+
+//************************************
+INT_FAULT::
+		PUSH	RBX
+		PUSH	RAX
+		MOV 	BL, U8 16[RSP] 	//We pushed fault_num $LK,"IntFaultHandlersNew",A="MN:IntFaultHandlersNew"$().
+		XOR 	RAX, RAX
+		MOV 	FS:U8 CTask.fault_num[RAX], BL
+		POP 	RAX
+		POP 	RBX
+		ADD 	RSP, 8 					//Pop fault_num
+
+		CALL	TASK_CONTEXT_SAVE
+
+		XOR 	RDX, RDX
+		MOV 	U64 CTask.fault_err_code[RSI], RDX
+		MOV 	EDX, U32 CTask.fault_num[RSI]
+		BT		U64 [INT_FAULT_ERR_CODE_BITMAP], RDX
+		JNC 	@@1
+		POP		U64 CTask.fault_err_code[RSI]
+
+@@1:	MOV 	RAX, U64 [RSP]
+		MOV 	U64 CTask.rip[RSI], RAX
+		MOV 	RAX, U64 16[RSP]
+		MOV 	U64 CTask.rflags[RSI], RAX
+		MOV 	RSP, U64 24[RSP]
+		MOV 	U64 CTask.rsp[RSI], RSP
+		MOV 	RBP, CTask.rbp[RSI]
+		PUSH	U64 CTask.fault_err_code[RSI]
+		PUSH	U64 CTask.fault_num[RSI]
+		MOV 	RSI, CTask.rsi[RSI]
+		CALL	&Fault2 				//See $LK,"Fault2",A="FF:::/Kernel/KDebug.ZC,Fault2"$
+		JMP 	I32 RESTORE_FS_TASK
+
+INT_FAULT_ERR_CODE_BITMAP::
+		DU32	0x00027D00, 0, 0, 0, 0, 0, 0, 0;
+}
+
+U8 *IntEntryGet(I64 irq)
+{//Get interrupt handler.
+	I64			 handler_addr;
+	CIDTEntry	*entry = &dev.idt[irq];
+
+	handler_addr.u16[0] = entry->offset_low;
+	handler_addr.u16[1] = entry->offset_mid;
+	handler_addr.u32[1] = entry->offset_hi;
+
+	return handler_addr;
+}
+
+U8 *IntEntrySet(I64 irq, U0 (*fp_new_handler)(), I64 type=IDTET_IRQ)
+{//Set interrupt handler. Returns old handler. See $LK,"IDTET_IRQ",A="MN:IDTET_IRQ"$.
+//See $LK,"::/Demo/Lectures/InterruptDemo.ZC"$.
+//See $LK,"::/Demo/MultiCore/Interrupts.ZC"$.
+	I64			 fp = fp_new_handler;
+	U8			*old_handler;
+	CIDTEntry	*entry;
+
+	PUSHFD
+	CLI
+	old_handler = IntEntryGet(irq);
+	entry = &dev.idt[irq];
+	entry->seg_select = offset(CGDT.cs64);
+	entry->offset_low = fp.u16[0];
+	entry->offset_mid = fp.u16[1];
+	entry->offset_hi  = fp.u32[1];
+	entry->type_attr  = 0x80 + type; //bit 7 is 'segment present'
+	entry->ist = entry->zero = 0; //We don't care about the IST mechanism
+	POPFD
+
+	return old_handler;
+}
+
+I64 IntEntryAlloc()
+{ // 'Allocate' a user irq num.
+  // 64 user irqs available, 0xFF <--> 0xBF.
+  // $LK+PU,"Goes backwards from 0xFF.",A="MN:I_USER"$
+	I64 i, res = 0;
+
+	for (i = 0xFF; i > 0xFF - 64; i--)
+		if (!Bts(&dev.user_int_bitmap, i - 192))
+		{
+			res = i;
+			break;
+		}
+
+	return res;
+}
+
+U0 IntPICInit()
+{//Init 8259
+	OutU8(PIC_1, PIC_INIT); //IW (Initialization Word) 1
+	OutU8(PIC_2, PIC_INIT); //IW1
+
+	OutU8(PIC_1_DATA, 0x20); //IW2 Moving IRQ base from 0 -> 32 (beyond Intel reserved faults)
+	OutU8(PIC_2_DATA, 0x28); //IW2 Moving IRQ base from 8 -> 40
+	OutU8(PIC_1_DATA, 0x04); //IW3 Telling PIC_1 PIC_2 exists.
+	OutU8(PIC_2_DATA, 0x02); //IW3 Telling PIC_2 its cascade identity.
+	OutU8(PIC_1_DATA, 0x0D); //IW4 8086 Mode, Buffered Mode (Master PIC)
+	OutU8(PIC_2_DATA, 0x09); //IW4 8086 Mode, Buffered Mode (Slave PIC)
+	OutU8(PIC_1_DATA, 0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
+	OutU8(PIC_2_DATA, 0xFF);
+}
+
+interrupt U0 IntNop()
+{//Make unplanned IRQs stop by all means!
+	OutU8(PIC_2, PIC_EOI);
+	OutU8(PIC_1, PIC_EOI);
+	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+}
+
+I64 IntEntryFree(I64 irq)
+{ // 'Free' a user irq num. Unsets bit in user irq bitmap.
+	I64 res = 0;
+
+	if (0xFF >= irq >= 0xFF - 64)
+		if (res = Btr(&dev.user_int_bitmap, irq - 192))
+			IntEntrySet(irq, &IntNop); // clear the irq entry vect
+
+	return res;
+}
+
+interrupt U0 IntDivZero()
+{
+	if (Gs->num)
+	{
+		mp_count = 1;
+		debug.mp_crash->cpu_num = Gs->num;
+		debug.mp_crash->task = Fs;
+		MOV RAX, U64 8[RBP] //Get RIP off of stack.
+		debug.mp_crash->rip = RAXGet;
+		debug.mp_crash->message = "Div Zero";
+		debug.mp_crash->message_num = 0;
+		MPInt(I_MP_CRASH, 0);
+		SysHlt;
+	}
+	throw('DivZero');
+}
+
+U8 *IntFaultHandlersNew()
+{
+	I64 i;
+	U8 *res = MAlloc(256 * 7, Fs->code_heap), *dst = res;
+
+	for (i = 0; i < 256; i++)
+	{
+		*dst++ = 0x6A; //PUSH I8 xx
+		*dst(I8 *)++ = i;
+		*dst++ = 0xE9; //JMP	I32 xxxxxxxx
+		*dst(I32 *) = INT_FAULT - dst - 4;
+		dst += 4;
+	}
+
+	return res;
+}
+
+U0 IntInit1()
+{//Interrupt descriptor table part1.
+	I64				i;
+	CSysLimitBase	tmp_ptr;
+
+	if (!Gs->num) //Gs is current $LK,"CCPU",A="MN:CCPU"$ struct
+	{
+		dev.idt = CAllocAligned(sizeof(CIDTEntry) * 256, 8);
+		for (i = 0; i < 256; i++)
+			IntEntrySet(i, &IntNop);
+	}
+	tmp_ptr.limit = 256 * sizeof(CIDTEntry) - 1;
+	tmp_ptr.base = dev.idt;
+	RAXSet(&tmp_ptr);
+	LIDT U64 [RAX]
+}
+
+U0 IntInit2()
+{//Interrupt descriptor table part2: Core 0 Only.
+	I64 i;
+
+	PUSHFD
+	CLI
+	IntEntrySet(I_DIV_ZERO, &IntDivZero);
+	for (i = 1; i < 32; i++)
+		IntEntrySet(i, &debug.int_fault_code[7 * i]);
+/*In theory, we use the PIC mask reg to insure we don't get
+anything but keyboard, mouse and timer IRQs.	In practice, Terry had
+gotten IRQ 0x27, he thought perhaps because he didn't initialize the APIC?
+We go ahead and ACK PIC in $LK,"IntNop",A="MN:IntNop"$().
+He had no idea why he got a IRQ 0x27.
+*/
+	IntEntrySet(I_NMI,		 _SYS_HLT);
+	IntEntrySet(I_TIMER,	 IRQ_TIMER);
+	IntEntrySet(I_MP_CRASH, *INT_MP_CRASH_ADDR(U32 *));
+	IntEntrySet(I_WAKE,		 INT_WAKE);
+	IntEntrySet(I_DEBUG,	&debug.int_fault_code[7 * I_DEBUG]);
+	POPFD
+}

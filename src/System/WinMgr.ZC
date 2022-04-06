@@ -1,0 +1,1037 @@
+#help_index "Windows;Task/Delay"
+
+public U0 Refresh(I64 count = 1, Bool force = FALSE)
+{//Wait for 60fps WinMgr to start & finish screen refresh.
+	//0,FALSE Count Sync to WinMgr.
+	//0,TRUE	Pump Messages.
+	//1 Count Wait and Pump Messages.
+	//2 Count Make Sure to do a Full Refresh
+	//and Set Cur Pos.
+	Bool	 old_full_refresh, old_idle = LBts(&Fs->task_flags, TASKf_IDLE);
+	CDoc	*old_doc = DocPut;
+	I64		 update_count;
+
+	if (!count && force)
+		LBts(&sys_semas[SEMA_JUST_PUMP_MESSAGES], 0);
+	while (Bt(&sys_semas[SEMA_REFRESH_IN_PROGRESS], 0))
+	{
+		if (force && sys_winmgr_task)
+			sys_winmgr_task->wake_jiffy = counts.jiffies;
+		Yield;
+	}
+	if (count > 1 && old_doc)
+		old_full_refresh = LBts(&old_doc->flags, DOCf_DO_FULL_REFRESH);
+	update_count = winmgr.updates+count;
+	while (winmgr.updates < update_count)
+	{
+		if (force && sys_winmgr_task)
+			sys_winmgr_task->wake_jiffy = counts.jiffies;
+		Sleep(1);
+	}
+	if (old_doc)
+		LBEqual(&old_doc->flags, DOCf_DO_FULL_REFRESH, old_full_refresh);
+	LBEqual(&Fs->task_flags, TASKf_IDLE, old_idle);
+}
+
+#help_index "Windows"
+
+I64 WinQueueIPMessages(Bool que)
+{
+	static CD3I64	 single_mouse = {0, 0, 0};
+	F64				 time = tS;
+	I64				 message_code = 0, arg1, arg2, single_arg1, single_arg2;
+	CTask			*task_focus = sys_focus_task;
+
+	if (task_focus && !winmgr.grab_scroll)
+	{
+		arg1 = mouse.pos.x - task_focus->pix_left - task_focus->scroll_x;
+		arg2 = mouse.pos.y - task_focus->pix_top - task_focus->scroll_y;
+		single_arg1 = single_mouse.x - task_focus->pix_left - task_focus->scroll_x;
+		single_arg2 = single_mouse.y - task_focus->pix_top - task_focus->scroll_y;
+		if (old_mouse.presnap.x != mouse.presnap.x || old_mouse.presnap.y != mouse.presnap.y)
+		{
+			if (que)
+				TaskMessage(task_focus, 0, MESSAGE_MS_MOVE, arg1, arg2, 0);
+			message_code = MESSAGE_MS_MOVE;
+		}
+//TODO que message for mouse.pos.z?
+		if (mouse.left_dbl_time)
+		{
+			if (time > mouse.left_dbl_time)
+			{
+				if (mouse.left_dbl)
+				{
+					if (!mouse.left_down_sent)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_L_D_DOWN, arg1, arg2, 0);
+						mouse.left_down_sent = TRUE;
+						message_code = MESSAGE_MS_L_D_DOWN;
+					}
+					if (!mouse.lb)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_L_D_UP, arg1, arg2, 0);
+						mouse.left_dbl_time = 0;
+						message_code = MESSAGE_MS_L_D_UP;
+					}
+				}
+				else
+				{
+					if (!mouse.left_down_sent)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_L_DOWN, single_arg1, single_arg2, 0);
+						mouse.left_down_sent = TRUE;
+						message_code = MESSAGE_MS_L_DOWN;
+					}
+					if (!mouse.lb)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_L_UP, arg1, arg2, 0);
+						mouse.left_dbl_time = 0;
+						message_code = MESSAGE_MS_L_UP;
+					}
+				}
+			}
+			else
+			{
+				if (mouse.lb && !mouse_last.lb) {
+					mouse.left_dbl_time = time;
+					mouse.left_dbl = TRUE;
+				}
+			}
+		}
+		else
+		{
+			if (TaskValidate(task_focus) && Bt(&task_focus->win_inhibit, WIf_FOCUS_TASK_MS_L_D))
+			{
+				if (mouse.lb && !mouse_last.lb)
+				{
+					if (que)
+						TaskMessage(task_focus, 0, MESSAGE_MS_L_DOWN, arg1, arg2, 0);
+					message_code = MESSAGE_MS_L_DOWN;
+				}
+				else if (!mouse.lb && mouse_last.lb)
+				{
+					if (que)
+						TaskMessage(task_focus, 0, MESSAGE_MS_L_UP, arg1, arg2, 0);
+					message_code = MESSAGE_MS_L_UP;
+				}
+			}
+			else
+			{
+				if (mouse.lb && !mouse_last.lb)
+				{
+					mouse.left_dbl = FALSE;
+					mouse.left_down_sent = FALSE;
+					mouse.left_dbl_time = time + mouse.dbl_time;
+					single_mouse.x = mouse.pos.x;
+					single_mouse.y = mouse.pos.y;
+				}
+			}
+		}
+
+		if (mouse.right_dbl_time)
+		{
+			if (time > mouse.right_dbl_time)
+			{
+				if (mouse.right_dbl)
+				{
+					if (!mouse.right_down_sent)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_R_D_DOWN, arg1, arg2, 0);
+						mouse.right_down_sent = TRUE;
+						message_code = MESSAGE_MS_R_D_DOWN;
+					}
+					if (!mouse.rb)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_R_D_UP, arg1, arg2, 0);
+						mouse.right_dbl_time = 0;
+						message_code = MESSAGE_MS_R_D_UP;
+					}
+				}
+				else
+				{
+					if (!mouse.right_down_sent)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_R_DOWN, single_arg1, single_arg2, 0);
+						mouse.right_down_sent = TRUE;
+						message_code = MESSAGE_MS_R_DOWN;
+					}
+					if (!mouse.rb)
+					{
+						if (que)
+							TaskMessage(task_focus, 0, MESSAGE_MS_R_UP, arg1, arg2, 0);
+						mouse.right_dbl_time = 0;
+						message_code = MESSAGE_MS_R_UP;
+					}
+				}
+			}
+			else
+			{
+				if (mouse.rb && !mouse_last.rb)
+				{
+					mouse.right_dbl_time = time;
+					mouse.right_dbl = TRUE;
+				}
+			}
+		}
+		else
+		{
+			if (TaskValidate(task_focus) && Bt(&task_focus->win_inhibit, WIf_FOCUS_TASK_MS_R_D))
+			{
+				if (mouse.rb && !mouse_last.rb) {
+					if (que)
+						TaskMessage(task_focus, 0, MESSAGE_MS_R_DOWN, arg1, arg2, 0);
+					message_code = MESSAGE_MS_R_DOWN;
+				}
+				else if (!mouse.rb && mouse_last.rb)
+				{
+					if (que)
+						TaskMessage(task_focus, 0, MESSAGE_MS_R_UP, arg1, arg2, 0);
+					message_code = MESSAGE_MS_R_UP;
+				}
+			}
+			else
+			{
+				if (mouse.rb && !mouse_last.rb) {
+					mouse.right_dbl = FALSE;
+					mouse.right_down_sent = FALSE;
+					mouse.right_dbl_time = time + mouse.dbl_time;
+					single_mouse.x = mouse.pos.x;
+					single_mouse.y = mouse.pos.y;
+				}
+			}
+		}
+
+		MemCopy(&mouse_last, &mouse, sizeof(CMouseStateGlobals));
+		MemCopy(&old_mouse, &mouse, sizeof(CMouseStateGlobals));
+	}
+
+	return message_code;
+}
+
+U0 WinCalcIdles()
+{
+	F64						 calc_idle_time;
+	I64						 i, k, total_jiffies, total_jiffies_delta, idle_pt_hits[MP_PROCESSORS_NUM];
+	CCPU					*c;
+	CWinMgrTimingGlobals	*t = winmgr.t;
+
+	if ((t->calc_idle_delta_time = (calc_idle_time = tS) - t->last_calc_idle_time) > .25)
+	{
+		PUSHFD
+		CLI
+		total_jiffies = cpu_structs[0].total_jiffies;
+		for (i = 0; i < mp_count; i++)
+			idle_pt_hits[i] = cpu_structs[i].idle_pt_hits;
+		POPFD
+
+		total_jiffies_delta = total_jiffies - t->last_total_jiffies;
+		for (i = 0; i < mp_count; i++)
+		{
+			c = &cpu_structs[i];
+			if (total_jiffies_delta && (k = idle_pt_hits[i] - t->last_idle_pt_hits[i]) >= 0)
+				c->idle_factor = Clamp(ToF64(k) / total_jiffies_delta, 0.01, 0.99);
+			else
+				c->idle_factor = 0.01;
+			t->last_idle_pt_hits[i] = idle_pt_hits[i];
+		}
+		t->last_total_jiffies = total_jiffies;
+		t->last_calc_idle_time = calc_idle_time;
+		t->calc_idle_count++;
+	}
+}
+
+I64 WinMgrSleep(Bool flush_messages = FALSE)
+{
+	I64 timeout_val, message_code=0;
+	CCtrl	*c;
+	Bool	 que;
+	F64		 t, t_delta;
+	U8		*st;
+	CDC		*diff;
+	CDate	 cdt;
+
+	TimeCal;
+	if ((t_delta = (t = tS) - winmgr.last_refresh_tS) > 0.01)
+		winmgr.fps = Max(1.0 / t_delta, 1);
+	else
+		winmgr.fps = 99;
+	winmgr.last_refresh_tS = t;
+	WinCalcIdles;
+
+	if (flush_messages)
+		FifoI64Flush(kbd.scan_code_fifo);
+	else if (TaskValidate(sys_focus_task))
+	{
+		KbdMessagesQueue;
+
+		que = TRUE;
+		if (TaskValidate(sys_focus_task) && !Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_CTRLS)) {
+			c = sys_focus_task->next_ctrl;
+			while (c != &sys_focus_task->next_ctrl)
+			{
+				if (CtrlInside(c, mouse.pos.x, mouse.pos.y))
+				{
+					que = FALSE;
+					break;
+				}
+				c = c->next;
+			}
+		}
+		message_code = WinQueueIPMessages(que);
+	}
+	else
+	{
+		WinRefocus(sys_focus_task);
+		if (!TaskValidate(sys_focus_task))
+			FifoI64Flush(kbd.scan_code_fifo);
+	}
+	if (sys_focus_task)
+		LBtr(&sys_focus_task->task_flags, TASKf_HAS_SONG);
+	WinMouseUpdate;
+
+	if (!LBtr(&sys_semas[SEMA_JUST_PUMP_MESSAGES], 0))
+	{
+		t = tS + WINMGR_PERIOD / 8;
+		while (winmgr.ideal_refresh_tS < t)
+			winmgr.ideal_refresh_tS += WINMGR_PERIOD;
+		timeout_val = counts.jiffies + (winmgr.ideal_refresh_tS - tS) * JIFFY_FREQ;
+		LBts(&sys_semas[SEMA_REFRESH_IN_PROGRESS], 0);
+		GrUpdateScreen;
+		LBtr(&sys_semas[SEMA_REFRESH_IN_PROGRESS], 0);
+		if (screencast.record  && !screencast.just_audio)
+		{
+			cdt = screencast.t0_now(I64) + ToI64(CDATE_FREQ * (tS - screencast.t0_tS));
+			if (!screencast.dc)
+			{
+				screencast.dc = DCCopy(screencast.dc2_alias);
+				screencast.dc->cdt = cdt;
+				st = MStrPrint(screencast.print_format, cdt);
+				GRWrite(st, screencast.dc);
+				Free(st);
+			}
+			else if (MemCompare(screencast.dc->body,
+					screencast.dc2_alias->body, MSize(screencast.dc2_alias->body)))
+			{
+				diff = DCDiff(screencast.dc, screencast.dc2_alias);
+				diff->cdt = cdt;
+				st = MStrPrint(screencast.print_format, cdt);
+				GRWrite(st, diff);
+				Free(st);
+				DCDel(diff);
+				Free(screencast.dc->body);
+				screencast.dc->body = MAllocIdent(screencast.dc2_alias->body);
+			}
+		}
+		else if (screencast.dc)
+		{
+			DCDel(screencast.dc); //TODO: $LK,"MemRep",A="MN:MemRep"$ can crash.
+			screencast.dc = NULL;
+		}
+		if (sys_focus_task && !Bt(&sys_focus_task->task_flags, TASKf_HAS_SONG))
+		{
+			Free(music.cur_song);
+			music.cur_song = NULL;
+		}
+		if (music.cur_song)
+		{
+			if (!music.cur_song_task)
+				music.cur_song_task = Spawn(&CurSongTask, NULL, "Song");
+		}
+		else if (music.cur_song_task)
+		{
+			Kill(music.cur_song_task);
+			music.cur_song_task = NULL;
+		}
+		winmgr.updates++;
+		if (mouse_hard.install_attempts) //Don't call before boot mouse install attempt
+			KbdMouseHandler(FALSE, TRUE);
+		SleepUntil(timeout_val);
+	}
+
+	return message_code;
+}
+
+CDoc *WinCursorPosSet(CTask *task, I64 mouse_x, I64 mouse_y, Bool set_cursor = TRUE)
+{
+	CDoc *res = NULL;
+	Bool  unlock;
+	I64   x0, y0;
+
+	if (!task)
+		task = Fs;
+	if (WinInside(mouse_x, mouse_y, task))
+	{
+		if ((res = DocDisplay(task)) && res->flags & DOCF_DONT_SHOW)
+			res = NULL;
+		else if (set_cursor)
+		{
+			unlock = DocLock(res);
+			if (res->doc_signature != DOC_SIGNATURE_VAL)
+				res = NULL;
+			else
+			{
+				x0 = res->line_start_col;
+				y0 = res->top_line_num;
+				DocRecalc(res, RECALCF_HAS_CURSOR);
+				res->x = (mouse_x-task->pix_left - task->scroll_x) / FONT_WIDTH + x0;
+				res->y = (mouse_y-task->pix_top - task->scroll_y) / FONT_HEIGHT + y0;
+				DocRecalc(res, RECALCt_FIND_CURSOR);
+				task->scroll_x = 0;
+				task->scroll_y = 0;
+				task->scroll_z = 0;
+				if (unlock)
+					DocUnlock(res);
+			}
+		}
+		WinToTop(task);
+	}
+
+	return res;
+}
+
+Bool WinKeyNavMenu()
+{
+	I64			 i, old_key_count;
+	CD3I64		 old_pos, new_pos;
+	CMenu		*m;
+	CMenuEntry	*tmpme;
+	CTask		*focus = MenuTask;
+
+	if (Bt(kbd.down_bitmap, SC_GUI) && focus && (m = focus->cur_menu))
+	{
+		winmgr.show_menu = TRUE;
+		sys_cur_submenu_entry = NULL;
+		old_pos.x = mouse.pos.x;
+		old_pos.y = mouse.pos.y;
+		mouse.pos.x = new_pos.x = mouse.pos.y = new_pos.y = 0;
+		while (Bt(kbd.down_bitmap, SC_GUI))
+		{
+			old_key_count = kbd.count;
+			if (Bt(kbd.down_bitmap, SC_CURSOR_LEFT))
+			{
+				while (Bt(kbd.down_bitmap, SC_CURSOR_LEFT) && kbd.count == old_key_count)
+					WinMgrSleep(TRUE);
+				if (new_pos.x)
+				{
+					i = 0;
+					tmpme = m->sub;
+					while (tmpme)
+					{
+						if (i + MenuEntryWidth(tmpme) * FONT_WIDTH == new_pos.x)
+						{
+							new_pos.x = i;
+							break;
+						}
+						i += MenuEntryWidth(tmpme) * FONT_WIDTH;
+						tmpme = tmpme->next;
+					}
+				}
+				new_pos.y = 0;
+			}
+			else if (Bt(kbd.down_bitmap, SC_CURSOR_RIGHT))
+			{
+				while (Bt(kbd.down_bitmap, SC_CURSOR_RIGHT) && kbd.count == old_key_count)
+					WinMgrSleep(TRUE);
+				i = 0;
+				tmpme = m->sub;
+				while (tmpme)
+				{
+					if (i == new_pos.x)
+					{
+						if (tmpme->next)
+							new_pos.x = i + MenuEntryWidth(tmpme) * FONT_WIDTH;
+						break;
+					}
+					i += MenuEntryWidth(tmpme) * FONT_WIDTH;
+					tmpme = tmpme->next;
+				}
+				new_pos.y = 0;
+			}
+			else if (Bt(kbd.down_bitmap, SC_CURSOR_UP))
+			{
+				while (Bt(kbd.down_bitmap, SC_CURSOR_UP) && kbd.count == old_key_count)
+					WinMgrSleep(TRUE);
+				new_pos.y -= FONT_HEIGHT;
+			}
+			else if (Bt(kbd.down_bitmap, SC_CURSOR_DOWN))
+			{
+				while (Bt(kbd.down_bitmap, SC_CURSOR_DOWN) && kbd.count == old_key_count)
+					WinMgrSleep(TRUE);
+				new_pos.y += FONT_HEIGHT;
+			}
+			new_pos.x = ClampI64(new_pos.x, 0, GR_WIDTH - 1);
+			new_pos.y = ClampI64(new_pos.y, 0, GR_HEIGHT - 1);
+			mouse.pos.x = new_pos.x;
+			mouse.pos.y = new_pos.y;
+			WinMgrSleep(TRUE);
+			if (!sys_cur_submenu_entry)
+				mouse.pos.y = new_pos.y=0;
+		}
+		if (sys_cur_submenu_entry)
+			TaskMessage(sys_focus_task, 0, sys_cur_submenu_entry->message_code,
+						sys_cur_submenu_entry->arg1, sys_cur_submenu_entry->arg2, 0);
+		winmgr.show_menu = FALSE;
+		mouse.pos.x = old_pos.x;
+		mouse.pos.y = old_pos.y;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+U0 WinMgrTask(I64)
+{
+	CTask		*task = Fs;
+	CDoc		*doc;
+	CDocEntry	*doc_e;
+	I64			 x, y, z, message_code, my_mouse_z = 0, left, top, old_flags = RFlagsGet;
+	Bool		 has_border;
+	CCtrl		*c;
+
+	WinHorz(0, TEXT_COLS - 1);
+	WinVert(0, TEXT_ROWS - 1);
+	LBts(&Fs->display_flags, DISPLAYf_NO_BORDER);
+	LBts(&Fs->display_flags, DISPLAYf_SHOW);
+	gr.dc->win_task = Fs;
+	Fs->win_inhibit &= ~WIF_SELF_CTRLS;
+	GrSetUpTables;
+	screencast.dc2_alias = DCAlias(gr.dc2);
+	WinZBufUpdate;
+	LBts(&sys_run_level, RLf_WINMGR);
+	while (TRUE)
+	{
+		try
+		{
+wmt_start:
+			if (Bt(&sys_run_level, RLf_SYSTEM_SERVER))
+				TaskKillDying;
+			WinMgrSleep;
+
+			task = Fs->last_task;
+			while (TRUE)
+			{
+				CLI
+				if (!TaskValidate(task))
+				{
+					RFlagsSet(old_flags);
+					goto wmt_start;
+				}
+				TaskDerivedValsUpdate(task, FALSE);
+				task = task->last_task;
+				RFlagsSet(old_flags);
+				if (task == Fs)
+					break;
+			}
+			TaskDerivedValsUpdate(Fs, FALSE);
+
+			task = Fs->last_task;
+			while (TRUE)
+			{
+				CLI
+				if (!TaskValidate(task))
+				{
+					RFlagsSet(old_flags);
+					goto wmt_start;
+				}
+				if (WinInside(mouse.pos.x, mouse.pos.y, task, FONT_WIDTH))
+				{
+					RFlagsSet(old_flags);
+					break;
+				}
+				if (task == Fs) { //Shouldn't happen
+					RFlagsSet(old_flags);
+					goto wmt_start;
+				}
+				task = task->last_task;
+				RFlagsSet(old_flags);
+			}
+
+			if (Bt(&task->display_flags, DISPLAYf_NO_BORDER))
+				has_border = FALSE;
+			else
+				has_border = TRUE;
+
+			winmgr.show_menu = FALSE;
+			sys_cur_submenu_entry = NULL;
+			if (TaskValidate(sys_focus_task) && !Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MENU))
+			{
+				if (WinKeyNavMenu)
+					goto wmt_start;
+				if (task == Fs && 0 <= mouse.pos.y < FONT_HEIGHT && mouse_hard.installed)
+				{
+					winmgr.show_menu = TRUE;
+					if (mouse.lb && !old_mouse.lb)
+					{
+						winmgr.show_menu = TRUE;
+						while (mouse.lb)
+							WinMgrSleep(TRUE);
+						if (sys_cur_submenu_entry)
+							TaskMessage(sys_focus_task, 0,
+										sys_cur_submenu_entry->message_code,
+										sys_cur_submenu_entry->arg1,
+										sys_cur_submenu_entry->arg2, 0);
+						winmgr.show_menu = FALSE;
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+				}
+			}
+
+			//grab scroll
+			if (!Bt(&task->win_inhibit, WIf_SELF_GRAB_SCROLL) &&
+				(!TaskValidate(sys_focus_task)||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_GRAB_SCROLL)) &&
+				kbd.scan_code & SCF_CTRL && TaskValidate(task))
+			{
+				winmgr.grab_scroll_closed = FALSE;
+				winmgr.grab_scroll = TRUE;
+				while (kbd.scan_code & SCF_CTRL && TaskValidate(task) && (!ac.task ||
+						!WinInside(mouse.pos.x, mouse.pos.y, ac.task, FONT_WIDTH)))
+				{
+					if (mouse.lb)
+					{
+						winmgr.grab_scroll_closed = TRUE;
+						x = mouse.pos.x - task->scroll_x;
+						y = mouse.pos.y - task->scroll_y;
+						z = mouse.pos.z - task->scroll_z;
+						while (mouse.lb && kbd.scan_code & SCF_CTRL && TaskValidate(task))
+						{
+							task->scroll_x = (mouse.pos.x - x) & ~7;
+							task->scroll_y = (mouse.pos.y-y) & ~7;
+							task->scroll_z = mouse.pos.z-z;
+							WinMgrSleep(TRUE);
+						}
+						winmgr.grab_scroll_closed = FALSE;
+					}
+					else if (mouse.rb)
+					{
+						task->scroll_x = 0;
+						task->scroll_y = 0;
+						task->scroll_z = 0;
+						WinMgrSleep(TRUE);
+					}
+					else
+						WinMgrSleep;
+				}
+				winmgr.grab_scroll = FALSE;
+				goto wmt_start;
+			}
+			else
+				winmgr.grab_scroll = FALSE;
+
+			if (!Bt(&task->win_inhibit, WIf_SELF_CTRLS) &&
+				(!TaskValidate(sys_focus_task)||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_CTRLS)))
+			{
+				if (mouse.lb && !old_mouse.lb)
+				{
+					c = task->next_ctrl;
+					while (c != &task->next_ctrl)
+					{
+						if (CtrlInside(c, mouse.pos.x, mouse.pos.y))
+						{
+							left = task->pix_left;
+							top = task->pix_top;
+							if (c->flags & CTRLF_BORDER)
+							{
+								left -= FONT_WIDTH;
+								top -= FONT_HEIGHT;
+							}
+							if (c->flags & CTRLF_CAPTURE_LEFT_MS)
+							{
+								while (mouse.lb && TaskValidate(task))
+								{
+									if (c->left_click)
+										(*c->left_click)(c, mouse.pos.x - left, mouse.pos.y - top, TRUE);
+									WinMgrSleep;
+								}
+								if (c->left_click)
+									(*c->left_click)(c, mouse.pos.x - left, mouse.pos.y - top, FALSE);
+								old_mouse.lb = FALSE;
+								goto wmt_start;
+							}
+							else
+							{
+								if (c->left_click)
+									(*c->left_click)(c, mouse.pos.x - left, mouse.pos.y - top, TRUE);
+								old_mouse.lb = TRUE;
+								goto wmt_start;
+							}
+						}
+						c = c->next;
+					}
+				}
+				if (old_mouse.lb && !mouse.lb)
+				{
+					c = task->next_ctrl;
+					while (c != &task->next_ctrl)
+					{
+						if (CtrlInside(c, mouse.pos.x, mouse.pos.y))
+						{
+							left = task->pix_left;
+							top = task->pix_top;
+							if (c->flags & CTRLF_BORDER)
+							{
+								left -= FONT_WIDTH;
+								top -= FONT_HEIGHT;
+							}
+							if (c->left_click)
+								(*c->left_click)(c, mouse.pos.x - left, mouse.pos.y - top, FALSE);
+							old_mouse.lb = FALSE;
+							goto wmt_start;
+						}
+						c = c->next;
+					}
+				}
+				if (mouse.rb && !old_mouse.rb)
+				{
+					c = task->next_ctrl;
+					while (c != &task->next_ctrl)
+					{
+						if (CtrlInside(c, mouse.pos.x, mouse.pos.y))
+						{
+							left = task->pix_left;
+							top = task->pix_top;
+							if (c->flags & CTRLF_BORDER)
+							{
+								left -= FONT_WIDTH;
+								top -= FONT_HEIGHT;
+							}
+							if (c->flags & CTRLF_CAPTURE_RIGHT_MS)
+							{
+								while (mouse.rb && TaskValidate(task))
+								{
+									if (c->right_click)
+										(*c->right_click)(c, mouse.pos.x - left, mouse.pos.y - top, TRUE);
+									WinMgrSleep;
+								}
+								if (c->right_click)
+									(*c->right_click)(c, mouse.pos.x - left, mouse.pos.y - top, FALSE);
+								old_mouse.rb = FALSE;
+								goto wmt_start;
+							}
+							else
+							{
+								if (c->right_click)
+									(*c->right_click)(c, mouse.pos.x - left, mouse.pos.y - top, TRUE);
+								old_mouse.rb = TRUE;
+								goto wmt_start;
+							}
+						}
+						c = c->next;
+					}
+				}
+				if (old_mouse.rb && !mouse.rb)
+				{
+					c = task->next_ctrl;
+					while (c != &task->next_ctrl)
+					{
+						if (CtrlInside(c, mouse.pos.x, mouse.pos.y))
+						{
+							left = task->pix_left;
+							top = task->pix_top;
+							if (c->flags & CTRLF_BORDER)
+							{
+								left -= FONT_WIDTH;
+								top -= FONT_HEIGHT;
+							}
+							if (c->right_click)
+								(*c->right_click)(c, mouse.pos.x - left, mouse.pos.y - top, FALSE);
+							old_mouse.rb = FALSE;
+							goto wmt_start;
+						}
+						c = c->next;
+					}
+				}
+				if (mouse.has_wheel && my_mouse_z != mouse.pos.z)
+				{
+					if (task == sys_focus_task)
+					{
+						c = task->next_ctrl;
+						while (c != &task->next_ctrl)
+						{
+							if (c->wheel_chg)
+							{
+								(*c->wheel_chg)(c, mouse.pos.z - my_mouse_z);
+								my_mouse_z = mouse.pos.z;
+								goto wmt_start;
+							}
+							c = c->next;
+						}
+						my_mouse_z = mouse.pos.z;
+					}
+					else if (!sys_focus_task)
+						my_mouse_z = mouse.pos.z;
+				}
+			}
+
+			if (task == Fs)
+				goto wmt_start;
+
+			if (!Bt(&task->win_inhibit, WIf_SELF_MS_L) &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MS_L)))
+			{
+				if (!old_mouse.lb && mouse.lb)
+				{
+					if (doc = WinCursorPosSet(task, mouse.pos.x, mouse.pos.y))
+					{
+						DocLock(doc);
+						if (doc->doc_signature == DOC_SIGNATURE_VAL)
+						{
+							doc_e = doc->cur_entry;
+							if (doc_e != doc)
+							{
+								if (doc_e->de_flags & DOCEF_HAS_BORDER)
+									doc_e->de_flags |= DOCEF_SOLID_BORDER;
+							}
+						}
+						DocUnlock(doc);
+						old_mouse.lb = TRUE;
+						goto wmt_start;
+					}
+				}
+			}
+			if (!Bt(&task->win_inhibit, WIf_SELF_MS_R) &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MS_R)))
+			{
+				if (!old_mouse.rb && mouse.rb)
+				{
+					if (WinCursorPosSet(task, mouse.pos.x, mouse.pos.y))
+					{
+						old_mouse.rb = TRUE;
+						goto wmt_start;
+					}
+				}
+			}
+			if (!Bt(&task->win_inhibit, WIf_SELF_BORDER) && has_border &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_BORDER)))
+			{
+				if (old_mouse.lb && !mouse.lb)
+				{
+					if (mouse.pos_text.y == task->win_top - 1)
+					{
+						if (task->win_left <= mouse.pos_text.x < task->win_left + 4)
+						{
+							TaskMessage(task, 0, MESSAGE_KEY_DOWN, CH_CTRLM, 0x43200000432, 0);
+							old_mouse.lb = FALSE;
+							goto wmt_start;
+						}
+						else if (task->win_right - 2 <= mouse.pos_text.x <= task->win_right)
+						{
+							if (DocPut(task))
+								TaskMessage(task, 0, MESSAGE_KEY_DOWN, CH_SHIFT_ESC, 0, 0);
+							else
+								Kill(task, FALSE);
+							old_mouse.lb = FALSE;
+							goto wmt_start;
+						}
+					}
+				}
+			}
+			if (!Bt(&task->win_inhibit, WIf_SELF_MS_L) &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MS_L)))
+			{
+				if (old_mouse.lb && !mouse.lb)
+				{
+					if (doc = WinCursorPosSet(task, mouse.pos.x, mouse.pos.y, FALSE))
+					{
+						do message_code = WinMgrSleep;
+						while (TaskValidate(task) && (mouse.lb || mouse.left_dbl_time));
+						if (TaskValidate(task))
+						{
+							if (message_code == MESSAGE_MS_L_UP)
+							{
+								if (doc->doc_signature == DOC_SIGNATURE_VAL)
+								{
+									DocLock(doc);
+									if (TaskValidate(task))
+									{
+										if (doc->doc_signature == DOC_SIGNATURE_VAL)
+										{
+											doc_e = doc->cur_entry;
+											if (doc_e!=doc)
+											{
+												if (doc_e->de_flags & DOCEF_HAS_BORDER)
+													doc_e->de_flags &= ~DOCEF_SOLID_BORDER;
+												if (doc_e->de_flags & (DOCEF_TREE | DOCEF_LIST |
+													DOCEF_LINK | DOCEF_CHECK_COLLAPSABLE |
+													DOCEF_LEFT_CB | DOCEF_LEFT_MACRO | DOCEF_LEFT_EXP))
+												{
+													TaskMessage(task, 0, MESSAGE_KEY_DOWN, CH_SPACE, 0, 0);
+												}
+											}
+										}
+										DocUnlock(doc);
+									}
+								}
+							}
+							else if (message_code == MESSAGE_MS_L_D_UP)
+								TaskMessage(task, 0, MESSAGE_KEY_DOWN, CH_ESC, 0, 0);
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+				}
+			}
+
+			if (!Bt(&task->win_inhibit, WIf_SELF_MS_R) &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_MS_R)))
+			{
+				if (old_mouse.rb && !mouse.rb)
+				{
+					if (doc = WinCursorPosSet(task, mouse.pos.x, mouse.pos.y, FALSE))
+					{
+						do message_code = WinMgrSleep;
+						while (TaskValidate(task) && (mouse.rb || mouse.right_dbl_time));
+						if (TaskValidate(task))
+						{
+							if (message_code == MESSAGE_MS_R_UP)
+							{
+								if (doc->doc_signature == DOC_SIGNATURE_VAL)
+								{
+									DocLock(doc);
+									if (TaskValidate(task))
+									{
+										if (doc->doc_signature == DOC_SIGNATURE_VAL)
+										{
+											doc_e = doc->cur_entry;
+											if (doc_e != doc) {
+												if (doc_e->de_flags & (DOCEF_LINK |
+													DOCEF_RIGHT_CB | DOCEF_RIGHT_MACRO | DOCEF_RIGHT_EXP))
+												{
+													TaskMessage(task, 0, MESSAGE_KEY_DOWN, '\n', 0, 0);
+												}
+											}
+										}
+										DocUnlock(doc);
+									}
+								}
+							}
+							else if (message_code == MESSAGE_MS_R_D_UP)
+								TaskMessage(task, 0, MESSAGE_KEY_DOWN, CH_SHIFT_ESC, 0, 0);
+						}
+						old_mouse.rb = FALSE;
+						goto wmt_start;
+					}
+				}
+			}
+
+			if (!Bt(&task->win_inhibit, WIf_SELF_BORDER) && has_border &&
+				(!TaskValidate(sys_focus_task) ||
+				!Bt(&sys_focus_task->win_inhibit, WIf_FOCUS_TASK_BORDER)))
+			{
+				if (mouse.lb && !old_mouse.lb)
+				{
+					if (task->win_top == mouse.pos_text.y + 1 &&
+						task->win_left - 1 <= mouse.pos_text.x <= task->win_right + 1)
+					{
+						if (task->win_left <= mouse.pos_text.x < task->win_left + 4)
+						{
+							old_mouse.lb = TRUE;
+							goto wmt_start;
+						}
+						if (task->win_right - 2 <= mouse.pos_text.x <= task->win_right)
+						{
+							old_mouse.lb = TRUE;
+							goto wmt_start;
+						}
+						x = mouse.pos_text.x - task->win_left;
+						if (mouse.lb)
+						{
+							WinToTop(task);
+							while (mouse.lb && TaskValidate(task))
+							{
+								WinHorz(mouse.pos_text.x - x, task->win_width - 1 + mouse.pos_text.x - x, task);
+								WinVert(mouse.pos_text.y + 1, task->win_height + mouse.pos_text.y, task);
+								WinMgrSleep;
+							}
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+					if (task->win_left == mouse.pos_text.x + 1 &&
+						task->win_top - 1 <= mouse.pos_text.y <= task->win_bottom + 1)
+					{
+						y = mouse.pos_text.y - task->win_top;
+						if (mouse.lb)
+						{
+							WinToTop(task);
+							while (mouse.lb && TaskValidate(task))
+							{
+								WinHorz(mouse.pos_text.x + 1, task->win_width + mouse.pos_text.x, task);
+								WinVert(mouse.pos_text.y - y, task->win_height - 1 + mouse.pos_text.y - y, task);
+								WinMgrSleep;
+							}
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+					if (task->win_right + 1 == mouse.pos_text.x &&
+						task->win_bottom + 1 == mouse.pos_text.y)
+					{
+						if (mouse.lb)
+						{
+							WinToTop(task);
+							while (mouse.lb && TaskValidate(task))
+							{
+								WinHorz(task->win_left, mouse.pos_text.x - 1, task);
+								WinVert(task->win_top, mouse.pos_text.y - 1, task);
+								WinMgrSleep;
+							}
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+					if (task->win_bottom == mouse.pos_text.y - 1 &&
+						task->win_left <= mouse.pos_text.x <= task->win_right)
+					{
+						if (mouse.lb)
+						{
+							WinToTop(task);
+							while (mouse.lb && TaskValidate(task))
+							{
+								WinVert(task->win_top, mouse.pos_text.y - 1, task);
+								WinMgrSleep;
+							}
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+					if (task->win_right == mouse.pos_text.x - 1 &&
+						task->win_top <= mouse.pos_text.y <= task->win_bottom)
+					{
+						if (mouse.lb)
+						{
+							WinToTop(task);
+							while (mouse.lb && TaskValidate(task))
+							{
+								WinHorz(task->win_left, mouse.pos_text.x - 1, task);
+								WinMgrSleep;
+							}
+						}
+						old_mouse.lb = FALSE;
+						goto wmt_start;
+					}
+				}
+			}
+		}
+		catch
+		{
+			Beep;
+			Fs->catch_except = TRUE;
+			task = Fs;
+		}
+	}
+}

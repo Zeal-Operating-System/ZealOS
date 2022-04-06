@@ -14,7 +14,7 @@ public class CDirEntry //64-byte fixed-size
 	U8		name[CDIR_FILENAME_LEN];	//See $LK,"char_bmp_filename",A="MN:char_bmp_filename"$, $LK,"FileNameCheck",A="MN:FileNameCheck"$
 	I64		clus; $HL,0$$FG,7$(blk)$FG,0$$HL,1$ 				//One sector per cluster.
 	I64		size; 						//In bytes
-	CDate	datetime; 					//See  $LK,"DateTime",A="::/Doc/TimeDate.DD"$, $LK,"Implementation of DateTime",A="FI:::/Kernel/KDate.CC"$
+	CDate	datetime; 					//See  $LK,"DateTime",A="::/Doc/TimeDate.DD"$, $LK,"Implementation of DateTime",A="FI:::/Kernel/KDate.ZC"$
 };
 
 public class CRedSeaBoot //RedSea is type FAT32 in partition table to fool BIOS.
@@ -30,7 +30,7 @@ public class CRedSeaBoot //RedSea is type FAT32 in partition table to fool BIOS.
 	U16 signature2; 			//0xAA55
 };
 $HL,0$
-See $LK,"::/Kernel/BlkDev/FileSysRedSea.CC"$ and $LK,"::/System/Boot/DiskISORedSea.CC"$.
+See $LK,"::/Kernel/BlkDev/FileSysRedSea.ZC"$ and $LK,"::/System/Boot/DiskISORedSea.ZC"$.
 
 To replace ISO9660, make hard-drive partition image of a measured size and copy onto a CD/DVD starting at about sector 20, with EL TORITO booting.	512-byte sectors will be placed on top of 2048-byte CD/DVD sectors, so there will be four blocks per CD/DVD sector.
 

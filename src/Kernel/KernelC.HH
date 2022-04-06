@@ -112,7 +112,7 @@ public extern CTextGlobals text;
 public extern U0 HashSrcFileSet(CCompCtrl *cc, CHashSrcSym *h, I64 line_num_offset=0);
 
 #help_index "Compiler;Cmd Line (Typically)"
-extern U8 *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR); //INVALID_PTR=don't care what load address
+extern U8 *Load(U8 *filename, I64 ld_flags=0, CZXE *zxe_addr=INVALID_PTR); //INVALID_PTR=don't care what load address
 
 #help_index "Data Types/Circular Queue"
 public extern I64 		 QueueCount(CQueue *head);
@@ -183,10 +183,10 @@ public extern Bool Man(U8 *st, I64 edf_dof_flags=0);
 
 #help_index "Debugging/Dump"
 public extern	U0	 CallerRep(U8 **rbp=NULL, CTask *task=NULL);
-public extern	U0	 D( U8  *addr, I64 count=0x80, Bool show_offset=TRUE);
-public extern	U0	 Da(U8 **addr, I64 count=0x10);
-public extern	U0	 Dm(U8  *addr, I64 count=0x80);
-public extern	U0	 Dr(         CTask *task=NULL);
+public extern	U0	 Dump( U8  *addr, I64 count=0x80, Bool show_offset=TRUE);
+public extern	U0	 DumpAddress(U8 **addr, I64 count=0x10);
+public extern	U0	 DumpMem(U8  *addr, I64 count=0x80);
+public extern	U0	 DumpRegs(         CTask *task=NULL);
 public extern	U0	 StackRep(   CTask *task=NULL);
 extern			I64	*TaskRegAddr(CTask *task, I64 reg_num);
 
@@ -203,9 +203,9 @@ public extern CHash *FunSegFind(U8 *addr, I64 *_offset);
 #help_index "Debugging/Raw Output"
 public extern	Bool	IsRaw();
 public extern	Bool	Raw(Bool val);
-public extern	U0		RawD( I64 mS=100, U8 *addr, I64 count=0x80);
-public extern	U0		RawDm(I64 mS=100, U8 *addr, I64 count=0x80);
-extern			U0		RawDr(CTask *task=NULL);
+public extern	U0		RawDump( I64 mS=100, U8 *addr, I64 count=0x80);
+public extern	U0		RawDumpMem(I64 mS=100, U8 *addr, I64 count=0x80);
+extern			U0		RawDumpRegs(CTask *task=NULL);
 public extern	U0		RawPrint(I64 mS=100, U8 *format, ...);
 public extern	U0		RawPutChar(I64 ch);
 public extern	U0		LFBFlush();
@@ -305,6 +305,7 @@ public extern	Bool	 BlkDevLock( CBlkDev *bd);
 public extern	CBlkDev	*BlkDevNextFreeSlot(U8 first_drive_let, I64 type);
 public extern	Bool	 BlkDevUnlock(CBlkDev *bd, Bool reset=FALSE);
 public extern	U0		 BlkDevsRelease();
+public extern	U0		 BlkDevRep();
 public extern	Bool	 BlkRead(     CDrive *drive, U8 *buf, I64 blk, I64 count);
 public extern	Bool	 BlkWrite(    CDrive *drive, U8 *buf, I64 blk, I64 count);
 public extern	U0		 BlkWriteZero(CDrive *drive, I64 blk, I64 count);

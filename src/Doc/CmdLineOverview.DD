@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"Command Line Overview"$$FG$
 
-The cmd line feeds into the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiler line-by-line as you type.	A statement outside a function executes immediately.  Remember to add a semicolon.$WW,1$
+The cmd line feeds into the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ compiler line-by-line as you type.	A statement outside a function executes immediately.  Remember to add a semicolon.$WW,1$
 
 Look-up the function headers with $FG,2$AutoComplete$FG$ by hitting $FG,2$<CTRL-SHIFT-F1>$FG$ after typing the first few letters.
 
@@ -14,7 +14,7 @@ If you don't have args, you don't need parenthesis.
 
 Directories are referenced with $FG,2$/$FG$ not $FG,2$\$FG$.	There is a current directory, but not a path.  To run a program, you typically $FG,2$#include $FG$it.  There are several shortcuts for $FG,2$#include$FG$ing files.  Right-click or hit $FG,2$<ENTER>$FG$ on a directory listing or press $FG,2$<F5>$FG$ while editing.
 
->$FG,2$Ed("NewFile.CC");$FG$		Invokes the editor. See $LK,"Doc Link Type",A="MN:LK_FILE"$.
+>$FG,2$Ed("NewFile.ZC");$FG$		Invokes the editor. See $LK,"Doc Link Type",A="MN:LK_FILE"$.
 
 Drives are specified with a letter.  The boot drive is specified with a '$FG,2$:$FG$'.	The home dir drive is specified with a $FG,2$'~'$FG$.
 
@@ -33,7 +33,7 @@ If a file is not found, all parent directories are searched.
 
 You can place macros in your $LK,"PersonalMenu",A="FI:~/PersonalMenu.DD"$ for $LK,"Cd",A="MN:Cd"$() commands.  $FG,2$<CTRL-m>$FG$ to access your menu.
 
->$FG,2$Find("needle","/Demo/*.CC;*.DD;");$FG$ See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
+>$FG,2$Find("needle","/Demo/*.ZC;*.DD;");$FG$ See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
 
 $LK,"Cmd Line Routines",A="HI:Cmd Line (Typically)"$
 

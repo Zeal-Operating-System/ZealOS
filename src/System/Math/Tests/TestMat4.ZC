@@ -1,0 +1,103 @@
+Cd(__DIR__);;
+
+#define ARCH_SUPPORTS_AVX	FALSE
+#define ARCH_SUPPORTS_AVX2	TRUE
+
+F32 s;
+CVector4D *v0 = MAllocAligned(sizeof(CVector4D), 16);
+CVector4D *v1 = MAllocAligned(sizeof(CVector4D), 16);
+CVector4D *v2 = MAllocAligned(sizeof(CVector4D), 16);
+CMatrix4D *m1 = MAllocAligned(sizeof(CMatrix4D), 16);
+CMatrix4D *m2 = MAllocAligned(sizeof(CMatrix4D), 16);
+
+CMatrix4D *destMat = MAllocAligned(sizeof(CMatrix4D), 16);
+CVector4D *destVec = MAllocAligned(sizeof(CVector4D), 16);
+
+CMatrix4D *trueMatRes = MAllocAligned(sizeof(CMatrix4D), 16);
+CVector4D *trueVecRes = MAllocAligned(sizeof(CVector4D), 16);
+
+F32 theta;
+
+CVector4D *countVec = MAllocAligned(sizeof(CVector4D), 16);
+Vector4DInit(1.0, 2.0, 3.0, 4.0, countVec);
+
+CMatrix4D *countMat = MAllocAligned(sizeof(CMatrix4D), 16);
+Vector4DInit(1.0, 2.0, 3.0, 4.0, &countMat->vec[0]);
+Vector4DInit(5.0, 6.0, 7.0, 8.0, &countMat->vec[1]);
+Vector4DInit(9.0, 10.0, 11.0, 12.0, &countMat->vec[2]);
+Vector4DInit(13.0, 14.0, 15.0, 16.0, &countMat->vec[3]);
+
+//-----------------------------------------------------------------------------
+// Matrix4DMulVector4D
+
+Vector4DInit(90.0, 100.0, 110.0, 120.0, trueVecRes);
+Matrix4DMulVector4D(countMat, countVec, destVec);
+if (!Vector4DIsEqual(destVec, trueVecRes))
+{
+	ST_WARN_ST "Matrix4DMulVector4D NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(destVec);
+} else "$$GREEN$$PASS: Matrix4DMulVector4D $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Matrix4DMul
+
+Vector4DInit(90.0,	100.0,	110.0,	120.0,	&trueMatRes->vec[0]);
+Vector4DInit(202.0,	228.0,	254.0,	280.0,	&trueMatRes->vec[1]);
+Vector4DInit(314.0, 356.0,	398.0,	440.0,	&trueMatRes->vec[2]);
+Vector4DInit(426.0,	484.0,	542.0,	600.0,	&trueMatRes->vec[3]);
+Matrix4DMul(countMat, countMat, destMat);
+if (!Matrix4DIsEqual(destMat, trueMatRes))
+{
+	ST_WARN_ST "Matrix4DMul NOT WORKING CORRECTLY! RESULT MATRIX:\n";
+	Matrix4DPrint(destMat);
+} else "$$GREEN$$PASS: Matrix4DMul $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Matrix4DTranspose
+
+Vector4DInit(1.0,	5.0,	9.0,	13.0,	&trueMatRes->vec[0]);
+Vector4DInit(2.0,	6.0,	10.0,	14.0,	&trueMatRes->vec[1]);
+Vector4DInit(3.0,	7.0,	11.0,	15.0,	&trueMatRes->vec[2]);
+Vector4DInit(4.0,	8.0,	12.0,	16.0,	&trueMatRes->vec[3]);
+Matrix4DTranspose(countMat, destMat);
+if (!Matrix4DIsEqual(destMat, trueMatRes))
+{
+	ST_WARN_ST "Matrix4DTranspose NOT WORKING CORRECTLY! RESULT MATRIX:\n";
+	Matrix4DPrint(destMat); 
+} else "$$GREEN$$PASS: Matrix4DTranspose $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Matrix4DTranslationSet
+
+Vector4DInit(1.0,	0.0,	0.0,	0.0,	&trueMatRes->vec[0]);
+Vector4DInit(0.0,	1.0,	0.0,	0.0,	&trueMatRes->vec[1]);
+Vector4DInit(0.0,	0.0,	1.0,	0.0,	&trueMatRes->vec[2]);
+Vector4DInit(2.0,	3.0,	4.0,	1.0,	&trueMatRes->vec[3]);
+Matrix4DTranslationSet(F64ToF32(2.0), F64ToF32(3.0), F64ToF32(4.0), destMat);
+if (!Matrix4DIsEqual(destMat, trueMatRes))
+{
+	ST_WARN_ST "Matrix4DTranslationSet NOT WORKING CORRECTLY! RESULT MATRIX:\n";
+	Matrix4DPrint(destMat); 
+} else "$$GREEN$$PASS: Matrix4DTranslationSet $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Matrix4DScaleSet
+
+Vector4DInit(2.0,	0.0,	0.0,	0.0,	&trueMatRes->vec[0]);
+Vector4DInit(0.0,	3.0,	0.0,	0.0,	&trueMatRes->vec[1]);
+Vector4DInit(0.0,	0.0,	4.0,	0.0,	&trueMatRes->vec[2]);
+Vector4DInit(0.0,	0.0,	0.0,	1.0,	&trueMatRes->vec[3]);
+Matrix4DScaleSet(F64ToF32(2.0), F64ToF32(3.0), F64ToF32(4.0), destMat);
+if (!Matrix4DIsEqual(destMat, trueMatRes))
+{
+	ST_WARN_ST "Matrix4DScaleSet NOT WORKING CORRECTLY! RESULT MATRIX:\n";
+	Matrix4DPrint(destMat); 
+} else "$$GREEN$$PASS: Matrix4DScaleSet $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Matrix4DRotationSet
+
+//-----------------------------------------------------------------------------
+// Matrix4DLookAtSet
+
+Vector3DInit(2.0, 3.0, 4.0, v0);	// Eye
+Vector3DInit(1.0, -2.0, -3.0, v1);	// Center
+Vector3DInit(0.0, 0.0, 1.0, v2);	// Up
+Matrix4DLookAtSet(v0, v1, v2, destMat);
+Matrix4DPrint(destMat);
+//-----------------------------------------------------------------------------

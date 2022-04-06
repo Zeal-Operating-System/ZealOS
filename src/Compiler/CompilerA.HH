@@ -50,7 +50,7 @@ class CIntermediateStruct
 #define IC_TO_F64 				0x1C
 #define IC_TO_BOOL				0x1D
 #define IC_TOUPPER				0x1E
-#define IC_HOLYC_TYPECAST 		0x1F
+#define IC_POSTFIX_TYPECAST 	0x1F
 
 #define IC_ADDR 				0x20
 #define IC_COM					0x21
@@ -310,7 +310,7 @@ class CIntermediateStruct
 #define AKW_IMPORT		85
 #define AKW_LIST		86
 #define AKW_NOLIST		87
-#define AKW_BINFILE 	88
+#define AKW_BINLOAD 	88
 #define KW_KWS_NUM		89
 
 #define CMP_TEMPLATE_INC			0x00

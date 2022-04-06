@@ -4,7 +4,7 @@ Burn a CD with software that supports ISO files.	Then, boot it.	It's a live CD, 
 
 Dual booting with another operating system is the best way to use ZealOS.  It is often used in a virtual machine because it won't boot natively on some machines, though.  For native dual booting, you need a partition for ZealOS.	Windows often comes with a restore disk that does not allow repartitioning.  It's recommended to connect a spare additional hard drive and use the $FG,2$BIOS$FG$ to select which drive to boot.
 
-The $LK,"::/Misc/OSInstall.CC"$ script will automate much of this.	It runs if you boot the CD/DVD-ROM.
+The $LK,"::/Misc/OSInstall.ZC"$ script will automate much of this.	It runs if you boot the CD/DVD-ROM.
 
 See $LK,"Boot.DD",A="FI:::/Doc/Boot.DD"$ for an overview of booting.	See $LK,"Requirements",A="FI:::/Doc/Requirements.DD"$ for supported hardware.
 
@@ -26,7 +26,7 @@ $ID,-2$
 $ID,-2$2) $LK,"Format",A="MN:Format"$($FG,2$'D'$FG$,$FG,2$ TRUE$FG$,$FG,2$ FALSE$FG$,$FG,2$ FSt_FAT32$FG$)
 $ID,2$This command formats a drive with $FG,2$FAT32$FG$ or the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system type.	Use the drive letter of the partition in place of $FG,2$'D'$FG$.
 
-$BK,1$WARNING:$BK,0$	If you are upgrading, be sure not to lose the file, $FG,2$/Boot/OldMBR.BIN.C$FG$.
+$BK,1$WARNING:$BK,0$	If you are upgrading, be sure not to lose the file, $FG,2$/Boot/OldMBR.BIN$FG$.
 
 $ID,-2$3) $LK,"CopyTree",A="MN:CopyTree"$($FG,2$"T:/"$FG$,$FG,2$ "D:/"$FG$)
 $ID,2$This command is used to copy files onto a hard drive partition from the CD/DVD.  Use the drive letter of the partition in place of $FG,2$'D'$FG$.
@@ -36,9 +36,9 @@ $ID,2$This command recompiles the source code on a drive and writes to the $UL,1
 
 $ID,-2$5) Use Linux's Grub or ZealOS' $LK,"BootMHDIns",A="MN:BootMHDIns"$($FG,2$'D'$FG$)
 $ID,2$
-The $LK,"BootMHDIns",A="MN:BootMHDIns"$() command places a boot loader on a drive.	It saves the old master boot record to $FG,2$/Boot/OldMBR.BIN.C$FG$ and replaces it.	When you boot, you will have the option of booting the old master boot record.	This command can be skipped if you already have a boot loader.	Be sure not to lose the copy of the old boot record, like if you reformat the drive.
+The $LK,"BootMHDIns",A="MN:BootMHDIns"$() command places a boot loader on a drive.	It saves the old master boot record to $FG,2$/Boot/OldMBR.BIN$FG$ and replaces it.	When you boot, you will have the option of booting the old master boot record.	This command can be skipped if you already have a boot loader.	Be sure not to lose the copy of the old boot record, like if you reformat the drive.
 
-Delete $FG,2$/Boot/OldMBR.BIN.C$FG$ if you want to get a fresh copy of a mbr, like if installing from your own custom CD containing it's own $FG,2$/Boot/OldMBR.BIN.C$FG$ onto a system with a non-ZealOS boot loader.
+Delete $FG,2$/Boot/OldMBR.BIN$FG$ if you want to get a fresh copy of a mbr, like if installing from your own custom CD containing it's own $FG,2$/Boot/OldMBR.BIN$FG$ onto a system with a non-ZealOS boot loader.
 
 If you have anti-virus software, it might object to having a different master boot record.
 $ID,-2$

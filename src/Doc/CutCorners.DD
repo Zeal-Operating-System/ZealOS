@@ -6,7 +6,7 @@ There are a few places where corners are cut in the interest of not junking-up c
 
 * ZealOS does not figure-out $FG,2$FAT32$FG$ short name alias numbers.	$LK,"FAT32DirNew",A="MN:FAT32DirNew"$().	It can cause hard drive corruption, so it might have to do it eventually.  It would really take a lot of junky code for this hatefully, detestable, legacy issue.  "Please don't make us ruin the beautiful shiny-new ZealOS with that!"  $FG,2$FAT32$FG$ is also unappealing because it is in patent limbo.	$FG,2$FAT32$FG$ might get removed from ZealOS.	There is the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$	64-bit file system that works perfectly well.  $FG,2$FAT32$FG$ is useful, however, because it assists in transferring between dual booted operating systems.
 
-* The $LK,"asm opcodes",A="FI:::/Compiler/OpCodes.DD"$ names were changed to remove the ambiguity between insts with different numbers of arguments, making the $LK,"assembler",A="FI:::/Compiler/Asm.CC"$ simpler and minimal 16-bit asm support was done, since 64-bit is what you should be using, unless you're doing a $LK,"boot loader",A="FI:::/System/Boot/BootDVD.CC"$.
+* The $LK,"asm opcodes",A="FI:::/Compiler/OpCodes.DD"$ names were changed to remove the ambiguity between insts with different numbers of arguments, making the $LK,"assembler",A="FI:::/Compiler/Asm.ZC"$ simpler and minimal 16-bit asm support was done, since 64-bit is what you should be using, unless you're doing a $LK,"boot loader",A="FI:::/System/Boot/BootDVD.ZC"$.
 
 * There are no user-controlled file-sharing locks.	However, the drive and file system have locks and concurrent operations should be fine.
 

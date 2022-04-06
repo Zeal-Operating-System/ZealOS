@@ -1,10 +1,10 @@
 $HL,1$//Press F5 in the editor to compile and run.
 
---------Hello.CC---------
+// --------Hello.ZC--------- //
 "Hello World\n";
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- //
 U0 Main()
 {
 	"Hello World\n";
@@ -12,7 +12,7 @@ U0 Main()
 Main;
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- //
 U0 MyPrint(U8 *st)
 {
 	"%s", st;
@@ -20,7 +20,7 @@ U0 MyPrint(U8 *st)
 MyPrint("Hello World\n");
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- // 
 U0 MyPrint2(U8 *st1, U8 *st2) //Any number of args.
 {
 	"%s %s\n", st1, st2; //Any number of args.
@@ -28,7 +28,7 @@ U0 MyPrint2(U8 *st1, U8 *st2) //Any number of args.
 MyPrint2("Hello", "World");
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- // 
 U0 MyPrint(U8 *st)
 {
 	"" st; //Empty with no comma means first is format str.
@@ -36,13 +36,13 @@ U0 MyPrint(U8 *st)
 MyPrint("Hello World\n");
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- // 
 asm {
 MESSAGE:				DU8 "Hello World\n", 0;
 
 //The convention is underscore on C callable.
 //Two colons means exported symbol.
-_HELLO_WORLD::
+_HELLO_WORLD1::
 //You can only clobber RAX,RBX,RCX,RDX
 				PUSH		RSI
 				MOV 		RSI, MESSAGE
@@ -50,12 +50,12 @@ _HELLO_WORLD::
 				POP 		RSI
 				RET
 }
-Call(_HELLO_WORLD);
+Call(_HELLO_WORLD1);
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- //
 asm {
-_HELLO_WORLD::
+_HELLO_WORLD2::
 //You can only clobber RAX,RBX,RCX,RDX
 				MOV 		RAX, 'Hello '
 				CALL		PUT_CHARS //Up to 8 chars packed into one 64-bit int.
@@ -63,12 +63,12 @@ _HELLO_WORLD::
 				CALL		PUT_CHARS
 				RET
 }
-Call(_HELLO_WORLD);
+Call(_HELLO_WORLD2);
 
 
---------Hello.CC---------
+// --------Hello.ZC--------- //
 asm {
-_MY_PRINT::
+_MY_PRINT1::
 //You can only clobber RAX,RBX,RCX,RDX
 				PUSH		RBP
 				MOV 		RBP, RSP
@@ -79,13 +79,13 @@ _MY_PRINT::
 				POP 		RBP
 				RET1		8 			//Callee pops the stack to clear args.
 }
-_extern _MY_PRINT U0 MyPrint(U8 *st);
+_extern _MY_PRINT1 U0 MyPrint(U8 *st);
 MyPrint("Hello World\n");
 
 
---------Hello.CC---------
+ // --------Hello.ZC--------- //
 asm {
-_MY_PRINT::
+_MY_PRINT2::
 //You can only clobber RAX,RBX,RCX,RDX
 				PUSH		RBP
 				MOV 		RBP, RSP
@@ -94,6 +94,6 @@ _MY_PRINT::
 				POP 		RBP
 				RET1		8
 }
-_extern _MY_PRINT U0 MyPrint(U8 *st);
+_extern _MY_PRINT2 U0 MyPrint(U8 *st);
 MyPrint("Hello World\n");
 $HL,0$

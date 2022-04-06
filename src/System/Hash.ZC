@@ -1,0 +1,484 @@
+#help_index "Info;Hash/System;Cmd Line (Typically)"
+class CWho
+{
+	CHashGeneric *h;
+	U8 *idx;
+};
+
+I64 HashEntriesCompare(CWho *h1, CWho *h2)
+{
+	I64 i1, i2;
+
+	if (i1 = StrCompare(h1->h->str, h2->h->str))
+		return i1;
+	i1 = HashTypeNum(h1->h);
+	i2 = HashTypeNum(h2->h);
+
+	return i1 - i2;
+}
+
+I64 HashEntriesCompare2(CWho *h1, CWho *h2)
+{
+	CHashFun	*tmpf1 = h1->h, *tmpf2 = h2->h;
+	I64			 i1 = HashVal(tmpf1), i2 = HashVal(tmpf2);
+
+	if (i1 == i2)
+	{
+		i1 = HashTypeNum(tmpf1);
+		i2 = HashTypeNum(tmpf2);
+		if (i1 == i2)
+			return StrCompare(tmpf1->str, tmpf2->str);
+	}
+
+	return i1 - i2;
+}
+
+I64 HelpIndexCount(U8 *ptr, U8 *idx)
+{
+	I64 count = 0, ch, idx_len = StrLen(idx);
+
+	while (*ptr)
+	{
+		if (!StrNCompare(ptr, idx, idx_len))
+			count++;
+		while (ch = *ptr++)
+			if (ch == ';')
+				break;
+		if (!ch)
+			ptr--;
+	}
+
+	return count;
+}
+
+U8 *HelpIndexStr(U8 **_ptr, U8 *idx)
+{
+	U8 *ptr = *_ptr, *ptr2, *res;
+	I64 ch, idx_len = StrLen(idx);
+
+	while (*ptr)
+	{
+		ptr2 = ptr;
+		while (ch = *ptr++)
+			if (ch == ';')
+				break;
+		if (!ch)
+			ptr--;
+		*_ptr = ptr;
+		if (!StrNCompare(ptr2, idx, idx_len))
+		{
+			if (ch == ';')
+				ptr--;
+			*ptr = 0;
+			res = StrNew(ptr2);
+			*ptr = ch;
+			return res;
+		}
+	}
+
+	return NULL;
+}
+
+U8 *HelpComment(CTask *task, CHash *tmph, U8 *_src_link)
+{
+	CDoc		*doc;
+	CDocEntry	*doc_e;
+	U8			*res = NULL, *ptr, *ptr2, *src_link = StrNew(_src_link);
+
+	if (*src_link == 'F' && src_link[2] == ':')
+		*src_link = 'P';
+	XTalkWait(task, "Ed(0x%X, DOF_DONT_WINMGR_SYNC | DOF_DONT_SHOW);\n", src_link);
+	Free(src_link);
+
+	doc = DocPut(task);
+	doc_e = doc->cur_entry;
+	if (tmph->type & HTT_FUN)
+	{
+		if (Bt(&tmph(CHashFun *)->flags, Ff__EXTERN) || Bt(&tmph(CHashFun *)->flags, Ff_INTERNAL))
+			while (doc_e != doc && (!(doc_e->de_flags & DOCEF_TAG) || !StrOcc(doc_e->tag, ';')))
+				doc_e = doc_e->next;
+		else
+			while (doc_e != doc && (!(doc_e->de_flags & DOCEF_TAG) || !StrOcc(doc_e->tag, '{')))
+				doc_e = doc_e->next;
+	}
+	if (doc_e != doc)
+	{
+		if (doc_e->de_flags & DOCEF_TAG)
+		{
+			ptr = doc_e->tag;
+			if (ptr2 = StrMatch("//", ptr))
+				ptr = ptr2 + 2;
+			else if (ptr2 = StrMatch("/*", ptr))
+				ptr = ptr2 + 2;
+			else if (!StrNCompare(ptr, "public", 6))
+				ptr += 6;
+			while (*ptr == CH_SPACE)
+				ptr++;
+			res = StrNew(ptr);
+			doc_e = doc_e->next;
+		}
+		while (doc_e != doc && doc_e->type_u8 != DOCT_NEW_LINE)
+		{
+			if (doc_e->type_u8 == DOCT_TAB)
+			{
+				ptr = MStrPrint("%s ", res);
+				Free(res);
+				res = ptr;
+			}
+			else if (doc_e->de_flags & DOCEF_TAG)
+			{
+				ptr = MStrPrint("%s%s", res, doc_e->tag);
+				Free(res);
+				res = ptr;
+			}
+			doc_e = doc_e->next;
+		}
+	}
+	XTalkWait(task, "%c", CH_SHIFT_ESC);
+	if (res)
+	{
+		ptr = MStrUtil(res, SUF_REM_TRAILING | SUF_REM_LEADING | SUF_SINGLE_SPACE);
+		Free(res);
+		res = ptr;
+	}
+
+	return res;
+}
+
+I64 HashEntriesCompare3(CWho *h1, CWho *h2)
+{
+	I64 i, i1 = 0, i2 = 0;
+
+	i = StrCompare(h1->idx, h2->idx);
+	if (i)
+		return i;
+	else
+	{
+		if (h1->h->type & HTT_HELP_FILE)
+			i1 = 1;
+		if (h2->h->type & HTT_HELP_FILE)
+			i2 = 1;
+		i = i2 - i1;
+		if (i)
+			return i;
+		else
+			return StrCompare(h1->h->str, h2->h->str);
+	}
+}
+
+public U0 HashTableDump(U8 *fu_flags=NULL, CHashTable *h=NULL, U8 *idx=NULL, CDoc *doc=NULL)
+{	//Dump hash symbol table.
+	// "+p" for only public symbols
+	// "+m" to order by number (normally alphabetical)
+	// "-r" just local hash table
+	CHashTable		*table;
+	CHashSrcSym		*tmph;
+	CHashGeneric	*ptr;
+	CWho			*list;
+	I64				 count, i, j, k, f = 0;
+	U8				 buf[512], *last_idx = StrNew(""), *cur_idx, *comment;
+	Bool			 recurse, publics, map;
+	CTask			*task;
+
+	FlagsScan(&f, Define("ST_FILE_UTIL_FLAGS"), "+r");
+	FlagsScan(&f, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
+	if (f & ~(FUF_RECURSE | FUF_PUBLIC | FUF_MAP))
+		throw('FUF');
+	recurse = Bt(&f, FUf_RECURSE);
+	publics = Bt(&f, FUf_PUBLIC);
+	map 	= Bt(&f, FUf_MAP);
+
+	if (!h)
+		h = Fs->hash_table;
+
+	if (idx)
+	{
+		task = User;
+		TaskWait(task);
+		LBtr(&task->display_flags, DISPLAYf_SHOW);
+	}
+	else
+		task = NULL;
+
+	count = 0;
+	table = h;
+	while (table)
+	{
+		for (i = 0; i <= table->mask; i++)
+		{
+			tmph = table->body[i];
+			while (tmph)
+			{
+				if (!(tmph->type & (HTF_IMPORT | HTF_PRIVATE)) && (tmph->type & HTF_PUBLIC || !publics))
+				{
+					if (!idx)
+						count++;
+					else if (tmph->type & HTG_SRC_SYM && (cur_idx = tmph->idx))
+						count += HelpIndexCount(cur_idx, idx);
+				}
+				tmph = tmph->next;
+			}
+		}
+		if (recurse)
+			table = table->next;
+		else
+			break;
+	}
+	if (!count) goto wh_done;
+
+	list = CAlloc(count * sizeof(CWho));
+	j = 0;
+	table = h;
+	while (table)
+	{
+		for (i = 0; i <= table->mask; i++)
+		{
+			tmph = table->body[i];
+			while (tmph)
+			{
+				if (!(tmph->type & (HTF_IMPORT | HTF_PRIVATE)) && (tmph->type & HTF_PUBLIC || !publics))
+					if (!idx)
+						list[j++].h = tmph;
+					else if (tmph->type & HTG_SRC_SYM && (cur_idx=tmph->idx) && (k = HelpIndexCount(cur_idx, idx)))
+						while (k--)
+						{
+							list[j].idx = HelpIndexStr(&cur_idx, idx);
+							list[j++].h = tmph;
+						}
+				tmph = tmph->next;
+			}
+		}
+		if (recurse)
+			table = table->next;
+		else
+			break;
+	}
+
+	if (map)
+		QuickSort(list, count, sizeof(CWho), &HashEntriesCompare2);
+	else if (idx)
+		QuickSort(list, count, sizeof(CWho), &HashEntriesCompare3);
+	else
+		QuickSort(list, count, sizeof(CWho), &HashEntriesCompare);
+
+	if (idx)
+	{
+		progress1_max = count;
+		progress1 = 0;
+	}
+	for (i = 0; i < count; i++)
+	{
+		comment = NULL;
+		ptr = list[i].h;
+		if (idx)
+			if (cur_idx = list[i].idx)
+			{
+				if (StrCompare(cur_idx, last_idx))
+				{
+					Free(last_idx);
+					last_idx = StrNew(cur_idx);
+					if (i)
+						DocPrint(doc, "\n\n");
+					DocPrint(doc, "$$WW,0$$$$PURPLE$$$$TX+CX,\"%$$Q\"$$$$FG$$\n", cur_idx);
+				}
+			}
+
+		if (idx && ptr->type & HTT_HELP_FILE)
+		{
+			DocPrint(doc, "$$WW,1$$");
+			DocType(doc, ptr->str);
+			DocPrint(doc, "$$WW,0$$");
+		}
+		else
+		{
+			if (ptr->type & HTG_SRC_SYM && ptr(CHashSrcSym *)->src_link)
+			{
+				DocPrint(doc, "$$LK,\"%-40s\",A=\"%s\"$$", ptr->str, ptr(CHashSrcSym *)->src_link);
+				if (idx)
+					comment = HelpComment(task, ptr, ptr(CHashSrcSym *)->src_link);
+			}
+			else
+				DocPrint(doc, "%-40s", ptr->str);
+
+			if (!idx)
+			{
+				if (ptr->type & HTT_DEFINE_STR)
+				{
+					j = ptr(CHashDefineStr *)->count;
+					if (j == -1)
+						StrPrint(buf, "%-10t$$Q   ", ptr(CHashDefineStr *)->data);
+					else
+						StrPrint(buf, "%-10t$$Q %02X", ptr(CHashDefineStr *)->data, j);
+				}
+				else if (ptr->type & HTT_GLOBAL_VAR)
+					StrPrint(buf, "%010X   ", ptr(CHashGlobalVar *)->data_addr);
+				else
+					StrPrint(buf, "%010X   ", HashVal(ptr));
+				j = HashEntrySize(ptr);
+				if (j == -1)
+					CatPrint(buf, " %04X            ", ptr->use_count);
+				else
+					CatPrint(buf, " %04X %010X ", ptr->use_count, j);
+			}
+			else
+				*buf = 0;
+
+			k = ptr->type;
+			if (publics)
+				k &= ~HTF_PUBLIC;
+			if (!(k & HTG_TYPE_MASK))
+				CatPrint(buf, "NULL ");
+			while (k)
+			{
+				j = Bsf(k);
+				if (j < 0)
+					break;
+				Btr(&k, j);
+				CatPrint(buf, "%Z ", j, "ST_HTT_TYPES");
+			}
+			DocPrint(doc, "%s", buf);
+			if (comment)
+			{
+				DocPrint(doc, "$$GREEN$$%s$$FG$$", comment);
+				Free(comment);
+			}
+			DocPrint(doc, "\n");
+		}
+		Free(list[i].idx);
+		if (idx)
+			progress1++;
+	}
+	Free(list);
+	if (idx)
+		progress1 = progress1_max = 0;
+
+wh_done:
+	if (doc)
+	{
+		if (doc->head.next == doc)
+			DocPrint(doc, "No Match");
+		else
+			DocRecalc(doc);
+	}
+	Free(last_idx);
+	Kill(task);
+}
+
+#help_index "Info;Hash;Cmd Line (Typically)"
+
+#define HDR_NUM 16
+public I64 HashDepthRep(CHashTable *table=NULL)
+{	//Hash table linked-list chain depth report.
+	//Histogram of collision count.
+	I64		 i, j, longest = 0, count = 0, a[HDR_NUM];
+	CHash	*tmph;
+
+	if (!table)
+		table = Fs->hash_table;
+	MemSet(a, 0, sizeof(a));
+	for (i = 0; i <= table->mask; i++)
+	{
+		tmph = table->body[i];
+		if (tmph)
+		{
+			j = LinkedListCount(tmph);
+			if (j < HDR_NUM)
+				a[j]++;
+			count += j;
+			if (j > longest)
+				longest = j;
+		}
+	}
+	"Histogram\n";
+	for (i = 0; i < HDR_NUM; i++)
+		if (a[i])
+			"%02d:%d\n", i, a[i];
+	"Size:%d Count:%d Longest:%d\n", table->mask + 1, count, longest;
+
+	return longest;
+}
+
+#help_index "Help System"
+#help_file "::/Doc/HelpSystem"
+
+public U0 DocHelpIdx(CDoc *doc, U8 *idx)
+{//Put to doc report for given help idx.
+	HashTableDump("+p",, idx, doc);
+}
+
+public U0 PopUpHelpIndex(U8 *idx, CTask *parent=NULL)
+{//PopUp win report for given help idx.
+	U8 *buf;
+
+	buf = MStrPrint("DocHelpIdx(DocPut, \"%s\"); View;", idx);
+	PopUp(buf, parent);
+	Free(buf);
+}
+
+#help_index "Hash/System"
+public U0 MapFileLoad(U8 *filename)
+{//Load map file so we have src line info.
+	U8			*st, *ptr, *name = ExtDefault(filename, "MAP"), *absname = FileNameAbs(name);
+	CDoc		*doc = DocRead(name);
+	CDocEntry	*doc_e;
+	CHashSrcSym	*tmph;
+	I64			 i, j, base=0;
+	CDebugInfo	*debug_info;
+
+	FileExtRemove(absname);
+	if (absname[1] == ':' && StrLen(absname) > 2 && (tmph = HashSingleTableFind(absname + 2, Fs->hash_table, HTT_MODULE)))
+		base = tmph(CHashGeneric *)->user_data0 + sizeof(CZXE);
+
+	if (!doc) return;
+	doc_e = doc->head.next;
+	while (doc_e != doc)
+	{
+		if (doc_e->type_u8 == DOCT_LINK)
+		{
+			if (*doc_e->tag)
+				st = MStrUtil(doc_e->tag, SUF_REM_TRAILING);
+			else
+				st = MStrUtil(doc_e->aux_str, SUF_REM_TRAILING);
+			if (tmph = HashSingleTableFind(st, Fs->hash_table, HTG_SRC_SYM))
+			{
+				if (*doc_e->tag)
+				{
+					Free(tmph->src_link);
+					tmph->src_link = doc_e->aux_str;
+					ptr = tmph->src_link;
+					if (ptr[0] && ptr[1] && ptr[2] == ':')
+					{
+						if (ptr[3] == ':')
+							ptr[3] = blkdev.boot_drive_let;
+						else if (ptr[3] == '~')
+							ptr[3] = *blkdev.home_dir;
+					}
+					doc_e->aux_str = NULL;
+				}
+				if (tmph->type & (HTT_FUN | HTT_EXPORT_SYS_SYM) &&
+					!(debug_info = tmph->debug_info) && doc_e->bin_data &&
+					(debug_info = doc_e->bin_data->data))
+				{
+					if (doc_e->bin_data->size > MSize(debug_info))
+						"Corrupt Map Entry\n";
+					else
+					{
+						doc_e->bin_data->data = NULL;
+						tmph->debug_info = debug_info;
+						for (i = debug_info->min_line; i <= debug_info->max_line + 1; i++)
+						{
+							j = i - debug_info->min_line;
+							if (debug_info->body[j])
+								debug_info->body[j] = debug_info->body[j] + base;
+						}
+					}
+				}
+			}
+			Free(st);
+		}
+		doc_e = doc_e->next;
+	}
+	DocDel(doc);
+	Free(name);
+	Free(absname);
+}

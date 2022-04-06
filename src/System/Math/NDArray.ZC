@@ -1,0 +1,86 @@
+
+/**
+	@ingroup Math
+	@brief Initialize n-dimensional array.
+
+	@param[in,out] arr		Array array to initialize.
+	@param[in]     type		Type of Array, see NDARRAY_ macros.
+	@param[in]     clear	Whether the clear the initialized array with zeros.
+	@param[in]     ...		List of lengths for each dimension.
+*/
+U0 ArrayInit(CArray *arr, U16 type, Bool clear, ...)
+{
+	I64 i;
+
+	arr->dims = argc;
+	arr->dimLens = MAlloc(sizeof(U64) * argc);
+	arr->type = type;
+	arr->size = 1;
+
+	for (i = 0; i < argc; i++)
+	{
+		arr->dimLens[i] = argv[i];
+		arr->size *= argv[i];
+	}
+
+	switch (type)
+	{
+		case NDARRAY_I32:
+			if (clear)
+				arr->I32Buf = CAllocAligned(sizeof(I32) * arr->size, 16);
+			else
+				arr->I32Buf = MAllocAligned(sizeof(I32) * arr->size, 16);
+			break;
+
+		case NDARRAY_I64:
+			if (clear)
+				arr->I64Buf = CAllocAligned(sizeof(I64) * arr->size, 16);
+			else
+				arr->I64Buf = CAllocAligned(sizeof(I64) * arr->size, 16);
+			break;
+
+		case NDARRAY_F32:
+			if (clear)
+				arr->F32Buf = CAllocAligned(sizeof(F32) * arr->size, 16);
+			else
+				arr->F32Buf = CAllocAligned(sizeof(F32) * arr->size, 16);
+			break;
+
+		case NDARRAY_F64:
+			if (clear)
+				arr->F64Buf = CAllocAligned(sizeof(I32) * arr->size, 16);
+			else
+				arr->F64Buf = MAllocAligned(sizeof(I64) * arr->size, 16);
+		break;
+	}
+}
+
+/**
+	@ingroup Math
+	@brief Free n-dimensional array.
+
+	@param[in,out] arr	Array to free.
+*/
+U0 ArrayFree(CArray *arr)
+{
+	Free(arr->dimLens);
+
+	switch (type)
+	{
+		case NDARRAY_I32:
+			Free(arr->I32Buf);
+		break;
+
+		case NDARRAY_I64:
+			Free(arr->I64Buf);
+		break;
+
+		case NDARRAY_F32:
+			Free(arr->F32Buf);
+		break;
+
+		case NDARRAY_F64:
+			Free(arr->F64Buf);
+		break;
+	}
+}

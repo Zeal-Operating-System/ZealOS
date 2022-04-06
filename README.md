@@ -1,5 +1,7 @@
 # ZealOS
 
+[![Discord](https://img.shields.io/discord/934200098144022609?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://discord.gg/rK6U3xdr7D)
+
 The Zeal Operating System is a modernized, professional fork of the 64-bit Temple Operating System. Guiding principles of development include transparency, full user control, and adherence to public-domain/open-source implementations.
 
 ![](/screenshots/screenshot2.png)
@@ -15,28 +17,27 @@ Features in development include:
   - Fully-functional AHCI support
   - Network card drivers and a networking stack
 
-[Changes include](https://zeal-operating-system.github.io/ZealOS/Doc/ChangeLog.DD.html):
+[Changes include](https://zeal-operating-system.github.io/Doc/ChangeLog.DD.html):
   - 60 FPS
   - VBE graphics with variable resolutions
   - Reformatted code for readability
   - Added comments and documentation
-  - HolyC -> CosmiC
+  - HolyC -> ZealC
   - System-wide renaming for clarity
-  - Removed shift-space mechanism
-  - 440Hz 'A' tuning changed to 432Hz
 
 ## Getting started
 
 ### Prerequisites
 
 - For running in a VM: Intel VT-x/AMD-V acceleration enabled in your BIOS settings. (Required to virtualize any 64-bit operating system properly.)
+    * If using Windows, [Hyper-V must be enabled.](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v#enable-the-hyper-v-role-through-settings)
 - Working knowledge of the C programming language.
 
-To create a Distro ISO, run `build_iso.sh` in the `build/` directory. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
+To create a Distro ISO, run the `build-iso` script in the `build` directory. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
 
 ### Contributing
 
-There are two ways to contribute. The first way involves everything happening inside the OS, as intended by Terry. After you've built the latest ISO, installed to a VM, made your changes, and powered off the VM, you can run the `sync_repo.sh` script to merge your changes to the repo. 
+There are two ways to contribute. The first way involves everything happening inside the OS, as intended by Terry. After you've built the latest ISO, installed to a VM, made your changes, and powered off the VM, you can run the `sync` script to merge your changes to the repo.
 
 Alternatively, you can edit repo files using an external editor, outside of the OS.
 
@@ -44,7 +45,7 @@ Afterwards, you can make a pull request on the `master` branch.
 
 ## Background
 
-In around November of 2019, [VoidNV](https://web.archive.org/web/20210414181948/https://github.com/VoidNV) forked [ZenithOS](https://web.archive.org/web/20200811190005/https://github.com/VoidNV/ZenithOS) from TempleOS to continue Terry's work in a direction that would make it a viable operating system while still keeping the innovative and divine-intellect ideas and design strategies intact. At first, development occurred exclusively inside a VM and ISOs were occasionally generated as official releases, but this was scrapped and restarted from scratch. [Releases of the "old" ZenithOS are currently archived on the mega.nz website.](https://mega.nz/#F!ZIEGmSRQ!qvL6Wk6THzE-dazkfT6N3Q) The repository was removed in August of 2020, and reuploaded to [ZenithOS](https://web.archive.org/web/20210630230454/https://github.com/ZenithOS/ZenithOS). The latest archived [front page](https://web.archive.org/web/20200811190005/https://github.com/VoidNV/ZenithOS/), [master.zip](https://web.archive.org/web/20200811190054/https://codeload.github.com/VoidNV/ZenithOS/zip/master), and [related links](https://web.archive.org/web/*/https://github.com/VoidNV/ZenithOS/*) can be found on archive.org.
+In around November of 2019, [VoidNV](https://web.archive.org/web/20210414181948/https://github.com/VoidNV) forked [ZenithOS](https://web.archive.org/web/20200811190005/https://github.com/VoidNV/ZenithOS) from TempleOS. [Releases of pre-git ZenithOS are currently archived on the mega.nz website.](https://mega.nz/#F!ZIEGmSRQ!qvL6Wk6THzE-dazkfT6N3Q) The repository was removed in August of 2020, and reuploaded to [ZenithOS](https://web.archive.org/web/20210630230454/https://github.com/ZenithOS/ZenithOS). The latest archived [front page](https://web.archive.org/web/20200811190005/https://github.com/VoidNV/ZenithOS/), [master.zip](https://web.archive.org/web/20200811190054/https://codeload.github.com/VoidNV/ZenithOS/zip/master), and [related links](https://web.archive.org/web/*/https://github.com/VoidNV/ZenithOS/*) can be found on archive.org.
 
 In July of 2021, ZealOS was forked from ZenithOS.
 

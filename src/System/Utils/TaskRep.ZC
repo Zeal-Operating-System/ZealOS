@@ -1,0 +1,64 @@
+
+
+#help_index "Info;Task"
+U0 TaskRepTask(CTask *task, I64 indent, Bool verbose)
+{
+	CTask	*task1;
+	I64		 i;
+
+	if (!IsRaw)
+		"%h*c$$MA,T=\"%08X\",LM=\"Kill(0x%X);\n\",$$ $$BLACK$$#%d$$FG$$ $$TX,\"%$$Q...\",SCX=16$$\n",
+			indent, CH_SPACE, task, task, task->task_num, task->task_title;
+	else
+		"%h*c%08X #%d %$$Q\n",
+			indent, CH_SPACE, task, task->task_num, task->task_title;
+
+	if (!verbose)
+		"%h*c%08X %04X:%04X:%08X\n", indent + 2, CH_SPACE,
+									 TaskMemAlloced(task), task->task_flags, task->display_flags, task->win_inhibit;
+	else
+	{
+		"%h*cMemory Allocated: 0x%08X\n", indent + 2, CH_SPACE, TaskMemAlloced(task);
+		"%h*cMemory Used:      0x%08X\n", indent + 2, CH_SPACE, TaskMemUsed(task);
+		"%h*cTask Flags:       0x%04X\n", indent + 2, CH_SPACE, task->task_flags;
+		for (i = 0; i < TASKf_FLAGS_NUM; i++)
+			if (Bt(&task->task_flags, i))
+				"%h*c+ %Z\n", indent + 4, CH_SPACE, i, "ST_TASK_FLAGS";
+
+		"%h*cDisplay Flags:    0x%04X\n", indent + 2, CH_SPACE, task->display_flags;
+		for (i = 0; i < DISPLAYf_FLAGS_NUM; i++)
+			if (Bt(&task->display_flags, i))
+				"%h*c+ %Z\n", indent + 4, CH_SPACE, i, "ST_DISPLAY_FLAGS";
+
+		"%h*cWindow Inhibit:   0x%08X\n", indent + 2, CH_SPACE, task->win_inhibit;
+		for (i = 0; i < WIf_FLAGS_NUM; i++)
+			if (Bt(&task->win_inhibit, i))
+				"%h*c- %Z\n", indent + 4, CH_SPACE, i, "ST_WIN_INHIBIT_FLAGS";
+	}
+
+	task1 = task->next_child_task;
+	while (task1 != (&task->next_child_task)(U8 *) - offset(CTask.next_sibling_task))
+	{
+		TaskRepTask(task1, indent + 2, verbose);
+		task1 = task1->next_sibling_task;
+	}
+}
+
+public U0 TaskRep(Bool verbose=FALSE)
+{//Report current tasks on all cores.
+	I64 i;
+	CCPU *c;
+
+	PUSHFD
+	CLI
+	for (i = 0; i < mp_count; i++)
+	{
+		c = &cpu_structs[i];
+		if (!IsRaw)
+			"$$PURPLE$$CPU%02X$$FG$$\n", i;
+		else
+			"CPU%02X\n", i;
+		TaskRepTask(c->executive_task, 2, verbose);
+	}
+	POPFD
+}

@@ -1,0 +1,136 @@
+
+F64 F64_QUADRANT_CONSTANT_ARRAY[2] = {0, ã};
+
+#define F64_1					0x3FF0000000000000
+#define F64_1_OVER_2_FACTORIAL	0x3FE0000000000000	// 1/2!
+#define F64_1_OVER_4_FACTORIAL	0x3FA5555555555555	// 1/4!
+#define F64_1_OVER_6_FACTORIAL	0x3F56C16C16C16C17	// 1/6!
+#define F64_1_OVER_8_FACTORIAL	0x3EFA01A01A01A01A	// 1/8!
+#define F64_1_OVER_10_FACTORIAL	0x3E927E4FB7789F5C	// 1/10!
+#define F64_1_OVER_12_FACTORIAL	0x3E21EED8EFF8D898	// 1/12!
+#define F64_1_OVER_14_FACTORIAL 0x3DA93974A8C07C9D	// 1/14!
+
+#define F64_2_OVER_PI	0x3FE45F306DC9C883
+#define F64_PI_OVER_2	0x3FF921FB54442D18
+
+asm
+{
+_F32_COS::
+	PUSH		RBP
+	MOV			RBP, RSP
+	PUSH		RBX
+
+	CVTSS2SD	XMM0, SF_ARG1[RBP]//XMM0: é
+
+/*
+	I64 quadrant = é * (2.0 / ã);
+*/
+
+	MOV			RAX, F64_2_OVER_PI
+	MOVQ		XMM1, RAX		//	XMM1: 2.0 / Pi
+	MULSD		XMM1, XMM0		//	XMM1: (2.0 / ã) * é
+	CVTSD2SI	RBX, XMM1		//	RBX : quadrant = (I64) ((2.0 / ã) * é)
+
+/*
+	é = é - (F32) quadrant * (ã / 2.0);
+*/
+
+	CVTSI2SD	XMM1, RBX		//	XMM1: (F32) quadrant
+	MOV			RAX, F64_PI_OVER_2
+	MOVQ		XMM2, RAX		//	XMM2: ã / 2.0
+	MULSD		XMM2, XMM1		//	XMM2: (ã / 2.0) * (F32) quadrant
+	SUBSD		XMM0, XMM2		//	XMM0: é = é - ((ã / 2.0) * (F32) quadrant)
+
+/*
+	quadrant += 1;
+	é = gTrigQuadrantConstants[(quadrant >> 1) & 1] - é;
+*/
+
+	INC			RBX				//	RBX : quadrant += 1
+	SHR			RBX, 1			//	RBX : quadrant >> 1
+	AND			RBX, 1			//	RBX : (quadrant >> 1) & 1
+	SHL			RBX, 3			//	RBX : ((quadrant >> 1) & 1) * sizeof(F64)
+	MOV			RAX, &F64_QUADRANT_CONSTANT_ARRAY
+	ADD			RBX, RAX		//	RBX : constants + ((quadrant >> 1) & 1)
+	MOVQ		XMM1, [RBX]		//	XMM1: constants[(quadrant >> 1) & 1]
+	SUBSD		XMM1, XMM0		//	XMM1: é = constants[(quadrant >> 1) & 1] - é
+
+/*
+	é2 = -(é * é);
+*/
+
+	MULSD		XMM1, XMM1		// 	XMM1: é * é
+	XORPS		XMM0, XMM0		//	XMM0: {0.0, 0.0}
+	SUBSD		XMM0, XMM1		//	XMM0: é2 = -(é * é)
+
+/*
+	F64 r = (1/14!) * é2;
+*/
+
+	MOV			RAX, F64_1_OVER_14_FACTORIAL
+	MOVQ		XMM1, RAX
+	MULSD		XMM1, XMM0
+
+/*
+	r += (1/n!);
+	r *= é2;
+*/
+
+	MOV			RAX, F64_1_OVER_12_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/6!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/6!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+	MOV			RAX, F64_1_OVER_10_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/4!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/4!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+	MOV			RAX, F64_1_OVER_8_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/2!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/2!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+	MOV			RAX, F64_1_OVER_6_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/2!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/2!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+	MOV			RAX, F64_1_OVER_4_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/2!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/2!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+	MOV			RAX, F64_1_OVER_2_FACTORIAL
+	MOVQ		XMM2, RAX		//	XMM2: (1/2!)
+	ADDSD		XMM1, XMM2		//	XMM1: r += (1/2!)
+	MULSD		XMM1, XMM0		//	XMM1: r *= é
+
+/*
+	return (F32) (r + 1.0)
+*/
+
+	MOV			RAX, F64_1
+	MOVQ		XMM2, RAX		//	XMM2: 1.0
+	ADDSD		XMM1, XMM2		//	XMM1: r += 1.0
+	CVTSD2SS	XMM0, XMM1		//	XMM0: (F32) r
+	MOVQ		RAX, XMM0
+
+	POP			RBX
+	POP			RBP
+	RET1		8
+}
+/**
+	@ingroup Math
+	@brief Calculate single precision cosine.
+
+	Note that it isn't correct for all values of é yet.
+
+	Based on the paper:
+	Fast Trigonometric Functions using Intel's SSE2 Instructions. 2003.
+	L. Nyland, M. Snyder 
+
+	@param[in] theta	Angle in radians.
+	@return				sin(theta).
+*/
+_extern _F32_COS F32 CosF32(F32 theta);

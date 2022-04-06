@@ -4,19 +4,19 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * $LK,"U",A="MN:U"$(&FunName+offset) to unassemble mem or $LK,"Uf",A="MN:Uf"$("FunName") to unassemble a function. $LK,"U",A="MN:U"$($LK,"_RIP",A="MN:_RIP"$-16);
 
-* While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
+* While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
 
 * You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int variables.
 
 * You can use $LK,"SysLog",A="MN:SysLog"$() to send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ window.	It works like $LK,"Print",A="MN:Print"$().	You could also use $LK,"RawPrint",A="MN:RawPrint"$().
 
-* $LK,"D",A="MN:D"$(), $LK,"DocD",A="MN:DocD"$(), $LK,"RawD",A="MN:RawD"$() to do 16 column hex dump mem with numbering from zero.	With $LK,"DocD",A="MN:DocD"$ the values are updated continually and you can alter mem by editing.
+* $LK,"Dump",A="MN:Dump"$(), $LK,"DocDump",A="MN:DocDump"$(), $LK,"RawDump",A="MN:RawDump"$() to do 16 column hex dump mem with numbering from zero.	With $LK,"DocDump",A="MN:DocDump"$ the values are updated continually and you can alter mem by editing.
 
-* $LK,"Dm",A="MN:Dm"$(), $LK,"DocDm",A="MN:DocDm"$(), $LK,"RawDm",A="MN:RawDm"$() to do 16 column hex dump mem with addresses showing.
+* $LK,"DumpMem",A="MN:DumpMem"$(), $LK,"DocDumpMem",A="MN:DocDumpMem"$(), $LK,"RawDumpMem",A="MN:RawDumpMem"$() to do 16 column hex dump mem with addresses showing.
 
-* $LK,"Da",A="MN:Da"$() to do one column address dump (for stack, etc.) with symbolic addresses.
+* $LK,"DumpAddress",A="MN:DumpAddress"$() to do one column address dump (for stack, etc.) with symbolic addresses.
 
-* $LK,"Dr",A="MN:Dr"$() dumps registers.  You can display and modify registers in the debugger with variable-like labels, $FG,4$_RAX$FG$, $FG,4$_RBX$FG$, etc.
+* $LK,"DumpRegs",A="MN:DumpRegs"$() dumps registers.  You can display and modify registers in the debugger with variable-like labels, $FG,4$_RAX$FG$, $FG,4$_RBX$FG$, etc.
 
 * $LK,"ClassRep",A="MN:ClassRep"$() and the dynamic version $LK,"ClassRepD",A="MN:ClassRepD"$() can be used to dump structures.
 
@@ -30,7 +30,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 $ID,2$
 $LK,"Echo",A="MN:Echo"$() turns on or off raw data going into the lexical analyzer.
 
-$LK,"Trace",A="MN:Trace"$() unassembles code generated from the CosmiC compiler.
+$LK,"Trace",A="MN:Trace"$() unassembles code generated from the ZealC compiler.
 
 $LK,"PassTrace",A="MN:PassTrace"$() shows intermediate code coming-out after optimization.	The bits ctrl which passes are displayed.
 $ID,-2$

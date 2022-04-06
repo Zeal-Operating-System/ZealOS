@@ -1,0 +1,79 @@
+CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 port_num)
+{
+	CBlkDev *res;
+
+	if (0 <= first_drive_let - 'A' < DRIVES_NUM && (type == BDT_ATA || type == BDT_ATAPI) && 0 <= port_num <= AHCI_MAX_PORTS)
+	{
+		res = BlkDevNextFreeSlot(first_drive_let, type);
+		res->port_num = port_num;
+		res->ahci_port = &blkdev.ahci_hba->ports[port_num];
+		res->ahci_port->cmd_list_base = NULL; // See $LK+PU,"AHCIAtaInit",A="FF:::/Kernel/BlkDev/DiskAHCI.ZC,if (bd->ahci_port->cmd_list_base)"$ ...
+		if (BlkDevAdd(res,, FALSE, FALSE))
+			return res;
+	}
+
+	return NULL;
+}
+
+I64 MountAHCIAuto()
+{//Try to mount hard drives and CD/DVD drives automatically. (Kernel.Config option).
+//It uses 'C' and 'T' as first drive letters or whatever you set
+//in config when compiling Kernel.ZXE.
+	CBlkDev		*bd		= Letter2BlkDev(':', FALSE);
+	I64			 res	= 0, i, ata_port = -1, atapi_port = -1;
+	CAHCIPort	*port;
+
+	"MountAHCIAuto;\n";
+	if (bd)
+	{
+		// if boot-drive blkdev exists, do a SATA port iteration to mount it first
+		"( ':' BlkDev at 0x%0X )\n", bd;
+		for (i = 0; i < AHCI_MAX_PORTS; i++)
+			if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+			{
+				port = &blkdev.ahci_hba->ports[i];
+
+				if (bd->port_num == i)
+				{
+					if (ata_port == -1 && bd->type == BDT_ATA && port->signature == AHCI_PxSIG_ATA)
+					{
+						"ATAMount('%C', BDT_ATA, %d);\n", blkdev.first_hd_drive_let, i;
+						ATAMount(blkdev.first_hd_drive_let, BDT_ATA, i);
+						ata_port = i;
+						res++;
+					}
+					else if (atapi_port == -1 && bd->type == BDT_ATAPI && port->signature == AHCI_PxSIG_ATAPI)
+					{
+						"ATAMount('%C', BDT_ATAPI, %d);\n", blkdev.first_dvd_drive_let, i;
+						ATAMount(blkdev.first_dvd_drive_let, BDT_ATAPI, i);
+						atapi_port = i;
+						res++;
+					}
+				}
+			}
+	}
+	// do a 2nd iteration to mount remaining drives
+	// (we will end up trying to boot off whichever drive/partition ends up at chosen letter)
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+		if (i != ata_port && i != atapi_port && Bt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+
+			if (port->signature == AHCI_PxSIG_ATA)
+			{
+				"ATAMount('%C', BDT_ATA, %d);\n", blkdev.first_hd_drive_let, i;
+				if (ATAMount(blkdev.first_hd_drive_let, BDT_ATA, i))
+					res++;
+			}
+			else if (port->signature == AHCI_PxSIG_ATAPI)
+			{
+				"ATAMount('%C', BDT_ATAPI, %d);\n", blkdev.first_dvd_drive_let, i;
+				if (ATAMount(blkdev.first_dvd_drive_let, BDT_ATAPI, i))
+					res++;
+			}
+		}
+	"\n";
+	blkdev.mount_ide_auto_count = res;
+
+	return res;
+}

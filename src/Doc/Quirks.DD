@@ -10,9 +10,9 @@ $WW,1$* You run a risk of problems if you do file operations on the same files s
 
 * Call $LK,"DiskChange",A="MN:DiskChange"$() when you insert a new removable media.
 
-* Accessing CD/DVD's is flacky.  Try $LK,"Drive",A="MN:Drive"$() or $LK,"DiskChange",A="MN:DiskChange"$() twice.
+* Accessing CD/DVD's is flaky.  Try $LK,"Drive",A="MN:Drive"$() or $LK,"DiskChange",A="MN:DiskChange"$() twice.
 
-* You can only $FG,2$extern$FG$ something once.  There is a varient called $FG,2$_extern$FG$ which binds a CosmiC definition to a asm symbol.	This, too, can only be done once.
+* You can only $FG,2$extern$FG$ something once.  There is a varient called $FG,2$_extern$FG$ which binds a ZealC definition to a asm symbol.	This, too, can only be done once.
 
 * A terminal task has a $LK,"CDoc",A="MN:CDoc"$ document structure that remains active even when you change $FG,4$Fs->draw_it$FG$.	To prevent links in the $LK,"CDoc",A="MN:CDoc"$ from being activated when the user clicks in the window, do one of three things:
 $ID,2$

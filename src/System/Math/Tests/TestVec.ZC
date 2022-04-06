@@ -1,0 +1,206 @@
+Cd(__DIR__);;
+
+#define ARCH_SUPPORTS_AVX	TRUE
+#define ARCH_SUPPORTS_AVX2	TRUE
+
+F32 s;
+CVector4D *a = MAllocAligned(sizeof(CVector4D), 16);
+CVector4D *b = MAllocAligned(sizeof(CVector4D), 16);
+CVector4D *dest = MAllocAligned(sizeof(CVector4D), 16);
+I64 destS;
+CVector4D *trueRes = MAllocAligned(sizeof(CVector4D), 16);
+
+// Note that some smaller vector functions are identical to larger vector
+// functions so they do not get tested. 
+
+//-----------------------------------------------------------------------------
+// Vector4DCopy
+
+Vector4DInit(1.25, 2.5, 3.75, 5.0, a);
+Vector4DInit(0.0, 0.0, 0.0, 0.0, dest);
+Vector4DCopy(a, dest);
+if (!Vector4DIsEqual(a, dest))
+{
+	ST_WARN_ST "Vector4DCopy NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DCopy $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DAdd
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(0.25, -0.5, 0.75, -1.0, trueRes);
+Vector4DAdd(a, b, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DAdd NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DAdd $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DAddS
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+s = F64ToF32(2.0);
+Vector4DInit(3.25, -0.5, 5.75, -3.0, trueRes);
+Vector4DAddS(a, s, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DAddS NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DAddS $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DSub
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(2.25, -4.5, 6.75, -9.0, trueRes);
+Vector4DSub(a, b, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DSub NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DSub $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DSubS
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+s = F64ToF32(2.0);
+Vector4DInit(-0.75, -4.5, 1.75, -7.0, trueRes);
+Vector4DSubS(a, s, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DSubS NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DSubS $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DMul
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(-1.25, -5.0, -11.25, -20.0, trueRes);
+Vector4DMul(a, b, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DMul NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DMul $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DMulS
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+s = F64ToF32(2.0);
+Vector4DInit(2.5, -5.0, 7.5, -10.0, trueRes);
+Vector4DMulS(a, s, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DMulS NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DMulS $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DDiv
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(-1.25, -1.25, -1.25, -1.25, trueRes);
+Vector4DDiv(a, b, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DDiv NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DDiv $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DDivS
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+s = F64ToF32(2.0);
+Vector4DInit(0.625, -1.25, 1.875, -2.5, trueRes);
+Vector4DDivS(a, s, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DDivS NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DDivS $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DMin
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(-1.0,-2.5,-3.0,-5.0, trueRes);
+Vector4DMin(a, b, dest);
+if(!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DMin NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DMin $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DMax
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+Vector4DInit(1.25, 2.0, 3.75, 4.0, trueRes);
+Vector4DMax(a, b, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DMax NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DMax $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector4DNegate
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.25, 2.5, -3.75, 5.0, trueRes);
+Vector4DNegate(a, dest);
+if (!Vector4DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector4DNegate NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector4DPrint(dest);
+} else "$$GREEN$$PASS: Vector4DNegate $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector3DNormalize
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector3DInit(0.26726124, -0.5345225, 0.80178374, trueRes);
+Vector3DNormalize(a, dest);
+if (!Vector3DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector3DNormalize NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector3DPrint(dest);
+} else "$$GREEN$$PASS: Vector3DNormalize $$FG$$\n";
+
+//-----------------------------------------------------------------------------
+// Vector3DDot / Vector4DDot
+
+Vector4DInit(1.25, -2.5, 3.75, -5.0, a);
+Vector4DInit(-1.0, 2.0, -3.0, 4.0, b);
+
+s = Vector3DDot(a, b);
+if (F32ToF64(s) != -17.5)
+{
+	ST_WARN_ST "Vector3DDot NOT WORKING CORRECLTY! RESULT: %n\n", F32ToF64(s);
+} else "$$GREEN$$PASS: Vector3DDot $$FG$$\n";
+
+s = Vector4DDot(a, b);
+if (F32ToF64(s) != -37.5)
+{
+	ST_WARN_ST "Vector4DDot NOT WORKING CORRECTLY! RESULT: %n\n", F32ToF64(s);
+} else "$$GREEN$$PASS: Vector4DDot $$FG$$\n";
+//-----------------------------------------------------------------------------
+// Vector3DCross
+
+Vector4DInit(1.0, 2.0, 3.0, -5.0, a);
+Vector4DInit(1.5, -4.5, 2.5, 4.0, b);
+Vector3DInit(18.5, 2.0, -7.5, trueRes);
+
+Vector3DCross(a, b, dest);
+if (!Vector3DIsEqual(dest, trueRes))
+{
+	ST_WARN_ST "Vector3DCross NOT WORKING CORRECTLY! RESULT VECTOR:\n";
+	Vector3DPrint(dest);
+} else "$$GREEN$$PASS: Vector3DCross $$FG$$\n"; 
+//-----------------------------------------------------------------------------
+
+Free(a);
+Free(b);
+Free(dest);
+Free(trueRes);
+
