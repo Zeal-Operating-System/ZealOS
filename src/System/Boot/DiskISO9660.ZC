@@ -340,7 +340,7 @@ public I64 ISO9660ISO(U8 *_filename = NULL, U8 *src_files_find_mask,
 	//See $LK,"::/Misc/DoDistro.ZC"$
 	//Use "C:/Distro/*" if you want all files in the C:/Distro directory.
 	//Default flags are "+r" recurse.
-	CISOPriDesc	*iso_pri = CAlloc(DVD_BLK_SIZE),
+	CISOPriDesc		*iso_pri = CAlloc(DVD_BLK_SIZE),
 					*iso_boot = CAlloc(DVD_BLK_SIZE),
 					*iso_sup = CAlloc(DVD_BLK_SIZE),
 					*iso_term = CAlloc(DVD_BLK_SIZE);
