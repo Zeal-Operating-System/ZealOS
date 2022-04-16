@@ -119,7 +119,7 @@ Bool ISOFileFind(CDrive *drive, I64 cur_dir_clus, U8 *name, CDirEntry *_res, I64
 			{
 				if (!isoptr->len)
 				{
-					isoptr(U8*)++;
+					isoptr(U8 *)++;
 					i--;
 				}
 				else
@@ -139,7 +139,7 @@ Bool ISOFileFind(CDrive *drive, I64 cur_dir_clus, U8 *name, CDirEntry *_res, I64
 						}
 					}
 					i -= isoptr->len;
-					isoptr(U8*) += isoptr->len;
+					isoptr(U8 *) += isoptr->len;
 				}
 			}
 iff_done:
@@ -231,7 +231,7 @@ CDirEntry *ISOFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent = 
 	{
 		if (!buf->len)
 		{
-			buf(U8*) ++;
+			buf(U8 *) ++;
 			i--;
 		}
 		else
@@ -268,7 +268,7 @@ CDirEntry *ISOFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent = 
 			else
 				DirEntryDel(tmpde);
 			i -= buf->len;
-			buf(U8*) += buf->len;
+			buf(U8 *) += buf->len;
 		}
 	}
 	Free(buf2);
