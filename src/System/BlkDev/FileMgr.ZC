@@ -486,6 +486,7 @@ U0 FMMakeISO(CDoc *doc, I64 type)
 				case FSt_REDSEA:
 					RedSeaISO(, tmpde->full_name);
 					break;
+
 				case FSt_ISO9660:
 					if (tmpde->full_name[StrLen(tmpde->full_name) - 1] == '/')
 						st = MStrPrint("%s*", tmpde->full_name);

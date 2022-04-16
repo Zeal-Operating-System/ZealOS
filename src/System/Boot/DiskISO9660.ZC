@@ -512,8 +512,8 @@ public I64 ISO9660ISO(U8 *_filename = NULL, U8 *src_files_find_mask,
 		FBlkWrite(out_file, iso_term, 19 << 2, 4);
 		stage2_size = (Size(stage2_filename, "+s") + DVD_BLK_SIZE - 1) / DVD_BLK_SIZE;
 		MemCopy(stage1_buf, BDVD_START, BDVD_END - BDVD_START);
-		*(BDVD_BLK_COUNT - BDVD_START + stage1_buf)(U16*) = stage2_size;
-		*(BDVD_BLK_LO - BDVD_START + stage1_buf)(U32*) = stage2_blk;
+		*(BDVD_BLK_COUNT - BDVD_START + stage1_buf)(U16 *) = stage2_size;
+		*(BDVD_BLK_LO - BDVD_START + stage1_buf)(U32 *) = stage2_blk;
 		"$$RED$$!!! Boot Stage 2 !!! %X-%X$$FG$$\n",
 		stage2_blk, stage2_blk + stage2_size - 1;
 		FBlkWrite(out_file, stage1_buf, 20 << 2 + 1 << 2, DVD_BOOT_LOADER_SIZE / BLK_SIZE);

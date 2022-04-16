@@ -74,7 +74,7 @@ Bool ISOCDirFill(CDirEntry *tmpde, CISODirEntry *de)
 	tmpde->clus = de->loc.little;
 	tmpde->size = de->size.little;
 	tmpde->attr = FileAttr(tmpde->name);
-	if (de->flags &ISO_ATTR_DIR)
+	if (de->flags & ISO_ATTR_DIR)
 		tmpde->attr |= RS_ATTR_DIR;
 	tmpde->datetime = ISODateStruct2CDate(&de->date);
 
@@ -89,7 +89,7 @@ Bool ISOFileFind(CDrive *drive, I64 cur_dir_clus, U8 *name, CDirEntry *_res, I64
 	Bool			 res = FALSE, unlock;
 	I64				 i;
 
-	if (fuf_flags &~FUG_FILE_FIND)
+	if (fuf_flags & ~FUG_FILE_FIND)
 		throw ('FUF');
 	DriveCheck(drive);
 	if (drive->fs_type != FSt_ISO9660)
@@ -208,7 +208,7 @@ CDirEntry *ISOFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent = 
 	I64				 i, cur_dir_clus = Name2DirClus(drive, Fs->cur_dir);
 	CDirEntry		*res = NULL, *tmpde;
 
-	if (fuf_flags &~FUG_FILES_FIND)
+	if (fuf_flags & ~FUG_FILES_FIND)
 		throw ('FUF');
 	isoptr = MAlloc(drive->spc << BLK_SIZE_BITS);
 	ClusRead(drive, isoptr, cur_dir_clus, 1);
@@ -216,7 +216,7 @@ CDirEntry *ISOFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent = 
 	{
 		//curdir
 		i = (isoptr->size.little + drive->spc << BLK_SIZE_BITS - 1) / drive->spc << BLK_SIZE_BITS;
-		buf = MAlloc(drive->spc << BLK_SIZE_BITS *i);
+		buf = MAlloc(drive->spc << BLK_SIZE_BITS * i);
 		ClusRead(drive, buf, cur_dir_clus, i);
 		Free(isoptr);
 	}
@@ -254,7 +254,7 @@ CDirEntry *ISOFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent = 
 				else
 				{
 					tmpde->full_name = FileNameAbs(tmpde->name);
-					if ((tmpde->attr &RS_ATTR_DIR || !Bt(&fuf_flags, FUf_JUST_DIRS)) &&
+					if ((tmpde->attr & RS_ATTR_DIR || !Bt(&fuf_flags, FUf_JUST_DIRS)) &&
 						!(Bt(&fuf_flags, FUf_RECURSE) && *tmpde->name == '.' && tmpde->attr & RS_ATTR_DIR) &&
 						FilesFindMatch(tmpde->full_name, files_find_mask, fuf_flags))
 					{
