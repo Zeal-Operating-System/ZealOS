@@ -451,13 +451,13 @@ public I64 ISO9660ISO(U8 *_filename = NULL, U8 *src_files_find_mask,
 
 	tabbuf = CAlloc(tabsize * DVD_BLK_SIZE);
 	iso_pri->type_l_path_table = cur_blk;
-	tabbuf->name_len = 2;	//Fill-in adam entry
+	tabbuf->name_len = 2;	//Fill-in root entry
 	tmpi = &iso_pri->root_dir_record;
 	tabbuf->blk = tmpi->loc.little;
 	tabbuf->parent_entry_num = 1;
 	tabbuf2 = CAlloc(tabsize2 * DVD_BLK_SIZE);
 	iso_sup->type_l_path_table = cur_blk + tabsize;
-	tabbuf2->name_len = 2;	//Fill-in adam entry
+	tabbuf2->name_len = 2;	//Fill-in root entry
 	tmpi = &iso_sup->root_dir_record;
 	tabbuf2->blk = tmpi->loc.little;
 	tabbuf2->parent_entry_num = 1;
@@ -475,13 +475,13 @@ public I64 ISO9660ISO(U8 *_filename = NULL, U8 *src_files_find_mask,
 
 	MemSet(tabbuf, 0, tabsize * DVD_BLK_SIZE);
 	iso_pri->type_m_path_table = EndianU32(cur_blk);
-	tabbuf->name_len = 2;	//Fill-in adam entry
+	tabbuf->name_len = 2;	//Fill-in root entry
 	tmpi = &iso_pri->root_dir_record;
 	tabbuf->blk = tmpi->loc.big;
 	tabbuf->parent_entry_num = EndianU16(1);
 	MemSet(tabbuf2, 0, tabsize2 * DVD_BLK_SIZE);
 	iso_sup->type_m_path_table = EndianU32(cur_blk + tabsize);
-	tabbuf2->name_len = 2;	//Fill-in adam entry
+	tabbuf2->name_len = 2;	//Fill-in root entry
 	tmpi = &iso_sup->root_dir_record;
 	tabbuf2->blk = tmpi->loc.big;
 	tabbuf2->parent_entry_num = EndianU16(1);
