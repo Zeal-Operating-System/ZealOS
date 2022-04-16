@@ -37,6 +37,10 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 										mbr.p[i].type = MBR_PT_FAT32a;
 										break;
 
+									case FSt_ISO9660:
+										PrintErr("File System Not Writable\n");
+										throw('Drive');
+
 									default:
 										throw('Drive');
 								}

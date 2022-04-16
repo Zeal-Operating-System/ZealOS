@@ -697,6 +697,7 @@ public extern CCountsGlobals counts;
 #help_index "Time/Date/CDate;Date/CDate"
 #help_file "::/Doc/TimeDate"
 public extern	U0		 Date2Struct(CDateStruct *_ds, CDate cdt);
+extern			U0		 Date2ISO(CISODate *dst, CDate cdt);
 extern			U8		*MPrintDate(CDate cdt);
 extern			U8		*MPrintTime(CDate cdt);
 public extern	CDate	 Now();

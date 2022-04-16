@@ -302,6 +302,7 @@ Bool Drive(U8 drv_let=0)
 	switch (drive->fs_type)
 	{
 		case FSt_REDSEA:
+		case FSt_ISO9660:
 		case FSt_FAT32:
 			return TRUE;
 

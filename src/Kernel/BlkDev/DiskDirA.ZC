@@ -8,6 +8,10 @@ Bool DirNew(CDrive *drive, U8 *cur_dir, CDirEntry *tmpde, Bool free_old_chain=TR
 		case FSt_FAT32:
 			return FAT32DirNew(drive, cur_dir, tmpde, free_old_chain);
 
+		case FSt_ISO9660:
+			PrintErr("File System Not Writable\n");
+			return FALSE;
+
 		default:
 			PrintErr("File System Not Supported\n");
 			return FALSE;

@@ -68,7 +68,9 @@ Bool Cd(U8 *dirname=NULL, Bool make_dirs=FALSE)
 				case FSt_REDSEA:
 					res = RedSeaCd(buf, cur_dir_clus);
 					break;
-
+				case FSt_ISO9660:
+					res = ISOCd(buf, cur_dir_clus);
+					break;
 				case FSt_FAT32:
 					res = FAT32Cd(buf, cur_dir_clus);
 					break;
@@ -151,7 +153,7 @@ I64 Dir(U8 *files_find_mask, Bool full)
 
 			"$$MA,T=\"Directory\",LM=\"PopUpCd;Dir;\n\"$$ of %s\n", st;
 			if (full)
-				"__DATE__ __TIME__ %*ts %*ts\n", csize, "SIZE", c, "BLK";
+				"__DATE__ __TIME__ %*ts %*ts\n", csize, "SIZE", c, "CLUS";
 			else
 				"DATE_ TIME_ %*ts\n", csize, "SIZE";
 			while (tmpde1)
@@ -208,6 +210,10 @@ Bool DirMake(U8 *filename, I64 entry_count=0)
 
 					case FSt_FAT32:
 						res = FAT32MkDir(dirc->drive, Fs->cur_dir, name, entry_count);
+						break;
+
+					case FSt_ISO9660:
+						PrintErr("File System Not Writable\n");
 						break;
 
 					default:

@@ -3,6 +3,7 @@
 
 #include "BootDVD"
 #include "DiskISORedSea"
+#include "DiskISO9660"
 
 #help_index "Install"
 

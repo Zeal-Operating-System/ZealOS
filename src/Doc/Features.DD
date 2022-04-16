@@ -16,9 +16,9 @@
 
 * Keyboard & Mouse support.
 
-* AHCI ATA Hard drives, support for $FG,2$FAT32$FG$ and $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file systems.
+* AHCI ATA hard drives, support for $FG,2$FAT32$FG$ and $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file systems.
 
-* AHCI ATAPI $FG,2$CD/DVD$FG$ support with $FG,2$RedSea$FG$ file system.  Can make bootable ISO files so you can roll-your-own distro's.
+* AHCI ATAPI $FG,2$CD/DVD$FG$ drives, support for $FG,2$ISO9660$FG$ and $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file systems.  Can make bootable ISO files so you can roll-your-own distro's.
 
 * $LK,"Partitioning",A="MN:DiskPart"$ tool, installer, $FG,2$boot loaders$FG$ for CD/DVD and hard disk.
 
