@@ -1,4 +1,13 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/16/22 18:47:11----$IV,0$
+* Raised version number to 1.13.
+* Added ISO9660 support from "TempleOSCD_2017-05-21T03 56 09.ISO".
+	- $LK+PU,"DiskISO9660.ZC",A="FI:::/System/Boot/DiskISO9660.ZC"$
+	- $LK+PU,"FileSysISO.ZC",A="FI:::/Kernel/BlkDev/FileSysISO.ZC"$
+	- $MA-X+PU,"ISO9660 Filesystem support",LM="Find(\"case FSt_ISO9660\", \"::/Kernel\");Find(\"case FSt_ISO9660\", \"::/System\");View;"$
+	- $LK+PU,"FMMakeISO",A="MN:FMMakeISO"$ reverted to 2 args, second arg is ISO type.
+	- Updated documentation to mention ISO9660 support.
+
 $IV,1$----04/01/22 00:20:08----$IV,0$
 * Added $LK+PU,"ST_WIN_INHIBIT_FLAGS",A="MN:ST_WIN_INHIBIT_FLAGS"$, $LK+PU,"ST_TASK_FLAGS",A="MN:ST_TASK_FLAGS"$, $LK+PU,"ST_DISPLAY_FLAGS",A="MN:ST_DISPLAY_FLAGS"$, $LK+PU,"WIf_FLAGS_NUM",A="MN:WIf_FLAGS_NUM"$, $LK+PU,"TASKf_FLAGS_NUM",A="MN:TASKf_FLAGS_NUM"$, $LK+PU,"DISPLAYf_FLAGS_NUM",A="MN:DISPLAYf_FLAGS_NUM"$.
 * Added verbose Bool argument to $LK+PU,"TaskRep",A="MN:TaskRep"$, add logic to $LK+PU,"TaskRepTask",A="MN:TaskRepTask"$ to print out detailed task information. Default parameter value is FALSE.
