@@ -14,7 +14,7 @@ $FG,5$Supported Hardware$FG$
 
 * Internal PC Speakers.
 
-* CD/DVD-ROMs (not SCSI) but only RedSea file system.
+* CD/DVD-ROMs (not SCSI), RedSea or ISO9660 file system.
 
 * SATA hard drives. (SATA, mSATA, m.2)
 

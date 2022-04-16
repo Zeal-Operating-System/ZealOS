@@ -218,7 +218,7 @@ $FG,5$*.ZXE;*.ZXE$FG$
 $FG,5$*.DATA$FG$
 	Data files
 $FG,5$*.ISO;*.ISO.C$FG$
-	CD/DVD image file.
+	CD/DVD image file. $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ or ISO9660.
 $FG,5$*.IN$FG$
 	$FG,2$InFile$FG$ Basically a ZealC program whose stdout goes to the input of a task when $LK,"InFile",A="MN:InFile"$() is called.
 $FG,5$*.GR$FG$
