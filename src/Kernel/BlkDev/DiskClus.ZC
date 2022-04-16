@@ -141,6 +141,10 @@ I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)
 				}
 				break;
 
+			case FSt_ISO9660:
+				PrintErr("File System Not Writable\n");
+				throw('Drive');
+
 			default:
 				throw('Drive');
 		}
@@ -177,6 +181,11 @@ I64 ClusAlloc(CDrive *drive, I64 c=0, I64 count=1, Bool contiguous=FALSE)
 			}
 			else
 				return FAT32AllocClus(drive, c, count);
+
+
+		case FSt_ISO9660:
+			PrintErr("File System Not Writable\n");
+			throw('Drive');
 
 		default:
 			throw('Drive');

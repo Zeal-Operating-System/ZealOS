@@ -103,6 +103,10 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 				c = FAT32FileWrite(dirc->drive, Fs->cur_dir, dirc->mask, fbuf, size, cdt, attr);
 				break;
 
+			case FSt_ISO9660:
+				PrintErr("File System Not Writable\n");
+				break;
+
 			default:
 				PrintErr("File System Not Supported\n");
 		}
