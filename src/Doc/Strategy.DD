@@ -40,7 +40,7 @@ A three button mouse is like a leg you cannot put weight on.	ZealOS just does ha
 
 * No distinction between $FG,2$thread$FG$, $FG,2$process$FG$ or $FG,2$task$FG$.
 
-* The $LK,"Scheduler",A="FI:::/Kernel/Sched.ZC"$ is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.	It's wonderfully simple.
+* The $LK,"Scheduler",A="FI:::/Kernel/Sched.ZC"$ is for home systems.  It is not preemptive.  Disk requests are not broken-up, so sharing is bad.	It's wonderfully simple.
 
 * $LK,"MultiCore",A="FI:::/Doc/MultiCore.DD"$ is done $FG,2$master/slave$FG$, instead of $FG,2$SMP$FG$.  $FG,2$Core0$FG$ applications explicitly assigns jobs.	Locks are present allowing multicore file, heap, and hardware access, though.
 

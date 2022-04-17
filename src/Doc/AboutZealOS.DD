@@ -4,7 +4,7 @@ Terry A. Davis wrote all of TempleOS.	ZealOS is a fork of TempleOS.
 
 $FG,5$Websites:$FG$
 $TX,"www.templeos.org",HTML="https://www.templeos.org"$
-$TX,"www.zenithos.org",HTML="https://www.zenithos.org"$
+$TX,"www.zealos.net",HTML="https://www.zealos.net"$
 $TX,"www.github.com/Zeal-Operating-System/ZealOS",HTML="https://www.github.com/Zeal-Operating-System/ZealOS"$
 
 $FG,5$About Terry A. Davis:$FG$

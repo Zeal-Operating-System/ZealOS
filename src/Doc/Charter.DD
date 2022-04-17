@@ -6,9 +6,9 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * Low line count and code complexity is the highest good, so it is easy to learn the whole thing.  Users should see the light at the end of the tunnel.  One file system, for example, is better than many file systems.
 
-* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"97,194",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
+* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"98,216",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
 
-* The primary metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The secondary metric is how understandable the code is. The $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language should be changed to optimize these metrics, as Terry Davis did when he changed type casting from prefix standard C to postfix $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$, but we need a rule to prevent degenerating into a brainfuck language.
+* The primary metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The secondary metric is how understandable the code is. The $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language should be changed to optimize these metrics, as Terry Davis did when he changed type casting from prefix to $LK+PU,"postfix",A="FF:::/Doc/ZealC.DD,postfix"$.
  
 * Minimal abstraction is a goal. Sheep are fools. They always respect a design that is more complicated than another.  Any genius can make it complicated.	Like in physics, it takes a supra-genius to make it simple.
 
@@ -33,9 +33,6 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 * Documents are not for printing. They're dynamic, intended for the screen.
 
 * Just one 8x8 fixed-width font. $FG,4$No Unicode, just Extended ASCII$FG$. Other countries can make their own versions. The versions should be just for one language and platform.
-
-* $FG,4$No multimedia$FG$. Sounds and images will be primarily calculated in real-time, not fetched from storage.
-
 $FG,8$
 * "Commodore 64" is a trademark owned by Polabe Holding NV.
 * "Windows" is a trademark owned by MicroSoft Corp.

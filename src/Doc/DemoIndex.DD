@@ -147,7 +147,7 @@ $MA-X+PU,"::/Apps/TimeClock",LM="Cd(\"::/Apps/TimeClock\");Dir;View;\n"$
 $MA-X+PU,"::/Apps/Logic",LM="Cd(\"::/Apps/Logic\");Dir;View;\n"$
 $MA-X+PU,"::/Demo/Lectures",LM="Cd(\"::/Demo/Lectures\");Dir;View;\n"$
 $MA-X+PU,"::/Apps/Budget",LM="Cd(\"::/Apps/Budget\");Dir;View;\n"$
-$ID,-2$$TR,"ZealOS Specific"$
+$ID,-2$$TR,"TempleOS/ZealOS Specific"$
 $ID,2$$MA-X+PU,"::/Demo/InFile",LM="Cd(\"::/Demo/InFile\");Dir;View;\n"$
 $LK,"::/Demo/Print.ZC"$
 $LK,"::/Demo/SubIntAccess.ZC"$
