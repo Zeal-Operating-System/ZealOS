@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/16/22 20:24:18----$IV,0$
+* Inverted $LK+PU,"DocBorderNew",A="MN:DocBorderNew"$ and $LK+PU,"DocEd",A="MN:DocEd"$ bottom-right window text, adjusted DolDoc tag placement to make solid, changed Ed callbacks ($LK+PU,"EdOverStrikeCB",A="MN:EdOverStrikeCB"$, $LK+PU,"EdAutoSaveCB",A="MN:EdAutoSaveCB"$, $LK+PU,"EdFilterCB",A="MN:EdFilterCB"$, $LK+PU,"EdDollarCB",A="MN:EdDollarCB"$, $LK+PU,"EdMoreCB",A="MN:EdMoreCB"$) to return ' ' SPACE character(s) for disabled flags now since invert renders it solid foreground color, appended ' ' SPACE character at $LK+PU,"EdDollarTypeCB",A="FF:::/System/DolDoc/DocEd.ZC,\"%-3ts \""$ to pad.
+
 $IV,1$----04/16/22 18:47:11----$IV,0$
 * Raised version number to 1.13.
 * Added ISO9660 support from "TempleOSCD_2017-05-21T03 56 09.ISO".

@@ -8,21 +8,21 @@ public CDoc *DocBorderNew(CDoc *pdoc)
 	bdoc->flags |= DOCF_BORDER_DOC;
 	if (pdoc)
 	{
-		DocPrint(bdoc, "$$CM+H+BY+RX+NC,-7,1$$");
-		doc_e=DocPrint(bdoc, "$$TX+H+BD+TC,\" \"$$");
+		DocPrint(bdoc, "$$CM+H+BY+RX+NC,-3,1$$");
+		doc_e = DocPrint(bdoc, "$$TX+H+BD+TC+IV,\" \"$$");
 		doc_e->user_data = pdoc;
 		doc_e->tag_cb	 = &EdFilterCB;
-		doc_e=DocPrint(bdoc, "$$TX+H+BD+TC,\" \"$$");
+		doc_e = DocPrint(bdoc, "$$TX+H+BD+TC+IV,\" \"$$");
 		doc_e->user_data = pdoc;
 		doc_e->tag_cb	 = &EdOverStrikeCB;
-		doc_e=DocPrint(bdoc, "$$TX+H+BD+TC,\" \"$$");
+		doc_e = DocPrint(bdoc, "$$TX+H+BD+TC+IV,\" \"$$");
 		doc_e->user_data = pdoc;
 		doc_e->tag_cb	 = &EdDollarCB;
-		DocPrint(bdoc, "$$CM+H+BY+RX+NC,-18,1$$");
-		doc_e=DocPrint(bdoc, "$$TX+BD+TC,\"     \"$$");
+		DocPrint(bdoc, "$$CM+H+BY+RX+NC,-12,1$$");
+		doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\"     \"$$");
 		doc_e->user_data = pdoc;
 		doc_e->tag_cb	 = &EdMoreCB;
-		doc_e=DocPrint(bdoc, "$$TX+H+BD+TC,\" \"$$");
+		doc_e = DocPrint(bdoc, "$$TX+H+BD+TC+IV,\" \"$$");
 		doc_e->user_data = pdoc;
 		doc_e->tag_cb	 = &EdDollarTypeCB;
 	}

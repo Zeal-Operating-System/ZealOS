@@ -19,7 +19,7 @@ U8 *EdOverStrikeCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 	if (doc->flags & DOCF_OVERSTRIKE)
 		*st = 'O';
 	else
-		*st = 'Ä';
+		*st = ' ';
 	st[1] = 0;
 
 	return st;
@@ -33,7 +33,7 @@ U8 *EdAutoSaveCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 	if (doc->flags & DOCF_AUTO_SAVE)
 		*st = 'S';
 	else
-		*st = 'Ä';
+		*st = ' ';
 	st[1] = 0;
 
 	return st;
@@ -47,7 +47,7 @@ U8 *EdFilterCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 	if (doc->find_replace->filter_lines)
 		*st = 'F';
 	else
-		*st = 'Ä';
+		*st = ' ';
 	st[1] = 0;
 
 	return st;
@@ -61,7 +61,7 @@ U8 *EdDollarCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 	if (doc->flags & DOCF_IN_DOLLAR)
 		*st = '$$';
 	else
-		*st = 'Ä';
+		*st = ' ';
 	st[1] = 0;
 
 	return st;
@@ -73,9 +73,9 @@ U8 *EdMoreCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 	U8	 *st = MAlloc(8, mem_task);
 
 	if (doc->flags & DOCF_MORE)
-		StrCopy(st, "MoreÄ");
+		StrCopy(st, "More ");
 	else
-		StrCopy(st, "ÄÄÄÄÄ");
+		StrCopy(st, "     ");
 
 	return st;
 }
@@ -89,7 +89,7 @@ U8 *EdDollarTypeCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 		src = "EOF";
 	else if (!src)
 		src = "ERR";
-	StrPrint(st, "%-3ts", src);
+	StrPrint(st, "%-3ts ", src);
 
 	return st;
 }
@@ -134,34 +134,34 @@ public Bool DocEd(CDoc *doc, I64 dof_flags=0)
 	if (doc->flags & DOCF_ALLOW_UNDO)
 	{
 		DocPrint(bdoc, "$$CM+BY+LX+NC,1,1$$");
-		doc_e = DocPrint(bdoc, "$$DA+BD+RD-TRM,RT=U32,A=\"Undo:%%03d\"$$\n");
+		doc_e = DocPrint(bdoc, "$$DA+BD+RD+IV-TRM,RT=U32,A=\"Undo:%%03d\"$$\n");
 		doc_e->data = &doc->undo_count;
 		DocDataFormat(bdoc, doc_e);
 	}
 
 	DocPrint(bdoc, "$$CM+BY+RX+NC,-31,1$$");
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\"     \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\"     \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdMoreCB;
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\" \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\" \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdDollarTypeCB;
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\" \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\" \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdFilterCB;
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\" \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\" \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdOverStrikeCB;
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\" \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\" \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdAutoSaveCB;
-	doc_e = DocPrint(bdoc, "$$TX+BD+TC,\" \"$$");
+	doc_e = DocPrint(bdoc, "$$TX+BD+TC+IV,\" \"$$");
 	doc_e->user_data = doc;
 	doc_e->tag_cb = &EdDollarCB;
-	doc_e = DocPrint(bdoc, "$$DA+BD+RD-TRM,A=\"Line:%%04d \"$$");
+	doc_e = DocPrint(bdoc, "$$DA+BD+RD+IV-TRM,A=\"Line:%%04d \"$$");
 	doc_e->data = &doc->line;
 	DocDataFormat(bdoc,doc_e);
-	doc_e = DocPrint(bdoc, "$$DA+BD+RD-TRM,A=\"Col:%%04d\"$$\n");
+	doc_e = DocPrint(bdoc, "$$DA+BD+RD+IV-TRM,A=\"Col:%%04d\"$$\n");
 	doc_e->data = &doc->col;
 	DocDataFormat(bdoc, doc_e);
 
