@@ -1,6 +1,17 @@
-﻿if (!((Split-Path -Path (Get-Location) -Leaf) -eq "build"))
+﻿# make sure we are in the correct directory
+$currentDir=Get-Location
+if ("$currentDir" -ne "$PSScriptRoot")
 {
-    Write-Output "This script must be run inside the build folder. Press ENTER to exit."; Read-Host; exit
+    try
+    {
+        pushd "$PSScriptRoot"
+        . $PSCommandPath
+    }
+    finally
+    {
+        popd
+    }
+    exit
 }
 
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
