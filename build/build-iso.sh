@@ -9,7 +9,7 @@ EXPECTED_DIR=$(realpath "$PWD")
 
 if test "${EXPECTED_DIR}" != "${SCRIPT_DIR}"
 then
-	( cd "$SCRIPT_DIR" || exit ; "./$SCRIPT_NAME" );
+	( cd "$SCRIPT_DIR" || exit ; "./$SCRIPT_NAME" "$@" );
 	exit
 fi
 

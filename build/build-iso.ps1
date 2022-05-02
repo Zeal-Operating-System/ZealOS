@@ -5,7 +5,7 @@ if ("$currentDir" -ne "$PSScriptRoot")
     try
     {
         pushd "$PSScriptRoot"
-        . $PSCommandPath
+        . $PSCommandPath $args
     }
     finally
     {
