@@ -1,11 +1,22 @@
 #!/bin/sh
 #
 # Sync VM <--> Repo.
-# Run this script inside build/ directory.
 #
 # On copying from virtual disk to src/, the directory is emptied before copy. Comment out "rm -rf ../src/*" to copy onto src.
 #
 #
+
+# make sure we are in the correct directory
+SCRIPT_DIR=$(realpath "$(dirname "$0")")
+SCRIPT_NAME=$(basename "$0")
+EXPECTED_DIR=$(realpath "$PWD")
+
+if test "${EXPECTED_DIR}" != "${SCRIPT_DIR}"
+then
+	( cd "$SCRIPT_DIR" || exit ; "./$SCRIPT_NAME" "$@" );
+	exit
+fi
+
 
 # Uncomment if you use doas instead of sudo
 #alias sudo=doas

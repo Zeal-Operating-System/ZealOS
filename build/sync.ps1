@@ -1,4 +1,20 @@
-﻿$choice = $args[0]
+﻿# make sure we are in the correct directory
+$currentDir=Get-Location
+if ("$currentDir" -ne "$PSScriptRoot")
+{
+    try
+    {
+        pushd "$PSScriptRoot"
+        . $PSCommandPath $args
+    }
+    finally
+    {
+        popd
+    }
+    exit
+}
+
+$choice = $args[0]
 
 function print_usage()
 {
@@ -17,11 +33,6 @@ if ($args.count -eq 0)
 if ($choice -ne 'repo' -and $choice -ne "vm")
 {
     print_usage
-}
-
-if (!((Split-Path -Path (Get-Location) -Leaf) -eq "build"))
-{
-    Write-Output "This script must be run inside the build folder. Press ENTER to exit."; Read-Host; exit
 }
 
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
