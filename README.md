@@ -33,7 +33,7 @@ Features in development include:
     * If using Windows, [Hyper-V must be enabled.](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v#enable-the-hyper-v-role-through-settings)
 - Working knowledge of the C programming language.
 
-To create a Distro ISO, run the `build-iso` script in the `build` directory. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
+To create a Distro ISO, run the `build-iso` script. Check the Wiki guide for details on [building an ISO](https://github.com/Zeal-Operating-System/ZealOS/wiki/Building-an-ISO). After creating an ISO, see the Wiki guides on installing in [VirtualBox](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Virtualbox)), [VMWare](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(VMWare)), and [bare-metal](https://github.com/Zeal-Operating-System/ZealOS/wiki/Installing-(Bare%E2%80%90metal)).
 
 ### Contributing
 
