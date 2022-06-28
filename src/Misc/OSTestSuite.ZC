@@ -1820,6 +1820,9 @@ U0 OSTestSuite()
 	TS("TaskRep");			XTalkWait(task, "TaskRep;Sleep(750);\n");
 	TS("VideoRep"); 		XTalkWait(task, "VideoRep;Sleep(750);\n");
 	TS("SysRep");			XTalkWait(task, "SysRep;Sleep(750);\n");
+	// FIXME: Include TestF32, this is currently not possible since it requires HolyGL.
+	TS("HolyMathMat4");		TSFile("::/System/Math/Tests/TestMat4");
+	TS("HolyMathVec");		TSFile("::/System/Math/Tests/TestVec");
 	DeathWait(&task, TRUE);
 
 	ProgressBarsReset("ZealOS/OSTestSuite");
