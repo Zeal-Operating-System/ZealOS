@@ -494,7 +494,8 @@ U0 DrawIt(CTask *task, CDC *dc)
 	Car 	*tmpc = &c[0];
 
 	dc->color = LTCYAN;
-	GrRect(dc, 0, 0, w, HORIZON_DIP * Sin(dip_é) + h/8);
+	GrRect(dc, 0, 0, w, HORIZON_DIP * Sin(dip_é) + FONT_HEIGHT * 5);
+	GrRect(dc, 0, 0, w, HORIZON_DIP * Sin(dip_é) + h - 470);
 
 	Mat4x4IdentEqu(r);
 	Mat4x4RotY(r, ã - c[0].é);
