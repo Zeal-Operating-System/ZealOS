@@ -34,9 +34,19 @@
 #define E1000_REG_TDT	0x3818
 #define E1000_REG_MTA	0x5200	// Multicast Table Array
 
-#define E1000_CTRLf_SLU	6 // Set Link Up ?
+#define E1000_CTRLf_LRST	3 // Link Reset
+#define E1000_CTRLf_ASDE	5 // Auto-Speed Detection Enable
+#define E1000_CTRLf_SLU		6 // Set Link Up
+#define E1000_CTRLf_ILOS	7 // Invert Loss-Of-Signal
+#define E1000_CTRLf_VME		30 // VLAN Mode Enable
+#define E1000_CTRLf_PHY_RST	31 // PHY Reset
 
-#define E1000_CTRLF_SLU	(1 << E1000_CTRLf_SLU) // Set Link Up ?
+#define E1000_CTRLF_LRST	(1 << E1000_CTRLf_LRST)
+#define E1000_CTRLF_ASDE	(1 << E1000_CTRLf_ASDE)
+#define E1000_CTRLF_SLU		(1 << E1000_CTRLf_SLU)
+#define E1000_CTRLF_ILOS	(1 << E1000_CTRLf_ILOS)
+#define E1000_CTRLF_VME		(1 << E1000_CTRLf_VME)
+#define E1000_CTRLF_PHY_RST	(1 << E1000_CTRLf_PHY_RST)
 
 #define E1000_RCTLf_EN				1
 #define E1000_RCTLf_SBP				2
