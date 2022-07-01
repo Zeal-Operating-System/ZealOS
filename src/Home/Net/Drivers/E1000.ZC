@@ -33,6 +33,8 @@
 #define E1000_REG_TDH	0x3810
 #define E1000_REG_TDT	0x3818
 #define E1000_REG_MTA	0x5200	// Multicast Table Array
+#define E1000_REG_RAL	0x5400	// Receive Address Low
+#define E1000_REG_RAH	0x5404	// Receive Address High
 
 #define E1000_CTRLf_LRST	3 // Link Reset
 #define E1000_CTRLf_ASDE	5 // Auto-Speed Detection Enable
@@ -46,7 +48,7 @@
 #define E1000_CTRLF_SLU		(1 << E1000_CTRLf_SLU)
 #define E1000_CTRLF_ILOS	(1 << E1000_CTRLf_ILOS)
 #define E1000_CTRLF_VME		(1 << E1000_CTRLf_VME)
-#define E1000_CTRLF_PHY_RST	(1 << E1000_CTRLf_PHY_RST)
+#define E1000_CTRLF_PHY_RST	(1 << E1000_CTRLf_PHY_RST)
 
 #define E1000_RCTLf_EN				1
 #define E1000_RCTLf_SBP				2
@@ -157,6 +159,10 @@
 #define E1000_IMSF_GPI		(2 << E1000_IMSf_GPI) // flag sets both bits
 #define E1000_IMSF_TXDLOW	(1 << E1000_IMSf_TXDLOW)
 #define E1000_IMSF_SRPD		(1 << E1000_IMSf_SRPD)
+
+#define E1000_RAHf_AV	31	// Address Valid
+
+#define E1000_RAHF_AV	(1 << E1000_RAHf_AV)
 
 #define E1000_RX_BUFF_COUNT	32	// 01000101's driver uses 768 for each of these...
 #define E1000_TX_BUFF_COUNT	8
@@ -536,6 +542,7 @@ U0 E1000InitTX()
 U0 E1000Init()
 {
 	I64 i;
+	U32 val;
 
 	MemSet(&e1000, 0, sizeof(CE1000)); // e1000 global var will hold member data the driver uses often.
 	"\nE1000 driver WIP\n\n";
@@ -547,27 +554,32 @@ U0 E1000Init()
 
 	e1000.mmio_address = dev.uncached_alias + e1000.pci->base[0] & ~0xF;
 	// Assuming card supports MMIO... lower 4 bits are hardwired zero (?)
-
 	"\nMMIO address: 0x%0X\n", e1000.mmio_address;
 
-	// init rx/tx addrs? (linux)
+	val = E1000MMIORead(E1000_REG_CTRL);
+	val |= E1000_CTRLF_SLU | E1000_CTRLF_ASDE;
+	val &= ~(E1000_CTRLF_LRST | E1000_CTRLF_PHY_RST | E1000_CTRLF_ILOS | E1000_CTRLF_VME);
+	E1000MMIOWrite(E1000_REG_CTRL, val);
 
-	// eeprom? MAC ?
-	E1000MACGet;
-
-	// setup link? (01000101's driver)
-	E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_SLU);
-
-	// zero out multicast hash? (linux)
-	// zero out multicast table array (01000101's driver)
+	// zero out multicast table array
 	for (i = 0; i < 128; i++)
 		E1000MMIOWrite(E1000_REG_MTA + i*4, 0);
 
-	// setup link? (linux)
+	E1000MACGet;
 
-	// clear all statistics regs after link establish attempt (linux)
+	// set RAL/RAH registers for MAC
+	MemCopy(&val, e1000.mac_address, 4);
+	E1000MMIOWrite(E1000_REG_RAL, val);
+	val = 0;
+	MemCopy(&val, e1000.mac_address + 4, 2);
+	E1000MMIOWrite(E1000_REG_RAH, val | E1000_RAHF_AV);
 
-	// enable & clear existing interupts (01000101's driver)
+	// set flow control registers
+	E1000MMIOWrite(0x28, 0x00C28001);
+	E1000MMIOWrite(0x2C, 0x00000100);
+	E1000MMIOWrite(0x30, 0x8808);
+
+	// enable & clear existing interupts
 	E1000MMIOWrite(E1000_REG_IMS,	E1000_IMSF_LSC		|
 									E1000_IMSF_RXSEQ	|
 									E1000_IMSF_RXDMT	|
@@ -580,9 +592,8 @@ U0 E1000Init()
 									E1000_IMSF_TXDLOW	|
 									E1000_IMSF_SRPD);
 
-	E1000MMIORead(E1000_REG_ICR); // clear pending interrupts ?
+	E1000MMIORead(E1000_REG_ICR); // clear pending/spurious interrupts
 
-	// start rx tx?
 	E1000InitRX;
 	E1000InitTX;
 
