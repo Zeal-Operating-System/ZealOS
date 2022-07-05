@@ -18,76 +18,74 @@
 
 #define E1000_REG_CTRL	0x0000
 #define E1000_REG_EERD	0x0014	// EEPROM Read
+#define E1000_REG_FCAL	0x0028	// Flow Control Address Low
+#define E1000_REG_FCAH	0x002C	// Flow Control Address High
+#define E1000_REG_FCT	0x0030	// Flow Control Type
 #define E1000_REG_ICR	0x00C0  // Interrupt Cause Read
-#define E1000_REG_IMS	0x00D0
-#define E1000_REG_RCTL	0x0100
-#define E1000_REG_TCTL	0x0400
-#define E1000_REG_RDBAL	0x2800
-#define E1000_REG_RDBAH	0x2804
-#define E1000_REG_RDLEN	0x2808
-#define E1000_REG_RDH	0x2810
-#define E1000_REG_RDT	0x2818
-#define E1000_REG_TDBAL	0x3800
-#define E1000_REG_TDBAH	0x3804
-#define E1000_REG_TDLEN	0x3808
-#define E1000_REG_TDH	0x3810
-#define E1000_REG_TDT	0x3818
+#define E1000_REG_IMS	0x00D0	// Interrupt Mask Set/Read
+#define E1000_REG_RCTL	0x0100	// Receive Control
+#define E1000_REG_FCTTV 0x0170	// Flow Control Transmit Timer Value
+#define E1000_REG_TCTL	0x0400	// Transmit Control
+#define E1000_REG_TIPG	0x0410	// Transmit Inter Packet Gap timer
+#define E1000_REG_RDBAL	0x2800	// Receive Descriptor Base Address Low
+#define E1000_REG_RDBAH	0x2804	// Receive Descriptor Base Address High
+#define E1000_REG_RDLEN	0x2808	// Receive Descriptor Length
+#define E1000_REG_RDH	0x2810	// Receive Descriptor Head
+#define E1000_REG_RDT	0x2818	// Receive Descriptor Tail
+#define E1000_REG_TDBAL	0x3800	// Transmit Descriptor Base Address Low
+#define E1000_REG_TDBAH	0x3804	// Transmit Descriptor Base Address High
+#define E1000_REG_TDLEN	0x3808	// Transmit Descriptor Length
+#define E1000_REG_TDH	0x3810	// Transmit Descriptor Head
+#define E1000_REG_TDT	0x3818	// Transmit Descriptor Tail
 #define E1000_REG_MTA	0x5200	// Multicast Table Array
 #define E1000_REG_RAL	0x5400	// Receive Address Low
 #define E1000_REG_RAH	0x5404	// Receive Address High
-
-#define E1000_CTRLf_LRST	3 // Link Reset
-#define E1000_CTRLf_ASDE	5 // Auto-Speed Detection Enable
-#define E1000_CTRLf_SLU		6 // Set Link Up
-#define E1000_CTRLf_ILOS	7 // Invert Loss-Of-Signal
-#define E1000_CTRLf_VME		30 // VLAN Mode Enable
-#define E1000_CTRLf_PHY_RST	31 // PHY Reset
+#define E1000_CTRLf_LRST	3	// Link Reset
+#define E1000_CTRLf_ASDE	5	// Auto-Speed Detection Enable
+#define E1000_CTRLf_SLU		6	// Set Link Up
+#define E1000_CTRLf_ILOS	7	// Invert Loss-Of-Signal
+#define E1000_CTRLf_RST		26	// Reset
+#define E1000_CTRLf_VME		30	// VLAN Mode Enable
+#define E1000_CTRLf_PHY_RST	31	// PHY Reset
 
 #define E1000_CTRLF_LRST	(1 << E1000_CTRLf_LRST)
 #define E1000_CTRLF_ASDE	(1 << E1000_CTRLf_ASDE)
 #define E1000_CTRLF_SLU		(1 << E1000_CTRLf_SLU)
 #define E1000_CTRLF_ILOS	(1 << E1000_CTRLf_ILOS)
+#define E1000_CTRLF_RST		(1 << E1000_CTRLf_RST)
 #define E1000_CTRLF_VME		(1 << E1000_CTRLf_VME)
 #define E1000_CTRLF_PHY_RST	(1 << E1000_CTRLf_PHY_RST)
 
-#define E1000_RCTLf_EN				1
-#define E1000_RCTLf_SBP				2
-#define E1000_RCTLf_UPE				3
-#define E1000_RCTLf_MPE				4
-#define E1000_RCTLf_LPE				5
-//#define E1000_RCTLf_RDMTS_HALF		
-#define E1000_RCTLf_RDMTS_QUARTER	8
-#define E1000_RCTLf_RDMTS_EIGHTH	9
-#define E1000_RCTLf_BAM				15
-#define E1000_RCTLf_BSIZE_1024		16
-#define E1000_RCTLf_BSIZE_512		17
-#define E1000_RCTLf_BSIZE_256		18
-//#define E1000_RCTLf_BSIZE_2048		
-//#define E1000_RCTLf_BSIZE_4096		
-//#define E1000_RCTLf_BSIZE_8192		
-//#define E1000_RCTLf_BSIZE_16384		
-#define E1000_RCTLf_SECRC			26
+#define E1000_RCTLf_EN				1	// Receiver Enable
+#define E1000_RCTLf_SBP				2	// Store Bad Packets
+#define E1000_RCTLf_UPE				3	// Unicast Promiscuous Enabled
+#define E1000_RCTLf_MPE				4	// Multicast Promiscuous Enabled
+#define E1000_RCTLf_LPE				5	// Long Packet Reception Enable
+#define E1000_RCTLf_RDMTS			8	// Receive Descriptor Minimum Threshold Size
+#define E1000_RCTLf_BAM				15	// Broadcast Accept Mode
+#define E1000_RCTLf_BSIZE			16	// Receive Buffer Size
+#define E1000_RCTLf_SECRC			26	// Strip Ethernet CRC
 
 #define E1000_RCTLF_EN				(1 << E1000_RCTLf_EN)
 #define E1000_RCTLF_SBP				(1 << E1000_RCTLf_SBP)
 #define E1000_RCTLF_UPE				(1 << E1000_RCTLf_UPE)
 #define E1000_RCTLF_MPE				(1 << E1000_RCTLf_MPE)
 #define E1000_RCTLF_LPE				(1 << E1000_RCTLf_LPE)
-//#define E1000_RCTLF_RDMTS_HALF		
-#define E1000_RCTLF_RDMTS_QUARTER	(1 << E1000_RCTLf_RDMTS_QUARTER)
-#define E1000_RCTLF_RDMTS_EIGHTH	(2 << E1000_RCTLf_RDMTS_QUARTER)
+#define E1000_RCTLF_RDMTS_HALF		(0 << E1000_RCTLf_RDMTS)
+#define E1000_RCTLF_RDMTS_QUARTER	(1 << E1000_RCTLf_RDMTS)
+#define E1000_RCTLF_RDMTS_EIGHTH	(2 << E1000_RCTLf_RDMTS)
 #define E1000_RCTLF_BAM				(1 << E1000_RCTLf_BAM)
-#define E1000_RCTLF_BSIZE_1024		(1 << E1000_RCTLf_BSIZE_1024)
-#define E1000_RCTLF_BSIZE_512		(2 << E1000_RCTLf_BSIZE_1024)
-#define E1000_RCTLF_BSIZE_256		(3 << E1000_RCTLf_BSIZE_1024)
-//#define E1000_RCTLF_BSIZE_2048		
-//#define E1000_RCTLF_BSIZE_4096		
-//#define E1000_RCTLF_BSIZE_8192		
-//#define E1000_RCTLF_BSIZE_16384		
+#define E1000_RCTLF_BSIZE_2048		(0 << E1000_RCTLf_BSIZE) // when Buffer Size Extension is 0
+#define E1000_RCTLF_BSIZE_1024		(1 << E1000_RCTLf_BSIZE) // ''
+#define E1000_RCTLF_BSIZE_512		(2 << E1000_RCTLf_BSIZE) // ''
+#define E1000_RCTLF_BSIZE_256		(3 << E1000_RCTLf_BSIZE) // ''
+#define E1000_RCTLF_BSIZE_16384		(1 << E1000_RCTLf_BSIZE) // when Buffer Size Extension is 1
+#define E1000_RCTLF_BSIZE_8192		(2 << E1000_RCTLf_BSIZE) // ''
+#define E1000_RCTLF_BSIZE_4096		(3 << E1000_RCTLf_BSIZE) // ''
 #define E1000_RCTLF_SECRC			(1 << E1000_RCTLf_SECRC)
 
-#define E1000_TCTLf_EN	1
-#define E1000_TCTLf_PSP	3
+#define E1000_TCTLf_EN	1 // Trasmit Enable
+#define E1000_TCTLf_PSP	3 // Pad Short Packets
 
 #define E1000_TCTLF_EN	(1 << E1000_TCTLf_EN)
 #define E1000_TCTLF_PSP	(1 << E1000_TCTLf_PSP)
@@ -96,7 +94,7 @@
 
 #define E1000_RDESC_STATUSF_EOP	(1 << E1000_RDESC_STATUSf_EOP)
 
-#define E1000_EERDf_DONE	4
+#define E1000_EERDf_DONE	4 // Read Done
 
 #define E1000_EERDF_DONE	(1 << E1000_EERDf_DONE)
 
@@ -132,19 +130,20 @@
 #define E1000_ICRF_RXO		(1 << E1000_ICRf_RXO)
 #define E1000_ICRF_RXT		(1 << E1000_ICRf_RXT)
 
-#define E1000_IMSf_TXDW		0
-#define E1000_IMSf_TXQE		1
-#define E1000_IMSf_LSC		2
-#define E1000_IMSf_RXSEQ	3
-#define E1000_IMSf_RXDMT	4
-#define E1000_IMSf_RXO		6
-#define E1000_IMSf_RXT		7
-#define E1000_IMSf_MDAC		9
-#define E1000_IMSf_RXCFG	10
-#define E1000_IMSf_PHYINT	12
-#define E1000_IMSf_GPI		13 // 13-14
-#define E1000_IMSf_TXDLOW	15
-#define E1000_IMSf_SRPD		16
+#define E1000_IMSf_TXDW		0	// Transmit Descriptor Written Back
+#define E1000_IMSf_TXQE		1	// Transmit Queue Empty
+#define E1000_IMSf_LSC		2	// Link Status Change
+#define E1000_IMSf_RXSEQ	3	// Receive Sequence Error 
+#define E1000_IMSf_RXDMT	4	// Receive Descriptor Minimum Threshold Reached
+#define E1000_IMSf_RXO		6	// Receiver FIFO Overrun
+#define E1000_IMSf_RXT		7	// Receive Timer Interrupt
+#define E1000_IMSf_MDAC		9	// MDI/O Access Complete Interrupt
+#define E1000_IMSf_RXCFG	10	// Receiving /C/ ordered sets
+#define E1000_IMSf_PHYINT	12	// PHY Interrupt
+#define E1000_IMSf_GPI		13	// General Purpose Interrupts (Bits 13-14)
+// E1000_IMSf_GPI 14
+#define E1000_IMSf_TXDLOW	15	// Transmit Descriptor Low Threshold Reached
+#define E1000_IMSf_SRPD		16	// Small Receive Packet Detection
 
 #define E1000_IMSF_TXDW		(1 << E1000_IMSf_TXDW)
 #define E1000_IMSF_TXQE		(1 << E1000_IMSf_TXQE)
@@ -349,6 +348,7 @@ I64 E1000TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 	Bts(&entry->cmd, E1000_TDESC_CMDf_EOP);
 	Bts(&entry->cmd, E1000_TDESC_CMDf_IFCS);
 	Bts(&entry->cmd, E1000_TDESC_CMDf_RS);
+	entry->sta = 0;
 
 	NetLog("E1000 ALLOCATE TX PACKET: de_index: %X.", de_index);
 	return de_index;
@@ -486,6 +486,7 @@ U0 E1000InitRX()
 	{
 		entry->address = e1000.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE; // is this right? might need to change ?..
 																				// 01000101 MAlloc's 8208 for each DE
+		entry++;
 	}
 
 	// setup rx de ring buffer
@@ -512,6 +513,8 @@ U0 E1000InitRX()
 
 U0 E1000InitTX()
 {
+	I64 de_index;
+
 	e1000.tx_de_buffer_phys = CAllocAligned(sizeof(CE1000DescriptorEntryTX) * E1000_TX_BUFF_COUNT,
 											16, 
 											Fs->code_heap);
@@ -522,6 +525,17 @@ U0 E1000InitTX()
 
 	e1000.tx_buffer_addr = dev.uncached_alias + e1000.tx_buffer_addr_phys;
 
+	// iterate de's and make packet buffers for each
+	CE1000DescriptorEntryTX *entry = e1000.tx_de_buffer;
+	for (de_index = 0; de_index < E1000_TX_BUFF_COUNT; de_index++)
+	{
+		entry->address = e1000.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE; // is this right? might need to change ?..
+		entry->cmd = 0b1000;
+		entry->sta = 0x1;
+																				// 01000101 MAlloc's 8208 for each DE
+		entry++;
+	}
+
 	// setup tx de ring buffer
 	E1000MMIOWrite(E1000_REG_TDBAH, e1000.tx_de_buffer >> 32);			// should we be using uncached addr here ?
 	E1000MMIOWrite(E1000_REG_TDBAL, e1000.tx_de_buffer & 0xFFFFFFFF);
@@ -531,10 +545,13 @@ U0 E1000InitTX()
 
 	// set head tail pointers
 	E1000MMIOWrite(E1000_REG_TDH, 0);
-	E1000MMIOWrite(E1000_REG_TDT, E1000_RX_BUFF_COUNT);
+	E1000MMIOWrite(E1000_REG_TDT, 0);//E1000_TX_BUFF_COUNT);
 
 	// set transmit control reg
 	E1000MMIOWrite(E1000_REG_TCTL, E1000_TCTLF_EN | E1000_TCTLF_PSP);
+//	E1000MMIOWrite(E1000_REG_TCTL, 0b0110000000000111111000011111010);
+
+	E1000MMIOWrite(E1000_REG_TIPG, 0x0060200A);
 
 }
 
@@ -551,10 +568,15 @@ U0 E1000Init()
 	if (!e1000.pci)
 		return; // if we don't find the card, quit.
 
+	// enable PCI bus master, memory space access, I/O space access
+	PCIWriteU16(e1000.pci->bus, e1000.pci->dev, e1000.pci->fun, PCIR_COMMAND, 0x7); 
 
 	e1000.mmio_address = dev.uncached_alias + e1000.pci->base[0] & ~0xF;
 	// Assuming card supports MMIO... lower 4 bits are hardwired zero (?)
 	"\nMMIO address: 0x%0X\n", e1000.mmio_address;
+
+	E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_RST);
+	Sleep(1);
 
 	val = E1000MMIORead(E1000_REG_CTRL);
 	val |= E1000_CTRLF_SLU | E1000_CTRLF_ASDE;
@@ -572,12 +594,13 @@ U0 E1000Init()
 	E1000MMIOWrite(E1000_REG_RAL, val);
 	val = 0;
 	MemCopy(&val, e1000.mac_address + 4, 2);
-	E1000MMIOWrite(E1000_REG_RAH, val | E1000_RAHF_AV);
+	E1000MMIOWrite(E1000_REG_RAH, val | E1000_RAHF_AV);
 
 	// set flow control registers
-	E1000MMIOWrite(0x28, 0x00C28001);
-	E1000MMIOWrite(0x2C, 0x00000100);
-	E1000MMIOWrite(0x30, 0x8808);
+	E1000MMIOWrite(E1000_REG_FCAL, 0);
+	E1000MMIOWrite(E1000_REG_FCAH, 0);
+	E1000MMIOWrite(E1000_REG_FCT, 0);
+	E1000MMIOWrite(E1000_REG_FCTTV, 0);
 
 	// enable & clear existing interupts
 	E1000MMIOWrite(E1000_REG_IMS,	E1000_IMSF_LSC		|
@@ -655,4 +678,4 @@ U0 NetStart()
 
 }
 
-E1000Init;
+E1000Init;
