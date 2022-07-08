@@ -127,8 +127,10 @@ CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 }
 
 U0 ARPLocalIPV4Set(U32 ip_address)
-{ // takes in little endian IP, stores into globals as Big Endian
+{ // takes in little endian IP, stores into arp_globals as Big Endian and into ARP cache as Little Endian
 	arp_globals.local_ipv4 = EndianU32(ip_address);
+
+	ARPCachePut(ip_address, EthernetMACGet);
 
 	ARPSend(ARP_REPLY,
 			ethernet_globals.ethernet_broadcast,
