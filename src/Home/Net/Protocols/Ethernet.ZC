@@ -1,8 +1,8 @@
 class CEthernetFrame
 {
-	U8	source_address[6];
+	U8	source_address[MAC_ADDRESS_LENGTH];
 	U8	padding[2];
-	U8	destination_address[6];
+	U8	destination_address[MAC_ADDRESS_LENGTH];
 	U16	ethertype;
 
 	U8 *data;
@@ -12,15 +12,15 @@ class CEthernetFrame
 
 class CEthernetGlobals
 {
-	U8 ethernet_null[6];
-	U8 ethernet_broadcast[6];
+	U8 ethernet_null[MAC_ADDRESS_LENGTH];
+	U8 ethernet_broadcast[MAC_ADDRESS_LENGTH];
 
 } ethernet_globals;
 
 U0 EthernetGlobalsInit()
 {
 	I64 i;
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MAC_ADDRESS_LENGTH; i++)
 	{
 		ethernet_globals.ethernet_null[i]		= 0;
 		ethernet_globals.ethernet_broadcast[i]	= 0xFF;
