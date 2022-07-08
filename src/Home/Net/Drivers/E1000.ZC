@@ -16,6 +16,16 @@
 
 // TODO: clean up entire driver
 
+#define	E1000_CMDf_IOEN	0
+#define E1000_CMDf_MAEN 1
+#define	E1000_CMDf_BMEN	2
+#define	E1000_CMDf_MWEN	4
+
+#define	E1000_CMDF_IOEN	(1 << E1000_CMDf_IOEN)
+#define E1000_CMDF_MAEN	(1 << E1000_CMDf_MAEN)
+#define	E1000_CMDF_BMEN	(1 << E1000_CMDf_BMEN)
+#define E1000_CMDF_MWEN (1 << E1000_CMDf_MWEN)
+
 #define E1000_REG_CTRL	0x0000
 #define E1000_REG_EERD	0x0014	// EEPROM Read
 #define E1000_REG_FCAL	0x0028	// Flow Control Address Low
@@ -568,8 +578,15 @@ U0 E1000Init()
 	if (!e1000.pci)
 		return; // if we don't find the card, quit.
 
-	// enable PCI bus master, memory space access, I/O space access
-	PCIWriteU16(e1000.pci->bus, e1000.pci->dev, e1000.pci->fun, PCIR_COMMAND, 0x7); 
+	/*	Clear command register of E1000 PCI device,
+		set IO Enable, Bus Master Enable,
+		Memory Access Enable, and
+		Memory Write & Invalidate Enable bits. */
+	PCIWriteU16(e1000.pci->bus,
+				e1000.pci->dev,
+				e1000.pci->fun,
+				PCIR_COMMAND,
+				E1000_CMDF_IOEN | E1000_CMDF_BMEN | E1000_CMDF_MAEN | E1000_CMDF_MWEN);
 
 	e1000.mmio_address = dev.uncached_alias + e1000.pci->base[0] & ~0xF;
 	// Assuming card supports MMIO... lower 4 bits are hardwired zero (?)
@@ -678,4 +695,4 @@ U0 NetStart()
 
 }
 
-E1000Init;
+E1000Init;
