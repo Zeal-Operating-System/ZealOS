@@ -512,18 +512,26 @@ U0 PCNetTransmitPacketFinish(I64 de_index)
 
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
-	// check the TX packet MAC against local MAC, if they match: software loopback the TX packet to RX NetQueue
-	if (!MemCompare(EthernetMACGet(), pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE, 6))
-		NetQueuePush(pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE, U16_MAX - (entry->status1 & 0xFFFF) + 1);
-
 	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 	NetLog("PCNET FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.",
 				de_index, Bt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
-U0 EthernetFrameFinish(I64 de_index)
-{//Alias for driver Finish TX function.
+U0 NetDriverTransmitPacketFinish(I64 de_index)
+{//Alias for driver-specific Finish TX function.
 	PCNetTransmitPacketFinish(de_index);
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{
+	return pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{
+	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
+
+	return U16_MAX - (entry->status1 & 0xFFFF) + 1;
 }
 
 I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)

@@ -167,15 +167,15 @@ I64 EthernetFrameAllocate(U8 **buffer_out, U8 *src_addr, U8 *dst_addr,
 
   I64 index;
 
-  if (!MemCompare(dst_addr, &VirtioNet.mac, 6)) {
-    frame = loopback_frame;
-    loopback_length = length;
-    index = I64_MAX;
-  } else {
+//  if (!MemCompare(dst_addr, &VirtioNet.mac, 6)) {
+//    frame = loopback_frame;
+//    loopback_length = length;
+//    index = I64_MAX;
+//  } else {
     index = @virtio_net_alloc_tx_packet(&frame, 14 + length/*, flags*/);
     if (index < 0)
       return index;
-  }
+//  }
 
   MemCopy(frame + 0, dst_addr, 6);
   MemCopy(frame + 6, src_addr, 6);
@@ -186,13 +186,24 @@ I64 EthernetFrameAllocate(U8 **buffer_out, U8 *src_addr, U8 *dst_addr,
   return index;
 }
 
-I64 EthernetFrameFinish(I64 index) {
-  if (index == I64_MAX && loopback_frame && loopback_length) {
-    NetQueuePush(loopback_frame, loopback_length);
-    loopback_length = 0;
-    return 0;
-  }
+//I64 EthernetFrameFinish(I64 index) {
+I64 NetDriverTransmitPacketFinish(I64 index) {
+//  if (index == I64_MAX && loopback_frame && loopback_length) {
+//    NetQueuePush(loopback_frame, loopback_length);
+//    loopback_length = 0;
+//    return 0;
+//  }
   return @virtio_net_finish_tx_packet(index);
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{
+	return tx_buffers + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{ // TODO: ... de_index in Alec's VirtIO-Net driver don't match up to any way to get packet length...
+	return 0;
 }
 
 U8 *EthernetMACGet() { return &VirtioNet.mac; }

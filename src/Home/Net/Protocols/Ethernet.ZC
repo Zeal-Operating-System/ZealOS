@@ -52,4 +52,14 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH - 4;	// He has a comment literally just saying "??". + or - 4?
 }
 
+U0 EthernetFrameFinish(I64 de_index)
+{//Alias for generic driver Finish TX function.
+
+	// check the TX packet MAC against local MAC, if they match: software loopback the TX packet to RX NetQueue
+	if (!MemCompare(EthernetMACGet(), NetDriverPacketBufferGet(de_index), MAC_ADDRESS_LENGTH))
+		NetQueuePush(NetDriverPacketBufferGet(de_index), NetDriverPacketLengthGet(de_index));
+
+	NetDriverTransmitPacketFinish(de_index);
+}
+
 EthernetGlobalsInit;
