@@ -37,7 +37,7 @@ umount_tempdisk() {
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM.ISO -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM-0.ISO -device isa-debug-exit
 
 echo "Mounting vdisk and copying src/..."
 rm ../src/Home/Registry.ZC 2> /dev/null
