@@ -45,8 +45,7 @@ rm ../src/Home/MakeHome.ZC 2> /dev/null
 mount_tempdisk
 sudo cp -r ../src/* $TMPMOUNT
 [ ! -d "limine" ] && git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
-sudo mkdir $TMPMOUNT/EFI
-sudo mkdir $TMPMOUNT/EFI/BOOT
+sudo mkdir -p $TMPMOUNT/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPMOUNT/EFI/BOOT/BOOTX64.EFI
 umount_tempdisk
 
