@@ -48,7 +48,7 @@ umount_tempdisk
 
 #echo "Generating ISO..."
 echo "Running temporary VM"
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime
 
 #echo "Extracting ISO from vdisk..."
 #rm ./ZealOS-*.iso 2> /dev/null # comment this line if you want lingering old ISOs
