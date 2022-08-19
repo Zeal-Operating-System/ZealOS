@@ -3,4 +3,6 @@
 *.MAP
 src/Boot/
 docs/Boot/
+build/limine
+build/ovmf
 ZealOS-*.iso

@@ -35,6 +35,9 @@ umount_tempdisk() {
 
 [ ! -d $TMPMOUNT ] && mkdir -p $TMPMOUNT
 
+echo "Building ZealBooter..."
+( cd ../zealbooter && make clean all )
+
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM-1.ISO -device isa-debug-exit
@@ -47,21 +50,25 @@ sudo cp -r ../src/* $TMPMOUNT
 [ ! -d "limine" ] && git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
 sudo mkdir -p $TMPMOUNT/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPMOUNT/EFI/BOOT/BOOTX64.EFI
+sudo cp ../zealbooter/zealbooter.elf $TMPMOUNT/Boot/ZealBooter.ELF
 umount_tempdisk
 
-#echo "Generating ISO..."
-echo "Running temporary VM"
+echo "Rebuilding kernel..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios /usr/share/ovmf/OVMF.fd
 
-#echo "Extracting ISO from vdisk..."
-#rm ./ZealOS-*.iso 2> /dev/null # comment this line if you want lingering old ISOs
-#mount_tempdisk
-#cp $TMPMOUNT/Tmp/MyDistro.ISO.C ./ZealOS-$(date +%Y-%m-%d-%H_%M_%S).iso 
-#umount_tempdisk
+if [ ! -d "ovmf" ]; then
+    echo "Downloading OVMF..."
+    mkdir ovmf
+    cd ovmf
+    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
+    7z x OVMF-X64.zip
+    cd ..
+fi
+
+echo "Testing..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd
 
 echo "Deleting temp folder..."
 rm -rf $TMPDIR
 echo "Finished."
-#ls -lh ZealOS-*.iso
 

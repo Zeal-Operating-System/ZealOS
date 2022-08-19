@@ -1,0 +1,6 @@
+limine.h
+*.elf
+*.iso
+*.hdd
+*.o
+*.d
