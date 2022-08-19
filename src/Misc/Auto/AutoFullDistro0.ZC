@@ -22,7 +22,8 @@ U0 Auto()
 	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n1024\\n768\\n\\n\\n\");", ata_port);
 	OnceDrive('C', in_str);
 	Free(in_str);
-	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");
+//	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");
+	in_str = MStrPrint("BootHDIns;OnceFlush;Reboot;");
 	OnceDrive('C', in_str);
 	OutU8(0x501,0x31);
 }
