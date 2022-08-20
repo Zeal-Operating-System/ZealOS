@@ -6,6 +6,11 @@
 // the compiler does not optimise them away, so, usually, they should
 // be made volatile or equivalent.
 
+static volatile struct limine_module_request module_request = {
+    .id = LIMINE_MODULE_REQUEST,
+    .revision = 0
+};
+
 static volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
@@ -16,6 +21,10 @@ static void done(void) {
         __asm__("hlt");
     }
 }
+
+struct CKernel {
+
+};
 
 // The following will be our kernel's entry point.
 void _start(void) {
@@ -29,6 +38,9 @@ void _start(void) {
     // a simple "Hello World" to screen.
     struct limine_terminal *terminal = terminal_request.response->terminals[0];
     terminal_request.response->write(terminal, "Hello World", 11);
+
+    struct limine_file *kernel = module_request.response->modules[0];
+    struct CKernel *CKernel = kernel->address;
 
     // We're done, just hang...
     done();
