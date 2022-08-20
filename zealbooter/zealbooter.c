@@ -18,6 +18,11 @@ static volatile struct limine_memmap_request memmap_request = {
     .revision = 0
 };
 
+static volatile struct limine_framebuffer_request framebuffer_request = {
+    .id = LIMINE_FRAMEBUFFER_REQUEST,
+    .revision = 0
+};
+
 #define MEM_E820_ENTRIES_NUM 48
 
 #define MEM_E820T_USABLE 1
@@ -93,6 +98,7 @@ struct CKernel {
     uint16_t sys_pci_buses;
     struct CGDT sys_gdt;
     uint32_t sys_font_ptr;
+    struct limine_framebuffer limine_fb;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -194,6 +200,9 @@ void _start(void) {
         CKernel->mem_E820[i].len = entry->length;
         CKernel->mem_E820[i].type = our_type;
     }
+
+    struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+    memcpy(&CKernel->limine_fb, framebuffer, sizeof(struct limine_framebuffer));
 
     void *target_addr = (void *)lower - kernel_address_request.response->virtual_base;
     target_addr += kernel_address_request.response->physical_base;

@@ -544,6 +544,25 @@ class CVBEModeShort
 	U32 	max_pixel_clock; //TODO refresh rates.
 };
 
+class CLimineFramebuffer
+{
+	U8 *address;
+	U64	width,
+		height,
+		pitch;
+	U16 bpp;
+	U8	memory_model,
+		red_mask_size,
+		red_mask_shift,
+		green_mask_size,
+		green_mask_shift,
+		blue_mask_size,
+		blue_mask_shift,
+		unused[7];
+	U64 edid_size;
+	U8 *edid;
+};
+
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$
@@ -565,6 +584,7 @@ class CKernel
 	;$$ = ($$ + 15) & -16;
 	CGDT			sys_gdt;
 	U32				sys_font_ptr;
+	CLimineFramebuffer limine_framebuffer;
 	CVBEInfo		sys_vbe_info;
 	CVBEModeShort	sys_vbe_modes[VBE_MODES_NUM];
 	CVBEMode		sys_vbe_mode;
