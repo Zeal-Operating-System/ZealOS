@@ -22,8 +22,18 @@ static void done(void) {
     }
 }
 
-struct CKernel {
+struct CZXE {
+    uint16_t jmp;
+    uint8_t module_align_bits;
+    uint8_t reserved;
+    uint32_t signature;
+    int64_t org;
+    int64_t patch_table_offset;
+    int64_t file_size;
+};
 
+struct CKernel {
+    struct CZXE zxe;
 };
 
 // The following will be our kernel's entry point.
