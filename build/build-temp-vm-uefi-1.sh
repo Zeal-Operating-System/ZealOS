@@ -35,8 +35,12 @@ umount_tempdisk() {
 
 [ ! -d $TMPMOUNT ] && mkdir -p $TMPMOUNT
 
+set -e
+
 echo "Building ZealBooter..."
 ( cd ../zealbooter && make clean all )
+
+set +e
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
