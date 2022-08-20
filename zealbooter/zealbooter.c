@@ -32,8 +32,46 @@ struct CZXE {
     int64_t file_size;
 };
 
+struct CDate {
+    uint32_t time;
+    int32_t date;
+};
+
+struct CMemE820 {
+    uint8_t *base;
+    int64_t len;
+    uint8_t type;
+    uint8_t pad[3];
+};
+
+struct CSysLimitBase {
+    uint16_t limit;
+    uint8_t *base;
+};
+
 struct CKernel {
     struct CZXE zxe;
+    uint32_t jmp;
+    uint32_t boot_src;
+    uint32_t boot_blk;
+    uint32_t boot_patch_table_base;
+    uint32_t sys_run_level;
+    struct CDate compile_time;
+//U0 start;
+    uint32_t boot_base;
+    uint16_t mem_E801[2];
+    struct CMemE820 mem_E820[48];
+    uint64_t mem_physical_space;
+    struct CSysLimitBase sys_gdt_ptr;
+    uint16_t sys_pci_buses;
+// ;$ = ($ + 15) & -16;
+//    struct CGDT sys_gdt;
+//    uint32_t sys_font_ptr;
+//    struct CVBEInfo sys_vbe_info;
+//    struct CVBEModeShort sys_vbe_modes[32];
+//    struct CVBEMode sys_vbe_mode;
+//    uint16_t sys_vbe_mode_num;
+
 };
 
 // The following will be our kernel's entry point.
