@@ -49,8 +49,18 @@ void _start(void) {
     struct limine_terminal *terminal = terminal_request.response->terminals[0];
     terminal_request.response->write(terminal, "Hello World", 11);
 
-    struct limine_file *kernel = module_request.response->modules[0];
-    struct CKernel *CKernel = kernel->address;
+    struct limine_file *kernel_module = module_request.response->modules[0];
+    struct CKernel *kernel = kernel_module->address;
+
+    char str[128];
+    str[0] = ' ';
+    str[1] = kernel->zxe.signature;
+    str[2] = kernel->zxe.signature >> 8;
+    str[3] = kernel->zxe.signature >> 16;
+    str[4] = kernel->zxe.signature >> 24;
+    str[5] = 0;
+
+    terminal_request.response->write(terminal, str, 5);
 
     // We're done, just hang...
     done();
