@@ -18,21 +18,6 @@ static volatile struct limine_memmap_request memmap_request = {
     .revision = 0
 };
 
-struct CZXE {
-    uint16_t jmp;
-    uint8_t module_align_bits;
-    uint8_t reserved;
-    uint32_t signature;
-    int64_t org;
-    int64_t patch_table_offset;
-    int64_t file_size;
-};
-
-struct CDate {
-    uint32_t time;
-    int32_t date;
-};
-
 #define MEM_E820_ENTRIES_NUM 48
 
 #define MEM_E820T_USABLE 1
@@ -41,12 +26,6 @@ struct CDate {
 #define MEM_E820T_ACPI_NVS 4
 #define MEM_E820T_BAD_MEM 5
 #define MEM_E820T_PERM_MEM 7
-
-struct CMemE820 {
-    uint8_t *base;
-    int64_t len;
-    uint8_t type, pad[3];
-};
 
 struct CGDTEntry {
     uint64_t lo, hi;
