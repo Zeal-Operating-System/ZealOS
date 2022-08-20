@@ -21,7 +21,7 @@ $(eval $(call DEFAULT_VAR,CC,cc))
 $(eval $(call DEFAULT_VAR,LD,ld))
 
 # User controllable CFLAGS.
-CFLAGS ?= -O2 -g -Wall -Wextra -Wpedantic -pipe
+CFLAGS ?= -O2 -g -Wall -Wextra -pipe
 
 # User controllable preprocessor flags. We set none by default.
 CPPFLAGS ?=
@@ -35,7 +35,7 @@ LDFLAGS ?=
 # Internal C flags that should not be changed by the user.
 override CFLAGS +=       \
     -I.                  \
-    -std=c11             \
+    -std=gnu11           \
     -ffreestanding       \
     -fno-stack-protector \
     -fno-stack-check     \
