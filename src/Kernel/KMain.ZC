@@ -110,6 +110,7 @@ U0 SysGrInit()
 	text.buffer_size	= text.screen_size * 4; //buffer for 32-bit, but only 16 colors now.
 	text.raw_screen		= CAlloc(text.buffer_size);
 	text.fb_alias		= sys_vbe_mode.framebuffer;
+//	text.fb_alias		= sys_framebuffer_addr;
 
 	MemSetU32(text.fb_alias, BLACK32, text.screen_size);
 	text.vga_alias = CAlloc(text.rows * text.cols * 8);
