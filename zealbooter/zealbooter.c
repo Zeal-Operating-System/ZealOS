@@ -265,8 +265,8 @@ void _start(void) {
 
     uintptr_t boot_stack = ALIGN_UP(final_address + kernel->size + trampoline_size, 16) + boot_stack_size;
 
-    memmove(trampoline_phys, trampoline, trampoline_size);
-    memmove((void *)final_address, CKernel, kernel->size);
+    memcpy(trampoline_phys, trampoline, trampoline_size);
+    memcpy((void *)final_address, CKernel, kernel->size);
 
     asm volatile (
         "mov %5, %%rsp;"
