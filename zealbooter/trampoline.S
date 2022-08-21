@@ -2,7 +2,11 @@
 
 .global trampoline
 trampoline:
-    pushq $0x18
+    mov $0x6000, %esp
+
+    lgdt (%rcx)
+
+    pushq $0x30
     addq $(1f - trampoline), %rax
     pushq %rax
     lretq
@@ -10,14 +14,12 @@ trampoline:
     .code32
     1:
 
-    mov $0x20, %eax
+    mov $0x10, %eax
     mov %eax, %ds
     mov %eax, %es
     mov %eax, %fs
     mov %eax, %gs
     mov %eax, %ss
-
-    lgdt (%ecx)
 
     mov %cr0, %eax
     btr $31, %eax
@@ -31,7 +33,6 @@ trampoline:
     mov %ebx, %eax
     mov $2, %ebx
 
-    mov $0x7c00, %esp
     jmp *%eax
 
 .global trampoline_end

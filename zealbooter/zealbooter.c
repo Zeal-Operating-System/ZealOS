@@ -203,14 +203,6 @@ void _start(void) {
     CKernel->boot_base = (uintptr_t)&CKernel->jmp - (uintptr_t)kernel->address;
     CKernel->boot_base += final_address;
 
-    CKernel->sys_gdt.boot_ds.lo = 0x00CF92000000FFFF;
-    CKernel->sys_gdt.boot_cs.lo = 0x00CF9A000000FFFF;
-    CKernel->sys_gdt.cs32.lo = 0x00CF9A000000FFFF;
-    CKernel->sys_gdt.cs64.lo = 0x00209A0000000000;
-    CKernel->sys_gdt.cs64_ring3.lo = 0x0020FA0000000000;
-    CKernel->sys_gdt.ds.lo = 0x00CF92000000FFFF;
-    CKernel->sys_gdt.ds_ring3.lo = 0x00CFF2000000FFFF;
-
     CKernel->sys_gdt_ptr.limit = sizeof(CKernel->sys_gdt) - 1;
     CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt - (uintptr_t)kernel->address;
     CKernel->sys_gdt_ptr.base += final_address;
@@ -251,8 +243,8 @@ void _start(void) {
 
     void *trampoline_phys = (void *)final_address - ((uintptr_t)trampoline_end - (uintptr_t)trampoline);
 
-    memcpy(trampoline_phys, trampoline, ((uintptr_t)trampoline_end - (uintptr_t)trampoline));
-    memcpy((void *)final_address, CKernel, kernel->size);
+    memmove(trampoline_phys, trampoline, ((uintptr_t)trampoline_end - (uintptr_t)trampoline));
+    memmove((void *)final_address, CKernel, kernel->size);
 
     asm volatile (
         "jmp *%0"
