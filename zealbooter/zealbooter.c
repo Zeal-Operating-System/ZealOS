@@ -13,6 +13,11 @@ static volatile struct limine_kernel_address_request kernel_address_request = {
     .revision = 0
 };
 
+static volatile struct limine_hhdm_request hhdm_request = {
+    .id = LIMINE_HHDM_REQUEST,
+    .revision = 0
+};
+
 static volatile struct limine_memmap_request memmap_request = {
     .id = LIMINE_MEMMAP_REQUEST,
     .revision = 0
@@ -135,10 +140,40 @@ struct E801 get_E801(void) {
     return E801;
 }
 
+struct CVBEMode {
+    uint16_t attributes, pad0[7], pitch, width, height;
+    uint8_t pad1[3], bpp, pad2, memory_model, pad[12];
+    uint32_t framebuffer;
+    uint16_t pad3[9];
+    uint32_t max_pixel_clock;
+    uint8_t reserved[190];
+} __attribute__((packed));
+
 void _start(void) {
     struct limine_file *kernel = module_request.response->modules[0];
     struct CKernel *CKernel = (void *)0x7c00;
     memcpy(CKernel, kernel->address, kernel->size);
+
+    struct CVBEMode *sys_vbe_mode;
+    for (uint64_t *p = (uint64_t *)CKernel; ; p++) {
+        if (*p != 0x5439581381193aaf) {
+            continue;
+        }
+        p++;
+        if (*p != 0x2a8a30e69ec9f845) {
+            continue;
+        }
+        p++;
+        sys_vbe_mode = (void *)p;
+        break;
+    }
+
+    struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
+    sys_vbe_mode->pitch = fb->pitch;
+    sys_vbe_mode->width = fb->width;
+    sys_vbe_mode->height = fb->height;
+    sys_vbe_mode->bpp = fb->bpp;
+    sys_vbe_mode->framebuffer = (uintptr_t)fb->address - hhdm_request.response->offset;
 
     void *CORE0_32BIT_INIT;
     for (uint64_t *p = (uint64_t *)CKernel; ; p++) {
@@ -157,17 +192,20 @@ void _start(void) {
     CKernel->boot_src = BOOT_SRC_RAM;
     CKernel->boot_blk = 0;
     CKernel->boot_patch_table_base = (uintptr_t)CKernel + CKernel->h.patch_table_offset;
+
+//    asm volatile ("jmp ." ::"a"(CKernel->boot_patch_table_base));
+
     CKernel->sys_run_level = RLF_VESA | RLF_16BIT;
 
     CKernel->boot_base = (uintptr_t)&CKernel->jmp;
 
-    CKernel->sys_gdt.boot_ds.lo = 0x000093000000ffff;
-    CKernel->sys_gdt.boot_cs.lo = 0x00009a000000ffff;
-    CKernel->sys_gdt.cs32.lo = 0x00cf9a000000ffff;
-    CKernel->sys_gdt.cs64.lo = 0x00af9b000000ffff;
-    CKernel->sys_gdt.cs64_ring3.lo = 0x00affb000000ffff;
-    CKernel->sys_gdt.ds.lo = 0x00af93000000ffff;
-    CKernel->sys_gdt.ds_ring3.lo = 0x00aff3000000ffff;
+    CKernel->sys_gdt.boot_ds.lo = 0x00CF92000000FFFF;
+    CKernel->sys_gdt.boot_cs.lo = 0x00CF9A000000FFFF;
+    CKernel->sys_gdt.cs32.lo = 0x00CF9A000000FFFF;
+    CKernel->sys_gdt.cs64.lo = 0x00209A0000000000;
+    CKernel->sys_gdt.cs64_ring3.lo = 0x0020FA0000000000;
+    CKernel->sys_gdt.ds.lo = 0x00CF92000000FFFF;
+    CKernel->sys_gdt.ds_ring3.lo = 0x00CFF2000000FFFF;
 
     CKernel->sys_gdt_ptr.limit = sizeof(CKernel->sys_gdt) - 1;
     CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt;
@@ -207,7 +245,7 @@ void _start(void) {
     void *target_addr = (void *)lower - kernel_address_request.response->virtual_base;
     target_addr += kernel_address_request.response->physical_base;
 
-    asm volatile ("jmp *%0" :: "a"(target_addr), "b"(CORE0_32BIT_INIT), "c"(&CKernel->sys_gdt_ptr) : "memory");
+    asm volatile ("jmp *%0" :: "a"(target_addr), "b"(CORE0_32BIT_INIT), "c"(&CKernel->sys_gdt_ptr), "S"(CKernel->boot_patch_table_base), "D"(CKernel->boot_base) : "memory");
 
     __builtin_unreachable();
 }
