@@ -2,8 +2,6 @@
 
 .global trampoline
 trampoline:
-    mov $0x6000, %esp
-
     lgdt (%rcx)
 
     pushq $0x30

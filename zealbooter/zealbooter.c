@@ -166,7 +166,27 @@ void _start(void) {
     struct limine_file *kernel = module_request.response->modules[0];
     struct CKernel *CKernel = kernel->address;
 
-    uintptr_t final_address = 0x7c00;
+    size_t trampoline_size = (uintptr_t)trampoline_end - (uintptr_t)trampoline;
+
+    size_t boot_stack_size = 32768;
+
+    uintptr_t final_address = (uintptr_t)-1;
+    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
+        struct limine_memmap_entry *entry = memmap_request.response->entries[i];
+
+        if (entry->type != LIMINE_MEMMAP_USABLE) {
+            continue;
+        }
+
+        if (entry->length >= ALIGN_UP(kernel->size + trampoline_size, 16) + boot_stack_size) {
+            final_address = entry->base;
+            break;
+        }
+    }
+    if (final_address == (uintptr_t)-1) {
+        // TODO: Panic. Show something?
+        for (;;);
+    }
 
     struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
     CKernel->sys_vbe_mode.pitch = fb->pitch;
@@ -241,17 +261,20 @@ void _start(void) {
     void *sys_gdt_ptr = (void *)&CKernel->sys_gdt_ptr - (uintptr_t)kernel->address;
     sys_gdt_ptr += final_address;
 
-    void *trampoline_phys = (void *)final_address - ((uintptr_t)trampoline_end - (uintptr_t)trampoline);
+    void *trampoline_phys = (void *)final_address + kernel->size;
 
-    memmove(trampoline_phys, trampoline, ((uintptr_t)trampoline_end - (uintptr_t)trampoline));
+    uintptr_t boot_stack = ALIGN_UP(final_address + kernel->size + trampoline_size, 16) + boot_stack_size;
+
+    memmove(trampoline_phys, trampoline, trampoline_size);
     memmove((void *)final_address, CKernel, kernel->size);
 
     asm volatile (
+        "mov %5, %%rsp;"
         "jmp *%0"
         :
         : "a"(trampoline_phys), "b"(CORE0_32BIT_INIT),
           "c"(sys_gdt_ptr), "S"(CKernel->boot_patch_table_base),
-          "D"(CKernel->boot_base)
+          "D"(CKernel->boot_base), "r"(boot_stack)
         : "memory");
 
     __builtin_unreachable();

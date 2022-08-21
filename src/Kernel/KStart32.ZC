@@ -82,8 +82,6 @@ SYS_SEMAS::				DU8 	SEMA_SEMAS_NUM * DEFAULT_CACHE_LINE_WIDTH DUP(0);
         DU64 0xf6ceba7d4b74179a;
 
 CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
-        CLD
-
 		PUSH	U32 RFLAGG_START
 		POPFD
 		MOV 	EAX, SYS_START_CR0
@@ -100,7 +98,7 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		MOV		FS,  AX
 		MOV		GS,  AX
 		MOV		SS,  AX
-		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
+		//MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
 //Patch abs addresses
 		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
