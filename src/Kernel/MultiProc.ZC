@@ -193,7 +193,6 @@ U0 MPAPICInit()
 
 	RAXSet(Gs->tss->tr);
 	LTR 	AX
-
 	if (Gs->num)
 	{
 		IntInit1;

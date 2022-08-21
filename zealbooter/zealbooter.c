@@ -215,6 +215,8 @@ void _start(void) {
     CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt - (uintptr_t)kernel->address;
     CKernel->sys_gdt_ptr.base += final_address;
 
+    CKernel->sys_pci_buses = 256;
+
     struct E801 E801 = get_E801();
     CKernel->mem_E801[0] = E801.lowermem;
     CKernel->mem_E801[1] = E801.uppermem;
