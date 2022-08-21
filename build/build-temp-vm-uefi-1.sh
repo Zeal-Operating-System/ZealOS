@@ -70,7 +70,7 @@ if [ ! -d "ovmf" ]; then
 fi
 
 echo "Testing..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4
 
 echo "Deleting temp folder..."
 rm -rf $TMPDIR

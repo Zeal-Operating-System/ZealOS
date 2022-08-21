@@ -36,12 +36,12 @@ struct CZXE {
     int64_t org;
     int64_t patch_table_offset;
     int64_t file_size;
-};
+} __attribute__((packed));
 
 struct CDate {
     uint32_t time;
     int32_t date;
-};
+} __attribute__((packed));
 
 #define MEM_E820_ENTRIES_NUM 48
 
@@ -56,11 +56,11 @@ struct CMemE820 {
     uint8_t *base;
     int64_t len;
     uint8_t type, pad[3];
-};
+} __attribute__((packed));
 
 struct CGDTEntry {
     uint64_t lo, hi;
-};
+} __attribute__((packed));
 
 #define MP_PROCESSORS_NUM 128
 
@@ -75,7 +75,32 @@ struct CGDT {
     struct CGDTEntry ds_ring3;
     struct CGDTEntry tr[MP_PROCESSORS_NUM];
     struct CGDTEntry tr_ring3[MP_PROCESSORS_NUM];
-};
+} __attribute__((packed));
+
+struct CVBEInfo {
+    uint8_t signature[4];
+    uint16_t version;
+    uint32_t oem, capabilities, video_modes;
+    uint16_t total_memory, software_revision;
+    uint32_t vendor, product_name, product_revision;
+    uint8_t reserved[222], oem_data[256];
+} __attribute__((packed));
+
+struct CVBEModeShort {
+    uint16_t width, height, mode_num;
+    uint32_t max_pixel_clock;
+} __attribute__((packed));
+
+struct CVBEMode {
+    uint16_t attributes, pad0[7], pitch, width, height;
+    uint8_t pad1[3], bpp, pad2, memory_model, pad[12];
+    uint32_t framebuffer;
+    uint16_t pad3[9];
+    uint32_t max_pixel_clock;
+    uint8_t reserved[190];
+} __attribute__((packed));
+
+#define VBE_MODES_NUM 32
 
 struct CKernel {
     struct CZXE h;
@@ -95,15 +120,19 @@ struct CKernel {
         uint8_t *base;
     } __attribute__((packed)) sys_gdt_ptr;
     uint16_t sys_pci_buses;
-    struct CGDT sys_gdt;
+    struct CGDT sys_gdt __attribute__((aligned(16)));
     uint32_t sys_font_ptr;
+    struct CVBEInfo sys_vbe_info;
+    struct CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
+    struct CVBEMode sys_vbe_mode;
+    uint16_t sys_vbe_mode_num;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
 #define RLF_16BIT 0b01
 #define RLF_VESA  0b10
 
-extern char trampoline[], trampoline_end[];
+extern symbol trampoline, trampoline_end;
 
 struct E801 {
     size_t lowermem;
@@ -133,41 +162,18 @@ struct E801 get_E801(void) {
     return E801;
 }
 
-struct CVBEMode {
-    uint16_t attributes, pad0[7], pitch, width, height;
-    uint8_t pad1[3], bpp, pad2, memory_model, pad[12];
-    uint32_t framebuffer;
-    uint16_t pad3[9];
-    uint32_t max_pixel_clock;
-    uint8_t reserved[190];
-} __attribute__((packed));
-
 void _start(void) {
     struct limine_file *kernel = module_request.response->modules[0];
     struct CKernel *CKernel = kernel->address;
 
     uintptr_t final_address = 0x7c00;
 
-    struct CVBEMode *sys_vbe_mode;
-    for (uint64_t *p = (uint64_t *)CKernel; ; p++) {
-        if (*p != 0x5439581381193aaf) {
-            continue;
-        }
-        p++;
-        if (*p != 0x2a8a30e69ec9f845) {
-            continue;
-        }
-        p++;
-        sys_vbe_mode = (void *)p;
-        break;
-    }
-
     struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
-    sys_vbe_mode->pitch = fb->pitch;
-    sys_vbe_mode->width = fb->width;
-    sys_vbe_mode->height = fb->height;
-    sys_vbe_mode->bpp = fb->bpp;
-    sys_vbe_mode->framebuffer = (uintptr_t)fb->address - hhdm_request.response->offset;
+    CKernel->sys_vbe_mode.pitch = fb->pitch;
+    CKernel->sys_vbe_mode.width = fb->width;
+    CKernel->sys_vbe_mode.height = fb->height;
+    CKernel->sys_vbe_mode.bpp = fb->bpp;
+    CKernel->sys_vbe_mode.framebuffer = (uintptr_t)fb->address - hhdm_request.response->offset;
 
     void *CORE0_32BIT_INIT;
     for (uint64_t *p = (uint64_t *)CKernel; ; p++) {

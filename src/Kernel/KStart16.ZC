@@ -55,8 +55,6 @@ SYS_FONT_PTR::	DU32	0;
 SYS_VBE_INFO::			DU8 	sizeof(CVBEInfo)						DUP(0);
 SYS_VBE_MODES::			DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM	DUP(0);
 
-ALIGN   16, OC_NOP
-DU64 0x5439581381193aaf, 0x2a8a30e69ec9f845;
 SYS_VBE_FINAL_MODE::	DU8 	sizeof(CVBEMode)						DUP(0);
 SYS_VBE_FINAL_MODE_NUM::DU16	0; //mode number of final mode set
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
