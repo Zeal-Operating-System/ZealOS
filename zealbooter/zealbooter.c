@@ -103,7 +103,7 @@ struct CKernel {
 #define RLF_16BIT 0b01
 #define RLF_VESA  0b10
 
-void lower(void);
+extern char trampoline[], trampoline_end[];
 
 struct E801 {
     size_t lowermem;
@@ -144,8 +144,9 @@ struct CVBEMode {
 
 void _start(void) {
     struct limine_file *kernel = module_request.response->modules[0];
-    struct CKernel *CKernel = (void *)0x7c00;
-    memcpy(CKernel, kernel->address, kernel->size);
+    struct CKernel *CKernel = kernel->address;
+
+    uintptr_t final_address = 0x7c00;
 
     struct CVBEMode *sys_vbe_mode;
     for (uint64_t *p = (uint64_t *)CKernel; ; p++) {
@@ -182,15 +183,19 @@ void _start(void) {
         break;
     }
 
+    CORE0_32BIT_INIT -= (uintptr_t)kernel->address;
+    CORE0_32BIT_INIT += final_address;
+
     CKernel->boot_src = BOOT_SRC_RAM;
     CKernel->boot_blk = 0;
     CKernel->boot_patch_table_base = (uintptr_t)CKernel + CKernel->h.patch_table_offset;
-
-//    asm volatile ("jmp ." ::"a"(CKernel->boot_patch_table_base));
+    CKernel->boot_patch_table_base -= (uintptr_t)kernel->address;
+    CKernel->boot_patch_table_base += final_address;
 
     CKernel->sys_run_level = RLF_VESA | RLF_16BIT;
 
-    CKernel->boot_base = (uintptr_t)&CKernel->jmp;
+    CKernel->boot_base = (uintptr_t)&CKernel->jmp - (uintptr_t)kernel->address;
+    CKernel->boot_base += final_address;
 
     CKernel->sys_gdt.boot_ds.lo = 0x00CF92000000FFFF;
     CKernel->sys_gdt.boot_cs.lo = 0x00CF9A000000FFFF;
@@ -201,7 +206,8 @@ void _start(void) {
     CKernel->sys_gdt.ds_ring3.lo = 0x00CFF2000000FFFF;
 
     CKernel->sys_gdt_ptr.limit = sizeof(CKernel->sys_gdt) - 1;
-    CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt;
+    CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt - (uintptr_t)kernel->address;
+    CKernel->sys_gdt_ptr.base += final_address;
 
     struct E801 E801 = get_E801();
     CKernel->mem_E801[0] = E801.lowermem;
@@ -232,10 +238,21 @@ void _start(void) {
         CKernel->mem_E820[i].type = our_type;
     }
 
-    void *target_addr = (void *)lower - kernel_address_request.response->virtual_base;
-    target_addr += kernel_address_request.response->physical_base;
+    void *sys_gdt_ptr = (void *)&CKernel->sys_gdt_ptr - (uintptr_t)kernel->address;
+    sys_gdt_ptr += final_address;
 
-    asm volatile ("jmp *%0" :: "a"(target_addr), "b"(CORE0_32BIT_INIT), "c"(&CKernel->sys_gdt_ptr), "S"(CKernel->boot_patch_table_base), "D"(CKernel->boot_base) : "memory");
+    void *trampoline_phys = (void *)final_address - ((uintptr_t)trampoline_end - (uintptr_t)trampoline);
+
+    memcpy(trampoline_phys, trampoline, ((uintptr_t)trampoline_end - (uintptr_t)trampoline));
+    memcpy((void *)final_address, CKernel, kernel->size);
+
+    asm volatile (
+        "jmp *%0"
+        :
+        : "a"(trampoline_phys), "b"(CORE0_32BIT_INIT),
+          "c"(sys_gdt_ptr), "S"(CKernel->boot_patch_table_base),
+          "D"(CKernel->boot_base)
+        : "memory");
 
     __builtin_unreachable();
 }

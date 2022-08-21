@@ -1,9 +1,9 @@
 .section .text
 
-.global lower
-lower:
+.global trampoline
+trampoline:
     pushq $0x18
-    addq $(1f - lower), %rax
+    addq $(1f - trampoline), %rax
     pushq %rax
     lretq
 
@@ -34,3 +34,5 @@ lower:
     mov $0x7c00, %esp
     jmp *%eax
 
+.global trampoline_end
+trampoline_end:

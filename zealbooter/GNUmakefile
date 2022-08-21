@@ -41,6 +41,7 @@ override CFLAGS +=       \
     -fno-stack-check     \
     -fno-pie             \
     -fno-pic             \
+    -Wno-address-of-packed-member \
     -m64                 \
     -march=x86-64        \
     -mabi=sysv           \
