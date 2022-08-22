@@ -51,9 +51,15 @@ rm ../src/Home/Registry.ZC 2> /dev/null
 rm ../src/Home/MakeHome.ZC 2> /dev/null
 mount_tempdisk
 sudo cp -r ../src/* $TMPMOUNT
-[ ! -d "limine" ] && git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
+
+if [ ! -d "limine" ]; then
+    git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
+    make -C limine
+fi
+
 sudo mkdir -p $TMPMOUNT/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPMOUNT/EFI/BOOT/BOOTX64.EFI
+sudo cp limine/limine.sys $TMPMOUNT/
 sudo cp ../zealbooter/zealbooter.elf $TMPMOUNT/Boot/ZealBooter.ELF
 umount_tempdisk
 
@@ -69,8 +75,12 @@ if [ ! -d "ovmf" ]; then
     cd ..
 fi
 
-echo "Testing..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -no-reboot -no-shutdown
+./limine/limine-deploy $TMPDISK
+
+echo "Testing UEFI..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4
+echo "Testing BIOS..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4
 
 echo "Deleting temp folder..."
 rm -rf $TMPDIR

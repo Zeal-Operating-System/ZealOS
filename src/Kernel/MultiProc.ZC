@@ -96,7 +96,7 @@ CTSS *TSSNew(I64 cpu_num)
 	tss->tr 	 = offset(CGDT.tr) + cpu_num * 16;
 	tss->tr_ring3= offset(CGDT.tr_ring3) + cpu_num * 16;
 
-	d = (0x80d8)(U8 *) + tss->tr;
+	d = (&sys_gdt)(U8 *) + tss->tr;
 	d1 = d(U8 *) + 4;
 	*d = 0x0000FFFF;
 	*d1 = 0x008F8900;
@@ -106,7 +106,7 @@ CTSS *TSSNew(I64 cpu_num)
 	*d1++ = tss >> 32;
 	*d1 = 0;
 
-	d = (0x80d8)(U8 *) + tss->tr_ring3;
+	d = (&sys_gdt)(U8 *) + tss->tr_ring3;
 	d1 = d(U8 *) + 4;
 	*d = 0x0000FFFF;
 	*d1 = 0x008FE900;
@@ -193,7 +193,6 @@ U0 MPAPICInit()
 
 	RAXSet(Gs->tss->tr);
 	LTR 	AX
-
 	if (Gs->num)
 	{
 		IntInit1;
