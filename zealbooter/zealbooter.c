@@ -264,7 +264,6 @@ void _start(void) {
         CKernel->mem_E820[i].type = our_type;
     }
 
-//    memcpy(&CKernel->limine_fb, framebuffer, sizeof(struct limine_framebuffer));
     void *sys_gdt_ptr = (void *)&CKernel->sys_gdt_ptr - (uintptr_t)kernel->address;
     sys_gdt_ptr += final_address;
 
