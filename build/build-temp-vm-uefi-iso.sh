@@ -36,7 +36,6 @@ umount_tempdisk() {
 
 [ ! -d $TMPMOUNT ] && mkdir -p $TMPMOUNT
 [ ! -d $TMPISODIR ] && mkdir -p $TMPISODIR
-
 set -e
 
 echo "Building ZealBooter..."
@@ -46,28 +45,60 @@ set +e
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM-1.ISO -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM.ISO -device isa-debug-exit
+
+echo "Mounting vdisk, copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH ..."
+rm ../src/Home/Registry.ZC 2> /dev/null
+rm ../src/Home/MakeHome.ZC 2> /dev/null
+mount_tempdisk
+sudo cp -rf ../src/Kernel/KStart16.ZC $TMPMOUNT/Kernel/
+sudo cp -rf ../src/Kernel/KernelA.HH $TMPMOUNT/Kernel/
+umount_tempdisk
+
+echo "Rebuilding kernel headers..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+
+echo "Mounting vdisk, copying all src/ kernel code..."
+rm ../src/Home/Registry.ZC 2> /dev/null
+rm ../src/Home/MakeHome.ZC 2> /dev/null
+mount_tempdisk
+sudo cp -rf ../src/Kernel/* $TMPMOUNT/Kernel/
+umount_tempdisk
+
+echo "Rebuilding kernel..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+
+echo "Mounting vdisk and copying all src/ code..."
+rm ../src/Home/Registry.ZC 2> /dev/null
+rm ../src/Home/MakeHome.ZC 2> /dev/null
+rm ../src/Boot/Kernel.ZXE 2> /dev/null
+mount_tempdisk
+sudo cp -r ../src/* $TMPMOUNT
 
 if [ ! -d "limine" ]; then
-    echo "Downloading limine bootloader..."
     git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
     make -C limine
 fi
 
-echo "Mounting vdisk and copying src/..."
-rm ../src/Home/Registry.ZC 2> /dev/null
-rm ../src/Home/MakeHome.ZC 2> /dev/null
-
-mount_tempdisk
-sudo cp -r ../src/* $TMPMOUNT
 sudo mkdir -p $TMPMOUNT/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPMOUNT/EFI/BOOT/BOOTX64.EFI
 sudo cp limine/limine.sys $TMPMOUNT/
 sudo cp ../zealbooter/zealbooter.elf $TMPMOUNT/Boot/ZealBooter.ELF
 umount_tempdisk
 
-echo "Rebuilding kernel..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+if [ ! -d "ovmf" ]; then
+    echo "Downloading OVMF..."
+    mkdir ovmf
+    cd ovmf
+    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
+    7z x OVMF-X64.zip
+    cd ..
+fi
+
+./limine/limine-deploy $TMPDISK
+
+echo "Rebuilding kernel and OS..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -device isa-debug-exit
 
 mount_tempdisk
 sudo cp limine/limine-cd-efi.bin $TMPISODIR/
@@ -88,18 +119,10 @@ xorriso -as mkisofs -b limine-cd.bin \
 
 ./limine/limine-deploy ZealOS-UEFI-limine-dev.iso
 
-if [ ! -d "ovmf" ]; then
-    echo "Downloading OVMF..."
-    mkdir ovmf
-    cd ovmf
-    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
-    7z x OVMF-X64.zip
-    cd ..
-fi
-
 echo "Testing UEFI ISO boot ..."
-#qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-UEFI-limine-dev.iso
 qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-UEFI-limine-dev.iso
+echo "Testing BIOS ISO boot ..."
+qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-UEFI-limine-dev.iso
 
 echo "Deleting temp folder..."
 sudo rm -rf $TMPDIR
