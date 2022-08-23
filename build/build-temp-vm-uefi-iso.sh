@@ -45,7 +45,7 @@ set +e
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM.ISO -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO-VM.ISO -device isa-debug-exit
 
 echo "Mounting vdisk, copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH ..."
 rm ../src/Home/Registry.ZC 2> /dev/null
@@ -56,7 +56,7 @@ sudo cp -rf ../src/Kernel/KernelA.HH $TMPMOUNT/Kernel/
 umount_tempdisk
 
 echo "Rebuilding kernel headers..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
 echo "Mounting vdisk, copying all src/ kernel code..."
 rm ../src/Home/Registry.ZC 2> /dev/null
@@ -66,7 +66,7 @@ sudo cp -rf ../src/Kernel/* $TMPMOUNT/Kernel/
 umount_tempdisk
 
 echo "Rebuilding kernel..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
 echo "Mounting vdisk and copying all src/ code..."
 rm ../src/Home/Registry.ZC 2> /dev/null
@@ -98,7 +98,7 @@ fi
 ./limine/limine-deploy $TMPDISK
 
 echo "Rebuilding kernel and OS..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -device isa-debug-exit
 
 mount_tempdisk
 sudo cp limine/limine-cd-efi.bin $TMPISODIR/
