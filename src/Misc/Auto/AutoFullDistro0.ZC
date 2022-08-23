@@ -26,7 +26,7 @@ U0 Auto()
 //	in_str = MStrPrint("BootHDIns;OnceFlush;Reboot;");
 //	in_str = MStrPrint("BootHDIns;OnceFlush;OutU8(0x501,0x31);");
 //	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"Sleep(700);In(\\\"CC\\\\n%d\\\\n\\\\n1024\\\\n768\\\\n\\\\n\\\\n\\\");OutU8(0x501,0x31);\");OutU8(0x501,0x31);");
-	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");OutU8(0x501,0x31);");
+	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");OutU8(0x501,0x31);");
 	OnceDrive('C', in_str);
 	OutU8(0x501,0x31);
 }
