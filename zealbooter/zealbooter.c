@@ -127,11 +127,15 @@ struct CKernel {
     uint16_t sys_pci_buses;
     struct CGDT sys_gdt __attribute__((aligned(16)));
     uint32_t sys_font_ptr;
-//    struct limine_framebuffer limine_fb;
     struct CVBEInfo sys_vbe_info;
     struct CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
     struct CVBEMode sys_vbe_mode;
     uint16_t sys_vbe_mode_num;
+    uint64_t sys_framebuffer_addr;
+    uint64_t sys_framebuffer_width;
+    uint64_t sys_framebuffer_height;
+    uint64_t sys_framebuffer_pitch;
+    uint16_t sys_framebuffer_bpp;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -195,11 +199,11 @@ void _start(void) {
     }
 
     struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
-    CKernel->sys_vbe_mode.pitch = fb->pitch;
-    CKernel->sys_vbe_mode.width = fb->width;
-    CKernel->sys_vbe_mode.height = fb->height;
-    CKernel->sys_vbe_mode.bpp = fb->bpp;
-    CKernel->sys_vbe_mode.framebuffer = (uintptr_t)fb->address - hhdm_request.response->offset;
+    CKernel->sys_framebuffer_pitch = fb->pitch;
+    CKernel->sys_framebuffer_width = fb->width;
+    CKernel->sys_framebuffer_height = fb->height;
+    CKernel->sys_framebuffer_bpp = fb->bpp;
+    CKernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
 
     void *CORE0_32BIT_INIT;
     for (uint64_t *p = (uint64_t *)CKernel; ; p++) {

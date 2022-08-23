@@ -243,13 +243,17 @@ public _intern IC_FS CTask *Fs(); //FS segment register points to the current $L
 #help_file "::/Doc/TimeCycles"
 public _intern IC_RDTSC I64 TSCGet(); //Get time stamp counter.
 
-//#help_index "Graphics/Framebuffer"
-//public _extern SYS_FRAMEBUFFER_ADDR U8	*sys_framebuffer_addr;
-
 #help_index "Graphics/VBE"
 public _extern SYS_VBE_INFO			CVBEInfo		sys_vbe_info;
 public _extern SYS_VBE_FINAL_MODE	CVBEMode		sys_vbe_mode;
 _extern SYS_VBE_FINAL_MODE_NUM		U16				sys_vbe_mode_num;
 _extern SYS_VBE_MODES				CVBEModeShort	sys_vbe_modes[VBE_MODES_NUM];
+
+#help_index "Graphics/Framebuffer"
+public _extern SYS_FRAMEBUFFER_ADDR U8	*sys_framebuffer_addr;
+public _extern SYS_FRAMEBUFFER_WIDTH U64	sys_framebuffer_width;
+public _extern SYS_FRAMEBUFFER_HEIGHT U64	sys_framebuffer_height;
+public _extern SYS_FRAMEBUFFER_PITCH U64	sys_framebuffer_pitch;
+public _extern SYS_FRAMEBUFFER_BPP U16	sys_framebuffer_bpp;
 
 #help_index ""

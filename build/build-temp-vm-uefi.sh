@@ -44,11 +44,33 @@ set +e
 
 echo "Making temp vdisk, running auto-install..."
 qemu-img create -f raw $TMPDISK 192M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM-1.ISO -device isa-debug-exit
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -cdrom AUTO-VM.ISO -device isa-debug-exit
 
-echo "Mounting vdisk and copying src/..."
+echo "Mounting vdisk, copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH ..."
 rm ../src/Home/Registry.ZC 2> /dev/null
 rm ../src/Home/MakeHome.ZC 2> /dev/null
+mount_tempdisk
+sudo cp -rf ../src/Kernel/KStart16.ZC $TMPMOUNT/Kernel/
+sudo cp -rf ../src/Kernel/KernelA.HH $TMPMOUNT/Kernel/
+umount_tempdisk
+
+echo "Rebuilding kernel headers..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+
+echo "Mounting vdisk, copying all src/ kernel code..."
+rm ../src/Home/Registry.ZC 2> /dev/null
+rm ../src/Home/MakeHome.ZC 2> /dev/null
+mount_tempdisk
+sudo cp -rf ../src/Kernel/* $TMPMOUNT/Kernel/
+umount_tempdisk
+
+echo "Rebuilding kernel..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
+
+echo "Mounting vdisk and copying all src/ code..."
+rm ../src/Home/Registry.ZC 2> /dev/null
+rm ../src/Home/MakeHome.ZC 2> /dev/null
+rm ../src/Boot/Kernel.ZXE 2> /dev/null
 mount_tempdisk
 sudo cp -r ../src/* $TMPMOUNT
 
@@ -63,9 +85,6 @@ sudo cp limine/limine.sys $TMPMOUNT/
 sudo cp ../zealbooter/zealbooter.elf $TMPMOUNT/Boot/ZealBooter.ELF
 umount_tempdisk
 
-echo "Rebuilding kernel..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -device isa-debug-exit
-
 if [ ! -d "ovmf" ]; then
     echo "Downloading OVMF..."
     mkdir ovmf
@@ -76,6 +95,9 @@ if [ ! -d "ovmf" ]; then
 fi
 
 ./limine/limine-deploy $TMPDISK
+
+echo "Rebuilding kernel and OS..."
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -device isa-debug-exit
 
 echo "Testing UEFI..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4

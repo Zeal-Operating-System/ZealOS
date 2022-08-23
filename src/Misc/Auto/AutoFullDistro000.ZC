@@ -33,8 +33,8 @@ U0 Auto()
 //	OnceDrive('C', in_str);
 	BootHDIns;
 	OnceFlush;
-	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro000\";;Auto;OutU8(0x501,0x31);");
-	OnceDrive('C', in_str);
+//	in_str = MStrPrint("Once(\"#include \\\"/Misc/Auto/AutoFullDistro000\\\";;Auto;\");OutU8(0x501,0x31);");
+//	OnceDrive('C', in_str);
 	OutU8(0x501,0x31);
 }
 Auto;
