@@ -81,16 +81,11 @@ U0 SysGlobalsInit()
 
 U0 SysGrInit()
 {
-	I64 i, j;
-	text.aux_font = MAlloc(256 * 8); //256 U64s
-//	MemCopy(text.aux_font, *SYS_FONT_PTR(U32), 256 * 8);
-	text.aux_font = sys_font_aux;
-
-//	for (i = 0; i < 256; i++)
-//		for (j = 0; j < 8; j++)
-//			text.aux_font[i].u8[j] = rev_bits_table[text.aux_font[i].u8[j]];
+	I64 i;
 
     text.font = sys_font_std;
+
+	text.aux_font = sys_font_aux;
 
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
