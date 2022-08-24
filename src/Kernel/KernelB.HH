@@ -256,4 +256,7 @@ public _extern SYS_FRAMEBUFFER_HEIGHT U64	sys_framebuffer_height;
 public _extern SYS_FRAMEBUFFER_PITCH U64	sys_framebuffer_pitch;
 public _extern SYS_FRAMEBUFFER_BPP U16	sys_framebuffer_bpp;
 
+#help_index "Processor/SMBIOS"
+public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;
+
 #help_index ""

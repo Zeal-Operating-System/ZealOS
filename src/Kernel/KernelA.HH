@@ -574,6 +574,7 @@ class CKernel
 	U64				sys_framebuffer_height;
 	U64				sys_framebuffer_pitch;
 	U16				sys_framebuffer_bpp;
+	U64				sys_smbios_entry;
 };
 
 //Run-Levels

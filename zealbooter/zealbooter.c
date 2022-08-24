@@ -28,6 +28,11 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
     .revision = 0
 };
 
+static volatile struct limine_smbios_request smbios_request = {
+    .id = LIMINE_SMBIOS_REQUEST,
+    .revision = 0
+};
+
 struct CZXE {
     uint16_t jmp;
     uint8_t module_align_bits;
@@ -136,6 +141,7 @@ struct CKernel {
     uint64_t sys_framebuffer_height;
     uint64_t sys_framebuffer_pitch;
     uint16_t sys_framebuffer_bpp;
+    uint64_t sys_smbios_entry;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -270,6 +276,9 @@ void _start(void) {
 
     void *sys_gdt_ptr = (void *)&CKernel->sys_gdt_ptr - (uintptr_t)kernel->address;
     sys_gdt_ptr += final_address;
+
+    void *sys_smbios_entry = smbios_request.response->entry_32;
+    CKernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
 
     void *trampoline_phys = (void *)final_address + kernel->size;
 
