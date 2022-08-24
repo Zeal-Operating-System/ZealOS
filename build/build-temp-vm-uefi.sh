@@ -99,10 +99,12 @@ fi
 echo "Rebuilding kernel and OS..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd  -smp 4 -device isa-debug-exit
 
+mv $TMPDISK ./ZealOS-UEFI-limine-dev.raw
+
 echo "Testing UEFI..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=ZealOS-UEFI-limine-dev.raw -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4
 echo "Testing BIOS..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4
+qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=ZealOS-UEFI-limine-dev.raw -m 1G -rtc base=localtime -smp 4
 
 echo "Deleting temp folder..."
 rm -rf $TMPDIR

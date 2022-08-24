@@ -8,11 +8,6 @@ static volatile struct limine_module_request module_request = {
     .revision = 0
 };
 
-static volatile struct limine_kernel_address_request kernel_address_request = {
-    .id = LIMINE_KERNEL_ADDRESS_REQUEST,
-    .revision = 0
-};
-
 static volatile struct limine_hhdm_request hhdm_request = {
     .id = LIMINE_HHDM_REQUEST,
     .revision = 0
@@ -155,7 +150,7 @@ struct E801 {
     size_t uppermem;
 };
 
-struct E801 get_E801(void) {
+static struct E801 get_E801(void) {
     struct E801 E801 = {0};
 
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {

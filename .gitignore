@@ -6,3 +6,4 @@ docs/Boot/
 build/limine
 build/ovmf
 ZealOS-*.iso
+ZealOS-*.raw

@@ -4,10 +4,10 @@ override KERNEL := zealbooter.elf
 
 # Convenience macro to reliably declare overridable command variables.
 define DEFAULT_VAR =
-    ifeq ($(origin $1), default)
+    ifeq ($(origin $1),default)
         override $(1) := $(2)
     endif
-    ifeq ($(origin $1), undefined)
+    ifeq ($(origin $1),undefined)
         override $(1) := $(2)
     endif
 endef
@@ -65,9 +65,9 @@ override NASMFLAGS += \
     -f elf64
 
 # Use find to glob all *.c, *.S, and *.asm files in the directory and extract the object names.
-override CFILES := $(shell find ./ -type f -name '*.c')
-override ASFILES := $(shell find ./ -type f -name '*.S')
-override NASMFILES := $(shell find ./ -type f -name '*.asm')
+override CFILES := $(shell find . -type f -name '*.c')
+override ASFILES := $(shell find . -type f -name '*.S')
+override NASMFILES := $(shell find . -type f -name '*.asm')
 override OBJ := $(CFILES:.c=.o) $(ASFILES:.S=.o) $(NASMFILES:.asm=.o)
 override HEADER_DEPS := $(CFILES:.c=.d) $(ASFILES:.S=.d)
 

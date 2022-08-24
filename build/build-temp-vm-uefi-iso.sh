@@ -101,19 +101,20 @@ echo "Rebuilding kernel and OS..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -device isa-debug-exit
 
 mount_tempdisk
-sudo cp limine/limine-cd-efi.bin $TMPISODIR/
-sudo cp limine/limine-cd.bin $TMPISODIR/
+sudo cp -rf $TMPMOUNT/* $TMPISODIR
+sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/
+sudo cp limine/limine-cd.bin $TMPISODIR/Boot/
 sudo cp limine/limine.sys $TMPISODIR/
 sudo cp $TMPMOUNT/limine.cfg $TMPISODIR/limine.cfg
-sudo cp -rf $TMPMOUNT/* $TMPISODIR
+sudo rm -rf $TMPISODIR/EFI
 sudo cp -rf ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
 umount_tempdisk
 
 sudo ls $TMPISODIR -al
 
-xorriso -as mkisofs -b limine-cd.bin \
+xorriso -as mkisofs -b Boot/limine-cd.bin \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
-        --efi-boot limine-cd-efi.bin \
+        --efi-boot Boot/limine-cd-efi.bin \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
         $TMPISODIR -o ZealOS-UEFI-limine-dev.iso
 
