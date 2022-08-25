@@ -564,10 +564,6 @@ class CKernel
 	U16				sys_pci_buses;
 	;$$ = ($$ + 15) & -16;
 	CGDT			sys_gdt;
-	CVBEInfo		sys_vbe_info;
-	CVBEModeShort	sys_vbe_modes[VBE_MODES_NUM];
-	CVBEMode		sys_vbe_mode;
-	U16				sys_vbe_mode_num;
 	U64				sys_framebuffer_addr;
 	U64				sys_framebuffer_width;
 	U64				sys_framebuffer_height;

@@ -19,7 +19,7 @@ U0 Auto()
 	}
 
 	BootMHDIns('C');
-	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n1024\\n768\\n\\n\\n\");", ata_port);
+	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n\\n\\n\");", ata_port);
 	OnceDrive('C', in_str);
 	Free(in_str);
 //	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");

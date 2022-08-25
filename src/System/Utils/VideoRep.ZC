@@ -2,7 +2,7 @@ public I64 VideoRep(Bool full=TRUE)
 {//List available VBE modes as indicated by the BIOS. Show current mode;
 	I64 i, mode_count = 0;
 	CVBEModeShort *mode;
-
+/*
 	if (full)
 	{
 		"\nVBE Version %X.%X\n\n", sys_vbe_info.version.u8[1], sys_vbe_info.version.u8[0];
@@ -61,6 +61,6 @@ public I64 VideoRep(Bool full=TRUE)
 			mode_count++;
 		}
 	}
-	return mode_count;
+*/	return mode_count;
 }
 
