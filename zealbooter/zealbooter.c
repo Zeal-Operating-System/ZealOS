@@ -126,7 +126,6 @@ struct CKernel {
     } __attribute__((packed)) sys_gdt_ptr;
     uint16_t sys_pci_buses;
     struct CGDT sys_gdt __attribute__((aligned(16)));
-    uint32_t sys_font_ptr;
     struct CVBEInfo sys_vbe_info;
     struct CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
     struct CVBEMode sys_vbe_mode;
