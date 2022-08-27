@@ -139,6 +139,8 @@ struct CKernel {
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
+#define BOOT_SRC_HDD 3
+#define BOOT_SRC_DVD 4
 #define RLF_16BIT 0b01
 #define RLF_VESA  0b10
 
@@ -222,7 +224,12 @@ void _start(void) {
     CORE0_32BIT_INIT -= (uintptr_t)kernel->address;
     CORE0_32BIT_INIT += final_address;
 
-    CKernel->boot_src = BOOT_SRC_RAM;
+    if (kernel->media_type == LIMINE_MEDIA_TYPE_OPTICAL)
+        CKernel->boot_src = BOOT_SRC_DVD;
+    else if (kernel->media_type == LIMINE_MEDIA_TYPE_GENERIC)
+        CKernel->boot_src = BOOT_SRC_HDD;
+    else
+        CKernel->boot_src = BOOT_SRC_RAM;
     CKernel->boot_blk = 0;
     CKernel->boot_patch_table_base = (uintptr_t)CKernel + CKernel->h.patch_table_offset;
     CKernel->boot_patch_table_base -= (uintptr_t)kernel->address;
