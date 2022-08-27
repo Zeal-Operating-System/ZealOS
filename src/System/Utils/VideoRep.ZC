@@ -6,4 +6,3 @@ public U0 VideoRep()
 	"Bits-per-pixel:      $$RED$$%d$$FG$$ \n", sys_framebuffer_bpp;
 	"Framebuffer pointer: $$RED$$0x%8X$$FG$$ \n\n", sys_framebuffer_addr;
 }
-
