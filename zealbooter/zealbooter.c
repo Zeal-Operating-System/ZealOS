@@ -132,6 +132,10 @@ struct CKernel {
     uint64_t sys_framebuffer_pitch;
     uint16_t sys_framebuffer_bpp;
     uint64_t sys_smbios_entry;
+	uint32_t sys_disk_uuid_a;
+	uint16_t sys_disk_uuid_b;
+	uint16_t sys_disk_uuid_c;
+	uint8_t sys_disk_uuid_d[8];
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -269,6 +273,11 @@ void _start(void) {
 
     void *sys_smbios_entry = smbios_request.response->entry_32;
     CKernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
+
+	CKernel->sys_disk_uuid_a = kernel->gpt_disk_uuid.a;
+	CKernel->sys_disk_uuid_b = kernel->gpt_disk_uuid.b;
+	CKernel->sys_disk_uuid_c = kernel->gpt_disk_uuid.c;
+	memcpy(CKernel->sys_disk_uuid_d, kernel->gpt_disk_uuid.d, 8);
 
     void *trampoline_phys = (void *)final_address + kernel->size;
 

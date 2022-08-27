@@ -1163,7 +1163,17 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 						return TRUE;
 					}
 					else
-						"AHCI: Did not find matching sys_compile_time on Port %d\n", i;
+						"AHCI: Did not find matching sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
+
+					"%X %X", sys_disk_uuid[0], sys_disk_uuid[1]; 
+					AHCIAtapiBlksRead(bd, buf, 0, 1, FALSE);
+					if (!MemCompare(buf + 568, sys_disk_uuid, 16))
+					{
+						"AHCI: Found sys_disk_uuid at BLK 0 byte 568 on Port %d\n", i;
+						"______________________\n";
+						return TRUE;
+					}
+
 				}
 				catch
 				{
