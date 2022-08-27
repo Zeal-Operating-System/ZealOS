@@ -60,14 +60,13 @@ SYS_SMBIOS_ENTRY::	DU64	0;
 
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
-TEMP_VBE_MODE:		DU8 	sizeof(CVBEMode)		DUP(0);
-MAX_VBE_MODE:		DU8 	sizeof(CVBEModeShort)	DUP(0);
-MAX_SCREEN_HEIGHT:	DU16	0;
-VBE_INFO:			DU8 	sizeof(CVBEInfo)						DUP(0);
-VBE_MODES:			DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM	DUP(0);
-VBE_FINAL_MODE:		DU8 	sizeof(CVBEMode)						DUP(0);
-VBE_FINAL_MODE_NUM:	DU16	0; //mode number of final mode set
+REQUESTED_SCREEN_WIDTH:		DU16	1920;
+REQUESTED_SCREEN_HEIGHT:	DU16	1080;
 
+VBE_TEMP_MODE:		DU8 	sizeof(CVBEMode)	DUP(0);
+VBE_INFO:			DU8 	sizeof(CVBEInfo)	DUP(0);
+VBE_FINAL_MODE_NUM:	DU16	0; // gets set to final result mode number
+VBE_STD_MODE_NUM:	DU16	0; // gets set to mode number for standard 1024x768
 
 //************************************
 CORE0_16BIT_INIT::
@@ -114,7 +113,6 @@ GET_IP: POP 	BX
 /*Loop variables:
  DI <- Temporary storage for mode information
  CX <- Mode number
- DX <- mode array
  GS <- Segment for video modes list
  SI <- Offset for video modes list
 */
@@ -122,8 +120,7 @@ GET_IP: POP 	BX
 		MOV		AX, VBE_INFO
 		MOV		SI, CVBEInfo.video_modes[AX]
 		MOV		GS, CVBEInfo.video_modes+2[AX]
-		MOV		DI, TEMP_VBE_MODE
-		MOV		DX, VBE_MODES
+		MOV		DI, VBE_TEMP_MODE
 
 @@15: //Loop through all the mode numbers
 		MOV 	AX, GS:[SI]
@@ -144,7 +141,7 @@ GET_IP: POP 	BX
 		CMP		AX, 0x004F
 		JNE		@@15 //if call to get mode information failed
 
-//filter everything but 32-bit color
+//Filter everything but 32-bit color
 		MOV 	AL, CVBEMode.bpp[DI]
 		CMP 	AL, 32
 		JNE 	@@15
@@ -167,9 +164,17 @@ GET_IP: POP 	BX
 @@20: 	MOV		AX, CVBEMode.width[DI]
 
 //Check if width and height match standard 1024x768
+//If they match, set VBE_STD_MODE_NUM to this mode num
 		CMP		AX, 1024
-		JNE		@@15
+		JNE		@@23
 		CMP		BX, 768
+		JNE		@@23
+		MOV		[VBE_STD_MODE_NUM], CX
+
+//Check if width and height match requested resolution
+@@23:	CMP		AX, [REQUESTED_SCREEN_WIDTH]
+		JNE		@@15
+		CMP		BX, [REQUESTED_SCREEN_HEIGHT]
 		JNE		@@15
 
 //If we've made it here we have our mode
@@ -178,11 +183,20 @@ GET_IP: POP 	BX
 
 @@25: //End of loop
 
+//If requested resolution wasn't found in VBE mode list,
+//use the standard 1024x768 mode as fallback
+		MOV		AX, [VBE_FINAL_MODE_NUM]
+		CMP		AX, 0
+		JNE		@@30
+
+		MOV		CX, [VBE_STD_MODE_NUM]
+		MOV		[VBE_FINAL_MODE_NUM], CX
+
 @@30: 	PUSH	ES
 		PUSH	DS
 		POP 	ES
-//Get mode infomration for the mode we want
-		MOV 	DI, VBE_FINAL_MODE
+//Get mode information for the mode we want
+		MOV 	DI, VBE_TEMP_MODE
 		MOV 	CX, [VBE_FINAL_MODE_NUM]
 		MOV 	AX, 0x4F01
 		INT 	0x10
