@@ -215,7 +215,8 @@ U0 KMain()
 
 	"Load(\"Compiler\");\n";
 	Cd("/Compiler");
-	Load("Compiler", LDF_SILENT);
+	Load("Compiler");
+	Sleep(3000);
 	LBts(&sys_run_level, RLf_COMPILER);
 
 	DebugMode(OFF);

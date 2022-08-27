@@ -28,6 +28,7 @@ Bool ISOInit(CDrive *drive, I64 blk)
 							drv_offset += (2 * DVD_BLK_SIZE + DVD_BLK_SIZE) / BLK_SIZE;
 							break;
 
+//						case ISOT_PRI_VOL_DESC:
 						case ISOT_SUPPLEMENTARY_DESC:
 							de = &iso->root_dir_record;
 							drive->size = iso->vol_space_size.little * bd->blk_size >> BLK_SIZE_BITS;

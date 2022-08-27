@@ -103,6 +103,7 @@ qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
 cp $TMPMOUNT/Tmp/MyDistro.ISO.C ./ZealOS-MyDistro.iso
+sudo rm $TMPMOUNT/Tmp/MyDistro.ISO.C 2> /dev/null
 echo "Setting up temp ISO directory contents for use with limine xorriso command ..."
 sudo cp -rf $TMPMOUNT/* $TMPISODIR
 sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/
@@ -118,7 +119,7 @@ umount_tempdisk
 sudo ls $TMPISODIR -al
 mv $TMPDISK ./ZealOS-UEFI-limine-dev.raw
 
-xorriso -as mkisofs -b Boot/limine-cd.bin \
+xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/limine-cd.bin \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
         --efi-boot Boot/limine-cd-efi.bin \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
