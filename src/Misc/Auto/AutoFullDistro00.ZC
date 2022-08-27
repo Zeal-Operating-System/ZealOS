@@ -18,22 +18,12 @@ U0 Auto()
 		}
 	}
 
-//	BootMHDIns('C');
-//	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n1024\\n768\\n\\n\\n\");", ata_port);
 	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
 	Sleep(700);
 	In(in_str);
-//	OnceDrive('C', in_str);
-//	Free(in_str);
-//	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");Reboot;");
-//	in_str = MStrPrint("BootHDIns;OnceFlush;Reboot;");
-//	in_str = MStrPrint("BootHDIns;OnceFlush;OutU8(0x501,0x31);");
-//	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"Sleep(700);In(\\\"CC\\\\n%d\\\\n\\\\n1024\\\\n768\\\\n\\\\n\\\\n\\\");OutU8(0x501,0x31);\");OutU8(0x501,0x31);");
-//	in_str = MStrPrint("BootHDIns;OnceFlush;Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");OutU8(0x501,0x31);");
-//	OnceDrive('C', in_str);
 	BootHDIns;
 	OnceFlush;
-	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro000\";;Auto;OutU8(0x501,0x31);");
+	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro1\";;Auto;;");
 	OnceDrive('C', in_str);
 	OutU8(0x501,0x31);
 }

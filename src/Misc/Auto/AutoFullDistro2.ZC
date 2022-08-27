@@ -64,6 +64,8 @@ U0 MakeMyISO()
 	//If CD-ROM use MT_CD instead of MT_DVD.
 	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
 
+	Copy("/Distro" BOOT_DIR_KERNEL_ZXE, "/Tmp/DVD" KERNEL_ZXE);
+
 	DelTree("/Distro");
 	ProgressBarsReset;
 	Free(out_iso_filename);
