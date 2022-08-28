@@ -105,7 +105,7 @@ struct CKernel {
     uint64_t sys_framebuffer_width;
     uint64_t sys_framebuffer_height;
     uint64_t sys_framebuffer_pitch;
-    uint16_t sys_framebuffer_bpp;
+    uint8_t sys_framebuffer_bpp;
     uint64_t sys_smbios_entry;
 	uint32_t sys_disk_uuid_a;
 	uint16_t sys_disk_uuid_b;

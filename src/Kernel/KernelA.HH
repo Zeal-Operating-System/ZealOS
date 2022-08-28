@@ -536,14 +536,6 @@ class CVBEMode
 };
 #assert sizeof(CVBEMode) == 256
 
-class CVBEModeShort
-{
-	U16 	width,
-			height,
-			mode_num;
-	U32 	max_pixel_clock; //TODO refresh rates.
-};
-
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$
@@ -568,7 +560,7 @@ class CKernel
 	U64				sys_framebuffer_width;
 	U64				sys_framebuffer_height;
 	U64				sys_framebuffer_pitch;
-	U16				sys_framebuffer_bpp;
+	U8				sys_framebuffer_bpp;
 	U64				sys_smbios_entry;
 	U64				sys_disk_uuid[2];
 };
