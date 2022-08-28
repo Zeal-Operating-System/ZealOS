@@ -77,31 +77,6 @@ struct CGDT {
     struct CGDTEntry tr_ring3[MP_PROCESSORS_NUM];
 } __attribute__((packed));
 
-struct CVBEInfo {
-    uint8_t signature[4];
-    uint16_t version;
-    uint32_t oem, capabilities, video_modes;
-    uint16_t total_memory, software_revision;
-    uint32_t vendor, product_name, product_revision;
-    uint8_t reserved[222], oem_data[256];
-} __attribute__((packed));
-
-struct CVBEModeShort {
-    uint16_t width, height, mode_num;
-    uint32_t max_pixel_clock;
-} __attribute__((packed));
-
-struct CVBEMode {
-    uint16_t attributes, pad0[7], pitch, width, height;
-    uint8_t pad1[3], bpp, pad2, memory_model, pad[12];
-    uint32_t framebuffer;
-    uint16_t pad3[9];
-    uint32_t max_pixel_clock;
-    uint8_t reserved[190];
-} __attribute__((packed));
-
-#define VBE_MODES_NUM 32
-
 struct CSysLimitBase {
     uint16_t limit;
     uint8_t *base;
