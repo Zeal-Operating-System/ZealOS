@@ -116,8 +116,9 @@ struct CKernel {
 #define BOOT_SRC_RAM 2
 #define BOOT_SRC_HDD 3
 #define BOOT_SRC_DVD 4
-#define RLF_16BIT 0b01
-#define RLF_VESA  0b10
+#define RLF_16BIT 0b001
+#define RLF_VESA  0b010
+#define RLF_32BIT 0b100
 
 extern symbol trampoline, trampoline_end;
 
@@ -210,7 +211,7 @@ void _start(void) {
     CKernel->boot_patch_table_base -= (uintptr_t)kernel->address;
     CKernel->boot_patch_table_base += final_address;
 
-    CKernel->sys_run_level = RLF_VESA | RLF_16BIT;
+    CKernel->sys_run_level = RLF_VESA | RLF_16BIT | RLF_32BIT;
 
     CKernel->boot_base = (uintptr_t)&CKernel->jmp - (uintptr_t)kernel->address;
     CKernel->boot_base += final_address;
@@ -269,12 +270,11 @@ void _start(void) {
     memcpy((void *)final_address, CKernel, kernel->size);
 
     asm volatile (
-        "mov %5, %%rsp;"
         "jmp *%0"
         :
         : "a"(trampoline_phys), "b"(CORE0_32BIT_INIT),
-          "c"(sys_gdt_ptr), "S"(CKernel->boot_patch_table_base),
-          "D"(CKernel->boot_base), "r"(boot_stack)
+          "c"(sys_gdt_ptr), "d"(boot_stack),
+          "S"(CKernel->boot_patch_table_base), "D"(CKernel->boot_base)
         : "memory");
 
     __builtin_unreachable();

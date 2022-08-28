@@ -77,10 +77,6 @@ SYS_SEMAS::				DU8 	SEMA_SEMAS_NUM * DEFAULT_CACHE_LINE_WIDTH DUP(0);
 //************************************
 		ALIGN 	16, OC_NOP
 
-        // Signature to find CORE0_32BIT_INIT
-        DU64 0xaa23c08ed10bd4d7;
-        DU64 0xf6ceba7d4b74179a;
-
 CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		PUSH	U32 RFLAGG_START
 		POPFD
@@ -89,8 +85,9 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 
 		MOV		AX,  CGDT.boot_ds //LOAD DS SELECTOR
 		MOV 	DS,  AX
-		//MOV 	ESI, U32 [SYS_BOOT_PATCH_TABLE_BASE]
-		//MOV 	EDI, U32 [MEM_BOOT_BASE]
+		BTS 	U32 [SYS_RUN_LEVEL], RLf_32BIT
+		MOV 	ESI, U32 [SYS_BOOT_PATCH_TABLE_BASE]
+		MOV 	EDI, U32 [MEM_BOOT_BASE]
 
 		MOV		AX, CGDT.ds
 		MOV		DS,  AX
@@ -98,8 +95,16 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		MOV		FS,  AX
 		MOV		GS,  AX
 		MOV		SS,  AX
-		//MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
+		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
+        JMP @@02
+
+        ALIGN 16, OC_NOP
+        // Signature to find CORE0_32BIT_INIT
+        DU64 0xaa23c08ed10bd4d7;
+        DU64 0xf6ceba7d4b74179a;
+
+@@02:
 //Patch abs addresses
 		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
 		LEA		ESI, U32 CPatchTableAbsAddr.abs_address[ESI]
@@ -113,7 +118,6 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		DU16	CGDT.cs32;
 
 @@10: 	BTS		U32 [SYS_RUN_LEVEL], RLf_PATCHED
-		BTS 	U32 [SYS_RUN_LEVEL], RLf_32BIT
 
 		CALL	SYS_FIND_PCIBIOS_SERVICE_DIR
 		CALL	SYS_FIND_PCI_SERVICES
