@@ -152,8 +152,8 @@ static struct E801 get_E801(void) {
 }
 
 void _start(void) {
-    struct limine_file *kernel = module_request.response->modules[0];
-    struct CKernel *CKernel = kernel->address;
+    struct limine_file *module_kernel = module_request.response->modules[0];
+    struct CKernel *kernel = module_kernel->address;
 
     size_t trampoline_size = (uintptr_t)trampoline_end - (uintptr_t)trampoline;
 
@@ -167,7 +167,7 @@ void _start(void) {
             continue;
         }
 
-        if (entry->length >= ALIGN_UP(kernel->size + trampoline_size, 16) + boot_stack_size) {
+        if (entry->length >= ALIGN_UP(module_kernel->size + trampoline_size, 16) + boot_stack_size) {
             final_address = entry->base;
             break;
         }
@@ -178,14 +178,14 @@ void _start(void) {
     }
 
     struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
-    CKernel->sys_framebuffer_pitch = fb->pitch;
-    CKernel->sys_framebuffer_width = fb->width;
-    CKernel->sys_framebuffer_height = fb->height;
-    CKernel->sys_framebuffer_bpp = fb->bpp;
-    CKernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
+    kernel->sys_framebuffer_pitch = fb->pitch;
+    kernel->sys_framebuffer_width = fb->width;
+    kernel->sys_framebuffer_height = fb->height;
+    kernel->sys_framebuffer_bpp = fb->bpp;
+    kernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
 
-    void *CORE0_32BIT_INIT;
-    for (uint64_t *p = (uint64_t *)CKernel; ; p++) {
+    void *entry_point; // to CORE0_32BIT_INIT
+    for (uint64_t *p = (uint64_t *)kernel; ; p++) {
         if (*p != 0xaa23c08ed10bd4d7) {
             continue;
         }
@@ -194,38 +194,38 @@ void _start(void) {
             continue;
         }
         p++;
-        CORE0_32BIT_INIT = p;
+        entry_point = p;
         break;
     }
 
-    CORE0_32BIT_INIT -= (uintptr_t)kernel->address;
-    CORE0_32BIT_INIT += final_address;
+    entry_point -= (uintptr_t)module_kernel->address;
+    entry_point += final_address;
 
-    if (kernel->media_type == LIMINE_MEDIA_TYPE_OPTICAL)
-        CKernel->boot_src = BOOT_SRC_DVD;
-    else if (kernel->media_type == LIMINE_MEDIA_TYPE_GENERIC)
-        CKernel->boot_src = BOOT_SRC_HDD;
+    if (module_kernel->media_type == LIMINE_MEDIA_TYPE_OPTICAL)
+        kernel->boot_src = BOOT_SRC_DVD;
+    else if (module_kernel->media_type == LIMINE_MEDIA_TYPE_GENERIC)
+        kernel->boot_src = BOOT_SRC_HDD;
     else
-        CKernel->boot_src = BOOT_SRC_RAM;
-    CKernel->boot_blk = 0;
-    CKernel->boot_patch_table_base = (uintptr_t)CKernel + CKernel->h.patch_table_offset;
-    CKernel->boot_patch_table_base -= (uintptr_t)kernel->address;
-    CKernel->boot_patch_table_base += final_address;
+        kernel->boot_src = BOOT_SRC_RAM;
+    kernel->boot_blk = 0;
+    kernel->boot_patch_table_base = (uintptr_t)kernel + kernel->h.patch_table_offset;
+    kernel->boot_patch_table_base -= (uintptr_t)module_kernel->address;
+    kernel->boot_patch_table_base += final_address;
 
-    CKernel->sys_run_level = RLF_VESA | RLF_16BIT | RLF_32BIT;
+    kernel->sys_run_level = RLF_VESA | RLF_16BIT | RLF_32BIT;
 
-    CKernel->boot_base = (uintptr_t)&CKernel->jmp - (uintptr_t)kernel->address;
-    CKernel->boot_base += final_address;
+    kernel->boot_base = (uintptr_t)&kernel->jmp - (uintptr_t)module_kernel->address;
+    kernel->boot_base += final_address;
 
-    CKernel->sys_gdt_ptr.limit = sizeof(CKernel->sys_gdt) - 1;
-    CKernel->sys_gdt_ptr.base = (void *)&CKernel->sys_gdt - (uintptr_t)kernel->address;
-    CKernel->sys_gdt_ptr.base += final_address;
+    kernel->sys_gdt_ptr.limit = sizeof(kernel->sys_gdt) - 1;
+    kernel->sys_gdt_ptr.base = (void *)&kernel->sys_gdt - (uintptr_t)module_kernel->address;
+    kernel->sys_gdt_ptr.base += final_address;
 
-    CKernel->sys_pci_buses = 256;
+    kernel->sys_pci_buses = 256;
 
     struct E801 E801 = get_E801();
-    CKernel->mem_E801[0] = E801.lowermem;
-    CKernel->mem_E801[1] = E801.uppermem;
+    kernel->mem_E801[0] = E801.lowermem;
+    kernel->mem_E801[1] = E801.uppermem;
 
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
@@ -247,37 +247,39 @@ void _start(void) {
                 our_type = MEM_E820T_RESERVED; break;
         }
 
-        CKernel->mem_E820[i].base = (void *)entry->base;
-        CKernel->mem_E820[i].len = entry->length;
-        CKernel->mem_E820[i].type = our_type;
+        kernel->mem_E820[i].base = (void *)entry->base;
+        kernel->mem_E820[i].len = entry->length;
+        kernel->mem_E820[i].type = our_type;
     }
 
-    void *sys_gdt_ptr = (void *)&CKernel->sys_gdt_ptr - (uintptr_t)kernel->address;
+    void *sys_gdt_ptr = (void *)&kernel->sys_gdt_ptr - (uintptr_t)module_kernel->address;
     sys_gdt_ptr += final_address;
 
     void *sys_smbios_entry = smbios_request.response->entry_32;
-    CKernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
+    if (sys_smbios_entry != NULL) {
+        kernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
+    }
 
-	CKernel->sys_disk_uuid_a = kernel->gpt_disk_uuid.a;
-	CKernel->sys_disk_uuid_b = kernel->gpt_disk_uuid.b;
-	CKernel->sys_disk_uuid_c = kernel->gpt_disk_uuid.c;
-	memcpy(CKernel->sys_disk_uuid_d, kernel->gpt_disk_uuid.d, 8);
+	kernel->sys_disk_uuid_a = module_kernel->gpt_disk_uuid.a;
+	kernel->sys_disk_uuid_b = module_kernel->gpt_disk_uuid.b;
+	kernel->sys_disk_uuid_c = module_kernel->gpt_disk_uuid.c;
+	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, 8);
 
-    void *trampoline_phys = (void *)final_address + kernel->size;
+    void *trampoline_phys = (void *)final_address + module_kernel->size;
 
-    uintptr_t boot_stack = ALIGN_UP(final_address + kernel->size + trampoline_size, 16) + boot_stack_size;
+    uintptr_t boot_stack = ALIGN_UP(final_address + module_kernel->size + trampoline_size, 16) + boot_stack_size;
 
-	CKernel->sys_boot_stack = boot_stack;
+	kernel->sys_boot_stack = boot_stack;
 
     memcpy(trampoline_phys, trampoline, trampoline_size);
-    memcpy((void *)final_address, CKernel, kernel->size);
+    memcpy((void *)final_address, kernel, module_kernel->size);
 
     asm volatile (
         "jmp *%0"
         :
-        : "a"(trampoline_phys), "b"(CORE0_32BIT_INIT),
+        : "a"(trampoline_phys), "b"(entry_point),
           "c"(sys_gdt_ptr), "d"(boot_stack),
-          "S"(CKernel->boot_patch_table_base), "D"(CKernel->boot_base)
+          "S"(kernel->boot_patch_table_base), "D"(kernel->boot_base)
         : "memory");
 
     __builtin_unreachable();
