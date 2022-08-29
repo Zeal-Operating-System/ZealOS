@@ -111,6 +111,7 @@ struct CKernel {
 	uint16_t sys_disk_uuid_b;
 	uint16_t sys_disk_uuid_c;
 	uint8_t sys_disk_uuid_d[8];
+	uint32_t sys_boot_stack;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -265,6 +266,8 @@ void _start(void) {
     void *trampoline_phys = (void *)final_address + kernel->size;
 
     uintptr_t boot_stack = ALIGN_UP(final_address + kernel->size + trampoline_size, 16) + boot_stack_size;
+
+	CKernel->sys_boot_stack = boot_stack;
 
     memcpy(trampoline_phys, trampoline, trampoline_size);
     memcpy((void *)final_address, CKernel, kernel->size);

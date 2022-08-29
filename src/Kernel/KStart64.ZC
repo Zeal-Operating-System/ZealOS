@@ -83,7 +83,7 @@ USE64
 //************************************
 SYS_RAM_REBOOT:: //This gets copied high.  $LK,"SYS_RAM_REBOOT",A="FF:::/System/Boot/BootRAM.ZC,SYS_RAM_REBOOT:2"$
 		PUSH	U32 CGDT.ds 		//stack seg
-		PUSH	U32 BOOT_RAM_LIMIT	//stack
+		PUSH	U32 [SYS_BOOT_STACK]//stack
 		PUSH	U32 0 				//flags
 		PUSH	U32 CGDT.cs32
 		LEA 	RAX, [@@10]

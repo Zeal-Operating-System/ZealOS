@@ -563,6 +563,7 @@ class CKernel
 	U8				sys_framebuffer_bpp;
 	U64				sys_smbios_entry;
 	U64				sys_disk_uuid[2];
+	U32				sys_boot_stack;
 };
 
 //Run-Levels
