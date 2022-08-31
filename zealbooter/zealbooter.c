@@ -80,7 +80,7 @@ struct CGDT {
 struct CSysLimitBase {
     uint16_t limit;
     uint8_t *base;
-};
+} __attribute__((packed));
 
 struct CKernel {
     struct CZXE h;
@@ -95,10 +95,7 @@ struct CKernel {
     uint16_t mem_E801[2];
     struct CMemE820 mem_E820[MEM_E820_ENTRIES_NUM];
     uint64_t mem_physical_space;
-    struct {
-        uint16_t limit;
-        uint8_t *base;
-    } __attribute__((packed)) sys_gdt_ptr;
+    struct CSysLimitBase sys_gdt_ptr;
     uint16_t sys_pci_buses;
     struct CGDT sys_gdt __attribute__((aligned(16)));
     uint64_t sys_framebuffer_addr;
