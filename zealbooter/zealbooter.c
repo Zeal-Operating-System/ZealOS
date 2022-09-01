@@ -224,6 +224,8 @@ void _start(void) {
     kernel->mem_E801[0] = E801.lowermem;
     kernel->mem_E801[1] = E801.uppermem;
 
+    kernel->mem_physical_space = 0;
+
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
 
@@ -247,7 +249,15 @@ void _start(void) {
         kernel->mem_E820[i].base = (void *)entry->base;
         kernel->mem_E820[i].len = entry->length;
         kernel->mem_E820[i].type = our_type;
+
+        if (kernel->mem_physical_space < entry->base + entry->length) {
+            kernel->mem_physical_space = entry->base + entry->length;
+        }
     }
+
+    kernel->mem_E820[memmap_request.response->entry_count].type = 0;
+
+    kernel->mem_physical_space = ALIGN_UP(kernel->mem_physical_space, 0x200000);
 
     void *sys_gdt_ptr = (void *)&kernel->sys_gdt_ptr - (uintptr_t)module_kernel->address;
     sys_gdt_ptr += final_address;
