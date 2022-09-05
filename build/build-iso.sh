@@ -79,7 +79,7 @@ echo "Building Distro ISO ..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
 if [ ! -d "limine" ]; then
-    git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1
+    git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
     make -C limine
 fi
 
