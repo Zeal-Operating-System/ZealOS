@@ -229,6 +229,9 @@ void _start(void) {
     kernel->sys_gdt_ptr.base = (void *)&kernel->sys_gdt - (uintptr_t)module_kernel->address;
     kernel->sys_gdt_ptr.base += final_address;
 
+    printf("kernel->sys_gdt_ptr.limit: 0x%X\n", kernel->sys_gdt_ptr.limit);
+    printf("kernel->sys_gdt_ptr.base: 0x%X\n", kernel->sys_gdt_ptr.base);
+
     kernel->sys_pci_buses = 256;
 
     struct E801 E801 = get_E801();
