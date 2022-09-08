@@ -149,6 +149,9 @@ static struct E801 get_E801(void) {
 }
 
 void _start(void) {
+    printf("ZealBooter prekernel\n");
+    printf("____________________\n\n");
+
     struct limine_file *module_kernel = module_request.response->modules[0];
     struct CKernel *kernel = module_kernel->address;
 
@@ -164,15 +167,17 @@ void _start(void) {
             continue;
         }
 
-        if (entry->length >= ALIGN_UP(module_kernel->size + trampoline_size, 16) + boot_stack_size) {
+        if (entry->length >= align_up_u64(module_kernel->size + trampoline_size, 16) + boot_stack_size) {
             final_address = entry->base;
             break;
         }
     }
-    if (final_address == (uintptr_t)-1) {
-        // TODO: Panic. Show something?
-        for (;;);
+    if (final_address == (uintptr_t) - 1) {
+        printf("ERROR: could not find valid final address");
+        for (;;) { asm("hlt"); }
     }
+
+	printf("final_address: 0x%X\n", final_address);
 
     struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
     kernel->sys_framebuffer_pitch = fb->pitch;
@@ -198,6 +203,8 @@ void _start(void) {
     entry_point -= (uintptr_t)module_kernel->address;
     entry_point += final_address;
 
+    printf("entry_point: 0x%X\n", entry_point);
+
     if (module_kernel->media_type == LIMINE_MEDIA_TYPE_OPTICAL)
         kernel->boot_src = BOOT_SRC_DVD;
     else if (module_kernel->media_type == LIMINE_MEDIA_TYPE_GENERIC)
@@ -209,10 +216,14 @@ void _start(void) {
     kernel->boot_patch_table_base -= (uintptr_t)module_kernel->address;
     kernel->boot_patch_table_base += final_address;
 
+    printf("kernel->boot_patch_table_base: 0x%X\n", kernel->boot_patch_table_base);
+
     kernel->sys_run_level = RLF_VESA | RLF_16BIT | RLF_32BIT;
 
     kernel->boot_base = (uintptr_t)&kernel->jmp - (uintptr_t)module_kernel->address;
     kernel->boot_base += final_address;
+
+    printf("kernel->boot_base: 0x%X\n", kernel->boot_base);
 
     kernel->sys_gdt_ptr.limit = sizeof(kernel->sys_gdt) - 1;
     kernel->sys_gdt_ptr.base = (void *)&kernel->sys_gdt - (uintptr_t)module_kernel->address;
@@ -226,24 +237,36 @@ void _start(void) {
 
     kernel->mem_physical_space = 0;
 
+    printf("memory map:\n");
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
-
         int our_type;
+
+        printf("    ");
         switch (entry->type) {
             case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_KERNEL_AND_MODULES:
             case LIMINE_MEMMAP_USABLE:
-                our_type = MEM_E820T_USABLE; break;
+                our_type = MEM_E820T_USABLE;
+                printf("  USABLE: ");
+                break;
             case LIMINE_MEMMAP_ACPI_RECLAIMABLE:
-                our_type = MEM_E820T_ACPI; break;
+                our_type = MEM_E820T_ACPI;
+                printf("    ACPI: ");
+                break;
             case LIMINE_MEMMAP_ACPI_NVS:
-                our_type = MEM_E820T_ACPI_NVS; break;
+                our_type = MEM_E820T_ACPI_NVS;
+                printf("     NVS: ");
+                break;
             case LIMINE_MEMMAP_BAD_MEMORY:
-                our_type = MEM_E820T_BAD_MEM; break;
+                our_type = MEM_E820T_BAD_MEM;
+                printf("     BAD: ");
+                break;
             case LIMINE_MEMMAP_RESERVED:
             default:
-                our_type = MEM_E820T_RESERVED; break;
+                our_type = MEM_E820T_RESERVED;
+                printf("RESERVED: ");
+                break;
         }
 
         kernel->mem_E820[i].base = (void *)entry->base;
@@ -253,14 +276,25 @@ void _start(void) {
         if (kernel->mem_physical_space < entry->base + entry->length) {
             kernel->mem_physical_space = entry->base + entry->length;
         }
+
+        printf("0x%08X-0x%08X", entry->base, entry->base + entry->length - 1);
+
+        if (i % 3 == 0)
+        {
+            printf("\n");
+        }
+
     }
+    printf("\n");
 
     kernel->mem_E820[memmap_request.response->entry_count].type = 0;
 
-    kernel->mem_physical_space = ALIGN_UP(kernel->mem_physical_space, 0x200000);
+    kernel->mem_physical_space = align_up_u64(kernel->mem_physical_space, 0x200000);
 
     void *sys_gdt_ptr = (void *)&kernel->sys_gdt_ptr - (uintptr_t)module_kernel->address;
     sys_gdt_ptr += final_address;
+
+    printf("sys_gdt_ptr: 0x%X\n", sys_gdt_ptr);
 
     void *sys_smbios_entry = smbios_request.response->entry_32;
     if (sys_smbios_entry != NULL) {
@@ -274,13 +308,18 @@ void _start(void) {
 
     void *trampoline_phys = (void *)final_address + module_kernel->size;
 
-    uintptr_t boot_stack = ALIGN_UP(final_address + module_kernel->size + trampoline_size, 16) + boot_stack_size;
+	printf("trampoline_phys: 0x%X\n", trampoline_phys);
+
+    uintptr_t boot_stack = align_up_u64(final_address + module_kernel->size + trampoline_size, 16) + boot_stack_size;
+
+	printf("boot_stack: 0x%X\n", boot_stack);
 
 	kernel->sys_boot_stack = boot_stack;
 
     memcpy(trampoline_phys, trampoline, trampoline_size);
     memcpy((void *)final_address, kernel, module_kernel->size);
 
+//    printf("\nDEBUG: halting."); for (;;);
     asm volatile (
         "jmp *%0"
         :

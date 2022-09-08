@@ -5,6 +5,9 @@ trampoline:
     // Set new stack
     mov %rdx, %rsp
 
+//    hlt
+//    hlt
+
     // Load GDTR
     lgdt (%rcx)
 
