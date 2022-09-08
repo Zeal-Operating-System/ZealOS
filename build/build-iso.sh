@@ -78,10 +78,18 @@ umount_tempdisk
 echo "Building Distro ISO ..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
+if [ -d "limine" ]
+then
+	cd limine
+	git pull
+	rm limine-deploy
+	rm limine-version
+	cd ..
+fi
 if [ ! -d "limine" ]; then
     git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
-    make -C limine
 fi
+make -C limine
 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
