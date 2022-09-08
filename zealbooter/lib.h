@@ -6,6 +6,11 @@
 #include <memset.h>
 #include <memmove.h>
 #include <memcmp.h>
+#include <strcpy.h>
+#include <strncpy.h>
+#include <strcmp.h>
+#include <strncmp.h>
+#include <strlen.h>
 #include <print.h>
 
 uint64_t div_roundup_u64(uint64_t a, uint64_t b);
