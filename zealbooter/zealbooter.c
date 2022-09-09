@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <limine.h>
 #include <lib.h>
+#include <idt.h>
 
 static volatile struct limine_module_request module_request = {
     .id = LIMINE_MODULE_REQUEST,
@@ -151,6 +152,8 @@ static struct E801 get_E801(void) {
 void _start(void) {
     printf("ZealBooter prekernel\n");
     printf("____________________\n\n");
+
+    idt_init();
 
     struct limine_file *module_kernel = module_request.response->modules[0];
     struct CKernel *kernel = module_kernel->address;
