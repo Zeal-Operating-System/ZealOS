@@ -310,7 +310,7 @@ void _start(void) {
 	kernel->sys_disk_uuid_a = module_kernel->gpt_disk_uuid.a;
 	kernel->sys_disk_uuid_b = module_kernel->gpt_disk_uuid.b;
 	kernel->sys_disk_uuid_c = module_kernel->gpt_disk_uuid.c;
-	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, 8;
+	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, 8);
 
     void *const trampoline_phys = (void *)final_address + module_kernel->size;
 
