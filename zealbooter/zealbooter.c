@@ -158,9 +158,9 @@ void _start(void) {
     struct limine_file *module_kernel = module_request.response->modules[0];
     struct CKernel *kernel = module_kernel->address;
 
-    size_t trampoline_size = (uintptr_t)trampoline_end - (uintptr_t)trampoline;
-
-    size_t boot_stack_size = 32768;
+    const size_t trampoline_size = (uintptr_t)trampoline_end - (uintptr_t)trampoline;
+    const size_t boot_stack_size = 32768;
+    const size_t final_size = align_up_u64(module_kernel->size + trampoline_size, 16) + boot_stack_size;
 
     uintptr_t final_address = (uintptr_t)-1;
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
@@ -170,12 +170,12 @@ void _start(void) {
             continue;
         }
 
-        if (entry->length >= align_up_u64(module_kernel->size + trampoline_size, 16) + boot_stack_size) {
+        if (entry->length >= final_size) {
             final_address = entry->base;
             break;
         }
     }
-    if (final_address == (uintptr_t) - 1) {
+    if (final_address == (uintptr_t)-1) {
         printf("ERROR: could not find valid final address");
         for (;;) { asm("hlt"); }
     }
@@ -310,13 +310,13 @@ void _start(void) {
 	kernel->sys_disk_uuid_a = module_kernel->gpt_disk_uuid.a;
 	kernel->sys_disk_uuid_b = module_kernel->gpt_disk_uuid.b;
 	kernel->sys_disk_uuid_c = module_kernel->gpt_disk_uuid.c;
-	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, 8);
+	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, sizeof(struct limine_uuid));
 
-    void *trampoline_phys = (void *)final_address + module_kernel->size;
+    void *const trampoline_phys = (void *)final_address + module_kernel->size;
 
 	printf("trampoline_phys: 0x%X\n", trampoline_phys);
 
-    uintptr_t boot_stack = align_up_u64(final_address + module_kernel->size + trampoline_size, 16) + boot_stack_size;
+    const uintptr_t boot_stack = final_address + final_size;
 
 	printf("boot_stack: 0x%X\n", boot_stack);
 
