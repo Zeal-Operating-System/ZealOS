@@ -44,7 +44,7 @@ struct CDate {
     int32_t date;
 } __attribute__((packed));
 
-#define MEM_E820_ENTRIES_NUM 64
+#define MEM_E820_ENTRIES_NUM 256
 
 #define MEM_E820T_USABLE 1
 #define MEM_E820T_RESERVED 2
@@ -243,21 +243,8 @@ void _start(void) {
 
     kernel->mem_physical_space = 0;
 
-    size_t mem_count = 0;
-    if (memmap_request.response->entry_count > MEM_E820_ENTRIES_NUM)
-    {
-        mem_count = MEM_E820_ENTRIES_NUM;
-        // If limine hands us more regions than the constant, cap it off early instead of buffer overflowing into kernel headers.
-        // This won't guarantee we'll get lucky with framebuffer placement passed via limine.
-        // If the mem_count gets capped at the constant, the system should still boot fully (drive activity lights, reading compiler and code from disc, etc),
-        // just possibly with no visible framebuffer.  :^)
-    }
-    else
-    {
-        mem_count = memmap_request.response->entry_count;
-    }
-
     printf("memory map:\n");
+    size_t mem_count = memmap_request.response->entry_count; // MEM_E820_ENTRIES_NUM now == 256, which is also Limine's memmap entry count max
     for (size_t i = 0; i < mem_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
         int our_type;

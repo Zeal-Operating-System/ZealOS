@@ -427,7 +427,7 @@ class CSysLimitBase
 };
 
 #help_index "Memory/Info"
-#define MEM_E820_ENTRIES_NUM	64
+#define MEM_E820_ENTRIES_NUM	256
 #define MEM_E820t_USABLE		1
 #define MEM_E820t_RESERVED		2
 #define MEM_E820t_ACPI			3
