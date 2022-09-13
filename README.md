@@ -1,6 +1,15 @@
 # ZealOS
 
 [![Discord](https://img.shields.io/discord/934200098144022609?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://discord.gg/rK6U3xdr7D) [![](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/Zeal-Operating-System/ZealOS/wiki)
+Zeal
+Nor should our zeal in communicating Christian knowledge be relaxed because it has sometimes
+to be exercised in expounding matters apparently humble and unimportant, and whose exposition
+is usually irksome, especially to minds accustomed to the contemplation of the more sublime
+truths of religion. If the Wisdom of the eternal Father descended upon the earth in the meanness
+of our flesh to teach us the maxims of a heavenly life, who is there whom the love of Christ does
+not constrain to become little in the midst of his brethren, and, as a nurse fostering her children,
+so anxiously to wish for the salvation of his neighbours as to be ready, as the Apostle says of
+himself, to give them not only the gospel of God, but even his own life.
 
 The Zeal Operating System is a modernized, professional fork of the 64-bit Temple Operating System. Guiding principles of development include transparency, full user control, and adherence to public-domain/open-source implementations.
 
