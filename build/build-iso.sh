@@ -78,16 +78,22 @@ umount_tempdisk
 echo "Building Distro ISO ..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
+LIMINE_BINARY_BRANCH="v4.x-branch-binary"
+
 if [ -d "limine" ]
 then
 	cd limine
+	git remote set-branches origin $LIMINE_BINARY_BRANCH
+	git fetch
+	git remote set-head origin $LIMINE_BINARY_BRANCH
+	git switch $LIMINE_BINARY_BRANCH
 	git pull
 	rm limine-deploy
 	rm limine-version
 	cd ..
 fi
 if [ ! -d "limine" ]; then
-    git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
+    git clone https://github.com/limine-bootloader/limine.git --branch=$LIMINE_BINARY_BRANCH --depth=1
 fi
 make -C limine
 
