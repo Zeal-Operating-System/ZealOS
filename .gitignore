@@ -1,6 +1,8 @@
 *.BIN
 *.ZXE
 *.MAP
+*.ELF
+*.elf
 build/limine
 build/ovmf
 ZealOS-*.iso
