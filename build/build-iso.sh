@@ -101,7 +101,7 @@ sudo mkdir -p $TMPISODIR/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
 sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/
 sudo cp limine/limine-cd.bin $TMPISODIR/Boot/
-sudo cp limine/limine.sys $TMPISODIR/
+sudo cp limine/limine.sys $TMPISODIR/Boot/
 sudo cp ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
 sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
