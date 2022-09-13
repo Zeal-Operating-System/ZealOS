@@ -961,8 +961,9 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 {//Initialize base addresses for command list and FIS receive area and start command execution on port.
-	CPortCmdHeader *cmd_header;
-	I64				i;
+	CPortCmdHeader	*cmd_header,
+					*cmd_header_base;
+	I64				 i;
 
 	if (!(port->signature == AHCI_PxSIG_ATAPI || port->signature == AHCI_PxSIG_ATA))
 		Debug("AHCI Port/BlkDev error: Invalid Port Signature");
@@ -993,8 +994,9 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	port->fis_base_upper = 0;
 
 
+	cmd_header_base = port->cmd_list_base;
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-	{
+	{
 		"AHCI: DEBUG: AHCIPortInit variable check\n";
 		"___________\n";
 		"port (addr):                               0x%016X\n", port;
@@ -1002,17 +1004,13 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 		"&port->fis_base:                           0x%016X\n", &port->fis_base;
 		"port->cmd_list_base:                       0x%016X\n", port->cmd_list_base;
 		"&port->cmd_list_base:                      0x%016X\n", &port->cmd_list_base;
-		"port->cmd_list_base(CPortCmdHeader *):     0x%016X\n", port->cmd_list_base(CPortCmdHeader *);
-		"&port->cmd_list_base(CPortCmdHeader *):    0x%016X\n", &port->cmd_list_base(CPortCmdHeader *);
-		"&port->cmd_list_base(CPortCmdHeader *)[0]: 0x%016X\n", &port->cmd_list_base(CPortCmdHeader *)[0];
-		"blkdev.cmd_slot_count:                     %d\n", blkdev.cmd_slot_count;
-		"___________\nAHCI: DEBUG: Halting...";
-		while(TRUE){HLT};
-	}
-
+		"cmd_header_base:                           0x%016X\n", cmd_header_base;
+		"&cmd_header_base[0]:                       0x%016X\n", &cmd_header_base[0];
+		"___________\n";
+	}
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
 	{
-		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
+		cmd_header = &cmd_header_base[i];
 		//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
 		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
 
