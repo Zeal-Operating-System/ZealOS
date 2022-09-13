@@ -99,19 +99,20 @@ echo "Setting up temp ISO directory contents for use with limine xorriso command
 sudo cp -rf $TMPMOUNT/* $TMPISODIR
 sudo mkdir -p $TMPISODIR/EFI/BOOT
 sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
-sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/
-sudo cp limine/limine-cd.bin $TMPISODIR/Boot/
-sudo cp limine/limine.sys $TMPISODIR/Boot/
+sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/Limine-CD-EFI.BIN
+sudo cp limine/limine-cd.bin $TMPISODIR/Boot/Limine-CD.BIN
+sudo cp limine/limine.sys $TMPISODIR/Boot/Limine.SYS
 sudo cp ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
 sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
+sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
 umount_tempdisk
 
 sudo ls $TMPISODIR -al
 
-xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/limine-cd.bin \
+xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-CD.BIN \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
-        --efi-boot Boot/limine-cd-efi.bin \
+        --efi-boot Boot/Limine-CD-EFI.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
         $TMPISODIR -o ZealOS-UEFI-limine-dev.iso
 
