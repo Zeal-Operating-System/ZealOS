@@ -224,7 +224,8 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 
 	U64		   debug_timeout = 0;
 	U64		   debug_retries = 16;
-	"DEBUG: AHCI: AHCIPortCmdWait";
+	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
+		"DEBUG: AHCI: AHCIPortCmdWait";
 
 	while (TRUE)
 	{
@@ -234,11 +235,13 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
 		{
 error:
-			"\nDEBUG: AHCI: AHCIPortCmdWait Task File Error!\n";
-			AHCIDebug(port_num);
-			"\nPausing for 10 seconds...\n";
-			Busy(10 * 1000 * 1000);
-
+			if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
+			{
+				"\nDEBUG: AHCI: AHCIPortCmdWait Task File Error!\n";
+				AHCIDebug(port_num);
+				"\nPausing for 10 seconds...\n";
+				Busy(10 * 1000 * 1000);
+			}
 			if (AHCI_DEBUG)
 			{
 				StrPrint(str, "Run AHCIDebug(%d);", port_num);
@@ -264,7 +267,8 @@ error:
 
 		Yield; // don't hang OS
 	}
-	"\n";
+	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
+		"\n";
 
 	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Second safety check
 		goto error;
@@ -571,6 +575,16 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U16				*dev_id_record;
 
+	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
+	{
+		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
+		"___________\n";
+		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
+		"port->device_sleep:                 0x%016X\n", port->device_sleep;
+		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
+		"___________\n";
+	}
+
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
 	//Using the code heap for this alloc to stay under 32-bit address space.
@@ -604,7 +618,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check\n";
+		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
 		"___________\n";
 		"bd      :                           0x%016X\n", bd;
 		"cmd_table:                          0x%016X\n", cmd_table;
@@ -616,7 +630,8 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 		"port->signature:                    0x%016X\n", port->signature;
 		"cmd_fis->command:                   0x%016X\n", cmd_fis->command;
 		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
-
+		"port->device_sleep:                 0x%016X\n", port->device_sleep;
+		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
 		"___________\n";
 	}
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
