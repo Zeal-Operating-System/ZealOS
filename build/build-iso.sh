@@ -97,6 +97,7 @@ then
 	echo "*/\$WW,0\$" >> Limine-HDD.HH
 	cat limine-hdd.h >> Limine-HDD.HH
 	sed -i 's/const uint8_t/U8/g' Limine-HDD.HH
+	sed -i "s/\[\]/\[$(grep -c '    ' ./limine-hdd.h)*16\]/g" Limine-HDD.HH
 
 	cd ..
 fi
