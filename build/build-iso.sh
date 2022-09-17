@@ -90,6 +90,14 @@ then
 	git pull
 	rm limine-deploy
 	rm limine-version
+
+	touch Limine-HDD.HH
+	echo "/*\$WW,1\$" > Limine-HDD.HH
+	cat LICENSE.md >> Limine-HDD.HH
+	echo "*/\$WW,0\$" >> Limine-HDD.HH
+	cat limine-hdd.h >> Limine-HDD.HH
+	sed -i 's/const uint8_t/U8/g' Limine-HDD.HH
+
 	cd ..
 fi
 if [ ! -d "limine" ]; then
@@ -104,6 +112,7 @@ sudo rm $TMPMOUNT/Tmp/MyDistro.ISO.C 2> /dev/null
 echo "Setting up temp ISO directory contents for use with limine xorriso command ..."
 sudo cp -rf $TMPMOUNT/* $TMPISODIR
 sudo mkdir -p $TMPISODIR/EFI/BOOT
+sudo cp limine/Limine-HDD.HH $TMPISODIR/Boot/Limine-HDD.HH
 sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
 sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/Limine-CD-EFI.BIN
 sudo cp limine/limine-cd.bin $TMPISODIR/Boot/Limine-CD.BIN
