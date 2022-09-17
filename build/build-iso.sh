@@ -91,20 +91,20 @@ then
 	rm limine-deploy
 	rm limine-version
 
-	touch Limine-HDD.HH
-	echo "/*\$WW,1\$" > Limine-HDD.HH
-	cat LICENSE.md >> Limine-HDD.HH
-	echo "*/\$WW,0\$" >> Limine-HDD.HH
-	cat limine-hdd.h >> Limine-HDD.HH
-	sed -i 's/const uint8_t/U8/g' Limine-HDD.HH
-	sed -i "s/\[\]/\[$(grep -c '    ' ./limine-hdd.h)*16\]/g" Limine-HDD.HH
-
 	cd ..
 fi
 if [ ! -d "limine" ]; then
     git clone https://github.com/limine-bootloader/limine.git --branch=$LIMINE_BINARY_BRANCH --depth=1
 fi
 make -C limine
+
+touch limine/Limine-HDD.HH
+echo "/*\$WW,1\$" > limine/Limine-HDD.HH
+cat limine/LICENSE.md >> limine/Limine-HDD.HH
+echo "*/\$WW,0\$" >> limine/Limine-HDD.HH
+cat limine/limine-hdd.h >> limine/Limine-HDD.HH
+sed -i 's/const uint8_t/U8/g' limine/Limine-HDD.HH
+sed -i "s/\[\]/\[$(grep -c '    ' ./limine/limine-hdd.h)*16\]/g" limine/Limine-HDD.HH
 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
