@@ -25,12 +25,7 @@ limine_stage2->size_a = limine_stage2_sectors_size + (512 * (limine_stage2->size
 limine_stage2->size_b = limine_stage2_sectors_size;
 limine_stage2->location_a = 512;
 limine_stage2->location_b = 512 + limine_stage2->size_a;
-
-limine_stage2->size_a = EndianU16(limine_stage2->size_a);
-limine_stage2->size_b = EndianU16(limine_stage2->size_b);
-limine_stage2->location_a = EndianU32(limine_stage2->location_a);
-limine_stage2->location_b = EndianU32(limine_stage2->location_b);
-
+
 ClassRep(limine_stage2);
 Dump(binary_limine_hdd_bin_data + 0x1A4);
 
@@ -57,4 +52,3 @@ Dump(buffer, BLK_SIZE);
 "\n\n\n\n";
 
 
-
