@@ -270,7 +270,7 @@ error:
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 		"\n";
 
-	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Second safety check
+	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Second safety check
 		goto error;
 }
 
@@ -579,8 +579,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
 		"___________\n";
+		"cmd_header->desc:                   0x%016X\n", cmd_header->desc;
 		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
-		"port->device_sleep:                 0x%016X\n", port->device_sleep;
+		"port->device_sleep:                 0x%016X\n", port->device_sleep;
 		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
 		"___________\n";
 	}
@@ -598,6 +599,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_table->prdt[0].data_base_upper = 0;
 	cmd_table->prdt[0].data_byte_count = 512 - 1; //Zero-based value
 	cmd_header->prdt_len = 1; //1 PRD, as described above, which contains the address to put the ID record.
+
+	cmd_header->desc &= ~0b11111; // clear CFL bits
+	cmd_header->desc |= sizeof(CFisH2D) / 4; // set CFL to size of FIS (represented as U32)
 
 	//Setup command FIS
 	cmd_fis = cmd_table->cmd_fis;
@@ -620,14 +624,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
 		"___________\n";
-		"bd      :                           0x%016X\n", bd;
-		"cmd_table:                          0x%016X\n", cmd_table;
-		"cmd_fis:                            0x%016X\n", cmd_fis;
-		"port:                               0x%016X\n", port;
-		"cmd_slot:                           %d\n", cmd_slot;
-		"cmd_header:                         0x%016X\n", cmd_header;
-		"dev_id_record:                      0x%016X\n", dev_id_record;
-		"port->signature:                    0x%016X\n", port->signature;
+		"cmd_header->desc:                   0x%016X\n", cmd_header->desc;
 		"cmd_fis->command:                   0x%016X\n", cmd_fis->command;
 		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
 		"port->device_sleep:                 0x%016X\n", port->device_sleep;
