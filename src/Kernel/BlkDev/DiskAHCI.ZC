@@ -581,7 +581,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 		"___________\n";
 		"cmd_header->desc:                   0x%016X\n", cmd_header->desc;
 		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
-		"port->device_sleep:                 0x%016X\n", port->device_sleep;
+		"port->device_sleep:                 0x%016X\n", port->device_sleep;
 		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
 		"___________\n";
 	}
@@ -601,7 +601,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_header->prdt_len = 1; //1 PRD, as described above, which contains the address to put the ID record.
 
 	cmd_header->desc &= ~0b11111; // clear CFL bits
-	cmd_header->desc |= sizeof(CFisH2D) / 4; // set CFL to size of FIS (represented as U32)
+	cmd_header->desc |= sizeof(CFisH2D) / sizeof(U32); // set CFL to size of FIS (represented as U32)
 
 	//Setup command FIS
 	cmd_fis = cmd_table->cmd_fis;
