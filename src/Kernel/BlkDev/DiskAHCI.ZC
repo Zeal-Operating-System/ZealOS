@@ -222,8 +222,7 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	U8		   str[STR_LEN];
 
-	U64		   debug_timeout = 0;
-	U64		   debug_retries = 16;
+	U64		   debug_timeout = 0, debug_retries = 16;
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 		"DEBUG: AHCI: AHCIPortCmdWait";
 
