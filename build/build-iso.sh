@@ -104,7 +104,7 @@ cat limine/LICENSE.md >> limine/Limine-HDD.HH
 echo "*/\$WW,0\$" >> limine/Limine-HDD.HH
 cat limine/limine-hdd.h >> limine/Limine-HDD.HH
 sed -i 's/const uint8_t/U8/g' limine/Limine-HDD.HH
-sed -i "s/\[\]/\[$(grep -c '    ' ./limine/limine-hdd.h)*16\]/g" limine/Limine-HDD.HH
+sed -i "s/\[\]/\[$(grep -o "0x" ./limine/limine-hdd.h | wc -l)\]/g" limine/Limine-HDD.HH
 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
