@@ -633,7 +633,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
