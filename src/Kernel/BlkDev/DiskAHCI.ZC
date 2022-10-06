@@ -593,6 +593,8 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
+	port->command |= 1 << 28; // set ICC to 1 (try cause HBA to transition Port to Active state)
+
 	//Using the code heap for this alloc to stay under 32-bit address space.
 	dev_id_record = CAlloc(512, sys_task->code_heap);
 
