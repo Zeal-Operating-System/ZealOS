@@ -638,14 +638,15 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
-		"___________\n";
-		"cmd_header->desc:                   0x%016X\n", cmd_header->desc;
-		"cmd_fis->command:                   0x%016X\n", cmd_fis->command;
-		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
-		"port->device_sleep:                 0x%016X\n", port->device_sleep;
-		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
-		"___________\n";
+		"AHCI: DEBUG: AHCIPortIdentify variable check 3\n";
+		"port->command:           0x%016X\n", port->command;
+		"cmd_header->desc:        0x%016X\n", cmd_header->desc;
+		"cmd_fis->command:        0x%016X\n", cmd_fis->command;
+		"port->cmd_issue:         0x%016X\n", port->cmd_issue;
+		"port->device_sleep:      0x%016X\n", port->device_sleep;
+		"port->fis_switch_ctrl:   0x%016X\n", port->fis_switch_ctrl;
+		if (port->cmd_issue > 0xFF)
+			"Why is port->cmd_issue invalid ?   >:(  \n";
 	}
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
@@ -813,7 +814,7 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
 //			"$$GREEN$$read count: %d\n$$FG$$", count;
-		}$ER$
+		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
 
