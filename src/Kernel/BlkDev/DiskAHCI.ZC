@@ -614,7 +614,14 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_fis = cmd_table->cmd_fis;
 
 	cmd_fis->type = FISt_H2D;
-	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+//	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+	cmd_fis->desc |= AHCI_CF_DESCF_C; //set command bit in h2d fis with |= for debug
+	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
+	{
+		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
+		"port->command:           0x%016X\n", port->command;
+		"cmd_fis->desc:           0x%016X\n", cmd_fis->desc;
+	}
 
 	if (port->signature == AHCI_PxSIG_ATAPI)
 		cmd_fis->command = ATA_IDENTIFY_PACKET;
