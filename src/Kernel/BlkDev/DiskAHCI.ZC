@@ -588,12 +588,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
-		"___________\n";
-		"cmd_header->desc:                   0x%016X\n", cmd_header->desc;
-		"port->cmd_issue:                    0x%016X\n", port->cmd_issue;
-		"port->device_sleep:                 0x%016X\n", port->device_sleep;
-		"port->fis_switch_ctrl:              0x%016X\n", port->fis_switch_ctrl;
-		"___________\n";
+		"port->device_sleep:      0x%016X\n", port->device_sleep;
 	}
 
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
