@@ -228,7 +228,8 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 
 	while (TRUE)
 	{
-		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
+//		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
+		if (!(port->cmd_issue & (1 << cmd_slot))) //When command has been processed (using & and 1 << for debug)
 			break;
 
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
