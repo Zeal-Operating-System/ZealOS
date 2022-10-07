@@ -1190,7 +1190,8 @@ U0 AHCIInit()
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&hba->ports_implemented, i))
+//		if (Bt(&hba->ports_implemented, i))
+		if (hba->ports_implemented & (1 << i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
 			"AHCI: Port %2d signature 0x%08X ", i, port->signature;
@@ -1228,7 +1229,8 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+//		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (blkdev.ahci_hba->ports_implemented & (1 << i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			"AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n", i, port->signature;
