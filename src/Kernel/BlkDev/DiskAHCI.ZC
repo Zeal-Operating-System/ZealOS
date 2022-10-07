@@ -309,7 +309,8 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 	cmd_table->acmd[0]	= ATAPI_READ_CAPACITY >> 8;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -531,7 +532,8 @@ Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 	cmd_table->acmd[4]	= start;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -777,7 +779,8 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 	//Issue the command.
-	Bts(&port->cmd_issue, cmd_slot);
+//	Bts(&port->cmd_issue, cmd_slot);
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 	//Wait on command to finish.
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
@@ -929,7 +932,8 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	
-	Bts(&port->cmd_issue, cmd_slot);
+//	Bts(&port->cmd_issue, cmd_slot);
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 	
 	if (bd->flags & BDF_INTERNAL_BUF)
