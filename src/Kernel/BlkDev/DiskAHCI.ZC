@@ -1169,6 +1169,8 @@ U0 AHCIInit()
 
 	Bts(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
 	"AHCI: GHC.AE set\n";
+	"AHCI: GHC.AE value confirm with &:    %d\n", blkdev.ahci_hba->ghc & (1 << AHCI_GHCf_AHCI_ENABLE);
+	"AHCI: GHC.AE value confirm with Bt(): %d\n", Bt(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
 
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
