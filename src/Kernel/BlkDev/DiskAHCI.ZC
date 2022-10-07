@@ -576,7 +576,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
 	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U16				*dev_id_record;
+	U64 debug_val1 = 0, debug_val2 = 0;;
 
+	Bts(&debug_val1, cmd_slot);
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 0\n";
@@ -585,14 +587,22 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 		"port->cmd_issue:         0x%016X\n", port->cmd_issue;
 		"port->device_sleep:      0x%016X\n", port->device_sleep;
 		"port->fis_switch_ctrl:   0x%016X\n", port->fis_switch_ctrl;
+		"debug_val1:              0x%016X\n", debug_val1;
 	}
 
 	port->device_sleep = 0; // clear device sleep bits for debug sake
+	debug_val1 = 0;
+	debug_val1 |= 1 << cmd_slot;
+	debug_val2 = Bt(&debug_val1, cmd_slot);
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
 		"port->device_sleep:      0x%016X\n", port->device_sleep;
+		"debug_val1:               0x%016X\n", debug_val1;
+		"debug_val2:               0x%016X\n", debug_val2;
 	}
+	debug_val1 = 0;
+	debug_val2 = 0;
 
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
