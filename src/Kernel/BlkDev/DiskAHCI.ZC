@@ -593,7 +593,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	port->device_sleep = 0; // clear device sleep bits for debug sake
 	debug_val1 = 0;
 	debug_val1 |= 1 << cmd_slot;
-	debug_val2 = Bt(&debug_val1, cmd_slot);
+	debug_val2 = Bt(&debug_val1, cmd_slot);
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
 	{
 		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
@@ -1097,6 +1097,7 @@ Bool AHCIAtaInit(CBlkDev *bd)
 {
 	Bool			unlock, okay = FALSE;
 	CPortCmdHeader *cmd_header;
+	CPortCmdHeader *cmd_header_base;
 	I64				i;
 
 	if (!bd->ahci_port)
@@ -1109,7 +1110,8 @@ Bool AHCIAtaInit(CBlkDev *bd)
 	{
 		for (i = 0; i < blkdev.cmd_slot_count; i++)
 		{
-			cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
+			cmd_header_base = bd->ahci_port->cmd_list_base;
+			cmd_header = &cmd_header_base[i];
 			Free(cmd_header->cmd_table_base);
 		}
 		Free(bd->ahci_port->cmd_list_base);
