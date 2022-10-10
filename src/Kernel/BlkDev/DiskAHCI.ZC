@@ -1025,8 +1025,7 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 Bool AHCIAtaInit(CBlkDev *bd)
 {
 	Bool			unlock, okay = FALSE;
-	CPortCmdHeader *cmd_header;
-	CPortCmdHeader *cmd_header_base;
+	CPortCmdHeader *cmd_header, *cmd_header_base;
 	I64				i;
 
 	if (!bd->ahci_port)
