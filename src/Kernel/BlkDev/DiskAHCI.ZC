@@ -556,17 +556,6 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U16				*dev_id_record;
 
-	Bts(&debug_val1, cmd_slot);
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check 0\n";
-		"port->command:           0x%016X\n", port->command;
-		"cmd_header->desc:        0x%016X\n", cmd_header->desc;
-		"port->cmd_issue:         0x%016X\n", port->cmd_issue;
-		"port->device_sleep:      0x%016X\n", port->device_sleep;
-		"port->fis_switch_ctrl:   0x%016X\n", port->fis_switch_ctrl;
-	}
-
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
 	//Using the code heap for this alloc to stay under 32-bit address space.
