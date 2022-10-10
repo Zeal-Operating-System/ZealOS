@@ -1,11 +1,16 @@
 /*
-- Perhaps make more references to spec in comments
+- Make more references to spec in comments
 
-- ATAPI RW
+- ATAPI RW needs cleaning up / improving
 
 - Remove Buffer alignment check and just do it on every call
 
-- AHCIATAPISetMaxSpeed?
+- AHCIATAPISetMaxSpeed needs to be implemented
+
+- TODO FIXME: certain Bt() and Bts() on AHCI memory areas, and variable casting,
+	caused strange crashes on a Ryzen with Gigabyte brand motherboard. Bit test
+	function implementation and compiler casting internal functionality need
+	to be researched to fix those bugs.
 */
 
 I64 AHCI_DEBUG = FALSE;
@@ -222,10 +227,6 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	U8		   str[STR_LEN];
 
-	U64		   debug_timeout = 0, debug_retries = 16;
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-		"DEBUG: AHCI: AHCIPortCmdWait";
-
 	while (TRUE)
 	{
 //		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
@@ -235,13 +236,6 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
 		{
 error:
-			if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-			{
-				"\nDEBUG: AHCI: AHCIPortCmdWait Task File Error!\n";
-				AHCIDebug(port_num);
-				"\nPausing for 10 seconds...\n";
-				Busy(10 * 1000 * 1000);
-			}
 			if (AHCI_DEBUG)
 			{
 				StrPrint(str, "Run AHCIDebug(%d);", port_num);
@@ -252,23 +246,8 @@ error:
 			throw('AHCI');
 		}
 
-		if (++debug_timeout > U16_MAX * 6)
-		{
-			debug_timeout = 0;
-			".";
-			if (!--debug_retries)
-			{
-				"\nDEBUG: AHCI: AHCIPortCmdWait stuck !\n";
-				AHCIDebug(port_num);
-				"\nDEBUG: AHCI: Halting.\n";
-				while (TRUE) {asm{HLT};};
-			}
-		}
-
 		Yield; // don't hang OS
 	}
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-		"\n";
 
 	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Second safety check
 		goto error;
@@ -576,7 +555,6 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
 	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U16				*dev_id_record;
-	U64 debug_val1 = 0, debug_val2 = 0;;
 
 	Bts(&debug_val1, cmd_slot);
 	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
@@ -587,26 +565,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 		"port->cmd_issue:         0x%016X\n", port->cmd_issue;
 		"port->device_sleep:      0x%016X\n", port->device_sleep;
 		"port->fis_switch_ctrl:   0x%016X\n", port->fis_switch_ctrl;
-		"debug_val1:              0x%016X\n", debug_val1;
 	}
-
-	port->device_sleep = 0; // clear device sleep bits for debug sake
-	debug_val1 = 0;
-	debug_val1 |= 1 << cmd_slot;
-	debug_val2 = Bt(&debug_val1, cmd_slot);
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check 1\n";
-		"port->device_sleep:      0x%016X\n", port->device_sleep;
-		"debug_val1:               0x%016X\n", debug_val1;
-		"debug_val2:               0x%016X\n", debug_val2;
-	}
-	debug_val1 = 0;
-	debug_val2 = 0;
 
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
-
-	port->command |= 1 << 28; // set ICC to 1 (try cause HBA to transition Port to Active state)
 
 	//Using the code heap for this alloc to stay under 32-bit address space.
 	dev_id_record = CAlloc(512, sys_task->code_heap);
@@ -620,21 +581,11 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_table->prdt[0].data_byte_count = 512 - 1; //Zero-based value
 	cmd_header->prdt_len = 1; //1 PRD, as described above, which contains the address to put the ID record.
 
-	cmd_header->desc &= ~0b11111; // clear CFL bits
-	cmd_header->desc |= sizeof(CFisH2D) / sizeof(U32); // set CFL to size of FIS (represented as U32)
-
 	//Setup command FIS
 	cmd_fis = cmd_table->cmd_fis;
 
 	cmd_fis->type = FISt_H2D;
-//	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
-	cmd_fis->desc |= AHCI_CF_DESCF_C; //set command bit in h2d fis with |= for debug
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check 2\n";
-		"port->command:           0x%016X\n", port->command;
-		"cmd_fis->desc:           0x%016X\n", cmd_fis->desc;
-	}
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
 
 	if (port->signature == AHCI_PxSIG_ATAPI)
 		cmd_fis->command = ATA_IDENTIFY_PACKET;
@@ -649,18 +600,6 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 //	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 
-	if (sys_boot_src.u16[0] == BOOT_SRC_DVD)
-	{
-		"AHCI: DEBUG: AHCIPortIdentify variable check 3\n";
-		"port->command:           0x%016X\n", port->command;
-		"cmd_header->desc:        0x%016X\n", cmd_header->desc;
-		"cmd_fis->command:        0x%016X\n", cmd_fis->command;
-		"port->cmd_issue:         0x%016X\n", port->cmd_issue;
-		"port->device_sleep:      0x%016X\n", port->device_sleep;
-		"port->fis_switch_ctrl:   0x%016X\n", port->fis_switch_ctrl;
-		if (port->cmd_issue > 0xFF)
-			"Why is port->cmd_issue invalid ?   >:(  \n";
-	}
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
 	Free(bd->dev_id_record);
@@ -1081,6 +1020,7 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	cmd_header_base = port->cmd_list_base;
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
 	{
+//		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
 		cmd_header = &cmd_header_base[i];
 		//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
 		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
@@ -1111,6 +1051,7 @@ Bool AHCIAtaInit(CBlkDev *bd)
 		for (i = 0; i < blkdev.cmd_slot_count; i++)
 		{
 			cmd_header_base = bd->ahci_port->cmd_list_base;
+//			cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
 			cmd_header = &cmd_header_base[i];
 			Free(cmd_header->cmd_table_base);
 		}
@@ -1171,8 +1112,6 @@ U0 AHCIInit()
 
 	Bts(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
 	"AHCI: GHC.AE set\n";
-	"AHCI: GHC.AE value confirm with &:    %d\n", blkdev.ahci_hba->ghc & (1 << AHCI_GHCf_AHCI_ENABLE);
-	"AHCI: GHC.AE value confirm with Bt(): %d\n", Bt(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
 
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
