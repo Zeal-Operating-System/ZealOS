@@ -1,0 +1,27 @@
+
+#include "/Boot/Limine-HDD.HH"
+
+class CLimineStage2Header
+{
+	U16 size_a;
+	U16 size_b;
+	U64 location_a;
+	U64 location_b;
+};
+
+U8					*limine			= binary_limine_hdd_bin_data;
+U16					 limine_size	= sizeof(binary_limine_hdd_bin_data);
+CLimineStage2Header *limine_stage2	= limine + 0x1A4;
+
+U16 limine_stage2_size = limine_size - BLK_SIZE;
+U16 limine_stage2_size_aligned = limine_stage2_size + ((BLK_SIZE * 2) - limine_stage2_size % (BLK_SIZE * 2));
+
+limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
+limine_stage2->location_a = BLK_SIZE;
+limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
+
+ClassRep(limine_stage2);
+
+CBlkDev *bd = Letter2BlkDev('c');
+
+AHCIAtaBlksWrite(bd, limine, 0, BLK_SIZE + limine_stage2_size_aligned);
