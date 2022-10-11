@@ -28,6 +28,6 @@ AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
 
 MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
 
-AHCIAtaBlksWrite(bd, limine, 0, 1 + limine_stage2_size_aligned); // write Limine to MBR and post-MBR gap
+AHCIAtaBlksWrite(bd, limine, 0, 1 + (limine_stage2_size_aligned / BLK_SIZE)); // write Limine to MBR and post-MBR gap
 
-BlkDevUnlock(bd);
+BlkDevUnlock(bd);
