@@ -1,4 +1,3 @@
-
 #include "/Boot/Limine-HDD.HH"
 
 class CLimineStage2Header
@@ -20,8 +19,15 @@ limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
 limine_stage2->location_a = BLK_SIZE;
 limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
 
-ClassRep(limine_stage2);
-
 CBlkDev *bd = Letter2BlkDev('c');
+CMasterBoot old_mbr, *new_mbr = limine;
 
-AHCIAtaBlksWrite(bd, limine, 0, BLK_SIZE + limine_stage2_size_aligned);
+BlkDevLock(bd);
+
+AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
+
+MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
+
+AHCIAtaBlksWrite(bd, limine, 0, 1 + limine_stage2_size_aligned); // write Limine to MBR and post-MBR gap
+
+BlkDevUnlock(bd);
