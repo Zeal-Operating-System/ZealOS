@@ -564,6 +564,7 @@ class CKernel
 	U64				sys_smbios_entry;
 	U64				sys_disk_uuid[2];
 	U32				sys_boot_stack;
+	Bool				sys_is_uefi_booted;
 };
 
 //Run-Levels

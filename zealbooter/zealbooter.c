@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <limine.h>
 #include <lib.h>
 
@@ -25,6 +26,11 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 
 static volatile struct limine_smbios_request smbios_request = {
     .id = LIMINE_SMBIOS_REQUEST,
+    .revision = 0
+};
+
+static volatile struct limine_efi_system_table_request efi_request = {
+    .id = LIMINE_EFI_SYSTEM_TABLE_REQUEST,
     .revision = 0
 };
 
@@ -109,6 +115,7 @@ struct CKernel {
 	uint16_t sys_disk_uuid_c;
 	uint8_t sys_disk_uuid_d[8];
 	uint32_t sys_boot_stack;
+	uint8_t sys_is_uefi_booted;
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -319,6 +326,11 @@ void _start(void) {
 	printf("boot_stack: 0x%X\n", boot_stack);
 
 	kernel->sys_boot_stack = boot_stack;
+
+    if (efi_request.response)
+    {
+        kernel->sys_is_uefi_booted = true;
+    }
 
     memcpy(trampoline_phys, trampoline, trampoline_size);
     memcpy((void *)final_address, kernel, module_kernel->size);

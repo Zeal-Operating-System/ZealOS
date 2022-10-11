@@ -253,6 +253,8 @@ public _extern SYS_FRAMEBUFFER_BPP U8	sys_framebuffer_bpp;
 #help_index "Processor/SMBIOS"
 public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;
 
+#help_index ""
 public _extern SYS_DISK_UUID  U64	sys_disk_uuid[2];
+public _extern SYS_IS_UEFI_BOOTED	Bool	sys_is_uefi_booted;
 
 #help_index ""
