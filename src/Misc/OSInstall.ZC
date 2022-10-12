@@ -4,6 +4,11 @@
 #include LIMINE_HDD_FILE
 #include LIMINE_HDD_INSTALLER
 
+#define LIMINE_INSTALL_PROMPT	\
+"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n" \
+"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n" \
+"$$DKGRAY$$ZealOS Boot Loader is written in public-domain ZealC, but only supports BIOS mode.\n\n" \
+"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
 
 CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 {
@@ -167,10 +172,7 @@ U0 OSUpgrade()
 			"\n\n";
 			if (FileFind(LIMINE_HDD_FILE))
 			{
-				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
-				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
-				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
-				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"" LIMINE_INSTALL_PROMPT;
 				"(Z/L): ";
 
 				do
@@ -292,10 +294,7 @@ U0 VMInstallWiz()
 			if (FileFind(LIMINE_HDD_FILE))
 			{
 				"\n\n"
-				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
-				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
-				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
-				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"" LIMINE_INSTALL_PROMPT;
 				"(Z/L): ";
 
 				do
@@ -403,10 +402,7 @@ U0 RegularInstallWiz()
 			"\n\n";
 			if (FileFind(LIMINE_HDD_FILE))
 			{
-				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
-				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
-				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
-				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"" LIMINE_INSTALL_PROMPT;
 				"(Z/L): ";
 
 				do
