@@ -1,4 +1,3 @@
-#include "/Boot/Limine-HDD.HH"
 
 class CLimineStage2Header
 {
@@ -8,26 +7,41 @@ class CLimineStage2Header
 	U64 location_b;
 };
 
-U8					*limine			= binary_limine_hdd_bin_data;
-U16					 limine_size	= sizeof(binary_limine_hdd_bin_data);
-CLimineStage2Header *limine_stage2	= limine + 0x1A4;
+#ifndef binary_limine_hdd_bin_data
+U8 binary_limine_hdd_bin_data[0];
+#endif
 
-U16 limine_stage2_size = limine_size - BLK_SIZE;
-U16 limine_stage2_size_aligned = limine_stage2_size + ((BLK_SIZE * 2) - limine_stage2_size % (BLK_SIZE * 2));
+Bool LimineMHDIns(U8 drv_let)
+{
+	U8					*limine			= binary_limine_hdd_bin_data;
+	U16					 limine_size	= sizeof(binary_limine_hdd_bin_data);
+	CLimineStage2Header *limine_stage2	= limine + 0x1A4;
+	U16 limine_stage2_size = limine_size - BLK_SIZE;
+	U16 limine_stage2_size_aligned = limine_stage2_size + ((BLK_SIZE * 2) - limine_stage2_size % (BLK_SIZE * 2));
 
-limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
-limine_stage2->location_a = BLK_SIZE;
-limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
+	if (limine_size == 0)
+	{
+		"\n" ST_ERR_ST "Limine HDD MBR binary bytes not found. Must first #include it, then recompile this file.\n";
+		return FALSE;
+	}
 
-CBlkDev *bd = Letter2BlkDev('c');
-CMasterBoot old_mbr, *new_mbr = limine;
+	limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
+	limine_stage2->location_a = BLK_SIZE;
+	limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
 
-BlkDevLock(bd);
+	CBlkDev *bd = Letter2BlkDev(drv_let);
+	CMasterBoot old_mbr, *new_mbr = limine;
 
-AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
+	BlkDevLock(bd);
 
-MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
+	AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
 
-AHCIAtaBlksWrite(bd, limine, 0, 1 + (limine_stage2_size_aligned / BLK_SIZE)); // write Limine to MBR and post-MBR gap
+	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
 
-BlkDevUnlock(bd);
+	AHCIAtaBlksWrite(bd, limine, 0, 1 + (limine_stage2_size_aligned / BLK_SIZE)); // write Limine to MBR and post-MBR gap
+
+	BlkDevUnlock(bd);
+
+	return TRUE;
+
+}
