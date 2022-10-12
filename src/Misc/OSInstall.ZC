@@ -1,3 +1,10 @@
+
+#define LIMINE_HDD_FILE			"/Boot/Limine-HDD.HH"
+#define LIMINE_HDD_INSTALLER	"/System/Boot/LimineMHDIns.ZC"
+#include LIMINE_HDD_FILE
+#include LIMINE_HDD_INSTALLER
+
+
 CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 {
 	while (haystack_list)
@@ -97,7 +104,7 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 
 U0 OSUpgrade()
 {
-	I64		 drv_let;
+	I64		 drv_let, ch;
 	U8		*st, *port_st;
 	I64		 res_num;
 	CTask	*task;
@@ -157,8 +164,29 @@ U0 OSUpgrade()
 		"$$RED$$Install Master Boot Loader?$$FG$$";
 		if (YorN)
 		{
-			'\n';
-			BootMHDIns(drv_let);
+			"\n\n";
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
+				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
+				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
+				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+				if (ch == 'Z')
+					BootMHDIns(drv_let);
+				else
+				{
+					LimineMHDIns(drv_let);
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns(drv_let);
 		}
 	}
 
@@ -215,7 +243,7 @@ U0 VMInstallDrive(CTask *task, U8 drv_let, I64 ata_port, I64 atapi_port)
 U0 VMInstallWiz()
 {
 	CTask		*task;
-	I64			 i, atapi_port = -1, ata_port = -1;
+	I64			 i, atapi_port = -1, ata_port = -1, ch;
 	CAHCIPort	*port;
 
 	task = User;
@@ -261,7 +289,29 @@ U0 VMInstallWiz()
 		VMInstallDrive(task, 'D', ata_port, atapi_port);
 		if (!sys_is_uefi_booted)
 		{
-			BootMHDIns('C');
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"\n\n"
+				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
+				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
+				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
+				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+				if (ch == 'Z')
+					BootMHDIns('C');
+				else
+				{
+					LimineMHDIns('C');
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns('C');
 		}
 	}
 
@@ -350,8 +400,29 @@ U0 RegularInstallWiz()
 		"$$RED$$Install Master Boot loader?$$FG$$";
 		if (YorN)
 		{
-			'\n';
-			BootMHDIns(drv_let);
+			"\n\n";
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n"
+				"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n"
+				"$$DKGRAY$$ZealOS Boot Loader only supports BIOS mode, but is written in public-domain ZealC.\n\n"
+				"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+				if (ch == 'Z')
+					BootMHDIns(drv_let);
+				else
+				{
+					LimineMHDIns(drv_let);
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns(drv_let);
 		}
 	}
 	WinVert(task->win_top, Fs->win_bottom);
