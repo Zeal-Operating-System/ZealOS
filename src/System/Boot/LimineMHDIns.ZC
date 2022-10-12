@@ -18,6 +18,8 @@ Bool LimineMHDIns(U8 drv_let)
 	CLimineStage2Header *limine_stage2	= limine + 0x1A4;
 	U16 limine_stage2_size = limine_size - BLK_SIZE;
 	U16 limine_stage2_size_aligned = limine_stage2_size + ((BLK_SIZE * 2) - limine_stage2_size % (BLK_SIZE * 2));
+	CBlkDev *bd = Letter2BlkDev(drv_let);
+	CMasterBoot old_mbr, *new_mbr = limine;
 
 	if (limine_size == 0)
 	{
@@ -28,9 +30,6 @@ Bool LimineMHDIns(U8 drv_let)
 	limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
 	limine_stage2->location_a = BLK_SIZE;
 	limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
-
-	CBlkDev *bd = Letter2BlkDev(drv_let);
-	CMasterBoot old_mbr, *new_mbr = limine;
 
 	BlkDevLock(bd);
 
