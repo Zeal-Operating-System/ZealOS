@@ -2718,7 +2718,7 @@ class CPCIDev
 
 //Command FIS flags
 #define AHCI_CF_DESCf_C		7	//'Command' bit. Set when FIS is an ATA command.
-#define AHCI_CF_DESCF_C		(1 << AHCI_CF_DESCF_C)
+#define AHCI_CF_DESCF_C		(1 << AHCI_CF_DESCf_C)
 
 //Port register flags
 //Command and Status register flags

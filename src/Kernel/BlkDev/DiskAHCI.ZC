@@ -1,11 +1,16 @@
 /*
-- Perhaps make more references to spec in comments
+- Make more references to spec in comments
 
-- ATAPI RW
+- ATAPI RW needs cleaning up / improving
 
 - Remove Buffer alignment check and just do it on every call
 
-- AHCIATAPISetMaxSpeed?
+- AHCIATAPISetMaxSpeed needs to be implemented
+
+- TODO FIXME: certain Bt() and Bts() on AHCI memory areas, and variable casting,
+	caused strange crashes on a Ryzen with Gigabyte brand motherboard. Bit test
+	function implementation and compiler casting internal functionality need
+	to be researched to fix those bugs.
 */
 
 I64 AHCI_DEBUG = FALSE;
@@ -224,7 +229,8 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 
 	while (TRUE)
 	{
-		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
+//		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
+		if (!(port->cmd_issue & (1 << cmd_slot))) //When command has been processed (using & and 1 << for debug)
 			break;
 
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
@@ -282,7 +288,8 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 	cmd_table->acmd[0]	= ATAPI_READ_CAPACITY >> 8;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -504,7 +511,8 @@ Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 	cmd_table->acmd[4]	= start;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -578,7 +586,9 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
 	Free(bd->dev_id_record);
@@ -707,7 +717,8 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 	//Issue the command.
-	Bts(&port->cmd_issue, cmd_slot);
+//	Bts(&port->cmd_issue, cmd_slot);
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 	//Wait on command to finish.
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
@@ -745,7 +756,7 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
 //			"$$GREEN$$read count: %d\n$$FG$$", count;
-		}$ER$
+		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
 
@@ -859,7 +870,8 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	
-	Bts(&port->cmd_issue, cmd_slot);
+//	Bts(&port->cmd_issue, cmd_slot);
+	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 	
 	if (bd->flags & BDF_INTERNAL_BUF)
@@ -961,8 +973,9 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 {//Initialize base addresses for command list and FIS receive area and start command execution on port.
-	CPortCmdHeader *cmd_header;
-	I64				i;
+	CPortCmdHeader	*cmd_header,
+					*cmd_header_base;
+	I64				 i;
 
 	if (!(port->signature == AHCI_PxSIG_ATAPI || port->signature == AHCI_PxSIG_ATA))
 		Debug("AHCI Port/BlkDev error: Invalid Port Signature");
@@ -992,9 +1005,12 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	port->fis_base = CAllocAligned(sizeof(CFisReceived), 256, sys_task->code_heap);
 	port->fis_base_upper = 0;
 
+
+	cmd_header_base = port->cmd_list_base;
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
 	{
-		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
+//		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
+		cmd_header = &cmd_header_base[i];
 		//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
 		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
 
@@ -1009,7 +1025,7 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 Bool AHCIAtaInit(CBlkDev *bd)
 {
 	Bool			unlock, okay = FALSE;
-	CPortCmdHeader *cmd_header;
+	CPortCmdHeader *cmd_header, *cmd_header_base;
 	I64				i;
 
 	if (!bd->ahci_port)
@@ -1022,7 +1038,9 @@ Bool AHCIAtaInit(CBlkDev *bd)
 	{
 		for (i = 0; i < blkdev.cmd_slot_count; i++)
 		{
-			cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
+			cmd_header_base = bd->ahci_port->cmd_list_base;
+//			cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
+			cmd_header = &cmd_header_base[i];
 			Free(cmd_header->cmd_table_base);
 		}
 		Free(bd->ahci_port->cmd_list_base);
@@ -1101,7 +1119,8 @@ U0 AHCIInit()
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&hba->ports_implemented, i))
+//		if (Bt(&hba->ports_implemented, i))
+		if (hba->ports_implemented & (1 << i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
 			"AHCI: Port %2d signature 0x%08X ", i, port->signature;
@@ -1139,7 +1158,8 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+//		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (blkdev.ahci_hba->ports_implemented & (1 << i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			"AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n", i, port->signature;
