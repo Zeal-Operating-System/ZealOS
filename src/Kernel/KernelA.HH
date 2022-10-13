@@ -4511,7 +4511,7 @@ public class CDebugGlobals
 #define BOOT_SRC_DVD		4
 
 // $LK,"In",A="MN:In"$("") StdIn for call to $LK,"BootHDIns",A="MN:BootHDIns"$().
-#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT \n\n\n\n"
+#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
 
 #help_index "Registry"
 //Registry sys_message_flags. $LK,"RegOneTimePopUp",A="MN:RegOneTimePopUp"$()
