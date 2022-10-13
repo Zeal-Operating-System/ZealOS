@@ -160,9 +160,7 @@ U0 OSUpgrade()
 	OSMerge(drv_let); // src_drv needed?
 
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
-	VideoRep;
-	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
-	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
+	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
 
 	if (!sys_is_uefi_booted)
 	{
@@ -391,9 +389,7 @@ U0 RegularInstallWiz()
 
 
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
-	VideoRep;
-	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
-	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
+	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
 	if (!sys_is_uefi_booted)
 	{
 		"$$RED$$Install Master Boot loader?$$FG$$";
