@@ -110,10 +110,7 @@ struct CKernel {
     uint64_t sys_framebuffer_pitch;
     uint8_t sys_framebuffer_bpp;
     uint64_t sys_smbios_entry;
-	uint32_t sys_disk_uuid_a;
-	uint16_t sys_disk_uuid_b;
-	uint16_t sys_disk_uuid_c;
-	uint8_t sys_disk_uuid_d[8];
+    uint64_t sys_disk_uuid[2];
 	uint32_t sys_boot_stack;
 	uint8_t sys_is_uefi_booted;
 } __attribute__((packed));
@@ -312,10 +309,7 @@ void _start(void) {
         kernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
     }
 
-	kernel->sys_disk_uuid_a = module_kernel->gpt_disk_uuid.a;
-	kernel->sys_disk_uuid_b = module_kernel->gpt_disk_uuid.b;
-	kernel->sys_disk_uuid_c = module_kernel->gpt_disk_uuid.c;
-	memcpy(kernel->sys_disk_uuid_d, module_kernel->gpt_disk_uuid.d, 8);
+    memcpy(kernel->sys_disk_uuid, &module_kernel->gpt_disk_uuid, sizeof(kernel->sys_disk_uuid));
 
     void *const trampoline_phys = (void *)final_address + module_kernel->size;
 
