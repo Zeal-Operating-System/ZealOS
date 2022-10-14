@@ -244,11 +244,13 @@ public _intern IC_FS CTask *Fs(); //FS segment register points to the current $L
 public _intern IC_RDTSC I64 TSCGet(); //Get time stamp counter.
 
 #help_index "Graphics/Framebuffer"
-public _extern SYS_FRAMEBUFFER_ADDR U8	*sys_framebuffer_addr;
-public _extern SYS_FRAMEBUFFER_WIDTH U64	sys_framebuffer_width;
-public _extern SYS_FRAMEBUFFER_HEIGHT U64	sys_framebuffer_height;
-public _extern SYS_FRAMEBUFFER_PITCH U64	sys_framebuffer_pitch;
-public _extern SYS_FRAMEBUFFER_BPP U8	sys_framebuffer_bpp;
+public _extern SYS_FRAMEBUFFER_ADDR		U8	*sys_framebuffer_addr;
+public _extern SYS_FRAMEBUFFER_WIDTH	U64	sys_framebuffer_width;
+public _extern SYS_FRAMEBUFFER_HEIGHT	U64	sys_framebuffer_height;
+public _extern SYS_FRAMEBUFFER_PITCH	U64	sys_framebuffer_pitch;
+public _extern SYS_FRAMEBUFFER_BPP		U8	sys_framebuffer_bpp;
+
+_extern SYS_FRAMEBUFFER_LIST CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
 
 #help_index "Processor/SMBIOS"
 public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;

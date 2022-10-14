@@ -1,8 +1,52 @@
-public U0 VideoRep()
-{ //Report screen information.
+
+public I64 VideoRep()
+{ // List available screen resolutions. 
+
 	"\n";
-	"Resolution:          $$RED$$%d x %d$$FG$$ \n", sys_framebuffer_width, sys_framebuffer_height;
-	"Pitch:               $$RED$$%d$$FG$$ \n", sys_framebuffer_pitch;
-	"Bits-per-pixel:      $$RED$$%d$$FG$$ \n", sys_framebuffer_bpp;
-	"Framebuffer pointer: $$RED$$0x%8X$$FG$$ \n\n", sys_framebuffer_addr;
+	"$$PURPLE$$Framebuffer pointer: $$BLACK$$0x%8X$$FG$$ \n", sys_framebuffer_addr;
+
+	I64 i, count = 0;
+	CVideoInfo *info;
+
+	"\nAll modes shown are 32-bit color.\n\n";
+
+	if (!IsRaw)
+		"$$LTCYAN$$ #    W  x   H$$FG$$\n\n";
+	else
+		"#\t\t  W  x   H\n\n";
+
+	for (i = 0; i < VBE_MODES_NUM; i++)
+	{
+		info = &sys_framebuffer_list[i];
+		if (info->height)
+		{
+
+			if (!IsRaw)
+				"$$PURPLE$$ $$BT+X,\"%d\",LM=\"%d\\n\"$$$$FG$$$$LM,4$$", i+1, i+1;
+			else
+				" [%d]\t", i+1;
+
+			if (info->width == sys_framebuffer_width && info->height == sys_framebuffer_height)
+			{
+				if (!IsRaw)
+					"$$RED$$%4d x %4d (Current resolution)$$FG$$$$LM,0$$", info->width, info->height;
+				else
+					"%4d x %4d (Current resolution)", info->width, info->height;
+			}
+			else
+			{
+				if (!IsRaw)
+					"$$BLACK$$%4d x %4d $$FG$$$$LM,0$$", info->width, info->height;
+				else
+					"%4d x %4d ", info->width, info->height;
+			}
+
+			"\n\n\n";
+			count++;
+		}
+	}
+
+	return count;
 }
+
+VideoRep;

@@ -64,6 +64,8 @@ SYS_BOOT_STACK::	DU32	BOOT_RAM_LIMIT;
 
 SYS_IS_UEFI_BOOTED::    DU8    0;
 
+//SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
+
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
 REQUESTED_SCREEN_WIDTH:		DU16	1024;
@@ -73,6 +75,8 @@ VBE_TEMP_MODE:		DU8 	sizeof(CVBEMode)	DUP(0);
 VBE_INFO:			DU8 	sizeof(CVBEInfo)	DUP(0);
 VBE_FINAL_MODE_NUM:	DU16	0; // gets set to final result mode number
 VBE_STD_MODE_NUM:	DU16	0; // gets set to mode number for standard 1024x768
+
+SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
 
 //************************************
 CORE0_16BIT_INIT::
@@ -119,6 +123,7 @@ GET_IP: POP 	BX
 /*Loop variables:
  DI <- Temporary storage for mode information
  CX <- Mode number
+ DX <- 'mode' array
  GS <- Segment for video modes list
  SI <- Offset for video modes list
 */
@@ -126,6 +131,7 @@ GET_IP: POP 	BX
 		MOV		AX, VBE_INFO
 		MOV		SI, CVBEInfo.video_modes[AX]
 		MOV		GS, CVBEInfo.video_modes+2[AX]
+		MOV		DX, SYS_FRAMEBUFFER_LIST
 		MOV		DI, VBE_TEMP_MODE
 
 @@15: //Loop through all the mode numbers
@@ -168,6 +174,12 @@ GET_IP: POP 	BX
 //Copy information about this mode into AX and BX
 @@18:	MOV 	BX, CVBEMode.height[DI]
 @@20: 	MOV		AX, CVBEMode.width[DI]
+
+// Copy info into DX SYS_FRAMEBUFFER_LIST
+
+		MOV		CVideoInfo.height[DX], BX
+		MOV		CVideoInfo.width[DX], AX
+		ADD		DX, sizeof(CVideoInfo) // next array element
 
 //Check if width and height match standard 1024x768
 //If they match, set VBE_STD_MODE_NUM to this mode num

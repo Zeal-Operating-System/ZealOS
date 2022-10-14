@@ -536,6 +536,12 @@ class CVBEMode
 };
 #assert sizeof(CVBEMode) == 256
 
+class CVideoInfo
+{
+	U16 width;
+	U16 height;
+};
+
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$
@@ -564,7 +570,8 @@ class CKernel
 	U64				sys_smbios_entry;
 	U64				sys_disk_uuid[2];
 	U32				sys_boot_stack;
-	Bool				sys_is_uefi_booted;
+	Bool			sys_is_uefi_booted;
+//	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
 };
 
 //Run-Levels
