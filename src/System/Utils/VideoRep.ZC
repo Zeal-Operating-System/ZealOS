@@ -3,23 +3,43 @@ public I64 VideoRep()
 { // List available screen resolutions. 
 
 	"\n";
-	"$$PURPLE$$Framebuffer pointer: $$BLACK$$0x%8X$$FG$$ \n", sys_framebuffer_addr;
+	if (!IsRaw)
+		"$$PURPLE$$Framebuffer pointer: $$BLACK$$0x%8X$$FG$$ \n", sys_framebuffer_addr;
+	else
+		"Framebuffer pointer: 0x%8X \n", sys_framebuffer_addr;
 
-	I64 i, count = 0;
+	I64 i, count = 0, div, aspect_w, aspect_h;
 	CVideoInfo *info;
 
 	"\nAll modes shown are 32-bit color.\n\n";
 
 	if (!IsRaw)
-		"$$LTCYAN$$ #    W  x   H$$FG$$\n\n";
+		"$$LTCYAN$$ #    W  x   H     Aspect Ratio$$FG$$\n\n";
 	else
-		"#\t\t  W  x   H\n\n";
+		"  #\t\t  W  x   H     Aspect Ratio\n\n";
 
 	for (i = 0; i < VBE_MODES_NUM; i++)
 	{
 		info = &sys_framebuffer_list[i];
 		if (info->height)
 		{
+			// Determine aspect ratio
+			aspect_w = info->width;
+			aspect_h = info->height;
+			div = 2;
+			while (TRUE)
+			{
+				while (aspect_w % div == 0 && aspect_h % div == 0)
+				{
+					aspect_w /= div;
+					aspect_h /= div;
+					//reset div
+					div = 2;
+				}
+				div++;
+				if (div >= aspect_h || div >= aspect_w)
+					break;
+			}
 
 			if (!IsRaw)
 				"$$PURPLE$$ $$BT+X,\"%d\",LM=\"%d\\n\"$$$$FG$$$$LM,4$$", i+1, i+1;
@@ -29,16 +49,16 @@ public I64 VideoRep()
 			if (info->width == sys_framebuffer_width && info->height == sys_framebuffer_height)
 			{
 				if (!IsRaw)
-					"$$RED$$%4d x %4d (Current resolution)$$FG$$$$LM,0$$", info->width, info->height;
+					"$$RED$$%4d x %4d   %0.3f =%4d:%d (Current resolution)$$FG$$$$LM,0$$", info->width, info->height,  aspect_w / ToF64(aspect_h), aspect_w, aspect_h;
 				else
-					"%4d x %4d (Current resolution)", info->width, info->height;
+					"%4d x %4d   %0.3f =%4d:%d (Current resolution)", info->width, info->height,  aspect_w / ToF64(aspect_h), aspect_w, aspect_h;
 			}
 			else
 			{
 				if (!IsRaw)
-					"$$BLACK$$%4d x %4d $$FG$$$$LM,0$$", info->width, info->height;
+					"$$BLACK$$%4d x %4d$$FG$$   %0.3f =%4d:%d $$LM,0$$", info->width, info->height,  aspect_w / ToF64(aspect_h), aspect_w, aspect_h;
 				else
-					"%4d x %4d ", info->width, info->height;
+					"%4d x %4d   %0.3f =%4d:%d ", info->width, info->height,  aspect_w / ToF64(aspect_h), aspect_w, aspect_h;
 			}
 
 			"\n\n\n";
