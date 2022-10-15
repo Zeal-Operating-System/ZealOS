@@ -88,6 +88,13 @@ struct CSysLimitBase {
     uint8_t *base;
 } __attribute__((packed));
 
+struct CVideoInfo {
+    uint16_t width;
+    uint16_t height;
+} __attribute__((packed));
+
+#define VBE_MODES_NUM 32
+
 struct CKernel {
     struct CZXE h;
     uint32_t jmp;
@@ -113,6 +120,7 @@ struct CKernel {
     uint64_t sys_disk_uuid[2];
 	uint32_t sys_boot_stack;
 	uint8_t sys_is_uefi_booted;
+	struct CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
 } __attribute__((packed));
 
 #define BOOT_SRC_RAM 2
@@ -189,6 +197,18 @@ void _start(void) {
     kernel->sys_framebuffer_height = fb->height;
     kernel->sys_framebuffer_bpp = fb->bpp;
     kernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
+
+    struct limine_video_mode *mode;
+    for (size_t i = 0, j = 0; i < fb->mode_count && i < VBE_MODES_NUM; i++)
+    {
+        mode = fb->modes[i];
+        if (mode->bpp == 32)
+        {
+            kernel->sys_framebuffer_list[j].height = mode->height;
+            kernel->sys_framebuffer_list[j].width = mode->width;
+            j++;
+        }
+    }
 
     void *entry_point; // to CORE0_32BIT_INIT
     for (uint64_t *p = (uint64_t *)kernel; ; p++) {

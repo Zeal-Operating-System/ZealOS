@@ -39,7 +39,7 @@ umount_tempdisk() {
 
 set -e
 echo "Building ZealBooter..."
-( cd ../zealbooter && make clean all )
+( cd ../zealbooter && make distclean all )
 set +e
 
 echo "Making temp vdisk, running auto-install ..."

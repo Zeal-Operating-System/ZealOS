@@ -571,7 +571,7 @@ class CKernel
 	U64				sys_disk_uuid[2];
 	U32				sys_boot_stack;
 	Bool			sys_is_uefi_booted;
-//	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
+	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
 };
 
 //Run-Levels

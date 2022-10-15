@@ -64,7 +64,10 @@ SYS_BOOT_STACK::	DU32	BOOT_RAM_LIMIT;
 
 SYS_IS_UEFI_BOOTED::    DU8    0;
 
-//SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
+SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
+// TODO: after placing this here, Ctrl-Alt-Shift-Z to un-zoom the screen
+// causes a General Protection at &GrUpdateScreen32+0x89 with 
+// RAX 0x00E2C4A686A4C2E1, RSI all 0F repeated, and RDI 0x0FF1D3B595B3D1F0
 
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
@@ -75,8 +78,6 @@ VBE_TEMP_MODE:		DU8 	sizeof(CVBEMode)	DUP(0);
 VBE_INFO:			DU8 	sizeof(CVBEInfo)	DUP(0);
 VBE_FINAL_MODE_NUM:	DU16	0; // gets set to final result mode number
 VBE_STD_MODE_NUM:	DU16	0; // gets set to mode number for standard 1024x768
-
-SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
 
 //************************************
 CORE0_16BIT_INIT::
