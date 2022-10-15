@@ -253,11 +253,11 @@ public U0 MemBIOSRep()
 	"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n";
 
 	if (!IsRaw)
-		"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n";
+		"$$PURPLE$$Linear Framebuffer$$FG$$\n";
 	else
-		"VBE Linear Framebuffer\n";
+		"Linear Framebuffer\n";
 
-	"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;
+	"%08X-%08X  \n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;
 
 	if (!IsRaw)
 		"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
