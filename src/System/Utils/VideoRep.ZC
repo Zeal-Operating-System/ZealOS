@@ -1,15 +1,14 @@
 
 public I64 VideoRep()
-{ // List available screen resolutions. 
+{ // List available screen resolutions, show current resolution.
+	I64			i, count = 0, div, aspect_w, aspect_h;
+	CVideoInfo *info;
 
 	"\n";
 	if (!IsRaw)
 		"$$PURPLE$$Framebuffer pointer: $$BLACK$$0x%8X$$FG$$ \n", sys_framebuffer_addr;
 	else
 		"Framebuffer pointer: 0x%8X \n", sys_framebuffer_addr;
-
-	I64 i, count = 0, div, aspect_w, aspect_h;
-	CVideoInfo *info;
 
 	"\nAll modes shown are 32-bit color.\n\n";
 
