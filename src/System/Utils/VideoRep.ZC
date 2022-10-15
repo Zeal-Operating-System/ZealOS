@@ -48,5 +48,3 @@ public I64 VideoRep()
 
 	return count;
 }
-
-VideoRep;
