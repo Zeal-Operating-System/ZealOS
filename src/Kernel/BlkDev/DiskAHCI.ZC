@@ -229,8 +229,7 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 
 	while (TRUE)
 	{
-//		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
-		if (!(port->cmd_issue & (1 << cmd_slot))) //When command has been processed (using & and 1 << for debug)
+		if (!Bt(&port->cmd_issue, cmd_slot)) //When command has been processed
 			break;
 
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
@@ -288,8 +287,7 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 	cmd_table->acmd[0]	= ATAPI_READ_CAPACITY >> 8;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -511,8 +509,7 @@ Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 	cmd_table->acmd[4]	= start;
 
 	AHCIPortWait(bd->port_num, tS + 2);
-//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 
 	try
 		AHCIPortCmdWait(bd->port_num, cmd_slot);
@@ -586,8 +583,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 
-//	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
@@ -660,16 +656,11 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	buf_size = buf_size_tmp = count * BLK_SIZE;
 	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
 
-//	"PRDT Length:\t%d\n", prdt_len;
-//	"Count:\t\t\t%d\n", count;
-//	"Buffer size:\t%X\n", buf_size;
-
 	cmd_header->prdt_len = prdt_len; //Set PRD table length in cmd header.
 	//Set 'write' bit depending on 'write' argument.
 	BEqual(&cmd_header->desc, AHCI_CH_DESCf_W, write);
 
 	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, write);
-//	"Buffer:\t\t\t0x%X\n", internal_buf;
 
 	if (!internal_buf) throw('AHCI'); //Will probably never happen.
 
@@ -684,9 +675,6 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 			byte_count = AHCI_PRD_MAX_BYTES;
 		else
 			byte_count = buf_size_tmp;
-
-//		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
-//		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
 
 		cmd_table->prdt[i].data_base = internal_buf_tmp;
 		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
@@ -717,8 +705,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	//Wait on previous command to complete.
 	AHCIPortWait(bd->port_num, tS + 2);
 	//Issue the command.
-//	Bts(&port->cmd_issue, cmd_slot);
-	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+	Bts(&port->cmd_issue, cmd_slot);
 	//Wait on command to finish.
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
@@ -742,20 +729,16 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		return 0;
 	if (count <= AHCI_PRDT_MAX_BLOCKS)
 	{
-//		"$$GREEN$$READ less than MAX_BLOCKS$$FG$$\n";
 		return AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
 	else
 	{
-//		"$$GREEN$$READ greater than MAX_BLOCKS\n";
-//		"read count: %d\n$$FG$$", count;
 		while (count > AHCI_PRDT_MAX_BLOCKS)
 		{
 			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, FALSE);
 			count -= AHCI_PRDT_MAX_BLOCKS;
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
-//			"$$GREEN$$read count: %d\n$$FG$$", count;
 		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
@@ -773,20 +756,16 @@ I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		return 0;
 	if (count <= AHCI_PRDT_MAX_BLOCKS)
 	{
-//		"$$GREEN$$WRITE less than MAX_BLOCKS$$FG$$\n";
 		return AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
 	}
 	else
 	{
-//		"$$GREEN$$WRITE greater than MAX_BLOCKS\n";
-//		"write count: %d$$FG$$\n", count;
 		while (count > AHCI_PRDT_MAX_BLOCKS)
 		{
 			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, TRUE);
 			count -= AHCI_PRDT_MAX_BLOCKS;
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
-//			"$$GREEN$$write count: %d\n$$FG$$\n", count;
 		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
 	}
@@ -819,14 +798,9 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 	buf_size = buf_size_tmp = count * DVD_BLK_SIZE;
 	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
 
-//	"PRDT Length:\t%d\n", prdt_len;
-//	"Count:\t\t\t%d\n", count;
-//	"Buffer size:\t%X\n", buf_size;
-
 	cmd_header->prdt_len = prdt_len;
 
 	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, FALSE);
-//	"Buffer:\t\t\t0x%X\n", internal_buf;
 
 	if (!internal_buf) throw('AHCI');
 
@@ -842,8 +816,6 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 		else
 			byte_count = buf_size_tmp;
 
-//		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
-//		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
 		cmd_table->prdt[i].data_base = internal_buf_tmp;
 		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
 
@@ -870,8 +842,7 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	
-//	Bts(&port->cmd_issue, cmd_slot);
-	port->cmd_issue |= 1 << cmd_slot; //issue the command with |= for debug sake
+	Bts(&port->cmd_issue, cmd_slot);
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 	
 	if (bd->flags & BDF_INTERNAL_BUF)
@@ -1119,8 +1090,7 @@ U0 AHCIInit()
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-//		if (Bt(&hba->ports_implemented, i))
-		if (hba->ports_implemented & (1 << i))
+		if (Bt(&hba->ports_implemented, i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
 			"AHCI: Port %2d signature 0x%08X ", i, port->signature;
@@ -1158,8 +1128,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-//		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
-		if (blkdev.ahci_hba->ports_implemented & (1 << i))
+		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			"AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n", i, port->signature;
