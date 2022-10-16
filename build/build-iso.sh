@@ -112,6 +112,8 @@ cp $TMPMOUNT/Tmp/MyDistro.ISO.C ./ZealOS-MyDistro.iso
 sudo rm $TMPMOUNT/Tmp/MyDistro.ISO.C 2> /dev/null
 echo "Setting up temp ISO directory contents for use with limine xorriso command ..."
 sudo cp -rf $TMPMOUNT/* $TMPISODIR
+sudo rm $TMPISODIR/Boot/OldMBR.BIN 2> /dev/null
+sudo rm $TMPISODIR/Boot/BootMHD2.BIN 2> /dev/null
 sudo mkdir -p $TMPISODIR/EFI/BOOT
 sudo cp limine/Limine-HDD.HH $TMPISODIR/Boot/Limine-HDD.HH
 sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
