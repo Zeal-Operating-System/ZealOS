@@ -13,7 +13,11 @@ public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and co
 //public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
 //public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
 
-// TODO FIXME DEBUG: fix ICBitOps bugs when using on bare metal into PCI device memory-mapped areas
+// TODO FIXME DEBUG: Fix ICBitOps bugs when using on bare metal into PCI device memory-mapped areas.
+//                   Temporarily manually defining functions for Bt, Btr, and Bts below.
+// (certain Bt(), Btr(), and Bts() on AHCI memory areas using variable (reg, not imm) bit param
+//  caused strange crashes on a Ryzen with Gigabyte brand motherboard, all PCI devices AMD brand.
+//	Bit test compiler implementation needs to be researched to fix those bugs.)
 
 Bool Bt(U8 *bit_field, I64 bit)
 {
