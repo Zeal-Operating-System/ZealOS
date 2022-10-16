@@ -10,6 +10,9 @@
 "$$DKGRAY$$ZealOS Boot Loader is written in public-domain ZealC, but only supports BIOS mode.\n\n" \
 "Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
 
+// TODO FIXME: refactor OSUpgrade code into optional Diff prompt to compare ISO<->HDD before Install.
+// (also test to ensure that Installs to existing installations don't remove existing untracked files)
+
 CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 {
 	while (haystack_list)
@@ -445,15 +448,15 @@ Bool DoInstall(Bool prompt_reboot)
 	DocBottom;
 	if (vm_install)
 	{
-		"\n\nUpgrade an existing install,"
-		"\nor create new Installation? (U/I): ";
-		do
-			ch = ToUpper(CharGet(, FALSE));
-		while (ch != 'U' && ch != 'I');
+//		"\n\nUpgrade an existing install,"
+//		"\nor create new Installation? (U/I): ";
+//		do
+//			ch = ToUpper(CharGet(, FALSE));
+//		while (ch != 'U' && ch != 'I');
 
-		if (ch == 'U')
-			OSUpgrade;
-		else
+//		if (ch == 'U')
+//			OSUpgrade;
+//		else
 			VMInstallWiz();
 
 		res = TRUE;
@@ -465,22 +468,22 @@ Bool DoInstall(Bool prompt_reboot)
 				"Continue Install Wizard ";
 		if (YorN)
 		{
-			"\n\nUpgrade an existing install,"
-			"\nor create new Installation? (U/I): ";
-			do
-				ch = ToUpper(CharGet(, FALSE));
-			while (ch != 'U' && ch != 'I');
+//			"\n\nUpgrade an existing install,"
+//			"\nor create new Installation? (U/I): ";
+//			do
+//				ch = ToUpper(CharGet(, FALSE));
+//			while (ch != 'U' && ch != 'I');
 
-			if (ch == 'I')
-			{
+//			if (ch == 'I')
+//			{
 				RegularInstallWiz();
 				res = TRUE;
-			}
-			else
-			{
-				OSUpgrade;
-				res = TRUE;
-			}
+//			}
+//			else
+//			{
+//				OSUpgrade;
+//				res = TRUE;
+//			}
 		}
 		else
 			prompt_reboot = FALSE;
