@@ -206,6 +206,10 @@ U0 InstallDrive(U8 drv_let)
 	Sleep(1000);
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
+
+	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", drv_let);
+
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
 	ExePrint("DirMake(\"%C:/Home\");",				drv_let);
