@@ -2,6 +2,7 @@
 *.bin
 *.ZXE
 *.MAP
+src/Boot/
 *.ELF
 *.elf
 *.sys
