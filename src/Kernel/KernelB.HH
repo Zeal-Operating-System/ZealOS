@@ -8,10 +8,46 @@ $LK,"KernelB",A="FF:::/StartOS.ZC,KernelB"$ StartOS.ZC
 #help_file "::/Doc/Bit"
 public _intern IC_BSF				I64	 Bsf(I64 bit_field_val); //Scan forward from lowest for 1st set. -1 if not found.
 public _intern IC_BSR				I64  Bsr(I64 bit_field_val); //Scan rev from highest for 1st set. -1 if not found.
-public _intern IC_BT				Bool Bt(		  U8 *bit_field, I64 bit); //Bit test.
+//public _intern IC_BT				Bool Bt(		  U8 *bit_field, I64 bit); //Bit test.
 public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and complement (same as xor with 1).
-public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
-public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
+//public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
+//public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
+
+// TODO FIXME DEBUG: fix ICBitOps bugs when using on bare metal into PCI device memory-mapped areas
+
+Bool Bt(U8 *bit_field, I64 bit)
+{
+	U32 *chunk = bit_field;
+	chunk += (bit / 32);
+	U64 chunk_bit = 1 << (bit % 32);
+
+	return (*chunk & chunk_bit) >> (bit % 32);
+}
+
+Bool Btr(U8 *bit_field, I64 bit)
+{
+	U32 *chunk = bit_field;
+	chunk += (bit / 32);
+	U64 chunk_bit = 1 << (bit % 32);
+	Bool result  = (*chunk & chunk_bit) >> (bit % 32);
+
+	*chunk &= ~(chunk_bit);
+
+	return result;
+}
+
+Bool Bts(U8 *bit_field, I64 bit)
+{
+	U32 *chunk = bit_field;
+	chunk += (bit / 32);
+	U64 chunk_bit = 1 << (bit % 32);
+	Bool result = (*chunk & chunk_bit) >> (bit % 32);
+
+	*chunk |= chunk_bit;
+
+	return result;
+}
+
 public _intern IC_LBTC				Bool LBtc(		  U8 *bit_field, I64 bit); //Locked bit test and complement (xor with 1).
 public _intern IC_LBTR				Bool LBtr(		  U8 *bit_field, I64 bit); //Locked bit test and reset to zero.
 public _intern IC_LBTS				Bool LBts(		  U8 *bit_field, I64 bit); //Locked bit test and set to one.
