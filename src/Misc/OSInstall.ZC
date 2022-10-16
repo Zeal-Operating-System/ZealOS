@@ -209,6 +209,7 @@ U0 InstallDrive(U8 drv_let)
 
 	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", drv_let);
 	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/boot.catalog\");", drv_let);
 
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
