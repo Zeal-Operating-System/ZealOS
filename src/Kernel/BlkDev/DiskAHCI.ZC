@@ -7,10 +7,12 @@
 
 - AHCIATAPISetMaxSpeed needs to be implemented
 
-- TODO FIXME: certain Bt() and Bts() on AHCI memory areas, and variable casting,
-	caused strange crashes on a Ryzen with Gigabyte brand motherboard. Bit test
-	function implementation and compiler casting internal functionality need
-	to be researched to fix those bugs.
+- TODO FIXME: Variable casting into AHCI memory-mapped areas caused strange crashes
+	on a Ryzen with Gigabyte brand motherboard, all PCI devices AMD brand.
+	Compiler casting internal functionality needs to be researched to fix those bugs.
+	Example line that caused crashes with Page Faults and bad memory address on Ryzen:
+		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
+
 */
 
 I64 AHCI_DEBUG = FALSE;
@@ -584,7 +586,6 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	AHCIPortWait(bd->port_num, tS + 2);
 
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-
 	AHCIPortCmdWait(bd->port_num, cmd_slot);
 
 	Free(bd->dev_id_record);
