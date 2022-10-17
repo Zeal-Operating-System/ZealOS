@@ -17,7 +17,7 @@ fi
 #alias sudo=doas 
 
 # Set this true if you want to test ISOs in QEMU after building.
-$TESTING = false
+TESTING = false
 
 TMPDIR="/tmp/zealtmp"
 TMPISODIR="$TMPDIR/iso"
