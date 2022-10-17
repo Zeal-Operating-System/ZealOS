@@ -16,6 +16,9 @@ fi
 # Uncomment if you use doas instead of sudo
 #alias sudo=doas 
 
+# Set this true if you want to test ISOs in QEMU after building.
+$TESTING = false
+
 TMPDIR="/tmp/zealtmp"
 TMPISODIR="$TMPDIR/iso"
 TMPDISK="$TMPDIR/ZealOS.raw"
@@ -135,22 +138,22 @@ xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-CD.BIN \
 
 ./limine/limine-deploy ZealOS-limine.iso
 
-if [ ! -d "ovmf" ]; then
-    echo "Downloading OVMF..."
-    mkdir ovmf
-    cd ovmf
-    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
-    7z x OVMF-X64.zip
-    cd ..
+if [ "$TESTING" = true ]; then
+	if [ ! -d "ovmf" ]; then
+	    echo "Downloading OVMF..."
+	    mkdir ovmf
+	    cd ovmf
+	    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
+	    7z x OVMF-X64.zip
+	    cd ..
+	fi
+	echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
+	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
+	echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
+	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
+	echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."
+	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
 fi
-
-echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
-qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
-echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
-qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
-
-echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."
-qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
 
 # comment these 2 lines if you want lingering old Distro ISOs
 rm ./ZealOS-PublicDomain-BIOS-*.iso 2> /dev/null
