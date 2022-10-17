@@ -127,15 +127,13 @@ sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
 sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
 umount_tempdisk
 
-sudo ls $TMPISODIR -al
-
 xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-CD.BIN \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
         --efi-boot Boot/Limine-CD-EFI.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
-        $TMPISODIR -o ZealOS-UEFI-limine-dev.iso
+        $TMPISODIR -o ZealOS-limine.iso
 
-./limine/limine-deploy ZealOS-UEFI-limine-dev.iso
+./limine/limine-deploy ZealOS-limine.iso
 
 if [ ! -d "ovmf" ]; then
     echo "Downloading OVMF..."
@@ -147,17 +145,25 @@ if [ ! -d "ovmf" ]; then
 fi
 
 echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
-qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-UEFI-limine-dev.iso
+qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
 echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
-qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-UEFI-limine-dev.iso
+qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
 
 echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."
 qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
 
-rm ./ZealOS-2*.iso 2> /dev/null # comment this line if you want lingering old Distro ISOs
-mv ./ZealOS-MyDistro.iso ./ZealOS-$(date +%Y-%m-%d-%H_%M_%S).iso
+# comment these 2 lines if you want lingering old Distro ISOs
+rm ./ZealOS-PublicDomain-BIOS-*.iso 2> /dev/null
+rm ./ZealOS-BSD2-UEFI-*.iso 2> /dev/null
+
+mv ./ZealOS-MyDistro.iso ./ZealOS-PublicDomain-BIOS-$(date +%Y-%m-%d-%H_%M_%S).iso
+mv ./ZealOS-limine.iso ./ZealOS-BSD2-UEFI-$(date +%Y-%m-%d-%H_%M_%S).iso
 
 echo "Deleting temp folder ..."
 sudo rm -rf $TMPDIR
 sudo rm -rf $TMPISODIR
 echo "Finished."
+echo
+echo "ISOs built:"
+ls | grep ZealOS-
+echo
