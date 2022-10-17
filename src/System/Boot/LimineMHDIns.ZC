@@ -19,6 +19,7 @@ Bool LimineCFGMake(U8 drv_let)
 	CBlkDev	*bd;
 	I64		 i;
 	U8		*filename_sys, *filename_elf, *filename_zxe, *st;
+
 	// Limine interface settings
 	DocPrint(doc,
 		"TIMEOUT=2\n"
@@ -26,36 +27,45 @@ Bool LimineCFGMake(U8 drv_let)
 
 	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
 	{
-		if (drive->drive_signature == DRIVE_SIGNATURE_VAL)
+		if (drive->drive_signature == DRIVE_SIGNATURE_VAL && drive->fs_type == FSt_FAT32 && DriveIsWritable(drive->drv_let))
 		{
 			bd = drive->bd;
 			drv_let = Drive2Letter(drive);
 
-			if (DriveIsWritable(drv_let) && drive->fs_type == FSt_FAT32)
+			filename_sys = MStrPrint("%C:/Boot/Limine.SYS", drv_let);
+			filename_elf = MStrPrint("%C:/Boot/ZealBooter.ELF", drv_let);
+			filename_zxe = MStrPrint("%C:/Boot/Kernel.ZXE", drv_let);
+			if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))
 			{
-				filename_sys = MStrPrint("%C:/Boot/Limine.SYS", drv_let);
-				filename_elf = MStrPrint("%C:/Boot/ZealBooter.ELF", drv_let);
-				filename_zxe = MStrPrint("%C:/Boot/Kernel.ZXE", drv_let);
-				if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))
-				{
-					st = MStrPrint(":ZealOS %C:/\n"
-						"PROTOCOL=limine\n"
-						"RESOLUTION=1024x768\n"
-						"KERNEL_PATH=boot://%d/Boot/ZealBooter.ELF\n"
-						"MODULE_PATH=boot://%d/Boot/Kernel.ZXE\n"
-						"\n", drv_let, drive->prt_num + 1, drive->prt_num + 1);
+				st = MStrPrint(":ZealOS %C:/\n"
+					"PROTOCOL=limine\n"
+					"RESOLUTION=1024x768\n"
+					"KERNEL_PATH=boot://%d/Boot/ZealBooter.ELF\n"
+					"MODULE_PATH=boot://%d/Boot/Kernel.ZXE\n"
+					"\n", drv_let, drive->prt_num + 1, drive->prt_num + 1);
 
-					DocPrint(doc, st);
+				DocPrint(doc, st);
 
-				}
-				else
-					"\n%C:/ drive is missing Limine bootloader files.\n", drv_let;
+			}
+			else
+				"\n%C:/ drive is missing Limine bootloader files.\n", drv_let;
+		}
+	}
+	DocWrite(doc);
+	DocDel(doc);
+
+	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
+	{
+		if (drive->drive_signature == DRIVE_SIGNATURE_VAL && drive->fs_type == FSt_FAT32 && DriveIsWritable(drive->drv_let))
+		{
+			drv_let = Drive2Letter(drive);
+			if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))
+			{
+				st = MStrPrint("%C:/Boot/Limine.CFG", drv_let);
+				Copy(filename_cfg, st);
 			}
 		}
 	}
-
-	DocWrite(doc);
-	DocDel(doc);
 
 	return TRUE;
 }
