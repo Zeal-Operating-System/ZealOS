@@ -6,7 +6,7 @@
 
 * Master/Slave MultiCore
 
-* Free, $FG,2$public domain$FG$, $FG,2$100% open source$FG$.
+* Free, $FG,2$public domain$FG$, $FG,2$100% open source$FG$ operating system code.
 
 * 64-bit $FG,2$compiler/assembler$FG$ for $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$.	Truly compiles, doesn't interpret.	$FG,2$Just-in-Time$FG$ and $FG,2$Ahead-of-Time$FG$ compilation.  With $FG,2$JIT$FG$, no need for object or exe files.
 
@@ -50,4 +50,4 @@
 
 * Many games, $LK,"demos",A="FI:::/Doc/DemoIndex.DD"$ and $LK,"documentation",A="FI:::/Doc/HelpIndex.DD"$.
 
-* $FG,2$All source code$FG$ included.  Only compiles with the included ZealOS compiler and assembler.
+* $FG,2$All operating system source code$FG$ included.  Only compiles with the included ZealOS compiler and assembler.
