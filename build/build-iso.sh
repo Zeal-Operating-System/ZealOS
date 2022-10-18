@@ -168,5 +168,6 @@ sudo rm -rf $TMPISODIR
 echo "Finished."
 echo
 echo "ISOs built:"
-ls | grep ZealOS-
+ls | grep ZealOS-P
+ls | grep ZealOS-B
 echo
