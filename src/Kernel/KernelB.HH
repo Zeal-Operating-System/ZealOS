@@ -19,11 +19,11 @@ public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and co
 //  caused strange crashes on a Ryzen with Gigabyte brand motherboard, all PCI devices AMD brand.
 //	Bit test compiler implementation needs to be researched to fix those bugs.)
 
-Bool Bt(U8 reg RBX *bit_field, I64 reg RCX bit)
+Bool Bt(U8 reg RBX *bit_field, I64 reg RDX bit)
 {
 	bit_field += bit / 8;
-	U64 reg RDX bit_mod = (bit & 7);
-	return (*bit_field & (1 << bit_mod)) >> bit_mod;
+	bit &= 7;
+	return (*bit_field & (1 << bit)) >> bit;
 }
 
 Bool Btr(U8 reg RDX *bit_field, I64 reg RBX bit)
