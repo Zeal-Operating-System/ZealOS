@@ -19,35 +19,33 @@ public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and co
 //  caused strange crashes on a Ryzen with Gigabyte brand motherboard, all PCI devices AMD brand.
 //	Bit test compiler implementation needs to be researched to fix those bugs.)
 
-Bool Bt(U8 *bit_field, I64 bit)
+Bool Bt(U8 reg RBX *bit_field, I64 reg RCX bit)
 {
-	U32 *chunk = bit_field;
-	chunk += (bit / 32);
-	U64 chunk_bit = 1 << (bit % 32);
-
-	return (*chunk & chunk_bit) >> (bit % 32);
+	bit_field += bit / 8;
+	U64 reg RDX bit_mod = (bit & 7);
+	return (*bit_field & (1 << bit_mod)) >> bit_mod;
 }
 
-Bool Btr(U8 *bit_field, I64 bit)
+Bool Btr(U8 reg RDX *bit_field, I64 reg RBX bit)
 {
-	U32 *chunk = bit_field;
-	chunk += (bit / 32);
-	U64 chunk_bit = 1 << (bit % 32);
-	Bool result  = (*chunk & chunk_bit) >> (bit % 32);
+	U64 reg R9 chunk_mod = (bit & 31);
+	U64 chunk_bit = 1 << chunk_mod;
+	bit_field(U32 *) += bit / 32;
+	Bool reg R8 result = (*(bit_field(U32 *)) & chunk_bit) >> chunk_mod;
 
-	*chunk &= ~(chunk_bit);
+	*(bit_field(U32 *)) &= ~(chunk_bit);
 
 	return result;
 }
 
-Bool Bts(U8 *bit_field, I64 bit)
+Bool Bts(U8 reg RDX *bit_field, I64 reg RBX bit)
 {
-	U32 *chunk = bit_field;
-	chunk += (bit / 32);
-	U64 chunk_bit = 1 << (bit % 32);
-	Bool result = (*chunk & chunk_bit) >> (bit % 32);
+	U64 reg R9 chunk_mod = (bit & 31);
+	U64 chunk_bit = 1 << chunk_mod;
+	bit_field(U32 *) += bit / 32;
+	Bool reg R8 result = (*(bit_field(U32 *)) & chunk_bit) >> chunk_mod;
 
-	*chunk |= chunk_bit;
+	*(bit_field(U32 *)) |= chunk_bit;
 
 	return result;
 }
