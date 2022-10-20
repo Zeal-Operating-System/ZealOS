@@ -57,7 +57,7 @@ Bool CopySingle(U8 *f1, U8 *f2) //Just one file
 			out_file = FOpen(f2, "w", count);
 		if (out_file)
 		{
-			"Copying %s to %s ", f1, f2;
+			"Copying %s to %s", f1, f2;
 			j = size;
 			while (count > 0)
 			{
@@ -65,7 +65,8 @@ Bool CopySingle(U8 *f1, U8 *f2) //Just one file
 				{
 					n = COPY_BUF_BLKS;
 					i = n << BLK_SIZE_BITS;
-					".";
+					if (size)
+						"\n [ %0.2f%% ]", 100 * ToF64(size - j) / size;
 				}
 				else
 				{
