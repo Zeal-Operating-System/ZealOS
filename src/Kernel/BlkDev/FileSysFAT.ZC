@@ -1045,8 +1045,7 @@ Bool FAT32MkDir(CDrive *drive, U8 *cur_dir, U8 *name, I64 entry_count)
 {
 	I64				 c, cur_dir_clus = Name2DirClus(drive, cur_dir), 
 					 //Rough estimate of size
-					 size = CeilU64((entry_count + 2) << FAT32_ENTRIES_BITS,
-					 drive->spc << BLK_SIZE_BITS);
+					 size = CeilU64((entry_count + 2) << FAT32_ENTRIES_BITS, drive->spc << BLK_SIZE_BITS);
 	U8				*buf = CAlloc(size);
 	CDirEntry		 d_native;
 	CFAT32DirEntry	*dFAT = buf;
