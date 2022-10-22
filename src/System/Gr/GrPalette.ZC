@@ -20,7 +20,7 @@ public CBGR24 gr32_palette_std[COLORS_NUM] = {
 };
 
 public U0 PaletteSetStd(Bool persistent=TRUE)
-{//Activate std palette.
+{//Activate standard palette.
 	GrPaletteSet(gr32_palette_std);
 	LFBFlush;
 	if (persistent)
@@ -80,11 +80,11 @@ public U0 PaletteSetSlate(Bool persistent=TRUE)
 }
 //********************************************************************************
 public CBGR24 gr_palette_commander[COLORS_NUM] = {
-	0xFFFFFF, 0x867ADE, 0x00CC55, 0x5A878B, 0xEE0000, 0xCC44CC, 0xDD8855, 0xBBBBBB,
-	0x777777, 0x009BFF, 0xAAFF66, 0xAAFFEE, 0xFF7777, 0xCA94E8, 0xEEEE77, 0x483AAA
+	0xFFFFFF, 0x867ADE, 0x00CC55, 0x5A878B, 0xFF0000, 0xCC44CC, 0xDD8855, 0xE1E1E2,
+	0x777777, 0x009BFF, 0xAAFF66, 0xAAFFEE, 0xFF7777, 0xCA94E8, 0xEEEE77, 0x483AA7
 };
 public U0 PaletteSetCommander(Bool persistent=TRUE)
-{//Activate Slate palette.
+{//Activate Commander palette.
 	GrPaletteSet(gr_palette_commander);
 	LFBFlush;
 	if (persistent)
