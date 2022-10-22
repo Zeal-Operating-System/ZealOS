@@ -8,47 +8,10 @@ $LK,"KernelB",A="FF:::/StartOS.ZC,KernelB"$ StartOS.ZC
 #help_file "::/Doc/Bit"
 public _intern IC_BSF				I64	 Bsf(I64 bit_field_val); //Scan forward from lowest for 1st set. -1 if not found.
 public _intern IC_BSR				I64  Bsr(I64 bit_field_val); //Scan rev from highest for 1st set. -1 if not found.
-//public _intern IC_BT				Bool Bt(		  U8 *bit_field, I64 bit); //Bit test.
+public _intern IC_BT				Bool Bt(		  U8 *bit_field, I64 bit); //Bit test.
 public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and complement (same as xor with 1).
-//public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
-//public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
-
-// TODO FIXME DEBUG: Fix ICBitOps bugs when using on bare metal into PCI device memory-mapped areas.
-//                   Temporarily manually defining functions for Bt, Btr, and Bts below.
-// (certain Bt(), Btr(), and Bts() on AHCI memory areas using variable (reg, not imm) bit param
-//  caused strange crashes on a Ryzen with Gigabyte brand motherboard, all PCI devices AMD brand.
-//	Bit test compiler implementation needs to be researched to fix those bugs.)
-
-Bool Bt(U8 reg RBX *bit_field, I64 reg RDX bit)
-{
-	bit_field += bit / 8;
-	bit &= 7;
-	return (*bit_field & (1 << bit)) >> bit;
-}
-
-Bool Btr(U8 reg RDX *bit_field, I64 reg RBX bit)
-{
-	U64 reg R9 chunk_mod = (bit & 31);
-	U64 chunk_bit = 1 << chunk_mod;
-	bit_field(U32 *) += bit / 32;
-	Bool reg R8 result = (*(bit_field(U32 *)) & chunk_bit) >> chunk_mod;
-
-	*(bit_field(U32 *)) &= ~(chunk_bit);
-
-	return result;
-}
-
-Bool Bts(U8 reg RDX *bit_field, I64 reg RBX bit)
-{
-	U64 reg R9 chunk_mod = (bit & 31);
-	U64 chunk_bit = 1 << chunk_mod;
-	bit_field(U32 *) += bit / 32;
-	Bool reg R8 result = (*(bit_field(U32 *)) & chunk_bit) >> chunk_mod;
-
-	*(bit_field(U32 *)) |= chunk_bit;
-
-	return result;
-}
+public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
+public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
 
 public _intern IC_LBTC				Bool LBtc(		  U8 *bit_field, I64 bit); //Locked bit test and complement (xor with 1).
 public _intern IC_LBTR				Bool LBtr(		  U8 *bit_field, I64 bit); //Locked bit test and reset to zero.

@@ -199,7 +199,7 @@ U0 PCNetSWStyleSet()
 
 	csr &= ~0xFF; // clears first 8 bits: SWSTYLE 8-bit register.
 	csr |= PCNET_SWSTYLE_SELECTION; // set SWSTYLE to PCNet-PCI mode.
-	Bts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
+	PCIBts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
 
 	PCNetCSRWrite(PCNET_CSR_SOFTWARESTYLE, csr);
 }
@@ -239,7 +239,7 @@ U0 PCNetDescriptorEntryInit(CPCNetDescriptorEntry *entry, U32 buffer_address, I6
 
 	//if this is a Receive DE, give ownership to the card so the PCNet can fill them.
 	if (is_rx)
-		Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
+		PCIBts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 }
 
 U0 PCNetBuffersAllocate()
@@ -397,11 +397,11 @@ U0 PCNetInterruptCSRSet()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_INTERRUPTS);
 
-	Btr(&csr, PCNET_INT_BSWP);
-	Btr(&csr, PCNET_INT_RINTM);
+	PCIBtr(&csr, PCNET_INT_BSWP);
+	PCIBtr(&csr, PCNET_INT_RINTM);
 
-	Bts(&csr, PCNET_INT_IDONM);
-	Bts(&csr, PCNET_INT_TINTM);
+	PCIBts(&csr, PCNET_INT_IDONM);
+	PCIBts(&csr, PCNET_INT_TINTM);
 	
 	PCNetCSRWrite(PCNET_CSR_INTERRUPTS, csr);
 }
@@ -414,7 +414,7 @@ U0 PCNetTXAutoPadEnable()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
 
-	Bts(&csr, PCNET_FEATURE_APADXMT);
+	PCIBts(&csr, PCNET_FEATURE_APADXMT);
 
 	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
 }
@@ -429,10 +429,10 @@ U0 PCNetConfigModeExit()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	Btr(&csr, PCNET_CTRL_INIT);
-	Btr(&csr, PCNET_CTRL_STOP);
+	PCIBtr(&csr, PCNET_CTRL_INIT);
+	PCIBtr(&csr, PCNET_CTRL_STOP);
 
-	Bts(&csr, PCNET_CTRL_STRT);
+	PCIBts(&csr, PCNET_CTRL_STRT);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 }
@@ -442,7 +442,7 @@ I64 PCNetDriverOwns(CPCNetDescriptorEntry* entry)
 	Descriptor Entry is zero. If 0, driver owns,
 	if 1, PCNet card owns it. */
 
-	return !Bt(&entry->status1, PCNET_DESCRIPTORf_OWN);
+	return !PCIBt(&entry->status1, PCNET_DESCRIPTORf_OWN);
 }
 
 I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
@@ -474,9 +474,9 @@ I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 		NetLog("PCNET ALLOCATE TX PACKET: Driver owns TX DE at index %d.", de_index);
 	}
 
-	Bts(&entry->status1, PCNET_DESCRIPTORf_STP);
+	PCIBts(&entry->status1, PCNET_DESCRIPTORf_STP);
 
-	Bts(&entry->status1, PCNET_DESCRIPTORf_ENP);
+	PCIBts(&entry->status1, PCNET_DESCRIPTORf_ENP);
 
 	/*	AMD PCNet datasheet p.1-991.
 		BCNT is the usable buffer length, expressed as first
@@ -507,9 +507,9 @@ U0 PCNetTransmitPacketFinish(I64 de_index)
 
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
-	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
+	PCIBts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 	NetLog("PCNET FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.",
-				de_index, Bt(&entry->status1, PCNET_DESCRIPTORf_OWN));
+				de_index, PCIBt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
 U0 EthernetFrameFinish(I64 de_index)
@@ -553,7 +553,7 @@ U0 PCNetReceivePacketRelease(I64 de_index)
 
 	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
-	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
+	PCIBts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 }
 
 interrupt U0 PCNetIRQ()
@@ -586,7 +586,7 @@ interrupt U0 PCNetIRQ()
 			PCNetReceivePacketRelease(de_index);
 		}
 
-		Bts(&csr, PCNET_CTRL_RINT);
+		PCIBts(&csr, PCNET_CTRL_RINT);
 
 		PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
@@ -649,10 +649,10 @@ U0 PCNetInit()
 	PCNet32BitModeEnable;
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT START: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT START: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT START: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT START: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT START: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT START: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT START: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT START: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
 
 
 	PCNetSWStyleSet;
@@ -672,10 +672,10 @@ U0 PCNetInit()
 	PCNetCSRWrite(0, PCNetCSRRead(0) | 1 | 1 << 6); // ?
 
 	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
 
 	while (!(PCNetCSRRead(0) & 1 << 8)) // ?
 		Yield;
@@ -685,15 +685,15 @@ U0 PCNetInit()
 	Sleep(100); //? necessary?
 
 	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT END: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT END: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT END: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT END: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
-	NetLog("PCNET INIT END: what is TXON ?: %d", Bt(&csr, 4));
-	NetLog("PCNET INIT END: what is RXON ?: %d", Bt(&csr, 5));
+	NetLog("PCNET INIT END: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT END: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT END: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT END: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is TXON ?: %d", PCIBt(&csr, 4));
+	NetLog("PCNET INIT END: what is RXON ?: %d", PCIBt(&csr, 5));
 
 	csr =  PCNetCSRRead(PCNET_CSR_POLLINT);
-	NetLog("PCNET INIT END: what is POLLINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is POLLINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
 
 	NetLog("PCNET INIT END: Redirecting interrupts.");
 	PCNetInterruptsSetup;
@@ -751,7 +751,7 @@ U0 NetStop()
 { // Halt network activity by setting STOP bit on Status CSR.
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	Bts(&csr, PCNET_CTRL_STOP);
+	PCIBts(&csr, PCNET_CTRL_STOP);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
@@ -761,7 +761,7 @@ U0 NetStart()
 { // Continue network activity. Setting START bit clears STOP/INIT.
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	Bts(&csr, PCNET_CTRL_STRT);
+	PCIBts(&csr, PCNET_CTRL_STRT);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 }
