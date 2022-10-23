@@ -25,7 +25,7 @@ CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 	return NULL;
 }
 
-U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 *_df_flags, Bool auto)
+U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_df_flags)
 {
 	CDirEntry	*tmpde;
 	U8			*new;
@@ -44,23 +44,24 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 		else
 		{
 			if (tmpde1->attr & RS_ATTR_DIR)
-				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _fuf_flags, _df_flags, auto);
+				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _df_flags);
 			else
 			{
-				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) {//slop
+//				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) //slop
+//				{
 					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
 					"$$LTGREEN$$%s$$FG$$\n", tmpde1->full_name;
-					if (Bt(_fuf_flags, FUf_DIFF))
-					{
+//					if (Bt(_fuf_flags, FUf_DIFF))
+//					{
 						if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
 						{
-							if (!auto)
+//							if (!auto)
 								Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
-							else
-								Copy(tmpde1->full_name, tmpde->full_name);
+//							else
+//								Copy(tmpde1->full_name, tmpde->full_name);
 						}
-					}
-				}
+//					}
+//				}
 			}
 		}
 		tmpde1 = tmpde1->next;
@@ -69,9 +70,10 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 
 U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *fu_flags=NULL)
 { // See $LK+PU,"Merge",A="FF:::/System/Utils/Merge.ZC,public U0 Merge"$.
-	I64			 df_flags = 0, fuf_flags = 0, ch;
+	I64			 df_flags, fuf_flags = 0;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 
+	df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE;
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r");
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
 	if (fuf_flags & ~(FUG_FILES_FIND | FUF_DIFF))
@@ -79,20 +81,20 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	PrintWarn("This is based strictly on file dates.\n");
 	tmpde1 = FilesFind(src_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	tmpde2 = FilesFind(dst_files_find_mask, fuf_flags & FUG_FILES_FIND);
-	fuf_flags &= FUF_DIFF;
+//	fuf_flags &= FUF_DIFF;
 
-	"\n\nManual or Automatic Upgrade? (M/A): ";
-	do
-		ch = ToUpper(CharGet(, FALSE));
-	while (ch != 'M' && ch != 'A');
-	if (ch == 'M')
-	{
-		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
-				"$$LTRED$$FILE1$$FG$$ is from existing install.");
-		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, FALSE);
-	}
-	else
-		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, TRUE);
+//	"\n\nManual or Automatic Upgrade? (M/A): ";
+//	do
+//		ch = ToUpper(CharGet(, FALSE));
+//	while (ch != 'M' && ch != 'A');
+//	if (ch == 'M')
+//	{
+//		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
+//				"$$LTRED$$FILE1$$FG$$ is from existing install.");
+//		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags);
+//	}
+//	else
+		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
 
 	DirTreeDel(tmpde1);
 	DirTreeDel(tmpde2);
@@ -104,8 +106,12 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	U8 *src = MStrPrint("%C:/", src_drv);
 
 	CopyTree(dst, "B:/");
-	Copy(MStrPrint("%C:/Misc/Bible.TXT", src_drv), "B:/Misc/Bible.TXT");
-	Copy(MStrPrint("%C:/Misc/Clementine.TXT", src_drv), "B:/Misc/Clementine.TXT");
+	Del("B:/Misc/Bible.TXT");
+	Del("B:/Misc/Clementine.TXT");
+//	Copy(MStrPrint("%C:/Misc/Bible.TXT", src_drv), "B:/Misc/Bible.TXT");
+//	Copy(MStrPrint("%C:/Misc/Clementine.TXT", src_drv), "B:/Misc/Clementine.TXT");
+//	Copy(MStrPrint("%C:" ACD_WORD_FILENAME, src_drv), "B:" ACD_WORD_FILENAME);
+//	Copy(MStrPrint("%C:" ACD_DEF_FILENAME, src_drv), "B:" ACD_DEF_FILENAME);
 	OSFilesMerge("B:/", src, "+d");
 	CopyTree("B:/", dst);
 }
@@ -452,6 +458,8 @@ Bool DoInstall(Bool prompt_reboot)
 	CSMBIOSSystemInfo	*sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
 	U8					*company = SMBIOSStr(sys_info, sys_info->manufacturer);
 
+	DocMax;
+
 	if (StrCompare(company, "VMware, Inc.") && StrCompare(company, "innotek GmbH") && StrCompare(company, "QEMU"))
 	{
 		"\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox or a similar virtual machine? ";
@@ -460,15 +468,15 @@ Bool DoInstall(Bool prompt_reboot)
 	DocBottom;
 	if (vm_install)
 	{
-//		"\n\nUpgrade an existing install,"
-//		"\nor create new Installation? (U/I): ";
-//		do
-//			ch = ToUpper(CharGet(, FALSE));
-//		while (ch != 'U' && ch != 'I');
+		"\n\nUpgrade an existing install,"
+		"\nor create new Installation? (U/I): ";
+		do
+			ch = ToUpper(CharGet(, FALSE));
+		while (ch != 'U' && ch != 'I');
 
-//		if (ch == 'U')
-//			OSUpgrade;
-//		else
+		if (ch == 'U')
+			OSUpgrade;
+		else
 			VMInstallWiz();
 
 		res = TRUE;
@@ -480,22 +488,22 @@ Bool DoInstall(Bool prompt_reboot)
 				"Continue Install Wizard ";
 		if (YorN)
 		{
-//			"\n\nUpgrade an existing install,"
-//			"\nor create new Installation? (U/I): ";
-//			do
-//				ch = ToUpper(CharGet(, FALSE));
-//			while (ch != 'U' && ch != 'I');
+			"\n\nUpgrade an existing install,"
+			"\nor create new Installation? (U/I): ";
+			do
+				ch = ToUpper(CharGet(, FALSE));
+			while (ch != 'U' && ch != 'I');
 
-//			if (ch == 'I')
-//			{
+			if (ch == 'I')
+			{
 				RegularInstallWiz();
 				res = TRUE;
-//			}
-//			else
-//			{
-//				OSUpgrade;
-//				res = TRUE;
-//			}
+			}
+			else
+			{
+				OSUpgrade;
+				res = TRUE;
+			}
 		}
 		else
 			prompt_reboot = FALSE;
