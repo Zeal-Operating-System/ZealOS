@@ -114,7 +114,6 @@ U0 OSUpgrade()
 {
 	I64		 drv_let, ch;
 	U8		*st, *port_st;
-	I64		 res_num;
 	CTask	*task;
 
 	task = User;
@@ -192,6 +191,8 @@ U0 OSUpgrade()
 				BootMHDIns(drv_let);
 		}
 	}
+	else
+		LimineCFGMake(drv_let);
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
@@ -318,6 +319,9 @@ U0 VMInstallWiz()
 			else
 				BootMHDIns('C');
 		}
+		else
+			LimineCFGMake('C');
+
 	}
 
 	WinVert(task->win_top, Fs->win_bottom);
@@ -328,7 +332,7 @@ U0 RegularInstallWiz()
 {
 	I64		 drv_let;
 	U8		*st, *port_st;
-	I64		 ch, res_num;
+	I64		 ch;
 	CTask	*task;
 
 	task = User;
@@ -425,6 +429,9 @@ U0 RegularInstallWiz()
 				BootMHDIns(drv_let);
 		}
 	}
+	else
+		LimineCFGMake(drv_let);
+
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
 }
