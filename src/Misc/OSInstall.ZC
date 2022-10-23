@@ -38,7 +38,14 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_df_flags)
 			"$$BROWN$$Does Not Exist:%s$$FG$$\n", tmpde1->full_name;
 			new = StrNew(tmpde1->full_name);
 			new[0] = tmpde2->full_name[0]; // shortcut to quickly get drive letter
-			Copy(tmpde1->full_name, new);
+
+			if (tmpde1->attr & RS_ATTR_DIR)
+				CopyTree(tmpde1->full_name, new);
+			else
+			{
+				Copy(tmpde1->full_name, new);
+			}
+
 			Free(new);
 		}
 		else
