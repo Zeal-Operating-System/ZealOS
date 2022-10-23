@@ -36,6 +36,7 @@ I64 DiffEntriesCompare(CDocEntry *doc_e1, CDocEntry *doc_e2)
 #define DF_ABORT_FILE 					0x10
 #define DF_ABORT_ALL_FILES				0x20
 #define DF_NO_MORE_PROMPTS_THIS_FILE	0x40
+#define DF_KEEP_FLAGS					0x80 // tells Diff NOT to &= with abort-all flag at call start
 
 U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi, I64 count1, I64 count2,
 		   CDocEntry **doc_unsorted1, CDocEntry **doc_unsorted2)
@@ -277,13 +278,8 @@ public Bool Diff(U8 *dst_file, U8 *src_file, I64 *_df_flags=NULL)
 	else
 		df_flags = 0;
 
-//	df_flags &= DF_ABORT_ALL_FILES; // This line removes ALL df_flags values passed to this function,
-									// while also setting df_flags to DF_ABORT_ALL_FILES 
-									// if it somehow got passed with a value of DF_ABORT_ALL_FILES.
-									// ... this seems counterproductive, and makes utilizing Diff with df_flags
-									// very difficult... Changing this to instead !! UN-SET !! DF_ABORT_ALL_FILES,
-									// which is what I can only guess was the intended behaviour here? ........
-	df_flags &= ~(DF_ABORT_ALL_FILES);
+	if (!(df_flags & DF_KEEP_FLAGS))
+		df_flags &= DF_ABORT_ALL_FILES;
 
 	doc_e = doc1->head.next;
 	while (doc_e != doc1)
