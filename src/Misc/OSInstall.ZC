@@ -73,7 +73,7 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	I64			 df_flags, fuf_flags = 0;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 
-	df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE;
+	df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE | DF_KEEP_FLAGS;
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r");
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
 	if (fuf_flags & ~(FUG_FILES_FIND | FUF_DIFF))
@@ -106,12 +106,8 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	U8 *src = MStrPrint("%C:/", src_drv);
 
 	CopyTree(dst, "B:/");
-	Del("B:/Misc/Bible.TXT");
-	Del("B:/Misc/Clementine.TXT");
-//	Copy(MStrPrint("%C:/Misc/Bible.TXT", src_drv), "B:/Misc/Bible.TXT");
-//	Copy(MStrPrint("%C:/Misc/Clementine.TXT", src_drv), "B:/Misc/Clementine.TXT");
-//	Copy(MStrPrint("%C:" ACD_WORD_FILENAME, src_drv), "B:" ACD_WORD_FILENAME);
-//	Copy(MStrPrint("%C:" ACD_DEF_FILENAME, src_drv), "B:" ACD_DEF_FILENAME);
+	Del("B:/Misc/Bible.TXT");		// Deleting from B:/ prevents causing hang when merging large .TXT files,
+	Del("B:/Misc/Clementine.TXT");	// they will instead be copied over from boot drive in OSMergeInner
 	OSFilesMerge("B:/", src, "+d");
 	CopyTree("B:/", dst);
 }
@@ -164,6 +160,10 @@ U0 OSUpgrade()
 	while (!('A' <= drv_let <= 'Z'));
 
 	'\n';
+
+	DocMax;
+
+	"\nBeginning Upgrade...\n\n";
 
 	OSMerge(drv_let); // src_drv needed?
 
@@ -457,8 +457,6 @@ Bool DoInstall(Bool prompt_reboot)
 	I64					 res = FALSE, vm_install = TRUE, ch;
 	CSMBIOSSystemInfo	*sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
 	U8					*company = SMBIOSStr(sys_info, sys_info->manufacturer);
-
-	DocMax;
 
 	if (StrCompare(company, "VMware, Inc.") && StrCompare(company, "innotek GmbH") && StrCompare(company, "QEMU"))
 	{
