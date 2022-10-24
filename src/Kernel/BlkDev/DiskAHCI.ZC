@@ -724,7 +724,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 }
 
 I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
-{//Read 'blk' amount of blocks from AHCI disk device. Returns num of bytes transferred between disk and memory.
+{//Read 'count' amount of blocks from block 'blk' in AHCI disk device. Returns num of bytes transferred between disk and memory.
 	I64 byte_count = 0;
 	if (!count)
 		return 0;
@@ -750,7 +750,7 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 }
 
 I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
-{//Write 'blk' amount of blocks to AHCI disk device. Returns num of bytes transferred between memory and disk.
+{//Write 'count' amount of blocks from block 'blk' in AHCI disk device. Returns num of bytes transferred between memory and disk.
 	I64  byte_count = 0;
 
 	if (!count)
@@ -775,7 +775,7 @@ I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 }
 
 I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
-{//Read 'blk' amount of blocks from from AHCI ATAPI device. Returns num of bytes transferred.
+{//Read 'count' amount of blocks from block 'blk' in AHCI ATAPI device. Returns num of bytes transferred.
 	CPortCmdTable	*cmd_table;
 	CFisH2D			*cmd_fis;
 	CAHCIPort		*port = bd->ahci_port;
