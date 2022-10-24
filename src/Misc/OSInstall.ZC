@@ -54,21 +54,12 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_df_flags)
 				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _df_flags);
 			else
 			{
-//				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) //slop
-//				{
+				if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
+				{
 					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
 					"$$LTGREEN$$%s$$FG$$\n", tmpde1->full_name;
-//					if (Bt(_fuf_flags, FUf_DIFF))
-//					{
-						if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
-						{
-//							if (!auto)
-								Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
-//							else
-//								Copy(tmpde1->full_name, tmpde->full_name);
-						}
-//					}
-//				}
+					Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
+				}
 			}
 		}
 		tmpde1 = tmpde1->next;
@@ -77,10 +68,9 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_df_flags)
 
 U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *fu_flags=NULL)
 { // See $LK+PU,"Merge",A="FF:::/System/Utils/Merge.ZC,public U0 Merge"$.
-	I64			 df_flags, fuf_flags = 0;
+	I64			 df_flags, fuf_flags = 0, ch;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 
-	df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE | DF_KEEP_FLAGS;
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r");
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
 	if (fuf_flags & ~(FUG_FILES_FIND | FUF_DIFF))
@@ -88,20 +78,23 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	PrintWarn("This is based strictly on file dates.\n");
 	tmpde1 = FilesFind(src_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	tmpde2 = FilesFind(dst_files_find_mask, fuf_flags & FUG_FILES_FIND);
-//	fuf_flags &= FUF_DIFF;
 
-//	"\n\nManual or Automatic Upgrade? (M/A): ";
-//	do
-//		ch = ToUpper(CharGet(, FALSE));
-//	while (ch != 'M' && ch != 'A');
-//	if (ch == 'M')
-//	{
-//		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
-//				"$$LTRED$$FILE1$$FG$$ is from existing install.");
-//		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags);
-//	}
-//	else
+	"\n\nManual or Automatic Upgrade? (M/A): ";
+	do
+		ch = ToUpper(CharGet(, FALSE));
+	while (ch != 'M' && ch != 'A');
+	if (ch == 'M')
+	{
+		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
+				"$$LTRED$$FILE1$$FG$$ is from existing install.");
+		df_flags = 0;
 		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
+	}
+	else
+	{
+		df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE | DF_KEEP_FLAGS;
+		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
+	}
 
 	DirTreeDel(tmpde1);
 	DirTreeDel(tmpde2);
@@ -115,8 +108,25 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	CopyTree(dst, "B:/");
 	Del("B:/Misc/Bible.TXT");		// Deleting from B:/ prevents causing hang when merging large .TXT files,
 	Del("B:/Misc/Clementine.TXT");	// they will instead be copied over from boot drive in OSMergeInner
+
+	DocMax;
+
+	"$$PB$$$$PB$$$$LTCYAN$$Beginning Upgrade (running OSFilesMerge) ...$$FG$$\n\n";
+
 	OSFilesMerge("B:/", src, "+d");
+
+	"\n\n$$LTCYAN$$Upgrade merge completed."
+	"\nChanges listed above, scroll up to see all."
+	"\n\nPress ESC when you are ready to finish Upgrade (write merged files to disk).$$FG$$\n\n";
+	View;
+	DocBottom;
+
 	CopyTree("B:/", dst);
+
+	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/boot.catalog\");", dst_drv);
+
 }
 
 U0 OSUpgrade()
@@ -167,10 +177,6 @@ U0 OSUpgrade()
 	while (!('A' <= drv_let <= 'Z'));
 
 	'\n';
-
-	DocMax;
-
-	"\nBeginning Upgrade...\n\n";
 
 	OSMerge(drv_let); // src_drv needed?
 
