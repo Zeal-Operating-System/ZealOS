@@ -32,7 +32,6 @@ public I64 VideoRep()
 				{
 					aspect_w /= div;
 					aspect_h /= div;
-					//reset div
 					div = 2;
 				}
 				div++;
