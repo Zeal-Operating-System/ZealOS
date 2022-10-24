@@ -83,9 +83,11 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	do
 		ch = ToUpper(CharGet(, FALSE));
 	while (ch != 'M' && ch != 'A');
+
+	"%c\n", ch;
+
 	if (ch == 'M')
 	{
-		"%c\n", ch;
 		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
 				"$$LTRED$$FILE1$$FG$$ is from existing install.");
 		df_flags = 0;
@@ -93,7 +95,6 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	}
 	else
 	{
-		"%c\n", ch;
 		df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE | DF_KEEP_FLAGS;
 		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
 	}
