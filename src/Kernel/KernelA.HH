@@ -910,7 +910,7 @@ public class CHashImport:CHashSrcSym
 };
 
 #help_index "Compiler/Internal"
-#define PTR_STARS_NUM 	4
+#define PTR_STARS_NUM 	3
 
 //Member List Flags
 #define MLF_DEFAULT_AVAILABLE 		1
