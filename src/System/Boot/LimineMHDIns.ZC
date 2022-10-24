@@ -54,6 +54,7 @@ Bool LimineCFGMake(U8 drv_let)
 	DocWrite(doc);
 	DocDel(doc);
 
+	"/Boot/Limine.CFG generated.\n\n";
 	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
 	{
 		if (drive->drive_signature == DRIVE_SIGNATURE_VAL && drive->fs_type == FSt_FAT32 && DriveIsWritable(drive->drv_let))
@@ -86,6 +87,8 @@ Bool LimineMHDIns(U8 drv_let)
 		return FALSE;
 	}
 
+	'\n';
+
 	limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
 	limine_stage2->location_a = BLK_SIZE;
 	limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
@@ -101,6 +104,8 @@ Bool LimineMHDIns(U8 drv_let)
 	BlkDevUnlock(bd);
 
 	LimineCFGMake(drv_let);
+
+	"\nLimine BSD2-licensed HDD MBR Boot Loader installed.\n\n";
 
 	return TRUE;
 

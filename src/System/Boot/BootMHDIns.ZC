@@ -117,10 +117,13 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 			StrPrint(menu_ptr, "\n\r\n\rZealOS Boot Loader\n\r\n\r");
 			j = 0;
 
+			"\nDetected boot drives:\n";
+			"(Choice %16s)\n", "drv_offset";
 			if (FileFind(BOOT_DIR_OLDMBR_BIN, &de, FUF_JUST_FILES))
 			{
 				Free(de.full_name);
 				*_q++ = Clus2Blk(drive, de.clus);
+				"Old Boot Record\n";
 				CatPrint(menu_ptr, "0. Old Boot Record\n\r");
 				j++;
 			}
@@ -173,6 +176,7 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 				res = TRUE;
 			}
 		}
+		"\nZealOS Public Domain HDD MBR Boot Loader installed.\n\n";
 	}
 	catch
 		PutExcept;
