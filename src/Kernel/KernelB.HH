@@ -12,7 +12,6 @@ public _intern IC_BT				Bool Bt(		  U8 *bit_field, I64 bit); //Bit test.
 public _intern IC_BTC				Bool Btc(		  U8 *bit_field, I64 bit); //Bit test and complement (same as xor with 1).
 public _intern IC_BTR				Bool Btr(		  U8 *bit_field, I64 bit); //Bit test and reset to zero.
 public _intern IC_BTS				Bool Bts(		  U8 *bit_field, I64 bit); //Bit test and set to one.
-
 public _intern IC_LBTC				Bool LBtc(		  U8 *bit_field, I64 bit); //Locked bit test and complement (xor with 1).
 public _intern IC_LBTR				Bool LBtr(		  U8 *bit_field, I64 bit); //Locked bit test and reset to zero.
 public _intern IC_LBTS				Bool LBts(		  U8 *bit_field, I64 bit); //Locked bit test and set to one.
