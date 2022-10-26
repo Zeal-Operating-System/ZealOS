@@ -2,16 +2,12 @@ Bool CheckPtr(U8 *ptr)
 {//Check if address is valid pointer.
 	if (mem_heap_base <= ptr <= mem_mapped_space)
 		return *MemPageTable(ptr) & 1;
-	else
-		return mem_boot_base < ptr < VGAM_GRAPHICS;
 }
 
 Bool CheckCodePtr(U8 *ptr)
 {//Check if address is valid code address.
 	if (mem_heap_base <= ptr <= mem_heap_limit)
 		return *MemPageTable(ptr) & 1;
-	else
-		return mem_boot_base < ptr < VGAM_GRAPHICS;
 }
 
 Bool CheckOnStack(U8 *ptr, CTask *task=NULL)

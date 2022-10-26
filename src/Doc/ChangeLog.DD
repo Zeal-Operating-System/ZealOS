@@ -1,7 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
-$IV,1$----10/25/22 17:56:27----$IV,0$
+$IV,1$----10/26/22 18:30:33----$IV,0$
 * Raised version number to 2.00.
-* Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$ to allow non-Public-Domain MBR/UEFI bootloaders, as long as the Public Domain ZealOS HDD/DVD Boot Loaders are included, offered, and functional. The Charter still upholds that all operating system code must still be 100% public domain. Updated $LK+PU,"Credits",A="FI:::/Doc/Credits.DD"$, $LK+PU,"FAQ",A="FI:::/Doc/FAQ.DD"$, $LK+PU,"Features.DD",A="FI:::/Doc/Features.DD"$.
+* Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$ to allow non-Public-Domain MBR/UEFI bootloaders, as long as the Public Domain ZealOS HDD/DVD Boot Loaders are included, offered, and functional. The Charter still upholds that all operating system code must still be 100% public domain. Updated $LK+PU,"Credits",A="FI:::/Doc/Credits.DD"$, $LK+PU,"FAQ",A="FI:::/Doc/FAQ.DD"$, $LK+PU,"Features.DD",A="FI:::/Doc/Features.DD"$, $LK+PU,"Welcome.DD",A="FI:::/Doc/Welcome.DD"$.
 * Added 128-bit signature to $LK+PU,"KStart32",A="FF:::/Kernel/KStart32.ZC,JMP @@02"$ to allow for booting the ZealOS Kernel.ZXE from 32-bit mode via a prekernel booted from any other bootloader. The signature is jumped over with JMP if booted from the Public Domain ZealOS Boot Loaders to KStart16 to KStart32.
 * Created external Public Domain "ZealBooter" prekernel written in C, for use with booting Kernel.ZXE from other bootloaders, primarily targeting Limine. ZealBooter compiles to an ELF file that Limine boots into and passes boot-time information to, which ZealBooter then uses to boot into and pass information to the Kernel.ZXE kernel header.
 * Implemented Limine bootloader install prompt to $LK+PU,"OSInstall",A="FI:::/Misc/OSInstall.ZC"$. Created $LK+PU,"LimineCFGMake and LimineMHDIns",A="FI:::/System/Boot/LimineMHDIns.ZC"$ to allow for installing Limine to MBR, and for generating the Limine.CFG file required. 
@@ -26,6 +26,7 @@ $IV,1$----10/25/22 17:56:27----$IV,0$
 * Replace SYS_FONT_PTR VGA ROM 16-bit mode aux font retrieval with $LK+PU,"FontAux",A="FI:::/Kernel/FontAux.ZC"$.
 * Lowered $LK+PU,"PTR_STARS_NUM",A="MN:PTR_STARS_NUM"$ from 4 to 3.
 * Moved $LK+PU,"PCILookUpSingle",A="MN:PCILookUpSingle"$, $LK+PU,"PCILookUpDevs",A="MN:PCILookUpDevs"$, $LK+PU,"PCIDevFind",A="MN:PCIDevFind"$, and $LK+PU,"PCIRep",A="MN:PCIRep"$ out of System/DevInfo.ZC to new file $LK+PU,"System/Utils/PCIRep.ZC",A="FI:::/System/Utils/PCIRep.ZC"$. Added including this file to $LK+PU,"MakeUtils",A="FF:::/System/Utils/MakeUtils.ZC,PCIRep"$.
+* Removed VGAM_GRAPHICS, text.vga_alias, and all code/documentation referencing them or legacy VGA graphics.  MiniGrLib now needs a complete rewrite.
 
 $IV,1$----04/16/22 20:24:18----$IV,0$
 * Inverted $LK+PU,"DocBorderNew",A="MN:DocBorderNew"$ and $LK+PU,"DocEd",A="MN:DocEd"$ bottom-right window text, adjusted DolDoc tag placement to make solid, changed Ed callbacks ($LK+PU,"EdOverStrikeCB",A="MN:EdOverStrikeCB"$, $LK+PU,"EdAutoSaveCB",A="MN:EdAutoSaveCB"$, $LK+PU,"EdFilterCB",A="MN:EdFilterCB"$, $LK+PU,"EdDollarCB",A="MN:EdDollarCB"$, $LK+PU,"EdMoreCB",A="MN:EdMoreCB"$) to return ' ' SPACE character(s) for disabled flags now since invert renders it solid foreground color, appended ' ' SPACE character at $LK+PU,"EdDollarTypeCB",A="FF:::/System/DolDoc/DocEd.ZC,\"%-3ts \""$ to pad.

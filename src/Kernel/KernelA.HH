@@ -4281,7 +4281,6 @@ public class CTextGlobals
 	U32 	*raw_screen, *fb_alias;
 	I64 	 rows, cols;	//Use TEXT_ROWS,TEXT_COLS
 	U64 	*font, *aux_font, screen_size, buffer_size;
-	U8		*vga_alias;
 	U8		 border_chars[16];
 	Bool	 is_fb_busy;
 };
@@ -4389,10 +4388,6 @@ public class CDC
 	I64				 db_z; //private
 #assert !($$ & 7)
 };
-
-#help_index "Devices"
-//VGA Memory
-#define VGAM_GRAPHICS 	0xA0000
 
 #define "Char/Input;StdIn"
 //StrGet flags

@@ -97,7 +97,6 @@ U0 SysGrInit()
 	text.fb_alias		= sys_framebuffer_addr;
 
 	MemSetU32(text.fb_alias, BLACK32, text.screen_size);
-	text.vga_alias = CAlloc(text.rows * text.cols * 8);
 }
 
 U0 TimerInit()
