@@ -54,22 +54,48 @@ fsutil sparse setflag $TMPDISK 0
 fsutil sparse queryflag $TMPDISK 
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
 
+Write-Output "Copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH into vdisk ..."
+
 Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
 Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
 Mount-TempDisk
+Copy-Item -Path "..\src\Kernel\KStart16.ZC" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
+Copy-Item -Path "..\src\Kernel\KernelA.HH" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
+Unmount-TempDisk
 
+Write-Output "Rebuilding kernel headers ..."
+qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
+
+Write-Output "Copying all kernel code into vdisk ..."
+
+Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
+Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
+Mount-TempDisk
+Copy-Item -Path "..\src\Kernel\*" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
+Unmount-TempDisk
+
+Write-Output "Rebuilding kernel..."
+qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
+
+Write-Output "Copying all src/ code into vdisk ..."
+
+Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
+Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
+Remove-Item "..\src\Boot\Kernel.ZXE" -errorAction SilentlyContinue
+Mount-TempDisk
 Copy-Item -Path "..\src\*" -Destination "${QEMULETTER}:\" -Recurse -Force
 Unmount-TempDisk
 
-Write-Output "Generating ISO..."
+Write-Output "Building Distro ISO ..."
+
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
+
 Write-Output "Extracting ISO from vdisk..."
+
 Remove-Item "ZealOS-*.iso" -errorAction SilentlyContinue
 Mount-TempDisk
-
-$ZEALISO = "ZealOS-" + (Get-Date -Format "yyyy-MM-dd-HH_mm_ss").toString() + ".iso"
-
-Copy-Item "${QEMULETTER}:\Tmp\MyDistro.ISO.C" -Destination $ZEALISO
+$ZEALISO = "ZealOS-PublicDomain-BIOS-" + (Get-Date -Format "yyyy-MM-dd-HH_mm_ss").toString() + ".iso"
+Copy-Item "${QEMULETTER}:\Tmp\MyDistro.ISO.C" -Destination $ZEALISO 
 Unmount-TempDisk
 
 Remove-Item $TMPDISK
