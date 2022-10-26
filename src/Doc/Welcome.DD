@@ -7,7 +7,7 @@ $ID,2$* Professionals doing hobby projects
 * Teenagers doing projects
 * Non-professional, older-persons projects
 $ID,-2$
-Simplicity is a goal to $LK,"keep the line count down",A="FI:::/Doc/Strategy.DD"$, so it's easy to tinker with.  As it turns-out, simplicity makes it faster in some ways, too.  It never switches privilege levels, never changes address maps, tends to load whole contiguous files and other, similar things which boost speed.	It's only $TX,"95,255",D="DD_ZEALOS_LOC"$ lines of code including the kernel, the 64-bit compiler, the graphics library and all the tools.	More importantly, it's designed to keep the user's line count down -- you can do a $LK,"Hello World",A="FI:::/Doc/HelloWorld.DD"$ application in one line of code and can put graphics on the screen with a three line program!
+Simplicity is a goal to $LK,"keep the line count down",A="FI:::/Doc/Strategy.DD"$, so it's easy to tinker with.  As it turns-out, simplicity makes it faster in some ways, too.  It never switches privilege levels, never changes address maps, tends to load whole contiguous files and other, similar things which boost speed.	It's only $TX,"98,658",D="DD_ZEALOS_LOC"$ lines of code including the kernel, the 64-bit compiler, the graphics library and all the tools.	More importantly, it's designed to keep the user's line count down -- you can do a $LK,"Hello World",A="FI:::/Doc/HelloWorld.DD"$ application in one line of code and can put graphics on the screen with a three line program!
 
 It's a kayak, not a Titanic -- it will crash if you do something wrong.  You quickly reboot, however.  DOS and the 8-bit home computers of the 80's worked fine without memory protection and most computers in the world -- the embedded ones -- operate without protection.  The resulting simplicity of no protections is why ZealOS has value.	In facts, that's the point of ZealOS.  See the $LK,"ZealOS Charter",A="FI:::/Doc/Charter.DD"$.
 
@@ -118,7 +118,7 @@ Software is distributed as $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ ISO files.  Bur
 
 Ideally, do not install applications such as games onto your hard drive because we wish to keep hard drive usage low, so the whole $FG,2$'C'$FG$ drive can be copied quickly to $FG,2$'D'$FG$.	Also, the $LK,"FileMgr",A="MN:FileMgr"$() $FG,2$<CTRL-d>$FG$ starts too slowly when there are lots of hard drive files, but that is how we want it.
 
-3rd party libraries are banned, since they circumvent the 100,000 line of code limit in the $LK,"ZealOS Charter",A="FI:::/Doc/Charter.DD"$.  All applications must only depend on the core ZealOS files and whatever they bring along in the ISO.  This is similar to how Commodore 64 applications only depended on the ROM.
+3rd party libraries are banned from being required, since they circumvent the 100,000 line of code limit in the $LK,"ZealOS Charter",A="FI:::/Doc/Charter.DD"$.  All applications must only depend on the core ZealOS files and whatever they bring along in the ISO.  This is similar to how Commodore 64 applications only depended on the ROM.
 
 $MA-X+PU,"Take Tour",LM="User(\"Cd(\\\"::/Misc/Tour\\\");;InFile(\\\"Tour\\\");\n\");"$
 
