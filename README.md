@@ -52,7 +52,7 @@ In July of 2021, ZealOS was forked from ZenithOS.
 
 ## Screenshots
 
-Network Report, Gopher Client, FTP Client, and AutoComplete, with Stars wallpaper
+Network Report, Gopher Client, FTP Client, GrDir, and AutoComplete, with Stars wallpaper
 
 ![](/screenshots/screenshot3.png)
 
