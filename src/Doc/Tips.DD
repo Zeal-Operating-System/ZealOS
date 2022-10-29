@@ -67,7 +67,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * Use $FG,2$<CTRL-ALT-a>$FG$ to enter an extended ASCII char.
 
-* Use $FG,2$<CTRL-ALT-f>$FG$ to toggle between the $LK,"VGA ROM Font",A="FF:::/Kernel/KMain.ZC,SYS_FONT_PTR:2"$ and $LK,"Std Font",A="FI:::/Kernel/FontStd.ZC"$.
+* Use $FG,2$<CTRL-ALT-f>$FG$ to toggle between the $LK,"Aux Font",A="FI:::/Kernel/FontAux.ZC"$ and $LK,"Std Font",A="FI:::/Kernel/FontStd.ZC"$.
 
 * Use $FG,2$<CTRL-ALT-s>$FG$ will capture the screen as a sprite on the clip. You can save the cmd line doc as text with $FG,2$<CTRL-a>$FG$.
 
