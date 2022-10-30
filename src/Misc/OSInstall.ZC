@@ -183,7 +183,7 @@ U0 OSUpgrade()
 
 	OSMerge(drv_let); // src_drv needed?
 
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
+	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
 	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
 
 	if (!sys_is_uefi_booted)
