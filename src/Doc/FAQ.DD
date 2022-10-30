@@ -9,7 +9,7 @@ $ID,2$ZealOS was written from scratch, starting with $FG,2$TASM$FG$ long ago, la
 $ID,-2$$TR,"Why do you dual boot?"$
 $ID,2$ZealOS is 100% independent -- it does not access the files of your primary operating system and ZealOS will work as the only operating system on your computer.  In your off hours, you will probably use your other operating system.
 $ID,-2$$TR,"It has links, so is it a browser?"$
-$ID,2$ZealOS is an operating system, not a browser.  $LK,"ZealOS links",A="MN:LK_FILE"$ are a special format and only link too local files and symbol source addresses.
+$ID,2$ZealOS is an operating system, not a browser.  $LK,"ZealOS links",A="MN:LK_FILE"$ are a special format and only link to local files and symbol source addresses.
 $ID,-2$$TR,"Where are the animated 3D icon GIFs?"$
 $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangles.	There are no GIF files.  It $LK,"rotates",A="MN:Mat4x4MulXYZ"$ 3D sprite objects on the fly.
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
