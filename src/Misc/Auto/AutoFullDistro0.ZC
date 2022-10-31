@@ -25,7 +25,7 @@ U0 Auto()
 	Free(in_str);
 	in_str = MStrPrint(	"BootHDIns;"
 						"OnceFlush;"
-						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");"
+						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro1\\\";;Auto;\");"
 						"Reboot;");
 	OnceDrive('C', in_str);
 	OutU8(0x501,0x31);

@@ -25,7 +25,7 @@ U0 Auto()
 	In(in_str);
 	BootHDIns;
 	OnceFlush;
-	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro1\";;Auto;;");
+	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro4\";;Auto;;");
 	OnceDrive('C', in_str);
 	DelTree("C:/Tmp/OSBuild");
 	Reboot;

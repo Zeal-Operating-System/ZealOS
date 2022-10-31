@@ -1,0 +1,74 @@
+#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
+
+U0 MakeMyISO()
+{
+	U8 *_out_iso_filename = "/Tmp/MyDistro.ISO.C";
+	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);
+	I64 line_count = LineRep("/*", "-r") + LineRep("/System/*") + LineRep("/Compiler/*", "-S+$$") + LineRep("/Kernel/*");
+
+	if (!DriveIsWritable)
+	{
+		"Drive must be writable.	Install on Hard drive, first.\n";
+		return;
+	}
+
+	DocTreeFWrite("/System/Define.ZC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", line_count);
+	DefinePrint("DD_ZEALOS_LOC", "%,d", line_count);
+
+	"Total LOC:%12,d\n\n", line_count;
+
+	DelTree("/Distro");
+	Del(out_iso_filename);
+
+	ProgressBarsReset;
+	progress1_max = 14;
+	StrCopy(progress1_desc, "Copying files to /Distro");
+
+	DirMake("/Distro");
+	In(STD_DISTRO_DVD_CONFIG);
+	BootDVDIns;
+	progress1++;
+
+	Copy("/*", "/Distro");
+	progress1++;
+	DirMake("/Distro" BOOT_DIR);
+	Move(BOOT_DIR_DVD_KERNEL_ZXE, "/Distro" BOOT_DIR_KERNEL_ZXE);
+	progress1++;
+	CopyTree("/Home", 		"/Distro/Home");
+	progress1++;
+	Del("/Distro/Home/Registry.ZC");
+	CopyTree("/System", 	"/Distro/System");
+	progress1++;
+	CopyTree("/Apps", 		"/Distro/Apps");
+	progress1++;
+	CopyTree("/Compiler",	"/Distro/Compiler");
+	progress1++;
+	CopyTree("/Demo", 		"/Distro/Demo");
+	progress1++;
+	CopyTree("/Doc",		"/Distro/Doc");
+	progress1++;
+	CopyTree("/Kernel", 	"/Distro/Kernel");
+	progress1++;
+	CopyTree("/Misc", 		"/Distro/Misc");
+	progress1++;
+
+	CopyTree("/Downloads", "/Distro/Downloads");
+	progress1++;
+	DirMake("/Distro/Tmp");
+	DirMake("/Distro/Tmp/ScreenShots");
+	progress1++;
+	StrCopy(progress1_desc, "Building ISO");
+	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_ZXE);
+	progress1++;
+
+	//If CD-ROM use MT_CD instead of MT_DVD.
+	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
+
+	Copy("/Distro" BOOT_DIR_KERNEL_ZXE, "/Tmp/DVD" KERNEL_ZXE);
+
+	DelTree("/Distro");
+	ProgressBarsReset;
+	Free(out_iso_filename);
+}
+MakeMyISO;
+OutU8(0x501,0x31);
