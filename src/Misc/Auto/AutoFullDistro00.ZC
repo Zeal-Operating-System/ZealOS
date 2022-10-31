@@ -18,13 +18,20 @@ U0 Auto()
 		}
 	}
 
+	WinMax;
+	BootMHDIns('C');
+	Copy("C:/Tmp/OSBuild/Kernel/KStart16.ZC", "C:/Kernel/");
+	Copy("C:/Tmp/OSBuild/Kernel/KernelA.HH", "C:/Kernel/");
 	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
 	Sleep(700);
 	In(in_str);
 	BootHDIns;
 	OnceFlush;
-	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro1\";;Auto;;");
+	Free(in_str);
+	in_str = MStrPrint(	"OnceFlush;"
+						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro000\\\";;Auto;\");"
+						"Reboot;");
 	OnceDrive('C', in_str);
-	OutU8(0x501,0x31);
+	Reboot;
 }
 Auto;

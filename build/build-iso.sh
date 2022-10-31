@@ -46,39 +46,19 @@ echo "Building ZealBooter..."
 set +e
 
 echo "Making temp vdisk, running auto-install ..."
-qemu-img create -f raw $TMPDISK 192M
+qemu-img create -f raw $TMPDISK 1024M
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO.ISO -device isa-debug-exit
 
-echo "Copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH into vdisk ..."
-rm ../src/Home/Registry.ZC 2> /dev/null
-rm ../src/Home/MakeHome.ZC 2> /dev/null
-mount_tempdisk
-sudo cp -rf ../src/Kernel/KStart16.ZC $TMPMOUNT/Kernel/
-sudo cp -rf ../src/Kernel/KernelA.HH $TMPMOUNT/Kernel/
-umount_tempdisk
-
-echo "Rebuilding kernel headers ..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
-
-echo "Copying all kernel code into vdisk ..."
-rm ../src/Home/Registry.ZC 2> /dev/null
-rm ../src/Home/MakeHome.ZC 2> /dev/null
-mount_tempdisk
-sudo cp -rf ../src/Kernel/* $TMPMOUNT/Kernel/
-umount_tempdisk
-
-echo "Rebuilding kernel..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
-
-echo "Copying all src/ code into vdisk ..."
+echo "Copying all src/ code into vdisk Tmp/OSBuild/ ..."
 rm ../src/Home/Registry.ZC 2> /dev/null
 rm ../src/Home/MakeHome.ZC 2> /dev/null
 rm ../src/Boot/Kernel.ZXE 2> /dev/null
 mount_tempdisk
-sudo cp -r ../src/* $TMPMOUNT
+sudo mkdir $TMPMOUNT/Tmp/OSBuild/
+sudo cp -r ../src/* $TMPMOUNT/Tmp/OSBuild
 umount_tempdisk
 
-echo "Building Distro ISO ..."
+echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
 LIMINE_BINARY_BRANCH="v4.x-branch-binary"

@@ -20,14 +20,17 @@ U0 Auto()
 
 	WinMax;
 	BootMHDIns('C');
-	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n\\n\\n\");", ata_port);
-	OnceDrive('C', in_str);
+	CopyTree("C:/Tmp/OSBuild/Kernel/", "C:/Kernel/");
+	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
+	Sleep(700);
+	In(in_str);
+	BootHDIns;
+	OnceFlush;
 	Free(in_str);
-	in_str = MStrPrint(	"BootHDIns;"
-						"OnceFlush;"
-						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");"
+	in_str = MStrPrint(	"OnceFlush;"
+						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro0000\\\";;Auto;\");"
 						"Reboot;");
 	OnceDrive('C', in_str);
-	OutU8(0x501,0x31);
+	Reboot;
 }
 Auto;

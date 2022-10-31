@@ -19,15 +19,15 @@ U0 Auto()
 	}
 
 	WinMax;
-	BootMHDIns('C');
-	in_str = MStrPrint("Sleep(700);In(\"CC\\n%d\\n\\n\\n\\n\");", ata_port);
+	CopyTree("C:/Tmp/OSBuild/", "C:/");
+	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
+	Sleep(700);
+	In(in_str);
+	BootHDIns;
+	OnceFlush;
+	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro1\";;Auto;;");
 	OnceDrive('C', in_str);
-	Free(in_str);
-	in_str = MStrPrint(	"BootHDIns;"
-						"OnceFlush;"
-						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro00\\\";;Auto;\");"
-						"Reboot;");
-	OnceDrive('C', in_str);
-	OutU8(0x501,0x31);
+	DelTree("C:/Tmp/OSBuild");
+	Reboot;
 }
 Auto;
