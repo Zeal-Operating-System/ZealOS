@@ -49,44 +49,22 @@ function Unmount-TempDisk
 
 Write-Output "Making temp vdisk, running auto-install..."
 
-qemu-img create -f vhdx $TMPDISK 512M
+qemu-img create -f vhdx $TMPDISK 1024M
 fsutil sparse setflag $TMPDISK 0
 fsutil sparse queryflag $TMPDISK 
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
 
-Write-Output "Copying src/Kernel/KStart16.ZC and src/Kernel/KernelA.HH into vdisk ..."
-
-Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
-Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
-Mount-TempDisk
-Copy-Item -Path "..\src\Kernel\KStart16.ZC" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
-Copy-Item -Path "..\src\Kernel\KernelA.HH" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
-Unmount-TempDisk
-
-Write-Output "Rebuilding kernel headers ..."
-qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
-
-Write-Output "Copying all kernel code into vdisk ..."
-
-Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
-Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
-Mount-TempDisk
-Copy-Item -Path "..\src\Kernel\*" -Destination "${QEMULETTER}:\Kernel\" -Recurse -Force
-Unmount-TempDisk
-
-Write-Output "Rebuilding kernel..."
-qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
-
-Write-Output "Copying all src/ code into vdisk ..."
+Write-Output "Copying all src/ code into vdisk Tmp/OSBuild/ ..."
 
 Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
 Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
 Remove-Item "..\src\Boot\Kernel.ZXE" -errorAction SilentlyContinue
 Mount-TempDisk
-Copy-Item -Path "..\src\*" -Destination "${QEMULETTER}:\" -Recurse -Force
+New-Item -Path "${QEMULETTER}:\Tmp\" -Name "OSBuild" -ItemType "directory"
+Copy-Item -Path "..\src\*" -Destination "${QEMULETTER}:\Tmp\OSBuild\" -Recurse -Force
 Unmount-TempDisk
 
-Write-Output "Building Distro ISO ..."
+Write-Output "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
 
