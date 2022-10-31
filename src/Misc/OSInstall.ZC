@@ -11,7 +11,6 @@
 "Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
 
 // TODO FIXME: refactor OSUpgrade code into optional Diff prompt to compare ISO<->HDD before Install.
-// (also test to ensure that Installs to existing installations don't remove existing untracked files)
 
 CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 {
@@ -204,7 +203,11 @@ U0 OSUpgrade()
 				"%c\n", ch;
 
 				if (ch == 'Z')
+				{
 					BootMHDIns(drv_let);
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake(drv_let); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+				}
 				else
 				{
 					LimineMHDIns(drv_let);
@@ -343,7 +346,11 @@ U0 VMInstallWiz()
 				"%c\n", ch;
 
 				if (ch == 'Z')
+				{
 					BootMHDIns('C');
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake('C'); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+				}
 				else
 				{
 					LimineMHDIns('C');
@@ -455,7 +462,11 @@ U0 RegularInstallWiz()
 				"%c\n", ch;
 
 				if (ch == 'Z')
+				{
 					BootMHDIns(drv_let);
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake(drv_let); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+				}
 				else
 				{
 					LimineMHDIns(drv_let);

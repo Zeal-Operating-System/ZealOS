@@ -47,16 +47,16 @@ Bool LimineCFGMake(U8 drv_let)
 					"\n", drv_let, drive->prt_num + 1, drive->prt_num + 1);
 
 				DocPrint(doc, st);
-				"\n%C:/ drive added as a Limine.CFG menu entry.\n", drv_let;
+				"%C:/ drive added as a Limine.CFG menu entry.\n", drv_let;
 			}
 			else
-				"\n%C:/ drive is missing Limine bootloader files.\n", drv_let;
+				"%C:/ drive is missing Limine bootloader files.\n", drv_let;
 		}
 	}
 	DocWrite(doc);
 	DocDel(doc);
 
-	"/Boot/Limine.CFG generated.\n\n";
+	"/Boot/Limine.CFG generated.\n";
 
 	"Copying Limine.CFG to all other drives ...\n";
 	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
