@@ -239,7 +239,6 @@ U0 InstallDrive(U8 drv_let)
 	Sleep(1000);
 	'.';
 	Sleep(1000);
-	'.';
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
 
