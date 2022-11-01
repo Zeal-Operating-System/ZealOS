@@ -111,6 +111,8 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	Del("B:/Misc/Bible.TXT");		// Deleting from B:/ prevents causing hang when merging large .TXT files,
 	Del("B:/Misc/Clementine.TXT");	// they will instead be copied over from boot drive in OSMergeInner
 
+	Del("B:/Boot/Limine.CFG"); // Delete to make merge output ignore (copy) this, since it gets regenerated later
+
 	DocMax;
 
 	"$$PB$$$$PB$$$$LTCYAN$$Beginning Upgrade (running OSFilesMerge) ...$$FG$$\n\n";
@@ -127,6 +129,7 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 
 	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", dst_drv);
 	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", dst_drv);
 	ExePrint("Del(\"%C:/boot.catalog\");", dst_drv);
 
 }
@@ -206,7 +209,7 @@ U0 OSUpgrade()
 				{
 					BootMHDIns(drv_let);
 					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
-					LimineCFGMake(drv_let); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+					LimineCFGMake(drv_let);
 				}
 				else
 				{
@@ -244,6 +247,7 @@ U0 InstallDrive(U8 drv_let)
 
 	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", drv_let);
 	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", drv_let);
 	ExePrint("Del(\"%C:/boot.catalog\");", drv_let);
 
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
@@ -348,7 +352,7 @@ U0 VMInstallWiz()
 				{
 					BootMHDIns('C');
 					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
-					LimineCFGMake('C'); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+					LimineCFGMake('C');
 				}
 				else
 				{
