@@ -100,8 +100,10 @@ Bool LimineMHDIns(U8 drv_let)
 	BlkDevLock(bd);
 
 	AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
-
 	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
+
+	// read the whole MBR + post-MBR-gap that Limine wants to overwrite, save all of that as an OldMBR.BIN
+	BootMHDOldRead(drv_let, drv_let, 1 + (limine_stage2_size_aligned / BLK_SIZE));
 
 	AHCIAtaBlksWrite(bd, limine, 0, 1 + (limine_stage2_size_aligned / BLK_SIZE)); // write Limine to MBR and post-MBR gap
 
