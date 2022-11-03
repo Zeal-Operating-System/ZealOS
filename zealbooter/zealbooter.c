@@ -95,6 +95,9 @@ struct CVideoInfo {
 
 #define VBE_MODES_NUM 32
 
+#define ZEALBOOTER_LIMINE_SIGNATURE_1 0xaa23c08ed10bd4d7
+#define ZEALBOOTER_LIMINE_SIGNATURE_2 0xf6ceba7d4b74179a
+
 struct CKernel {
     struct CZXE h;
     uint32_t jmp;
@@ -212,11 +215,11 @@ void _start(void) {
 
     void *entry_point; // to CORE0_32BIT_INIT
     for (uint64_t *p = (uint64_t *)kernel; ; p++) {
-        if (*p != 0xaa23c08ed10bd4d7) {
+        if (*p != ZEALBOOTER_LIMINE_SIGNATURE_1) {
             continue;
         }
         p++;
-        if (*p != 0xf6ceba7d4b74179a) {
+        if (*p != ZEALBOOTER_LIMINE_SIGNATURE_2) {
             continue;
         }
         p++;
