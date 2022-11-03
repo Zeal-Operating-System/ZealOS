@@ -83,7 +83,7 @@ override HEADER_DEPS := $(CFILES:.c=.d) $(ASFILES:.S=.d)
 all: $(KERNEL)
 
 limine.h:
-	curl -f https://raw.githubusercontent.com/limine-bootloader/limine/trunk/limine.h -o $@ || cp ../build/limine/limine.h limine.h
+	curl https://raw.githubusercontent.com/limine-bootloader/limine/trunk/limine.h -o $@ || cp ../build/limine/limine.h limine.h || echo "ERROR: limine.h not found! Cannot build ZealBooter. "
 
 # Link rules for the final kernel executable.
 $(KERNEL): $(OBJ)
