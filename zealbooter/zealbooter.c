@@ -271,38 +271,38 @@ void _start(void) {
     size_t mem_count = memmap_request.response->entry_count; // MEM_E820_ENTRIES_NUM now == 256, which is also Limine's memmap entry count max
     for (size_t i = 0; i < mem_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
-        int our_type;
+        int zeal_mem_type;
 
         printf("    ");
         switch (entry->type) {
             case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_KERNEL_AND_MODULES:
             case LIMINE_MEMMAP_USABLE:
-                our_type = MEM_E820T_USABLE;
+                zeal_mem_type = MEM_E820T_USABLE;
                 printf("  USABLE: ");
                 break;
             case LIMINE_MEMMAP_ACPI_RECLAIMABLE:
-                our_type = MEM_E820T_ACPI;
+                zeal_mem_type = MEM_E820T_ACPI;
                 printf("    ACPI: ");
                 break;
             case LIMINE_MEMMAP_ACPI_NVS:
-                our_type = MEM_E820T_ACPI_NVS;
+                zeal_mem_type = MEM_E820T_ACPI_NVS;
                 printf("     NVS: ");
                 break;
             case LIMINE_MEMMAP_BAD_MEMORY:
-                our_type = MEM_E820T_BAD_MEM;
+                zeal_mem_type = MEM_E820T_BAD_MEM;
                 printf("     BAD: ");
                 break;
             case LIMINE_MEMMAP_RESERVED:
             default:
-                our_type = MEM_E820T_RESERVED;
+                zeal_mem_type = MEM_E820T_RESERVED;
                 printf("RESERVED: ");
                 break;
         }
 
         kernel->mem_E820[i].base = (void *)entry->base;
         kernel->mem_E820[i].len = entry->length;
-        kernel->mem_E820[i].type = our_type;
+        kernel->mem_E820[i].type = zeal_mem_type;
 
         if (kernel->mem_physical_space < entry->base + entry->length) {
             kernel->mem_physical_space = entry->base + entry->length;
