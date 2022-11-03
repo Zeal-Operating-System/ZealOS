@@ -542,6 +542,9 @@ class CVideoInfo
 	U16 height;
 };
 
+#define ZEALBOOTER_LIMINE_SIGNATURE_1	0xaa23c08ed10bd4d7; // See $LK+PU,"CORE0_32BIT_INIT",A="FF:::/Kernel/KStart32.ZC,JMP @@"$
+#define ZEALBOOTER_LIMINE_SIGNATURE_2	0xf6ceba7d4b74179a; //
+
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.ZC,MEM_BOOT_BASE"$

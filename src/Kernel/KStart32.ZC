@@ -101,8 +101,8 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 
         ALIGN 16, OC_NOP
         // Signature to find CORE0_32BIT_INIT
-        DU64 0xaa23c08ed10bd4d7;
-        DU64 0xf6ceba7d4b74179a;
+        DU64 ZEALBOOTER_LIMINE_SIGNATURE_1; 
+        DU64 ZEALBOOTER_LIMINE_SIGNATURE_2;
 
 @@02:
 //Patch abs addresses
