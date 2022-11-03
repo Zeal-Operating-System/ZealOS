@@ -184,7 +184,7 @@ Bool DiffSub(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_
 		{
 			if (!CheckPtr(doc_sorted1[i1]) || !CheckPtr(doc_sorted2[i2]) || !CheckPtr(doc_sorted1[i1]->tag) || !CheckPtr(doc_sorted2[i2]->tag))
 			{
-				RawPrint(200, "DiffSub PANIC DEBUG: %X %X %X %X\n", doc_sorted1[i1], doc_sorted2[i2], doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
+				RawPrint(200, "DiffSub PANIC DEBUG FIXME: %X %X %X %X\n", doc_sorted1[i1], doc_sorted2[i2], doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
 				i = 1; // ???
 			}
 			else
