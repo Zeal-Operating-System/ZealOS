@@ -10,9 +10,7 @@ In the CPU department, ZealOS has state of the art 64-bit $LK,"long mode",A="FI:
 
 Terry Davis made an incredible accomplishment by getting it to work on practically everyone's computer as long as it is 64-bit and they run inside VMware, QEMU or VirtualBox.
 
-Adding a USB driver would be really ugly with UHCI, EHCI, OHCI, USB1, USB2, USB3, ICH6, ICH7, ICH8, ICH9, ICH10, ICH11, ICH12, boot mode and regular mode for keyboard/mouse and a diversity of HID reports.	It's hopeless.	It could never offer anything but crappy, limited support and it would just add a ton of crappy code that mostly didn't work.	What would ZealOS gain?	Nothing.	A keyboard or mouse would not be improved.	Solid State USB drives would be nice, but it's not going to happen.
-
-UEFI is pointless.	If ZealOS is forced to run in VMware, QEMU or VirtualBox, they will always support non-UEFI mode.	Without working, native hard drive and CD/DVD drivers, you can't get very far with UEFI on a native install, not to mention SecureBoot.  UEFI is, first of all, redundant.	If non-UEFI works in a virtual machine, supporting UEFI would only be redundant, ugly nasty code.  The compiler does not create an ELF or PE format.  We would have to ruin the beauty of the compiler.
+The compiler does not create an ELF or PE format.  We would have to ruin the beauty of the compiler.
 
 God talks.
 $FG,8$

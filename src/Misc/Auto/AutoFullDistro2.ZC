@@ -1,72 +1,36 @@
-#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n1024\n768\n\n\n"
-
-U0 MakeMyISO()
+U0 Auto()
 {
-	U8 *_out_iso_filename = "/Tmp/MyDistro.ISO.C";
-	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);
-	I64 line_count = LineRep("/*", "-r") + LineRep("/System/*") + LineRep("/Compiler/*", "-S+$$") + LineRep("/Kernel/*");
+	I64			 i, ata_port = -1;
+	CAHCIPort	*port;
+	U8			*in_str;
 
-	if (!DriveIsWritable)
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+
 	{
-		"Drive must be writable.	Install on Hard drive, first.\n";
-		return;
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATA)
+			{
+				ata_port = i;
+				break;
+			}
+		}
 	}
 
-	DocTreeFWrite("/System/Define.ZC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", line_count);
-	DefinePrint("DD_ZEALOS_LOC", "%,d", line_count);
-
-	"Total LOC:%12,d\n\n", line_count;
-
-	DelTree("/Distro");
-	Del(out_iso_filename);
-
-	ProgressBarsReset;
-	progress1_max = 14;
-	StrCopy(progress1_desc, "Copying files to /Distro");
-
-	DirMake("/Distro");
-	In(STD_DISTRO_DVD_CONFIG);
-	BootDVDIns;
-	progress1++;
-
-	Copy("/*", "/Distro");
-	progress1++;
-	DirMake("/Distro" BOOT_DIR);
-	Move(BOOT_DIR_DVD_KERNEL_ZXE, "/Distro" BOOT_DIR_KERNEL_ZXE);
-	progress1++;
-	CopyTree("/Home", 		"/Distro/Home");
-	progress1++;
-	Del("/Distro/Home/Registry.ZC");
-	CopyTree("/System", 	"/Distro/System");
-	progress1++;
-	CopyTree("/Apps", 		"/Distro/Apps");
-	progress1++;
-	CopyTree("/Compiler",	"/Distro/Compiler");
-	progress1++;
-	CopyTree("/Demo", 		"/Distro/Demo");
-	progress1++;
-	CopyTree("/Doc",		"/Distro/Doc");
-	progress1++;
-	CopyTree("/Kernel", 	"/Distro/Kernel");
-	progress1++;
-	CopyTree("/Misc", 		"/Distro/Misc");
-	progress1++;
-
-	CopyTree("/Downloads", "/Distro/Downloads");
-	progress1++;
-	DirMake("/Distro/Tmp");
-	DirMake("/Distro/Tmp/ScreenShots");
-	progress1++;
-	StrCopy(progress1_desc, "Building ISO");
-	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_ZXE);
-	progress1++;
-
-	//If CD-ROM use MT_CD instead of MT_DVD.
-	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
-
-	DelTree("/Distro");
-	ProgressBarsReset;
-	Free(out_iso_filename);
+	WinMax;
+	BootMHDIns('C');
+	CopyTree("C:/Tmp/OSBuild/Kernel/", "C:/Kernel/");
+	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
+	Sleep(700);
+	In(in_str);
+	BootHDIns;
+	OnceFlush;
+	Free(in_str);
+	in_str = MStrPrint(	"OnceFlush;"
+						"Once(\"#include \\\"/Misc/Auto/AutoFullDistro3\\\";;Auto;\");"
+						"Reboot;");
+	OnceDrive('C', in_str);
+	Reboot;
 }
-MakeMyISO;
-OutU8(0x501,0x31);
+Auto;

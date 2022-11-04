@@ -36,6 +36,7 @@ I64 DiffEntriesCompare(CDocEntry *doc_e1, CDocEntry *doc_e2)
 #define DF_ABORT_FILE 					0x10
 #define DF_ABORT_ALL_FILES				0x20
 #define DF_NO_MORE_PROMPTS_THIS_FILE	0x40
+#define DF_KEEP_FLAGS					0x80 // tells Diff NOT to &= with abort-all flag at call start
 
 U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi, I64 count1, I64 count2,
 		   CDocEntry **doc_unsorted1, CDocEntry **doc_unsorted2)
@@ -181,7 +182,13 @@ Bool DiffSub(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_
 			i2++;
 		else
 		{
-			i = StrCompare(doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
+			if (!CheckPtr(doc_sorted1[i1]) || !CheckPtr(doc_sorted2[i2]) || !CheckPtr(doc_sorted1[i1]->tag) || !CheckPtr(doc_sorted2[i2]->tag))
+			{
+				RawPrint(200, "DiffSub PANIC DEBUG FIXME: %X %X %X %X\n", doc_sorted1[i1], doc_sorted2[i2], doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
+				i = 1; // ???
+			}
+			else
+				i = StrCompare(doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
 			if (i > 0)
 				i2++;
 			else if (i < 0)
@@ -270,7 +277,9 @@ public Bool Diff(U8 *dst_file, U8 *src_file, I64 *_df_flags=NULL)
 		df_flags = *_df_flags;
 	else
 		df_flags = 0;
-	df_flags &= DF_ABORT_ALL_FILES;
+
+	if (!(df_flags & DF_KEEP_FLAGS))
+		df_flags &= DF_ABORT_ALL_FILES;
 
 	doc_e = doc1->head.next;
 	while (doc_e != doc1)

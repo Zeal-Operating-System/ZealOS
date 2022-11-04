@@ -1,12 +1,13 @@
+
 $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * The vision is the same usage model and niche as the Commodore 64 -- a simple machine where programming was the goal, not just a means to an end.  However, it is modern, 64-bit and $FG,2$multi-cored$FG$.  It is special purpose, not general purpose, so some things it will not do.  Also, it's a kayak, not a Titanic. The priority is $FG,2$user developers$FG$, not $FG,2$3rd party developers$FG$.
 
 * $FG,4$We don't think twice about breaking compatibility. $FG$ We do not put any hooks for future changes.  "Perfect" means we always act as though it is final, for all time.  Microsoft allowed the $FG,2$$TX,"Windows BMP",HTML="http://en.wikipedia.org/wiki/BMP_file"$$FG$ file format to adapt to the future and it became grotesque.
 
-* Low line count and code complexity is the highest good, so it is easy to learn the whole thing.  Users should see the light at the end of the tunnel.  One file system, for example, is better than many file systems.
+* Low line count and low code complexity is the highest good, so it is easy to learn the whole thing.  Users should see the light at the end of the tunnel.
 
-* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"98,216",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
+* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"98,661",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned from being required$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
 
 * The primary metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The secondary metric is how understandable the code is. The $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language should be changed to optimize these metrics, as Terry Davis did when he changed type casting from prefix to $LK+PU,"postfix",A="FF:::/Doc/ZealC.DD,postfix"$.
  
@@ -14,7 +15,7 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * It is for one platform -- $FG,4$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ desktop PC compatibles, more like super-computers than battery efficient wimpy mobiles.
 
-* One driver for each class of device. Limited exceptions are allowed. With divergent device capabilities, it is a nightmare for user applications and what is gained? 
+* One driver for each class of device. The only exceptions are networking, sound, and keyboard/mouse. With divergent device capabilities, it is a nightmare for user applications and what is gained? 
 
 * $FG,2$Ring-0-only$FG$.	Everything runs in kernel mode, including user applications.
 
@@ -26,13 +27,15 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * $FG,2$Single-address-map$FG$ as though paging is not used.	Long mode requires paging, however, so the nearest thing is keeping all memory $FG,2$identity-mapped$FG$.
 
-* $FG,2$Free$FG$ and $FG,2$public domain$FG$.
+* $FG,2$Free$FG$ and $FG,2$public domain$FG$ operating system code. Bootloaders of other open-source licenses (Grub, Limine, etc) are permitted. The Public Domain ZealOS HDD/DVD Bootloaders written in ZealC must always be kept functional, must always be offered as a bootloader option during BIOS-mode install, and must always be included in Distro ISOs. 
 
-* $FG,2$100% open source$FG$ with all source included.
+* $FG,2$100% open source$FG$ operating system code with all source included. Bootloaders are excluded from this requirement.
 
 * Documents are not for printing. They're dynamic, intended for the screen.
 
 * Just one 8x8 fixed-width font. $FG,4$No Unicode, just Extended ASCII$FG$. Other countries can make their own versions. The versions should be just for one language and platform.
+
+* Fully self-hosted self-reproducing functionality on bare-metal and in VMs, primarily via AHCI ATAPI burned CD/DVD discs (ÒR/W).
 $FG,8$
 * "Commodore 64" is a trademark owned by Polabe Holding NV.
 * "Windows" is a trademark owned by MicroSoft Corp.

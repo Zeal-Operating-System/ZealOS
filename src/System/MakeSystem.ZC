@@ -20,6 +20,7 @@ LBts(&sys_run_level, RLf_DOC);
 #include "God/MakeGod"
 #include "Hash"
 #include "TaskSettings"
+#include "PCILookUpSingle"
 #include "DevInfo"
 #include "Define"
 #include "WallPaper"

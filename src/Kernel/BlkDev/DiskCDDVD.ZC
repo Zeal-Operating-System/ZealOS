@@ -27,7 +27,8 @@ Bool ISOInit(CDrive *drive, I64 blk)
 						case ISOT_BOOT_RECORD:
 							drv_offset += (2 * DVD_BLK_SIZE + DVD_BLK_SIZE) / BLK_SIZE;
 							break;
-
+// TODO FIXME: ISOT_PRI_VOL_DESC isn't currently implemented, meaning only ISO9660 ISOs with Joliet filesystem are supported !
+//						case ISOT_PRI_VOL_DESC:
 						case ISOT_SUPPLEMENTARY_DESC:
 							de = &iso->root_dir_record;
 							drive->size = iso->vol_space_size.little * bd->blk_size >> BLK_SIZE_BITS;

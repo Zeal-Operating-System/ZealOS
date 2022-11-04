@@ -237,6 +237,6 @@ U0 KeyDevInit()
 	CtrlAltCBSet('M', &CtrlAltM, "Cmd /Toggle Mute");
 	CtrlAltCBSet('N', &CtrlAltN, "Cmd /Next Focus Task",, TRUE);
 	CtrlAltCBSet('T', &CtrlAltT, "Cmd /Terminal Window");
-	CtrlAltCBSet('V', &CtrlAltV, "Cmd /VGA Flush",, TRUE);
+	CtrlAltCBSet('V', &CtrlAltV, "Cmd /Video Framebuffer Flush",, TRUE);
 	CtrlAltCBSet('X', &CtrlAltX, "Cmd /Kill Focused Task",, TRUE);
 }

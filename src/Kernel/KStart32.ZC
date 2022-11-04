@@ -88,6 +88,7 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		BTS 	U32 [SYS_RUN_LEVEL], RLf_32BIT
 		MOV 	ESI, U32 [SYS_BOOT_PATCH_TABLE_BASE]
 		MOV 	EDI, U32 [MEM_BOOT_BASE]
+		MOV		ESP, U32 [SYS_BOOT_STACK]
 
 		MOV		AX, CGDT.ds
 		MOV		DS,  AX
@@ -95,8 +96,15 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		MOV		FS,  AX
 		MOV		GS,  AX
 		MOV		SS,  AX
-		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
+        JMP @@02
+
+        ALIGN 16, OC_NOP
+        // Signature to find CORE0_32BIT_INIT
+        DU64 ZEALBOOTER_LIMINE_SIGNATURE_1; 
+        DU64 ZEALBOOTER_LIMINE_SIGNATURE_2;
+
+@@02:
 //Patch abs addresses
 		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
 		LEA		ESI, U32 CPatchTableAbsAddr.abs_address[ESI]

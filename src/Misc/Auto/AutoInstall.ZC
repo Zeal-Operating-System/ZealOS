@@ -41,7 +41,7 @@ U0 VMInstallDrive(CTask *task, U8 drv_let, I64 ata_port, I64 atapi_port)
 		XTalkWait(task, "C\n%d\n", ata_port);
 	if (atapi_port > -1)
 		XTalkWait(task, "T%d\n", atapi_port);
-	XTalkWait(task, "\n1024\n768\n\n\n"); //Exit Drives,  set Screen Resolution, skip Disk Cache and Options
+	XTalkWait(task, "\n\n\n"); //Exit Drives, skip Disk Cache and Options
 }
 
 U0 VMInstallWiz()
@@ -66,7 +66,7 @@ U0 VMInstallWiz()
 	SATARep;
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			if (port->signature == AHCI_PxSIG_ATA)
@@ -78,7 +78,7 @@ U0 VMInstallWiz()
 	}
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			if (port->signature == AHCI_PxSIG_ATAPI)

@@ -126,3 +126,32 @@ else bus, dev, fun.
 pci_end:
 	return res;
 }
+
+Bool PCIBt(U8 reg RBX *bit_field, I64 reg RDX bit)
+{ // MOV-based Bt for use in PCI device memory-mapped IO areas.  See $LK+PU,"Bt()",A="FF:::/Kernel/KernelB.HH,Bt("$.
+	bit_field += bit / 8;
+	bit &= 7;
+	return (*bit_field & 1 << bit) >> bit;
+}
+
+Bool PCIBtr(U8 reg RDX *bit_field, I64 reg RBX bit)
+{ // MOV-based Btr for use in PCI device memory-mapped IO areas.  See $LK+PU,"Btr()",A="FF:::/Kernel/KernelB.HH,Btr("$.
+	U64 reg R9 chunk_mod = bit & 31, chunk_bit = 1 << chunk_mod;
+	bit_field(U32 *) += bit / 32;
+	Bool reg R8 result = (*bit_field(U32 *) & chunk_bit) >> chunk_mod;
+
+	*bit_field(U32 *) &= ~chunk_bit;
+
+	return result;
+}
+
+Bool PCIBts(U8 reg RDX *bit_field, I64 reg RBX bit)
+{ // MOV-based Bts for use in PCI device memory-mapped IO areas.  See $LK+PU,"Bts()",A="FF:::/Kernel/KernelB.HH,Bts("$.
+	U64 reg R9 chunk_mod = bit & 31, chunk_bit = 1 << chunk_mod;
+	bit_field(U32 *) += bit / 32;
+	Bool reg R8 result = (*bit_field(U32 *) & chunk_bit) >> chunk_mod;
+
+	*bit_field(U32 *) |= chunk_bit;
+
+	return result;
+}

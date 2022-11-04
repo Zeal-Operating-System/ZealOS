@@ -50,23 +50,31 @@ GDT_TR: 		DU8 	MP_PROCESSORS_NUM * 16 DUP(0);
 GDT_TR_RING3: 	DU8 	MP_PROCESSORS_NUM * 16 DUP(0);
 #assert $$ - SYS_GDT == sizeof(CGDT)
 
-SYS_FONT_PTR::	DU32	0;
+SYS_FRAMEBUFFER_ADDR::		DU64	0;
+SYS_FRAMEBUFFER_WIDTH::		DU64	0;
+SYS_FRAMEBUFFER_HEIGHT::	DU64	0;
+SYS_FRAMEBUFFER_PITCH::		DU64	0;
+SYS_FRAMEBUFFER_BPP::		DU8		0;
 
-SYS_VBE_INFO::			DU8 	sizeof(CVBEInfo)						DUP(0);
-SYS_VBE_MODES::			DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM	DUP(0);
-SYS_VBE_FINAL_MODE::	DU8 	sizeof(CVBEMode)						DUP(0);
-SYS_VBE_FINAL_MODE_NUM::DU16	0; //mode number of final mode set
+SYS_SMBIOS_ENTRY::	DU64	0;
+
+SYS_DISK_UUID::			DU64	0, 0;
+
+SYS_BOOT_STACK::	DU32	BOOT_RAM_LIMIT;
+
+SYS_IS_UEFI_BOOTED::    DU8    0;
+
+SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
+
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
-TEMP_VBE_MODE:		DU8 	sizeof(CVBEMode)		DUP(0);
-MAX_VBE_MODE:		DU8 	sizeof(CVBEModeShort)	DUP(0);
-MAX_SCREEN_HEIGHT:	DU16	0;
+REQUESTED_SCREEN_WIDTH:		DU16	1024;
+REQUESTED_SCREEN_HEIGHT:	DU16	768;
 
-#exe
-{
-	StreamPrint("SCREEN_WIDTH:	DU16		%d;"
-				"SCREEN_HEIGHT: DU16		%d;", kernel_config->screen_width, kernel_config->screen_height);
-};
+VBE_TEMP_MODE:		DU8 	sizeof(CVBEMode)	DUP(0);
+VBE_INFO:			DU8 	sizeof(CVBEInfo)	DUP(0);
+VBE_FINAL_MODE_NUM:	DU16	0; // gets set to final result mode number
+VBE_STD_MODE_NUM:	DU16	0; // gets set to mode number for standard 1024x768
 
 //************************************
 CORE0_16BIT_INIT::
@@ -84,10 +92,10 @@ GET_IP: POP 	BX
 		MOV 	AX, CS
 		ADD 	AX, BX
 		PUSH	AX
-		PUSH	U16 @@04
+		PUSH	U16 @@05
 		RETF
 
-@@04: 	STI
+@@05: 	STI
 		MOV 	AX, CS
 		MOV 	DS, AX
 		MOV 	U32 [SYS_RUN_LEVEL], RLF_16BIT
@@ -100,34 +108,34 @@ GET_IP: POP 	BX
 
 //Get VBE implementation information
 		MOV		AX, 0x4F00
-		MOV		DI, SYS_VBE_INFO
+		MOV		DI, VBE_INFO
 		MOV		CVBEInfo.signature[DI], 'VBE2' //set to 'VBE2' to use VBE 2.0 functionality
 		INT		0x10
 		POP		ES
 		CMP		AX, 0x004F
-		JE		@@05
+		JE		@@10
 		JMP		$$	//Freeze system if VBE not supported
 
-@@05:
+@@10:
 
 /*Loop variables:
  DI <- Temporary storage for mode information
  CX <- Mode number
- DX <- mode array
+ DX <- 'mode' array
  GS <- Segment for video modes list
  SI <- Offset for video modes list
 */
 //Obtain segment:offset of list of potential video modes
-		MOV		AX, SYS_VBE_INFO
+		MOV		AX, VBE_INFO
 		MOV		SI, CVBEInfo.video_modes[AX]
 		MOV		GS, CVBEInfo.video_modes+2[AX]
-		MOV		DI, TEMP_VBE_MODE
-		MOV		DX, SYS_VBE_MODES
+		MOV		DX, SYS_FRAMEBUFFER_LIST
+		MOV		DI, VBE_TEMP_MODE
 
-@@06: //Loop through all the mode numbers
+@@15: //Loop through all the mode numbers
 		MOV 	AX, GS:[SI]
 		CMP 	AX, 0xFFFF //FFFF signifies the end of the list
-		JE		@@08
+		JE		@@25
 
 		ADD 	SI, 2 //Increment pointer to read next U16 mode
 
@@ -141,90 +149,98 @@ GET_IP: POP 	BX
 		INT		0x10
 		POP		ES
 		CMP		AX, 0x004F
-		JNE		@@06 //if call to get mode information failed
+		JNE		@@15 //if call to get mode information failed
 
-//filter everything but 32-bit color
+//Filter everything but 32-bit color
 		MOV 	AL, CVBEMode.bpp[DI]
 		CMP 	AL, 32
-		JNE 	@@06
+		JNE 	@@15
 
 //Check if the mode is actually supported
 		MOV 	AX, CVBEMode.attributes[DI]
 		AND 	AX, 0x91 //bit 0 = supported, bit 4 = graphics mode, bit 7 = linear framebuffer
 		CMP 	AX, 0x91
-		JNE 	@@06
+		JNE 	@@15
 
 //Only want memory model of packed pixel or direct color (RGB)
-//		MOV 	AX, CVBEMode.memory_model[DI]
-//		CMP 	AX, 4
-//		JNE 	@@06
-//		CMP 	AX, 6
-//		JNE 	@@06
-//Copy information about this mode into an element of the mode array
-		MOV 	BX, CVBEMode.height[DI]
-		MOV 	CVBEModeShort.height[DX], BX
-		CMP 	BX, [MAX_SCREEN_HEIGHT]
-		JL		@@07
+		MOV 	AX, CVBEMode.memory_model[DI]
+		CMP 	AX, 4
+		JE		@@18
+		CMP		AX, 6
+		JNE		@@15
 
-		MOV		[MAX_SCREEN_HEIGHT], BX
-		MOV		[MAX_VBE_MODE],      CX
+//Copy information about this mode into AX and BX
+@@18:	MOV 	BX, CVBEMode.height[DI]
+@@20: 	MOV		AX, CVBEMode.width[DI]
 
-@@07: 	MOV		AX, CVBEMode.width[DI]
-		MOV		CVBEModeShort.width[DX], AX
-//		MOV		EAX, CVBEMode.max_pixel_clock[DI]
-//		MOV		CVBEModeShort.max_pixel_clock[DX], EAX
+// Copy info into DX SYS_FRAMEBUFFER_LIST
 
-		MOV 	CVBEModeShort.mode_num[DX], CX
-		ADD 	DX, sizeof(CVBEModeShort) //next array element
+		MOV		CVideoInfo.height[DX], BX
+		MOV		CVideoInfo.width[DX], AX
+		ADD		DX, sizeof(CVideoInfo) // next array element
 
-//Check if width and height match
-		CMP		AX, [SCREEN_WIDTH]
-		JNE		@@06
-		CMP		BX, [SCREEN_HEIGHT]
-		JNE		@@06
+//Check if width and height match standard 1024x768
+//If they match, set VBE_STD_MODE_NUM to this mode num
+		CMP		AX, 1024
+		JNE		@@23
+		CMP		BX, 768
+		JNE		@@23
+		MOV		[VBE_STD_MODE_NUM], CX
+
+//Check if width and height match requested resolution
+@@23:	CMP		AX, [REQUESTED_SCREEN_WIDTH]
+		JNE		@@15
+		CMP		BX, [REQUESTED_SCREEN_HEIGHT]
+		JNE		@@15
 
 //If we've made it here we have our mode
-		MOV		[SYS_VBE_FINAL_MODE_NUM], CX
-		JMP		@@06
+		MOV		[VBE_FINAL_MODE_NUM], CX
+		JMP		@@15
 
-@@08: //End of loop
-//If there isn't a valid mode set by user through kernel config, set the mode with the biggest height.
-		MOV		AX, [SYS_VBE_FINAL_MODE_NUM]
+@@25: //End of loop
+
+//If requested resolution wasn't found in VBE mode list,
+//use the standard 1024x768 mode as fallback
+		MOV		AX, [VBE_FINAL_MODE_NUM]
 		CMP		AX, 0
-		JNE		@@09
-		MOV		CX, [MAX_VBE_MODE]
-		MOV		[SYS_VBE_FINAL_MODE_NUM], CX
+		JNE		@@30
 
-@@09: 	PUSH	ES
+		MOV		CX, [VBE_STD_MODE_NUM]
+		MOV		[VBE_FINAL_MODE_NUM], CX
+
+@@30: 	PUSH	ES
 		PUSH	DS
 		POP 	ES
-//Get mode infomration for the mode we want
-		MOV 	DI, SYS_VBE_FINAL_MODE
-		MOV 	CX, [SYS_VBE_FINAL_MODE_NUM]
+//Get mode information for the mode we want
+		MOV 	DI, VBE_TEMP_MODE
+		MOV 	CX, [VBE_FINAL_MODE_NUM]
 		MOV 	AX, 0x4F01
 		INT 	0x10
 		POP 	ES
 		CMP 	AX, 0x004F
-		JNE 	@@10 //if called failed
+		JNE 	@@35 //if called failed
 
 //Set the mode; call takes mode number in BX
 		MOV 	AX, 0x4F02
 		MOV 	BX, CX
 		INT 	0x10
 		CMP 	AX, 0x004F
-		JNE 	@@10
+		JNE 	@@35
+
+//Give mode information to kernel
+		MOV		EAX, CVBEMode.framebuffer[DI]
+		MOV		U32 [SYS_FRAMEBUFFER_ADDR], EAX
+		MOV		AX, CVBEMode.height[DI]
+		MOV		U16 [SYS_FRAMEBUFFER_HEIGHT], AX
+		MOV		AX, CVBEMode.width[DI]
+		MOV		U16 [SYS_FRAMEBUFFER_WIDTH], AX
+		MOV		AX, CVBEMode.pitch[DI]
+		MOV		U16 [SYS_FRAMEBUFFER_PITCH], AX
+		MOV		AL, CVBEMode.bpp[DI]
+		MOV		U8 [SYS_FRAMEBUFFER_BPP], AL
 
 		BTS 	U32 [SYS_RUN_LEVEL], RLf_VESA
-@@10:
-
-//Get pointer to 8x8 VGA ROM font.
-		MOV		AX, 0x1130
-		MOV		BH, 3
-		INT		0x10
-		MOV		AX, ES
-		SHL		EAX, 16
-		MOV		AX, BP
-		MOV		U32 [SYS_FONT_PTR], EAX
+@@35:
 
 //Get E801 memory map.
 //Output: AX = Memory between 1MiB and 16MiB in KiB (max 0x3C00 == 15 MiB)
@@ -233,10 +249,10 @@ GET_IP: POP 	BX
 		XOR		DX, DX
 		MOV		AX, 0xE801
 		INT 	0x15
-		JCXZ	@@12 //if CX and DX are zero, use AX and BX instead.
+		JCXZ	@@40 //if CX and DX are zero, use AX and BX instead.
 		MOV		AX, CX
 		MOV		BX, DX
-@@12:	MOV 	U16 [MEM_E801],   AX
+@@40:	MOV 	U16 [MEM_E801],   AX
 		MOV 	U16 [MEM_E801+2], BX
 
 //Get E820 memory map.
@@ -245,21 +261,21 @@ GET_IP: POP 	BX
 		PUSH	DS
 		POP		ES
 		MOV 	DI,  MEM_E820
-@@15: 	PUSH	CX
+@@45: 	PUSH	CX
 		MOV 	EAX, 0xE820
 		MOV 	ECX, sizeof(CMemE820)
 		MOV 	EDX, 'PAMS'
 		INT 	0x15
-		JC		@@20
+		JC		@@50
 		CMP 	EAX, 'PAMS'
-		JNE 	@@20
+		JNE 	@@50
 		TEST	EBX, EBX
-		JZ		@@20
+		JZ		@@50
 		ADD 	DI,  sizeof(CMemE820)
 		POP 	CX
-		LOOP	@@15
+		LOOP	@@45
 		SUB 	SP,  2
-@@20: 	ADD		SP,  2 //if called failed we want to nullify the PUSHed CX value.
+@@50: 	ADD		SP,  2 //if called failed we want to nullify the PUSHed CX value.
 
 //Find how much space to map, start with E801 limit.
 		XOR 	EAX, EAX
@@ -270,24 +286,24 @@ GET_IP: POP 	BX
 
 //Find max of E820 to set mapped space.
 		MOV 	SI,  MEM_E820
-@@25: 	MOV 	CL,  CMemE820.type[SI]
+@@55: 	MOV 	CL,  CMemE820.type[SI]
 		TEST	CL,  CL
-		JZ		@@35
+		JZ		@@65
 		MOV 	EBX, CMemE820.base  [SI]
 		MOV 	ECX, CMemE820.base+4[SI]
 		ADD 	EBX, CMemE820.len   [SI]
 		ADC 	ECX, CMemE820.len+4 [SI]
 		SUB 	EBX, EAX
 		SBB 	ECX, EDX
-		JC		@@30
+		JC		@@60
 		MOV		EAX, CMemE820.base  [SI]
 		MOV		EDX, CMemE820.base+4[SI]
 		ADD		EAX, CMemE820.len   [SI]
 		ADC		EDX, CMemE820.len+4 [SI]
-@@30: 	ADD		SI,  sizeof(CMemE820)
-		JMP		@@25
+@@60: 	ADD		SI,  sizeof(CMemE820)
+		JMP		@@55
 
-@@35: 	MOV		[MEM_PHYSICAL_SPACE],   EAX
+@@65: 	MOV		[MEM_PHYSICAL_SPACE],   EAX
 		MOV		[MEM_PHYSICAL_SPACE+4], EDX
 
 //Get PCI Bus Info
@@ -296,11 +312,11 @@ GET_IP: POP 	BX
 		MOV		AX, 0xB101
 		INT		0x1A
 		CMP		DX, 'PC'
-		JNE		@@40
+		JNE		@@70
 		MOV		CH, 0
 		INC		CX
 		MOV		U16 [SYS_PCI_BUSES], CX
-@@40:
+@@70:
 		CLI
 //Enable A20
 		IN		AL, 0x92

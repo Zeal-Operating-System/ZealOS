@@ -60,7 +60,7 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 
 		for (i = 0; i < AHCI_MAX_PORTS; i++)
 		{
-			if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+			if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
 			{
 				port = &blkdev.ahci_hba->ports[i];
 

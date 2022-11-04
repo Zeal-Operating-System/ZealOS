@@ -1,3 +1,17 @@
+
+#define LIMINE_HDD_FILE			"/Boot/Limine-HDD.HH"
+#define LIMINE_HDD_INSTALLER	"/System/Boot/LimineMHDIns.ZC"
+#include LIMINE_HDD_FILE
+#include LIMINE_HDD_INSTALLER
+
+#define LIMINE_INSTALL_PROMPT	\
+"Install $$GREEN$$Public Domain$$FG$$ ZealOS Boot Loader,\n" \
+"or $$RED$$BSD-2 licensed$$FG$$ Limine Boot Loader?\n\n" \
+"$$DKGRAY$$ZealOS Boot Loader is written in public-domain ZealC, but only supports BIOS mode.\n\n" \
+"Limine supports UEFI and BIOS mode and multiple boot protocols, but is written in BSD-2 licensed C code, and cannot be modified within ZealOS.$$FG$$\n\n\n"
+
+// TODO FIXME: refactor OSUpgrade code into optional Diff prompt to compare ISO<->HDD before Install.
+
 CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 {
 	while (haystack_list)
@@ -10,7 +24,7 @@ CDirEntry OSFilesMGFind(CDirEntry *needle_entry, CDirEntry *haystack_list)
 	return NULL;
 }
 
-U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 *_df_flags, Bool auto)
+U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_df_flags)
 {
 	CDirEntry	*tmpde;
 	U8			*new;
@@ -23,28 +37,27 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 			"$$BROWN$$Does Not Exist:%s$$FG$$\n", tmpde1->full_name;
 			new = StrNew(tmpde1->full_name);
 			new[0] = tmpde2->full_name[0]; // shortcut to quickly get drive letter
-			Copy(tmpde1->full_name, new);
+
+			if (tmpde1->attr & RS_ATTR_DIR)
+				CopyTree(tmpde1->full_name, new);
+			else
+			{
+				Copy(tmpde1->full_name, new);
+			}
+
 			Free(new);
 		}
 		else
 		{
 			if (tmpde1->attr & RS_ATTR_DIR)
-				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _fuf_flags, _df_flags, auto);
+				OSFilesMergeInner(tmpde1->sub, tmpde->sub, _df_flags);
 			else
 			{
-				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) {//slop
+				if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
+				{
 					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
 					"$$LTGREEN$$%s$$FG$$\n", tmpde1->full_name;
-					if (Bt(_fuf_flags, FUf_DIFF))
-					{
-						if (FilesFindMatch(tmpde1->full_name, FILEMASK_TXT))
-						{
-							if (!auto)
-								Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
-							else
-								Copy(tmpde1->full_name, tmpde->full_name);
-						}
-					}
+					Diff(tmpde->full_name, tmpde1->full_name, _df_flags);
 				}
 			}
 		}
@@ -54,7 +67,7 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 
 U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *fu_flags=NULL)
 { // See $LK+PU,"Merge",A="FF:::/System/Utils/Merge.ZC,public U0 Merge"$.
-	I64			 df_flags = 0, fuf_flags = 0, ch;
+	I64			 df_flags, fuf_flags = 0, ch;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r");
@@ -64,20 +77,26 @@ U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *
 	PrintWarn("This is based strictly on file dates.\n");
 	tmpde1 = FilesFind(src_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	tmpde2 = FilesFind(dst_files_find_mask, fuf_flags & FUG_FILES_FIND);
-	fuf_flags &= FUF_DIFF;
 
 	"\n\nManual or Automatic Upgrade? (M/A): ";
 	do
 		ch = ToUpper(CharGet(, FALSE));
 	while (ch != 'M' && ch != 'A');
+
+	"%c\n", ch;
+
 	if (ch == 'M')
 	{
 		PopUpOk("\n$$LTGREEN$$FILE2$$FG$$ is new changes.\n"
 				"$$LTRED$$FILE1$$FG$$ is from existing install.");
-		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, FALSE);
+		df_flags = 0;
+		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
 	}
 	else
-		OSFilesMergeInner(tmpde1, tmpde2, &fuf_flags, &df_flags, TRUE);
+	{
+		df_flags = DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE | DF_KEEP_FLAGS;
+		OSFilesMergeInner(tmpde1, tmpde2, &df_flags);
+	}
 
 	DirTreeDel(tmpde1);
 	DirTreeDel(tmpde2);
@@ -89,17 +108,36 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	U8 *src = MStrPrint("%C:/", src_drv);
 
 	CopyTree(dst, "B:/");
-	Copy(MStrPrint("%C:/Misc/Bible.TXT", src_drv), "B:/Misc/Bible.TXT");
-	Copy(MStrPrint("%C:/Misc/Clementine.TXT", src_drv), "B:/Misc/Clementine.TXT");
+	Del("B:/Misc/Bible.TXT");		// Deleting from B:/ prevents causing hang when merging large .TXT files,
+	Del("B:/Misc/Clementine.TXT");	// they will instead be copied over from boot drive in OSMergeInner
+
+	Del("B:/Boot/Limine.CFG"); // Delete to make merge output ignore (copy) this, since it gets regenerated later
+
+	DocMax;
+
+	"$$PB$$$$PB$$$$LTCYAN$$Beginning Upgrade (running OSFilesMerge) ...$$FG$$\n\n";
+
 	OSFilesMerge("B:/", src, "+d");
+
+	"\n\n$$LTCYAN$$Upgrade merge completed."
+	"\nChanges listed above, scroll up to see all."
+	"\n\nPress ESC when you are ready to finish Upgrade (write merged files to disk).$$FG$$\n\n";
+	View;
+	DocBottom;
+
 	CopyTree("B:/", dst);
+
+	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", dst_drv);
+	ExePrint("Del(\"%C:/boot.catalog\");", dst_drv);
+
 }
 
 U0 OSUpgrade()
 {
-	I64		 drv_let;
+	I64		 drv_let, ch;
 	U8		*st, *port_st;
-	I64		 res_num;
 	CTask	*task;
 
 	task = User;
@@ -147,17 +185,44 @@ U0 OSUpgrade()
 
 	OSMerge(drv_let); // src_drv needed?
 
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
-	VideoRep;
-	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
-	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
+	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
+	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
 
-	"$$RED$$Install Master Boot Loader?$$FG$$";
-	if (YorN)
+	if (!sys_is_uefi_booted)
 	{
-		'\n';
-		BootMHDIns(drv_let);
+		"$$RED$$Install Master Boot Loader?$$FG$$";
+		if (YorN)
+		{
+			"\n\n";
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"" LIMINE_INSTALL_PROMPT;
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+				"%c\n", ch;
+
+				if (ch == 'Z')
+				{
+					BootMHDIns(drv_let);
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake(drv_let);
+				}
+				else
+				{
+					LimineMHDIns(drv_let);
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns(drv_let);
+		}
 	}
+	else
+		LimineCFGMake(drv_let);
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
@@ -169,9 +234,22 @@ U0 InstallDrive(U8 drv_let)
 
 	while (!DriveCheck(blkdev.let_to_drive[drv_let - 'A'], FALSE))
 		Sleep(1);
+
+	Sleep(1000);
+	'.';
+	Sleep(1000);
+	'.';
+	Sleep(1000);
+	'.';
 	Sleep(1000);
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
+
+	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", drv_let);
+	ExePrint("Del(\"%C:/boot.catalog\");", drv_let);
+
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
 	ExePrint("DirMake(\"%C:/Home\");",				drv_let);
@@ -206,13 +284,13 @@ U0 VMInstallDrive(CTask *task, U8 drv_let, I64 ata_port, I64 atapi_port)
 		XTalkWait(task, "C\n%d\n", ata_port);
 	if (atapi_port > -1)
 		XTalkWait(task, "T%d\n", atapi_port);
-	XTalkWait(task, "\n1024\n768\n\n\n"); //Exit Drives,  set Screen Resolution, skip Disk Cache and Options
+	XTalkWait(task, "\n\n\n\n"); //Exit Drives, skip Disk Cache and Options
 }
 
 U0 VMInstallWiz()
 {
 	CTask		*task;
-	I64			 i, atapi_port = -1, ata_port = -1;
+	I64			 i, atapi_port = -1, ata_port = -1, ch;
 	CAHCIPort	*port;
 
 	task = User;
@@ -229,7 +307,7 @@ U0 VMInstallWiz()
 	SATARep;
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			if (port->signature == AHCI_PxSIG_ATA)
@@ -241,7 +319,7 @@ U0 VMInstallWiz()
 	}
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
 			if (port->signature == AHCI_PxSIG_ATAPI)
@@ -256,7 +334,38 @@ U0 VMInstallWiz()
 	{
 		VMInstallDrive(task, 'C', ata_port, atapi_port);
 		VMInstallDrive(task, 'D', ata_port, atapi_port);
-		BootMHDIns('C');
+		if (!sys_is_uefi_booted)
+		{
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"\n\n"
+				"" LIMINE_INSTALL_PROMPT;
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+				"%c\n", ch;
+
+				if (ch == 'Z')
+				{
+					BootMHDIns('C');
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake('C');
+				}
+				else
+				{
+					LimineMHDIns('C');
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns('C');
+		}
+		else
+			LimineCFGMake('C');
+
 	}
 
 	WinVert(task->win_top, Fs->win_bottom);
@@ -267,7 +376,7 @@ U0 RegularInstallWiz()
 {
 	I64		 drv_let;
 	U8		*st, *port_st;
-	I64		 ch, res_num;
+	I64		 ch;
 	CTask	*task;
 
 	task = User;
@@ -336,15 +445,43 @@ U0 RegularInstallWiz()
 
 
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
-	VideoRep;
-	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
-	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
-	"$$RED$$Install Master Boot loader?$$FG$$";
-	if (YorN)
+	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
+	if (!sys_is_uefi_booted)
 	{
-		'\n';
-		BootMHDIns(drv_let);
+		"$$RED$$Install Master Boot loader?$$FG$$";
+		if (YorN)
+		{
+			"\n\n";
+			if (FileFind(LIMINE_HDD_FILE))
+			{
+				"" LIMINE_INSTALL_PROMPT;
+				"(Z/L): ";
+
+				do
+					ch = ToUpper(CharGet(, FALSE));
+				while (ch != 'Z' && ch != 'L');
+
+
+				"%c\n", ch;
+
+				if (ch == 'Z')
+				{
+					BootMHDIns(drv_let);
+					"\n(Generating optional UEFI-mode Limine.CFG...)\n";
+					LimineCFGMake(drv_let); // ensures we don't leave the LiveCD's Limine.CFG on the HDD
+				}
+				else
+				{
+					LimineMHDIns(drv_let);
+				}
+				"\n\n";
+			}
+			else
+				BootMHDIns(drv_let);
+		}
 	}
+	else
+		LimineCFGMake(drv_let);
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
@@ -380,6 +517,8 @@ Bool DoInstall(Bool prompt_reboot)
 			ch = ToUpper(CharGet(, FALSE));
 		while (ch != 'U' && ch != 'I');
 
+		"%c\n", ch;
+
 		if (ch == 'U')
 			OSUpgrade;
 		else
@@ -399,6 +538,8 @@ Bool DoInstall(Bool prompt_reboot)
 			do
 				ch = ToUpper(CharGet(, FALSE));
 			while (ch != 'U' && ch != 'I');
+
+			"%c\n", ch;
 
 			if (ch == 'I')
 			{

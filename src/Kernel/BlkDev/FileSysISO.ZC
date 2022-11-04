@@ -176,7 +176,8 @@ U8 *ISOFileRead(CDrive *drive, U8 *cur_dir, U8 *filename, I64 *_size, I64 *_attr
 				buf = MAlloc(blk_cnt << BLK_SIZE_BITS + 1);
 				c = de.clus;
 				c = ClusBlkRead(drive, buf, c, blk_cnt);
-				buf[de.size] = 0;	//Terminate *_size = de.size;
+				buf[de.size] = 0;	//Terminate
+				*_size = de.size;
 				*_attr = FileAttr(de.name, de.attr);
 			}
 			DriveUnlock(drive);

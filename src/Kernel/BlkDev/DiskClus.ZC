@@ -106,7 +106,7 @@ I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
 
 I64 ClusRead(CDrive *drive, U8 *buf, I64 c, I64 count)
 {//Read cluster count from drive to buf.
-	return ClusBlkRead(drive, buf, c, count*drive->spc);
+	return ClusBlkRead(drive, buf, c, count * drive->spc);
 }
 
 I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)

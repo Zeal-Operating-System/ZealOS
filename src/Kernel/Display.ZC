@@ -60,17 +60,17 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 		{//Scroll screen down
 
 			MemCopy(text.fb_alias,
-					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
-					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+					text.fb_alias		+ sys_framebuffer_width * FONT_HEIGHT,
+					(text.screen_size	- sys_framebuffer_width * FONT_HEIGHT) * sizeof(U32));
 
-			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
+			MemSetU32(text.fb_alias + text.screen_size - sys_framebuffer_width * FONT_HEIGHT, BLACK32, sys_framebuffer_width * FONT_HEIGHT);
 			text.raw_col -= text.cols ;
 			row = text.rows - 1;
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;
 		ch_bitmap = text.font[ch & 0xFF];
-		framebuffer = text.fb_alias + sys_vbe_mode.width * y + x;
+		framebuffer = text.fb_alias + sys_framebuffer_width * y + x;
 
 		PUSHFD
 		CLI
@@ -81,7 +81,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 			else
 				*framebuffer++ = BLACK32;
 			if (i & (FONT_WIDTH - 1) == FONT_WIDTH - 1)
-				framebuffer += sys_vbe_mode.width - FONT_WIDTH;
+				framebuffer += sys_framebuffer_width - FONT_WIDTH;
 			ch_bitmap >>= 1;
 		}
 		POPFD
