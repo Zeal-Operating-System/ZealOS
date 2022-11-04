@@ -1,0 +1,33 @@
+U0 Auto()
+{
+	I64			 i, ata_port = -1;
+	CAHCIPort	*port;
+	U8			*in_str;
+
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+
+	{
+		if (PCIBt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATA)
+			{
+				ata_port = i;
+				break;
+			}
+		}
+	}
+
+	WinMax;
+	CopyTree("C:/Tmp/OSBuild/", "C:/");
+	in_str = MStrPrint("CC\n%d\n\n\n\n", ata_port);
+	Sleep(700);
+	In(in_str);
+	BootHDIns;
+	OnceFlush;
+	in_str = MStrPrint("#include \"/Misc/Auto/AutoFullDistro4\";;Auto;;");
+	OnceDrive('C', in_str);
+	DelTree("C:/Tmp/OSBuild");
+	Reboot;
+}
+Auto;

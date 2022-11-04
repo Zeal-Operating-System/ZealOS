@@ -49,27 +49,31 @@ function Unmount-TempDisk
 
 Write-Output "Making temp vdisk, running auto-install..."
 
-qemu-img create -f vhdx $TMPDISK 512M
+qemu-img create -f vhdx $TMPDISK 1024M
 fsutil sparse setflag $TMPDISK 0
 fsutil sparse queryflag $TMPDISK 
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -cdrom AUTO.ISO -device isa-debug-exit
 
+Write-Output "Copying all src/ code into vdisk Tmp/OSBuild/ ..."
+
 Remove-Item "..\src\Home\Registry.ZC" -errorAction SilentlyContinue
 Remove-Item "..\src\Home\MakeHome.ZC" -errorAction SilentlyContinue
+Remove-Item "..\src\Boot\Kernel.ZXE" -errorAction SilentlyContinue
 Mount-TempDisk
-
-Copy-Item -Path "..\src\*" -Destination "${QEMULETTER}:\" -Recurse -Force
+New-Item -Path "${QEMULETTER}:\Tmp\" -Name "OSBuild" -ItemType "directory"
+Copy-Item -Path "..\src\*" -Destination "${QEMULETTER}:\Tmp\OSBuild\" -Recurse -Force
 Unmount-TempDisk
 
-Write-Output "Generating ISO..."
+Write-Output "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
+
 qemu-system-x86_64 -machine q35,accel=whpx,kernel-irqchip=off -drive format=vhdx,file=$TMPDISK -m 2G -rtc base=localtime -device isa-debug-exit
+
 Write-Output "Extracting ISO from vdisk..."
+
 Remove-Item "ZealOS-*.iso" -errorAction SilentlyContinue
 Mount-TempDisk
-
-$ZEALISO = "ZealOS-" + (Get-Date -Format "yyyy-MM-dd-HH_mm_ss").toString() + ".iso"
-
-Copy-Item "${QEMULETTER}:\Tmp\MyDistro.ISO.C" -Destination $ZEALISO
+$ZEALISO = "ZealOS-PublicDomain-BIOS-" + (Get-Date -Format "yyyy-MM-dd-HH_mm_ss").toString() + ".iso"
+Copy-Item "${QEMULETTER}:\Tmp\MyDistro.ISO.C" -Destination $ZEALISO 
 Unmount-TempDisk
 
 Remove-Item $TMPDISK

@@ -1,0 +1,4 @@
+U0 Auto()
+{
+	PopUp("#include \"/Misc/Auto/AutoFullDistro5\"");
+}

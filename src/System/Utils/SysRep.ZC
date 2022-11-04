@@ -660,6 +660,12 @@ Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry)
 	I64		 i;
 	U8 noreg checksum = 0, *mem = 0xF0000;
 
+	if (sys_smbios_entry)
+	{
+		*entry = sys_smbios_entry;
+		return TRUE;
+	}
+
 	do
 	{
 		if (!MemCompare(mem, "_SM_", 4))

@@ -1,0 +1,136 @@
+#help_index "PCI;Processor;Devices;Info"
+
+// PCILookUpSingle has been moved to its own file
+// to make it simpler to update for modern PCI device lists.
+// https://www.github.com/Zeal-Operating-System/PCIDeviceList
+
+//The file was downloaded from
+//http://www.pcidatabase.com/reports.php?type=tab-delimeted
+
+#define PCI_DEV_FILE "::/Misc/PCIDevices.DD"
+
+/****
+//1) Download http://www.pcidatabase.com/reports.php?type=tab-delimeted
+//2) Rename to ::/Misc/PCIDevices.DD
+//3) ToDolDoc("::/Misc/PCIDevices.DD");
+//4) Edit and remove file header and tail
+//5) Text find-and-replace "=0A=" with "". (Doesn't seem necessary anmore.)
+//6) Run PCIDevFileGen(). (Doesn't seem necessary anmore.)
+
+public U0 PCIDevFileGen()
+{
+	Bool first=TRUE,del=FALSE,del2=FALSE,cont=FALSE;
+	CDoc *doc=DocRead(PCI_DEV_FILE,
+				DOCF_PLAIN_TEXT|DOCF_DBL_DOLLARS|DOCF_NO_CURSOR);
+	CDocEntry *doc_e=doc->head.next,*doc_e2;
+	while (doc_e!=doc) {
+		doc_e2=doc_e->next;
+		if (first) {
+			if (doc_e->type_u8==DOCT_TEXT) {
+				if (doc_e->tag[0]==';')
+					del=TRUE;
+			}
+			first=FALSE;
+		}
+		if (doc_e->type_u8==DOCT_TEXT && doc_e->tag[StrLen(doc_e->tag)-1]=='=' &&
+					doc_e2->type_u8==DOCT_NEW_LINE) {
+			doc_e->tag[StrLen(doc_e->tag)-1]=CH_SPACE;
+			cont=TRUE;
+		}
+		del2=del;
+		if (doc_e->type_u8==DOCT_NEW_LINE) {
+			first=TRUE;
+			del2=FALSE;
+			if (cont) {
+				del=TRUE;
+				cont=FALSE;
+			}
+		}
+		if (del)
+			DocEntryDel(doc,doc_e);
+		del=del2;
+		doc_e=doc_e2;
+	}
+	DocWrite(doc);
+}
+****/
+
+//$LK,"::/Misc/PCIDevices.DD",A="PI:::/Misc/PCIDevices.DD"$
+U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
+{
+	Bool		 first = TRUE;
+	U8			 buf[8], *vendor = NULL, *dev = NULL;
+	CDocEntry	*doc_e = doc->head.next;
+
+	while (doc_e != doc)
+	{
+		if (first)
+		{
+			if (doc_e->type_u8 == DOCT_TEXT && doc_e->tag[0] != ';' && StrLen(doc_e->tag) >= 4)
+			{
+				buf[0](U16) = '0x';
+				buf[2](U32) = doc_e->tag(U32 *)[0];
+				buf[6] = '\0';
+				if (Str2I64(buf) == m)
+				{
+					doc_e = doc_e->next->next->next;
+					if (doc_e->type_u8 == DOCT_TEXT)
+					{
+						vendor = SysStrNew(doc_e->tag);
+						first = FALSE;
+						break;
+					}
+				}
+			}
+			first=FALSE;
+		}
+		if (doc_e->type_u8 == DOCT_NEW_LINE)
+			first = TRUE;
+		doc_e = doc_e->next;
+	}
+
+	if (vendor)
+	{
+		while (doc_e != doc)
+		{
+			if (first)
+			{
+				if (doc_e->type_u8 == DOCT_TAB)
+				{
+					doc_e = doc_e->next->next->next->next;
+					if (doc_e->type_u8 == DOCT_TEXT && StrLen(doc_e->tag) >= 4)
+					{
+						buf[0](U16) = '0x';
+						buf[2](U32) = doc_e->tag(U32 *)[0];
+						buf[6] = '\0';
+						if (Str2I64(buf) == d)
+						{
+							doc_e = doc_e->next->next->next;
+							if (doc_e->type_u8 == DOCT_TEXT)
+							{
+								dev = SysStrNew(doc_e->tag);
+								break;
+							}
+						}
+					}
+				}
+				else
+					break;
+				first = FALSE;
+			}
+			if (doc_e->type_u8 == DOCT_NEW_LINE)
+				first = TRUE;
+			doc_e = doc_e->next;
+		}
+	}
+
+	if (vendor)
+		*_vendor = vendor;
+	else
+		*_vendor = SysStrNew("Unknown");
+
+	if (dev)
+		*_dev = dev;
+	else
+		*_dev = SysStrNew("Unknown");
+}

@@ -26,7 +26,6 @@ class CKConfig
 	CDoc	*add_dev;
 	U8		*debug_distro_file, *debug_distro_start;
 	U8		*home_dir;
-	U16		screen_width, screen_height;
 	Bool	opts[CONFIG_OPTIONS_NUM];
 	U8		mem_init_val, heap_init_val, var_init_val, boot_drive_let, mount_ide_auto_hd_let, mount_ide_auto_cd_let;
 };
@@ -168,27 +167,11 @@ U0 KConfigOptions(CKConfig *c)
 
 CKConfig *KConfigNew()
 {
-	I64		  resolution_num;
 	CKConfig *c = CAlloc(sizeof(CKConfig));
 
 	c->add_dev = KConfigAddDev(c);
 	c->home_dir = StrNew("::/Home");
-
-	VideoRep(FALSE);
-	resolution_num = I64Get("Enter list number of desired resolution, "
-							"or desired width. ($$PURPLE$$<ENTER>$$FG$$ for auto maximum): ",, 1);
-	if (resolution_num <= VBE_MODES_NUM)
-	{
-		c->screen_width  = sys_vbe_modes[resolution_num - 1].width;
-		c->screen_height = sys_vbe_modes[resolution_num - 1].height;
-	}
-	else
-	{
-		c->screen_width  = resolution_num;
-		c->screen_height = I64Get("Enter Height: ",, 0);
-	}
  
-
 	c->disk_cache_size_exp = StrGet("\nDisk Cache Size in Bytes, gets rounded-up funny, "
 									"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
 									"Scale2Mem(0x80000,0x8000000)");

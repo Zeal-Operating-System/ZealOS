@@ -64,32 +64,17 @@ U0 SysGlobalsInit()
 	QueueInit(&dev.pci_head);
 	dev.mem64_ptr = mem_mapped_space;
 
-	if (sys_boot_src.u8[0] != BOOT_SRC_RAM)
-	{//framebuffer pointer is already linear
-		Seg2Linear(&sys_vbe_info.video_modes);
-		Seg2Linear(&sys_vbe_info.oem);
-		Seg2Linear(&sys_vbe_info.vendor);
-		Seg2Linear(&sys_vbe_info.product_name);
-		Seg2Linear(&sys_vbe_info.product_revision);
-		Seg2Linear(SYS_FONT_PTR);
-		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
-	}
-
 	debug.fun_seg_cache  = CAlloc(FUN_SEG_CACHE_SIZE * sizeof(CFunSegCache));
 	debug.int_fault_code = IntFaultHandlersNew;
 }
 
 U0 SysGrInit()
 {
-	I64 i, j;
-	text.aux_font = MAlloc(256 * 8); //256 U64s
-	MemCopy(text.aux_font, *SYS_FONT_PTR(U32), 256 * 8);
-
-	for (i = 0; i < 256; i++)
-		for (j = 0; j < 8; j++)
-			text.aux_font[i].u8[j] = rev_bits_table[text.aux_font[i].u8[j]];
+	I64 i;
 
     text.font = sys_font_std;
+
+	text.aux_font = sys_font_aux;
 
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
@@ -103,16 +88,15 @@ U0 SysGrInit()
 	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32) = 'ÀÈÙ¼';
 
-	text.cols = sys_vbe_mode.width  / FONT_WIDTH;
-	text.rows = sys_vbe_mode.height / FONT_HEIGHT;
+	text.cols = sys_framebuffer_width  / FONT_WIDTH;
+	text.rows = sys_framebuffer_height / FONT_HEIGHT;
 
-	text.screen_size	= sys_vbe_mode.width * sys_vbe_mode.height;
+	text.screen_size	= sys_framebuffer_width * sys_framebuffer_height;
 	text.buffer_size	= text.screen_size * 4; //buffer for 32-bit, but only 16 colors now.
 	text.raw_screen		= CAlloc(text.buffer_size);
-	text.fb_alias		= sys_vbe_mode.framebuffer;
+	text.fb_alias		= sys_framebuffer_addr;
 
 	MemSetU32(text.fb_alias, BLACK32, text.screen_size);
-	text.vga_alias = CAlloc(text.rows * text.cols * 8);
 }
 
 U0 TimerInit()

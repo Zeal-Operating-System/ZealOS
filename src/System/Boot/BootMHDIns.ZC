@@ -12,12 +12,13 @@
 //Old master boot record
 #define BOOT_DIR_OLDMBR_BIN 	BOOT_DIR "/OldMBR.BIN"
 
-public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive)
+public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive, I64 size=1)
 {//Reads MBR from disk drive containing src partition.
-//Writes a single block file to dst BOOT_DIR.
+//Writes MBR file to dst BOOT_DIR.
+// Takes optional arg 'size': count of 512-byte blocks.
 	CBlkDev		*bd = Letter2BlkDev(src_drive);
 	CDrive		*drive;
-	CMasterBoot	 mbr;
+	U8			*mbr = MAlloc(BLK_SIZE * size);
 
 	Drive(dst_drive);
 	drive = Fs->cur_dv;
@@ -28,28 +29,30 @@ public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive)
 	{
 //Bypass partition bounds-checking
 		BlkDevLock(bd);
-		AHCIAtaBlksRead(bd, &mbr, 0, 1);
+		AHCIAtaBlksRead(bd, mbr, 0, size);
 		BlkDevUnlock(bd);
 
 		Drive(dst_drive);
 		DirMake(BOOT_DIR);
-		FileWrite(BOOT_DIR_OLDMBR_BIN, &mbr, BLK_SIZE);
+		FileWrite(BOOT_DIR_OLDMBR_BIN, mbr, size * BLK_SIZE);
 	}
 }
 
 public U0 BootMHDOldWrite(U8 src_drive, U8 dst_drive)
 {//Reads OldMBR from src drive BOOT_DIR.
 //writes it to the MBR of the drive with dst partition.
+// If OldMBR.BIN size > BLK_SIZE, writes to post-MBR gap.
 	CBlkDev		*bd = Letter2BlkDev(dst_drive);
 	CMasterBoot	*mbr;
+	I64			 size;
 
 	Drive(src_drive);
 
-	if (mbr = FileRead(BOOT_DIR_OLDMBR_BIN))
+	if (mbr = FileRead(BOOT_DIR_OLDMBR_BIN, &size))
 	{
 //Bypass partition bounds-checking
 		BlkDevLock(bd);
-		AHCIAtaBlksWrite(bd, mbr, 0, 1);
+		AHCIAtaBlksWrite(bd, mbr, 0, size / BLK_SIZE);
 		BlkDevUnlock(bd);
 	}
 	Free(mbr);
@@ -117,10 +120,13 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 			StrPrint(menu_ptr, "\n\r\n\rZealOS Boot Loader\n\r\n\r");
 			j = 0;
 
+			"\nDetected boot drives:\n";
+			"(Choice %16s)\n", "drv_offset";
 			if (FileFind(BOOT_DIR_OLDMBR_BIN, &de, FUF_JUST_FILES))
 			{
 				Free(de.full_name);
 				*_q++ = Clus2Blk(drive, de.clus);
+				"Old Boot Record\n";
 				CatPrint(menu_ptr, "0. Old Boot Record\n\r");
 				j++;
 			}
@@ -173,6 +179,7 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 				res = TRUE;
 			}
 		}
+		"\nZealOS Public Domain HDD MBR Boot Loader installed.\n\n";
 	}
 	catch
 		PutExcept;

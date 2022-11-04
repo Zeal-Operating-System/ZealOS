@@ -239,7 +239,7 @@ U16	E1000EEPROMRead(U8 word)
 	E1000MMIOWrite(E1000_REG_EERD, 1 | word << 8);
 
 	temp = E1000MMIORead(E1000_REG_EERD);
-	while (!Bt(&temp, E1000_EERDf_DONE))
+	while (!PCIBt(&temp, E1000_EERDf_DONE))
 	{
 		Sleep(1);
 		temp = E1000MMIORead(E1000_REG_EERD);
@@ -278,7 +278,7 @@ I64 E1000PacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 		drop = TRUE;
 	}
 
-	if (Bt(&entry->status, E1000_RDESC_STATUSf_EOP))
+	if (PCIBt(&entry->status, E1000_RDESC_STATUSf_EOP))
 	{
 		NetErr("E1000 PACKET RECEIVE: No EOP Set");
 		drop = TRUE;
@@ -316,7 +316,7 @@ U0 E1000ReceivePacketRelease(I64 de_index)
 
 Bool E1000DriverOwnsRX(CE1000DescriptorEntryRX *entry)
 {
-	return Bt(&entry->status, 0); // ?? TODO #define
+	return PCIBt(&entry->status, 0); // ?? TODO #define
 }
 
 I64 E1000TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
@@ -330,9 +330,9 @@ I64 E1000TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 
 	entry->address	= *packet_buffer_out;
 	entry->length	= length;
-	Bts(&entry->cmd, E1000_TDESC_CMDf_EOP);
-	Bts(&entry->cmd, E1000_TDESC_CMDf_IFCS);
-	Bts(&entry->cmd, E1000_TDESC_CMDf_RS);
+	PCIBts(&entry->cmd, E1000_TDESC_CMDf_EOP);
+	PCIBts(&entry->cmd, E1000_TDESC_CMDf_IFCS);
+	PCIBts(&entry->cmd, E1000_TDESC_CMDf_RS);
 
 	NetLog("E1000 ALLOCATE TX PACKET: de_index: %X.", de_index);
 	return de_index;
@@ -370,23 +370,23 @@ interrupt U0 E1000IRQ()
 
 	icr &= ~(E1000_ICRF_TXDW | E1000_ICRF_TXQE);
 
-	if (Bt(&icr, E1000_ICRf_LSC)) // 'link status change' ?
+	if (PCIBt(&icr, E1000_ICRf_LSC)) // 'link status change' ?
 	{
-		Btr(&icr, E1000_ICRf_LSC);
+		PCIBtr(&icr, E1000_ICRf_LSC);
 		E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_SLU);
 	}
 
-	if (Bt(&icr, E1000_ICRf_RXO) || Bt(&icr, E1000_ICRf_RXDMT)) // 'rx underrun / min threshold' ?
+	if (PCIBt(&icr, E1000_ICRf_RXO) || PCIBt(&icr, E1000_ICRf_RXDMT)) // 'rx underrun / min threshold' ?
 	{
-		Btr(&icr, E1000_ICRf_RXO);
-		Btr(&icr, E1000_ICRf_RXDMT);
+		PCIBtr(&icr, E1000_ICRf_RXO);
+		PCIBtr(&icr, E1000_ICRf_RXDMT);
 
 		poll = TRUE;
 	}
 
-	if (Bt(&icr, E1000_ICRf_RXT)) // 'packet pending' ?
+	if (PCIBt(&icr, E1000_ICRf_RXT)) // 'packet pending' ?
 	{
-		Btr(&icr, E1000_ICRf_RXT);
+		PCIBtr(&icr, E1000_ICRf_RXT);
 
 		poll = TRUE;
 	}

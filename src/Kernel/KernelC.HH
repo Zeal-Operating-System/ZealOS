@@ -622,6 +622,9 @@ public extern							U0	PCIWriteU32(I64 bus, I64 dev, I64 fun, I64 rg, I64 val);
 public extern							U0	PCIWriteU8( I64 bus, I64 dev, I64 fun, I64 rg, I64 val);
 public _extern SYS_PCIBIOS_SERVICE_DIR	U32	sys_PCIBIOS_service_dir;//Far call routine in the BIOS
 public _extern SYS_PCI_SERVICES			U32	sys_pci_services;//Far call routine in the BIOS
+public extern							Bool PCIBt(		U8 *bit_field, I64 bit); // MOV-based Bt for use in PCI device memory-mapped IO areas.   See $LK+PU,"Bt()",A="FF:::/Kernel/KernelB.HH,Bt("$.
+public extern							Bool PCIBtr(	U8 *bit_field, I64 bit); // MOV-based Btr for use in PCI device memory-mapped IO areas.  See $LK+PU,"Btr()",A="FF:::/Kernel/KernelB.HH,Btr("$.
+public extern							Bool PCIBts(	U8 *bit_field, I64 bit); // MOV-based Bts for use in PCI device memory-mapped IO areas.  See $LK+PU,"Bts()",A="FF:::/Kernel/KernelB.HH,Bts("$.
 
 #help_index "Processor"
 public extern U8 *IntEntryGet(I64 irq);

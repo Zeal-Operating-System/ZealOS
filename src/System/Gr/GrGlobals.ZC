@@ -47,9 +47,9 @@ public CBGR24 gr_palette[COLORS_NUM];
 //See $LK,"SysGrInit",A="MN:SysGrInit"$()
 //Allows consts to be used instead of variables.
 HashPublic("GR_WIDTH", HTT_DEFINE_STR);;
-DefinePrint("GR_WIDTH", "%d", sys_vbe_mode.width);
+DefinePrint("GR_WIDTH", "%d", sys_framebuffer_width);
 HashPublic("GR_HEIGHT", HTT_DEFINE_STR);;
-DefinePrint("GR_HEIGHT", "%d", sys_vbe_mode.height);
+DefinePrint("GR_HEIGHT", "%d", sys_framebuffer_height);
 
 #help_index "Char;TextBase Layer/Char"
 DefinePrint("TEXT_ROWS", "%d", text.rows);;

@@ -16,6 +16,7 @@ Features in development include:
   - [32-bit color VBE graphics](https://github.com/TempleProgramming/HolyGL)
   - Fully-functional AHCI support
   - Network card drivers and a networking stack
+  - UEFI booting via [BSD2-licensed Limine bootloader](https://github.com/limine-bootloader/limine) and [Public Domain ZealBooter prekernel](/zealbooter/zealbooter.c)
 
 [Changes include](https://zeal-operating-system.github.io/Doc/ChangeLog.DD.html):
   - 60 FPS
@@ -51,7 +52,7 @@ In July of 2021, ZealOS was forked from ZenithOS.
 
 ## Screenshots
 
-Network Report, UDP Chat Application and AutoComplete, with Stars wallpaper
+Network Report, Gopher Client, FTP Client, GrDir, and AutoComplete, with Stars wallpaper
 
 ![](/screenshots/screenshot3.png)
 

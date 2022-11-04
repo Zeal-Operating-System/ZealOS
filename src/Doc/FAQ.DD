@@ -1,15 +1,15 @@
 $WW,1$$FG,5$$TX+CX,"Frequently Asked Questions"$$FG$
 
 $TR,"How come it is public domain, not GPL?"$
-$ID,2$$FG,2$Terry A. Davis$FG$, wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D="DD_TEMPLEOS_AGE"$$FG$ years (full-time).  ZealOS, written over a span of $FG,2$$TX,"2.6",D="DD_ZEALOS_AGE"$$FG$ years, is a fork of TempleOS.  It can run on some bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.  Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.  It is independent and stands alone.	100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!  See $LK,"::/Doc/Credits.DD"$.
+$ID,2$$FG,2$Terry A. Davis$FG$, wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D="DD_TEMPLEOS_AGE"$$FG$ years (full-time).  ZealOS, written over a span of $FG,2$$TX,"3.2",D="DD_ZEALOS_AGE"$$FG$ years (part-time), is a fork of TempleOS.  It can run on bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.  Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.  It is independent and can stand alone.	100% of the public-domain operating system source code is included on all distros, from the kernel to the compiler to the applications, including public-domain BIOS-mode boot loaders!  See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Shouldn't it be GNU/ZealOS?"$
-$ID,2$ZealOS executes 100% public-domain code.	Boot-loaders were even written, so we do not need Grub.  See $LK,"::/Doc/Credits.DD"$.
+$ID,2$ZealOS executes 100% public-domain operating system code.	Public-domain boot-loaders were even written, so we do not require Grub.  Optional UEFI-compatible ZealOS distro builds can be made using Limine, a BSD-2 licensed bootloader, but this is never required for BIOS-mode.  See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Don't you use GNU's gcc?"$
 $ID,2$ZealOS was written from scratch, starting with $FG,2$TASM$FG$ long ago, launching from real-mode DOS.  Now, there is no $FG,2$Linux$FG$ or $FG,2$GNU$FG$ or any other code in ZealOS.  Yes, the compiler was written from scratch.	See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Why do you dual boot?"$
 $ID,2$ZealOS is 100% independent -- it does not access the files of your primary operating system and ZealOS will work as the only operating system on your computer.  In your off hours, you will probably use your other operating system.
 $ID,-2$$TR,"It has links, so is it a browser?"$
-$ID,2$ZealOS is an operating system, not a browser.  $LK,"ZealOS links",A="MN:LK_FILE"$ are a special format and only link too local files and symbol source addresses.
+$ID,2$ZealOS is an operating system, not a browser.  $LK,"ZealOS links",A="MN:LK_FILE"$ are a special format and only link to local files and symbol source addresses.
 $ID,-2$$TR,"Where are the animated 3D icon GIFs?"$
 $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangles.	There are no GIF files.  It $LK,"rotates",A="MN:Mat4x4MulXYZ"$ 3D sprite objects on the fly.
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
@@ -55,11 +55,11 @@ $ID,2$If you use Grub, you $FG,2$chain-load$FG$ like Windows.  See $LK,"Boot",A=
 $ID,-2$$TR,"How do I get Kernel.ZXE to boot?"$
 $ID,2$The boot-loaders must be patched by you running $LK,"BootHDIns",A="MN:BootHDIns"$() or $LK,"BootMHDIns",A="MN:BootMHDIns"$().  Those will write the block address into the boot-loader because the boot-loaders do not navigate file systems to find the $LK,"Stage2",A="FI:::/Kernel/KStart16.ZC"$ if you relocate it.
 $ID,-2$$TR,"Why is there some 16-Bit code?"$
-$ID,2$ZealOS is 64-bit.  Like all PC operating systems, the boot-loader starts in 16-bit real-mode.  ZealOS calls a few $FG,2$BIOS$FG$ info routines, switches to VGA-640x480x4bit, switches to 32-bit, then, 64-bit mode.	There is an odd thing called a $FG,2$$TX,"PCI BIOS",HTML="http://www.o3one.org/hwdocs/bios_doc/pci_bios_21.pdf"$$FG$ which is 32-bit used for $FG,2$PCI$FG$ config space access.	If supported, ZealOS calls $LK,"that",A="FI:::/Kernel/PCIBIOS.ZC"$ a couple times, otherwise using Port I/O for PCI.	It must temporarily drop-out-of 64-bit mode for that and stop multi-tasking.
+$ID,2$ZealOS is 64-bit.  Like all PC operating systems, the MBR boot-loader starts in 16-bit real-mode.  ZealOS calls a few $FG,2$BIOS$FG$ info routines, switches to 32-bit, then, 64-bit mode.	There is an odd thing called a $FG,2$$TX,"PCI BIOS",HTML="http://www.o3one.org/hwdocs/bios_doc/pci_bios_21.pdf"$$FG$ which is 32-bit used for $FG,2$PCI$FG$ config space access.	If supported, ZealOS calls $LK,"that",A="FI:::/Kernel/PCIBIOS.ZC"$ a couple times, otherwise using Port I/O for PCI.	It must temporarily drop-out-of 64-bit mode for that and stop multi-tasking.
 $ID,-2$$TR,"Why are you pushing 32-bit values on the stack?"$
 $ID,2$$FG,2$PUSH EAX$FG$ : All stack operations in 64-bit mode are 64-bits.
 $ID,-2$$TR,"Why are you using 32-bit insts and not setting high 32-bits?"$
-$ID,2$$FG,2$XOR EAX,EAX$FG$ : Operations on 32-bit registers clear the high 32-bits.
+$ID,2$$FG,2$XOR EAX, EAX$FG$ : Operations on 32-bit registers clear the high 32-bits.
 $ID,-2$$TR,"How do you use the FS and GS segment registers."$
 $ID,2$$FG,2$MOV RAX,FS:[RAX]$FG$ : FS can be set with a $FG,2$WRMSR$FG$, but displacement is RIP relative, so it's tricky to use.  FS is used for the current $LK,"CTask",A="MN:CTask"$, GS for $LK,"CCPU",A="MN:CCPU"$.
 $ID,-2$$TR,"How do I set ORG for position of code?"$
