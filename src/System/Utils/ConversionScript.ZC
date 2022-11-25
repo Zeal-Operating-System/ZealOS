@@ -88,6 +88,10 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("Let2BlkDev",			ff_mask,fu_flags,"Letter2BlkDev");
 	Find("first_drv_let",		ff_mask,fu_flags,"first_drive_let");
 
+	//Discovered by Doodguy and Anfintony November 25 2022
+	Find("ScanKey",ff_mask,fu_flags,"KeyScan");
+	Find("ScanChar",ff_mask,fu_flags,"CharScan");
+	Find("fp_final_scrn_update",ff_mask,fu_flags,"fp_final_screen_update");
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
 }
