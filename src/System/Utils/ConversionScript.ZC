@@ -67,6 +67,31 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("GetStr",			ff_mask, fu_flags, "StrGet");
 	Find("GetChar",			ff_mask, fu_flags, "CharGet");
 
+	//Added from Anfintony's Insecticide November 24 2022
+	Find("GetMsg",				ff_mask,fu_flags,"MessageGet");
+	Find("DRV_SIGNATURE_VAL",	ff_mask,fu_flags,"DRIVE_SIGNATURE_VAL");
+	Find("dv_signature",		ff_mask,fu_flags,"drive_signature");
+	Find("DrvTextAttrGet",		ff_mask,fu_flags,"DriveTextAttrGet");
+	Find("DrvIsWritable",		ff_mask,fu_flags,"DriveIsWritable");
+	Find("gr_palette_std",		ff_mask,fu_flags,"gr32_palette_std");
+	Find("GetKey",ff_mask,		fu_flags,"KeyGet");
+	Find("STD_DISTRO_DVD_CFG",	ff_mask,fu_flags,"STD_DISTRO_DVD_CONFIG");
+	Find("CBGR48",				ff_mask,fu_flags,"CBGR24");
+	Find("CFreeLst",			ff_mask,fu_flags,"CFreeList");
+	Find("DrvLock",				ff_mask,fu_flags,"DriveLock");
+	Find("DrvUnlock",			ff_mask,fu_flags,"DriveUnlock");
+	Find("DrvChk",				ff_mask,fu_flags,"DriveCheck");
+	Find("AMAlloc",				ff_mask,fu_flags,"SysMAlloc");
+	Find("Let2Drv",				ff_mask,fu_flags,"Letter2Drive");
+	Find("Let2Let",				ff_mask,fu_flags,"Letter2Letter");
+	Find("Let2BlkDev",			ff_mask,fu_flags,"Letter2BlkDev");
+	Find("first_drv_let",		ff_mask,fu_flags,"first_drive_let");
+
+	//Added by Doodguy and Anfintony November 25 2022
+	Find("ScanKey",ff_mask,fu_flags,"KeyScan");
+	Find("ScanChar",ff_mask,fu_flags,"CharScan");
+	Find("fp_final_scrn_update",ff_mask,fu_flags,"fp_final_screen_update");
+	
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
 }
