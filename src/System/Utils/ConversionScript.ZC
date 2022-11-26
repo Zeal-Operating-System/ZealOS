@@ -69,7 +69,6 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 
 	//From Anfintony's Insecticide November 24 2022
 	Find("GetMsg",				ff_mask,fu_flags,"MessageGet");
-	Find("GetMsg",				ff_mask,fu_flags,"MessageGet");
 	Find("DRV_SIGNATURE_VAL",	ff_mask,fu_flags,"DRIVE_SIGNATURE_VAL");
 	Find("dv_signature",		ff_mask,fu_flags,"drive_signature");
 	Find("DrvTextAttrGet",		ff_mask,fu_flags,"DriveTextAttrGet");
