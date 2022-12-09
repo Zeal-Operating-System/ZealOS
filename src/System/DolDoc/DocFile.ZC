@@ -134,7 +134,9 @@ public U8 *DocSave(CDoc *doc, I64 *_size=NULL)
 			{
 				case DOCT_CURSOR:
 					DocEntryDel(doc, doc_e);
-					*dst++ = CH_CURSOR;
+					if (DD_INSERT_CURSOR) {
+						*dst++ = CH_CURSOR;
+                    }
 					break;
 
 				case DOCT_TAB:

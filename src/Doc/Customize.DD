@@ -4,4 +4,4 @@ $WW,1$* You can adjust the mouse movement rate by setting global variables in yo
 
 * You can change the palette using the $LK+PU,"PaletteSet",A="FF:::/System/Gr/GrPalette.ZC,U0 PaletteSet"$ functions. Pressing $FG,2$<CTRL-ALT-f>$FG$ toggles standard and auxiliary font.
 
-* Get rid of this message $LK,"here",A="FF:~/Once.ZC,Customize.DD"$.
+* Get rid of this message $LK,"here",A="FF:~/07-Once.ZC,Customize.DD"$.

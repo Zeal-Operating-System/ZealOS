@@ -30,7 +30,7 @@ $LK,"~/MakeHome.ZC"$ a file compiled by the $LK,"System Task",A="FF:::/Doc/Gloss
 
 $FG,4$~/Home*$FG$ Copy $FG,2$Home*$FG$ files from the root into $FG,2$~$FG$ and customize them.  These files are invoked when the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ starts-up.
 
-$LK,"~/Once.ZC"$ a file invoked at the start-up of the first user.	Customize this!
+$LK,"~/07-Once.ZC"$ a file invoked at the start-up of the first user.	Customize this!
 
 $LK,"~/Registry.ZC"$ can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
 

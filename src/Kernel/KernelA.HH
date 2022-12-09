@@ -4289,7 +4289,7 @@ public class CTextGlobals
 };
 
 #define FONT_WIDTH		8
-#define FONT_HEIGHT 	8
+#define FONT_HEIGHT 	12
 
 #help_index "Graphics"
 //z-values less than zero are in front of screen and not drawn.
@@ -4551,5 +4551,8 @@ class CProgress
 #define PRINTF_NEG					0x200
 #define PRINTF_NEG_E				0x400
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
+
+// toggle whether DoDoc inserts the cusrsor position at save
+#define DD_INSERT_CURSOR 1
 
 #help_index ""

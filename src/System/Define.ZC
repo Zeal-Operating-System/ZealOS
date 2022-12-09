@@ -15,7 +15,7 @@ U0 LoadDocDefines()
 	//$LK,"DD_BOOT_HIGH_LOC_DVD",A="FF:::/System/Boot/BootDVD.ZC,DD_BOOT_HIGH_LOC_DVD"$
 
 $TR,"LineRep"$
-$ID,2$DefinePrint("DD_ZEALOS_LOC","98,675");
+$ID,2$DefinePrint("DD_ZEALOS_LOC","103,456");
 $ID,-2$
 	DefinePrint("DD_MP_VECT", "%08X", MP_VECT_ADDR);
 	DefinePrint("DD_MP_VECT_END", "%08X", MP_VECT_ADDR + COREAP_16BIT_INIT_END - COREAP_16BIT_INIT - 1);

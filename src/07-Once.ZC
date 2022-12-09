@@ -3,7 +3,7 @@
 
 //This file is executed by the
 //first terminal window upon start-up.
-//See $LK,"01-Once",A="FF:~/HomeSys.HC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
+//See $LK,"07-Once",A="FF:~/HomeSys.HC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
 
 //Delete the rest from this file.
 
@@ -16,7 +16,7 @@ U0 Tmp()
       "Continue booting hard drive ";
       if (YorN) {
 	DocBottom;
-	ExeFile("C:/Home/01-Once");
+	ExeFile("C:/Home/07-Once");
       }
       break;
     case BOOT_SRC_DVD:

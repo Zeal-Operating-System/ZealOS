@@ -204,7 +204,7 @@ public U0 OnceDrive(U8 drv_let=0, U8 *format, ...)
 }
 
 public U0 OnceExe()
-{//Execute Once code. Call goes in $LK,"~/Once.ZC"$.
+{//Execute Once code. Call goes in $LK,"~/07-Once.ZC"$.
 	try
 	{
 

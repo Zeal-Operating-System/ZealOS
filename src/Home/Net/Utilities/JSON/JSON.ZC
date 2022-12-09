@@ -476,7 +476,7 @@ U8 *JSONString(U8 *obj, U8 *class_name=lastclass, Bool is_base=FALSE, Bool is_li
 
 	if (is_list && !is_base)
 		"]";
-	else
+	else
 		"}";
 
 	return NULL;

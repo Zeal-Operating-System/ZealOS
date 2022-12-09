@@ -3,7 +3,7 @@ $WW,1$$LK,"KMain",A="MN:KMain"$()
 		includes $LK,"~/MakeHome.ZC"$
 			includes $LK,"~/HomeSys.ZC"$
 				calls $LK,"StartUpTasks",A="FF:~/HomeSys.ZC,StartUpTasks"$()
-					includes $LK,"~/Once.ZC"$
+					includes $LK,"~/07-Once.ZC"$
 						calls $LK,"OnceExe",A="MN:OnceExe"$().
 
 $LK,"SysOnce",A="MN:SysOnce"$() appends src code to $LK,"~/Registry.ZC"$ $FG,2$Once/System$FG$ tree, executed at next boot by $FG,2$System$FG$.
