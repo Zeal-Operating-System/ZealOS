@@ -4,7 +4,7 @@
 
 The Zeal Explorers Edition Operating System is a modernized, professional fork of the 64-bit Temple Operating System. Guiding principles of development include transparency, full user control, and adherence to public-domain/open-source implementations.
 
-![](/screenshots/screenshot2.png)
+![](/screenshots/Screenshot4.png)
 
 ZealOS strives to be simple, documented, and require as little of a knowledge gap as possible. One person should be able to comprehend the entire system in at least a semi-detailed way within a few days of study.
 Simplify, don't complicate; make accessible, don't obfuscate.
