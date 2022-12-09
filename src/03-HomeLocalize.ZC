@@ -1,0 +1,21 @@
+//Place this file in /Home and change
+//anything you want.
+
+//This makes your keyboard fast
+KbdTypeMatic(0);
+
+//Set Time Zone
+local_time_offset = 0 * 60 * 60 * CDATE_FREQ; //Do daylight savings by hand
+
+//Set screen zoom behaviour
+gr.continuous_scroll = TRUE;
+
+//$AN,"",A="mouse_move_scale"$adjust these to set mouse move scale
+mouse_hard.scale.x = 0.7;
+mouse_hard.scale.y = 0.7;
+mouse_hard.scale.z = 1.0; //wheel
+
+//don't change these
+mouse_hard.prescale.x = mouse_hard.pos.x / mouse_hard.scale.x;
+mouse_hard.prescale.y = mouse_hard.pos.y / mouse_hard.scale.y;
+mouse_hard.prescale.z = mouse_hard.pos.z / mouse_hard.scale.z;
