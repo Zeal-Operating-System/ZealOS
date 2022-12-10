@@ -607,6 +607,98 @@ public U0 WinTileGrid()
 	POPFD
 }
 
+public U0 WinShrink(CTask *task = NULL)
+{//Make the window smaller than max
+	I64 no_border;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+	WinHorz(5 - no_border, TEXT_COLS - 6 + no_border, task);
+	WinVert(6 - no_border, TEXT_ROWS - 6 + no_border, task);
+	WinToTop(task);
+	POPFD
+}
+
+public U0 WinDown(CTask *task = NULL)
+{//Shrink the top of the window down
+	I64 no_border;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+  
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+	WinHorz(task->win_left, task->win_right, task);
+	WinVert(task->win_top + 8, task->win_bottom, task);
+	WinToTop(task);
+	POPFD
+}
+
+public U0 WinUp(CTask *task = NULL)
+{//Move the top of the window up - this is a nieve implementation
+	I64 no_border;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+  
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+	WinHorz(task->win_left, task->win_right, task);
+	WinVert(task->win_top - 8, task->win_bottom, task);
+	WinToTop(task);
+	POPFD
+}
+
+public U0 WinLeft(CTask *task = NULL)
+{//take up half the screen on the left
+	I64 no_border;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+	WinHorz(1 - no_border, (TEXT_COLS/2) - 2 + no_border, task);
+	WinVert(2 - no_border, TEXT_ROWS - 2 + no_border, task);
+	WinToTop(task);
+	POPFD
+}
+
+
+public U0 WinRight(CTask *task = NULL)
+{//take up half the screen on the right
+	I64 no_border;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+
+	PUSHFD
+	CLI //TODO Multiprocessor safe
+	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
+	WinHorz((TEXT_COLS/2)+ 1 - no_border, TEXT_COLS - 2 + no_border, task);
+	WinVert(2 - no_border, TEXT_ROWS - 2 + no_border, task);
+	WinToTop(task);
+	POPFD
+}
 
 public U0 WinMax(CTask *task = NULL)
 {//Maximize task's window
