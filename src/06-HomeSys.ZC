@@ -22,7 +22,7 @@ U0 ServerStartUp()
 
 U0 StartUpTasks()
 {
-	CTask *user = User;
+//	CTask *user = User;
 
 	"Boot Time:%7.3fs\n", tS;
 	XTalk(User, "Cd; #include \"07-Once\";\n");
