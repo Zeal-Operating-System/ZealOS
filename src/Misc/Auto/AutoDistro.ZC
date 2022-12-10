@@ -46,7 +46,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
 	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_ZXE);
 
-	DelTree("/Distro");
+	DelTree("/Distro");
 	Free(out_iso_filename);
 }
 MakeMyISO("/Tmp/AUTO.ISO.C");

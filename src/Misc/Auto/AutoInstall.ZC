@@ -117,7 +117,7 @@ Bool DoInstall()
 }
 
 Bool OSInstall()
-{
+{
 	return DoInstall();
 }
 

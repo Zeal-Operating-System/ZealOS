@@ -47,9 +47,9 @@ extern class CTask;
 #define F64_MAX 	(0x7FEFFFFFFFFFFFFF(F64))
 #define F64_MIN 	(0xFFEFFFFFFFFFFFFF(F64))
 #define inf 		(0x7FF0000000000000(F64))
-#define ì 			(0x7FF0000000000000(F64))
+#define ï¿½ 			(0x7FF0000000000000(F64))
 #define pi			(0x400921FB54442D18(F64))
-#define ã 			(0x400921FB54442D18(F64))
+#define ï¿½ 			(0x400921FB54442D18(F64))
 #define exp_1 		(0x4005BF0A8B145769(F64)) //The number "e"
 #define log2_10 	(0x400A934F0979A371(F64))
 #define log2_e		(0x3FF71547652B82FE(F64))
@@ -1611,8 +1611,8 @@ class CWinMgrTimingGlobals
 	I64 	calc_idle_count;
 };
 
-#define WINMGR_FPS		(60000.0 / 1001)
-#define WINMGR_PERIOD 	(1001 / 60000.0)
+#define WINMGR_FPS		(30000.0 / 1001)
+#define WINMGR_PERIOD 	(1001 / 30000.0)
 
 public class CWinMgrGlobals
 {
@@ -1690,7 +1690,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_KEEP_PRIVATE 			7
 #define OPTf_NO_REG_VAR 			8	//Applied to functions, not statements
 #define OPTf_GLOBALS_ON_DATA_HEAP 	9
-//Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
+//Disable 10-byte float consts for ï¿½,log2_10,log10_2,loge_2
 #define OPTf_NO_BUILTIN_CONST 		10	//Applied to functions, not statements
 #define OPTf_USE_IMM64				11	//Not completely implemented
 #define OPTf_DECIMAL_ONLY			12	//Only allow decimal numbers (no 0x or 0b prefixed numbers)
@@ -2703,7 +2703,7 @@ class CPCIDev
 //Physical Region Descriptor Table
 #define AHCI_PRD_MAX_BYTES		(4 * 1024 * 1024) //Max bytes that can go in one PRD entry ($ER$4 MiB). Section 4.2.3.3 Fig. 17 (DBC) 
 #define AHCI_PRDT_MAX_BLOCKS	(U16_MAX + 1) 	  //Max blocks you can transfer in one command. 
-#define AHCI_PRDT_MAX_LEN		8 				  //Max PRD entries in one command. This is equal to (MAX_BLOCKS * BLK_SIZE) ö MAX_BYTES.
+#define AHCI_PRDT_MAX_LEN		8 				  //Max PRD entries in one command. This is equal to (MAX_BLOCKS * BLK_SIZE) ï¿½ MAX_BYTES.
 
 //Global Host Control (Controller) flags
 #define AHCI_GHCf_HBA_RESET			0
@@ -3642,6 +3642,7 @@ public class CDevGlobals
 #define ROPF_PROBABILITY_DITHER 	0x80000000
 
 #help_index "Graphics/Color"
+#define TRANSPARENT32	0xFF000000
 #define TRANSPARENT		0xFF
 #define BLACK 			0
 #define BLUE			1
@@ -4284,7 +4285,7 @@ public class CTextGlobals
 	U32 	*raw_screen, *fb_alias;
 	I64 	 rows, cols;	//Use TEXT_ROWS,TEXT_COLS
 	U64 	*font, *aux_font, screen_size, buffer_size;
-	U8		 border_chars[16];
+	U8		 border_chars[20];
 	Bool	 is_fb_busy;
 };
 
@@ -4390,6 +4391,7 @@ public class CDC
 	I32				*depth_buf;
 	I64				 db_z; //private
 #assert !($$ & 7)
+    U8				bitsPerPixel; // 4 (legacy) or 32, 4 is stored in mem as U8 
 };
 
 #define "Char/Input;StdIn"

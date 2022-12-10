@@ -7,8 +7,11 @@ public class CGrGlobals
 				*dc,			//Persistent
 				*dc1,
 				*dc2, 			//Updated every refresh
+				*dc32, 			//32 bit back plane also updated every refresh - the
+// idea is to transition off the 8bit back plane and use just the 32 bit
 				*dc_cache,
-				*zoomed_dc;
+				*zoomed_dc,
+                *screen;        // screen is the display screen, its body is the Linear FrameBuffer (in the old days it wasn't linear)
 	U32			*text_base; 	//See $LK,"TextBase Layer",A="HI:TextBase Layer"$. (Similar to 0xB8000 but 32 bits)
 	U16			*win_z_buf;
 

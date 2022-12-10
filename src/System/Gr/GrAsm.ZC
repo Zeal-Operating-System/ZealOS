@@ -316,6 +316,31 @@ U0 GrRopEquU8NoClipping(I64 ch, U8 *dst,I64 width_internal) {
       dst += width_internal - FONT_WIDTH;
     }
   }
+}
+
+/**
+This is the main font draw for System, it only draws the foreground color
+*/ 
+U0 GrRopEquU32NoClipping(I64 ch, U32 *dst,I64 width_internal) {
+  U8 *fp = text.font(U8*) + ((ch & 0xFF) * FONT_HEIGHT);
+
+  U8 c = ch.u8[1] & 0xFF;
+  U32 reg RBX color = gr_palette[c & 0xFF];
+  U64 ix = FONT_WIDTH - 1, i = 0;
+
+  for (; i < FONT_WIDTH * FONT_HEIGHT; i++) {
+    if (Bt(fp, i)) {
+      *dst = color;
+    }
+    dst++;
+
+    if (i & ix == ix) {
+      dst += width_internal - FONT_WIDTH;
+    }
+  }
 } 
+ 
 public _extern	_IS_PIX_COVERED0			Bool IsPixCovered0(CTask *task, I64 x, I64 y);//No clipping
-_extern			_DC_BLOT_COLOR4				U0	 DCBlotColor4(U8 *dst, I64 *img, I64 *img_cache, I64 count);
+// @deprecated
+//_extern			_DC_BLOT_COLOR4				U0	 DCBlotColor4(U8 *dst, I64 *img, I64 *img_cache, I64 count);
+

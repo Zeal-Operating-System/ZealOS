@@ -208,6 +208,9 @@ U0 GrInit2()
 	gr.screen_image	= DCNew(GR_WIDTH, GR_HEIGHT); //4-bit
 	gr.zoomed_dc	= DCNew(GR_WIDTH, GR_HEIGHT); //4-bit
 	gr.zoomed_dc->flags |= DCF_SCREEN_BITMAP;
+
+	gr.screen = DCNewFrameBuffer(); 
+	gr.dc32 = DCNew32(GR_WIDTH, GR_HEIGHT);
 }
 
 GrInit2;

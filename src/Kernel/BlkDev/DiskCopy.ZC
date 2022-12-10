@@ -26,7 +26,7 @@ Bool CopySingleZ(U8 *f1, U8 *f2) //Just one file
 }
 
 #define COPY_BUF_BLKS 	0x80
-Bool CopySingle(U8 *f1, U8 *f2) //Just one file
+Bool CopySingle(U8 *f1, U8 *f2) //Just one file
 {
 	U8 buf[COPY_BUF_BLKS << BLK_SIZE_BITS];
 	U8		*absf1 = FileNameAbs(f1), *absf2 = FileNameAbs(f2);

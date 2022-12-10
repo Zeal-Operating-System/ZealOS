@@ -45,4 +45,6 @@ U0 Tmp()
   }
 }
 
+Type("08-Display.DD");
+
 Tmp;

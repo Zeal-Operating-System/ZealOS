@@ -69,7 +69,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;
-		U8 *fontPointer = text.font(U8*) + ch & 0xFF * FONT_HEIGHT;
+		U8 *fontPointer = text.font(U8*) + (ch & 0xFF) * FONT_HEIGHT;
 		framebuffer = text.fb_alias + sys_framebuffer_width * y + x;
 		U64 nextRow = FONT_WIDTH - 1;
 		U64 rowInc = sys_framebuffer_width - FONT_WIDTH;
@@ -84,13 +84,13 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 				*framebuffer++ = BLACK32;  // Background
 			if (i & nextRow == nextRow) {
 		      		framebuffer += rowInc;
-	    	}
+		    	}
 		}
 		POPFD
 		text.raw_col++;
 	}
 }
-
+
 U0 LFBFlush()
 {//Flush winmgr screen cache, so updates whole screen.
 	LBts(&sys_semas[SEMA_FLUSH_VBE_IMAGE], 0);

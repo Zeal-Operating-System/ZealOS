@@ -1,7 +1,7 @@
 U0 UserStartUp()
 {
 	DocTermNew;
-	Type("::/Doc/Start.DD");
+	Type("::/Doc/Start.DD");
 	LBts(&Fs->display_flags, DISPLAYf_SHOW);
 	WinToTop;
 	WinZBufUpdate;
