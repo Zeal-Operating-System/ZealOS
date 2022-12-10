@@ -900,6 +900,31 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 					}
 					break;
 
+				case ' ':
+					if (sc & SCF_CTRL)
+					{
+						if (sc & SCF_KEY_DESC)
+						{
+							if (sc & SCF_SHIFT)
+								KeyDescSet("Cmd /Word Definition");
+							else
+								KeyDescSet("Edit/Autocomplete Word");
+						}
+						else
+						{
+							if (AutoComplete(ON))
+							{
+								DocUnlock(doc);
+								if (sc & SCF_SHIFT)
+									ACMan(1, Fs);
+								else
+									ACFillIn(1);
+								DocLock(doc);
+							}
+						}
+					}
+					break;
+
 				case '[':
 					if (sc & SCF_CTRL)
 					{

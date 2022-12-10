@@ -1,6 +1,7 @@
 #help_index "Graphics/Misc"
 asm {
 //************************************
+/*
 _DC_BLOT_COLOR4::
 				PUSH		RBP
 				MOV 		RBP, RSP
@@ -145,16 +146,18 @@ _DC_BLOT_COLOR4::
 				POP 		RSI
 				POP 		RBP
 				RET1		32
+*/
 //************************************
 _IS_PIX_COVERED0::
+// checking the textbuffer if there is a char there?
 				PUSH		RBP
 				MOV 		RBP, RSP
 #assert FONT_WIDTH == FONT_HEIGHT == 8
-				MOV 		RCX, U64 SF_ARG3[RBP]
+				MOV 		RCX, U64 SF_ARG3[RBP] // y
 				SAR 		RCX, 3
-				MOV 		RAX, U64 SF_ARG2[RBP]
+				MOV 		RAX, U64 SF_ARG2[RBP] // x 
 				SAR 		RAX, 3
-				MOV 		RDX, U64 SF_ARG1[RBP]
+				MOV 		RDX, U64 SF_ARG1[RBP] // task
 				IMUL2		RCX, TEXT_COLS
 				MOV 		RBX, U64 [&gr.win_z_buf]
 				MOV 		DX,  U16 CTask.win_z_num[RDX]
@@ -166,7 +169,7 @@ _IS_PIX_COVERED0::
 @@05:			POP 		RBP
 				RET1		24
 //************************************
-_GR_ROP_EQU_U8_NO_CLIPPING::
+/*_GR_ROP_EQU_U8_NO_CLIPPING::
 //Puts foreground char shape onto gr.dc2.
 //ch.u8[1] is color as a whole byte
 //ch ATTRf_UNDERLINE attr flag is used.
@@ -292,13 +295,14 @@ _GR_ROP_EQU_U8_NO_CLIPPING::
 				POP 		RSI
 @@10:			POP 		RBP
 				RET1		24
+*/
 };
 
-_extern _GR_ROP_EQU_U8_NO_CLIPPING U0 GrRopEquU8NoClipping_(I64 ch, U8 *dst,I64 width_internal);
+//_extern _GR_ROP_EQU_U8_NO_CLIPPING U0 GrRopEquU8NoClipping_(I64 ch, U8 *dst,I64 width_internal);
 
 /**
 This is the main font draw for System, it only draws the foreground color
-*/ 
+ 
 U0 GrRopEquU8NoClipping(I64 ch, U8 *dst,I64 width_internal) {
   U8 *fp = text.font(U8*) + ((ch & 0xFF) * FONT_HEIGHT);
 
@@ -317,10 +321,11 @@ U0 GrRopEquU8NoClipping(I64 ch, U8 *dst,I64 width_internal) {
     }
   }
 }
-
+*/
 /**
 This is the main font draw for System, it only draws the foreground color
-*/ 
+@Deprecated
+ 
 U0 GrRopEquU32NoClipping(I64 ch, U32 *dst,I64 width_internal) {
   U8 *fp = text.font(U8*) + ((ch & 0xFF) * FONT_HEIGHT);
 
@@ -339,6 +344,36 @@ U0 GrRopEquU32NoClipping(I64 ch, U32 *dst,I64 width_internal) {
     }
   }
 } 
+*/
+U0 GrDrawCharNoClippingU32(U32 ch, U32 reg RBX fgColor, U32 reg RCX bgColor,  U32 reg RDI *dst, I64 width_internal) {
+
+  U8 *fontPointer = text.font(U8*) + ((ch & 0xFF) * FONT_HEIGHT);
+
+  U64 ix = FONT_WIDTH - 1, i = 0;
+
+  for (; i < FONT_WIDTH * FONT_HEIGHT; i++) {
+    if (Bt(fontPointer, i)) {
+      *dst = fgColor;
+    } else {
+      *dst = bgColor;
+    }
+    dst++;
+
+    if (i & ix == ix) {
+      dst += width_internal - FONT_WIDTH;
+    }
+  }
+
+/* Something wrong here
+  if (!Bt(ch, ATTRf_UNDERLINE)) {
+    dst -= width_internal;
+	for (i = 0; i < FONT_WIDTH; i++, dst++) {
+		*dst = fgColor;
+    }	
+  }
+*/
+} 
+
  
 public _extern	_IS_PIX_COVERED0			Bool IsPixCovered0(CTask *task, I64 x, I64 y);//No clipping
 // @deprecated
