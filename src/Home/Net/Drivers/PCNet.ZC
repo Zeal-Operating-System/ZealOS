@@ -211,10 +211,11 @@ U0 PCNetMACGet()
 	APROM accessible at first 16 bytes of PCI IO space. */
 
 	I64 i;
+	U64 eeprom_bytes = InU32(PCNetIOBaseGet) | InU32(PCNetIOBaseGet + 4) << 32;
 	NetLog("PCNET GET MAC: Getting VM MAC.");
 	for (i = 0; i < 6; i++)
 	{
-		pcnet.mac_address[i] = InU8(PCNetIOBaseGet + i);
+		pcnet.mac_address[i] = eeprom_bytes.u8[i];
 		NetLog(" %02X", pcnet.mac_address[i]);
 	}
 }
