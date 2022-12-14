@@ -13,11 +13,6 @@
 	-	Clear documentation.
 */
 
-//#define	PCNET_DEVICE_ID	0x2000
-//#define	PCNET_VENDOR_ID	0x1022
-
-//#define	PCI_REG_COMMAND	0x04
-
 #define	PCNET_CMDf_IOEN	0
 #define	PCNET_CMDf_BMEN	2
 
@@ -65,7 +60,9 @@
 #define PCNET_CTRL_INIT	0
 #define PCNET_CTRL_STRT	1
 #define PCNET_CTRL_STOP	2
-#define PCNET_CTRL_RINT 10
+#define PCNET_CTRL_IENA	6
+#define PCNET_CTRL_IDON	8
+#define PCNET_CTRL_RINT	10
 
 #define PCNET_RX_BUFF_COUNT	32	// Linux & Shrine Driver use 32 and 8 for
 #define PCNET_TX_BUFF_COUNT	8	// these, we could allow more if wanted.
@@ -88,8 +85,6 @@ class CPCNet
 	U8 *rx_de_buffer_phys;		// Pointer to the buffer of RX Descriptor Entries. (Code Heap, lower 2Gb)
 	U8 *tx_de_buffer_phys;		// Pointer to the buffer of TX Descriptor Entries. (Code Heap, lower 2Gb)
 
-	U32 rx_buffer_addr;			// Uncached-alias of address of receive buffers.
-	U32 tx_buffer_addr;			// Uncached-alias of address of transmit buffers.
 	U32 rx_buffer_addr_phys;	// Physical address of actual receive buffers  (< 4 Gb)
 	U32 tx_buffer_addr_phys;	// Physical address of actual transmit buffers (< 4 Gb)
 
@@ -199,7 +194,7 @@ U0 PCNetSWStyleSet()
 
 	csr &= ~0xFF; // clears first 8 bits: SWSTYLE 8-bit register.
 	csr |= PCNET_SWSTYLE_SELECTION; // set SWSTYLE to PCNet-PCI mode.
-	PCIBts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
+	Bts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
 
 	PCNetCSRWrite(PCNET_CSR_SOFTWARESTYLE, csr);
 }
@@ -271,14 +266,11 @@ U0 PCNetBuffersAllocate()
 
 	//Shrine does a check and returns -1 here, if the end of either buffer exceeds 0x100000000
 
-	pcnet.rx_buffer_addr = dev.uncached_alias + pcnet.rx_buffer_addr_phys;
-	pcnet.tx_buffer_addr = dev.uncached_alias + pcnet.tx_buffer_addr_phys;
-
 	CPCNetDescriptorEntry *entry = pcnet.rx_de_buffer;
 	for (de_index = 0; de_index < PCNET_RX_BUFF_COUNT; de_index++)
 	{
 		PCNetDescriptorEntryInit(&entry[de_index],
-								 pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
+								 pcnet.rx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE,
 								 TRUE); // TRUE for is_rx.
 	}
 
@@ -286,7 +278,7 @@ U0 PCNetBuffersAllocate()
 	for (de_index = 0; de_index < PCNET_TX_BUFF_COUNT; de_index++)
 	{
 		PCNetDescriptorEntryInit(&entry[de_index],
-								 pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
+								 pcnet.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE,
 								 FALSE); // FALSE for is_rx.
 	}
 }
@@ -343,11 +335,11 @@ U0 PCNetDirectInit()
 		Bitshift right of 16 will replace
 		first 16 bits  with upper 16 bits,
 		remaining bits cleared.*/
-	PCNetCSRWrite(PCNET_CSR_BADRL, pcnet.rx_buffer_addr & 0xFFFF);
-	PCNetCSRWrite(PCNET_CSR_BADRU, pcnet.rx_buffer_addr >> 16);
+	PCNetCSRWrite(PCNET_CSR_BADRL, pcnet.rx_buffer_addr_phys & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_BADRU, pcnet.rx_buffer_addr_phys >> 16);
 
-	PCNetCSRWrite(PCNET_CSR_BADTL, pcnet.tx_buffer_addr & 0xFFFF);
-	PCNetCSRWrite(PCNET_CSR_BADTU, pcnet.tx_buffer_addr >> 16);
+	PCNetCSRWrite(PCNET_CSR_BADTL, pcnet.tx_buffer_addr_phys & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_BADTU, pcnet.tx_buffer_addr_phys >> 16);
 
 	/*	AMD PCNet datasheet p. 1-967
 		Default value at hardware init is
@@ -399,11 +391,11 @@ U0 PCNetInterruptCSRSet()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_INTERRUPTS);
 
-	PCIBtr(&csr, PCNET_INT_BSWP);
-	PCIBtr(&csr, PCNET_INT_RINTM);
+	Btr(&csr, PCNET_INT_BSWP);
+	Btr(&csr, PCNET_INT_RINTM);
 
-	PCIBts(&csr, PCNET_INT_IDONM);
-	PCIBts(&csr, PCNET_INT_TINTM);
+	Bts(&csr, PCNET_INT_IDONM);
+	Bts(&csr, PCNET_INT_TINTM);
 	
 	PCNetCSRWrite(PCNET_CSR_INTERRUPTS, csr);
 }
@@ -416,7 +408,7 @@ U0 PCNetTXAutoPadEnable()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
 
-	PCIBts(&csr, PCNET_FEATURE_APADXMT);
+	Bts(&csr, PCNET_FEATURE_APADXMT);
 
 	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
 }
@@ -431,13 +423,32 @@ U0 PCNetConfigModeExit()
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	PCIBtr(&csr, PCNET_CTRL_INIT);
-	PCIBtr(&csr, PCNET_CTRL_STOP);
+	Btr(&csr, PCNET_CTRL_INIT);
+	Btr(&csr, PCNET_CTRL_STOP);
 
-	PCIBts(&csr, PCNET_CTRL_STRT);
+	Bts(&csr, PCNET_CTRL_STRT);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 }
+
+U0 PCNetUploadConfig()
+{/* Upload new config and wait for card to acknowlege */
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
+
+	Bts(&csr, PCNET_CTRL_INIT);
+	Bts(&csr, PCNET_CTRL_IENA);
+
+	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
+
+	Btr(&csr, PCNET_CTRL_IDON);
+
+	while (!Bt(&csr, PCNET_CTRL_IDON))
+	{
+		Yield;
+		csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
+	}
+}
+
 
 I64 PCNetDriverOwns(CPCNetDescriptorEntry* entry)
 {/* Returns whether the value of the OWN bit of the
@@ -495,9 +506,7 @@ I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 
 	pcnet.current_tx_de_index = (pcnet.current_tx_de_index + 1) & (PCNET_TX_BUFF_COUNT - 1);
 
-	*packet_buffer_out = pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
-
-	MemSet(*packet_buffer_out, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
+	*packet_buffer_out = pcnet.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
 
 	NetLog("PCNET ALLOCATE TX PACKET: de_index: %X.", de_index);
 	return de_index;
@@ -543,7 +552,7 @@ I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 	pcnet.current_rx_de_index = (pcnet.current_rx_de_index + 1) & (PCNET_RX_BUFF_COUNT - 1);
 	NetDebug("PCNET RECEIVE PACKET: de_index incremented = 0x%0X", pcnet.current_rx_de_index);
 
-	*packet_buffer_out = pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
+	*packet_buffer_out = pcnet.rx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
 	*packet_length_out = packet_length;
 
 	return de_index;
@@ -584,11 +593,12 @@ interrupt U0 PCNetIRQ()
 		if (de_index >= 0) // todo: necessary? check increment logic in PCNetPacketReceive.
 		{
 			NetLog("PCNET IRQ: Pushing copy into Net Queue, releasing receive packet.");
-			NetQueuePush(packet_buffer, packet_length);
+			// uncached read
+			NetQueuePush(packet_buffer + dev.uncached_alias, packet_length);
 			PCNetReceivePacketRelease(de_index);
 		}
 
-		PCIBts(&csr, PCNET_CTRL_RINT);
+		Bts(&csr, PCNET_CTRL_RINT);
 
 		PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
@@ -651,10 +661,10 @@ U0 PCNetInit()
 	PCNet32BitModeEnable;
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT START: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT START: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT START: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT START: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT START: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT START: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT START: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT START: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 
 	PCNetSWStyleSet;
@@ -671,31 +681,28 @@ U0 PCNetInit()
 
 	PCNetTXAutoPadEnable;
 
-	PCNetCSRWrite(0, PCNetCSRRead(0) | 1 | 1 << 6); // ?
+	PCNetUploadConfig;
 
 	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
-
-	while (!(PCNetCSRRead(0) & 1 << 8)) // ?
-		Yield;
+	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 	PCNetConfigModeExit;	
 
 	Sleep(100); //? necessary?
 
 	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
-	NetLog("PCNET INIT END: what is INIT ?: %d", PCIBt(&csr, PCNET_CTRL_INIT));
-	NetLog("PCNET INIT END: what is STRT ?: %d", PCIBt(&csr, PCNET_CTRL_STRT));
-	NetLog("PCNET INIT END: what is STOP ?: %d", PCIBt(&csr, PCNET_CTRL_STOP));
-	NetLog("PCNET INIT END: what is RINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
-	NetLog("PCNET INIT END: what is TXON ?: %d", PCIBt(&csr, 4));
-	NetLog("PCNET INIT END: what is RXON ?: %d", PCIBt(&csr, 5));
+	NetLog("PCNET INIT END: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT END: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT END: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT END: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is TXON ?: %d", Bt(&csr, 4));
+	NetLog("PCNET INIT END: what is RXON ?: %d", Bt(&csr, 5));
 
 	csr =  PCNetCSRRead(PCNET_CSR_POLLINT);
-	NetLog("PCNET INIT END: what is POLLINT ?: %d", PCIBt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is POLLINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 	NetLog("PCNET INIT END: Redirecting interrupts.");
 	PCNetInterruptsSetup;
@@ -726,12 +733,15 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	}
 
 	de_index = PCNetTransmitPacketAllocate(&ethernet_frame, ETHERNET_MAC_HEADER_LENGTH + packet_length);
+	ethernet_frame += dev.uncached_alias; // Make write uncached
 
 	if (de_index < 0)
 	{
 		NetErr("ETHERNET FRAME ALLOCATE: Failure");
 		return -1; // Positive value expected. Functions calling this must factor this in.
 	}
+
+	MemSet(ethernet_frame, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
 
 	MemCopy(ethernet_frame,						 destination_address, MAC_ADDRESS_LENGTH);
 	MemCopy(ethernet_frame + MAC_ADDRESS_LENGTH, source_address,	  MAC_ADDRESS_LENGTH);
@@ -753,7 +763,7 @@ U0 NetStop()
 { // Halt network activity by setting STOP bit on Status CSR.
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	PCIBts(&csr, PCNET_CTRL_STOP);
+	Bts(&csr, PCNET_CTRL_STOP);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
@@ -763,7 +773,7 @@ U0 NetStart()
 { // Continue network activity. Setting START bit clears STOP/INIT.
 	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
-	PCIBts(&csr, PCNET_CTRL_STRT);
+	Bts(&csr, PCNET_CTRL_STRT);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 }
