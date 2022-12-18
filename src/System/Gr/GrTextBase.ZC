@@ -334,6 +334,7 @@ public U0 TextBorder(CTask *task=NULL, I64 l, I64 r, I64 t, I64 b, I64 attr, Boo
 {//Plot border square. 60fps in Fs->draw_it() callback.
 //Draws window borders or DolDoc text button borders.
 	//Set task=sys_winmgr_task for no clipping.
+// size in chars
 	I64 i;
 
 	if (!task)
@@ -358,7 +359,6 @@ public U0 TextBorder(CTask *task=NULL, I64 l, I64 r, I64 t, I64 b, I64 attr, Boo
 		TextChar(task,, l - 1, i, text.border_chars[4 + solid] + attr);
         // right
 		TextChar(task,, r + 1, i, text.border_chars[16 + solid] + attr);
-//		TextChar(task,, r + 1, i, 'a' + attr);
 	}
 }
 

@@ -140,7 +140,7 @@ U0 FontEd()
 	  if (0 <= k < FONT_WIDTH*FONT_HEIGHT) {
 	    if (mouse.lb||msg_code==MESSAGE_MS_L_DOWN)
 	      Bts(&fp[cur_ch * FONT_HEIGHT],k);
-	    if (mouse.rb||msg_code==MESSAGE_MS_R_DOWN)
+	    if (mouse.rb||msg_code==MESSAGE_MS_R_DOWN)
 	      Btr(&fp[cur_ch * FONT_HEIGHT],k);
 	  }
 	  break;

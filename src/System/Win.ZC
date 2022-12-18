@@ -663,7 +663,7 @@ public U0 WinUp(CTask *task = NULL)
 	POPFD
 }
 
-public U0 WinLeft(CTask *task = NULL)
+public U0 WinLeft(CTask *task = NULL)
 {//take up half the screen on the left
 	I64 no_border;
 

@@ -264,7 +264,7 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 										KeyDescSet("Edit/Toggle Overstrike");
 								}
 								else
-								{
+								{
 									if (sc & SCF_SHIFT)
 										ClipPaste(doc);
 									else if (sc & SCF_CTRL)
