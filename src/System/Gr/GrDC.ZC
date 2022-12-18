@@ -228,15 +228,15 @@ public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALS
 	return res;
 }
 
-public CDC *DCNew32(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALSE)
+public CDC32 *DCNew32(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALSE)
 {//Create new width x height device context with 32 bits per pixel.
 //Internally only allows widths which are divisible by 8.
 	//Don't forget these $MA-X+PU,"sizeof(CDC)",LM="Find(\"sizeof(CDC)\",\"/*\");View;"$.
-	CDC *res;
+	CDC32 *res;
 
 	if (!task)
 		task = Fs;
-	res=CAlloc(sizeof(CDC), task);
+	res=CAlloc(sizeof(CDC32), task);
 	res->win_task		= task;
 	res->mem_task		= task;
 	res->width			= width;
@@ -245,7 +245,7 @@ public CDC *DCNew32(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FA
 	if (null_bitmap)
 		res->flags |= DCF_DONT_DRAW;
 	else
-		res->body		= CAlloc(res->width_internal * res->height * 4, task);
+		res->body		= CAlloc(res->width_internal * res->height * sizeof(U32), task);
 	res->r				= MAlloc(16 * sizeof(I64), task);
 	DCReset(res);
 	res->dc_signature	= DCS_SIGNATURE_VAL;
@@ -254,13 +254,13 @@ public CDC *DCNew32(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FA
 	return res;
 }
 
-public CDC *DCNewFrameBuffer(CTask *task=NULL)
+public CDC32 *DCNewFrameBuffer(CTask *task=NULL)
 {// this is a unique Context which is the actual screen
-	CDC *res;
+	CDC32 *res;
 
 	if (!task)
 		task = Fs;
-	res=CAlloc(sizeof(CDC), task);
+	res=CAlloc(sizeof(CDC32), task);
 	res->win_task		= task;
 	res->mem_task		= task;
 	res->width			= GR_WIDTH;

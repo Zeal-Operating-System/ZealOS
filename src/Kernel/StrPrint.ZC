@@ -438,6 +438,11 @@ to avoid this.
 							throw('StrPrint');
 						ptr = argv[cur_arg++];
 						break;
+					case 'o': // Bool
+						if (cur_arg >= argc)
+							throw('StrPrint');
+						if (argv[cur_arg++]) ptr = "TRUE"; else ptr = "FALSE";
+						break;
 
 					case 'S':
 						if (cur_arg >= argc)

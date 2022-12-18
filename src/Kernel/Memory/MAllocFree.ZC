@@ -391,6 +391,15 @@ _extern _MHEAP_CTRL	CHeapCtrl	*MHeapCtrl(U8 *src); //$LK,"CHeapCtrl",A="MN:CHeap
 _extern _MALLOC		U8			*MAlloc(I64 size, CTask *mem_task=NULL); //Alloc memory chunk.
 //Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$. NULL allocs off current task's heap.
 
+
+
+U0 FreeAll(...) 
+{//Accepts a list of pointers to free, then zips through them all and calls Free
+	U64 curArg = 0;
+	while(argc--)
+		Free(argv[curArg++]);
+}
+
 U8 *SysMAlloc(I64 size)
 {//Alloc memory in System task's heap.
 	return MAlloc(size, sys_task);

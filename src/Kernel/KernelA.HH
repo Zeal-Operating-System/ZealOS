@@ -3642,7 +3642,7 @@ public class CDevGlobals
 #define ROPF_PROBABILITY_DITHER 	0x80000000
 
 #help_index "Graphics/Color"
-#define TRANSPARENT32	0xFF000000
+#define TRANSPARENT32	0xFF000000  // one bit is probably better than all bits
 #define TRANSPARENT		0xFF
 #define BLACK 			0
 #define BLUE			1
@@ -3682,7 +3682,7 @@ public U32 class CBGR24
 };
 public U32 class CBGR32
 {
-	U8		b, g, r, a;
+	U8		blue, green, red, rop;
 };
 public I64 class CBGR48
 {
@@ -4394,6 +4394,72 @@ public class CDC
     U8				bitsPerPixel; // 4 (legacy) or 32, 4 is stored in mem as U8 
 };
 
+public class CDC32
+{// equal to CDC except the: 
+// * Color 
+// * CDC's 
+// Dither etc but the size should be ==
+	U0				 start;
+	CDate			 cdt;
+	I32				 x0, y0,
+					 width, width_internal,
+					 height,
+					 flags;
+	U0				 end;
+	CBGR24			 palette[COLORS_NUM];
+
+	//public (Change directly)
+	CBGR32	 		color,
+					 bkcolor, //Set for use with $LK,"ROP_COLLISION",A="MN:ROP_COLLISION"$
+					 color2; //Internally used for $LK,"GrFloodFill",A="MN:GrFloodFill"$()
+	CD3I32			 ls; //Light source (should be normalized to 65536).
+
+	//dither_probability_i16 is basically a U16.
+	//It is activated by $LK,"ROPF_PROBABILITY_DITHER",A="MN:ROPF_PROBABILITY_DITHER"$.
+	// a positive value will make things lighter
+    // a negitive value will make things darker
+    // it only needs to be U8 
+	//See $LK,"::/Demo/Graphics/SunMoon.ZC"$ and	$LK,"::/Demo/Graphics/Shading.ZC"$.
+	I64				 dither_probability_i16;
+
+	CDC32			*brush;
+
+	//Set with $LK,"DCMat4x4Set",A="MN:DCMat4x4Set"$().  $LK,"Free",A="MN:Free"$() before setting.
+	I64				*r, //rotation matrix of quads decimal in lo
+					 r_norm; //shifted 32 bits.	Used for scaling thick
+
+	//public (Change directly)
+	I32				 x, y, z,
+					 thick;
+
+	//Can be changed from the default $LK,"DCTransform",A="MN:DCTransform"$()
+	U0			   (*transform)(CDC32 *dc, I64 *x, I64 *y, I64 *z);
+
+	//Can be changed from the default $LK,"DCLighting",A="MN:DCLighting"$()
+	U0			   (*lighting)(CDC32 *dc, CD3I32 *p1, CD3I32 *p2, CD3I32 *p3, CBGR32 color);
+
+	//Set by $LK,"DCSymmetrySet",A="MN:DCSymmetrySet"$() or $LK,"DCSymmetry3Set",A="MN:DCSymmetry3Set"$()
+	CGrSym			 sym;
+
+	I32				 cur_x, cur_y, cur_z, pad;
+	I64				 collision_count;
+
+	I64				 nearest_dist,
+					 min_x, max_x, min_y, max_y; //Set by $LK,"DCF_RECORD_EXTENTS",A="MN:DCF_RECORD_EXTENTS"$ (screen coordinates)
+
+	U32				 dc_signature, pad;
+	CTask			*mem_task, *win_task;
+	CDC32				*alias;
+	U32				*body;
+
+	//Set by $LK,"DCDepthBufAlloc",A="MN:DCDepthBufAlloc"$()
+	I32				*depth_buf;
+	I64				 db_z; //private
+#assert !($$ & 7)
+    U8				bitsPerPixel; // 4 (legacy) or 32, 4 is stored in mem as U8 
+};
+
+
 #define "Char/Input;StdIn"
 //StrGet flags
 #define SGF_SHIFT_ESC_EXIT			1 //This kills task on <SHIFT-ESC>
@@ -4555,6 +4621,8 @@ class CProgress
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
 // toggle whether DoDoc inserts the cusrsor position at save
-#define DD_INSERT_CURSOR 1
+#define DD_NO_INSERT_CURSOR 		1
+#define DD_INSERT_CURSOR 			1
+
 
 #help_index ""

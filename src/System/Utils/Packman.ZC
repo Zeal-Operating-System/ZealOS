@@ -1,0 +1,367 @@
+#help_index "Package Manager"
+class CInstallerPackage {
+	U8* name;
+	U8* version;
+	U8* dependancies;
+	U8* url;
+	U8* addFiles;
+	U8* removeFiles;
+	U8* description;
+    Bool rebuildKernel;
+	Bool rebuildCompiler;
+	Bool reboot;
+};
+
+
+CInstallerPackage myInstaller = {"package", "1", NULL, "templeospackages.com", 
+"/Home/Tmp2.DD
+/Home/Tmp.DD", "", "Basic Package Test.", FALSE, FALSE, FALSE};
+
+
+/**
+package management
+the three main functions are
+* create installer package (this is the ISO that gets distributed)
+* Install package (befor the install it creates an uninstall)
+* uninstall package
+
+
+@TODO the uninstaller needs to have a directory remove
+@TODO maintain a registry of installed packages
+@TODO addFile, buffer sizes
+
+*/
+
+U0 CreateSubDirAction(U8 *fName, U8 *toDir) {
+    if (!StrLen(fName)) return; 
+	U8 *dest = StrPrint(NULL, "%s/%s", toDir,  &fName[3]);
+	if (!FileFind(dest)) {
+		"Dirmake %s\n",  dest;
+		Silent;
+		Cd(dest, TRUE);
+		Silent(OFF);
+	}
+	Free(dest);
+}
+
+U0 CopyFileAction(U8 *fName, U8* toDir) {
+	U8 *dest = StrPrint(NULL, "%s/%s", toDir,  &fName[3]);
+	Copy(fName, dest);
+	Free(dest);
+}
+
+// Used by the create package
+U0 CreateAndCopyAction(U8 *dName, U8 *fName, U8 *toDir) {
+	CreateSubDirAction(dName, toDir);
+	CopyFileAction(fName, toDir);
+}
+
+// Used by the create package
+U0 CreateAndCopyInstallAction(U8 *dName, U8 *fName, U8 *toDir) {
+	U8* srcFile = StrPrint(NULL, "%c:/Files%s", fName[0],  &fName[2]);
+	fName[0] = toDir[0];
+	U8 * dirFile = DirFile(fName);
+
+	CreateSubDirAction(dirFile, toDir);
+	Copy(srcFile, fName);
+
+	FreeAll(srcFile, dirFile);
+}
+
+// used by create uninstaller
+U0 CreateAddList(U8 *dName, U8 *fName, U8 *toDir) {
+	// in this case toDir is just a string we CatPrint to
+	if (FileFind(fName)) {
+		// existing file - goes in add
+		CatPrint(toDir, "%s\n", &fName[2]);
+	} else {
+		// new file - goes in remove
+	}
+}
+
+// used do installer actions
+U0 RemoveFileAction(U8 *dName, U8 *fName, U8 *toDir) {
+	// in this case toDir is just a string we CatPrint to
+	if (FileFind(fName)) {
+		// existing file - goes in add
+		"Delete file %s\n", fName;
+		Del(fName);
+	} else {
+		"Was going to delete but file not found %s\n", fName;
+		// new file - goes in remove
+	}
+}
+
+
+U0 WriteManifest(CInstallerPackage * ip, U8 * toDir) 
+{// Generate the Manifest file
+    U8 *tmpStr = StrPrint(NULL, "%s/%s", toDir, "Manifest.ZC");
+	CDoc *manifest = DocNew(tmpStr);
+	Free(tmpStr);
+	
+	DocPrint(manifest, "CInstallerPackage %s_%s_installer = {", ip->name, ip->version);
+	DocPrint(manifest, "\"%s\", ", ip->name);
+	DocPrint(manifest, "\"%s\", ", ip->version);
+	DocPrint(manifest, "\"%s\", ", ip->dependancies);
+	DocPrint(manifest, "\"%s\", ", ip->url);
+	DocPrint(manifest, "\"%s\", ", ip->addFiles);
+	DocPrint(manifest, "\"%s\", ", ip->removeFiles);
+	DocPrint(manifest, "\"%s\", ", ip->description);
+	DocPrint(manifest, "%o, ", ip->rebuildKernel);
+	DocPrint(manifest, "%o, ", ip->rebuildCompiler);
+	DocPrint(manifest, "%o", ip->reboot);
+	DocPrint(manifest, "};");
+	
+	DocSave(manifest);
+	DocWrite(manifest);
+
+	// this may need a DocFree?
+	Free(manifest);
+}
+
+
+U0 PrintManifest(CInstallerPackage * ip) {
+	"$$BLACK$$Name:            $$CYAN$$%s$$FG$$\n", ip->name;
+	"$$BLACK$$Version:         $$CYAN$$%s$$FG$$\n", ip->version;
+	"$$BLACK$$Dependancies:    $$CYAN$$%s$$FG$$\n", ip->dependancies;
+	"$$BLACK$$url:             $$CYAN$$%s$$FG$$\n", ip->url;
+	"$$BLACK$$description:     $$CYAN$$%s$$FG$$\n", ip->description;
+	"$$BLACK$$addFiles:        $$CYAN$$%s$$FG$$\n", ip->addFiles;
+	"$$BLACK$$removeFiles:     $$CYAN$$%s$$FG$$\n", ip->removeFiles;
+	"$$BLACK$$rebuildKernel:   $$CYAN$$%o$$FG$$\n", ip->rebuildKernel;
+	"$$BLACK$$rebuildCompiler: $$CYAN$$%o$$FG$$\n", ip->rebuildCompiler;
+	"$$BLACK$$reboot:          $$CYAN$$%o$$FG$$\n", ip->reboot;
+}
+
+U0 IterateFileList(U8 *fList, U8 *destFilesDir, U0 (*action)(U8 *dName, U8 *fName, U8* toDir)) {
+	U8 tmpFName[STR_LEN], *fName = tmpFName, *dirfile, *absFilename;
+
+	while (*fList) {
+		if (*fList == '\n') {
+			*fName = 0;
+			if (StrLen(tmpFName)) {
+				absFilename = FileNameAbs(tmpFName);
+				dirfile = DirFile(tmpFName);
+
+				action(dirfile, absFilename, destFilesDir);
+
+				FreeAll(absFilename, dirfile);
+			}
+			fName = tmpFName;
+			fList++;
+		} 
+		*fName++ = *fList++;
+	}
+
+	if (fName != tmpFName) {
+		*fName = 0;
+		if (StrLen(tmpFName)) {
+			absFilename = FileNameAbs(tmpFName);
+			dirfile = DirFile(tmpFName);
+
+			action(dirfile, absFilename, destFilesDir);
+
+			FreeAll(absFilename, dirfile);
+		}
+	}
+}
+
+/**
+Produce the installer ISO image based on the CInstallerPackage
+*/
+U0 CreateInstaller(CInstallerPackage * ip, Bool uninstaller = FALSE) {
+	U8 tmpFName[STR_LEN], *fList = ip->addFiles,  *fName = tmpFName, *dirfile, *absFilename;
+	U8 *destDir;
+	U8 *destFilesDir;
+	U8 *dirname = DirFile(Fs->last_cc->lex_include_stack->full_name);
+
+	if (uninstaller) {
+		"\nUninstaller...\n";
+	}
+	PrintManifest(ip);
+
+	fName = StrPrint(NULL, "/Tmp/%s_%s", ip->name, ip->version);
+	destDir = DirNameAbs(fName);
+	Free(fName);	
+	
+	destFilesDir = StrPrint(NULL, "%s/Files", destDir);
+
+	// check if exists
+	if (FileFind(destDir)) {
+		"$$BLACK$$Error: Tempory package Directory already exists %s $$FG$$\n", destDir;
+		"first do a clean up with DelTree(\"%s\");\n", destDir;
+
+		FreeAll(destDir, destFilesDir, dirname);
+		return;
+	} 
+	Silent; //no output to screen
+	Cd(destDir, TRUE);  // use Cd to create the tmp package Dir;
+	Cd(destFilesDir, TRUE);
+	Silent(OFF); //no output to screen
+
+	IterateFileList(fList, destFilesDir, &CreateAndCopyAction);
+
+	WriteManifest(ip, destDir);
+
+	dirfile = DirNameAbs("/Tmp");
+	if (uninstaller) {
+		absFilename = StrPrint(NULL, "%s/uninstall_%s_%s.ISO", dirfile, ip->name, ip->version);
+		"Creating Uninstaller ISO %s\n", absFilename;
+	} else {
+		absFilename = StrPrint(NULL, "%s/%s_%s.ISO", dirfile, ip->name, ip->version);
+		"Creating Installation Package ISO %s\n", absFilename;
+	}
+
+	RedSeaISO(absFilename, destDir);
+
+	Cd(dirname);
+
+//	Zip(absFilename);
+	Silent; //no output to screen
+	DelTree(destDir);
+	Silent(OFF); //no output to screen
+
+	FreeAll(destDir, destFilesDir, absFilename, dirfile);
+}
+
+
+/**
+ Init the basic uninstaller manifest, caller is responsible for freeing, and freeing addFiles
+*/
+CInstallerPackage *InitBaseUninstaller(CInstallerPackage *ip) 
+{
+	CInstallerPackage *uip = MAlloc(sizeof(CInstallerPackage));
+
+	uip->name = ip->name;
+	uip->version = ip->version;
+	uip->dependancies = ip->dependancies;
+	uip->url = ip->url;
+	uip->description = ip->description;
+	uip->addFiles = MAlloc(1024*4);  // @TODO this will need resizing
+	uip->removeFiles = ip->addFiles;  // A delta could be created
+ 	uip->rebuildKernel = ip->rebuildKernel;
+	uip->rebuildCompiler = ip->rebuildCompiler;
+	uip->reboot = ip->reboot;
+
+	// addFiles = removeFiles + files overriden
+
+	StrPrint(uip->addFiles, "%s\n", ip->removeFiles);	
+	IterateFileList(ip->addFiles, uip->addFiles, &CreateAddList);
+
+	if (uip->rebuildKernel) {
+		CatPrint(uip->addFiles, "%s\n", BOOT_DIR_KERNEL_ZXE);	
+	}
+
+	if (uip->rebuildCompiler) {
+		// @TODO add Compiler.BIN to addFiles
+	}
+
+	return uip;
+}
+
+/**
+ Perform the actions on the installer package
+ For this function installers and uninstallers are treated the same they both have files to delete and files to add
+*/
+U0 DoInstallerActions(CInstallerPackage *ip, U8 srcDrive, U8 dstDrive) {
+	U8 dstDriveStr[4], srcDriveStr[4]; 
+	StrPrint(&dstDriveStr, "%c:/", dstDrive);
+	StrPrint(&srcDriveStr, "%c:/", srcDrive);
+	// delete the files first
+
+	Cd(dstDriveStr);
+	dstDriveStr[2] = 0;
+	IterateFileList(ip->removeFiles, dstDriveStr,  &RemoveFileAction);
+
+	// add the files
+	Cd(srcDriveStr);
+	Cd("Files");
+	IterateFileList(ip->addFiles, dstDriveStr,  &CreateAndCopyInstallAction);
+
+	dstDriveStr[2] = '/';
+	Cd(dstDriveStr);
+
+	// compiles and reboots
+	if (ip->rebuildCompiler) {
+		// @TODO		
+	}
+
+	if (ip->rebuildKernel) {
+		// @TODO error check
+		// BootHDIns
+  		In("\nc\np1\n\n\n\n");
+		BootHDIns;
+
+	}
+
+	if (ip->reboot) {
+		// @TODO
+	}
+}
+
+U0 UninstallPackage(U8 *installer) {
+	U8 *dirname = DirFile(Fs->last_cc->lex_include_stack->full_name);
+
+	Cd(dirname);
+
+	Free(dirname);	
+}
+
+/**
+Install the specified packageFile
+*/
+U0 InstallPackage(U8 *installer) {
+	U8 *dirname = DirFile(Fs->last_cc->lex_include_stack->full_name);
+	U8 srcDrive = dirname[0];
+
+	U8 *installDirectory = "/Installs";
+	U8 *installRegistry = "/Installs/Registry.DD";
+	U8 *className = StrPrint(NULL, "%s_installer", installer);
+	U8 *isoFilename = StrPrint(NULL, "%s.ISO.C", installer);
+	Copy(isoFilename, installDirectory);
+	U8 *uninstallIsoFilename = StrPrint(NULL, "%c:/Tmp/uninstall_%s.ISO.C", srcDrive, installer);
+	"Uninstaller ISO %s\n", uninstallIsoFilename;
+	if (!FileFind(isoFilename)) {
+		"Error: cannot find package file %s\n", isoFilename;
+		FreeAll(uninstallIsoFilename, dirname, isoFilename, className);
+		return;
+    }
+
+	U8 drive = MountFile(isoFilename);
+	U8 *manifestFile = StrPrint(NULL, "%c:/Manifest.ZC", drive);
+	if (!FileFind(manifestFile)) {
+		"Error: cannot find manifest file in Installer %s\n", manifestFile;
+		FreeAll(uninstallIsoFilename, dirname, isoFilename, className, manifestFile);
+		Unmount(drive);
+		return;
+	}
+
+	ExePrint("#include \"%s\"\n", manifestFile);
+	CInstallerPackage *ip = ExePrint("&%s;\n", className);
+	// @TODO CInstallerPackage needs a signature to test against
+	if (!ip) {
+		"Error: loading maifest file in Installer\n";
+		FreeAll(uninstallIsoFilename, dirname, isoFilename, className, manifestFile);
+		Unmount(drive);
+		return;
+	}
+	CInstallerPackage *uip = InitBaseUninstaller(ip);
+
+	"Installing..\n";
+	PrintManifest(ip);
+	// Uninstaller
+	CreateInstaller(uip, TRUE);
+	Move(uninstallIsoFilename, installDirectory);
+
+	// do the file actions from the mounted installer ISO, onto our HDD
+	DoInstallerActions(ip, drive, srcDrive);
+
+	Cd(dirname);
+	FreeAll(uninstallIsoFilename, dirname, isoFilename, className, manifestFile, uip->addFiles, uip, ip);
+	Unmount(drive);
+}
+
+
+//CreateInstaller(&myInstaller);
+InstallPackage("package_1");
+ 

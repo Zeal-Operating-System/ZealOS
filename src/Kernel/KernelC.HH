@@ -555,6 +555,7 @@ public extern				U8			*ReAlloc(    U8 *src, U64 size,         CTask *mem_task=NU
 public _extern _MHEAP_CTRL	CHeapCtrl	*MHeapCtrl(  U8 *src);
 public _extern _MSIZE		I64			 MSize(      U8 *src); 	//size of heap object
 public _extern _MSIZE2		I64			 MSize2(     U8 *src); //Internal size
+public extern 				U0 			 FreeAll(...); // Call Free for all pointers passed
 
 #help_index "Memory/HeapCtrl"
 public extern U0		 HeapCtrlDel( CHeapCtrl *hc);

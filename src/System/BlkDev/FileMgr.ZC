@@ -329,6 +329,47 @@ U0 FMRename(CDoc *doc)
 	}
 }
 
+U0 FMCopyFile(CDoc *doc)
+{
+	CEdFileName	 fn;
+	CDocEntry	*doc_e = doc->cur_entry;
+	CDirEntry	*tmpde = NULL, *parent;
+
+	if (doc_e->type_u8 == DOCT_MENU_VAL)
+	{
+		tmpde = doc_e->user_data;
+		if (parent = tmpde->parent)
+		{
+			Cd(parent->full_name);
+			StrCopy(fn.name, tmpde->name);
+			if (DocForm(&fn))
+			{
+				Silent;
+				Copy(tmpde->name, fn.name);
+				Silent(OFF);
+			}
+		}
+	}
+	else if (doc_e->type_u8 == DOCT_TREE)
+	{
+		tmpde = doc_e->user_data;
+		if (parent = tmpde->parent)
+		{
+			Cd(parent->full_name);
+			StrCopy(fn.name, tmpde->name);
+			if (DocForm(&fn))
+			{
+				if (StrCompare(tmpde->name, fn.name))
+				{
+					Silent;
+					CopyTree(tmpde->name, fn.name);
+					Silent(OFF);
+				}
+			}
+		}
+	}
+}
+
 U0 FMMkDir(CDoc *doc)
 {
 	CEdFileName	 fn;
@@ -588,6 +629,7 @@ U0 FMCopy(CDoc *doc)
 #define FMR_MAKE_ISO9660		11
 #define FMR_BURN_ISO			12
 #define FMR_HELP				13
+#define FMR_COPY				14
 
 I64 PopUpFMRight(U8 *header=NULL, U8 *footer=NULL)
 {
@@ -610,8 +652,11 @@ I64 PopUpFMRight(U8 *header=NULL, U8 *footer=NULL)
 					"$$CM+LX,1,3 $$$$BT,\"MAKE ISO.C (CD/DVD) FILE\",LE=FMR_MAKE_REDSEA_ISO_C$$"
 					"$$CM+LX,29,0$$$$BT,\"MAKE ISO (CD/DVD) FILE  \",LE=FMR_MAKE_ISO9660$$"
 					"$$CM+LX,1,3 $$$$BT,\"BURN ISO (CD/DVD) FILE  \",LE=FMR_BURN_ISO$$"
-					"$$CM+LX,29,0$$$$BT,\"HELP                    \",LE=FMR_HELP$$"
-					"$$CM+LX,1,3 $$$$BT,\"CANCEL                  \",LE=DOCM_CANCEL$$\n");
+					"$$CM+LX,29,0$$$$BT,\"COPY FILE               \",LE=FMR_COPY$$"
+					"$$CM+LX,1,3 $$$$BT,\"HELP                    \",LE=FMR_HELP$$"
+					"$$CM+LX,29,0$$$$BT,\"CANCEL                  \",LE=DOCM_CANCEL\n$$"
+
+);
 
 	if (footer)
 		DocPrint(doc, "%s", footer);
@@ -675,6 +720,10 @@ U0 FMRightClick()
 
 		case FMR_BURN_ISO:
 			Message(MESSAGE_KEY_DOWN, 'B', 0);
+			break;
+
+		case FMR_COPY:
+			Message(MESSAGE_KEY_DOWN, 'C', 0);
 			break;
 
 		case FMR_HELP:
@@ -839,6 +888,10 @@ public U8 *FileMgr(I64 mode=FM_NORMAL, CTask *mem_task=NULL)
 
 						case 'r':
 							FMRename(doc);
+							break;
+
+						case 'C':
+							FMCopyFile(doc);
 							break;
 
 						case 'd':

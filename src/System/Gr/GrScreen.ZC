@@ -17,6 +17,9 @@ U0 GrUpdateTaskODEs(CTask *task)
 	sys_task_being_screen_updated = NULL;
 }
 
+public I64 GrRect(CDC *dc=gr.dc, I64 x, I64 y, I64 w, I64 h);
+
+
 U0 GrUpdateTaskWin(CTask *task)
 { //Draw a win. Only Core0 tasks have a win.
 	CDC		*dc;
@@ -25,11 +28,19 @@ U0 GrUpdateTaskWin(CTask *task)
 	sys_task_being_screen_updated = task;
 	try
 	{
-		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER))
+		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER)) {
 			TextBorder(Fs,	task->win_left, task->win_right, task->win_top, task->win_bottom,
 							task->border_attr, task == sys_focus_task);
+		}
+
+        U64 x = task->win_left * FONT_WIDTH;
+        U64 xx = task->win_right * FONT_WIDTH;
+
+        U64 y = task->win_top * FONT_HEIGHT;
+        U64 yy = task->win_bottom * FONT_HEIGHT;
 
 		TextRect(task->win_left, task->win_right, task->win_top, task->win_bottom, task->text_attr << 8);
+
 		if (task == sys_winmgr_task)
 		{
 			if (gr.fp_wall_paper)
@@ -176,61 +187,7 @@ U0 GrZoomInScreen()
 	}
 }
 
-/*
-U0 GrUpdateTextBG()
-{// No drawing just setup
-	U32 *src = gr.text_base;
-    I64 row, col, 
-		num_rows = TEXT_ROWS, 
-		num_cols = TEXT_COLS, 
-		j, cur_ch, 
-		w4 = 0;
-	Bool blink_flag = Blink;
-
-	if (gr.pan_text_x || gr.hide_col)
-	{
-		gr.pan_text_x = ClampI64(gr.pan_text_x, -7, 7);
-		j = AbsI64(gr.pan_text_x) / FONT_WIDTH + 1;
-		num_cols -= j;
-		if (gr.pan_text_x < 0)
-		{
-			src += j;
-		}
-        w4 = j;
-	}
-
-	if (gr.pan_text_y || gr.hide_row)
-	{
-		gr.pan_text_y = ClampI64(gr.pan_text_y, -7, 7);
-		j = AbsI64(gr.pan_text_y) / FONT_HEIGHT + 1;
-		num_rows -= j;
-		if (gr.pan_text_y < 0)
-		{
-			src $WW,1$+= TEXT_COLS * j;
-		}
-	}
-
-	for (row = num_rows; row--;)
-	{
-		for (col = num_cols; col--;)
-		{
-			cur_ch = *src++;
-			if (cur_ch & (ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
-			{
-				if (cur_ch & ATTRF_SEL)
-					cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
-				if (cur_ch & ATTRF_INVERT)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
-				if (cur_ch & ATTRF_BLINK && blink_flag)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
-			}
-		}
-		src += w4;
-	}
-}
-*/
-
-U0 GrUpdateTextFG(CDC *dest=gr.dc32)
+U0 GrUpdateText(CDC *dest=gr.dc32)
 {//See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
 	U32 *src = gr.text_base, *dst32 = dest->body;
 	I64  i, j, cur_ch, w1 = dest->width_internal, w2 = (FONT_HEIGHT - 1) * w1, w4 = 0, 
@@ -292,15 +249,13 @@ U0 GrUpdateTextFG(CDC *dest=gr.dc32)
 				if (dst_start <= dst32 + i < dst_end) {
 					bgColor = gr_palette[cur_ch.u8[1] >> 4];
 					fgColor = gr_palette[cur_ch.u8[1] & 0xF];
-					GrDrawCharNoClippingU32(cur_ch & 0xFFFE, fgColor, bgColor, dst32 + i, w1);
-//					GrDrawCharNoClippingU32(cur_ch & (ATTRF_UNDERLINE + 0xFFF), fgColor, bgColor, dst32 + i, w1);
+					GrDrawCharNoClippingU32(cur_ch, fgColor, bgColor, dst32 + i, w1);
 				}
 			}
 			else {
 				bgColor = gr_palette[cur_ch.u8[1] >> 4];
 				fgColor = gr_palette[cur_ch.u8[1] & 0xF];
-				GrDrawCharNoClippingU32(cur_ch & 0xFFFF, fgColor, bgColor, dst32, w1);
-//				GrDrawCharNoClippingU32(cur_ch & (ATTRF_UNDERLINE + 0xFFF), fgColor, bgColor, dst32, w1);
+				GrDrawCharNoClippingU32(cur_ch, fgColor, bgColor, dst32, w1);
 			}
             dst32 += 8;
 		}
@@ -332,7 +287,7 @@ U0 DCBlotColor8to32(CDC *dest, CDC *source)
 	{
 		pixel = *src;
 		if (pixel != TRANSPARENT)
-			*dst = gr_palette[pixel & 0xF];
+			*dst = source->palette[pixel & 0xF];
     }
 }
 
@@ -377,21 +332,31 @@ U0 GrUpdateScreen32(CDC *dest, CDC *source)
 	}
 }
 
+
+U64	tasks_done = 0;
+
+
+U0 GrTask2(U64) 
+{
+	GrUpdateText;  // dc32
+
+	lock {tasks_done--;}
+}
+
+
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/System/WinMgr.ZC,GrUpdateScreen"$, 30 times a second.
-
-    MemSet(gr.dc->body, TRANSPARENT, gr.dc->width_internal * gr.dc->height);
-    MemSet(gr.dc2->body, TRANSPARENT, gr.dc2->width_internal * gr.dc2->height);
-
-	CDC *dc;
 
 	if (text.is_fb_busy)
 		return;
 
-///	GrUpdateTextBG; // no draw
-	GrUpdateTextFG; // draw dc32 
+    MemSet(gr.dc2->body, TRANSPARENT, gr.dc2->width_internal * gr.dc2->height);
+    MemSet(gr.dc->body, TRANSPARENT, gr.dc->width_internal * gr.dc->height);
+	while (tasks_done)  // wait for GrUpdateText
+		Yield;
 	GrUpdateTasks; // write to dc2
-	DCBlot(gr.dc2, gr.dc);
+
+	CDC *dc;
 
 	dc = DCAlias(gr.dc2, Fs);
 	dc->flags |= DCF_ON_TOP;
@@ -399,7 +364,13 @@ U0 GrUpdateScreen()
 		(*gr.fp_final_screen_update)(dc);
 	DCDel(dc);
 
+    DCBlot(gr.dc2, gr.dc); 
     GrUpdateScreen32(gr.dc32, gr.dc2); // dc2 to back plane
-    
+
     DCBlot(gr.screen, gr.dc32); // back plane to screen
+
+	// post screen draw prepare next refresh
+	tasks_done = 1;
+	Spawn(&GrTask2,,, mp_count-1); 
+
 }
