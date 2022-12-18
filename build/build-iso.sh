@@ -24,9 +24,12 @@ TMPISODIR="$TMPDIR/iso"
 TMPDISK="$TMPDIR/ZealOS.raw"
 TMPMOUNT="$TMPDIR/mnt"
 
+# Change this if your default QEMU version does not work and you have installed a different version elsewhere.
+QEMU_BIN_PATH=$(dirname "$(which qemu-system-x86_64)")
+
 mount_tempdisk() {
 	sudo modprobe nbd
-	sudo qemu-nbd -c /dev/nbd0 -f raw $TMPDISK
+	sudo $QEMU_BIN_PATH/qemu-nbd -c /dev/nbd0 -f raw $TMPDISK
 	sudo partprobe /dev/nbd0
 	sudo mount /dev/nbd0p1 $TMPMOUNT
 }
@@ -34,7 +37,7 @@ mount_tempdisk() {
 umount_tempdisk() {
 	sync
 	sudo umount $TMPMOUNT
-	sudo qemu-nbd -d /dev/nbd0
+	sudo $QEMU_BIN_PATH/qemu-nbd -d /dev/nbd0
 }
 
 [ ! -d $TMPMOUNT ] && mkdir -p $TMPMOUNT
@@ -46,8 +49,8 @@ echo "Building ZealBooter..."
 set +e
 
 echo "Making temp vdisk, running auto-install ..."
-qemu-img create -f raw $TMPDISK 1024M
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO.ISO -device isa-debug-exit
+$QEMU_BIN_PATH/qemu-img create -f raw $TMPDISK 1024M
+$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO.ISO -device isa-debug-exit
 
 echo "Copying all src/ code into vdisk Tmp/OSBuild/ ..."
 rm ../src/Home/Registry.ZC 2> /dev/null
@@ -59,7 +62,7 @@ sudo cp -r ../src/* $TMPMOUNT/Tmp/OSBuild
 umount_tempdisk
 
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
-qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
+$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
 LIMINE_BINARY_BRANCH="v4.x-branch-binary"
 
@@ -128,11 +131,11 @@ if [ "$TESTING" = true ]; then
 	    cd ..
 	fi
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
-	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
-	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
 	echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."
-	qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
 fi
 
 # comment these 2 lines if you want lingering old Distro ISOs
