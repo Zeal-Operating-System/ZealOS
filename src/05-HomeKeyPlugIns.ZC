@@ -58,7 +58,7 @@ Bool MyPutKey(I64 ch, I64 sc)
 						return TRUE;
                 }
 		}
-	}
+	}
 
 	if (sc & SCF_ALT && !(sc & SCF_CTRL))
 	{
