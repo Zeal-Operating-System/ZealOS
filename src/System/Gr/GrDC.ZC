@@ -223,59 +223,9 @@ public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALS
 	res->r				= MAlloc(16 * sizeof(I64), task);
 	DCReset(res);
 	res->dc_signature	= DCS_SIGNATURE_VAL;
-	res->bitsPerPixel   = 4;
 
 	return res;
 }
-
-public CDC32 *DCNew32(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALSE)
-{//Create new width x height device context with 32 bits per pixel.
-//Internally only allows widths which are divisible by 8.
-	//Don't forget these $MA-X+PU,"sizeof(CDC)",LM="Find(\"sizeof(CDC)\",\"/*\");View;"$.
-	CDC32 *res;
-
-	if (!task)
-		task = Fs;
-	res=CAlloc(sizeof(CDC32), task);
-	res->win_task		= task;
-	res->mem_task		= task;
-	res->width			= width;
-	res->width_internal	= (width + 7) & ~7;
-	res->height			= height;
-	if (null_bitmap)
-		res->flags |= DCF_DONT_DRAW;
-	else
-		res->body		= CAlloc(res->width_internal * res->height * sizeof(U32), task);
-	res->r				= MAlloc(16 * sizeof(I64), task);
-	DCReset(res);
-	res->dc_signature	= DCS_SIGNATURE_VAL;
-    res->bitsPerPixel   = 32;
-
-	return res;
-}
-
-public CDC32 *DCNewFrameBuffer(CTask *task=NULL)
-{// this is a unique Context which is the actual screen
-	CDC32 *res;
-
-	if (!task)
-		task = Fs;
-	res=CAlloc(sizeof(CDC32), task);
-	res->win_task		= task;
-	res->mem_task		= task;
-	res->width			= GR_WIDTH;
-	res->width_internal	= GR_WIDTH; // @TODO check this VESA returns pixels per line whch should be used here
-	res->height			= GR_HEIGHT;
-	res->body	  		= sys_framebuffer_addr;
-	res->r				= MAlloc(16 * sizeof(I64), task);
-	DCReset(res);
-	res->dc_signature	= DCS_SIGNATURE_VAL;
-    res->bitsPerPixel = 32;
-
-	return res;
-}
-
-
 
 public U0 DCDel(CDC *dc)
 {//Free dc, image body, rot mat and depth buf.

@@ -72,13 +72,9 @@ U0 SysGrInit()
 {
 	I64 i;
 
-    text.font = sys_font_std_8x12;
+    text.font = sys_font_std;
 
-	text.aux_font = sys_font_block_8x12;
-
-//    text.font = sys_font_std;
-
-//	text.aux_font = sys_font_aux;
+	text.aux_font = sys_font_aux;
 
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
@@ -91,10 +87,6 @@ U0 SysGrInit()
 	
 	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32) = 'ÀÈÙ¼';
-	text.border_chars[14] = 2;
-	text.border_chars[15] = 3;
-	text.border_chars[16] = 4;
-	text.border_chars[17] = 5;
 
 	text.cols = sys_framebuffer_width  / FONT_WIDTH;
 	text.rows = sys_framebuffer_height / FONT_HEIGHT;
@@ -229,7 +221,7 @@ U0 KMain()
 	counts.time_stamp_freq_initial = TimeCal;
 	Cd("/");
 	try
-		ExeFile("01-StartOS"); //Continues $LK,"/StartOS.ZC",A="FL:/StartOS.ZC,1"$
+		ExeFile("StartOS"); //Continues $LK,"/StartOS.ZC",A="FL:/StartOS.ZC,1"$
 	catch
 	{
 		Raw(ON);

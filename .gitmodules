@@ -1,3 +1,0 @@
-[submodule "src/Efisource"]
-	path = src/Efisource
-	url = git@github.com:Slapparoo/TempleOs-efi.git

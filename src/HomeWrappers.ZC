@@ -7,22 +7,22 @@
 //Feel free to add more or change.
 public I64 F(U8 *needle_str, U8 *fu_flags = NULL)
 {//Find text in all text files.
-  return Find(needle_str, "/*", fu_flags);
+	return Find(needle_str, "/*", fu_flags);
 }
 
 public I64 R(U8 *needle_str, U8 *replace_text = NULL, U8 *fu_flags = "+l-i")
 {//Find text and replace in all text files.
-  return Find(needle_str, "/*", fu_flags, replace_text);
+	return Find(needle_str, "/*", fu_flags, replace_text);
 }
 
 public I64 FD(U8 *needle_str, U8 *fu_flags = NULL)
 {//Find text in cur dir text files.
-  return Find(needle_str, "*", fu_flags);
+	return Find(needle_str, "*", fu_flags);
 }
 
 public I64 RD(U8 *needle_str, U8 *replace_text = NULL, U8 *fu_flags = "+l-i")
 {//Find text and replace in cur dir text files.
-  return Find(needle_str, "*", fu_flags, replace_text);
+	return Find(needle_str, "*", fu_flags, replace_text);
 }
 
 public U0 Cls()
@@ -34,38 +34,3 @@ public U0 SysCls()
 {//Clear System terminal.
 	Sys("DocClear;\n");
 }
-
-#define STD_BOOTHDINS	"\nc\np1\n\n\n\n"
-
-
-public U0 bi()
-{// BootHDIns
-  In(STD_BOOTHDINS);
-  BootHDIns;
-}
-
-public U0 rb()
-{
-  Reboot;
-}
-
-public I64 ll()
-{
-  return Dir;
-}
-
-public I64 ls(U8 * dir)
-{
-  return Dir(dir);
-}
-
-public I64 cd(U8 * dir)
-{
-  return Cd(dir);
-}
-
-public I64 rm(U8 * dir)
-{
-  return Del(dir);
-}
-

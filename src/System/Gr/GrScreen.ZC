@@ -1,6 +1,5 @@
 #help_index "Graphics/Screen"
 
-
 U0 GrUpdateTaskODEs(CTask *task)
 {
 	sys_task_being_screen_updated = task;
@@ -17,9 +16,6 @@ U0 GrUpdateTaskODEs(CTask *task)
 	sys_task_being_screen_updated = NULL;
 }
 
-public I64 GrRect(CDC *dc=gr.dc, I64 x, I64 y, I64 w, I64 h);
-
-
 U0 GrUpdateTaskWin(CTask *task)
 { //Draw a win. Only Core0 tasks have a win.
 	CDC		*dc;
@@ -28,19 +24,11 @@ U0 GrUpdateTaskWin(CTask *task)
 	sys_task_being_screen_updated = task;
 	try
 	{
-		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER)) {
+		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER))
 			TextBorder(Fs,	task->win_left, task->win_right, task->win_top, task->win_bottom,
 							task->border_attr, task == sys_focus_task);
-		}
-
-        U64 x = task->win_left * FONT_WIDTH;
-        U64 xx = task->win_right * FONT_WIDTH;
-
-        U64 y = task->win_top * FONT_HEIGHT;
-        U64 yy = task->win_bottom * FONT_HEIGHT;
 
 		TextRect(task->win_left, task->win_right, task->win_top, task->win_bottom, task->text_attr << 8);
-
 		if (task == sys_winmgr_task)
 		{
 			if (gr.fp_wall_paper)
@@ -187,16 +175,14 @@ U0 GrZoomInScreen()
 	}
 }
 
-U0 GrUpdateText(CDC *dest=gr.dc32)
-{//See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
-	U32 *src = gr.text_base, *dst32 = dest->body;
-	I64  i, j, cur_ch, w1 = dest->width_internal, w2 = (FONT_HEIGHT - 1) * w1, w4 = 0, 
-		 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, row, col;
-	U32	*dst_start = dest->body, 
-		*dst_end = dst_start + w1 * dest->height - (FONT_HEIGHT - 1) * w1 - FONT_WIDTH;
-	Bool blink_flag = Blink;
-	U32 bgColor;
-	U32 fgColor;
+U0 GrUpdateTextBG()
+{
+	I64 reg RSI *dst = gr.dc2->body, reg R13 c, row, col, 
+				 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, i, j, cur_ch, 
+		reg R12  w1 = gr.dc2->width_internal, w2 = -7 * w1 + 8, w3 = 7 * w1, w4 = 0;
+	U32			*src = gr.text_base;
+	Bool		 blink_flag = Blink;
+	U8			*dst2 = dst;
 
 	if (gr.pan_text_x || gr.hide_col)
 	{
@@ -206,7 +192,105 @@ U0 GrUpdateText(CDC *dest=gr.dc32)
 		if (gr.pan_text_x < 0)
 		{
 			src += j;
-            dst32 += FONT_WIDTH * j;
+			i = FONT_WIDTH * j + gr.pan_text_x;
+		}
+		else
+			i = gr.pan_text_x;
+		dst2 = dst(U8 *) + i;
+		w4 = j;
+		w3 += j * FONT_WIDTH;
+
+		j *= FONT_WIDTH;
+		dst(U8 *) = gr.dc2->body;
+		for (row = num_rows * FONT_HEIGHT; row--;)
+		{
+			for (col = i; col--;)
+				*dst(U8 *)++ = 0;
+			dst(U8 *) += w1 - i - j;
+			for (col = j; col--;)
+				*dst(U8 *)++ = 0;
+		}
+	}
+	dst = dst2;
+
+	if (gr.pan_text_y || gr.hide_row)
+	{
+		gr.pan_text_y = ClampI64(gr.pan_text_y, -7, 7);
+		j = AbsI64(gr.pan_text_y) / FONT_HEIGHT + 1;
+		num_rows -= j;
+		if (gr.pan_text_y < 0)
+		{
+			src += w1 / FONT_WIDTH * j;
+			i = w1 * (FONT_HEIGHT * j + gr.pan_text_y);
+		}
+		else
+			i = w1 * gr.pan_text_y;
+		dst2 = dst(U8 *) + i;
+
+		j *= w1 * FONT_HEIGHT;
+		dst(U8 *) = gr.dc2->body;
+		for (row = i; row--;)
+			*dst(U8 *)++ = 0;
+		dst(U8 *) = gr.dc2->body + TEXT_ROWS * TEXT_COLS * FONT_HEIGHT * FONT_WIDTH - j;
+		for (row=j;row--;)
+			*dst(U8 *)++ = 0;
+	}
+	dst = dst2;
+
+	for (row = num_rows; row--;)
+	{
+		for (col = num_cols; col--;)
+		{
+			cur_ch = *src++;
+			if (cur_ch & (ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
+			{
+				if (cur_ch & ATTRF_SEL)
+					cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
+				if (cur_ch & ATTRF_INVERT)
+					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				if (cur_ch & ATTRF_BLINK && blink_flag)
+					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+			}
+			c = gr.to_8_colors[cur_ch.u8[1] >> 4];
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			ADD 			RSI, R12
+			MOV 			U64 [RSI], R13
+			dst(U8 *) += w2;
+		}
+		src += w4;
+		dst(U8 *) += w3;
+	}
+}
+
+U0 GrUpdateTextFG()
+{//See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
+	U32 *src = gr.text_base;
+	I64  i, j, cur_ch, *dst = gr.dc2->body, w1 = gr.dc2->width_internal, w2 = 7 * w1, w4 = 0, 
+		 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, row, col;
+	U8	*dst_start = gr.dc2->body, *dst_end = dst_start + w1 * gr.dc2->height - 7 * w1 - 8;
+	Bool blink_flag = Blink;
+
+	if (gr.pan_text_x || gr.hide_col)
+	{
+		gr.pan_text_x = ClampI64(gr.pan_text_x, -7, 7);
+		j = AbsI64(gr.pan_text_x) / FONT_WIDTH + 1;
+		num_cols -= j;
+		if (gr.pan_text_x < 0)
+		{
+			src += j;
+			dst(U8 *) += FONT_WIDTH * j;
 		}
 		w4 = j;
 		w2 += j * FONT_WIDTH;
@@ -219,8 +303,8 @@ U0 GrUpdateText(CDC *dest=gr.dc32)
 		num_rows -= j;
 		if (gr.pan_text_y < 0)
 		{
-			src += TEXT_COLS * j;
-			dst32 += w1 * FONT_HEIGHT * j;
+			src += w1 / FONT_WIDTH * j;
+			dst(U8 *) += w1 * FONT_HEIGHT * j;
 		}
 	}
 
@@ -246,117 +330,88 @@ U0 GrUpdateText(CDC *dest=gr.dc32)
 				if (i & 0x10)
 					i |= ~0x1F;
 				i = w1 * i + j;
-				if (dst_start <= dst32 + i < dst_end) {
-					bgColor = gr_palette[cur_ch.u8[1] >> 4];
-					fgColor = gr_palette[cur_ch.u8[1] & 0xF];
-					GrDrawCharNoClippingU32(cur_ch, fgColor, bgColor, dst32 + i, w1);
-				}
+				if (dst_start <= dst(U8 *) + i < dst_end)
+					GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst(U8 *) + i, w1);
 			}
-			else {
-				bgColor = gr_palette[cur_ch.u8[1] >> 4];
-				fgColor = gr_palette[cur_ch.u8[1] & 0xF];
-				GrDrawCharNoClippingU32(cur_ch, fgColor, bgColor, dst32, w1);
-			}
-            dst32 += 8;
+			else
+				GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst, w1);
+			dst(U8 *) += 8;
 		}
 		src += w4;
-        dst32 += w2;
+		dst(U8 *) += w2;
 	}
 }
 
-U0 DCBlotColor8to8(CDC *dest, CDC *source)
-{// copy non transparent pixels
-	U8 pixel, reg RSI *src = source->body, reg RDI *dst = dest->body;
-	I64 i = 0, size = source->width_internal * source->height;
-
-	for (; i < size; i++, src++, dst++)
-	{
-		pixel = *src;
-		if (pixel != TRANSPARENT)
-			*dst = pixel;
-	}
-}
-
-U0 DCBlotColor8to32(CDC *dest, CDC *source) 
-{// don't call directly call DCBlot
-    U32 reg RDI *dst = dest->body; 
-	U8 reg RSI *src = source->body, pixel;
-	U64	size = src + source->height * source->width_internal;
-
-    for (; src < size; src++, dst++) 
-	{
-		pixel = *src;
-		if (pixel != TRANSPARENT)
-			*dst = source->palette[pixel & 0xF];
-    }
-}
-
-/**
-This really needs 2 implementations
-* One full copy
-* one conditional copy on transparent
-*/
-U0 DCBlotColor32to32(CDC *dest, CDC *source) 
-{// Don't call directly call DCBlot
-	I64 size = source->width_internal * source->height;
-    MemCopy(dest->body, source->body, size * 4);
-	
-}
-
-
-U0 DCBlot(CDC *dest, CDC *source) 
-{  // some things may not be set like saved images
-  if (source->bitsPerPixel != 32) {
-    if (dest->bitsPerPixel == 32) 
-      DCBlotColor8to32(dest, source);
-    else
-      DCBlotColor8to8(dest, source);
-
-  } else {
-    // there is no 'downgrade' for 32bit
-    DCBlotColor32to32(dest, source);
-  }
-}
-
-
-U0 GrUpdateScreen32(CDC *dest, CDC *source)
+U0 DCBlotColor8(CDC *dc, CDC *img)
 {
+	U8	*src = img->body, *b0 = dc->body;
+	I64  j, k, d0 = img->width_internal * img->height;
+
+	for (k = 0; k < d0; k++)
+	{
+		j = *src++;
+		if (j != TRANSPARENT)
+			*b0++ = j;
+		else
+			b0++;
+	}
+}
+
+U0 GrCalcScreenUpdates()
+{
+	U16 *screen, *last_screen = gr.screen_cache;
+	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
+
+	for (i = 0; i < diffs_size; i++)
+	{
+		if (screen[i] != last_screen[i])
+			dst[i] = src[i];
+	}
+	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+}
+
+U0 GrUpdateScreen32()
+{
+	U64 size, *dst;
+	U8 *src;
+
 	if (gr.screen_zoom == 1)
 	{
-        DCBlot(dest, source);
+		src = gr.dc2->body;
+		size = src + gr.dc2->height * gr.dc2->width_internal;
 	}
 	else
 	{
 		GrZoomInScreen;
-        DCBlot(dest, gr.zoomed_dc); 
+		src = gr.zoomed_dc->body;
+		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
 	}
+	dst = text.raw_screen;
+	while (src < size) //draw 2 pixels at a time
+		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
+
+	GrCalcScreenUpdates;
+
+	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE], 0))
+		MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
 }
-
-
-U64	tasks_done = 0;
-
-
-U0 GrTask2(U64) 
-{
-	GrUpdateText;  // dc32
-
-	lock {tasks_done--;}
-}
-
 
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/System/WinMgr.ZC,GrUpdateScreen"$, 30 times a second.
+	CDC *dc;
 
 	if (text.is_fb_busy)
 		return;
 
-    MemSet(gr.dc2->body, TRANSPARENT, gr.dc2->width_internal * gr.dc2->height);
-    MemSet(gr.dc->body, TRANSPARENT, gr.dc->width_internal * gr.dc->height);
-	while (tasks_done)  // wait for GrUpdateText
-		Yield;
-	GrUpdateTasks; // write to dc2
-
-	CDC *dc;
+	GrUpdateTextBG;
+	GrUpdateTextFG;
+	GrUpdateTasks;
+	DCBlotColor8(gr.dc2, gr.dc);
 
 	dc = DCAlias(gr.dc2, Fs);
 	dc->flags |= DCF_ON_TOP;
@@ -364,13 +419,6 @@ U0 GrUpdateScreen()
 		(*gr.fp_final_screen_update)(dc);
 	DCDel(dc);
 
-    DCBlot(gr.dc2, gr.dc); 
-    GrUpdateScreen32(gr.dc32, gr.dc2); // dc2 to back plane
-
-    DCBlot(gr.screen, gr.dc32); // back plane to screen
-
-	// post screen draw prepare next refresh
-	tasks_done = 1;
-	Spawn(&GrTask2,,, mp_count-1); 
-
+	DCBlotColor4(gr.dc1->body, gr.dc2->body, gr.dc_cache->body, gr.dc2->height * gr.dc2->width_internal >> 3);
+	GrUpdateScreen32;
 }

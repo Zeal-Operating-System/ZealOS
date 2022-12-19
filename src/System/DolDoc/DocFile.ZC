@@ -72,8 +72,6 @@ public U8 *DocSave(CDoc *doc, I64 *_size=NULL)
 
 	if (!(doc->flags & (DOCF_PLAIN_TEXT | DOCF_PLAIN_TEXT_TABS)))
 		DocBinsValidate(doc);
-
-//	if (DD_NO_INSERT_CURSOR || doc->flags & DOCF_NO_CURSOR)
 	if (doc->flags & DOCF_NO_CURSOR)
 		DocRecalc(doc);
 	else
@@ -136,9 +134,7 @@ public U8 *DocSave(CDoc *doc, I64 *_size=NULL)
 			{
 				case DOCT_CURSOR:
 					DocEntryDel(doc, doc_e);
-//					if (DD_NO_INSERT_CURSOR) {
-						*dst++ = CH_CURSOR;
-  //                                      }
+					*dst++ = CH_CURSOR;
 					break;
 
 				case DOCT_TAB:

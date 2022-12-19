@@ -31,7 +31,6 @@
 #include "Memory/MakeMemory"
 #include "FontStd"
 #include "FontAux"
-#include "Lib/FontStd8x12"
 #include "StrB"
 #include "KHashA"
 #include "KInterrupts"

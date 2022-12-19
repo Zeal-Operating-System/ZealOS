@@ -68,7 +68,7 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 							else
 								sc &= ~SCF_CTRL;
 //Fall Through to SC_END
-//						case SC_END:
+						case SC_END:
 							if (!(sc & SCF_CTRL))
 							{
 								if (sc & SCF_KEY_DESC)
@@ -108,7 +108,7 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 							else
 								sc &= ~SCF_CTRL;
 //Fall Through to SC_HOME
-//						case SC_HOME:
+						case SC_HOME:
 							if (!(sc & SCF_CTRL))
 							{
 								if (sc & SCF_KEY_DESC)
@@ -195,7 +195,6 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 							}
 							break;
 
-						case SC_HOME:
 						case SC_CURSOR_LEFT:
 							if (sc & SCF_KEY_DESC)
 							{
@@ -213,7 +212,6 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 								EdCursorLeft(doc, sc);
 							break;
 
-						case SC_END:
 						case SC_CURSOR_RIGHT:
 							if (sc & SCF_KEY_DESC)
 							{
@@ -894,31 +892,6 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 									ACDDef(ch - '0', Fs);
 								else
 									ACDFillin(ch - '0');
-								DocLock(doc);
-							}
-						}
-					}
-					break;
-
-				case ' ':
-					if (sc & SCF_CTRL)
-					{
-						if (sc & SCF_KEY_DESC)
-						{
-							if (sc & SCF_SHIFT)
-								KeyDescSet("Cmd /Word Definition");
-							else
-								KeyDescSet("Edit/Autocomplete Word");
-						}
-						else
-						{
-							if (AutoComplete(ON))
-							{
-								DocUnlock(doc);
-								if (sc & SCF_SHIFT)
-									ACMan(1, Fs);
-								else
-									ACFillIn(1);
 								DocLock(doc);
 							}
 						}

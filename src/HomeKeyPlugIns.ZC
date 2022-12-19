@@ -25,41 +25,6 @@ Bool MyPutKey(I64 ch, I64 sc)
 	I64 i;
 	U8 *st1, *st2;
 
-	if (sc & SCF_ALT && sc & SCF_CTRL)
-	{
-		switch (ch)
-        {
-			case 0:
-				switch (sc.u8[0])
-				{
-					case SC_CURSOR_LEFT:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Win Left");
-						else
-							WinLeft;
-						return TRUE;
-					case SC_CURSOR_RIGHT:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Win Right");
-						else
-							WinRight;
-						return TRUE;
-					case SC_CURSOR_UP:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Win Max");
-						else
-							WinMax;
-						return TRUE;
-					case SC_CURSOR_DOWN:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Win Shrink");
-						else
-							WinShrink;
-						return TRUE;
-                }
-		}
-	}
-
 	if (sc & SCF_ALT && !(sc & SCF_CTRL))
 	{
 		switch (ch)
@@ -67,38 +32,6 @@ Bool MyPutKey(I64 ch, I64 sc)
 			case 0:
 				switch (sc.u8[0])
 				{
-					case SC_CURSOR_UP:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Move Window Up");
-						else
-							WinUp;
-						return TRUE;
-
-					case SC_CURSOR_DOWN:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Move Window Down");
-						else
-							WinDown;
-						return TRUE;
-					case SC_CURSOR_RIGHT:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Cmd/Next Focus Task Window");
-						else
-                            if (sys_winmgr_task->next_task == sys_task)
-							{
-								WinToTop(sys_winmgr_task->next_task->next_task);
-								return TRUE;	
-							}
-							                            
-							WinToTop(sys_winmgr_task->next_task);
-						return TRUE;
-
-					case SC_CURSOR_LEFT:
-						if (sc & SCF_KEY_DESC)
-							KeyDescSet("Cmd/Last Focus Task Window");
-						else
-							WinToTop(sys_winmgr_task->last_task);
-						return TRUE;
 					case SC_F1:
 						if (sc & SCF_SHIFT)
 						{
@@ -232,12 +165,6 @@ Bool MyPutKey(I64 ch, I64 sc)
 				else
 					WinTileVert;
 				return TRUE;
-//      case 'p':
-//	if (sc & SCF_KEY_DESC)
-//	  KeyDescSet("Cmd /Lsh");
-//	else
-//	  Lsh;
-//	return TRUE;
 
 			case 'l':
 				if (sc & SCF_KEY_DESC)
@@ -276,30 +203,30 @@ Bool MyPutKey(I64 ch, I64 sc)
 
 			case '1':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ï¿½");
+					KeyDescSet("Dol /ã");
 				else
-					'ï¿½';
+					'ã';
 				return TRUE;
 
 			case '2':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ï¿½");
+					KeyDescSet("Dol /é");
 				else
-					'ï¿½';
+					'é';
 				return TRUE;
 
 			case '3':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ï¿½");
+					KeyDescSet("Dol /è");
 				else
-					'ï¿½';
+					'è';
 				return TRUE;
 
 			case '4':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ï¿½");
+					KeyDescSet("Dol /ê");
 				else
-					'ï¿½';
+					'ê';
 				return TRUE;
 
 			case '9':
