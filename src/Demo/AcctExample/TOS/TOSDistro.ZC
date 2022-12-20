@@ -112,7 +112,7 @@ U0 DebugDistroFilePrep()
 	Copy("C:/Kernel/*.HH*",			"A:/Kernel");
 	CopyTree("C:/Kernel/BlkDev",	"A:/Kernel/BlkDev");
 
-	Copy("C:/Home/Sup1/Sup1Distro/DebugStartOS.ZC", "A:/StartOS.ZC");
+	Copy("C:/Home/Sup1/Sup1Distro/DebugStartOS.ZC", "A:/01-StartOS.ZC");
 
 	DirMake("A:/System");
 	Copy("C:/Home/Sup1/Sup1Distro/DebugMakeSystem.ZC", "A:/System/MakeSystem.ZC");

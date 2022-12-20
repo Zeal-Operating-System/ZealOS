@@ -16,9 +16,9 @@ U0 InstallDrive(U8 drv_let)
 		Copy("::/Misc/DoDistro.ZC", st);
 	Free(st);
 
-	st = MStrPrint("%C:/Home/MakeHome.ZC", drv_let);
+	st = MStrPrint("%C:/Home/02-MakeHome.ZC", drv_let);
 	if (!FileFind(st))
-		Copy("::/MakeHome.ZC", st);
+		Copy("::/02-MakeHome.ZC", st);
 	Free(st);
 }
 

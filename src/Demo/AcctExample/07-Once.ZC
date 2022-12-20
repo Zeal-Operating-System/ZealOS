@@ -3,7 +3,7 @@
 
 //This file is executed by the
 //first terminal window upon start-up.
-//See $LK,"Once",A="FF:/Home/HomeSys.ZC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
+//See $LK,"07-Once",A="FF:/Home/06-HomeSys.ZC,07-Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
 
 //	Type("::/Doc/Customize.DD");
 

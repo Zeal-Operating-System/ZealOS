@@ -1,14 +1,14 @@
 $WW,1$$LK,"KMain",A="MN:KMain"$()
-	includes $LK,"::/StartOS.ZC"$
-		includes $LK,"~/MakeHome.ZC"$
-			includes $LK,"~/HomeSys.ZC"$
-				calls $LK,"StartUpTasks",A="FF:~/HomeSys.ZC,StartUpTasks"$()
-					includes $LK,"~/Once.ZC"$
+	includes $LK,"::/01-StartOS.ZC"$
+		includes $LK,"~/02-MakeHome.ZC"$
+			includes $LK,"~/06-HomeSys.ZC"$
+				calls $LK,"StartUpTasks",A="FF:~/06-HomeSys.ZC,StartUpTasks"$()
+					includes $LK,"~/07-Once.ZC"$
 						calls $LK,"OnceExe",A="MN:OnceExe"$().
 
 $LK,"SysOnce",A="MN:SysOnce"$() appends src code to $LK,"~/Registry.ZC"$ $FG,2$Once/System$FG$ tree, executed at next boot by $FG,2$System$FG$.
 
-$LK,"Once",A="MN:Once"$() 	appends src code to $LK,"~/Registry.ZC"$ $FG,2$Once/User$FG$ tree, executed at next boot by first $FG,2$User$FG$ term.
+$LK,"Once",A="MN:07-Once"$() 	appends src code to $LK,"~/Registry.ZC"$ $FG,2$Once/User$FG$ tree, executed at next boot by first $FG,2$User$FG$ term.
 
 At boot, $LK,"OnceExe",A="MN:OnceExe"$(), executes $FG,2$Once/System$FG$ tree, $LK,"SysOnceFlush",A="MN:SysOnceFlush"$()s it,
 executes $FG,2$Once/User$FG$ tree and $LK,"OnceFlush",A="MN:OnceFlush"$()s.

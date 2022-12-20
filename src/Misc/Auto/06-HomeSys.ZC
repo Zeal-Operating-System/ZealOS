@@ -1,8 +1,5 @@
-//Place this file in /Home and change
-//anything you want.
-
 U0 UserStartUp()
-{//Run each time a user a spawned
+{
 	DocTermNew;
 	Type("::/Doc/Start.DD");
 	LBts(&Fs->display_flags, DISPLAYf_SHOW);
@@ -12,7 +9,7 @@ U0 UserStartUp()
 }
 
 U0 ServerStartUp()
-{//Run each time a server task is spawned.
+{
 	DocTermNew;
 	LBts(&Fs->display_flags, DISPLAYf_SHOW);
 	WinToTop;
@@ -29,13 +26,9 @@ U0 StartUpTasks()
 	WinToTop(user);
 	WinTileVert;
 	"Boot Time:%7.3fs\n", tS;
-	XTalk(user, "Cd; #include \"Once\";\n");
-	Silent; //no output to screen
-	ACInit("/*;!*/Bible.TXT;!*/Clementine.TXT;!*/PCIDevices.DD;!*/HTML/*;!*/ChangeLog.DD");
-	Silent(OFF); //no output to screen
-
-	if (sys_boot_src.u16[0] != BOOT_SRC_RAM)
-		PopUp("ExeFile2(\"::/System/ZSplash.ZC\");");
+	XTalk(user, "Cd; #include \"07-Once\";\n");
+	Silent;
+	Silent(OFF);
 }
 
 StartUpTasks;

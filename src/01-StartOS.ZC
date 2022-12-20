@@ -38,6 +38,6 @@ Option(OPTf_WARN_DUP_TYPES, OFF);
 LBts(&sys_run_level, RLf_HOME);
 
 #help_index ""
-#include "~/MakeHome"
+#include "~/02-MakeHome"
 
 //After this file, the System task enters $LK,"server mode",A="HI:Job"$.

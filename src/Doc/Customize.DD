@@ -1,7 +1,7 @@
-$WW,1$* You can adjust the mouse movement rate by setting global variables in your start-up file.	See $LK,"mouse scale",A="FF:~/HomeLocalize.ZC,mouse_hard.scale"$.
+$WW,1$* You can adjust the mouse movement rate by setting global variables in your start-up file.	See $LK,"mouse scale",A="FF:~/03-HomeLocalize.ZC,mouse_hard.scale"$.
 
-* You can set your local time zone by setting the $FG,4$local_time_offset$FG$ global variable in a start-up file.	Its units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$.  See $LK,"local time",A="FF:~/HomeLocalize.ZC,local_time"$.
+* You can set your local time zone by setting the $FG,4$local_time_offset$FG$ global variable in a start-up file.	Its units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$.  See $LK,"local time",A="FF:~/03-HomeLocalize.ZC,local_time"$.
 
 * You can change the palette using the $LK+PU,"PaletteSet",A="FF:::/System/Gr/GrPalette.ZC,U0 PaletteSet"$ functions. Pressing $FG,2$<CTRL-ALT-f>$FG$ toggles standard and auxiliary font.
 
-* Get rid of this message $LK,"here",A="FF:~/Once.ZC,Customize.DD"$.
+* Get rid of this message $LK,"here",A="FF:~/07-Once.ZC,Customize.DD"$.

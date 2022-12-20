@@ -44,7 +44,7 @@ Sleep(2000);
 
 TourPut("Notice the number of matches.\n",TRUE);
 
-TourPut(	"The wrapper function is in your $$RED$$~/HomeWrappers.ZC$$FG$$ file.  "
+TourPut(	"The wrapper function is in your $$RED$$~/04-HomeWrappers.ZC$$FG$$ file.  "
 			"There is a function $$RED$$$$TX+L+PU+UL,\"R\",A=\"MN:R\"$$$$FG$$() for "
 			"find and replace.  Feel free to customize.\n", TRUE);
 
@@ -54,7 +54,7 @@ TourPut("Press $$GREEN$$<ENTER>$$FG$$.\n");
 Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
-"Ed(\"~/HomeWrappers.ZC\");";
+"Ed(\"~/04-HomeWrappers.ZC\");";
 InGetStr("\n");
 
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort the source code.\n");

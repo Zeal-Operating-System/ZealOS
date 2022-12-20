@@ -1,7 +1,7 @@
 /*	Kernel ASM symbols.
 $LK,"KernelB",A="FF:::/Kernel/Kernel.PRJ,KernelB"$ Kernel.PRJ
 $LK,"KernelB",A="FF:::/Compiler/Compiler.PRJ,KernelB"$ Compiler.PRJ
-$LK,"KernelB",A="FF:::/StartOS.ZC,KernelB"$ StartOS.ZC
+$LK,"KernelB",A="FF:::/01-StartOS.ZC,KernelB"$ 01-StartOS.ZC
 */
 
 #help_index "Bit"

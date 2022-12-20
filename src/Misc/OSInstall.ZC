@@ -259,10 +259,36 @@ U0 InstallDrive(U8 drv_let)
 		Copy("::/Misc/DoDistro.ZC", st);
 	Free(st);
 
-	st = MStrPrint("%C:/Home/MakeHome.ZC", drv_let);
+	st = MStrPrint("%C:/Home/02-MakeHome.ZC", drv_let);
 	if (!FileFind(st))
-		Copy("::/MakeHome.ZC", st);
+		Copy("::/02-MakeHome.ZC", st);
 	Free(st);
+
+	st = MStrPrint("%C:/Home/03-HomeLocalize.ZC", drv_let);
+	if (!FileFind(st))
+		Copy("::/03-HomeLocalize.ZC", st);
+	Free(st);
+
+	st = MStrPrint("%C:/Home/04-HomeWrappers.ZC", drv_let);
+	if (!FileFind(st))
+		Copy("::/04-HomeWrappers.ZC", st);
+	Free(st);
+
+	st = MStrPrint("%C:/Home/05-HomeKeyPlugIns.ZC", drv_let);
+	if (!FileFind(st))
+		Copy("::/05-HomeKeyPlugIns.ZC", st);
+	Free(st);
+
+	st = MStrPrint("%C:/Home/06-HomeSys.ZC", drv_let);
+	if (!FileFind(st))
+		Copy("::/06-HomeSys.ZC", st);
+	Free(st);
+
+	st = MStrPrint("%C:/Home/07-Once.ZC", drv_let);
+	if (!FileFind(st))
+		Copy("::/07-Once.ZC", st);
+	Free(st);
+	
 }
 
 Bool VMPartDisk(CTask *task, I64 ata_port)

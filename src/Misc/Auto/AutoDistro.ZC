@@ -37,8 +37,8 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	Copy("/Doc/EdPullDown.DD", "/Distro/Doc/EdPullDown.DD");
 	Copy("/Doc/Tips.DD", "/Distro/Doc/Tips.DD");
 
-	Copy("/Misc/Auto/Once.ZC", "/Distro/Once.ZC");
-	Copy("/Misc/Auto/HomeSys.ZC", "/Distro/HomeSys.ZC");
+	Copy("/Misc/Auto/07-Once.ZC", "/Distro/07-Once.ZC");
+	Copy("/Misc/Auto/06-HomeSys.ZC", "/Distro/06-HomeSys.ZC");
 
 	Del("/Distro/Misc/PCIDevices.DD");
 	Del("/Distro/Misc/Bible.TXT");

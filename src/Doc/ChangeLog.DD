@@ -369,7 +369,7 @@ $IV,1$----04/21/20 18:54:47----$IV,0$
 * Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.ZC,PaletteSetDark"$ for better visibility.
 
 $IV,1$----04/21/20 16:13:01----$IV,0$
-* Added start-up intro $LK+PU,"Splash",A="FI:::/System/ZSplash.ZC"$ as a PopUp in $LK+PU,"Once",A="FF:::/HomeSys.ZC,PopUp"$, after performing a full boot (excludes soft reboots).
+* Added start-up intro $LK+PU,"Splash",A="FI:::/System/ZSplash.ZC"$ as a PopUp in $LK+PU,"Once",A="FF:::/06-HomeSys.ZC,PopUp"$, after performing a full boot (excludes soft reboots).
 
 $IV,1$----04/13/20 13:48:15----$IV,0$
 * Added $LK,"PIC_INIT",A="MN:PIC_INIT"$ and comments to $LK,"IntPICInit",A="MN:IntPICInit"$().
@@ -505,7 +505,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.ZC"$ to use current palette environment.
 * Shortened $LK,"CheckPtr",A="MN:CheckPtr"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
 * $LK,"RawDr",A="MN:RawDumpRegs"$() is 40 columns off the right of the screen, instead of fixed at column 40.
-* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.ZC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.ZC,text.rows"$.
+* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.ZC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/01-StartOS.ZC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
 * Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.ZC"$.
 * Added $MA-X+PU,"screen resolution selection",LM="F(\"->screen_w\");View;"$ to kernel configuration procedure.

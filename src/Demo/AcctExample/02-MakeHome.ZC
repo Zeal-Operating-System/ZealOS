@@ -2,15 +2,15 @@ Cd(__DIR__);;
 
 //If these are not present in /Home, it uses the version in the root dir.  You
 //can make your own, modified, version of these files in your /Home directory.
-#include "~/HomeLocalize"
+#include "~/03-HomeLocalize"
 #include "/System/Boot/MakeBoot"
 #include "/System/Utils/MakeUtils"
-#include "~/HomeWrappers"
+#include "~/04-HomeWrappers"
 MapFileLoad("::/Kernel/Kernel");
 MapFileLoad("::/Compiler/Compiler");
 
 #include "::/Apps/Psalmody/Load"
 #include "~/TOS/MakeTOS"
-#include "~/HomeKeyPlugIns"
-#include "~/HomeSys"
+#include "~/05-HomeKeyPlugIns"
+#include "~/06-HomeSys"
 Cd("..");;

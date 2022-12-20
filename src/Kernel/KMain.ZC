@@ -221,7 +221,7 @@ U0 KMain()
 	counts.time_stamp_freq_initial = TimeCal;
 	Cd("/");
 	try
-		ExeFile("StartOS"); //Continues $LK,"/StartOS.ZC",A="FL:/StartOS.ZC,1"$
+		ExeFile("01-StartOS"); //Continues $LK,"/01-StartOS.ZC",A="FL:/01-StartOS.ZC,1"$
 	catch
 	{
 		Raw(ON);

@@ -51,7 +51,7 @@ Two things to know about ZealOS are that $UL,1$tasks$UL,0$ have $LK,"MAlloc",A="
 
 With $FG,2$ZealOS$FG$, the command line feeds right into the $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ compiler, line by line, and it places code into memory it $LK,"MAlloc",A="MN:MAlloc"$()s.	The compiler is paused at the command line, waiting for input.	Naturally, you $FG,2$#include$FG$ a program to load it into memory and, usually, start it.
 
-During the boot process, many files get $LK,"compiled",A="FI:::/StartOS.ZC"$ before you have access to the command line.	(Don't worry, booting takes only two seconds.)	All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.	Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
+During the boot process, many files get $LK,"compiled",A="FI:::/01-StartOS.ZC"$ before you have access to the command line.	(Don't worry, booting takes only two seconds.)	All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.	Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
 
 Statements at the global scope -- outside the scope of functions -- execute immediately.	There is no $FG,2$main()$FG$ function.	Instead, you give meaningful names to what would be $FG,2$main()$FG$ functions and you invoke them by calling them with a statement in the global scope, usually at the bottom of your file.
 
@@ -85,7 +85,7 @@ ZealOS is for hobbyist programmers on single user (at a time) home computers, no
 
 There is no distinction between the terms $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2$thread$FG$.	All have a task record, $LK,"CTask",A="MN:CTask"$, pointed to by the $FG,2$FS$FG$ segment register and are accessed with $FG,4$Fs->$FG$ while $FG,4$Gs->$FG$ points to a $LK,"CCPU",A="MN:CCPU"$ for the current CPU core.  Each task can have just one window, but a task can have children with windows.  (The segment registers are just used as extra registers -- there is nothing segmented about ZealOS' memory.)  It is approximately the case that $FG,2$ZealOS$FG$ is multi-threading, single-processing.
 
-In $FG,2$ZealOS$FG$, $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ refers to the father of all tasks.	It's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$System$FG$.  Its heap is like kernel memory in other operating systems.  Since $FG,2$System$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$System$FG$'s heap.  It stays in a server mode, taking requests, so you can ask it to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally Terry Davis called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)	$FG,2$System$FG$ executes $LK,"::/StartOS.ZC"$ at boot time.
+In $FG,2$ZealOS$FG$, $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ refers to the father of all tasks.	It's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$System$FG$.  Its heap is like kernel memory in other operating systems.  Since $FG,2$System$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$System$FG$'s heap.  It stays in a server mode, taking requests, so you can ask it to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally Terry Davis called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)	$FG,2$System$FG$ executes $LK,"::/01-StartOS.ZC"$ at boot time.
 
 For easy back-ups, place everything you author in your $FG,2$/Home$FG$ directory and subdirectories.	Then, use $LK,"CopyTree",A="MN:CopyTree"$().	That should make upgrading easy, too.  Customizable start-up scripts go in your $FG,2$/Home$FG$ directory.	The default start-up scripts are in the root directory.  Copy the start-up files you wish to customize into $FG,2$/Home$FG$ and modify them.	See $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.	You can make your own distro that includes everything and is a bootable live CD with $LK,"::/Misc/DoDistro.ZC"$.
 
@@ -102,13 +102,13 @@ $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.
 $FG,2$<ALT-a>$FG$ brings back AutoComplete.
 $FG,2$<ALT-v>$FG$ vertically tiles windows.
 $FG,2$<ALT-h>$FG$ horizontally tiles windows.
-The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.ZC"$.  You can customize them.
+The $FG,2$ALT$FG$ keys are defined in $LK,"~/05-HomeKeyPlugIns.ZC"$.  You can customize them.
 
 $FG,2$<CTRL-ALT-t>$FG$ new terminal window.
 $FG,2$<CTRL-ALT-n>$FG$ switches to the next window.
 $FG,2$<CTRL-ALT-x>$FG$ kills a window.
 
-$LK,"Find",A="MN:Find"$() is your best friend.	There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/HomeWrappers.ZC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.	By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.	You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
+$LK,"Find",A="MN:Find"$() is your best friend.	There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/04-HomeWrappers.ZC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.	By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.	You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
 
 As you browse code, use the $FG,2$AutoComplete$FG$ window to look-up functions, etc.	$FG,2$<CTRL-SHIFT-F1>$FG$ (or whatever number) to follow a symbol to it's source.	You can browse deeper and deeper.  You go back with $FG,2$<SHIFT-ESC>$FG$.
 

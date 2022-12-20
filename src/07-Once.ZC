@@ -3,7 +3,7 @@
 
 //This file is executed by the
 //first terminal window upon start-up.
-//See $LK,"Once",A="FF:~/HomeSys.ZC,Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
+//See $LK,"07-Once",A="FF:~/06-HomeSys.ZC,07-Once"$ and $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.
 
 //Delete the rest from this file.
 
@@ -17,7 +17,7 @@ U0 Tmp()
 			if (YorN)
 			{
 				DocBottom;
-				ExeFile("C:/Home/Once");
+				ExeFile("C:/Home/07-Once");
 			}
 			break;
 		case BOOT_SRC_DVD:

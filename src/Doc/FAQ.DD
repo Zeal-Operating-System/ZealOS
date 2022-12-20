@@ -27,7 +27,7 @@ $ID,2$$LK,"Yield",A="MN:Yield"$() saves the current task's registers (context) a
 $ID,-2$$TR,"What is JIT Compiled Mode?"$
 $ID,2$The term $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ means it compiles and executes code placed into mem, not stored on disk.
 $ID,-2$$TR,"Is it open source? How do I build it?"$
-$ID,2$ZealOS is 100% open source.	All the source code is included in the distro.  Use $LK,"BootHDIns",A="MN:BootHDIns"$() to compile the kernel and compiler.	The rest is $LK,"JIT Compiled",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ during boot.  See $LK,"::/StartOS.ZC"$.
+$ID,2$ZealOS is 100% open source.	All the source code is included in the distro.  Use $LK,"BootHDIns",A="MN:BootHDIns"$() to compile the kernel and compiler.	The rest is $LK,"JIT Compiled",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ during boot.  See $LK,"::/01-StartOS.ZC"$.
 $ID,-2$$TR,"Where are object files?  How do I link?"$
 $ID,2$ZealOS does not use object files or a linker.  $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ is used to directly create flat binary files, $LK,"::/Boot/Kernel.ZXE",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.ZXE",A="FI:::/Compiler/Compiler.PRJ"$ with no object files and linking.$FG$	$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ place code in memory, ready to run, with no object files or linking.  Linking is done when $FG,2$ZXE$FG$ modules are $LK,"Load",A="MN:Load"$()ed.
 $ID,-2$$TR,"What is the FPS refresh rate?"$
@@ -79,7 +79,7 @@ $ID,2$Binary sprite data is stored beyond the terminating $FG,2$NULL$FG$ in text
 $ID,-2$$TR,"Why are sprites so small?"$
 $ID,2$Sprites can be stored as vector graphics so they might take shockingly little room.  They can be converted to bitmaps.
 $ID,-2$$TR,"Why don't I need to recompile /System and /Home files?"$
-$ID,2$If you change code in the $FG,2$/System$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	There is no $FG,2$.ZXE$FG$ file for $FG,2$JIT$FG$ compilation.	See $LK,"::/StartOS.ZC"$.
+$ID,2$If you change code in the $FG,2$/System$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	There is no $FG,2$.ZXE$FG$ file for $FG,2$JIT$FG$ compilation.	See $LK,"::/01-StartOS.ZC"$.
 $ID,-2$$TR,"Why does it finds files that aren't there?"$
 $ID,2$If a file is not found, the parent directories are searched for a file of the same name.
 $ID,-2$

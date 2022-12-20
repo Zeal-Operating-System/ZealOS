@@ -8,7 +8,7 @@ $WW,1$$FG,5$$TX+CX,"Tips"$$FG$
 
 * See $MA-X+PU,"Key Map",LM="KeyMap;View;\n"$ for a list of defined keys. Define your own keys in $LK,"MyPutKey",A="MN:MyPutKey"$(). See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
 
-* $FG,2$<ALT-m>$FG$ maximizes a window. $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete. $FG,2$<ALT-a>$FG$ brings back AutoComplete. $FG,2$<ALT-v>$FG$ vertically tiles windows. $FG,2$<ALT-h>$FG$ horizontally tiles windows. The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.ZC"$. You can customize them.
+* $FG,2$<ALT-m>$FG$ maximizes a window. $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete. $FG,2$<ALT-a>$FG$ brings back AutoComplete. $FG,2$<ALT-v>$FG$ vertically tiles windows. $FG,2$<ALT-h>$FG$ horizontally tiles windows. The $FG,2$ALT$FG$ keys are defined in $LK,"~/05-HomeKeyPlugIns.ZC"$. You can customize them.
 
 * If you make changes to ZealOS files in your $FG,2$/Home$FG$ directory, generally you reboot to make them take effect.  (You don't compile anything.)	You should have two ZealOS partitions on your hard drive because a syntax error in a start-up file will make the partition unbootable.	Boot to the second partition or boot to a standard ZealOS CD/DVD and use $LK,"Mount",A="MN:Mount"$() to mount your hard drive.
 
@@ -21,9 +21,9 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * Use the PullDown menu at the top of the screen to learn commands, or for finding the keyboard controls to games.
 
-* You can adjust the mouse movement rate by setting global variables in your start-up file. See $LK,"mouse scale",A="FF:~/HomeLocalize.ZC,mouse_hard.scale"$.
+* You can adjust the mouse movement rate by setting global variables in your start-up file. See $LK,"mouse scale",A="FF:~/03-HomeLocalize.ZC,mouse_hard.scale"$.
 
-* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global variable in a start-up file. Its units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$. See $LK,"local time",A="FF:~/HomeLocalize.ZC,local_time"$.
+* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global variable in a start-up file. Its units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$. See $LK,"local time",A="FF:~/03-HomeLocalize.ZC,local_time"$.
 
 * $FG,2$<CTRL-SHIFT-L>$FG$ in the editor to reindent a $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ function or renumber an asm routine's local labels.
 
@@ -33,7 +33,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for config questions when recompiling. The $LK,"BootHDIns",A="MN:BootHDIns"$() config prompts accept expressions, not just numbers. The default disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
 
-* You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.ZC,ACInit"$() in $LK,"~/HomeSys.ZC",A="FF:/Home/HomeSys.ZC,ACInit"$.
+* You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/06-HomeSys.ZC,ACInit"$() in $LK,"~/06-HomeSys.ZC",A="FF:/Home/06-HomeSys.ZC,ACInit"$.
 
 * Boolean expressions $BK,1$not$BK,0$ in $FG,2$if$FG$ statements don't have short circuit logic and are compiled inefficiently.
 
@@ -53,7 +53,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$, ON) to find unnecessary local variable type statements.
 
-* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$, ON) can be placed in $LK,"StartOS.ZC",A="FI:::/StartOS.ZC"$ to echo start-up scripts.
+* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$, ON) can be placed in $LK,"01-StartOS.ZC",A="FI:::/01-StartOS.ZC"$ to echo start-up scripts.
 
 * Use $LK,"Plain",A="MN:Plain"$() to edit a plain text file. You'll need this if your file has $FG,2$$$$FG$'s. Use the $LK,"ToDolDoc",A="MN:ToDolDoc"$() utility to convert plain text to DolDoc's by doubling $FG,2$$$$FG$'s.
 
@@ -75,7 +75,7 @@ $FG,2$Merge("C:/","D:/","+r+d");$FG$ to check your changes.
 
 * You can eye-dropper colors in the $FG,2$<CTRL-r>$FG$ sprite editor by pressing $FG,2$'c'$FG$. Press $FG,2$'t'$FG$ for transparent.
 
-* There are handy functions--$FG,2$F(),R(),FD()$FG$ and $FG,2$RD()$FG$ which are defined in $LK,"~/HomeWrappers.ZC"$. You are encouraged to change them and add more. They will perform find-and-replace operations across multiple files. The $FG,2$+l$FG$ flag is particularly useful since it limits to whole labels. The $FG,2$+lb$FG$ and $FG,2$+la$FG$ flags limit to whole labels just before or after. You are encouraged to add or modify handy wrapper functions to make cmd line operations easier.
+* There are handy functions--$FG,2$F(),R(),FD()$FG$ and $FG,2$RD()$FG$ which are defined in $LK,"~/04-HomeWrappers.ZC"$. You are encouraged to change them and add more. They will perform find-and-replace operations across multiple files. The $FG,2$+l$FG$ flag is particularly useful since it limits to whole labels. The $FG,2$+lb$FG$ and $FG,2$+la$FG$ flags limit to whole labels just before or after. You are encouraged to add or modify handy wrapper functions to make cmd line operations easier.
 
 * When using $LK,"Find",A="MN:Find"$() while modifying code, work from the bottom-up so that line numbers are correct. If you work top-down, then inserting or deleting lines causes the lower file links to become incorrect.
 
