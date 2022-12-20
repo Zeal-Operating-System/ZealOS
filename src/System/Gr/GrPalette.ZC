@@ -54,6 +54,20 @@ public U0 PaletteSetDark(Bool persistent=TRUE)
 	//*(drv_text_attr(U8 *) + 1) = BROWN;
 }
 //********************************************************************************
+public CBGR24 gr_palette_sandy_beach[COLORS_NUM] = {
+	0x000000, 0x000088, 0x008800, 0x006060, 0x002288, 0x4B0082, 0xA52A2A, 0xAAAAAA,
+	0x444444, 0x4169E1, 0xADFF2F, 0x00AAAA, 0xFF8888, 0x9932CC, 0xC09020, 0xFFF8DF
+};
+
+public U0 PaletteSetSandyBeach(Bool persistent=TRUE)
+{//Activate Sandy beach Light palette.
+	GrPaletteSet(gr_palette_sandy_beach);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetSandyBeach;
+}
+//********************************************************************************
+
 public CBGR24 gr_palette_light[COLORS_NUM] = {
 	0x000000, 0x0148A4, 0x3B7901, 0x057C7E, 0xBB2020, 0x9E42AE, 0xB57901, 0xB2B6AF,
 	0x555753, 0x678FBB, 0x82BC49, 0x0097A2, 0xE26A6A, 0xC671BC, 0xC7AB00, 0xFEF1F0
