@@ -52,6 +52,12 @@ $FG,2$"%Z"$FG$ $LK,"DefineListLoad",A="MN:DefineListLoad"$() subentry.	Pass sub_
 $FG,2$"%Q"$FG$ convert "\" to "\\" and quote to backslash quote. (For use in creating strs in strs.)
 
 $FG,2$"%q"$FG$ rev a $FG,2$"%Q"$FG$.
+
+$FG,2$"%x"$FG$ Hex number.
+ 
+$FG,2$"%b"$FG$ Binary number$FG$.
+
+$FG,2$"%o"$FG$ Bool$FG$.
 $ID,-2$
 
 $FG,5$$TX+CX,"Print Family"$$FG$
