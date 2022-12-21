@@ -98,7 +98,7 @@ U0 USBFreeTD(CUSBTD *tmptd)
 	Free(tmptd);
 }
 
-U32* USBAllocFrameLst(I64 usb_num, I64 size)
+U32 *USBAllocFrameLst(I64 usb_num, I64 size)
 {
 	//aligned to 0x1000
 	CUSB *u;
