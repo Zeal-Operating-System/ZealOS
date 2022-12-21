@@ -20,7 +20,7 @@ extern U0 USBEndAll();
 extern U0 USBInitAll();
 extern U32 *USBAllocFrameLst(I64 usb_num, I64 size);
 
-U8* StatCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
+U8 *StatCB(CDoc *, CDocEntry *doc_e, CTask *mem_task)
 {
 	//This routine shows the stat of the USB ports
 	U8 *st = MAlloc(128, mem_task);
@@ -185,7 +185,7 @@ U0 SetUpTD()
   OutU16(d + USBP_PORTSC1, 4);
   "<3>\n"; Sleep(100);
 
-  tds[0] = &tds[4](U8*);
+  tds[0] = &tds[4](U8 *);
   tds[1] = 0;
   tds[2] = PID_SETUP + DEV_ADD_INIT << 8 + END_PT0 << 15 + LEN_MAX << 21;
   tds[3] = buf;
@@ -195,11 +195,11 @@ U0 SetUpTD()
   tds[4] = TERMINATE;
   tds[5] = 0;
   tds[6] = PID_SETUP + DEV_ADD_INIT << 8 + END_PT0 << 15 + LEN_MAX << 21;
-  tds[7] = buf(U8*) + 8;
+  tds[7] = buf(U8 *) + 8;
   buf[2] = 0 + RQ_SET_ADDR << 8 + DEV_ADD << 16;
   buf[3] = 0 + 0 << 16;
 
-  frm[0] = &tds[0](U8*);
+  frm[0] = &tds[0](U8 *);
   for (i = 1; i < 0x1000 / 4; i++)
     frm[i] = TERMINATE;
 
