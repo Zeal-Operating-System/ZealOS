@@ -23,7 +23,7 @@
 
 #define PCNET_DW_RDP	0x10
 #define PCNET_DW_RAP	0x14
-#define PCNET_DW_BDP	0x1c
+#define PCNET_DW_BDP	0x1C
 #define PCNET_DW_RESET	0x18 // reset reg location when card is in 32-bit mode
 
 #define PCNET_BCR_MISC_CONFIG		2
@@ -215,16 +215,20 @@ U32 PCNetCSRRead(U32 csr)
 U0 PCNetAutoLinkSelect()
 {
 	U32 bcr = PCNetCSRRead(PCNET_BCR_FULL_DUPLEX_CTRL);
-	Bts(&bcr,PCNET_BCR_FULL_DUPLEX_CTRL_FDEN);
-	Bts(&bcr,PCNET_BCR_FULL_DUPLEX_CTRL_AUIFD);
-	PCNetBCRWrite(PCNET_BCR_FULL_DUPLEX_CTRL,bcr);
+
+	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_FDEN);
+	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_AUIFD);
+
+	PCNetBCRWrite(PCNET_BCR_FULL_DUPLEX_CTRL, bcr);
 }
 
 U0 PCNetEnableFullDuplex()
 {
 	U32 bcr = PCNetCSRRead(PCNET_BCR_MISC_CONFIG);
-	Bts(&bcr,PCNET_BCR_MISC_CONFIG_ASEL);
-	PCNetBCRWrite(PCNET_BCR_MISC_CONFIG,bcr);
+
+	Bts(&bcr, PCNET_BCR_MISC_CONFIG_ASEL);
+
+	PCNetBCRWrite(PCNET_BCR_MISC_CONFIG, bcr);
 }
 
 
