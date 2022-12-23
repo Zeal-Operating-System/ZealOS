@@ -585,7 +585,7 @@ U0 NetDriverTransmitPacketFinish(I64 de_index)
 
 I64 NetDriverPacketBufferGet(I64 de_index)
 {
-	return pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
+	return pcnet.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
 }
 
 I64 NetDriverPacketLengthGet(I64 de_index)
