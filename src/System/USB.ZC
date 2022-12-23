@@ -1,17 +1,6 @@
-/*
-You can play with this if you are
-interested in USB.I'm not planning
-on doing USB unless the legacy PS2
-keyboard/mouse mode disappears.
-There EHCI UHCI in various ICH chips and
-others and God knows how many custom packet
-formats for different keyboards and mice.Okay,
-I suppose if BIOS can make a universal
-packet, it is done just one way for
-different mice.PS2 is more compatible.
 
-*/
 #help_index "USB"
+
 extern I64 sys_num_usb;
 extern CUSB sys_usb_devs[USB_NUM];
 extern CUSBTD *USBAllocTD();
@@ -74,7 +63,8 @@ U0 PutStat()
 		"$$FG$$\n";
 	}
 
-	NewLine;
+//	NewLine;
+	"\n";
 }
 
 extern U0 PutQH(U32 h);
@@ -88,10 +78,10 @@ U0 PutTD(U32 t)
 {
 	"TD:$$FG,GREEN$$%08X$$FG$$\n", t;
 	"%08X\n", *P(t);
-	DocDm(t + 4, 8);
+	DocDumpMem(t + 4, 8);
 	if (*P(t + 12))
-		DocDm(*P(t + 12), 16);
-	//    DocDm(*P(t+12), *P(t+4) >> 21 & 0x7FF);
+		DocDumpMem(*P(t + 12), 16);
+	//    DocDumpMem(*P(t+12), *P(t+4) >> 21 & 0x7FF);
 	if (!(*P(t) & 1))
 	{
 		if (*P(t) & 2)
@@ -157,7 +147,7 @@ U0 Main()
 
 Main;
 
-/* Not Finished
+///* Not Finished
 #define PORT		5
 #define DEV_ADD_INIT	1
 #define DEV_ADD		1
@@ -174,7 +164,7 @@ U0 SetUpTD()
   U32 *frm = CAllocAligned(0x1000, 0x1000, Fs->code_heap),
 	*tds = CAllocAligned(256, 16, Fs->code_heap),
 	*buf = CAlloc(128, Fs->code_heap);
-  DocD(buf, 128);
+  DocDump(buf, 128);
 
   "<0>\n"; Sleep(100);
   OutU16(d + USBP_CMD, 2);	//Reset
@@ -214,4 +204,4 @@ U0 SetUpTD()
 
 SetUpTD;
 
-*/
+//*/
