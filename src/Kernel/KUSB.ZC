@@ -9,19 +9,6 @@
 #define USBP_PORTSC1 0x12
 #define USB_NUM 16
 
-class CUSBTD	//Not implemented
-{
-	U32 td[4];
-};
-
-class CUSB	//Not implemented
-{
-	U8 num,	//USB dev num
-	bus, dev, fun;
-	U16 ports, pad;
-	U32 *frame_lst;
-};
-
 //USB Pkt ID's
 #define PID_OUT 0xE1
 #define PID_IN 0x69
@@ -90,7 +77,8 @@ U0 USBInitAll()	//This is only valid for my ICH10 dev
 
 CUSBTD *USBAllocTD()
 {
-	return MAllocAligned(sizeof(CUSBTD), 0x10, dev.uncached_heap);
+//	return MAllocAligned(sizeof(CUSBTD), 0x10, dev.uncached_heap);
+	return MAllocAligned(sizeof(CUSBTD), 0x10, dev.uncached_alias + sys_task->code_heap);
 }
 
 U0 USBFreeTD(CUSBTD *tmptd)
@@ -106,7 +94,8 @@ U32 *USBAllocFrameLst(I64 usb_num, I64 size)
 	{
 		u = &sys_usb_devs[usb_num];
 		Free(u->frame_lst);
-		u->frame_lst = MAllocAligned(size * sizeof(U32), 0x1000, dev.uncached_heap);
+//		u->frame_lst = MAllocAligned(size * sizeof(U32), 0x1000, dev.uncached_heap);
+		u->frame_lst = MAllocAligned(size * sizeof(U32), 0x1000, dev.uncached_alias + sys_task->code_heap);
 		OutU16(u->ports + USBP_CMD, 0);	//Stop
 		OutU16(u->ports + USBP_FRNUM, 0);
 		OutU32(u->ports + USBP_FRBASEADD, u->frame_lst);
