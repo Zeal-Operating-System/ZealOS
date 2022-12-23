@@ -124,7 +124,7 @@ U0 GrFixZoomScale()
 	}
 	else
 	{
-		gr.sx = ClampI64(gr.sx, 0, GR_WIDTH  - GR_WIDTH  / gr.screen_zoom) & ~7;
+		gr.sx = ClampI64(gr.sx, 0, GR_WIDTH  - GR_WIDTH  / gr.screen_zoom);
 		gr.sy = ClampI64(gr.sy, 0, GR_HEIGHT - GR_HEIGHT / gr.screen_zoom);
 	}
 }
