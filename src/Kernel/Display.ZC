@@ -8,8 +8,10 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
 	I64  i, row, col, x, y;
 	U32 *framebuffer;
-	U64  ch_bitmap;
-
+	U64 nextRow = FONT_WIDTH - 1,
+		rowInc = sys_framebuffer_width - FONT_WIDTH;
+	U8 *fontPointer = text.font(U8*) + (ch & 0xFF) * FONT_HEIGHT;
+	
 	if (!(text.raw_flags & RAWF_SHOW_DOLLAR))
 	{
 		if (ch == '$$')
@@ -69,20 +71,18 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;
-		ch_bitmap = text.font[ch & 0xFF];
 		framebuffer = text.fb_alias + sys_framebuffer_width * y + x;
 
 		PUSHFD
 		CLI
 		for (i = 0; i < FONT_WIDTH * FONT_HEIGHT; i++)
 		{
-			if (ch_bitmap & 1)
+			if (Bt(fontPointer, i))
 				*framebuffer++ = WHITE32;
 			else
 				*framebuffer++ = BLACK32;
-			if (i & (FONT_WIDTH - 1) == FONT_WIDTH - 1)
-				framebuffer += sys_framebuffer_width - FONT_WIDTH;
-			ch_bitmap >>= 1;
+			if (i & nextRow == nextRow)
+				framebuffer += rowInc;
 		}
 		POPFD
 		text.raw_col++;

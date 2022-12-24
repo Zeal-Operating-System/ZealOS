@@ -4290,6 +4290,16 @@ public class CTextGlobals
 
 #define FONT_WIDTH		8
 #define FONT_HEIGHT 	8
+#define SYS_FONT_STD	sys_font_std
+#define SYS_FONT_AUX	sys_font_aux
+
+/** Uncomment below to switch to an 8x12 font
+The Kernel will need to be rebuilt after the change with BootHDIns
+ */
+//#define FONT_WIDTH		8
+//#define FONT_HEIGHT 	12
+//#define SYS_FONT_STD	sys_font_lat0_8x12
+//#define SYS_FONT_AUX	sys_font_block_8x12
 
 #help_index "Graphics"
 //z-values less than zero are in front of screen and not drawn.

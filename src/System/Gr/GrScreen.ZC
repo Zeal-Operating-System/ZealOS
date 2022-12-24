@@ -177,16 +177,17 @@ U0 GrZoomInScreen()
 
 U0 GrUpdateTextBG()
 {
-	I64 reg RSI *dst = gr.dc2->body, reg R13 c, row, col, 
+	I64 reg *dst = gr.dc2->body, row, col, 
 				 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, i, j, cur_ch, 
-		reg R12  w1 = gr.dc2->width_internal, w2 = -7 * w1 + 8, w3 = 7 * w1, w4 = 0;
-	U32			*src = gr.text_base;
+		reg w1 = gr.dc2->width_internal, 
+		w3 = (FONT_HEIGHT - 1) * w1, w4 = 0;
+	U32			*src = gr.text_base, ix =0, iy =0;
 	Bool		 blink_flag = Blink;
-	U8			*dst2 = dst;
+	U8			*dst2 = dst, bgColor, reg *dstTmp;
 
 	if (gr.pan_text_x || gr.hide_col)
 	{
-		gr.pan_text_x = ClampI64(gr.pan_text_x, -7, 7);
+		gr.pan_text_x = ClampI64(gr.pan_text_x, -(FONT_WIDTH - 1), (FONT_WIDTH - 1));
 		j = AbsI64(gr.pan_text_x) / FONT_WIDTH + 1;
 		num_cols -= j;
 		if (gr.pan_text_x < 0)
@@ -215,7 +216,7 @@ U0 GrUpdateTextBG()
 
 	if (gr.pan_text_y || gr.hide_row)
 	{
-		gr.pan_text_y = ClampI64(gr.pan_text_y, -7, 7);
+		gr.pan_text_y = ClampI64(gr.pan_text_y, -(FONT_HEIGHT - 1), (FONT_HEIGHT - 1));
 		j = AbsI64(gr.pan_text_y) / FONT_HEIGHT + 1;
 		num_rows -= j;
 		if (gr.pan_text_y < 0)
@@ -251,23 +252,12 @@ U0 GrUpdateTextBG()
 				if (cur_ch & ATTRF_BLINK && blink_flag)
 					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
 			}
-			c = gr.to_8_colors[cur_ch.u8[1] >> 4];
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			ADD 			RSI, R12
-			MOV 			U64 [RSI], R13
-			dst(U8 *) += w2;
+			bgColor = cur_ch.u8[1] >> 4;
+			dstTmp = dst(U8*);
+			for (iy = 0; iy < FONT_HEIGHT; iy++, dstTmp += GR_WIDTH - FONT_WIDTH) {
+				for (ix = 0; ix < FONT_WIDTH; ix++, *dstTmp++ = bgColor);
+			}
+			dst(U8*)  += FONT_WIDTH;	
 		}
 		src += w4;
 		dst(U8 *) += w3;
@@ -277,14 +267,14 @@ U0 GrUpdateTextBG()
 U0 GrUpdateTextFG()
 {//See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
 	U32 *src = gr.text_base;
-	I64  i, j, cur_ch, *dst = gr.dc2->body, w1 = gr.dc2->width_internal, w2 = 7 * w1, w4 = 0, 
+	I64  i, j, cur_ch, *dst = gr.dc2->body, w1 = gr.dc2->width_internal, w2 = (FONT_HEIGHT - 1) * w1, w4 = 0, 
 		 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, row, col;
-	U8	*dst_start = gr.dc2->body, *dst_end = dst_start + w1 * gr.dc2->height - 7 * w1 - 8;
+	U8	*dst_start = gr.dc2->body, *dst_end = dst_start + w1 * gr.dc2->height - (FONT_HEIGHT - 1) * w1 - FONT_WIDTH;
 	Bool blink_flag = Blink;
 
 	if (gr.pan_text_x || gr.hide_col)
 	{
-		gr.pan_text_x = ClampI64(gr.pan_text_x, -7, 7);
+		gr.pan_text_x = ClampI64(gr.pan_text_x, -(FONT_WIDTH - 1), (FONT_WIDTH - 1));
 		j = AbsI64(gr.pan_text_x) / FONT_WIDTH + 1;
 		num_cols -= j;
 		if (gr.pan_text_x < 0)
@@ -298,7 +288,7 @@ U0 GrUpdateTextFG()
 
 	if (gr.pan_text_y || gr.hide_row)
 	{
-		gr.pan_text_y = ClampI64(gr.pan_text_y, -7, 7);
+		gr.pan_text_y = ClampI64(gr.pan_text_y, -(FONT_HEIGHT - 1), (FONT_HEIGHT - 1));
 		j = AbsI64(gr.pan_text_y) / FONT_HEIGHT + 1;
 		num_rows -= j;
 		if (gr.pan_text_y < 0)
@@ -335,7 +325,7 @@ U0 GrUpdateTextFG()
 			}
 			else
 				GrRopEquU8NoClipping(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst, w1);
-			dst(U8 *) += 8;
+			dst(U8 *) += FONT_WIDTH;
 		}
 		src += w4;
 		dst(U8 *) += w2;
