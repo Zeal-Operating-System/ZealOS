@@ -53,7 +53,7 @@ class CAC97BufferDescriptorList
 
 class CAC97
 {
-	@pci_info pci;
+	CPCIInfo pci;
 	CAC97BufferDescriptorList *bdl[3];
 	U16 nam;
 	U16 nabm;
@@ -174,7 +174,7 @@ I64 AC97Init()
 		return -1;
 	}
 
-	@get_pci_info(j, &ac97.pci);
+	PCIInfoGet(j, &ac97.pci);
 
 	if (ac97.pci.vendor_id != 0x8086 || ac97.pci.device_id != 0x2415)
 		goto device_not_found;
