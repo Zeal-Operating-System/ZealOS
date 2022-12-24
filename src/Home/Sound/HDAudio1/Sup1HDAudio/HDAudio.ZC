@@ -654,7 +654,7 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 				_w = hda.bar + ISTR0 + STRFMT;
 				*_w = HD_DFT_IN_FMT;
 
-				LBts(&sys_semas[SEMA_SOUND], 0);	//turn off until cfg completed
+				LBts(&sys_semas[SEMA_SOUND], 0);	//turn off until cfg completed
 				LBtr(&snd_flags, Sf_FILLING_OUT);
 				hda.audio_task_started = FALSE;
 				if (mp_count > 1)

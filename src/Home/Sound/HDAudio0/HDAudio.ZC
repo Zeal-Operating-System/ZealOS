@@ -1049,4 +1049,4 @@ Bool HDAudioScan()
 
 HDAudioScan;
 Kill(hda.task);
-HDAudioScan;
+HDAudioScan;

@@ -108,7 +108,7 @@ public I64 SndFileCreate(U8 *base_filename,F64 normalized_vol=1.0,
   s->body[cnt-1]=0;
 
   d=screencast.sound_head.next;
-  while (d!=&screencast.sound_head) {
+  while (d!=&screencast.sound_head) {
     d1=d->next;
     QueueRemove(d);
     Free(d);

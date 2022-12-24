@@ -166,7 +166,7 @@ U0 Mem2MegFree(CMemBlk *m,I64 pages2Meg,CBlkPool *bp=NULL)
     while (m2<m1) {
       pte=MemPageTable(m2);
       *pte=*pte & ~0x18;
-      InvalidatePage(m2);
+      InvalidatePage(m2);
       m2(U8 *)+=0x200000;
     }
     PUSHFD

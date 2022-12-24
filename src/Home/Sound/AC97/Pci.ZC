@@ -86,4 +86,4 @@ MemSet(&@pci_int_handler, NULL, sizeof(U64) * PCI_INTH_MAX);
 // IntEntrySet(0x41, &@pci_interrupt_handler, IDTET_IRQ);
 // IntEntrySet(0x42, &@pci_interrupt_handler, IDTET_IRQ);
 // IntEntrySet(0x43, &@pci_interrupt_handler, IDTET_IRQ);
-//@pci_reroute_interrupts(0x40, 0);
+//@pci_reroute_interrupts(0x40, 0);

@@ -649,7 +649,7 @@ U0 HDCfg()
 	PopUpOk(		"This is a tool to cfgure\n"
 		"HD Audio.It creates $$FG,RED$$~/HDAudioCfg.ZC.Z$$FG$$\n"
 		"which you should $$FG,GREEN$$
-#include$$FG$$ in your\n"
+#include$$FG$$ in your\n"
 		"$$FG,RED$$~/HomeSnd.ZC.Z$$FG$$ file.\n\n\n"
 		"Left click to see info and cfgure a widget.\n"
 		"Right click drag to connect output to input.\n\n"
