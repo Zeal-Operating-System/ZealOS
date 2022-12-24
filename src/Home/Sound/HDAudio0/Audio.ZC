@@ -1,0 +1,76 @@
+// vim: set ft=c:
+
+I64 start_buf_num;
+U0 (*fp_old_fill_buf)(SND_OUT_CONTAINER *buf,I64 buf_num)=NULL;
+
+U0 AudioFillBuf(SND_OUT_CONTAINER *buf,I64 buf_num)
+{
+	I64 j=0,k;
+	I64 intL, intR;
+	U8 *buf2;
+
+	if (paused)
+	{
+		while (j<SND_BUF_LEN)
+		{
+			buf[j++]=0;
+			buf[j++]=0;
+		}
+		return;
+	}
+
+	while (j<SND_BUF_LEN)
+	{
+		// TODO: fix this - dirty hack to keep audio in sync
+		if (FifoI64Cnt(audio_fifo_L)>8192)
+		{
+			while (FifoI64Cnt(audio_fifo_L)>7680)
+			{
+				FifoI64Rem(audio_fifo_L, &k);
+				FifoI64Rem(audio_fifo_R, &k);
+			}
+		}
+
+		if (FifoI64Cnt(audio_fifo_L))
+		{
+			FifoI64Rem(audio_fifo_L, &intL);
+		}
+		else
+		{
+			intL = 0;
+		}
+		intL *= 0xFFFF;
+		if (intL < 0)
+		{
+			intL += 0x1000000;
+		}
+
+		if (FifoI64Cnt(audio_fifo_R))
+		{
+			FifoI64Rem(audio_fifo_R, &intR);
+		}
+		else
+		{
+			intR = 0;
+		}
+		intR *= 0xFFFF;
+		if (intR < 0)
+		{
+			intR += 0x1000000;
+		}
+
+		buf2 = buf+j;
+		buf2[0] = 0;
+		buf2[1] = intL;
+		buf2[2] = intL >> 8;
+		buf2[3] = intL >> 16;
+		j++;
+
+		buf2 = buf+j;
+		buf2[0] = 0;
+		buf2[1] = intR;
+		buf2[2] = intR >> 8;
+		buf2[3] = intR >> 16;
+		j++;
+	}
+}
