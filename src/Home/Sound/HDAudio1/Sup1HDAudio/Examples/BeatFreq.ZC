@@ -53,8 +53,9 @@ U0 BeatFreq()
 	  "Pick two frequencies a multiple of two for an octave harmonic.\n"
 	  "$$FG,GREEN$$<CTRL-ALT-C>$$FG$$ to exit.\n";
     while (TRUE) {
-      freq1=PmtF64("Freq #1 (%0.2fHz):",freq1,20,20000);
-      freq2=PmtF64("Freq #2 (%0.2fHz):",freq2,20,20000);
+      freq1=440.0;//PmtF64("Freq #1 (%0.2fHz):",freq1,20,20000);
+      freq2=880.0;//PmtF64("Freq #2 (%0.2fHz):",freq2,20,20000);
+      Sleep(200);
     }
   } catch { //Catch <CTRL-ALT-C>, but pass it on to next higher handler.
     fp_snd_fill_buf=fp_old_fill_buf;
