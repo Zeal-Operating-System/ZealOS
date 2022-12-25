@@ -104,30 +104,38 @@ U0 DrawIt(CTask *task,CDC *dc)
 	    Line(NULL,
 		  (last_x-task->pix_left-task->scroll_x)*WF_BUF_LEN/h_max,
 		  WF_Y_SCALE*(cy-last_y+task->pix_top+task->scroll_y)/cy,0,
-		  (  msx-task->pix_left-task->scroll_x)*WF_BUF_LEN/h_max,
-		  WF_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+//		  (  msx-task->pix_left-task->scroll_x)*WF_BUF_LEN/h_max,
+		  (  mouse.pos.x-task->pix_left-task->scroll_x)*WF_BUF_LEN/h_max,
+//		  WF_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+		  WF_Y_SCALE*(cy-mouse.pos.y+task->pix_top+task->scroll_y)/cy,0,
 		  &WFPlot);
 	    break;
 	  case M_FREQUENCY:
 	    Line(NULL,
 		  (last_x-task->pix_left-task->scroll_x)*FQ_BUF_LEN/h_max,
 		  FQ_Y_SCALE*(cy-last_y+task->pix_top+task->scroll_y)/cy,0,
-		  (  msx-task->pix_left-task->scroll_x)*FQ_BUF_LEN/h_max,
-		  FQ_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+//		  (  msx-task->pix_left-task->scroll_x)*FQ_BUF_LEN/h_max,
+		  (  mouse.pos.x-task->pix_left-task->scroll_x)*FQ_BUF_LEN/h_max,
+//		  FQ_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+		  FQ_Y_SCALE*(cy-mouse.pos.y+task->pix_top+task->scroll_y)/cy,0,
 		  &FQPlot);
 	    break;
 	  case M_ENVELOPE:
 	    Line(NULL,
 		  (last_x-task->pix_left-task->scroll_x)*EL_BUF_LEN/h_max,
 		  EL_Y_SCALE*(cy-last_y+task->pix_top+task->scroll_y)/cy,0,
-		  (  msx-task->pix_left-task->scroll_x)*EL_BUF_LEN/h_max,
-		  EL_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+//		  (  msx-task->pix_left-task->scroll_x)*EL_BUF_LEN/h_max,
+		  (  mouse.pos.x-task->pix_left-task->scroll_x)*EL_BUF_LEN/h_max,
+//		  EL_Y_SCALE*(cy-msy+task->pix_top+task->scroll_y)/cy,0,
+		  EL_Y_SCALE*(cy-mouse.pos.y+task->pix_top+task->scroll_y)/cy,0,
 		  &ELPlot);
 	    break;
 	}
       my_ms_down=TRUE;
-      last_x=msx;
-      last_y=msy;
+//      last_x=msx;
+//      last_y=msy;
+      last_x=mouse.pos.x;
+      last_y=mouse.pos.y;
     } else
       my_ms_down=FALSE;
   }
