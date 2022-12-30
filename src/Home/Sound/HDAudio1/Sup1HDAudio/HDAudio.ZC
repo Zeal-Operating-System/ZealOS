@@ -685,7 +685,7 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 				LBtr(&snd_flags, Sf_FILLING_OUT);
 				hda.audio_task_started = FALSE;
 				if (mp_count > 1)
-					hda.task = Spawn(&HDAudioTask, NULL, "HD Audio", 3);
+					hda.task = Spawn(&HDAudioTask, NULL, "HD Audio", mp_count - 1);
 				else
 					hda.task = Spawn(&HDAudioTask, NULL, "HD Audio");
 				while (!hda.audio_task_started)
