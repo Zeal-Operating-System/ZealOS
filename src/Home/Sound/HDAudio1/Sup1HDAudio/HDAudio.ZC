@@ -348,19 +348,19 @@ U0 HDTraverse(I64 cad, I64 nid)
 		switch (type)
 		{
 			case AWT_OUTPUT:
-				if (FALSE)	//if disabled // ????
-					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x00);
-				else
+//				if (FALSE)	//if disabled // ????
+//					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x00);
+//				else
 					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x10);
-				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_OUT_FMT);
+				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_OUT_FMT); // TODO: check format streams support ?
 				HDWriteCORBSync(cad, nid, VERB_PROCESS_STATE_SET + 0x01);
 				break;
 			case AWT_INPUT:
-				if (TRUE)	//if disabled // ????
+//				if (TRUE)	//if disabled // ????
 					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x00);
-				else
-					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x20);
-				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_IN_FMT);
+//				else
+//					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x20);
+				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_IN_FMT); // TODO: check format streams support ?
 				HDWriteCORBSync(cad, nid, VERB_PROCESS_STATE_SET + 0x01);
 				break;
 			case AWT_PIN_COMPLEX:
