@@ -578,16 +578,23 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 {
 	I64 i;
 	U32 *_d;
-	U16 w, *_w;
+	U16 w, *_w, val;
 	U8 *_b;
 
 	if (hda.bar)
 		HDAudioEnd;
 	else
 		HDAudioUncachedInit;
-	if (PCIReadU16(hd_bus, hd_dev, hd_fun, 0) == 0x8086 && (hda.bar = PCIReadU32(hd_bus, hd_dev, hd_fun, 0x10) & ~(0x1F)))
+	if (PCIReadU16(hd_bus, hd_dev, hd_fun, PCIR_VENDOR_ID) == 0x8086 &&
+		(hda.bar = dev.uncached_alias + PCIReadU32(hd_bus, hd_dev, hd_fun, PCIR_BASE0) & ~0x1F))
 	{
-		PCIWriteU16(hd_bus, hd_dev, hd_fun, 0x04, PCIReadU16(hd_bus, hd_dev, hd_fun, 0x04) | 0x406);
+		/* Set HDAudio PCI device command
+		register IO Enable, Bus
+		Master Enable, Memory Space,and
+		Interrupt Disable bits. */
+		val = PCIReadU16(hd_bus, hd_dev, hd_fun, PCIR_COMMAND);
+		val |= PCI_CMDF_IOEN | PCI_CMDF_BMEN | PCI_CMDF_INTD | PCI_CMDF_MSEN;
+		PCIWriteU16(hd_bus, hd_dev, hd_fun, PCIR_COMMAND, val);
 
 		HDRst;
 
@@ -706,14 +713,14 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 
 Bool HDAudioScan()
 {
-	I64 i = -1, j;
+	I64 i = -1, bdf;
 	while (TRUE)
 	{
-		j = PCIClassFind(PCIC_MULTIMEDIA << 16 | PCISC_AUDIO << 8, ++i);
-		if (j < 0)
+		bdf = PCIClassFind(PCIC_MULTIMEDIA << 16 | PCISC_AUDIO << 8, ++i);
+		if (bdf < 0)
 			return FALSE;
 
-		if (HDAudioInit(j.u8[2], j.u8[1], j.u8[0]))
+		if (HDAudioInit(bdf.u8[2], bdf.u8[1], bdf.u8[0]))
 			return TRUE;
 	}
 }
