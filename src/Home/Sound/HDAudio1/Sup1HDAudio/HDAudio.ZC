@@ -714,7 +714,7 @@ Bool HDAudioScan()
 	I64 i = -1, j;
 	while (TRUE)
 	{
-		j = PCIClassFind(0x040300, ++i);
+		j = PCIClassFind(PCIC_MULTIMEDIA << 16 | PCISC_AUDIO << 8, ++i);
 		if (j < 0)
 			return FALSE;
 
