@@ -251,11 +251,9 @@ MemSet(&hda, 0, sizeof(CHDAudioCtrl));
 
 U0 HDSyncCORB()
 {
-	U16 *wp, *rp;
+	U16 *wp = hda.bar + HD_CORBWP, *rp = hda.bar + HD_CORBRP;
 
-	wp = hda.bar + HD_CORBWP;
 	*wp = hda.corb_wp;
-	rp = hda.bar + HD_CORBRP;
 	while (*rp & 255 != hda.corb_wp)
 		Yield;
 }
@@ -268,11 +266,9 @@ U0 HDWriteCORB(I64 cad, I64 nid, U32 val)
 
 I64 HDSyncRIRB()
 {
-	U16 *_w;
-	I64 wp, res = 0;
+	U16 *_w = hda.bar + HD_RIRBWP;
+	I64 wp = *_w, res = 0;
 
-	_w = hda.bar + HD_RIRBWP;
-	wp = *_w;
 	while (hda.rirb_rp != wp)
 		res = hda.rirb[++hda.rirb_rp];
 
@@ -281,10 +277,9 @@ I64 HDSyncRIRB()
 
 I64 HDReadRIRB()
 {
-	U16 *_w;
+	U16 *_w = hda.bar + HD_RIRBWP;
 	I64 wp, res = 0;
 
-	_w = hda.bar + HD_RIRBWP;
 	do
 	{
 		Yield;
@@ -531,10 +526,9 @@ U0 HDAudioTask(I64)
 
 U0 HDRst()
 {
-	U32 d, *_d;
+	U32 d, *_d = hda.bar + HD_GCTL;
 
 	HDStop(TRUE, TRUE);
-	_d = hda.bar + HD_GCTL;
 	*_d = 0;	//rst
 	do
 	{
@@ -586,6 +580,7 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 	U32 *_d;
 	U16 w, *_w;
 	U8 *_b;
+
 	if (hda.bar)
 		HDAudioEnd;
 	else
