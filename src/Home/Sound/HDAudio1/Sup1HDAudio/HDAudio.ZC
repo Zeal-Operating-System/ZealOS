@@ -249,9 +249,41 @@ class CHDAudioCtrl
 
 MemSet(&hda, 0, sizeof(CHDAudioCtrl));
 
-U0 HDSyncCORB()
+U0 HDAudioRegWriteU32(U16 hd_reg, U32 val)
 {
-	U16 *wp = hda.bar + HD_CORBWP, *rp = hda.bar + HD_CORBRP;
+	U32 *dest = hda.bar + hd_reg;
+	*dest = val;
+}
+
+U0 HDAudioRegWriteU16(U16 hd_reg, U16 val)
+{
+	U16 *dest = hda.bar + hd_reg;
+	*dest = val;
+}
+
+U0 HDAudioRegWriteU8(U16 hd_reg, U8 val)
+{
+	U8 *dest = hda.bar + hd_reg;
+	*dest = val;
+}
+
+U32 HDAudioRegReadU32(U16 hd_reg)
+{
+	U32 *dest = hda.bar + hd_reg;
+	return *dest;
+}
+
+U16 HDAudioRegReadU16(U16 hd_reg)
+{
+	U16 *dest = hda.bar + hd_reg;
+	return *dest;
+}
+
+U8 HDAudioRegReadU8(U16 hd_reg)
+{
+	U8 *dest = hda.bar + hd_reg;
+	return *dest;
+}
 
 	*wp = hda.corb_wp;
 	while (*rp & 255 != hda.corb_wp)
