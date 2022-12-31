@@ -285,8 +285,10 @@ U8 HDAudioRegReadU8(U16 hd_reg)
 	return *dest;
 }
 
-	*wp = hda.corb_wp;
-	while (*rp & 255 != hda.corb_wp)
+U0 HDSyncCORB()
+{
+	HDAudioRegWriteU16(HD_CORBWP, hda.corb_wp);
+	while (HDAudioRegReadU16(HD_CORBRP) & 0xFF != hda.corb_wp)
 		Yield;
 }
 
@@ -298,8 +300,7 @@ U0 HDWriteCORB(I64 cad, I64 nid, U32 val)
 
 I64 HDSyncRIRB()
 {
-	U16 *_w = hda.bar + HD_RIRBWP;
-	I64 wp = *_w, res = 0;
+	I64 wp = HDAudioRegReadU16(HD_RIRBWP), res = 0;
 
 	while (hda.rirb_rp != wp)
 		res = hda.rirb[++hda.rirb_rp];
@@ -309,13 +310,12 @@ I64 HDSyncRIRB()
 
 I64 HDReadRIRB()
 {
-	U16 *_w = hda.bar + HD_RIRBWP;
 	I64 wp, res = 0;
 
 	do
 	{
 		Yield;
-		wp = *_w;
+		wp = HDAudioRegReadU16(HD_RIRBWP);
 	} while (wp == hda.rirb_rp);
 	res = hda.rirb[++hda.rirb_rp];
 
@@ -334,7 +334,6 @@ I64 HDWriteCORBSync(I64 cad, I64 nid, U32 val)
 Bool HDTestCORBSync(I64 cad, I64 nid, U32 val)
 {
 	//Checks for a response
-	U16 *_w;
 	I64 wp;
 
 	HDSyncCORB;
@@ -343,8 +342,7 @@ Bool HDTestCORBSync(I64 cad, I64 nid, U32 val)
 	HDSyncCORB;
 
 	Sleep(1);
-	_w = hda.bar + HD_RIRBWP;
-	wp = *_w;
+	wp = HDAudioRegReadU16(HD_RIRBWP);
 	if (wp == hda.rirb_rp)
 		return FALSE;
 	HDReadRIRB;
@@ -404,20 +402,17 @@ U0 HDTraverse(I64 cad, I64 nid)
 
 U0 HDRun(Bool in, Bool out)
 {
-	U32 *_d;
 	if (hda.bar)
 	{
 		if (out)
 		{
-			_d = hda.bar + OSTR0 + STRCTL;
-			*_d = 0x100002;
+			HDAudioRegWriteU32(OSTR0 + STRCTL, 0x100002); // ??
 			hda.out_running = TRUE;
 		}
 
 		if (in)
 		{
-			_d = hda.bar + ISTR0 + STRCTL;
-			*_d = 0x200002;
+			HDAudioRegWriteU32(ISTR0 + STRCTL, 0x200002); // ??
 			hda.in_running = TRUE;
 		}
 	}
@@ -425,20 +420,17 @@ U0 HDRun(Bool in, Bool out)
 
 U0 HDStop(Bool in, Bool out)
 {
-	U32 *_d;
 	if (hda.bar)
 	{
 		if (out)
 		{
-			_d = hda.bar + OSTR0 + STRCTL;
-			*_d = 0;
+			HDAudioRegWriteU32(OSTR0 + STRCTL, 0); // ??
 			hda.out_running = FALSE;
 		}
 
 		if (in)
 		{
-			_d = hda.bar + ISTR0 + STRCTL;
-			*_d = 0;
+			HDAudioRegWriteU32(ISTR0 + STRCTL, 0); // ??
 			hda.in_running = FALSE;
 		}
 	}
@@ -556,22 +548,22 @@ U0 HDAudioTask(I64)
 	}
 }
 
-U0 HDRst()
+U0 HDReset()
 {
-	U32 d, *_d = hda.bar + HD_GCTL;
+	U32 d;
 
 	HDStop(TRUE, TRUE);
-	*_d = 0;	//rst
+	HDAudioRegWriteU32(HD_GCTL, 0); //rst // ??
 	do
 	{
 		Sleep(1);
-		d = *_d;
+		d = HDAudioRegReadU32(HD_GCTL);
 	} while (d & 1);
-	*_d = 1;
+	HDAudioRegWriteU32(HD_GCTL, 1); //??
 	do
 	{
 		Sleep(1);
-		d = *_d;
+		d = HDAudioRegReadU32(HD_GCTL);
 	} while (!(d & 1));
 	Sleep(1);
 }
@@ -609,9 +601,7 @@ U0 HDAudioUncachedInit()
 public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 {
 	I64 i;
-	U32 *_d;
-	U16 w, *_w, val;
-	U8 *_b;
+	U16 w, val;
 
 	if (hda.bar)
 		HDAudioEnd;
@@ -628,52 +618,40 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 		val |= PCI_CMDF_IOEN | PCI_CMDF_BMEN | PCI_CMDF_INTD | PCI_CMDF_MSEN;
 		PCIWriteU16(hd_bus, hd_dev, hd_fun, PCIR_COMMAND, val);
 
-		HDRst;
+		HDReset;
 
 		hda.corb = CAllocAligned(HD_CORB_ENTRIES * sizeof(U32), 128, hda.hc);
-		_d = hda.bar + HD_CORBLBASE;
-		*_d = hda.corb(I64).u32[0];
-		_d = hda.bar + HD_CORBUBASE;
-		*_d = hda.corb(I64).u32[1];
+		HDAudioRegWriteU32(HD_CORBLBASE, hda.corb(I64).u32[0]);
+		HDAudioRegWriteU32(HD_CORBUBASE, hda.corb(I64).u32[1]);
 
 		hda.rirb = CAllocAligned(HD_RIRB_ENTRIES * sizeof(I64), 128, hda.hc);
-		_d = hda.bar + HD_RIRBLBASE;
-		*_d = hda.rirb(I64).u32[0];
-		_d = hda.bar + HD_RIRBUBASE;
-		*_d = hda.rirb(I64).u32[1];
+		HDAudioRegWriteU32(HD_RIRBLBASE, hda.rirb(I64).u32[0]);
+		HDAudioRegWriteU32(HD_RIRBUBASE, hda.rirb(I64).u32[1]);
 
-		_w = hda.bar + HD_CORBRP;
-		*_w = 0x8000;	//Rst read ptr
+		HDAudioRegWriteU16(HD_CORBRP, 0x8000); //Rst read ptr // ??
 		do
 		{
 			Yield;
-			w = *_w;
+			w = HDAudioRegReadU16(HD_CORBRP);
 		} while (!(w & 0x8000));
-		*_w = 0x0000;	//Rst read ptr
+		HDAudioRegWriteU16(HD_CORBRP, 0x0000); //Rst read ptr // ??
 		do
 		{
 			Yield;
-			w = *_w;
+			w = HDAudioRegReadU16(HD_CORBRP);
 		} while (w & 0x8000);
 
-		_w = hda.bar + HD_RIRBWP;
-		*_w = 0x8000;	//Rst write ptr
+		HDAudioRegWriteU16(HD_RIRBWP, 0x8000); //Rst write ptr // ??
 
-		_b = hda.bar + HD_CORBCTL;
-		*_b = 0x02;	//Run
-		_b = hda.bar + HD_RIRBCTL;
-		*_b = 0x02;	//Run
+		HDAudioRegWriteU8(HD_CORBCTL, 0x02); //Run // ??
+		HDAudioRegWriteU8(HD_RIRBCTL, 0x02); //Run // ??
 
-		_w = hda.bar + HD_CORBWP;
-		hda.corb_wp = *_w;
-		_w = hda.bar + HD_RIRBWP;
-		hda.rirb_rp = *_w;
+		hda.corb_wp = HDAudioRegReadU16(HD_CORBWP);
+		hda.rirb_rp = HDAudioRegReadU16(HD_RIRBWP);
 
 		hda.ostr0_bdl = CAllocAligned(HD_BDL_ENTRIES * sizeof(CHDBufDesc), 128, hda.hc);
-		_d = hda.bar + OSTR0 + STRBDPL;
-		*_d = hda.ostr0_bdl(I64).u32[0];
-		_d = hda.bar + OSTR0 + STRBDPU;
-		*_d = hda.ostr0_bdl(I64).u32[1];
+		HDAudioRegWriteU32(OSTR0 + STRBDPL, hda.ostr0_bdl(I64).u32[0]);
+		HDAudioRegWriteU32(OSTR0 + STRBDPU, hda.ostr0_bdl(I64).u32[1]);
 		for (i = 0; i < 2; i++)
 		{
 			hda.ostr0_bdl[i].buf = hda.ostr0_buf[i] = CAllocAligned(SND_BUF_LEN * sizeof(SND_OUT_CONTAINER), 128, hda.hc);
@@ -682,10 +660,8 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 		}
 
 		hda.istr0_bdl = CAllocAligned(HD_BDL_ENTRIES * sizeof(CHDBufDesc), 128, hda.hc);
-		_d = hda.bar + ISTR0 + STRBDPL;
-		*_d = hda.istr0_bdl(I64).u32[0];
-		_d = hda.bar + ISTR0 + STRBDPU;
-		*_d = hda.istr0_bdl(I64).u32[1];
+		HDAudioRegWriteU32(ISTR0 + STRBDPL, hda.istr0_bdl(I64).u32[0]);
+		HDAudioRegWriteU32(ISTR0 + STRBDPU, hda.istr0_bdl(I64).u32[1]);
 		for (i = 0; i < 2; i++)
 		{
 			hda.istr0_bdl[i].buf = hda.istr0_buf[i] = CAllocAligned(SND_BUF_LEN * sizeof(SND_IN_CONTAINER), 128, hda.hc);
@@ -693,8 +669,7 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 			hda.istr0_bdl[i].ctrl = 1;
 		}
 
-		_w = hda.bar + HD_STATESTS;
-		w = *_w;
+		w = HDAudioRegReadU16(HD_STATESTS);
 		while (w)
 		{
 			hda.cad = Bsf(w);
@@ -702,23 +677,15 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 			{
 				HDTraverse(hda.cad, 0);
 
-				_d = hda.bar + OSTR0 + STRLPIB;
-				*_d = 0;
-				_d = hda.bar + OSTR0 + STRCBL;
-				*_d = HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_OUT_CONTAINER);
-				_w = hda.bar + OSTR0 + STRLVI;
-				*_w = 1;	//last valid idx
-				_w = hda.bar + OSTR0 + STRFMT;
-				*_w = HD_DFT_OUT_FMT;
+				HDAudioRegWriteU32(OSTR0 + STRLPIB, 0);
+				HDAudioRegWriteU32(OSTR0 + STRCBL, HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_OUT_CONTAINER));
+				HDAudioRegWriteU16(OSTR0 + STRLVI, 1); //last valid idx // ??
+				HDAudioRegWriteU16(OSTR0 + STRFMT,  HD_DFT_OUT_FMT);
 
-				_d = hda.bar + ISTR0 + STRLPIB;
-				*_d = 0;
-				_d = hda.bar + ISTR0 + STRCBL;
-				*_d = HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_IN_CONTAINER);
-				_w = hda.bar + ISTR0 + STRLVI;
-				*_w = 1;	//last valid idx
-				_w = hda.bar + ISTR0 + STRFMT;
-				*_w = HD_DFT_IN_FMT;
+				HDAudioRegWriteU32(ISTR0 + STRLPIB, 0);
+				HDAudioRegWriteU32(ISTR0 + STRCBL, HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_IN_CONTAINER));
+				HDAudioRegWriteU16(ISTR0 + STRLVI, 1); //last valid idx // ??
+				HDAudioRegWriteU16(ISTR0 + STRFMT, HD_DFT_IN_FMT);
 
 				LBts(&sys_semas[SEMA_SOUND], 0);	//turn off until cfg completed
 				LBtr(&snd_flags, Sf_FILLING_OUT);
