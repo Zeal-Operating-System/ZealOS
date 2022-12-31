@@ -576,16 +576,9 @@ public U0 HDAudioEnd(Bool rst = TRUE)
 		Kill(hda.task);
 		hda.task = NULL;
 		if (rst)
-			HDRst;
-		Free(hda.corb);
-		Free(hda.rirb);
-		Free(hda.o_tmp_buf);
-		Free(hda.ostr0_buf[0]);
-		Free(hda.ostr0_buf[1]);
-		Free(hda.istr0_buf[0]);
-		Free(hda.istr0_buf[1]);
-		Free(hda.ostr0_bdl);
-		Free(hda.istr0_bdl);
+			HDReset;
+		FreeAll(hda.corb, hda.rirb, hda.o_tmp_buf, hda.ostr0_buf[0], hda.ostr0_buf[1], hda.istr0_buf[0], hda.istr0_buf[1],
+				hda.ostr0_bdl, hda.istr0_bdl);
 		Mem32DevFree(hda.bar);
 		hda.bar = NULL;
 	}
