@@ -41,8 +41,8 @@ I64 snd_flags;
 #define HD_32_BIT	4
 #define HD_48kHz	0
 
-#define HD_DFT_OUT_FMT	(HD_2_CHAN + HD_24_BIT << 4 + HD_48kHz << 8)
-#define HD_DFT_IN_FMT	(HD_2_CHAN + HD_16_BIT << 4 + HD_48kHz << 8)
+#define HD_DEFAULT_OUT_FMT	(HD_2_CHAN + HD_24_BIT << 4 + HD_48kHz << 8)
+#define HD_DEFAULT_IN_FMT	(HD_2_CHAN + HD_16_BIT << 4 + HD_48kHz << 8)
 
 #define HD_POS_BUF_MULTIPLES 0x1000
 
@@ -150,14 +150,14 @@ I64 snd_flags;
 #define VERB_SUB_SYS_ID2_SET	0x72200
 #define VERB_SUB_SYS_ID3_GET	0xF2000
 #define VERB_SUB_SYS_ID3_SET	0x72300
-#define VERB_CFG_DFT0_GET		0xF1C00
-#define VERB_CFG_DFT0_SET		0x71C00
-#define VERB_CFG_DFT1_GET		0xF1C00
-#define VERB_CFG_DFT1_SET		0x71D00
-#define VERB_CFG_DFT2_GET		0xF1C00
-#define VERB_CFG_DFT2_SET		0x71E00
-#define VERB_CFG_DFT3_GET		0xF1C00
-#define VERB_CFG_DFT3_SET		0x71F00
+#define VERB_CFG_DEFAULT0_GET		0xF1C00
+#define VERB_CFG_DEFAULT0_SET		0x71C00
+#define VERB_CFG_DEFAULT1_GET		0xF1C00
+#define VERB_CFG_DEFAULT1_SET		0x71D00
+#define VERB_CFG_DEFAULT2_GET		0xF1C00
+#define VERB_CFG_DEFAULT2_SET		0x71E00
+#define VERB_CFG_DEFAULT3_GET		0xF1C00
+#define VERB_CFG_DEFAULT3_SET		0x71F00
 #define VERB_STRIPE_CTL_GET		0xF2400
 #define VERB_STRIPE_CTL_SET		0x72400
 #define VERB_RST				0x7FF00
@@ -382,7 +382,7 @@ U0 HDTraverse(I64 cad, I64 nid)
 //					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x00);
 //				else
 					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x10);
-				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_OUT_FMT); // TODO: check format streams support ?
+				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DEFAULT_OUT_FMT); // TODO: check format streams support ?
 				HDWriteCORBSync(cad, nid, VERB_PROCESS_STATE_SET + 0x01);
 				break;
 			case AWT_INPUT:
@@ -390,7 +390,7 @@ U0 HDTraverse(I64 cad, I64 nid)
 					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x00);
 //				else
 //					HDWriteCORBSync(cad, nid, VERB_CHAN_STREAM_ID_SET + 0x20);
-				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DFT_IN_FMT); // TODO: check format streams support ?
+				HDWriteCORBSync(cad, nid, VERB_STREAM_FMT_SET + HD_DEFAULT_IN_FMT); // TODO: check format streams support ?
 				HDWriteCORBSync(cad, nid, VERB_PROCESS_STATE_SET + 0x01);
 				break;
 			case AWT_PIN_COMPLEX:
@@ -673,12 +673,12 @@ public Bool HDAudioInit(I64 hd_bus, I64 hd_dev, I64 hd_fun)
 				HDAudioRegWriteU32(OSTR0 + STRLPIB, 0);
 				HDAudioRegWriteU32(OSTR0 + STRCBL, HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_OUT_CONTAINER));
 				HDAudioRegWriteU16(OSTR0 + STRLVI, 1); //last valid idx // ??
-				HDAudioRegWriteU16(OSTR0 + STRFMT,  HD_DFT_OUT_FMT);
+				HDAudioRegWriteU16(OSTR0 + STRFMT,  HD_DEFAULT_OUT_FMT);
 
 				HDAudioRegWriteU32(ISTR0 + STRLPIB, 0);
 				HDAudioRegWriteU32(ISTR0 + STRCBL, HD_POS_BUF_MULTIPLES * SND_BUF_LEN * sizeof(SND_IN_CONTAINER));
 				HDAudioRegWriteU16(ISTR0 + STRLVI, 1); //last valid idx // ??
-				HDAudioRegWriteU16(ISTR0 + STRFMT, HD_DFT_IN_FMT);
+				HDAudioRegWriteU16(ISTR0 + STRFMT, HD_DEFAULT_IN_FMT);
 
 				LBts(&sys_semas[SEMA_SOUND], 0);	//turn off until cfg completed
 				LBtr(&snd_flags, Sf_FILLING_OUT);
