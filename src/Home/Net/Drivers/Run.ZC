@@ -24,32 +24,23 @@ U0 NetDriverInit()
 	CPCIDev *net_driver_pci = PCIDevFind(PCIC_NETWORK);
 	Bool	 found = FALSE;
 
-	switch (net_driver_pci->vendor_id)
+	if (net_driver_pci)
 	{
-		case PCIV_PCNET:
-			switch (net_driver_pci->device_id)
-			{
-				case PCID_PCNET:
-					NetDriverInclude("PCNet");
-					found = TRUE;
-					break;
-			}
-			break;
-
-		case PCIV_E1000:
-			switch (net_driver_pci->device_id)
-			{
-				case PCID_82545EM:
-					NetDriverInclude("E1000");
-					found = TRUE;
-					break;
-			}
-			break;
-
-		case PCIV_VIRTIO:
+		if (net_driver_pci=PCIDevFind(, , PCIV_PCNET, PCID_PCNET))
+		{
+			NetDriverInclude("PCNet");
+			found = TRUE;
+		}
+		else if (net_driver_pci=PCIDevFind(, , PCIV_E1000, PCID_82545EM))
+		{
+			NetDriverInclude("E1000");
+			found = TRUE;
+		}
+		else if (net_driver_pci=PCIDevFind(PCIC_NETWORK, , PCIV_VIRTIO, ))
+		{
 			NetDriverInclude("VirtIONet");
 			found = TRUE;
-			break;
+		}
 	}
 
 	if (!found)
