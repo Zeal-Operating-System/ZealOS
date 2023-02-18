@@ -84,9 +84,8 @@ public I64 TGAWrite(U8 *filename, CDC *dc)
 	}
 
 	GrPaletteUnpad(palette, dc_copy->palette);
-
 	DCColorMax(dc_copy);
-	//TODO: Output correct size
+
 	if (dc_copy->width_internal == dc_copy->width)
 	{
 		MemCopy(body, dc_copy->body, dc_copy->width_internal * dc_copy->height);
