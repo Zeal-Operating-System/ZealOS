@@ -13,6 +13,29 @@ public U0 GrPaletteSet(CBGR24 *bgr24)
 	MemCopy(&gr_palette, bgr24, sizeof(CBGR24) * COLORS_NUM);
 }
 
+U0 GrPaletteUnpad(U8 *dst, CBGR24 *src, U64 count=COLORS_NUM)
+{//Remove extra byte from 24-bit palette.
+	I64 i, j = 0;
+	for (i = 0; i < sizeof(CBGR24) * count; i++)
+	{
+		if ((i + 1) % 4 == 0) i++;
+		dst[j] = src(U8 *)[i];
+		j++;
+	}
+}
+
+U0 GrPalettePad(CBGR24 *dst, U8 *src, U64 count=COLORS_NUM)
+{//Add extra byte back to 24-bit palette
+	I64 i;
+	for (i = 0; i < count; i++)
+	{
+		dst[i].b = src[i * 3];
+		dst[i].g = src[i * 3 + 1];
+		dst[i].r = src[i * 3 + 2];
+		dst[i].pad = 0;
+	}
+}
+
 //********************************************************************************
 public CBGR24 gr32_palette_std[COLORS_NUM] = {
 	0x000000, 0x0000AA, 0x00AA00, 0x00AAAA, 0xAA0000, 0xAA00AA, 0xAA5500, 0xAAAAAA,
