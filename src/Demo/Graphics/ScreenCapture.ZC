@@ -4,7 +4,7 @@ U0 Main()
 {
 	"Capture screen...\n";
 	PressAKey;
-	GRScreenCaptureWrite("~/DemoScreenShot");
+	GRScreenCaptureWrite("~/DemoScreenShot", FALSE);
 	"View captured screen...\n";
 	PressAKey;
 	GRScreenCaptureRead("~/DemoScreenShot");
