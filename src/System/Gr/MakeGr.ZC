@@ -8,7 +8,7 @@ Cd(__DIR__);;
 #include "GrAsm"
 #include "GrPalette"
 #include "GrDC"
-#include "GrFile"
+#include "GrFile"
 #include "GrInitB"
 #include "GrMath"
 #include "GrScreen"

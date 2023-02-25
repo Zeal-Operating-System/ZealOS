@@ -23,4 +23,4 @@ U0 PaletteExportGPL(U8* name="Palette", CBGR24 *pal=NULL) {
 
     DocWrite(out);
     DocDel(out);
-}
+}
