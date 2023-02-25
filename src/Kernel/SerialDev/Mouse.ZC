@@ -44,6 +44,26 @@ U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r)
 	LBEqual(&kbd.scan_code, SCf_MS_R_DOWN, mouse.rb);
 }
 
+public U0 MouseRawReset()
+{
+	mouse_hard.raw_data.x=0;
+	mouse_hard.raw_data.y=0;
+	mouse_hard.raw_data.z=0;
+	mouse_hard.raw_bttns[0]=FALSE;
+	mouse_hard.raw_bttns[1]=FALSE;
+	mouse_hard.raw_bttns[2]=FALSE;
+	mouse_hard.raw_bttns[3]=FALSE;
+	mouse_hard.raw_bttns[4]=FALSE;
+}
+
+public Bool MouseRaw(Bool val)
+{ // Places mouse in "raw" mode, button presses will not go to windows manager when true
+	Bool old_val=mouse_hard.raw_mode;
+	mouse_hard.raw_mode=val;
+	mouse.show=!val;
+	return old_val;
+}
+
 U0 MouseSet(I64 x=I64_MAX, I64 y=I64_MAX, I64 z=I64_MAX, I64 l=I64_MAX, I64 r=I64_MAX)
 {//Note: Generates a message. See $LK,"MouseSet",A="FF:::/Demo/Games/Zing.ZC,MouseSet"$().
 	if (!(0 <= x < sys_framebuffer_width))
@@ -78,6 +98,7 @@ U0 MouseInit()
 	mouse.timestamp	 = TSCGet;
 	mouse.dbl_time	 = 0.175;
 	GridInit;
+	MouseRawReset;
 }
 
 U0 MouseHardPacketRead()
@@ -194,6 +215,7 @@ Bool MouseHardReset()
 		catch
 			Fs->catch_except = TRUE;
 
+	MouseRawReset;
 	return res;
 }
 
@@ -255,19 +277,14 @@ U0 MouseHardHandler()
 {
 	I64 i, dx, dy, dz;
 	U8  mouse_buf[4];
-
-	MouseHardSetPre;
+	if (!mouse_hard.raw_mode)
+		MouseHardSetPre;
 	for (i = 0; i < 4; i++)
 		mouse_buf[i] = 0;
 	for (i = 0; i < mouse_hard.pkt_size; i++)
 		if (!FifoU8Remove(mouse_hard.fifo2, &mouse_buf[i]))
 			mouse_buf[i] = 0;
 
-	mouse_hard.bttns[0] =  mouse_buf[0] & 1;
-	mouse_hard.bttns[1] = (mouse_buf[0] & 2)    >> 1;
-	mouse_hard.bttns[2] = (mouse_buf[0] & 4)    >> 2;
-	mouse_hard.bttns[3] = (mouse_buf[3] & 0x10) >> 4;
-	mouse_hard.bttns[4] = (mouse_buf[3] & 0x20) >> 5;
 	if (mouse_buf[0] & 0x10)
 		dx = mouse_buf[1]-256;
 	else
@@ -281,11 +298,30 @@ U0 MouseHardHandler()
 	else
 		dz = mouse_buf[3] & 7;
 
-	mouse_hard.prescale.x += dx;
-	mouse_hard.prescale.y += dy;
-	mouse_hard.prescale.z += dz;
-
-	MouseHardSetPost;
+	if (mouse_hard.raw_mode) {
+		// buttons / position data need to by consumed by app
+		// buttons stay down, positions keep accumulating until
+		// consumed by app and reset with MouseRawReset
+		mouse_hard.raw_bttns[0] |=  mouse_buf[0] & 1;
+		mouse_hard.raw_bttns[1] |= (mouse_buf[0] & 2)    >> 1;
+		mouse_hard.raw_bttns[2] |= (mouse_buf[0] & 4)    >> 2;
+		mouse_hard.raw_bttns[3] |= (mouse_buf[3] & 0x10) >> 4;
+		mouse_hard.raw_bttns[4] |= (mouse_buf[3] & 0x20) >> 5;
+		mouse_hard.raw_data.x += dx;
+		mouse_hard.raw_data.y += dy;
+		mouse_hard.raw_data.z += dz;
+	}
+	else {
+		mouse_hard.bttns[0] =  mouse_buf[0] & 1;
+		mouse_hard.bttns[1] = (mouse_buf[0] & 2)    >> 1;
+		mouse_hard.bttns[2] = (mouse_buf[0] & 4)    >> 2;
+		mouse_hard.bttns[3] = (mouse_buf[3] & 0x10) >> 4;
+		mouse_hard.bttns[4] = (mouse_buf[3] & 0x20) >> 5;
+		mouse_hard.prescale.x += dx;
+		mouse_hard.prescale.y += dy;
+		mouse_hard.prescale.z += dz;
+		MouseHardSetPost;
+	}
 }
 
 U0 MouseHardSet(I64 x, I64 y, I64 z, I64 l, I64 r)
