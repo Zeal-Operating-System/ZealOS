@@ -124,9 +124,9 @@ public CDC *TGARead(U8 *filename, Bool palette=TRUE, CTask *task=NULL)
 		if(tga->color_map_bpp != 24/* && tga->color_map_bpp != 32*/) goto exit;
 		if(tga->color_map_length > COLORS_NUM) goto exit;
 		if(tga->x_origin != 0) goto exit;
-		if(tga->y_origin != tga->height) goto exit; //TODO: Support y_origin == 0
+		if(tga->y_origin != tga->height && tga->y_origin != 0) goto exit;
 		if(tga->bpp != 8) goto exit;
-		if(tga->flags != 0x20) goto exit; //TODO: Support y_origin == 0
+		if(tga->flags != 0x20 && tga->flags != 0x00) goto exit;
 
 		//TGA ID string doesn't store any useful information
 		//if(tga->id_size) tga->id = src + offset(TGAFile.end);
@@ -147,14 +147,19 @@ public CDC *TGARead(U8 *filename, Bool palette=TRUE, CTask *task=NULL)
 			MemCopy(dc->palette, tga->palette, sizeof(CBGR24) * COLORS_NUM);
 		}
 
-		if (tga->width == dc->width_internal)
+		if (tga->width == dc->width_internal && tga->y_origin == tga->height)
 		{
 			MemCopy(dc->body, tga->body, dc->width_internal * dc->height);
+		}
+		else if (tga->y_origin == tga->height)
+		{
+			for (i = 0; i < tga->height; i++)
+				MemCopy(dc->body + i * dc->width_internal, tga->body + i * tga->width, tga->width);
 		}
 		else
 		{
 			for (i = 0; i < tga->height; i++)
-				MemCopy(dc->body + i * dc->width_internal, tga->body + i * tga->width, tga->width);
+				MemCopy(dc->body + (tga->height - 1 - i) * dc->width_internal, tga->body + i * tga->width, tga->width);
 		}
 		
 	}
