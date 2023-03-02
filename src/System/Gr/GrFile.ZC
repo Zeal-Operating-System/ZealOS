@@ -1,0 +1,174 @@
+#help_index "Graphics/GR Files"
+#help_file "::/Doc/GRFiles"
+#help_index "Graphics/Device Contexts;Graphics/GR Files"
+
+#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR24) + GR_WIDTH * GR_HEIGHT)
+
+public I64 GRWrite(U8 *filename, CDC *dc, I64 dcsf_flags=NONE)
+{//ZealOS GR File.
+	I64 size;
+	U8 *st = ExtDefault(filename, "GR"), *src = DCSave(dc, &size, dcsf_flags);
+	FileWrite(st, src, size);
+	Free(st);
+	Free(src);
+
+	return size;
+}
+
+public CDC *GRRead(U8 *filename, CTask *task=NULL)
+{//ZealOS GR File.
+	CDC *dc = NULL;
+	U8  *st = ExtDefault(filename, "GR"), *src = FileRead(st);
+	if (src)
+		dc = DCLoad(src,, task);
+	Free(src);
+	Free(st);
+
+	return dc;
+}
+
+#help_index "Graphics/Sprite;Graphics/GR Files;DolDoc/Output;StdOut/DolDoc"
+public U0 DocGR(CDoc *doc=NULL, U8 *filename)
+{//Put a GR file into a document as asprite.
+	CDC		*dc = GRRead(filename);
+	CSprite *elems = DC2Sprite(dc);
+
+	DocSprite(doc, elems);
+	Free(elems);
+	DCDel(dc);
+}
+
+public class TGAFile
+{
+	U0 start;
+	U8 id_size,
+	   map_type,
+	   image_type;
+	U16 color_map_origin,
+	    color_map_length;
+	U8 color_map_bpp;
+	U16 x_origin,
+	    y_origin,
+	    width,
+	    height;
+	U8 bpp,
+	   flags;
+	U0 end;
+	U8 *id;
+	CBGR24 *palette;
+	U8 *body;
+};
+
+public I64 TGAWrite(U8 *filename, CDC *dc)
+{//Truevision TGA File.
+	CDC *dc_copy = DCCopy(dc);
+	I64 i, size = offset(TGAFile.end) + sizeof(CBGR24) * COLORS_NUM >> 2 * 3 +  dc_copy->width * dc_copy->height;
+	TGAFile *tga = CAlloc(size);
+	U8 *palette = tga(U8 *) + offset(TGAFile.end);
+	U8 *body = tga(U8 *) + offset(TGAFile.end) + sizeof(CBGR24) * COLORS_NUM >> 2 * 3;
+
+	tga->map_type = 1;
+	tga->image_type = 1; //uncompressed color-mapped
+	tga->color_map_origin = 0;
+	tga->color_map_length = COLORS_NUM;
+	tga->color_map_bpp = 24;
+	tga->x_origin = 0;
+	tga->y_origin = dc_copy->height;
+	tga->width = dc_copy->width;
+	tga->height = dc_copy->height;
+	tga->bpp = 8;
+	tga->flags = 0x20; //origin in top-left
+	if (!(dc_copy->flags & DCF_PALETTE))
+	{
+		GrPaletteGet(dc_copy->palette);
+	}
+
+	GrPaletteUnpad(palette, dc_copy->palette);
+	DCColorMax(dc_copy);
+
+	if (dc_copy->width_internal == dc_copy->width)
+	{
+		MemCopy(body, dc_copy->body, dc_copy->width_internal * dc_copy->height);
+	}
+	else
+	{
+		for (i = 0; i < dc_copy->height; i++)
+			MemCopy(body + i * dc_copy->width, dc_copy->body + i * dc_copy->width_internal, dc_copy->width);
+	}
+
+	DCDel(dc_copy);
+
+	U8 *str = ExtDefault(filename, "TGA");
+	
+	FileWrite(str, tga, size);
+
+	Free(tga);
+	Free(str);
+
+	return size;
+}
+
+public CDC *TGARead(U8 *filename, Bool palette=TRUE, CTask *task=NULL)
+{//Truevision TGA File.
+	I64 i;
+	CDC *dc = NULL;
+	U8  *st = ExtDefault(filename, "TGA"), *src = FileRead(st);
+	TGAFile *tga = CAlloc(sizeof(TGAFile));
+
+	if (src)
+	{
+		MemCopy(tga, src, offset(TGAFile.end));
+		if(tga->image_type != 1) goto exit;
+		if(tga->map_type != 1) goto exit;
+		if(tga->color_map_origin != 0) goto exit;
+		if(tga->color_map_bpp != 24/* && tga->color_map_bpp != 32*/) goto exit;
+		if(tga->color_map_length > COLORS_NUM) goto exit;
+		if(tga->x_origin != 0) goto exit;
+		if(tga->y_origin != tga->height && tga->y_origin != 0) goto exit;
+		if(tga->bpp != 8) goto exit;
+		if(tga->flags != 0x20 && tga->flags != 0x00) goto exit;
+
+		//TGA ID string doesn't store any useful information
+		//if(tga->id_size) tga->id = src + offset(TGAFile.end);
+
+		tga->palette = CAlloc(sizeof(CBGR24) * COLORS_NUM);
+		GrPalettePad(tga->palette, src + offset(TGAFile.end) + tga->id_size, tga->color_map_length); 
+		/*
+		32 bpp palette read. Should work in theory but not widely supported.
+		MemCopy(tga->palette, src + offset(TGAFile.end) + tga->id_size, sizeof(CBGR24) * tga->color_map_length);
+		*/
+		
+		tga->body = src + offset(TGAFile.end) + tga->id_size + sizeof(CBGR24) >> 2 * tga->color_map_bpp >> 3 * tga->color_map_length;
+		
+		dc = DCNew(tga->width, tga->height, task);
+		if (palette)
+		{
+			dc->flags |= DCF_PALETTE;
+			MemCopy(dc->palette, tga->palette, sizeof(CBGR24) * COLORS_NUM);
+		}
+
+		if (tga->width == dc->width_internal && tga->y_origin == tga->height)
+		{
+			MemCopy(dc->body, tga->body, dc->width_internal * dc->height);
+		}
+		else if (tga->y_origin == tga->height)
+		{
+			for (i = 0; i < tga->height; i++)
+				MemCopy(dc->body + i * dc->width_internal, tga->body + i * tga->width, tga->width);
+		}
+		else
+		{
+			for (i = 0; i < tga->height; i++)
+				MemCopy(dc->body + (tga->height - 1 - i) * dc->width_internal, tga->body + i * tga->width, tga->width);
+		}
+		
+	}
+
+exit:
+	Free(src);
+	Free(st);
+	Free(tga->palette);
+	Free(tga);
+
+	return dc;
+}

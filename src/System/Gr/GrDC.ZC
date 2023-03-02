@@ -315,6 +315,21 @@ public I64 DCColorChange(CDC *dc, I64 src_color, I64 dst_color=TRANSPARENT)
 	return res;
 }
 
+public I64 DCColorMax(CDC *dc, U8 max=COLORS_NUM, U8 newcolor=BLACK)
+{//Keep only colors below or at maximum
+	I64 i, res = 0;
+	U8 *dst;
+
+	dst = dc->body;
+	i = dc->width_internal * dc->height;
+	while (i--)
+	{
+		if (*dst > max) *dst = newcolor;
+		dst++;
+	}
+	return res;
+}
+
 public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 {//Stores device context to mem, perhaps, with compression.
 	U8		*res, *ptr, *body;
@@ -393,46 +408,6 @@ public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 		*_size = ptr - src;
 
 	return res;
-}
-
-#help_index "Graphics/GR Files"
-#help_file "::/Doc/GRFiles"
-#help_index "Graphics/Device Contexts;Graphics/GR Files"
-
-#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR24) + GR_WIDTH * GR_HEIGHT)
-
-public I64 GRWrite(U8 *filename, CDC *dc, I64 dcsf_flags=NONE)
-{//ZealOS GR File.
-	I64 size;
-	U8 *st = ExtDefault(filename, "GR"), *src = DCSave(dc, &size, dcsf_flags);
-	FileWrite(st, src, size);
-	Free(st);
-	Free(src);
-
-	return size;
-}
-
-public CDC *GRRead(U8 *filename, CTask *task=NULL)
-{//ZealOS GR File.
-	CDC *dc = NULL;
-	U8  *st = ExtDefault(filename, "GR"), *src = FileRead(st);
-	if (src)
-		dc = DCLoad(src,, task);
-	Free(src);
-	Free(st);
-
-	return dc;
-}
-
-#help_index "Graphics/Sprite;Graphics/GR Files;DolDoc/Output;StdOut/DolDoc"
-public U0 DocGR(CDoc *doc=NULL, U8 *filename)
-{//Put a GR file into a document as asprite.
-	CDC		*dc = GRRead(filename);
-	CSprite *elems = DC2Sprite(dc);
-
-	DocSprite(doc, elems);
-	Free(elems);
-	DCDel(dc);
 }
 
 #help_index "Graphics/Device Contexts;Graphics/Screen"
