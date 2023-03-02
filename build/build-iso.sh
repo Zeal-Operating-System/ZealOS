@@ -13,8 +13,17 @@ then
 	exit
 fi
 
-# Uncomment if you use doas instead of sudo
-#alias sudo=doas 
+[ "$1" = "--headless" ] && QEMU_HEADLESS='-display none'
+SUDO='none'
+command -v doas && $SUDO=doas
+command -v sudo&& $SUDO=sudo
+if [ "$SUDO" = "none" ] ; then
+  echo 'No sudo or doas installed. Cannot proceed.'
+  exit 1
+fi
+
+KVM=''
+(lsmod | grep -q kvm) && KVM=',accel=kvm'
 
 # Set this true if you want to test ISOs in QEMU after building.
 TESTING=false
@@ -28,16 +37,16 @@ TMPMOUNT="$TMPDIR/mnt"
 QEMU_BIN_PATH=$(dirname "$(which qemu-system-x86_64)")
 
 mount_tempdisk() {
-	sudo modprobe nbd
-	sudo $QEMU_BIN_PATH/qemu-nbd -c /dev/nbd0 -f raw $TMPDISK
-	sudo partprobe /dev/nbd0
-	sudo mount /dev/nbd0p1 $TMPMOUNT
+	$SUDO modprobe nbd
+	$SUDO $QEMU_BIN_PATH/qemu-nbd -c /dev/nbd0 -f raw $TMPDISK
+	$SUDO partprobe /dev/nbd0
+	$SUDO mount /dev/nbd0p1 $TMPMOUNT
 }
 
 umount_tempdisk() {
 	sync
-	sudo umount $TMPMOUNT
-	sudo $QEMU_BIN_PATH/qemu-nbd -d /dev/nbd0
+	$SUDO umount $TMPMOUNT
+	$SUDO $QEMU_BIN_PATH/qemu-nbd -d /dev/nbd0
 }
 
 [ ! -d $TMPMOUNT ] && mkdir -p $TMPMOUNT
@@ -50,19 +59,19 @@ set +e
 
 echo "Making temp vdisk, running auto-install ..."
 $QEMU_BIN_PATH/qemu-img create -f raw $TMPDISK 1024M
-$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO.ISO -device isa-debug-exit
+$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35$KVM -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -cdrom AUTO.ISO -device isa-debug-exit $QEMU_HEADLESS
 
 echo "Copying all src/ code into vdisk Tmp/OSBuild/ ..."
 rm ../src/Home/Registry.ZC 2> /dev/null
 rm ../src/Home/MakeHome.ZC 2> /dev/null
 rm ../src/Boot/Kernel.ZXE 2> /dev/null
 mount_tempdisk
-sudo mkdir $TMPMOUNT/Tmp/OSBuild/
-sudo cp -r ../src/* $TMPMOUNT/Tmp/OSBuild
+$SUDO mkdir $TMPMOUNT/Tmp/OSBuild/
+$SUDO cp -r ../src/* $TMPMOUNT/Tmp/OSBuild
 umount_tempdisk
 
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
-$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
+$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35$KVM -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit $QEMU_HEADLESS
 
 LIMINE_BINARY_BRANCH="v4.x-branch-binary"
 
@@ -95,22 +104,22 @@ sed -i "s/\[\]/\[$(grep -o "0x" ./limine/limine-hdd.h | wc -l)\]/g" limine/Limin
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
 cp $TMPMOUNT/Tmp/MyDistro.ISO.C ./ZealOS-MyDistro.iso
-sudo rm $TMPMOUNT/Tmp/MyDistro.ISO.C 2> /dev/null
+$SUDO rm $TMPMOUNT/Tmp/MyDistro.ISO.C 2> /dev/null
 echo "Setting up temp ISO directory contents for use with limine xorriso command ..."
-sudo cp -rf $TMPMOUNT/* $TMPISODIR
-sudo rm $TMPISODIR/Boot/OldMBR.BIN 2> /dev/null
-sudo rm $TMPISODIR/Boot/BootMHD2.BIN 2> /dev/null
-sudo mkdir -p $TMPISODIR/EFI/BOOT
-sudo cp limine/Limine-HDD.HH $TMPISODIR/Boot/Limine-HDD.HH
-sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
-sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/Limine-CD-EFI.BIN
-sudo cp limine/limine-cd.bin $TMPISODIR/Boot/Limine-CD.BIN
-sudo cp limine/limine.sys $TMPISODIR/Boot/Limine.SYS
-sudo cp ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
-sudo cp ../zealbooter/Limine.CFG $TMPISODIR/Boot/Limine.CFG
+$SUDO cp -rf $TMPMOUNT/* $TMPISODIR
+$SUDO rm $TMPISODIR/Boot/OldMBR.BIN 2> /dev/null
+$SUDO rm $TMPISODIR/Boot/BootMHD2.BIN 2> /dev/null
+$SUDO mkdir -p $TMPISODIR/EFI/BOOT
+$SUDO cp limine/Limine-HDD.HH $TMPISODIR/Boot/Limine-HDD.HH
+$SUDO cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
+$SUDO cp limine/limine-cd-efi.bin $TMPISODIR/Boot/Limine-CD-EFI.BIN
+$SUDO cp limine/limine-cd.bin $TMPISODIR/Boot/Limine-CD.BIN
+$SUDO cp limine/limine.sys $TMPISODIR/Boot/Limine.SYS
+$SUDO cp ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
+$SUDO cp ../zealbooter/Limine.CFG $TMPISODIR/Boot/Limine.CFG
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
-sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
-sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
+$SUDO mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
+$SUDO rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
 umount_tempdisk
 
 xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-CD.BIN \
@@ -131,11 +140,11 @@ if [ "$TESTING" = true ]; then
 	    cd ..
 	fi
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
-	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35$KVM -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso $QEMU_HEADLESS
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
-	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35$KVM -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso $QEMU_HEADLESS
 	echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."
-	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso
+	$QEMU_BIN_PATH/qemu-system-x86_64 -machine q35$KVM -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-MyDistro.iso $QEMU_HEADLESS
 fi
 
 # comment these 2 lines if you want lingering old Distro ISOs
@@ -146,8 +155,8 @@ mv ./ZealOS-MyDistro.iso ./ZealOS-PublicDomain-BIOS-$(date +%Y-%m-%d-%H_%M_%S).i
 mv ./ZealOS-limine.iso ./ZealOS-BSD2-UEFI-$(date +%Y-%m-%d-%H_%M_%S).iso
 
 echo "Deleting temp folder ..."
-sudo rm -rf $TMPDIR
-sudo rm -rf $TMPISODIR
+$SUDO rm -rf $TMPDIR
+$SUDO rm -rf $TMPISODIR
 echo "Finished."
 echo
 echo "ISOs built:"
