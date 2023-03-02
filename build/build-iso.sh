@@ -15,8 +15,8 @@ fi
 
 [ "$1" = "--headless" ] && QEMU_HEADLESS='-display none'
 SUDO='none'
-command -v doas && $SUDO=doas
-command -v sudo&& $SUDO=sudo
+command -v doas && SUDO=doas
+command -v sudo && SUDO=sudo
 if [ "$SUDO" = "none" ] ; then
   echo 'No sudo or doas installed. Cannot proceed.'
   exit 1

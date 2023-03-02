@@ -1,0 +1,47 @@
+name: Build Application
+
+on:
+  push:
+    branches-ignore:
+      - 'stable'
+    paths-ignore:
+      - '**.md'
+      - 'screenshots/**'
+      - '**/LICENSE'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'screenshots/**'
+      - '**/LICENSE'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install build-essential git xorriso qemu-system-x86
+
+      - name: Build ISOs
+        run: |
+          cd build
+          ./build-iso.sh --headless
+          cd ..
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ISOs
+          path: |
+            build/*.iso
+          if-no-files-found: error
+
