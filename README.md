@@ -2,15 +2,13 @@
 
 [![Discord](https://img.shields.io/discord/934200098144022609?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://discord.gg/rK6U3xdr7D) [![](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/Zeal-Operating-System/ZealOS/wiki)
 
-The Zeal Operating System is a modernized, professional fork of the 64-bit Temple Operating System. Guiding principles of development include transparency, full user control, and adherence to public-domain/open-source implementations.
+The Zeal Operating System is a modernized fork of the 64-bit Temple Operating System. Guiding principles of development include transparency, full user control, and adherence to public-domain/open-source implementations.
 
 ![](/screenshots/screenshot2.png)
 
 ZealOS strives to be simple, documented, and require as little of a knowledge gap as possible. One person should be able to comprehend the entire system in at least a semi-detailed way within a few days of study.
-Simplify, don't complicate; make accessible, don't obfuscate.
 
-> The CIA encourages code obfuscation. They make it more complicated than necessary.\
-—Terry A. Davis
+**Simplify, don't complicate; make accessible, don't obfuscate.**
 
 Features in development include:
   - [32-bit color VBE graphics](https://github.com/TempleProgramming/HolyGL)
