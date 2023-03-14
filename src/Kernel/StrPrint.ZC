@@ -438,10 +438,11 @@ to avoid this.
 							throw('StrPrint');
 						ptr = argv[cur_arg++];
 						break;
+
 					case 'o': // Bool
 						if (cur_arg >= argc)
 							throw('StrPrint');
-						if (argv[cur_arg++]) ptr = "TRUE"; else ptr = "FALSE";
+						ptr = DefineSub(ToBool(argv[cur_arg++]), "ST_FALSE_TRUE");
 						break;
 
 					case 'S':
@@ -661,7 +662,7 @@ sp_out_inf:
 						break;
 					}
 
-					sp_out_f:
+sp_out_f:
 					if (dec_len < 0)
 						dec_len = 0;
 					n = Log10(d);
