@@ -46,21 +46,23 @@ U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r)
 
 public U0 MouseRawReset()
 {
-	mouse_hard.raw_data.x=0;
-	mouse_hard.raw_data.y=0;
-	mouse_hard.raw_data.z=0;
-	mouse_hard.raw_bttns[0]=FALSE;
-	mouse_hard.raw_bttns[1]=FALSE;
-	mouse_hard.raw_bttns[2]=FALSE;
-	mouse_hard.raw_bttns[3]=FALSE;
-	mouse_hard.raw_bttns[4]=FALSE;
+	mouse_hard.raw_data.x = 0;
+	mouse_hard.raw_data.y = 0;
+	mouse_hard.raw_data.z = 0;
+	mouse_hard.raw_bttns[0] = FALSE;
+	mouse_hard.raw_bttns[1] = FALSE;
+	mouse_hard.raw_bttns[2] = FALSE;
+	mouse_hard.raw_bttns[3] = FALSE;
+	mouse_hard.raw_bttns[4] = FALSE;
 }
 
 public Bool MouseRaw(Bool val)
 { // Places mouse in "raw" mode, button presses will not go to windows manager when true
-	Bool old_val=mouse_hard.raw_mode;
-	mouse_hard.raw_mode=val;
-	mouse.show=!val;
+	Bool old_val = mouse_hard.raw_mode;
+
+	mouse_hard.raw_mode = val;
+	mouse.show = !val;
+
 	return old_val;
 }
 
@@ -277,8 +279,10 @@ U0 MouseHardHandler()
 {
 	I64 i, dx, dy, dz;
 	U8  mouse_buf[4];
+
 	if (!mouse_hard.raw_mode)
 		MouseHardSetPre;
+
 	for (i = 0; i < 4; i++)
 		mouse_buf[i] = 0;
 	for (i = 0; i < mouse_hard.pkt_size; i++)
@@ -298,7 +302,8 @@ U0 MouseHardHandler()
 	else
 		dz = mouse_buf[3] & 7;
 
-	if (mouse_hard.raw_mode) {
+	if (mouse_hard.raw_mode)
+	{
 		// buttons / position data need to by consumed by app
 		// buttons stay down, positions keep accumulating until
 		// consumed by app and reset with MouseRawReset
@@ -311,7 +316,8 @@ U0 MouseHardHandler()
 		mouse_hard.raw_data.y += dy;
 		mouse_hard.raw_data.z += dz;
 	}
-	else {
+	else
+	{
 		mouse_hard.bttns[0] =  mouse_buf[0] & 1;
 		mouse_hard.bttns[1] = (mouse_buf[0] & 2)    >> 1;
 		mouse_hard.bttns[2] = (mouse_buf[0] & 4)    >> 2;
