@@ -41,7 +41,7 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("ExtDft",			ff_mask, fu_flags, "ExtDefault");
 	Find("ExtChg",			ff_mask, fu_flags, "ExtChange");
 	Find("RegDft",			ff_mask, fu_flags, "RegDefault");
-	Find("\"HC\"",			ff_mask, fu_flags, "\"CC\"");
+	Find("\"HC\"",			ff_mask, fu_flags, "\"ZC\"");
 	Find("CDrv",			ff_mask, fu_flags, "CDrive");
 	Find("CDbgInfo",		ff_mask, fu_flags, "CDebugInfo");
 	Find("dbg_info",		ff_mask, fu_flags, "debug_info");

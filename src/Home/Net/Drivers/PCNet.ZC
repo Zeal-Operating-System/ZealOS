@@ -23,7 +23,11 @@
 
 #define PCNET_DW_RDP	0x10
 #define PCNET_DW_RAP	0x14
+#define PCNET_DW_BDP	0x1C
 #define PCNET_DW_RESET	0x18 // reset reg location when card is in 32-bit mode
+
+#define PCNET_BCR_MISC_CONFIG		2
+#define PCNET_BCR_FULL_DUPLEX_CTRL	9
 
 #define PCNET_CSR_CTRLSTATUS	0
 #define PCNET_CSR_INTERRUPTS	3
@@ -56,6 +60,11 @@
 #define PCNET_INT_RINTM		10	// Receive Interrupt Mask
 
 #define PCNET_FEATURE_APADXMT	11
+
+#define PCNET_BCR_MISC_CONFIG_ASEL	1
+
+#define PCNET_BCR_FULL_DUPLEX_CTRL_FDEN		0
+#define PCNET_BCR_FULL_DUPLEX_CTRL_AUIFD	1
 
 #define PCNET_CTRL_INIT	0
 #define PCNET_CTRL_STRT	1
@@ -159,6 +168,28 @@ U0 PCNetRAPWrite(U32 value)
 	OutU32(PCNetIOBaseGet + PCNET_DW_RAP, value);
 }
 
+U0 PCNetBCRWrite(U32 bcr, U32 value)
+{/* AMD PCNet datasheet p. 1-952
+	Summary: Bus Control Registers are
+	accessed via the BDP (Bus Data Port).
+	Which BCR is selected is based on the value
+	in the RAP. */
+
+	PCNetRAPWrite(bcr);
+	OutU32(PCNetIOBaseGet + PCNET_DW_BDP, value);
+}
+
+U32 PCNetBCRRead(U32 bcr)
+{/* AMD PCNet datasheet p. 1-952
+	Summary: Bus Control Registers are
+	accessed via the BDP (Bus Data Port).
+	Which BCR is selected is based on the value
+	in the RAP. */
+
+	PCNetRAPWrite(bcr);
+	return InU32(PCNetIOBaseGet + PCNET_DW_BDP);
+}
+
 U0 PCNetCSRWrite(U32 csr, U32 value)
 {/* AMD PCNet datasheet p. 1-952
 	Summary: Control and Status Registers are
@@ -180,6 +211,26 @@ U32 PCNetCSRRead(U32 csr)
 	PCNetRAPWrite(csr);
 	return InU32(PCNetIOBaseGet + PCNET_DW_RDP);
 }
+
+U0 PCNetAutoLinkSelect()
+{
+	U32 bcr = PCNetCSRRead(PCNET_BCR_FULL_DUPLEX_CTRL);
+
+	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_FDEN);
+	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_AUIFD);
+
+	PCNetBCRWrite(PCNET_BCR_FULL_DUPLEX_CTRL, bcr);
+}
+
+U0 PCNetEnableFullDuplex()
+{
+	U32 bcr = PCNetCSRRead(PCNET_BCR_MISC_CONFIG);
+
+	Bts(&bcr, PCNET_BCR_MISC_CONFIG_ASEL);
+
+	PCNetBCRWrite(PCNET_BCR_MISC_CONFIG, bcr);
+}
+
 
 U0 PCNetSWStyleSet()
 {/* AMD PCNet datasheet p. 1-968
@@ -260,9 +311,9 @@ U0 PCNetBuffersAllocate()
 	pcnet.rx_de_buffer = dev.uncached_alias + pcnet.rx_de_buffer_phys; // we want uncached
 	pcnet.tx_de_buffer = dev.uncached_alias + pcnet.tx_de_buffer_phys; // access to these.
 
-	pcnet.rx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * PCNET_RX_BUFF_COUNT, Fs->code_heap);
+	pcnet.rx_buffer_addr_phys = CAllocAligned(ETHERNET_FRAME_SIZE * PCNET_RX_BUFF_COUNT, 16, Fs->code_heap);
 
-	pcnet.tx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * PCNET_TX_BUFF_COUNT, Fs->code_heap);
+	pcnet.tx_buffer_addr_phys = CAllocAligned(ETHERNET_FRAME_SIZE * PCNET_TX_BUFF_COUNT, 16, Fs->code_heap);
 
 	//Shrine does a check and returns -1 here, if the end of either buffer exceeds 0x100000000
 
@@ -361,7 +412,7 @@ U0 PCNetDirectInit()
 
 U8 *PCNetInitBlockSetup()
 {
-	U8					*setup	 = CAlloc(sizeof(CPCNetBufferSetup), Fs->code_heap);
+	U8					*setup	 = CAllocAligned(sizeof(CPCNetBufferSetup), 16, Fs->code_heap);
 	CPCNetBufferSetup	*u_setup = setup + dev.uncached_alias;
 	U32					 p_setup;
 
@@ -426,6 +477,7 @@ U0 PCNetConfigModeExit()
 	Btr(&csr, PCNET_CTRL_INIT);
 	Btr(&csr, PCNET_CTRL_STOP);
 
+	Bts(&csr, PCNET_CTRL_IENA);
 	Bts(&csr, PCNET_CTRL_STRT);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
@@ -433,10 +485,9 @@ U0 PCNetConfigModeExit()
 
 U0 PCNetUploadConfig()
 {/* Upload new config and wait for card to acknowlege */
-	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
+	U32 csr = 0;
 
 	Bts(&csr, PCNET_CTRL_INIT);
-	Bts(&csr, PCNET_CTRL_IENA);
 
 	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
@@ -448,7 +499,6 @@ U0 PCNetUploadConfig()
 		csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 	}
 }
-
 
 I64 PCNetDriverOwns(CPCNetDescriptorEntry* entry)
 {/* Returns whether the value of the OWN bit of the
@@ -680,6 +730,10 @@ U0 PCNetInit()
 	PCNetInterruptCSRSet;
 
 	PCNetTXAutoPadEnable;
+
+	PCNetAutoLinkSelect;
+
+	PCNetEnableFullDuplex;
 
 	PCNetUploadConfig;
 

@@ -1,4 +1,19 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/13/23 18:06:09----$IV,0$
+* Raised version number to 2.02.
+
+$IV,1$----02/25/23 16:35:04----$IV,0$
+* Created $LK+PU,"MouseRaw",A="MN:MouseRaw"$ and $LK+PU,"MouseRawReset",A="MN:MouseRawReset"$, externs added to $LK+PU,"KernelC.HH",A="FF:::/Kernel/KernelC.HH,MouseRaw("$, functions used in $MA-X+PU,"Mouse.ZC",LM="Find(\"MouseRawReset;\", \"::/Kernel/SerialDev/Mouse.ZC\");View;"$.
+* Added members to $LK+PU,"CMouseHardStateGlobals",A="MN:CMouseHardStateGlobals"$ and used in $MA-X+PU,"Mouse.ZC",LM="Find(\"raw_data\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_mode\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_bttns\", \"::/Kernel/SerialDev/Mouse.ZC\");View;"$:
+	- CD3I64 raw_data
+	- Bool raw_bttns[5]
+	- Bool raw_mode
+* $MA-X+PU,"Update CastleFrankenstein to use new MouseRaw functionality.",LM="Find(\"mouse_task\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseHandler\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseRaw\", \"::/Demo/Games/CastleFrankenstein.ZC\");View;"$
+
+$IV,1$----12/21/22 03:38:35----$IV,0$
+* Raised version number to 2.01.
+* Created $LK+PU,"FreeAll",A="MN:FreeAll"$ method to /Kernel/Memory/MAllocFree.ZC and extern to $LK+PU,"/Kernel/KernelC.HH",A="FF:::/Kernel/KernelC.HH,FreeAll"$.
+
 $IV,1$----11/02/22 20:26:55----$IV,0$
 * Raised version number to 2.00.
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$ to allow non-Public-Domain MBR/UEFI bootloaders, as long as the Public Domain ZealOS HDD/DVD Boot Loaders are included, offered, and functional. The Charter upholds that all operating system code must still be 100% public domain. Updated $LK+PU,"Credits",A="FI:::/Doc/Credits.DD"$, $LK+PU,"FAQ",A="FI:::/Doc/FAQ.DD"$, $LK+PU,"Features.DD",A="FI:::/Doc/Features.DD"$, $LK+PU,"Welcome.DD",A="FI:::/Doc/Welcome.DD"$.
