@@ -4,6 +4,10 @@ $IV,1$----03/13/23 18:06:09----$IV,0$
 
 $IV,1$----02/25/23 16:35:04----$IV,0$
 * Created $LK+PU,"MouseRaw",A="MN:MouseRaw"$ and $LK+PU,"MouseRawReset",A="MN:MouseRawReset"$, externs added to $LK+PU,"KernelC.HH",A="FF:::/Kernel/KernelC.HH,MouseRaw("$.
+* Added members to $LK+PU,"CMouseHardStateGlobals",A="MN:CMouseHardStateGlobals"$ and used in $MA-X+PU,"Mouse.ZC",LM="Find(\"raw_data\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_mode\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_bttns\", \"::/Kernel/SerialDev/Mouse.ZC\");View;"$:
+	- CD3I64 raw_data
+	- Bool raw_bttns[5]
+	- Bool raw_mode
 * $MA-X+PU,"Update CastleFrankenstein to use new MouseRaw functionality.",LM="Find(\"mouse_task\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseHandler\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseRaw\", \"::/Demo/Games/CastleFrankenstein.ZC\");View;"$
 
 $IV,1$----12/21/22 03:38:35----$IV,0$
