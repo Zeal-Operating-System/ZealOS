@@ -21,6 +21,16 @@ For $FG,2$"%c"$FG$ or $FG,2$"%C"$FG$, the <aux_format_num> repeats the char that
 
 $ID,2$$FG,2$"%n"$FG$ floating point in engineering notation, exponents being multiples of three.	If it has a <aux_format> code, it will display scientific units letters.
 
+$FG,2$"%e"$FG$ floating point in engineering notation, exponents not restricted to multiples of three.
+
+$FG,2$"%d"$FG$ Whole number.
+
+$FG,2$"%u"$FG$ Unsigned whole number.
+
+$FG,2$"%f"$FG$ Floating point number.
+
+$FG,2$"%g"$FG$ Right-aligned rounded-up integer of floating point number.
+
 $FG,2$"%S"$FG$ $LK,"Define",A="MN:Define"$() entry.
 
 $FG,2$"%C"$FG$ $LK,"ToUpper",A="MN:ToUpper"$() character.
