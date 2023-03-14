@@ -503,6 +503,8 @@ extern			I64					 KbdMessagesQueue();
 public extern	U0					 KbdTypeMatic(U8 delay);
 extern			Bool				 MouseHardDriverInstall();
 public extern	Bool				 MouseHardEnable(Bool val=TRUE);
+public extern	Bool				 MouseRaw(Bool val);
+public extern	U0	    			 MouseRawReset(Bool val=TRUE);
 public extern	I64					 PressAKey();
 public extern	I64					 CharScan();
 public extern	Bool				 KeyScan(I64 *_ch=NULL, I64 *_scan_code=NULL, Bool echo=FALSE);
@@ -555,6 +557,7 @@ public extern				U8			*ReAlloc(    U8 *src, U64 size,         CTask *mem_task=NU
 public _extern _MHEAP_CTRL	CHeapCtrl	*MHeapCtrl(  U8 *src);
 public _extern _MSIZE		I64			 MSize(      U8 *src); 	//size of heap object
 public _extern _MSIZE2		I64			 MSize2(     U8 *src); //Internal size
+public extern				U0			 FreeAll(...); //Free all pointers passed
 
 #help_index "Memory/HeapCtrl"
 public extern U0		 HeapCtrlDel( CHeapCtrl *hc);
