@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/14/23 03:23:46----$IV,0$
+* Created %o Bool $LK+PU,"StrPrint",A="FF:::/Kernel/StrPrint.ZC,'o':"$ format code, updated $LK+PU,"Print.DD",A="FI:::/Doc/Print.DD"$ with new %o code and previously undocumented format codes.
+
 $IV,1$----03/13/23 18:06:09----$IV,0$
 * Raised version number to 2.02.
 
