@@ -55,7 +55,7 @@ lud_done:
 public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 												U16 vendor_id=NULL, U16 device_id=NULL,
 												U8 _bus=0xFF, U8 _dev=0xFF, U8 _fun=0xFF)
-{//return first device with matching class & subcode, vendor & device id, class & device id, class & vendor id or a specific device.
+{//return first device with matching class & subcode, vendor & device id, or a specific device.
 	PCILookUpDevs;
 	CPCIDev *p = dev.pci_head.next;
 
@@ -63,8 +63,6 @@ public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 	{
 		if (p->vendor_id == vendor_id && p->device_id == device_id ||
 				p->class_code == class_code && p->sub_code == sub_code ||
-				p->class_code == class_code && p->device_id == device_id && vendor_id == NULL ||
-				p->class_code == class_code && p->vendor_id == vendor_id && device_id == NULL ||
 				p->bus == _bus && p->dev == _dev && p->fun == _fun)
 
 			return p;

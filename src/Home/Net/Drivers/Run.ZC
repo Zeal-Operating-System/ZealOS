@@ -7,9 +7,8 @@
 #define	PCIV_E1000		0x8086
 #define	PCID_82545EM	0x100F
 
-
 #define PCIV_VIRTIO		0x1AF4
-//#define PCID_VIRTIO_NET 0x1000
+#define PCID_VIRTIO_NET 0x1000
 
 U0 NetDriverInclude(U8 *driver)
 {
@@ -19,33 +18,63 @@ U0 NetDriverInclude(U8 *driver)
 	Free(filename);
 }
 
+class CNetDriver:CQueue
+{
+	U16 vendor_id;
+	U16 device_id;
+	U8 *filename; // relative to Drivers/ folder, not absolute
+};
+
+CQueue *net_drivers = CAlloc(sizeof(CQueue));
+QueueInit(net_drivers);
+
+U0 NetDriverRegister(U16 vendor_id=NULL, U16 device_id=NULL, U8 *filename)
+{
+
+	CNetDriver *driver;
+
+	if (!vendor_id && !device_id)
+		return;
+
+	driver = CAlloc(sizeof(CNetDriver));
+
+	driver->vendor_id = vendor_id;
+	driver->device_id = device_id;
+	driver->filename = StrNew(filename);
+
+	QueueInsertRev(driver, net_drivers);
+}
+
+
 U0 NetDriverInit()
 {
-	CPCIDev *net_driver_pci = PCIDevFind(PCIC_NETWORK);
-	Bool	 found = FALSE;
+	Bool found = FALSE;
+	CNetDriver *net_driver;
+	CPCIDev *net_pci;
 
-	if (net_driver_pci)
+	// register NIC PCI details with driver (file)name
+	NetDriverRegister(PCIV_VIRTIO,	PCID_VIRTIO_NET,	"VirtIONet");
+	NetDriverRegister(PCIV_E1000,	PCID_82545EM,		"E1000");
+	NetDriverRegister(PCIV_PCNET,	PCID_PCNET,			"PCNet");
+
+	// iterate registered drivers until match is found, if any found
+	net_driver = net_drivers->next;
+
+	while (net_driver != net_drivers)
 	{
-		if (net_driver_pci=PCIDevFind(, , PCIV_PCNET, PCID_PCNET))
+		net_pci = PCIDevFind(,, net_driver->vendor_id, net_driver->device_id);
+		if (net_pci)
 		{
-			NetDriverInclude("PCNet");
 			found = TRUE;
+			NetDriverInclude(net_driver->filename);
+			break;
 		}
-		else if (net_driver_pci=PCIDevFind(, , PCIV_E1000, PCID_82545EM))
-		{
-			NetDriverInclude("E1000");
-			found = TRUE;
-		}
-		else if (net_driver_pci=PCIDevFind(PCIC_NETWORK, , PCIV_VIRTIO, ))
-		{
-			NetDriverInclude("VirtIONet");
-			found = TRUE;
-		}
+		net_driver = net_driver->next;
 	}
 
 	if (!found)
 	{
-		ClassRep(net_driver_pci);
+		ClassRep(net_pci);
 		throw('NODRIVER');
 	}
 }
