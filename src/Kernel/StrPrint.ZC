@@ -439,6 +439,12 @@ to avoid this.
 						ptr = argv[cur_arg++];
 						break;
 
+					case 'o': // Bool
+						if (cur_arg >= argc)
+							throw('StrPrint');
+						ptr = DefineSub(ToBool(argv[cur_arg++]), "ST_FALSE_TRUE");
+						break;
+
 					case 'S':
 						if (cur_arg >= argc)
 							throw('StrPrint');
@@ -656,7 +662,7 @@ sp_out_inf:
 						break;
 					}
 
-					sp_out_f:
+sp_out_f:
 					if (dec_len < 0)
 						dec_len = 0;
 					n = Log10(d);
