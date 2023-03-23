@@ -3715,6 +3715,11 @@ public class CKbdStateGlobals
 };
 
 #help_index "Mouse"
+class CMouseRawQueue:CQueue
+{
+	CTask *task;
+};
+
 public class CMouseHardStateGlobals
 {
 	CD3I64	 pos, 					//Position in pixels
@@ -3726,9 +3731,9 @@ public class CMouseHardStateGlobals
 			 install_attempts,		//Private
 			 pkt_size;				//Private
 	CFifoU8	*fifo, *fifo2;			//Private
+	CQueue	*raw_queue;
 	Bool	 bttns[5],
 			 raw_bttns[5],
-			 raw_mode,
 			 has_wheel,
 			 has_ext_bttns,
 			 enabled,

@@ -211,6 +211,8 @@ U0 KMain()
 	KbdInit;
 	"Spawn(&MouseHardDriverInstall);\n\n";
 	Spawn(&MouseHardDriverInstall);
+	"Spawn(&MouseRawWatcher,, \"MouseRawWatcher\");\n";
+	Spawn(&MouseRawWatcher,, "MouseRawWatcher");
 
 	"Load(\"Compiler\");\n";
 	Cd("/Compiler");
