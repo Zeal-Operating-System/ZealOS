@@ -24,7 +24,7 @@ $(eval $(call DEFAULT_VAR,CC,cc))
 $(eval $(call DEFAULT_VAR,LD,ld))
 
 # User controllable C flags.
-$(eval $(call DEFAULT_VAR,CFLAGS,-g -O2 -pipe -Wall -Wextra))
+$(eval $(call DEFAULT_VAR,CFLAGS,-g -O2 -pipe))
 
 # User controllable C preprocessor flags. We set none by default.
 $(eval $(call DEFAULT_VAR,CPPFLAGS,))
@@ -37,13 +37,15 @@ $(eval $(call DEFAULT_VAR,LDFLAGS,))
 
 # Internal C flags that should not be changed by the user.
 override CFLAGS += \
+    -Wall \
+    -Wextra \
     -std=gnu11 \
     -ffreestanding \
     -fno-stack-protector \
     -fno-stack-check \
     -fno-lto \
-    -fno-pie \
-    -fno-pic \
+    -fno-PIE \
+    -fno-PIC \
     -m64 \
     -march=x86-64 \
     -mabi=sysv \
@@ -77,6 +79,7 @@ endif
 
 # Internal nasm flags that should not be changed by the user.
 override NASMFLAGS += \
+    -Wall \
     -f elf64
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
