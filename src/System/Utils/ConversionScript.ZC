@@ -104,6 +104,8 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("fp_draw_ms",			ff_mask,fu_flags,"fp_draw_mouse");
 	Find("fp_draw_grab_ms",		ff_mask,fu_flags,"fp_draw_grab_mouse");
 	Find("fp_final_scrn_update",ff_mask,fu_flags,"fp_final_screen_update");
+	Find("DCColorChg",			ff_mask,fu_flags,"DCColorChange");
+	Find("Adam(",				ff_mask,fu_flags,"Sys("); // using Adam( not to rename lists that contain the name Adam
 
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
