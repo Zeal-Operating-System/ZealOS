@@ -109,7 +109,10 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("KbdMsHndlr",			ff_mask,fu_flags,"KbdMouseHandler");
 	Find("WinMsUpdate",			ff_mask,fu_flags,"WinMouseUpdate");
 	Find("RWF_SHOW_DOLLAR",		ff_mask,fu_flags,"RAWF_SHOW_DOLLAR");
+	Find("RWF_LAST_DOLLAR",		ff_mask,fu_flags,"RAWF_LAST_DOLLAR");
+	Find("RWF_IN_DOLLAR",		ff_mask,fu_flags,"RAWF_IN_DOLLAR");
 	Find("RWF_SCROLL",			ff_mask,fu_flags,"RAWF_SCROLL");
+	Find("RawDr",				ff_mask,fu_flags,"RawDumpRegs");
 
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
