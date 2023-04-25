@@ -74,7 +74,7 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("DrvTextAttrGet",		ff_mask,fu_flags,"DriveTextAttrGet");
 	Find("DrvIsWritable",		ff_mask,fu_flags,"DriveIsWritable");
 	Find("gr_palette_std",		ff_mask,fu_flags,"gr32_palette_std");
-	Find("GetKey",ff_mask,		fu_flags,"KeyGet");
+	Find("GetKey",				ff_mask,fu_flags,"KeyGet");
 	Find("STD_DISTRO_DVD_CFG",	ff_mask,fu_flags,"STD_DISTRO_DVD_CONFIG");
 	Find("CBGR48",				ff_mask,fu_flags,"CBGR24");
 	Find("CFreeLst",			ff_mask,fu_flags,"CFreeList");
@@ -92,6 +92,16 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("ScanChar",ff_mask,fu_flags,"CharScan");
 	Find("fp_final_scrn_update",ff_mask,fu_flags,"fp_final_screen_update");
 	
+	//Added by y4my4m April 25 2023
+	Find("FifoI64Cnt",			ff_mask,fu_flags,"FifoI64Count");
+	Find("FifoI64Rem",			ff_mask,fu_flags,"FifoI64Remove");
+	Find("FifoU8Cnt",			ff_mask,fu_flags,"FifoU8Count");
+	Find("FifoU8Rem",			ff_mask,fu_flags,"FifoU8Remove");
+	Find("AdamErr",				ff_mask,fu_flags,"SysErr");
+	Find("AdamLog",				ff_mask,fu_flags,"SysLog");
+	Find("CHashGlblVar",		ff_mask,fu_flags,"CHashGlobalVar");
+	Find("HTT_GLBL_VAR",		ff_mask,fu_flags,"HTT_GLOBAL_VAR");
+
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
 	Find("MemSet", ff_mask, fu_flags);
 }
