@@ -47,6 +47,36 @@ U0 GetColorString(I64 color_code, U8 *buf) {
   }
 }
 
+U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
+  U8 buf[9];
+
+  buf[0] = 0xFF; // IAC
+  buf[1] = 0xFA; // SB
+  buf[2] = 0x1F; // NAWS (Negotiate About Window Size)
+  buf[3] = cols >> 8; // High byte of columns
+  buf[4] = cols & 0xFF; // Low byte of columns
+  buf[5] = rows >> 8; // High byte of rows
+  buf[6] = rows & 0xFF; // Low byte of rows
+  buf[7] = 0xFF; // IAC
+  buf[8] = 0xF0; // SE
+
+  TCPSocketSend(sock, buf, sizeof(buf));
+}
+
+U0 SendTerminalType(I64 sock, U8 *term_type) {
+  U8 buf[6 + StrLen(term_type)];
+
+  buf[0] = 0xFF; // IAC
+  buf[1] = 0xFA; // SB
+  buf[2] = 0x18; // Terminal Type
+  buf[3] = 0x00; // IS
+  StrCopy(buf + 4, term_type);
+  buf[4 + StrLen(term_type)] = 0xFF; // IAC
+  buf[5 + StrLen(term_type)] = 0xF0; // SE
+
+  TCPSocketSend(sock, buf, sizeof(buf));
+}
+
 U0 TelnetClient(U8 *host, U16 port) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
@@ -56,6 +86,8 @@ U0 TelnetClient(U8 *host, U16 port) {
   if (sock <= 0) {
     return;
   }
+
+  SendWindowSize(sock, 24, 80); // Send default window size of 24 rows and 80 columns
 
   "Connected to %s:%d.\n", host, port;
 
@@ -68,8 +100,28 @@ U0 TelnetClient(U8 *host, U16 port) {
       // Basic Telnet protocol parser: Ignore negotiation sequences
       ptr = buffer;
       while (*ptr) {
-        if (*ptr == 0xFF) {
-          // Skip Telnet negotiation sequence (3 bytes)
+        if (*ptr == 0xFF) { // Telnet negotiation sequence
+          U8 negotiation_code = *(ptr + 1);
+          U8 option_code = *(ptr + 2);
+
+          // Send a response to the server
+          U8 response[3];
+          response[0] = 0xFF; // IAC
+
+          // Check if the negotiation code is DO or DONT
+          if (negotiation_code == 0xFD && option_code == 0x18) {
+            response[1] = 0xFB; // WILL
+            TCPSocketSend(sock, response, 3);
+            SendTerminalType(sock, "ANSI");
+          } else if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
+            response[1] = 0xFC; // WONT
+          } else { // Else, assume the negotiation code is WILL or WONT
+            response[1] = 0xFE; // DONT
+          }
+
+          response[2] = option_code;
+
+          TCPSocketSend(sock, response, 3);
           ptr += 3;
         } else if (*ptr == 0x1B) {
           // ANSI escape sequence
@@ -86,9 +138,14 @@ U0 TelnetClient(U8 *host, U16 port) {
               // Process ansi_code
               if (*ptr == ';') {
                 ptr++; // Move to next part of the sequence
-              } else if (*ptr == 'm') {
-                ptr++; // Move past 'm'
+              } else if (*ptr == 'm' || *ptr == 'H' || *ptr == 'J' || *ptr == 'K' || *ptr == 'C') {
+                ptr++; // Move past the current character
                 break; // End of the escape sequence
+              } else if (*ptr == '?') {
+                ptr++; // Skip the '?'
+              } else if (*ptr == 'h' || *ptr == 'l') {
+                ptr++; // Skip 'h' or 'l'
+                break;
               } else {
                 break; // Invalid character, exit loop
               }
@@ -102,31 +159,40 @@ U0 TelnetClient(U8 *host, U16 port) {
       }
 
       "\n";
-      Sleep(200); // Add a 200 ms delay
+      Sleep(500); // Add a 200 ms delay
       // Prompt user for input and send it to the remote host
       "Enter your choice: ";
 
-      input_len = 0;
+      U8 *line = input_buffer;
       while (1) {
-        ch = CharGet;
+        ch = CharGet(, FALSE);
         if (ch == '\r' || ch == '\n') {
           break;
         }
-        if (ch == 27) { // ESC key
+        if (ch == CH_ESC || ch == CH_SHIFT_ESC) { // ESC key
           force_disconnect = TRUE;
           break;
         }
-        input_buffer[input_len++] = ch;
+        if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
+          if (line != input_buffer) {
+            line--; // Move the pointer back
+            "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
+          }
+        } else {
+          *line++ = ch;
+		      "%c", ch;
+        }
       }
-      input_buffer[input_len] = '\0';
+      *line++ = '\r';
+      *line++ = '\n';
+      *line = '\0';
 
       if (!force_disconnect) {
         SysLog("Sending: %s\n", input_buffer); // Debugging line
-        input_buffer[input_len++] = '\r';
-        input_buffer[input_len++] = '\n';
-        TCPSocketSend(sock, input_buffer, input_len);
-      } else {
+        TCPSocketSendString(sock, input_buffer);
+		  } else {
         "Force disconnecting...\n";
+        break;
       }
     } else {
       "Error: Connection closed by the remote host.\n";
@@ -152,3 +218,6 @@ U0 TelnetPrompt() {
     TelnetClient(form.host, form.port);
   }
 }
+
+// Dev auto-connect to test server
+TelnetClient("mbrserver.com", 23);
