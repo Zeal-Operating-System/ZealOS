@@ -37,17 +37,18 @@ I64 TelnetOpen(U8 *host, U16 port) {
 //   }
 // }
 
-U0 GetColorString(I64 color_code, U8 *buf) {
+U0 AppendColorString(I64 color_code, U8 *buf) {
+  SysLog("AppendColorString(%d, %p)\n", color_code, buf);
   switch (color_code) {
-    case 0: StrCopy(buf, "$$BLACK$$"); break;
-    case 1: StrCopy(buf, "$$RED$$"); break;
-    case 2: StrCopy(buf, "$$GREEN$$"); break;
-    case 3: StrCopy(buf, "$$BROWN$$"); break; // ANSI yellow is mapped to ZealOS brown
-    case 4: StrCopy(buf, "$$BLUE$$"); break;
-    case 5: StrCopy(buf, "$$MAGENTA$$"); break;
-    case 6: StrCopy(buf, "$$CYAN$$"); break;
-    case 7: StrCopy(buf, "$$GREY$$"); break; // ANSI white is mapped to ZealOS grey
-    default: StrCopy(buf, ""); break; // Default to empty string if an invalid color code is given
+    case 0: CatPrint(buf, "$$BLACK$$"); break;
+    case 1: CatPrint(buf, "$$RED$$"); break;
+    case 2: CatPrint(buf, "$$GREEN$$"); break;
+    case 3: CatPrint(buf, "$$BROWN$$"); break; // ANSI yellow is mapped to ZealOS brown
+    case 4: CatPrint(buf, "$$BLUE$$"); break;
+    case 5: CatPrint(buf, "$$MAGENTA$$"); break;
+    case 6: CatPrint(buf, "$$CYAN$$"); break;
+    case 7: CatPrint(buf, "$$GREY$$"); break; // ANSI white is mapped to ZealOS grey
+    default: CatPrint(buf, ""); break; // Default to empty string if an invalid color code is given
   }
 }
 
@@ -157,29 +158,30 @@ U0 TelnetClient(U8 *host, U16 port) {
               }
               // Process ansi_code
               if (*ptr == ';') {
-                ptr++; // Move to next part of the sequence
-              } else if (*ptr == 'm' ) {
-                ptr++; 
-                break;
-              } else if (*ptr == 'H' || *ptr == 'J' || *ptr == 'K' ) {
-                ptr++; // Move past the current character
-                // Process color codes
+                ptr++; // Move to the next part of the sequence
+              } else if (*ptr == 'm') {
+                ptr++;
                 if (ansi_code >= 30 && ansi_code <= 37) {
                   // Set foreground color
-                  U8 color_buf_fg[16];
-                  GetColorString(ansi_code - 30, color_buf_fg);
-                  // Print(color_buf_fg);
-                  "%s", color_buf_fg;
+                  AppendColorString(ansi_code - 30, buffer);
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
-                  U8 color_buf_bg[16];
-                  GetColorString(ansi_code - 40, color_buf_bg);
-                  // Print(color_buf_bg);
-                  "%s", color_buf_bg;
+                  AppendColorString(ansi_code - 40, buffer);
                 }
-                // End of the escape sequence
                 break;
-              }  else if (*ptr == 'C') {
+              } else if (*ptr == 'H') {
+                // TODO: Handle cursor positioning
+                ptr++;
+                break;
+              } else if (*ptr == 'J') {
+                // TODO: Handle screen clearing
+                ptr++;
+                break;
+              } else if (*ptr == 'K') {
+                // TODO: Handle line clearing
+                ptr++;
+                break;
+              } else if (*ptr == 'C') {
                 // Custom 'C' escape code for centering text
                 // TODO: Handle the centering here
                 ptr++;
@@ -187,6 +189,7 @@ U0 TelnetClient(U8 *host, U16 port) {
               } else if (*ptr == '?') {
                 ptr++; // Skip the '?'
               } else if (*ptr == 'h' || *ptr == 'l') {
+                // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
                 ptr++; // Skip 'h' or 'l'
                 break;
               } else {
