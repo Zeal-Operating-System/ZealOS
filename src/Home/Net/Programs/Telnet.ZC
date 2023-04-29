@@ -17,6 +17,10 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
+  // TODO: needed?
+	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+	// TCPSocketSendString(sock, 0);
+
   return sock;
 }
 
@@ -63,19 +67,19 @@ U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
   TCPSocketSend(sock, buf, sizeof(buf));
 }
 
-U0 SendTerminalType(I64 sock, U8 *term_type) {
-  I64 term_type_len = StrLen(term_type);
-  U8 buf[6 + StrLen(term_type)];
+U0 SendTerminalType(I64 sock, U8 *terminal_type) {
+  U8 response[256];
+  I64 len = StrLen(terminal_type);
 
-  buf[0] = 0xFF; // IAC
-  buf[1] = 0xFA; // SB
-  buf[2] = 0x18; // Terminal Type
-  buf[3] = 0x00; // IS
-  MemCopy(buf + 4, term_type, term_type_len); // Copy terminal type string
-  buf[4 + term_type_len] = 0xFF; // IAC
-  buf[5 + term_type_len] = 0xF0; // SE
+  response[0] = 0xFF; // IAC
+  response[1] = 0xFA; // SB
+  response[2] = 0x18; // TERMINAL TYPE
+  response[3] = 0x00; // IS
+  MemCopy(response + 4, terminal_type, len);
+  response[len + 4] = 0xFF; // IAC
+  response[len + 5] = 0xF0; // SE
 
-  TCPSocketSend(sock, buf, 6 + term_type_len);
+  TCPSocketSend(sock, response, len + 6);
 }
 
 U0 TelnetClient(U8 *host, U16 port) {
@@ -106,49 +110,36 @@ U0 TelnetClient(U8 *host, U16 port) {
           U8 response[3];
           response[0] = 0xFF; // IAC
 
-          // Check if the negotiation code is DO or DONT
-        //   if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
-        //     switch (option_code) {
-        //       case 0x01: // Echo
-        //         response[1] = (negotiation_code == 0xFD) ? 0xFB : 0xFC; // WILL if DO, WONT if DONT
-        //         break;
-        //       case 0x03: // Suppress Go Ahead
-        //         response[1] = (negotiation_code == 0xFD) ? 0xFB : 0xFC; // WILL if DO, WONT if DONT
-        //         break;
-        //       case 0x18: // Terminal Type
-        //         if (negotiation_code == 0xFD) {
-        //           response[1] = 0xFB; // WILL
-        //           TCPSocketSend(sock, response, 3);
-        //           SendTerminalType(sock, "ANSI");
-        //           ptr += 3;
-        //           continue:
-        //         } else {
-        //           response[1] = 0xFC; // WONT
-        //         }
-        //         break;
-        //       default:
-        //         response[1] = 0xFC; // WONT
-        //         break;
-        //     }
-        //   } else { // Else, assume the negotiation code is WILL or WONT
-        //     response[1] = 0xFE; // DONT
-        //   }
-
-          // Check if the negotiation code is DO or DONT
-          if (negotiation_code == 0xFD && option_code == 0x18) {
-            response[1] = 0xFB; // WILL
-            TCPSocketSend(sock, response, 3);
-            // doesn't seem to work
-            SendTerminalType(sock, "ANSI");
-            SendWindowSize(sock, 40, 80);
-          } else if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
-            response[1] = 0xFC; // WONT
-          } else { // Else, assume the negotiation code is WILL or WONT
+          if (negotiation_code == 0xFD || negotiation_code == 0xFE) { // DO or DONT
+            if (option_code == 0x01) { // Echo
+              if (negotiation_code == 0xFD) {
+                response[1] = 0xFB; // WILL
+              } else {
+                response[1] = 0xFC; // WONT
+              }
+            } else if (option_code == 0x03) { // Suppress Go Ahead
+              if (negotiation_code == 0xFD) {
+                response[1] = 0xFB; // WILL
+              } else {
+                response[1] = 0xFC; // WONT
+              }
+            } else if (option_code == 0x18) { // Terminal Type
+              if (negotiation_code == 0xFD) {
+                response[1] = 0xFB; // WILL
+                TCPSocketSend(sock, response, 3);
+                SendTerminalType(sock, "ANSI");
+                ptr += 3;
+              } else {
+                response[1] = 0xFC; // WONT
+              }
+            } else {
+              response[1] = 0xFC; // WONT
+            }
+          } else { // WILL or WONT
             response[1] = 0xFE; // DONT
           }
 
           response[2] = option_code;
-
           TCPSocketSend(sock, response, 3);
           ptr += 3;
         } else if (*ptr == 0x1B) {
@@ -172,24 +163,17 @@ U0 TelnetClient(U8 *host, U16 port) {
               } else if (*ptr == 'H' || *ptr == 'J' || *ptr == 'K' ) {
                 ptr++; // Move past the current character
                 // Process color codes
-                // if (ansi_code >= 30 && ansi_code <= 37) {
-                //   // Set foreground color
-                //   U8 color_buf[16];
-                //   GetColorString(ansi_code - 30, color_buf);
-                //   Print(color_buf);
-                // } else if (ansi_code >= 40 && ansi_code <= 47) {
-                //   // Set background color
-                //   U8 color_buf[16];
-                //   GetColorString(ansi_code - 40, color_buf);
-                //   Print(color_buf);
-                // }
-                I64 zeal_color = 7; // Default color
                 if (ansi_code >= 30 && ansi_code <= 37) {
-                  zeal_color = ansi_code - 30;
+                  // Set foreground color
+                  U8 color_buf_fg[16];
+                  GetColorString(ansi_code - 30, color_buf_fg);
+                  Print(color_buf_fg);
+                } else if (ansi_code >= 40 && ansi_code <= 47) {
+                  // Set background color
+                  U8 color_buf_bg[16];
+                  GetColorString(ansi_code - 40, color_buf_bg);
+                  Print(color_buf_bg);
                 }
-                U8 color_string[16];
-                GetColorString(zeal_color, color_string);
-				"%s", color_string;
                 // End of the escape sequence
                 break;
               }  else if (*ptr == 'C') {
@@ -236,7 +220,7 @@ U0 TelnetClient(U8 *host, U16 port) {
           }
         } else {
           *line++ = ch;
-		  "%c", ch;
+          "%c", ch;
         }
       }
       *line++ = '\r';
