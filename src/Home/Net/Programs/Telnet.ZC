@@ -1,0 +1,73 @@
+// Telnet client for ZealOS by y4my4m 2023
+// Public Domain
+
+#define TELNET_PORT 23
+#define BUF_SIZE 512
+
+I64 TelnetOpen(U8 *host, U16 port) {
+  I64 sock;
+
+  if (host == NULL) {
+    return -1;
+  }
+
+  sock = TCPConnectionCreate(host, port);
+  if (sock <= 0) {
+    PrintErr("Failed to connect to %s:%d\n", host, port);
+    return sock;
+  }
+
+  return sock;
+}
+
+U0 TelnetClient(U8 *host, U16 port) {
+  I64 sock, bytes_received;
+  U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE];
+
+  sock = TelnetOpen(host, port);
+  if (sock <= 0) {
+    return;
+  }
+
+  "Connected to %s:%d.\n", host, port;
+
+  while (1) {
+    bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
+    if (bytes_received > 0) {
+      buffer[bytes_received] = '\0';
+      "Received: %s\n", buffer;
+
+      // Prompt user for input and send it to the remote host
+      "Enter your choice: ";
+      StrGet(input_buffer, BUF_SIZE - 1);
+      input_buffer[StrLen(input_buffer)] = '\r';
+      input_buffer[StrLen(input_buffer) + 1] = '\n';
+      TCPSocketSend(sock, input_buffer, StrLen(input_buffer) + 2);
+    } else {
+      "Error: Connection closed by the remote host.\n";
+      break;
+    }
+  }
+
+  TCPSocketClose(sock);
+  "Telnet connection closed.\n";
+}
+
+class CHostForm {
+  U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
+  U16 port format "A=\"Port:%d\"";
+};
+
+U0 TelnetPrompt() {
+  CHostForm form;
+
+  form.host[0] = 0;
+  form.port = TELNET_PORT;
+  if (PopUpForm(&form)) {
+    TelnetClient(form.host, form.port);
+  }
+}
+
+public U0 Telnet(U8 *hostname, U16 port = TELNET_PORT) {
+  TelnetClient(hostname, port);
+}
