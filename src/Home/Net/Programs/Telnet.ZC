@@ -64,34 +64,32 @@ U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
 }
 
 U0 SendTerminalType(I64 sock, U8 *term_type) {
+  I64 term_type_len = StrLen(term_type);
   U8 buf[6 + StrLen(term_type)];
 
   buf[0] = 0xFF; // IAC
   buf[1] = 0xFA; // SB
   buf[2] = 0x18; // Terminal Type
   buf[3] = 0x00; // IS
-  StrCopy(buf + 4, term_type);
-  buf[4 + StrLen(term_type)] = 0xFF; // IAC
-  buf[5 + StrLen(term_type)] = 0xF0; // SE
+  MemCopy(buf + 4, term_type, term_type_len); // Copy terminal type string
+  buf[4 + term_type_len] = 0xFF; // IAC
+  buf[5 + term_type_len] = 0xF0; // SE
 
-  TCPSocketSend(sock, buf, sizeof(buf));
+  TCPSocketSend(sock, buf, 6 + term_type_len);
 }
 
 U0 TelnetClient(U8 *host, U16 port) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
-  Bool force_disconnect;
+  Bool force_disconnect = FALSE;
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
     return;
   }
 
-  SendWindowSize(sock, 24, 80); // Send default window size of 24 rows and 80 columns
-
   "Connected to %s:%d.\n", host, port;
 
-  force_disconnect = FALSE;
   while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
     if (bytes_received > 0) {
@@ -113,6 +111,7 @@ U0 TelnetClient(U8 *host, U16 port) {
             response[1] = 0xFB; // WILL
             TCPSocketSend(sock, response, 3);
             SendTerminalType(sock, "ANSI");
+            SendWindowSize(sock, 40, 80); // default window size is normally 24 rows and 80 columns
           } else if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
             response[1] = 0xFC; // WONT
           } else { // Else, assume the negotiation code is WILL or WONT
@@ -138,9 +137,14 @@ U0 TelnetClient(U8 *host, U16 port) {
               // Process ansi_code
               if (*ptr == ';') {
                 ptr++; // Move to next part of the sequence
-              } else if (*ptr == 'm' || *ptr == 'H' || *ptr == 'J' || *ptr == 'K' || *ptr == 'C') {
+              } else if (*ptr == 'm' || *ptr == 'H' || *ptr == 'J' || *ptr == 'K' ) {
                 ptr++; // Move past the current character
                 break; // End of the escape sequence
+              } else if (*ptr == 'C') {
+                // Custom 'C' escape code for centering text
+                // TODO: Handle the centering here
+                ptr++;
+                break;
               } else if (*ptr == '?') {
                 ptr++; // Skip the '?'
               } else if (*ptr == 'h' || *ptr == 'l') {
@@ -159,7 +163,7 @@ U0 TelnetClient(U8 *host, U16 port) {
       }
 
       "\n";
-      Sleep(500); // Add a 200 ms delay
+      Sleep(500); // Add a 500 ms delay
       // Prompt user for input and send it to the remote host
       "Enter your choice: ";
 
