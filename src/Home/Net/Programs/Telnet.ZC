@@ -64,7 +64,7 @@ U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
   buf[7] = 0xFF; // IAC
   buf[8] = 0xF0; // SE
 
-  TCPSocketSend(sock, buf, sizeof(buf));
+  TCPSocketSendString(sock, buf);
 }
 
 U0 SendTerminalType(I64 sock, U8 *terminal_type) {
@@ -72,14 +72,12 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   I64 len = StrLen(terminal_type);
 
   response[0] = 0xFF; // IAC
-  response[1] = 0xFA; // SB
-  response[2] = 0x18; // TERMINAL TYPE
-  response[3] = 0x00; // IS
-  MemCopy(response + 4, terminal_type, len);
-  response[len + 4] = 0xFF; // IAC
-  response[len + 5] = 0xF0; // SE
+  response[1] = 0x1F; // TERMINAL TYPE
+  response[2] = 0x00; // IS
+  MemCopy(response + 3, terminal_type, len);
 
-  TCPSocketSend(sock, response, len + 6);
+  response[len + 3] = '\0';
+  TCPSocketSendString(sock, response);
 }
 
 U0 TelnetClient(U8 *host, U16 port) {
@@ -126,7 +124,9 @@ U0 TelnetClient(U8 *host, U16 port) {
             } else if (option_code == 0x18) { // Terminal Type
               if (negotiation_code == 0xFD) {
                 response[1] = 0xFB; // WILL
-                TCPSocketSend(sock, response, 3);
+                response[2] = option_code;
+                response[3] = '\0';
+                TCPSocketSendString(sock, response);
                 SendTerminalType(sock, "ANSI");
                 ptr += 3;
               } else {
@@ -140,7 +140,8 @@ U0 TelnetClient(U8 *host, U16 port) {
           }
 
           response[2] = option_code;
-          TCPSocketSend(sock, response, 3);
+          response[3] = '\0';
+          TCPSocketSendString(sock, response);
           ptr += 3;
         } else if (*ptr == 0x1B) {
           // ANSI escape sequence
@@ -167,12 +168,14 @@ U0 TelnetClient(U8 *host, U16 port) {
                   // Set foreground color
                   U8 color_buf_fg[16];
                   GetColorString(ansi_code - 30, color_buf_fg);
-                  Print(color_buf_fg);
+                  // Print(color_buf_fg);
+                  "%s", color_buf_fg;
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
                   U8 color_buf_bg[16];
                   GetColorString(ansi_code - 40, color_buf_bg);
-                  Print(color_buf_bg);
+                  // Print(color_buf_bg);
+                  "%s", color_buf_bg;
                 }
                 // End of the escape sequence
                 break;
