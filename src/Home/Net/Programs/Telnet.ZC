@@ -38,11 +38,11 @@ U0 GetColorString(I64 color_code, U8 *buf) {
     case 0: StrCopy(buf, "$$BLACK$$"); break;
     case 1: StrCopy(buf, "$$RED$$"); break;
     case 2: StrCopy(buf, "$$GREEN$$"); break;
-    case 3: StrCopy(buf, "$$YELLOW$$"); break;
+    case 3: StrCopy(buf, "$$BROWN$$"); break; // ANSI yellow is mapped to ZealOS brown
     case 4: StrCopy(buf, "$$BLUE$$"); break;
     case 5: StrCopy(buf, "$$MAGENTA$$"); break;
     case 6: StrCopy(buf, "$$CYAN$$"); break;
-    case 7: StrCopy(buf, "$$WHITE$$"); break;
+    case 7: StrCopy(buf, "$$GREY$$"); break; // ANSI white is mapped to ZealOS grey
     default: StrCopy(buf, ""); break; // Default to empty string if an invalid color code is given
   }
 }
@@ -95,7 +95,7 @@ U0 TelnetClient(U8 *host, U16 port) {
     if (bytes_received > 0) {
       buffer[bytes_received] = '\0';
 
-      // Basic Telnet protocol parser: Ignore negotiation sequences
+      // Basic Telnet protocol parser
       ptr = buffer;
       while (*ptr) {
         if (*ptr == 0xFF) { // Telnet negotiation sequence
@@ -107,11 +107,40 @@ U0 TelnetClient(U8 *host, U16 port) {
           response[0] = 0xFF; // IAC
 
           // Check if the negotiation code is DO or DONT
+        //   if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
+        //     switch (option_code) {
+        //       case 0x01: // Echo
+        //         response[1] = (negotiation_code == 0xFD) ? 0xFB : 0xFC; // WILL if DO, WONT if DONT
+        //         break;
+        //       case 0x03: // Suppress Go Ahead
+        //         response[1] = (negotiation_code == 0xFD) ? 0xFB : 0xFC; // WILL if DO, WONT if DONT
+        //         break;
+        //       case 0x18: // Terminal Type
+        //         if (negotiation_code == 0xFD) {
+        //           response[1] = 0xFB; // WILL
+        //           TCPSocketSend(sock, response, 3);
+        //           SendTerminalType(sock, "ANSI");
+        //           ptr += 3;
+        //           continue:
+        //         } else {
+        //           response[1] = 0xFC; // WONT
+        //         }
+        //         break;
+        //       default:
+        //         response[1] = 0xFC; // WONT
+        //         break;
+        //     }
+        //   } else { // Else, assume the negotiation code is WILL or WONT
+        //     response[1] = 0xFE; // DONT
+        //   }
+
+          // Check if the negotiation code is DO or DONT
           if (negotiation_code == 0xFD && option_code == 0x18) {
             response[1] = 0xFB; // WILL
             TCPSocketSend(sock, response, 3);
+            // doesn't seem to work
             SendTerminalType(sock, "ANSI");
-            SendWindowSize(sock, 40, 80); // default window size is normally 24 rows and 80 columns
+            SendWindowSize(sock, 40, 80);
           } else if (negotiation_code == 0xFD || negotiation_code == 0xFE) {
             response[1] = 0xFC; // WONT
           } else { // Else, assume the negotiation code is WILL or WONT
@@ -137,10 +166,33 @@ U0 TelnetClient(U8 *host, U16 port) {
               // Process ansi_code
               if (*ptr == ';') {
                 ptr++; // Move to next part of the sequence
-              } else if (*ptr == 'm' || *ptr == 'H' || *ptr == 'J' || *ptr == 'K' ) {
+              } else if (*ptr == 'm' ) {
+                ptr++; 
+                break;
+              } else if (*ptr == 'H' || *ptr == 'J' || *ptr == 'K' ) {
                 ptr++; // Move past the current character
-                break; // End of the escape sequence
-              } else if (*ptr == 'C') {
+                // Process color codes
+                // if (ansi_code >= 30 && ansi_code <= 37) {
+                //   // Set foreground color
+                //   U8 color_buf[16];
+                //   GetColorString(ansi_code - 30, color_buf);
+                //   Print(color_buf);
+                // } else if (ansi_code >= 40 && ansi_code <= 47) {
+                //   // Set background color
+                //   U8 color_buf[16];
+                //   GetColorString(ansi_code - 40, color_buf);
+                //   Print(color_buf);
+                // }
+                I64 zeal_color = 7; // Default color
+                if (ansi_code >= 30 && ansi_code <= 37) {
+                  zeal_color = ansi_code - 30;
+                }
+                U8 color_string[16];
+                GetColorString(zeal_color, color_string);
+				"%s", color_string;
+                // End of the escape sequence
+                break;
+              }  else if (*ptr == 'C') {
                 // Custom 'C' escape code for centering text
                 // TODO: Handle the centering here
                 ptr++;
@@ -184,7 +236,7 @@ U0 TelnetClient(U8 *host, U16 port) {
           }
         } else {
           *line++ = ch;
-		      "%c", ch;
+		  "%c", ch;
         }
       }
       *line++ = '\r';
