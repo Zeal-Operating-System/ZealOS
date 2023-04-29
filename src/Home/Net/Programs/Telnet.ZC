@@ -50,6 +50,7 @@ U0 GetColorString(I64 color_code, U8 *buf) {
 U0 TelnetClient(U8 *host, U16 port) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
+  Bool force_disconnect;
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
@@ -58,7 +59,8 @@ U0 TelnetClient(U8 *host, U16 port) {
 
   "Connected to %s:%d.\n", host, port;
 
-  while (1) {
+  force_disconnect = FALSE;
+  while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
     if (bytes_received > 0) {
       buffer[bytes_received] = '\0';
@@ -98,8 +100,9 @@ U0 TelnetClient(U8 *host, U16 port) {
           ptr++;
         }
       }
-      "\n";
 
+      "\n";
+      Sleep(200); // Add a 200 ms delay
       // Prompt user for input and send it to the remote host
       "Enter your choice: ";
 
@@ -109,14 +112,22 @@ U0 TelnetClient(U8 *host, U16 port) {
         if (ch == '\r' || ch == '\n') {
           break;
         }
+        if (ch == 27) { // ESC key
+          force_disconnect = TRUE;
+          break;
+        }
         input_buffer[input_len++] = ch;
       }
       input_buffer[input_len] = '\0';
 
-      "Sending: %s\n", input_buffer; // Debugging line
-      input_buffer[input_len++] = '\r';
-      input_buffer[input_len++] = '\n';
-      TCPSocketSend(sock, input_buffer, input_len);
+      if (!force_disconnect) {
+        SysLog("Sending: %s\n", input_buffer); // Debugging line
+        input_buffer[input_len++] = '\r';
+        input_buffer[input_len++] = '\n';
+        TCPSocketSend(sock, input_buffer, input_len);
+      } else {
+        "Force disconnecting...\n";
+      }
     } else {
       "Error: Connection closed by the remote host.\n";
       break;
@@ -140,8 +151,4 @@ U0 TelnetPrompt() {
   if (PopUpForm(&form)) {
     TelnetClient(form.host, form.port);
   }
-}
-
-public U0 Telnet(U8 *hostname, U16 port = TELNET_PORT) {
-  TelnetClient(hostname, port);
 }
