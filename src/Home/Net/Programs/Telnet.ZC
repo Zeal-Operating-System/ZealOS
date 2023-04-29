@@ -32,6 +32,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
 //     StrCopy(buf, ""); // Default to empty string if an invalid color code is given
 //   }
 // }
+
 U0 GetColorString(I64 color_code, U8 *buf) {
   switch (color_code) {
     case 0: StrCopy(buf, "$$BLACK$$"); break;
@@ -73,17 +74,23 @@ U0 TelnetClient(U8 *host, U16 port) {
           ptr++;
           if (*ptr == '[') {
             ptr++;
-            I64 ansi_code = 0;
-            while (*ptr >= '0' && *ptr <= '9') {
-              ansi_code = ansi_code * 10 + (*ptr - '0');
-              ptr++;
+            I64 ansi_code;
+            while (1) {
+              ansi_code = 0;
+              while (*ptr >= '0' && *ptr <= '9') {
+                ansi_code = ansi_code * 10 + (*ptr - '0');
+                ptr++;
+              }
+              // Process ansi_code
+              if (*ptr == ';') {
+                ptr++; // Move to next part of the sequence
+              } else if (*ptr == 'm') {
+                ptr++; // Move past 'm'
+                break; // End of the escape sequence
+              } else {
+                break; // Invalid character, exit loop
+              }
             }
-            // Convert ANSI color code to ZealOS color
-            I64 templeos_color = 7; // Default color
-            if (ansi_code >= 30 && ansi_code <= 37) {
-              templeos_color = ansi_code - 30;
-            }
-            // GrColor(templeos_color);
           }
         } else {
           // Print the received character
