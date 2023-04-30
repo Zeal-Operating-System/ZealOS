@@ -261,8 +261,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
       if (!skip_input)
       {
-        // should have a timer that checks if data is being received
-        // look at the Clocks graphics demo (count.jiffies) maybe
         Sleep(200);
         // Prompt user for input and send it to the remote host
         "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
