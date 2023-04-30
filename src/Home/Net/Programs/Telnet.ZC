@@ -3,6 +3,25 @@
 
 #define TELNET_PORT 23
 #define BUF_SIZE 512
+#define TIMEOUT_DURATION 5000
+
+Bool skip_input = FALSE;
+Bool WaitForInputOrTimeout(I64 timeout_duration) {
+  I64 start_jiffies = counts.jiffies;
+  I64 elapsed_jiffies;
+  U8 ch;
+
+  while (TRUE) {
+    elapsed_jiffies = counts.jiffies - start_jiffies;
+    if (elapsed_jiffies >= timeout_duration) {
+      return TRUE; // Timeout
+    }
+    ch = CharGet(, FALSE);
+    if (ch != CH_SHIFT_ESC) {
+      return FALSE; // needed?
+    }
+  }
+}
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -17,7 +36,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   
   return sock;
 }
@@ -75,7 +94,7 @@ U0 HandleControlCodes(U8 ch) {
     switch (ch) {
       case 0: // NUL (Null)
         // Typically ignored
-        break;
+		break;
       case 7: // BEL (Bell)
         // Make a beep sound or flash the screen
         Beep;
@@ -96,15 +115,15 @@ U0 HandleControlCodes(U8 ch) {
         DocClear;
         break;
       case 13: // CR (Carriage Return)
-        "\r";
-		break;
+        "\r\n\0";
+        skip_input = TRUE;
+        break;
       case 14: // SO (Shift Out)
         // Switch to an alternate character set
         break;
       case 15: // SI (Shift In)
         // Switch back to the default character set
         break;
-      // Add cases for other control codes as needed
       default:
         break;
     }
@@ -118,7 +137,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
-  // Bool negotiate = FALSE;
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
@@ -130,7 +148,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
     if (bytes_received > 0) {
-      buffer[bytes_received] = '\0';
+      buffer[bytes_received] = '\0';
 
       // Basic Telnet protocol parser
       ptr = buffer;
@@ -239,44 +257,49 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
       }
+      skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
 
-      // should have a timer that checks if data is being received
-      // look at the Clocks graphics demo (count.jiffies) maybe
-      Sleep(1000);
-      // Prompt user for input and send it to the remote host
-      "\nEnter your choice: ";
+      if (!skip_input)
+      {
+        // should have a timer that checks if data is being received
+        // look at the Clocks graphics demo (count.jiffies) maybe
+        Sleep(200);
+        // Prompt user for input and send it to the remote host
+        "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
-      U8 *line = input_buffer;
-      while (1) {
-        ch = CharGet(, FALSE);
-        if (ch == '\r' || ch == '\n') {
-          break;
-        }
-        if (ch == CH_SHIFT_ESC) { // ESC key
-          force_disconnect = TRUE;
-          break;
-        }
-        if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
-          if (line != input_buffer) {
-            line--; // Move the pointer back
-            "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
+        U8 *line = input_buffer;
+        while (1) {
+          ch = CharGet(, FALSE);
+          if (ch == '\r' || ch == '\n') {
+            break;
           }
+          if (ch == CH_SHIFT_ESC) { // ESC key
+            force_disconnect = TRUE;
+            break;
+          }
+          if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
+            if (line != input_buffer) {
+              line--; // Move the pointer back
+              "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
+            }
+          } else {
+            *line++ = ch;
+            HandleControlCodes(ch);
+          }
+        }
+        *line++ = '\r';
+        *line++ = '\n';
+        *line = '\0';
+        
+        if (!force_disconnect) {
+          // SysLog("Sending: %s\n", input_buffer); // Debugging line
+          TCPSocketSendString(sock, line);
         } else {
-          *line++ = ch;
-          HandleControlCodes(ch);
+          "Force disconnecting...\n";
+          break;
         }
       }
-      *line++ = '\r';
-      *line++ = '\n';
-      *line = '\0';
-      
-      if (!force_disconnect) {
-        // SysLog("Sending: %s\n", input_buffer); // Debugging line
-        TCPSocketSendString(sock, line);
-		  } else {
-        "Force disconnecting...\n";
-        break;
-      }
+      skip_input = FALSE;
     } else {
       "Error: Connection closed by the remote host.\n";
       break;
@@ -305,6 +328,6 @@ U0 TelnetPrompt() {
 
 // Dev auto-connect to test server
 // Telnet("mbrserver.com");
-// Telnet("freechess.org");
-Telnet("dura-bbs.net", 6359);
+Telnet("freechess.org");
+//Telnet("dura-bbs.net", 6359);
 //Telnet("darkrealms.ca");
