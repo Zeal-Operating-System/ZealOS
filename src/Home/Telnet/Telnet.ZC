@@ -115,7 +115,7 @@ U0 HandleControlCodes(U8 ch) {
         DocClear;
         break;
       case 13: // CR (Carriage Return)
-        "\r\n\0";
+        // "\r\n\0";
         skip_input = TRUE;
         break;
       case 14: // SO (Shift Out)
@@ -128,7 +128,8 @@ U0 HandleControlCodes(U8 ch) {
         break;
     }
   } else {
-    "%c", ch;
+    // dont print for now
+    // "%c", ch;
   }
 }
 
@@ -137,6 +138,19 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
+
+  // would be nice to resize to 25x80
+  // CTask *task;
+  // task=User;
+  // TaskWait(task);
+  // task->border_src=BDS_CONST;
+  // task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
+  // task->text_attr  =LTGRAY<<4+BLUE;
+  // task->win_inhibit= WIG_TASK_DEFAULT-WIF_SELF_BORDER;
+  // WinHorz(Fs->win_left,Fs->win_right,task);
+  // WinVert(Fs->win_top,(Fs->win_top+Fs->win_bottom)>>2-1,task);
+  // WinVert(task->win_bottom+3,Fs->win_bottom);
+  // WinToTop(Fs);
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
@@ -247,6 +261,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++; // Skip 'h' or 'l'
                 break;
               } else {
+                ptr++;
                 break; // Invalid character, exit loop
               }
             }
@@ -257,6 +272,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
       }
+
       skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
 
       if (!skip_input)
@@ -326,6 +342,9 @@ U0 TelnetPrompt() {
 
 // Dev auto-connect to test server
 // Telnet("mbrserver.com");
-Telnet("freechess.org");
-//Telnet("dura-bbs.net", 6359);
-//Telnet("darkrealms.ca");
+// Telnet("freechess.org");
+// Telnet("dura-bbs.net", 6359);
+// Telnet("darkrealms.ca");
+
+// ZealBBS dev server
+Telnet("localhost", 8888);

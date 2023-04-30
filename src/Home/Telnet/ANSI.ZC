@@ -1,0 +1,129 @@
+#define MODE_TEXT 0
+#define MODE_ESCAPE 1
+#define MODE_CSI 2
+
+#define CMD_RESET 0
+#define CMD_SLOW_BLINK 5
+#define CMD_FAST_BLINK 6
+#define CMD_FG 3
+#define CMD_BG 4
+#define CMB_B_FG 9
+#define CMD_B_BG 1
+
+U0 PrintANSI(U8 *str, I64 len=-1) {
+	U64 state = MODE_TEXT;
+	U64 cmd = -1;
+	if (len < 0) len = StrLen(str);
+	U64 i;
+	for (i=0; i<len; i++) {
+	start_iter:
+		U64 ch = str[i];
+
+		if (state != MODE_TEXT && ch == 'm') {
+			state = MODE_TEXT;
+			goto next_iter;
+		}
+
+		switch (state) {
+		case MODE_TEXT:
+			if (ch == 0x1b) {
+				state = MODE_ESCAPE;
+				goto next_iter;
+			}
+			PutChars(ch);
+			break;
+		case MODE_ESCAPE:
+			if (ch == '[') {
+				state = MODE_CSI;
+				goto next_iter;
+			}
+			break;
+		case MODE_CSI:
+		csi:
+			if (ch < '0' || ch > '9')
+				throw('ICSIC');
+
+			U64 code = ch - '0';
+			#define next_ch { if (i+1 >= len) { throw("Expected character"); } ch = str[++i]; code = ch - '0'; }
+
+			switch (code) {
+			case CMD_RESET:
+				"$$FG$$$$BG$$";
+				break;
+			case CMD_SLOW_BLINK:
+			case CMD_FAST_BLINK:
+				// FIXME: Add blink
+				break;
+      case 'A': // Cursor Up
+      case 'B': // Cursor Down
+      case 'C': // Cursor Forward (Right)
+      case 'D': // Cursor Backward (Left)
+      case 'E': // Cursor Next Line
+      case 'F': // Cursor Previous Line
+      case 'G': // Cursor Horizontal Absolute
+      case 'H': // Cursor Position (default: top-left corner)
+      case 'f': // Same as 'H'
+      case 'J': // Erase Display
+        ptr++;
+        DocClear;
+        break;
+      case 'K': // Erase Line
+      case 'S': // Scroll Up
+      case 'T': // Scroll Down
+      case '?': // DEC Private Mode
+      case 'h': // Set Mode
+      case 'l': // Reset Mode
+      case 'c': // Device Attributes (Request)
+			case CMD_FG:
+				next_ch;
+
+				switch (code) {
+          case 0: "$$BLACK$$";   break;
+          case 1: "$$RED$$";     break;
+          case 2: "$$GREEN$$";   break;
+          case 3: "$$YELLOW$$";  break;
+          case 4: "$$BLUE$$";    break;
+          case 5: "$$PURPLE$$"; break;
+          case 6: "$$CYAN$$";    break;
+          case 7: "$$WHITE$$";   break;
+          // FIXME: Handle 8
+          case 9: "$$FG$$";      break;
+				}
+				break;
+			case CMD_BG:
+				next_ch;
+
+				switch (code) {
+          case 0: "$$BG,BLACK$$";   break;
+          case 1: "$$BG,RED$$";     break;
+          case 2: "$$BG,GREEN$$";   break;
+          case 3: "$$BG,YELLOW$$";  break;
+          case 4: "$$BG,BLUE$$";    break;
+          case 5: "$$BG,PURPLE$$";  break;
+          case 6: "$$BG,CYAN$$";    break;
+          case 7: "$$BG,WHITE$$";   break;
+          // FIXME: Handle 8
+          case 9: "$$BG$$";         break;
+				}
+				break;
+			default:
+				"\nCOde: %d\n", code;
+				throw('ICSI');
+			}
+
+			next_ch;
+			if (ch == ';') {
+				next_ch;
+				goto csi;
+			}
+			goto start_iter;
+			break;
+		default:
+			throw('ISTE');
+		}
+
+	next_iter:
+	}
+}
+
+// PrintANSI("He\x1b[33;45mllo\x1b[0m yoooo\n");
