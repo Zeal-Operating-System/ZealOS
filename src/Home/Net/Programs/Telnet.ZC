@@ -70,6 +70,50 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   TCPSocketSendString(sock, response);
 }
 
+U0 HandleControlCodes(U8 ch) {
+  if (ch < 32) { // ASCII code below 32 (control character)
+    switch (ch) {
+      case 0: // NUL (Null)
+        // Typically ignored
+        break;
+      case 7: // BEL (Bell)
+        // Make a beep sound or flash the screen
+        Beep;
+        break;
+      case 8: // BS (Backspace)
+        "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        break;
+      case 9: // HT (Horizontal Tab)
+        // Move the cursor to the next tab stop (typically 8 spaces)
+        break;
+      case 10: // LF (Line Feed)
+        "%c", ch;
+        break;
+      case 11: // VT (Vertical Tab)
+        // Move the cursor down one line
+        break;
+      case 12: // FF (Form Feed)
+        DocClear;
+        break;
+      case 13: // CR (Carriage Return)
+        "\r";
+		break;
+      case 14: // SO (Shift Out)
+        // Switch to an alternate character set
+        break;
+      case 15: // SI (Shift In)
+        // Switch back to the default character set
+        break;
+      // Add cases for other control codes as needed
+      default:
+        break;
+    }
+  } else {
+    "%c", ch;
+  }
+}
+
+
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
@@ -119,7 +163,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
                 SendTerminalType(sock, "ANSI");
-                SendWindowSize(sock, 40, 80);
+                // SendWindowSize(sock, 40, 80);
                 ptr += 3;
               } else {
                 response[1] = 0xFC; // WONT
@@ -133,7 +177,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
           response[2] = option_code;
           response[3] = '\0';
-          TCPSocketSendString(sock, response);
+          // TCPSocketSendString(sock, response);
           ptr += 3;
         } else if (*ptr == 0x1B) {
           // ANSI escape sequence
@@ -153,11 +197,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               } else if (*ptr == 'm') {
                 ptr++;
                 if (ansi_code >= 30 && ansi_code <= 37) {
-                  // Set foreground color
-                  Print("%s", AppendColorString(ansi_code - 30, buffer));
+                  //Set foreground color
+                  Print("%s", AppendColorString(ansi_code - 30, *ptr));
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
-                  Print("%s", AppendColorString(ansi_code - 40, buffer));
+                  Print("%s", AppendColorString(ansi_code - 40, *ptr));
                 }
                 break;
               } else if (*ptr == 'H') {
@@ -191,7 +235,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           }
         } else {
           // Print the received character
-          "%c", *ptr;
+          HandleControlCodes(*ptr);
           ptr++;
         }
       }
@@ -219,16 +263,16 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           }
         } else {
           *line++ = ch;
-          "%c", ch;
+          HandleControlCodes(ch);
         }
       }
       *line++ = '\r';
       *line++ = '\n';
       *line = '\0';
-
+      
       if (!force_disconnect) {
-        SysLog("Sending: %s\n", input_buffer); // Debugging line
-        TCPSocketSendString(sock, input_buffer);
+        // SysLog("Sending: %s\n", input_buffer); // Debugging line
+        TCPSocketSendString(sock, line);
 		  } else {
         "Force disconnecting...\n";
         break;
@@ -260,6 +304,7 @@ U0 TelnetPrompt() {
 }
 
 // Dev auto-connect to test server
-Telnet("mbrserver.com");
+// Telnet("mbrserver.com");
 // Telnet("freechess.org");
-// Telnet("dura-bbs.net", 6359);
+Telnet("dura-bbs.net", 6359);
+//Telnet("darkrealms.ca");
