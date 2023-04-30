@@ -38,7 +38,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
 // }
 
 U0 AppendColorString(I64 color_code, U8 *buf) {
-  SysLog("AppendColorString(%d, %p)\n", color_code, buf);
+  SysLog("AppendColorString(%d, %p) - Before: %s\n", color_code, buf, buf);
   switch (color_code) {
     case 0: CatPrint(buf, "$$BLACK$$"); break;
     case 1: CatPrint(buf, "$$RED$$"); break;
@@ -50,6 +50,7 @@ U0 AppendColorString(I64 color_code, U8 *buf) {
     case 7: CatPrint(buf, "$$GREY$$"); break; // ANSI white is mapped to ZealOS grey
     default: CatPrint(buf, ""); break; // Default to empty string if an invalid color code is given
   }
+  SysLog("AppendColorString(%d, %p) - After: %s\n", color_code, buf, buf);
 }
 
 U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
@@ -73,11 +74,14 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   I64 len = StrLen(terminal_type);
 
   response[0] = 0xFF; // IAC
-  response[1] = 0x1F; // TERMINAL TYPE
-  response[2] = 0x00; // IS
-  MemCopy(response + 3, terminal_type, len);
+  response[1] = 0xFA; // SB
+  response[2] = 0x18; // TERMINAL TYPE
+  response[3] = 0x00; // IS
+  MemCopy(response + 4, terminal_type, len);
 
-  response[len + 3] = '\0';
+  response[len + 4] = 0xFF; // IAC
+  response[len + 5] = 0xF0; // SE
+  response[len + 6] = '\0';
   TCPSocketSendString(sock, response);
 }
 
@@ -90,6 +94,8 @@ U0 TelnetClient(U8 *host, U16 port) {
   if (sock <= 0) {
     return;
   }
+  U8 test_color_string[BUF_SIZE] = "This is a $$RED$$test$$GREY$$ string with colors.";
+  "%s\n", test_color_string;
 
   "Connected to %s:%d.\n", host, port;
 
