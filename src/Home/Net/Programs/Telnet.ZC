@@ -17,40 +17,25 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-  // TODO: needed?
-	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
-	// TCPSocketSendString(sock, 0);
-
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+  
   return sock;
 }
 
-// U0 GetColorString(I64 color_code, U8 *buf) {
-//   static U8 *color_strings[] = {
-//     "$$BLACK$$", "$$RED$$", "$$GREEN$$", "$$YELLOW$$",
-//     "$$BLUE$$", "$$MAGENTA$$", "$$CYAN$$", "$$WHITE$$"
-//   };
-
-//   if (color_code >= 0 && color_code < 8) {
-//     StrCopy(buf, color_strings[color_code]);
-//   } else {
-//     StrCopy(buf, ""); // Default to empty string if an invalid color code is given
-//   }
-// }
-
 U0 AppendColorString(I64 color_code, U8 *buf) {
-  SysLog("AppendColorString(%d, %p) - Before: %s\n", color_code, buf, buf);
+  U8 *color;
   switch (color_code) {
-    case 0: CatPrint(buf, "$$BLACK$$"); break;
-    case 1: CatPrint(buf, "$$RED$$"); break;
-    case 2: CatPrint(buf, "$$GREEN$$"); break;
-    case 3: CatPrint(buf, "$$BROWN$$"); break; // ANSI yellow is mapped to ZealOS brown
-    case 4: CatPrint(buf, "$$BLUE$$"); break;
-    case 5: CatPrint(buf, "$$MAGENTA$$"); break;
-    case 6: CatPrint(buf, "$$CYAN$$"); break;
-    case 7: CatPrint(buf, "$$GREY$$"); break; // ANSI white is mapped to ZealOS grey
-    default: CatPrint(buf, ""); break; // Default to empty string if an invalid color code is given
+    case 0: color = "$$BLACK$$"; break;
+    case 1: color = "$$RED$$"; break;
+    case 2: color = "$$GREEN$$"; break;
+    case 3: color = "$$YELLOW$$"; break;
+    case 4: color = "$$BLUE$$"; break;
+    case 5: color = "$$MAGENTA$$"; break;
+    case 6: color = "$$CYAN$$"; break;
+    case 7: color = "$$WHITE$$"; break;
+    default: color = ""; break;
   }
-  SysLog("AppendColorString(%d, %p) - After: %s\n", color_code, buf, buf);
+  "%s%s$$FG$$", color, buf;
 }
 
 U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
@@ -85,19 +70,18 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   TCPSocketSendString(sock, response);
 }
 
-U0 TelnetClient(U8 *host, U16 port) {
+U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
+  // Bool negotiate = FALSE;
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
     return;
   }
-  U8 test_color_string[BUF_SIZE] = "This is a $$RED$$test$$GREY$$ string with colors.";
-  "%s\n", test_color_string;
 
-  "Connected to %s:%d.\n", host, port;
+  "$$BG,RED$$$$WHITE$$Connected to %s:%d.$$FG$$$$BG$$\n", host, port;
 
   while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
@@ -135,6 +119,7 @@ U0 TelnetClient(U8 *host, U16 port) {
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
                 SendTerminalType(sock, "ANSI");
+                SendWindowSize(sock, 40, 80);
                 ptr += 3;
               } else {
                 response[1] = 0xFC; // WONT
@@ -169,10 +154,10 @@ U0 TelnetClient(U8 *host, U16 port) {
                 ptr++;
                 if (ansi_code >= 30 && ansi_code <= 37) {
                   // Set foreground color
-                  AppendColorString(ansi_code - 30, buffer);
+                  Print("%s", AppendColorString(ansi_code - 30, buffer));
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
-                  AppendColorString(ansi_code - 40, buffer);
+                  Print("%s", AppendColorString(ansi_code - 40, buffer));
                 }
                 break;
               } else if (*ptr == 'H') {
@@ -181,6 +166,7 @@ U0 TelnetClient(U8 *host, U16 port) {
                 break;
               } else if (*ptr == 'J') {
                 // TODO: Handle screen clearing
+                DocClear;
                 ptr++;
                 break;
               } else if (*ptr == 'K') {
@@ -210,10 +196,11 @@ U0 TelnetClient(U8 *host, U16 port) {
         }
       }
 
-      "\n";
-      Sleep(500); // Add a 500 ms delay
+      // should have a timer that checks if data is being received
+      // look at the Clocks graphics demo (count.jiffies) maybe
+      Sleep(1000);
       // Prompt user for input and send it to the remote host
-      "Enter your choice: ";
+      "\nEnter your choice: ";
 
       U8 *line = input_buffer;
       while (1) {
@@ -221,7 +208,7 @@ U0 TelnetClient(U8 *host, U16 port) {
         if (ch == '\r' || ch == '\n') {
           break;
         }
-        if (ch == CH_ESC || ch == CH_SHIFT_ESC) { // ESC key
+        if (ch == CH_SHIFT_ESC) { // ESC key
           force_disconnect = TRUE;
           break;
         }
@@ -256,6 +243,7 @@ U0 TelnetClient(U8 *host, U16 port) {
   "Telnet connection closed.\n";
 }
 
+
 class CHostForm {
   U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
   U16 port format "A=\"Port:%d\"";
@@ -267,9 +255,11 @@ U0 TelnetPrompt() {
   form.host[0] = 0;
   form.port = TELNET_PORT;
   if (PopUpForm(&form)) {
-    TelnetClient(form.host, form.port);
+    Telnet(form.host, form.port);
   }
 }
 
 // Dev auto-connect to test server
-TelnetClient("mbrserver.com", 23);
+Telnet("mbrserver.com");
+// Telnet("freechess.org");
+// Telnet("dura-bbs.net", 6359);
