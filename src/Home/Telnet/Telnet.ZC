@@ -302,40 +302,40 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       U8 *line = input_buffer;
       U8 *end_of_line = line;
       while (1) {
-        switch (KeyGet(&sc))
-        {
-          case 0:
-            switch (sc.u8[0])
-            {
-              case SC_CURSOR_UP:
-                TCPSocketSendString(sock, "CU01");
-                SysLog("Cursor up");
-                break;
-              case SC_CURSOR_DOWN:
-                TCPSocketSendString(sock, "CD01");
-                SysLog("Cursor down");
-                break;
-              case SC_CURSOR_LEFT:
-                TCPSocketSendString(sock, "CB01");
-                SysLog("Cursor left");
-                if (line > input_buffer) {
-                  line--;
-                  "%c", 8;
-                }
-                break;
-              case SC_CURSOR_RIGHT:
-                SysLog("Cursor right");
-                TCPSocketSendString(sock, "CF01");
-                if (line < end_of_line) {
-                  "%c", *line++;
-                }
-                break;
-              default:
-                break;
-            }
-          default:
-            break;
-        }
+        // switch (KeyGet(&sc))
+        // {
+        //   case 0:
+        //     switch (sc.u8[0])
+        //     {
+        //       case SC_CURSOR_UP:
+        //         TCPSocketSendString(sock, "CU01");
+        //         SysLog("Cursor up");
+        //         break;
+        //       case SC_CURSOR_DOWN:
+        //         TCPSocketSendString(sock, "CD01");
+        //         SysLog("Cursor down");
+        //         break;
+        //       case SC_CURSOR_LEFT:
+        //         TCPSocketSendString(sock, "CB01");
+        //         SysLog("Cursor left");
+        //         if (line > input_buffer) {
+        //           line--;
+        //           "%c", 8;
+        //         }
+        //         break;
+        //       case SC_CURSOR_RIGHT:
+        //         SysLog("Cursor right");
+        //         TCPSocketSendString(sock, "CF01");
+        //         if (line < end_of_line) {
+        //           "%c", *line++;
+        //         }
+        //         break;
+        //       default:
+        //         break;
+        //     }
+        //   default:
+        //     break;
+        // }
         ch = CharGet(, FALSE);
         if (ch == '\r' || ch == '\n') {
           break;
@@ -366,6 +366,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         // TCPSocketSend(sock, line, 16);
       } else {
         "Force disconnecting...\n";
+        goto disconnect;
         break;
       }
     } else {
@@ -374,7 +375,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       break;
     }
   }
-
+disconnect:
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
 }
