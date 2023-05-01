@@ -2,7 +2,7 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 512
+#define BUF_SIZE 51200
 #define TIMEOUT_DURATION 5000
 
 Bool skip_input = FALSE;
@@ -43,7 +43,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
   return sock;
 }
 
-U0 AppendColorString(I64 color_code, U8 *buf) {
+U0 AppendColorString(I64 color_code) {
   U8 *color;
   switch (color_code) {
     case 0: color = "$$BLACK$$"; break;
@@ -51,12 +51,12 @@ U0 AppendColorString(I64 color_code, U8 *buf) {
     case 2: color = "$$GREEN$$"; break;
     case 3: color = "$$YELLOW$$"; break;
     case 4: color = "$$BLUE$$"; break;
-    case 5: color = "$$MAGENTA$$"; break;
+    case 5: color = "$$BROWN$$"; break;
     case 6: color = "$$CYAN$$"; break;
     case 7: color = "$$WHITE$$"; break;
     default: color = ""; break;
   }
-  "%s%s$$FG$$", color, buf;
+  "%s", color;
 }
 
 U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
@@ -135,6 +135,17 @@ U0 HandleControlCodes(U8 ch) {
   // skip_input = TRUE;
 }
 
+U0 HandleMCICode(U8 *ptr, I64 *index) {
+  U8 code[4];
+  MemCopy(code, ptr + *index, 3);
+  *index += 3;
+
+  if (StrCompare(code, "ET1") == 0) {
+    // Handle ET1 MCI code here
+  }
+  SysLog("MCI code: %s\n", code);
+  // Add support for other MCI codes if needed
+}
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len, sc = 0;
@@ -156,7 +167,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
     return;
   }
 
-  "$$BG,RED$$$$WHITE$$Connected$$FG$$$$BG$$\n"
+  "$$BG,RED$$$$WHITE$$Connected$$FG$$$$BG$$\n";
 
   while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
@@ -166,7 +177,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       // Basic Telnet protocol parser
       ptr = buffer;
       while (*ptr) {
-        SysLog("BUF: 0x%02X\n", *ptr);
+        // SysLog("BUF: 0x%02X\n", *ptr);
         if (*ptr == 0xFF) { // Telnet negotiation sequence
           U8 negotiation_code = *(ptr + 1);
           U8 option_code = *(ptr + 2);
@@ -194,6 +205,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[2] = option_code;
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
+                Sleep(2000);
                 SendTerminalType(sock, "ANSI");
                 // SendWindowSize(sock, 25, 80);
                 ptr += 3;
@@ -231,10 +243,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++;
                 if (ansi_code >= 30 && ansi_code <= 37) {
                   //Set foreground color
-                  Print("%s", AppendColorString(ansi_code - 30, *ptr));
+                  "%s", AppendColorString(ansi_code - 30);
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
-                  Print("%s", AppendColorString(ansi_code - 40, *ptr));
+                  "%s", AppendColorString(ansi_code - 40);
+                }
+                else {
+                  "$$BG$$$$FG$$";
                 }
                 break;
               } else if (*ptr == 'H') {
@@ -267,6 +282,15 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               }
             }
           }
+          else if (*ptr == ';') {
+            SysLog("; event\n");
+            ptr++;
+          }
+        } else if (*ptr == '%' || *ptr == '|') {
+          // MCI code detected
+          ptr++;
+          HandleMCICode(ptr, &ptr);
+          ptr++;
         } else {
           // Print the received character
           HandleControlCodes(*ptr);
@@ -275,83 +299,84 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       }
 
       // skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
-      if (!skip_input)
-      {
-        Sleep(200);
-        // Prompt user for input and send it to the remote host
-        "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
+      // if (!skip_input)
+      // {
+      // Sleep(200);
+      // Prompt user for input and send it to the remote host
+      "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
-        U8 *line = input_buffer;
-        U8 *end_of_line = line;
-        while (1) {
-          // switch (KeyGet(&sc))
-          // {
-          //   case 0:
-          //     switch (sc.u8[0])
-          //     {
-          //       case SC_CURSOR_UP:
-          //         TCPSocketSendString(sock, "CU01");
-          //         SysLog("Cursor up");
-          //         break;
-          //       case SC_CURSOR_DOWN:
-          //         TCPSocketSendString(sock, "CD01");
-          //         SysLog("Cursor down");
-          //         break;
-          //       case SC_CURSOR_LEFT:
-          //         TCPSocketSendString(sock, "CB01");
-          //         SysLog("Cursor left");
-          //         if (line > input_buffer) {
-          //           line--;
-          //           "%c", 8;
-          //         }
-          //         break;
-          //       case SC_CURSOR_RIGHT:
-          //         SysLog("Cursor right");
-          //         TCPSocketSendString(sock, "CF01");
-          //         if (line < end_of_line) {
-          //           "%c", *line++;
-          //         }
-          //         break;
-          //       default:
-          //         break;
-          //     }
-          //   default:
-          //     break;
-          // }
-          ch = CharGet(, FALSE);
-          if (ch == '\r' || ch == '\n') {
-            break;
-          }
-          else if (ch == CH_SHIFT_ESC) { // ESC key
-            force_disconnect = TRUE;
-            break;
-          }
-          // if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
-          //   if (line != input_buffer) {
-          //     line--; // Move the pointer back
-          //     "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
-          //   }
-          // } 
-          else {
-            *line++ = ch;
-            "%c", ch;
-          }
-        }
-        *line++ = '\r';
-        *line++ = '\n';
-        *line = '\0';
-        
-        if (!force_disconnect) {
-          TCPSocketSendString(sock, line);
-          // TCPSocketSend(sock, input_buffer, BUF_SIZE);
-        } else {
-          "Force disconnecting...\n";
+      U8 *line = input_buffer;
+      U8 *end_of_line = line;
+      while (1) {
+        // switch (KeyGet(&sc))
+        // {
+        //   case 0:
+        //     switch (sc.u8[0])
+        //     {
+        //       case SC_CURSOR_UP:
+        //         TCPSocketSendString(sock, "CU01");
+        //         SysLog("Cursor up");
+        //         break;
+        //       case SC_CURSOR_DOWN:
+        //         TCPSocketSendString(sock, "CD01");
+        //         SysLog("Cursor down");
+        //         break;
+        //       case SC_CURSOR_LEFT:
+        //         TCPSocketSendString(sock, "CB01");
+        //         SysLog("Cursor left");
+        //         if (line > input_buffer) {
+        //           line--;
+        //           "%c", 8;
+        //         }
+        //         break;
+        //       case SC_CURSOR_RIGHT:
+        //         SysLog("Cursor right");
+        //         TCPSocketSendString(sock, "CF01");
+        //         if (line < end_of_line) {
+        //           "%c", *line++;
+        //         }
+        //         break;
+        //       default:
+        //         break;
+        //     }
+        //   default:
+        //     break;
+        // }
+        ch = CharGet(, FALSE);
+        if (ch == '\r' || ch == '\n') {
           break;
         }
+        else if (ch == CH_SHIFT_ESC) { // ESC key
+          force_disconnect = TRUE;
+          break;
+        }
+        // if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
+        //   if (line != input_buffer) {
+        //     line--; // Move the pointer back
+        //     "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
+        //   }
+        // } 
+        // *line++ = ch;
+        "%c", ch;
+      }
+      // *line++ = '\r';
+      // *line++ = '\n';
+      // *line = '\0';
+      
+      if (!force_disconnect) {
+        // SysLog("Sending: %s\n", input_buffer);
+        TCPSocketSendString(sock, input_buffer);
+        // input_buffer[BUF_SIZE] = 0;
+        // cant send line? its not a string but input_buffer is?
+        // TCPSocketSendString(sock, line);
+        // TCPSocketSend(sock, line, 16);
+      } else {
+        "Force disconnecting...\n";
+        break;
       }
       // skip_input = FALSE;
     } else {
-      SysLog("Error: %0x%02X\n", ch);
+      // SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
       break;
     }
@@ -379,9 +404,9 @@ U0 TelnetPrompt() {
 
 // Dev auto-connect to test server
 // Telnet("mbrserver.com");
-Telnet("freechess.org");
+// Telnet("freechess.org");
 // Telnet("dura-bbs.net", 6359);
 // Telnet("darkrealms.ca");
 
 // ZealBBS dev server
-// Telnet("localhost", 8888);
+Telnet("localhost", 8888);
