@@ -70,7 +70,6 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   response[len + 5] = 0xF0; // SE
   response[len + 6] = '\0';
   TCPSocketSendString(sock, response);
-  // Free(response); ??
 }
 
 U0 HandleControlCodes(U8 ch) {
@@ -112,6 +111,12 @@ U0 HandleControlCodes(U8 ch) {
     }
   } else {
     // SysLog("Code: 0x%02X\n", ch);
+
+    // FIXME
+    // Need to escape the dollar sign
+    if (ch == 0x24) {
+      ch = "//$$$$";
+    }
     "%c", ch;
   }
 }
@@ -125,6 +130,7 @@ U0 HandleMCICode(U8 *ptr, I64 *index) {
   //   // Handle ET1 MCI code here
   // }
   // SysLog("MCI code: %s\n", code);
+  SysLog("MCI Code not implemented\n");
   // Add support for other MCI codes if needed
 }
 
@@ -168,7 +174,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           U8 option_code = *(ptr + 2);
 
           // Send a response to the server
-          U8 response[3];
+          U8 response[4];
           response[0] = 0xFF; // IAC
 
           if (negotiation_code == 0xFD || negotiation_code == 0xFE) { // DO or DONT
@@ -190,11 +196,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[2] = option_code;
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
-                Sleep(5000);
                 SendTerminalType(sock, "ANSI");
-                // Sleep(1000);
-                // SendWindowSize(sock, 25, 80);
-                ptr += 3;
+                SendWindowSize(sock, 25, 80);
               } else {
                 response[1] = 0xFC; // WONT
               }
@@ -300,7 +303,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
       U8 *line = input_buffer;
-      U8 *end_of_line = line;
+      // U8 *end_of_line = line;
+      input_len = 0;
       while (1) {
         // switch (KeyGet(&sc))
         // {
@@ -351,19 +355,18 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         //   }
         // } 
         // *line++ = ch;
+        input_buffer[input_len++] = ch;
         "%c", ch;
       }
+      input_buffer[input_len] = '\0';
       // *line++ = '\r';
       // *line++ = '\n';
       // *line = '\0';
       
       if (!force_disconnect) {
-        // SysLog("Sending: %s\n", input_buffer);
-        TCPSocketSendString(sock, input_buffer);
-        // input_buffer[BUF_SIZE] = 0;
-        // cant send line? its not a string but input_buffer is?
-        // TCPSocketSendString(sock, line);
-        // TCPSocketSend(sock, line, 16);
+        input_buffer[input_len++] = '\r';
+        input_buffer[input_len++] = '\n';
+        TCPSocketSend(sock, input_buffer, input_len);
       } else {
         "Force disconnecting...\n";
         goto disconnect;
@@ -397,10 +400,13 @@ U0 TelnetPrompt() {
 }
 
 // Dev auto-connect to test server
-// Telnet("mbrserver.com");
+Telnet("mbrserver.com");
 // Telnet("freechess.org");
 // Telnet("dura-bbs.net", 6359);
 // Telnet("darkrealms.ca");
 
+// good to test refresh, line feed, etc
+// Telnet("20forbeers.com", 1337);
+
 // ZealBBS dev server
-Telnet("localhost", 8888);
+// Telnet("localhost", 8888);
