@@ -6,6 +6,7 @@
 #define TIMEOUT_DURATION 5000
 
 Bool skip_input = FALSE;
+
 Bool WaitForInputOrTimeout(I64 timeout_duration) {
   I64 start_jiffies = counts.jiffies;
   I64 elapsed_jiffies;
@@ -31,6 +32,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
   }
 
   sock = TCPConnectionCreate(host, port);
+  "$$RED$$Conecting to %s:%d.$$FG$$$$BG$$\n", host, port;
   if (sock <= 0) {
     PrintErr("Failed to connect to %s:%d\n", host, port);
     return sock;
@@ -90,23 +92,23 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
 }
 
 U0 HandleControlCodes(U8 ch) {
-  if (ch < 32) { // ASCII code below 32 (control character)
+  if (ch < 32 && ch != 20) { // ASCII code below 32 (control character)
     switch (ch) {
       case 0: // NUL (Null)
         // Typically ignored
-		break;
+        break;
       case 7: // BEL (Bell)
         // Make a beep sound or flash the screen
         Beep;
         break;
       case 8: // BS (Backspace)
-        "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
         break;
       case 9: // HT (Horizontal Tab)
         // Move the cursor to the next tab stop (typically 8 spaces)
         break;
       case 10: // LF (Line Feed)
-        "%c", ch;
+        // "%c", ch;
         break;
       case 11: // VT (Vertical Tab)
         // Move the cursor down one line
@@ -115,8 +117,7 @@ U0 HandleControlCodes(U8 ch) {
         DocClear;
         break;
       case 13: // CR (Carriage Return)
-        // "\r\n\0";
-        skip_input = TRUE;
+        "\r\n\0";
         break;
       case 14: // SO (Shift Out)
         // Switch to an alternate character set
@@ -128,45 +129,44 @@ U0 HandleControlCodes(U8 ch) {
         break;
     }
   } else {
-    // dont print for now
-    // "%c", ch;
+    // SysLog("Code: 0x%02X\n", ch);
+    "%c", ch;
   }
+  // skip_input = TRUE;
 }
 
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
-  I64 sock, bytes_received, input_len;
+  I64 sock, bytes_received, input_len, sc = 0;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
 
-  // would be nice to resize to 25x80
-  // CTask *task;
-  // task=User;
-  // TaskWait(task);
-  // task->border_src=BDS_CONST;
-  // task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
-  // task->text_attr  =LTGRAY<<4+BLUE;
-  // task->win_inhibit= WIG_TASK_DEFAULT-WIF_SELF_BORDER;
-  // WinHorz(Fs->win_left,Fs->win_right,task);
-  // WinVert(Fs->win_top,(Fs->win_top+Fs->win_bottom)>>2-1,task);
-  // WinVert(task->win_bottom+3,Fs->win_bottom);
-  // WinToTop(Fs);
+  I64 window_width = 80;
+  I64 window_height = 25;
+
+  I64 window_left = (GR_WIDTH - window_width) / 2;
+  I64 window_top = (Fs->win_bottom - Fs->win_top - window_height) / 2;
+
+  WinHorz(Fs->win_left, Fs->win_left+80, Fs);
+  WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height, Fs);
+  WinToTop(Fs);
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
     return;
   }
 
-  "$$BG,RED$$$$WHITE$$Connected to %s:%d.$$FG$$$$BG$$\n", host, port;
+  "$$BG,RED$$$$WHITE$$Connected$$FG$$$$BG$$\n"
 
   while (!force_disconnect) {
     bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
     if (bytes_received > 0) {
-      buffer[bytes_received] = '\0';
+      buffer[bytes_received] = '\0';
 
       // Basic Telnet protocol parser
       ptr = buffer;
       while (*ptr) {
+        SysLog("BUF: 0x%02X\n", *ptr);
         if (*ptr == 0xFF) { // Telnet negotiation sequence
           U8 negotiation_code = *(ptr + 1);
           U8 option_code = *(ptr + 2);
@@ -195,7 +195,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
                 SendTerminalType(sock, "ANSI");
-                // SendWindowSize(sock, 40, 80);
+                // SendWindowSize(sock, 25, 80);
                 ptr += 3;
               } else {
                 response[1] = 0xFC; // WONT
@@ -209,7 +209,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
           response[2] = option_code;
           response[3] = '\0';
-          // TCPSocketSendString(sock, response);
+          TCPSocketSendString(sock, response);
           ptr += 3;
         } else if (*ptr == 0x1B) {
           // ANSI escape sequence
@@ -221,6 +221,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               ansi_code = 0;
               while (*ptr >= '0' && *ptr <= '9') {
                 ansi_code = ansi_code * 10 + (*ptr - '0');
+                // HandleControlCodes(*ptr);
                 ptr++;
               }
               // Process ansi_code
@@ -273,8 +274,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         }
       }
 
-      skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
-
+      // skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
       if (!skip_input)
       {
         Sleep(200);
@@ -282,23 +282,59 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
         U8 *line = input_buffer;
+        U8 *end_of_line = line;
         while (1) {
+          // switch (KeyGet(&sc))
+          // {
+          //   case 0:
+          //     switch (sc.u8[0])
+          //     {
+          //       case SC_CURSOR_UP:
+          //         TCPSocketSendString(sock, "CU01");
+          //         SysLog("Cursor up");
+          //         break;
+          //       case SC_CURSOR_DOWN:
+          //         TCPSocketSendString(sock, "CD01");
+          //         SysLog("Cursor down");
+          //         break;
+          //       case SC_CURSOR_LEFT:
+          //         TCPSocketSendString(sock, "CB01");
+          //         SysLog("Cursor left");
+          //         if (line > input_buffer) {
+          //           line--;
+          //           "%c", 8;
+          //         }
+          //         break;
+          //       case SC_CURSOR_RIGHT:
+          //         SysLog("Cursor right");
+          //         TCPSocketSendString(sock, "CF01");
+          //         if (line < end_of_line) {
+          //           "%c", *line++;
+          //         }
+          //         break;
+          //       default:
+          //         break;
+          //     }
+          //   default:
+          //     break;
+          // }
           ch = CharGet(, FALSE);
           if (ch == '\r' || ch == '\n') {
             break;
           }
-          if (ch == CH_SHIFT_ESC) { // ESC key
+          else if (ch == CH_SHIFT_ESC) { // ESC key
             force_disconnect = TRUE;
             break;
           }
-          if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
-            if (line != input_buffer) {
-              line--; // Move the pointer back
-              "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
-            }
-          } else {
+          // if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
+          //   if (line != input_buffer) {
+          //     line--; // Move the pointer back
+          //     "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
+          //   }
+          // } 
+          else {
             *line++ = ch;
-            HandleControlCodes(ch);
+            "%c", ch;
           }
         }
         *line++ = '\r';
@@ -306,15 +342,16 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         *line = '\0';
         
         if (!force_disconnect) {
-          // SysLog("Sending: %s\n", input_buffer); // Debugging line
           TCPSocketSendString(sock, line);
+          // TCPSocketSend(sock, input_buffer, BUF_SIZE);
         } else {
           "Force disconnecting...\n";
           break;
         }
       }
-      skip_input = FALSE;
+      // skip_input = FALSE;
     } else {
+      SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
       break;
     }
@@ -342,9 +379,9 @@ U0 TelnetPrompt() {
 
 // Dev auto-connect to test server
 // Telnet("mbrserver.com");
-// Telnet("freechess.org");
+Telnet("freechess.org");
 // Telnet("dura-bbs.net", 6359);
 // Telnet("darkrealms.ca");
 
 // ZealBBS dev server
-Telnet("localhost", 8888);
+// Telnet("localhost", 8888);
