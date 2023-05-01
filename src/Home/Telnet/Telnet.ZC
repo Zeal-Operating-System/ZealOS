@@ -2,27 +2,8 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 51200
+#define BUF_SIZE 5120 // way too big?
 #define TIMEOUT_DURATION 5000
-
-Bool skip_input = FALSE;
-
-Bool WaitForInputOrTimeout(I64 timeout_duration) {
-  I64 start_jiffies = counts.jiffies;
-  I64 elapsed_jiffies;
-  U8 ch;
-
-  while (TRUE) {
-    elapsed_jiffies = counts.jiffies - start_jiffies;
-    if (elapsed_jiffies >= timeout_duration) {
-      return TRUE; // Timeout
-    }
-    ch = CharGet(, FALSE);
-    if (ch != CH_SHIFT_ESC) {
-      return FALSE; // needed?
-    }
-  }
-}
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -89,6 +70,7 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   response[len + 5] = 0xF0; // SE
   response[len + 6] = '\0';
   TCPSocketSendString(sock, response);
+  // Free(response); ??
 }
 
 U0 HandleControlCodes(U8 ch) {
@@ -132,18 +114,17 @@ U0 HandleControlCodes(U8 ch) {
     // SysLog("Code: 0x%02X\n", ch);
     "%c", ch;
   }
-  // skip_input = TRUE;
 }
 
 U0 HandleMCICode(U8 *ptr, I64 *index) {
-  U8 code[4];
-  MemCopy(code, ptr + *index, 3);
-  *index += 3;
+  // U8 code[4];
+  // MemCopy(code, ptr + *index, 3);
+  // *index += 3;
 
-  if (StrCompare(code, "ET1") == 0) {
-    // Handle ET1 MCI code here
-  }
-  SysLog("MCI code: %s\n", code);
+  // if (StrCompare(code, "ET1") == 0) {
+  //   // Handle ET1 MCI code here
+  // }
+  // SysLog("MCI code: %s\n", code);
   // Add support for other MCI codes if needed
 }
 
@@ -153,7 +134,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   Bool force_disconnect = FALSE;
 
   I64 window_width = 80;
-  I64 window_height = 25;
+  // I64 window_height = 25; // 25 should be default
+  I64 window_height = 40;
 
   I64 window_left = (GR_WIDTH - window_width) / 2;
   I64 window_top = (Fs->win_bottom - Fs->win_top - window_height) / 2;
@@ -161,6 +143,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   WinHorz(Fs->win_left, Fs->win_left+80, Fs);
   WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height, Fs);
   WinToTop(Fs);
+  WinFocus(Fs);
+
+  DocClear;
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
@@ -205,8 +190,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[2] = option_code;
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
-                Sleep(2000);
+                Sleep(5000);
                 SendTerminalType(sock, "ANSI");
+                // Sleep(1000);
                 // SendWindowSize(sock, 25, 80);
                 ptr += 3;
               } else {
@@ -241,15 +227,26 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++; // Move to the next part of the sequence
               } else if (*ptr == 'm') {
                 ptr++;
+                I64 color_code;
                 if (ansi_code >= 30 && ansi_code <= 37) {
                   //Set foreground color
-                  "%s", AppendColorString(ansi_code - 30);
+                  // "%s", AppendColorString(ansi_code - 30);
+                  color_code = ansi_code - 30;
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
                   // Set background color
-                  "%s", AppendColorString(ansi_code - 40);
+                  color_code = ansi_code - 40;
+                  // "%s", AppendColorString(ansi_code - 40);
                 }
-                else {
-                  "$$BG$$$$FG$$";
+                switch (color_code) {
+                  case 0: "$$BLACK$$"; break;
+                  case 1: "$$RED$$"; break;
+                  case 2: "$$GREEN$$"; break;
+                  case 3: "$$YELLOW$$"; break;
+                  case 4: "$$BLUE$$"; break;
+                  case 5: "$$BROWN$$"; break;
+                  case 6: "$$CYAN$$"; break;
+                  case 7: "$$WHITE$$"; break;
+                  default: break;
                 }
                 break;
               } else if (*ptr == 'H') {
@@ -298,50 +295,47 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         }
       }
 
-      // skip_input = WaitForInputOrTimeout(TIMEOUT_DURATION);
-      // if (!skip_input)
-      // {
-      // Sleep(200);
+      // Sleep(2000);
       // Prompt user for input and send it to the remote host
       "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
       U8 *line = input_buffer;
       U8 *end_of_line = line;
       while (1) {
-        // switch (KeyGet(&sc))
-        // {
-        //   case 0:
-        //     switch (sc.u8[0])
-        //     {
-        //       case SC_CURSOR_UP:
-        //         TCPSocketSendString(sock, "CU01");
-        //         SysLog("Cursor up");
-        //         break;
-        //       case SC_CURSOR_DOWN:
-        //         TCPSocketSendString(sock, "CD01");
-        //         SysLog("Cursor down");
-        //         break;
-        //       case SC_CURSOR_LEFT:
-        //         TCPSocketSendString(sock, "CB01");
-        //         SysLog("Cursor left");
-        //         if (line > input_buffer) {
-        //           line--;
-        //           "%c", 8;
-        //         }
-        //         break;
-        //       case SC_CURSOR_RIGHT:
-        //         SysLog("Cursor right");
-        //         TCPSocketSendString(sock, "CF01");
-        //         if (line < end_of_line) {
-        //           "%c", *line++;
-        //         }
-        //         break;
-        //       default:
-        //         break;
-        //     }
-        //   default:
-        //     break;
-        // }
+        switch (KeyGet(&sc))
+        {
+          case 0:
+            switch (sc.u8[0])
+            {
+              case SC_CURSOR_UP:
+                TCPSocketSendString(sock, "CU01");
+                SysLog("Cursor up");
+                break;
+              case SC_CURSOR_DOWN:
+                TCPSocketSendString(sock, "CD01");
+                SysLog("Cursor down");
+                break;
+              case SC_CURSOR_LEFT:
+                TCPSocketSendString(sock, "CB01");
+                SysLog("Cursor left");
+                if (line > input_buffer) {
+                  line--;
+                  "%c", 8;
+                }
+                break;
+              case SC_CURSOR_RIGHT:
+                SysLog("Cursor right");
+                TCPSocketSendString(sock, "CF01");
+                if (line < end_of_line) {
+                  "%c", *line++;
+                }
+                break;
+              default:
+                break;
+            }
+          default:
+            break;
+        }
         ch = CharGet(, FALSE);
         if (ch == '\r' || ch == '\n') {
           break;
@@ -374,7 +368,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         "Force disconnecting...\n";
         break;
       }
-      // skip_input = FALSE;
     } else {
       // SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
