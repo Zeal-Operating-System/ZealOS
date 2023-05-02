@@ -35,7 +35,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-	//sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   
   return sock;
 }
@@ -91,60 +91,35 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32 && ch != 20) { // ASCII code below 32 (control character)
     switch (ch) {
-      case 0: // NUL (Null)
-        // Typically ignored
+      case 0: // NUL (Null) - Typically ignored
         break;
       case 7: // BEL (Bell)
-        // Make a beep sound or flash the screen
         Beep;
         break;
       case 8: // BS (Backspace)
-        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
         break;
       case 9: // HT (Horizontal Tab)
-        // Move the cursor to the next tab stop (typically 8 spaces)
+        "        "; // 8 spaces
         break;
       case 10: // LF (Line Feed)
-        // "%c", ch;
+        "\n";
         break;
       case 11: // VT (Vertical Tab)
-        // Move the cursor down one line
         break;
       case 12: // FF (Form Feed)
         DocClear;
         break;
       case 13: // CR (Carriage Return)
-        "\r\n\0";
+        "\r";
         break;
-      case 14: // SO (Shift Out)
-        // Switch to an alternate character set
-        break;
-      case 15: // SI (Shift In)
-        // Switch back to the default character set
-        break;
+      case 14: // SO (Shift Out) - Switch to an alternate character set
+      case 15: // SI (Shift In)  - Switch back to the default character set
       default:
         break;
     }
   } 
   else {
-    // switch (ch) {
-    //   // if (ch > 126) break;
-    //   // not sure if there's any point looking for these codes here?
-    //   case 0x0A: // Line Feed
-    //   case 0x0C: // Form Feed
-    //     break;
-    //   case 0x0D: // Carriage Return
-    //     "\r\0";
-    //     break;
-    //   case 0x1B: // Escape
-    //     break;
-    //   case 0x24: // FIXME: Need to escape the dollar sign
-    //     ch = "//$$$$";
-    //     break;
-    //   default:
-    //     // SysLog("Code: 0x%02X\n", ch);
-    //     break;
-    // }
     if (ch == 0x24) {
       ch = "//$$$$";
     }
@@ -156,14 +131,15 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len, sc = 0;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
+  Bool request_input = FALSE;
 
   I64 window_width = 80;
-  I64 window_height = 25; // 25 should be default
+  I64 window_height = 25;
 
   I64 window_left = (GR_WIDTH - window_width) / 2;
   I64 window_top = (Fs->win_bottom - Fs->win_top - window_height) / 2;
 
-  WinHorz(Fs->win_left, Fs->win_left+80, Fs);
+  WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
   WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height, Fs);
   WinToTop(Fs);
   WinFocus(Fs);
@@ -213,7 +189,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 response[2] = option_code;
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
-                SendTerminalType(sock, "ANSI");
+                SendTerminalType(sock, "ANSI-BBS");
                 SendWindowSize(sock, 25, 80);
               } else {
                 response[1] = WONT;
@@ -243,132 +219,146 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++;
               }
               // Process ansi_code
-              if (*ptr == ';') {
+              if (*ptr == ' ') {
                 ptr++;
-              } else if (*ptr == 'A') {
-                // TODO: Cursor Up
-                // arg = isNaN(args[0]) ? 1 : args[0];
-                // self.moveCursor(0, -arg);
+              }
+              else if (*ptr == ';') {
                 ptr++;
-                break;
-              } else if (*ptr == 'B') {
-                // TODO: Cursor Down
-                // arg = isNaN(args[0]) ? 1 : args[0];
-                // self.moveCursor(0, arg);
-                ptr++;
-                break;
-              } else if (*ptr == 'C') {
-                // Cursor Right
-                I64 i;
-                for (i = 0; i < ansi_code; i++) {
-                  Print(" ");
-                }
-                // arg = isNaN(args[0]) ? 1 : args[0];
-                // self.moveCursor(arg, 0);
-                ptr++;
-                break;
-              } else if (*ptr == 'D') {
-                // TODO: Cursor Left
-                // arg = isNaN(args[0]) ? 1 : args[0];
-                // self.moveCursor(-arg, 0);
-                ptr++;
-                break;
-              } else if (*ptr == 'E') {
-                Print("\n");
-                ptr++;
-                break;
-              } else if (*ptr == 'H' || *ptr == 'f') {
-                // TODO: Cursor Position
-                // self.row = isNaN(args[0]) ? 1 : args[0];
-                // self.column = isNaN(args[1]) ? 1 : args[1];
-                // self.positionUpdated();
-                SysLog("H detected");
-                ptr++;
-                break;
-              } else if (*ptr == 'J') {
-                // TODO: Erase in Display
-                DocClear;
-                ptr++;
-                break;
-              } else if (*ptr == 'K') {
-                // TODO: Erase in Line
-                ptr++;
-                break;
-              } else if (*ptr == 'S') {
-                // TODO: Scroll Up
-                ptr++;
-                break;
-              } else if (*ptr == 'T') {
-                // TODO: Scroll Down
-                ptr++;
-                break;
-              } else if (*ptr == '?') {
-                switch (ansi_code) {
-                  case 25:
-                    if (*ptr == 'l') // Hide cursor
+              }
+              else {
+                // this helps for ANSI detection
+                if (*ptr == 'n') {
+                  if (ansi_code == 6) {
+                    // Respond with cursor position
+                    // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
+                    TCPSocketSendString(sock, "\x1B[25;80R");
+                  } else if (ansi_code == 5) {
+                    // Respond with terminal readiness
+                    TCPSocketSendString(sock, "\x1B[0n");
+                  }
+                  ptr++;
+                } else if (*ptr == 'c') {
+                  // Respond with device attributes
+                  TCPSocketSendString(sock, "\x1B[?1;0c");
+                  ptr++;
+                } else if (*ptr == 'm') {
+                  I64 color_code;
+                  if (ansi_code >= 30 && ansi_code <= 37) {
+                    color_code = ansi_code - 30; // Set foreground color
+                  } else if (ansi_code >= 40 && ansi_code <= 47) {
+                    color_code = ansi_code - 40; // Set background color
+                  } else {
+                    switch (ansi_code) {
+                      case 0: "$$BG$$$$FG$$"; break; // reset
+                      // case 1: ""; break; // TODO: bold
+                      // case 2: ""; break; // TODO: dim
+                      // case 3: ""; break; // TODO: italic
+                      // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
+                      // case 5: "$$"; break; // TODO: blink
+                      // case 6: ""; break; // TODO: fast blink
+                      // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
+                      // case 8: ""; break; // TODO: hide (rare)
+                      // case 9: ""; break; // TODO: strikethrough
+                      // case 10: ""; break; // TODO: primary font
+                    }
+                  }
+                  switch (color_code) {
+                    case 0: "$$BLACK$$"; break;
+                    case 1: "$$RED$$"; break;
+                    case 2: "$$GREEN$$"; break;
+                    case 3: "$$YELLOW$$"; break;
+                    case 4: "$$BLUE$$"; break;
+                    case 5: "$$BROWN$$"; break;
+                    case 6: "$$CYAN$$"; break;
+                    case 7: "$$WHITE$$"; break;
+                    default: break;
+                  }
+                  ptr++;
+                  break;
+                } else if (*ptr == 'A') {
+                  // TODO: Cursor Up
+                  // arg = isNaN(args[0]) ? 1 : args[0];
+                  // self.moveCursor(0, -arg);
+                  ptr++;
+                } else if (*ptr == 'B') {
+                  // TODO: Cursor Down
+                  // arg = isNaN(args[0]) ? 1 : args[0];
+                  // self.moveCursor(0, arg);
+                  ptr++;
+                } else if (*ptr == 'C') {
+                  // Cursor Right
+                  I64 i;
+                  for (i = 0; i < ansi_code; i++) {
+                    Print(" ");
+                  }
+                  // arg = isNaN(args[0]) ? 1 : args[0];
+                  // self.moveCursor(arg, 0);
+                  ptr++;
+                } else if (*ptr == 'D') {
+                  // TODO: Cursor Left
+                  // arg = isNaN(args[0]) ? 1 : args[0];
+                  // self.moveCursor(-arg, 0);
+                  ptr++;
+                } else if (*ptr == 'E') {
+                  Print("\n");
+                  ptr++;
+                } else if (*ptr == 'H' || *ptr == 'f') {
+                  // TODO: Cursor Position
+                  // self.row = isNaN(args[0]) ? 1 : args[0];
+                  // self.column = isNaN(args[1]) ? 1 : args[1];
+                  // self.positionUpdated();
+                  ptr++;
+                } else if (*ptr == 'J') {
+                  // TODO: Erase in Display
+                  DocClear;
+                  ptr++;
+                } else if (*ptr == 'K') {
+                  // TODO: Erase in Line
+                  ptr++;
+                } else if (*ptr == 'S') {
+                  // TODO: Scroll Up
+                  ptr++;
+                } else if (*ptr == 'T') {
+                  // TODO: Scroll Down
+                  ptr++;
+                } else if (*ptr == '?') {
+                  switch (ansi_code) {
+                    case 2:
+                      SysLog("code 2");
                       break;
-                    if (*ptr == 'h') // Show cursor
+                    case 25:
+                      if (*ptr == 'l') // Hide cursor
+                        SysLog("code 25l");
+                        break;
+                      if (*ptr == 'h') // Show cursor
+                        SysLog("code 25h");
+                        break;
                       break;
-                    SysLog("code 25");
-                    break;
-                  case 1049:
-                    if (*ptr == 'h') // Save screen and switch to alternate screen buffer
+                    case 1049:
+                      if (*ptr == 'l') // Save screen and switch to alternate screen buffer
+                        SysLog("code 1049l");
                         break;
-                    if (*ptr == 'l') // Restore screen and switch back to main screen buffer
+                      if (*ptr == 'h') // Restore screen and switch back to main screen buffer
+                        SysLog("code 1049h");
                         break;
-                    SysLog("code 1049");
-                    break;
+                      break;
+                    default:
+                      break;
+                  }
+                  ptr++;
+                } else if (*ptr == 's') {
+                  // self.saveCursorPosition();
+                  ptr++;
+                } else if (*ptr == 'r') {
+                  // self.restoreCursorPosition();
+                  ptr++;
+                } else if (*ptr == 'h' || *ptr == 'l') {
+                  // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
+                  ptr++; // Skip 'h' or 'l'
+                } else {
+                  ptr++;
                 }
-                ptr++;
                 break;
-              } else if (*ptr == 's') {
-                // self.saveCursorPosition();
-                ptr++;
-                break;
-              } else if (*ptr == 'r') {
-                // self.restoreCursorPosition();
-                ptr++;
-                break;
-              } else if (*ptr == 'm') {
-                switch (ansi_code) {
-                  case 0: "$$BG$$$$FG$$"; break; // reset
-                  // case 1: ""; break; // TODO: bold
-                  // case 2: ""; break; // TODO: dim
-                  // case 3: ""; break; // TODO: italic
-                  // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
-                  // case 5: "$$"; break; // TODO: blink
-                  // case 6: ""; break; // TODO: fast blink
-                  // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
-                  // case 8: ""; break; // TODO: hide (rare)
-                  // case 9: ""; break; // TODO: strikethrough
-                  // case 10: ""; break; // TODO: primary font
-                }
-                I64 color_code;
-                if (ansi_code >= 30 && ansi_code <= 37) {
-                  color_code = ansi_code - 30; // Set foreground color
-                } else if (ansi_code >= 40 && ansi_code <= 47) {
-                  color_code = ansi_code - 40; // Set background color
-                }
-                switch (color_code) {
-                  case 0: "$$BLACK$$"; break;
-                  case 1: "$$RED$$"; break;
-                  case 2: "$$GREEN$$"; break;
-                  case 3: "$$YELLOW$$"; break;
-                  case 4: "$$BLUE$$"; break;
-                  case 5: "$$BROWN$$"; break;
-                  case 6: "$$CYAN$$"; break;
-                  case 7: "$$WHITE$$"; break;
-                  default: break;
-                }
-                ptr++;
-                break;
-              } else if (*ptr == 'h' || *ptr == 'l') {
-                // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
-                ptr++; // Skip 'h' or 'l'
-                break;
-              } else {
-                ptr++;
-                break; // Invalid character, exit loop
               }
             }
           }
@@ -381,33 +371,37 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       }
 
       // Sleep(500);
-      // Prompt user for input and send it to the remote host
-      "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
+      if (request_input) {
+        // Prompt user for input and send it to the remote host
+        "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
-      U8 *line = input_buffer;
-      input_len = 0;
-      while (1) {
-        ch = CharGet(, FALSE);
-        if (ch == '\r' || ch == '\n') {
+        U8 *line = input_buffer;
+        input_len = 0;
+        while (1) {
+          ch = CharGet(, FALSE);
+          if (ch == '\r' || ch == '\n') {
+            break;
+          }
+          else if (ch == CH_SHIFT_ESC) { // ESC key
+            force_disconnect = TRUE;
+            break;
+          }
+          input_buffer[input_len++] = ch;
+          "%c", ch;
+        }
+        // input_buffer[input_len] = '\0';
+        
+        if (!force_disconnect) {
+          // input_buffer[input_len++] = '\r';
+          // input_buffer[input_len++] = '\n';
+          TCPSocketSend(sock, input_buffer, input_len);
+          // TCPSocketSend(sock, "\x0D\x0A", 2); // CR followed by LF
+        } else {
+          "Force disconnecting...\n";
+          goto disconnect;
           break;
         }
-        else if (ch == CH_SHIFT_ESC) { // ESC key
-          force_disconnect = TRUE;
-          break;
-        }
-        input_buffer[input_len++] = ch;
-        "%c", ch;
-      }
-      input_buffer[input_len] = '\0';
-      
-      if (!force_disconnect) {
-        input_buffer[input_len++] = '\r';
-        input_buffer[input_len++] = '\n';
-        TCPSocketSend(sock, input_buffer, input_len);
-      } else {
-        "Force disconnecting...\n";
-        goto disconnect;
-        break;
+        request_input = FALSE;
       }
     } else {
       // SysLog("Error: %0x%02X\n", ch);
