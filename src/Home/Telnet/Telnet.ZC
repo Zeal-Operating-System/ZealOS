@@ -109,29 +109,40 @@ U0 HandleControlCodes(U8 ch) {
       default:
         break;
     }
-  } else {
-    // SysLog("Code: 0x%02X\n", ch);
-
-    // FIXME
-    // Need to escape the dollar sign
-    if (ch == 0x24) {
-      ch = "//$$$$";
+  } 
+  else {
+    switch (ch) {
+      // not sure if there's any point looking for these codes here?
+      case 0x0A: // Line Feed
+      case 0x0C: // Form Feed
+        break;
+      case 0x0D: // Carriage Return
+        "\r\0";
+        break;
+      case 0x1B: // Escape
+        break;
+      case 0x24: // FIXME: Need to escape the dollar sign
+        ch = "//$$$$";
+        break;
+      default:
+        // SysLog("Code: 0x%02X\n", ch);
+        "%c", ch;
+        break;
     }
-    "%c", ch;
   }
 }
 
-U0 HandleMCICode(U8 *ptr, I64 *index) {
-  U8 code[4];
-  MemCopy(code, ptr + *index, 3);
-  *index += 3;
+// U0 HandleMCICode(U8 *ptr, I64 *index) {
+//   U8 code[4];
+//   MemCopy(code, ptr + *index, 3);
+//   *index += 3;
 
-  if (StrCompare(code, "ET1") == 0) {
-    // Handle ET1 MCI code here
-  }
-  SysLog("MCI code: %s\n", code);
-  // Add support for other MCI codes if needed
-}
+//   if (StrCompare(code, "ET1") == 0) {
+//     // Handle ET1 MCI code here
+//   }
+//   SysLog("MCI code: %s\n", code);
+//   // Add support for other MCI codes if needed
+// }
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len, sc = 0;
@@ -227,17 +238,73 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               // Process ansi_code
               if (*ptr == ';') {
                 ptr++; // Move to the next part of the sequence
-              } else if (*ptr == 'm') {
+              } else if (*ptr == 'A') {
+                // TODO: Cursor Up
                 ptr++;
+                break;
+              } else if (*ptr == 'B') {
+                // TODO: Cursor Down
+                ptr++;
+                break;
+              } else if (*ptr == 'C') {
+                // Cursor Right
+                I64 i;
+                for (i = 0; i < ansi_code; i++) {
+                  Print(" ");
+                }
+                ptr++;
+                break;
+              } else if (*ptr == 'D') {
+                // TODO: Cursor Left
+                ptr++;
+                break;
+              } else if (*ptr == 'E') {
+                Print("\n");
+                ptr++;
+                break;
+              } else if (*ptr == 'H') {
+                // TODO: Cursor Position
+                ptr++;
+                break;
+              } else if (*ptr == 'J') {
+                // TODO: Erase in Display
+                DocClear;
+                ptr++;
+                break;
+              } else if (*ptr == 'K') {
+                // TODO: Erase in Line
+                ptr++;
+                break;
+              } else if (*ptr == 'S') {
+                // TODO: Scroll Up
+                ptr++;
+                break;
+              } else if (*ptr == 'T') {
+                // TODO: Scroll Down
+                ptr++;
+                break;
+              } else if (*ptr == '?') {
+                ptr++; // Skip the '?'
+              } else if (*ptr == 'm') {
+                switch (ansi_code) {
+                  case 0: "$$BG$$$$FG$$"; break; // reset
+                  // case 1: ""; break; // TODO: bold
+                  // case 2: ""; break; // TODO: dim
+                  // case 3: ""; break; // TODO: italic
+                  // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
+                  // case 5: "$$"; break; // TODO: blink
+                  // case 6: ""; break; // TODO: fast blink
+                  // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
+                  // case 8: ""; break; // TODO: hide (rare)
+                  // case 9: ""; break; // TODO: strikethrough
+                  // case 10: ""; break; // TODO: primary font
+                  
+                }
                 I64 color_code;
                 if (ansi_code >= 30 && ansi_code <= 37) {
-                  //Set foreground color
-                  // "%s", AppendColorString(ansi_code - 30);
-                  color_code = ansi_code - 30;
+                  color_code = ansi_code - 30; // Set foreground color
                 } else if (ansi_code >= 40 && ansi_code <= 47) {
-                  // Set background color
-                  color_code = ansi_code - 40;
-                  // "%s", AppendColorString(ansi_code - 40);
+                  color_code = ansi_code - 40; // Set background color
                 }
                 switch (color_code) {
                   case 0: "$$BLACK$$"; break;
@@ -250,29 +317,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   case 7: "$$WHITE$$"; break;
                   default: break;
                 }
-                break;
-              } else if (*ptr == 'H') {
-                // TODO: Handle cursor positioning
                 ptr++;
                 break;
-              } else if (*ptr == 'J') {
-                // TODO: Handle screen clearing
-                DocClear;
-                ptr++;
-                break;
-              } else if (*ptr == 'K') {
-                // TODO: Handle line clearing
-                ptr++;
-                break;
-              } else if (*ptr == 'C') {
-                I64 i;
-                for (i = 0; i < ansi_code; i++) {
-                  Print(" ");
-                }
-                ptr++;
-                break;
-              } else if (*ptr == '?') {
-                ptr++; // Skip the '?'
               } else if (*ptr == 'h' || *ptr == 'l') {
                 // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
                 ptr++; // Skip 'h' or 'l'
@@ -280,15 +326,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               } else {
                 ptr++;
                 break; // Invalid character, exit loop
-              } 
+              }
             }
           }
-        }
-        else if (*ptr == '%' || *ptr == '|') {
-          // MCI code detected
-          HandleMCICode(ptr, &ptr);
-          ptr++;
-          break;
+          else {
+            ptr++;
+            break;
+          }
         }
         else {
           // Print the received character
