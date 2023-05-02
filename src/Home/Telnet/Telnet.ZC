@@ -21,6 +21,10 @@
 #define ANSI_ESC 0x1B
 #define ANSI_CSI 0x5B // [
 
+U8 IsDigit(U8 ch) {
+  return '0' <= ch <= '9';
+}
+
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
 
@@ -214,12 +218,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             I64 ansi_code;
             while (1) {
               ansi_code = 0;
-              while (*ptr >= '0' && *ptr <= '9') {
+              while (IsDigit(*ptr)) {
                 ansi_code = ansi_code * 10 + (*ptr - '0');
                 ptr++;
               }
               // Process ansi_code
               if (*ptr == ' ') {
+                // skip empty space
                 ptr++;
               }
               else if (*ptr == ';') {
@@ -288,7 +293,16 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 } else if (*ptr == 'C') {
                   // Cursor Right
                   I64 i;
-                  for (i = 0; i < ansi_code; i++) {
+                  I64 move_count = 0;
+                  while (IsDigit(*ptr)) {
+                    move_count = move_count * 10 + (*ptr - '0');
+                    ptr++;
+                  }
+                  if (move_count == 0) {
+                    move_count = 1; // Default value if no number is provided
+                  }
+
+                  for (i = 0; i < move_count; i++) {
                     Print(" ");
                   }
                   // arg = isNaN(args[0]) ? 1 : args[0];
@@ -300,7 +314,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // self.moveCursor(-arg, 0);
                   ptr++;
                 } else if (*ptr == 'E') {
-                  Print("\n");
+                  "\n";
                   ptr++;
                 } else if (*ptr == 'H' || *ptr == 'f') {
                   // TODO: Cursor Position
@@ -324,9 +338,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 } else if (*ptr == '?') {
                   ptr++;
                   I64 code = 0;
-                  
-                  // while (code >= '0' && code <= '9') {
-                  while ('0' <= *ptr <= '9') {
+
+                  while (IsDigit(*ptr)) {
                     code = code * 10 + (*ptr - '0');
                     ptr++;
                   }
@@ -370,7 +383,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         }
       }
 
-      // Sleep(500);
+      // TODO: setting this to OFF makes the login/account creation process display
+      // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/config_default.js#LL30C13-L30C34
+      // related refs
+      // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/connect.js#L137
+
       if (request_input) {
         // Prompt user for input and send it to the remote host
         "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
