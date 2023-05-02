@@ -322,30 +322,30 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // TODO: Scroll Down
                   ptr++;
                 } else if (*ptr == '?') {
-                  switch (ansi_code) {
-                    case 2:
-                      SysLog("code 2");
-                      break;
+                  ptr++;
+                  I64 code = 0;
+                  
+                  // while (code >= '0' && code <= '9') {
+                  while ('0' <= *ptr <= '9') {
+                    code = code * 10 + (*ptr - '0');
+                    ptr++;
+                  }
+
+                  // SysLog("?%d\n", code);
+                  switch (code) {
                     case 25:
-                      if (*ptr == 'l') // Hide cursor
-                        SysLog("code 25l");
-                        break;
-                      if (*ptr == 'h') // Show cursor
-                        SysLog("code 25h");
-                        break;
+                      if (*ptr == 'l') SysLog("code 25l");// Hide cursor
+                      if (*ptr == 'h') SysLog("code 25h");// Show cursor
+                      ptr++; // Move past 'l' or 'h'
                       break;
                     case 1049:
-                      if (*ptr == 'l') // Save screen and switch to alternate screen buffer
-                        SysLog("code 1049l");
-                        break;
-                      if (*ptr == 'h') // Restore screen and switch back to main screen buffer
-                        SysLog("code 1049h");
-                        break;
+                      if (*ptr == 'l') SysLog("code 1049l"); // Save screen and switch to alternate screen buffer
+                      if (*ptr == 'h') SysLog("code 1049h"); // Restore screen and switch back to main screen buffer
+                      ptr++; // Move past 'l' or 'h'
                       break;
                     default:
                       break;
                   }
-                  ptr++;
                 } else if (*ptr == 's') {
                   // self.saveCursorPosition();
                   ptr++;
