@@ -2,8 +2,24 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 5120 // way too big?
+#define BUF_SIZE 2048 // way too big?
 #define TIMEOUT_DURATION 5000
+
+#define NEGOTIATE 0xFF
+#define IAC 0xFF
+#define WILL 0xFB
+#define WONT 0xFC
+#define DO 0xFD
+#define DONT 0xFE
+#define ECHO 0x01
+#define SUPPRESS_GO_AHEAD 0x03
+#define TERMINAL_TYPE 0x18
+#define NAWS 0x1F
+#define IS 0x00
+#define SE 0xF0
+
+#define ANSI_ESC 0x1B
+#define ANSI_CSI 0x5B // [
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -19,7 +35,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+	//sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   
   return sock;
 }
@@ -111,38 +127,30 @@ U0 HandleControlCodes(U8 ch) {
     }
   } 
   else {
-    switch (ch) {
-      // not sure if there's any point looking for these codes here?
-      case 0x0A: // Line Feed
-      case 0x0C: // Form Feed
-        break;
-      case 0x0D: // Carriage Return
-        "\r\0";
-        break;
-      case 0x1B: // Escape
-        break;
-      case 0x24: // FIXME: Need to escape the dollar sign
-        ch = "//$$$$";
-        break;
-      default:
-        // SysLog("Code: 0x%02X\n", ch);
-        "%c", ch;
-        break;
+    // switch (ch) {
+    //   // if (ch > 126) break;
+    //   // not sure if there's any point looking for these codes here?
+    //   case 0x0A: // Line Feed
+    //   case 0x0C: // Form Feed
+    //     break;
+    //   case 0x0D: // Carriage Return
+    //     "\r\0";
+    //     break;
+    //   case 0x1B: // Escape
+    //     break;
+    //   case 0x24: // FIXME: Need to escape the dollar sign
+    //     ch = "//$$$$";
+    //     break;
+    //   default:
+    //     // SysLog("Code: 0x%02X\n", ch);
+    //     break;
+    // }
+    if (ch == 0x24) {
+      ch = "//$$$$";
     }
+    "%c", ch;
   }
 }
-
-// U0 HandleMCICode(U8 *ptr, I64 *index) {
-//   U8 code[4];
-//   MemCopy(code, ptr + *index, 3);
-//   *index += 3;
-
-//   if (StrCompare(code, "ET1") == 0) {
-//     // Handle ET1 MCI code here
-//   }
-//   SysLog("MCI code: %s\n", code);
-//   // Add support for other MCI codes if needed
-// }
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 sock, bytes_received, input_len, sc = 0;
@@ -150,8 +158,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   Bool force_disconnect = FALSE;
 
   I64 window_width = 80;
-  // I64 window_height = 25; // 25 should be default
-  I64 window_height = 40;
+  I64 window_height = 25; // 25 should be default
 
   I64 window_left = (GR_WIDTH - window_width) / 2;
   I64 window_top = (Fs->win_bottom - Fs->win_top - window_height) / 2;
@@ -178,72 +185,76 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       // Basic Telnet protocol parser
       ptr = buffer;
       while (*ptr) {
-        // SysLog("BUF: 0x%02X\n", *ptr);
-        if (*ptr == 0xFF) { // Telnet negotiation sequence
+         // Telnet negotiation sequence
+        if (*ptr == NEGOTIATE) {
           U8 negotiation_code = *(ptr + 1);
           U8 option_code = *(ptr + 2);
 
           // Send a response to the server
           U8 response[4];
-          response[0] = 0xFF; // IAC
+          response[0] = IAC;
 
-          if (negotiation_code == 0xFD || negotiation_code == 0xFE) { // DO or DONT
-            if (option_code == 0x01) { // Echo
-              if (negotiation_code == 0xFD) {
-                response[1] = 0xFB; // WILL
+          if (negotiation_code == DO || negotiation_code == DO) {
+            if (option_code == ECHO) {
+              if (negotiation_code == DO) {
+                response[1] = WILL;
               } else {
-                response[1] = 0xFC; // WONT
+                response[1] = WONT;
               }
-            } else if (option_code == 0x03) { // Suppress Go Ahead
-              if (negotiation_code == 0xFD) {
-                response[1] = 0xFB; // WILL
+            } else if (option_code == SUPPRESS_GO_AHEAD) { 
+              if (negotiation_code == DO) {
+                response[1] = WILL;
               } else {
-                response[1] = 0xFC; // WONT
+                response[1] = WONT;
               }
-            } else if (option_code == 0x18) { // Terminal Type
-              if (negotiation_code == 0xFD) {
-                response[1] = 0xFB; // WILL
+            } else if (option_code == TERMINAL_TYPE) {
+              if (negotiation_code == DO) {
+                response[1] = WILL;
                 response[2] = option_code;
                 response[3] = '\0';
                 TCPSocketSendString(sock, response);
                 SendTerminalType(sock, "ANSI");
                 SendWindowSize(sock, 25, 80);
               } else {
-                response[1] = 0xFC; // WONT
+                response[1] = WONT;
               }
             } else {
-              response[1] = 0xFC; // WONT
+              response[1] = WONT;
             }
-          } else { // WILL or WONT
-            response[1] = 0xFE; // DONT
+          } else {
+            response[1] = DONT;
           }
 
           response[2] = option_code;
           response[3] = '\0';
           TCPSocketSendString(sock, response);
           ptr += 3;
-        } else if (*ptr == 0x1B) {
+        } 
+        else if (*ptr == ANSI_ESC) {
           // ANSI escape sequence
           ptr++;
-          if (*ptr == '[') {
+          if (*ptr == ANSI_CSI) {
             ptr++;
             I64 ansi_code;
             while (1) {
               ansi_code = 0;
               while (*ptr >= '0' && *ptr <= '9') {
                 ansi_code = ansi_code * 10 + (*ptr - '0');
-                // HandleControlCodes(*ptr);
                 ptr++;
               }
               // Process ansi_code
               if (*ptr == ';') {
-                ptr++; // Move to the next part of the sequence
+                ptr++;
               } else if (*ptr == 'A') {
                 // TODO: Cursor Up
+                // arg = isNaN(args[0]) ? 1 : args[0];
+                // self.moveCursor(0, -arg);
                 ptr++;
                 break;
               } else if (*ptr == 'B') {
                 // TODO: Cursor Down
+                // arg = isNaN(args[0]) ? 1 : args[0];
+                // self.moveCursor(0, arg);
                 ptr++;
                 break;
               } else if (*ptr == 'C') {
@@ -252,18 +263,26 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 for (i = 0; i < ansi_code; i++) {
                   Print(" ");
                 }
+                // arg = isNaN(args[0]) ? 1 : args[0];
+                // self.moveCursor(arg, 0);
                 ptr++;
                 break;
               } else if (*ptr == 'D') {
                 // TODO: Cursor Left
+                // arg = isNaN(args[0]) ? 1 : args[0];
+                // self.moveCursor(-arg, 0);
                 ptr++;
                 break;
               } else if (*ptr == 'E') {
                 Print("\n");
                 ptr++;
                 break;
-              } else if (*ptr == 'H') {
+              } else if (*ptr == 'H' || *ptr == 'f') {
                 // TODO: Cursor Position
+                // self.row = isNaN(args[0]) ? 1 : args[0];
+                // self.column = isNaN(args[1]) ? 1 : args[1];
+                // self.positionUpdated();
+                SysLog("H detected");
                 ptr++;
                 break;
               } else if (*ptr == 'J') {
@@ -284,7 +303,32 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++;
                 break;
               } else if (*ptr == '?') {
-                ptr++; // Skip the '?'
+                switch (ansi_code) {
+                  case 25:
+                    if (*ptr == 'l') // Hide cursor
+                      break;
+                    if (*ptr == 'h') // Show cursor
+                      break;
+                    SysLog("code 25");
+                    break;
+                  case 1049:
+                    if (*ptr == 'h') // Save screen and switch to alternate screen buffer
+                        break;
+                    if (*ptr == 'l') // Restore screen and switch back to main screen buffer
+                        break;
+                    SysLog("code 1049");
+                    break;
+                }
+                ptr++;
+                break;
+              } else if (*ptr == 's') {
+                // self.saveCursorPosition();
+                ptr++;
+                break;
+              } else if (*ptr == 'r') {
+                // self.restoreCursorPosition();
+                ptr++;
+                break;
               } else if (*ptr == 'm') {
                 switch (ansi_code) {
                   case 0: "$$BG$$$$FG$$"; break; // reset
@@ -298,7 +342,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // case 8: ""; break; // TODO: hide (rare)
                   // case 9: ""; break; // TODO: strikethrough
                   // case 10: ""; break; // TODO: primary font
-                  
                 }
                 I64 color_code;
                 if (ansi_code >= 30 && ansi_code <= 37) {
@@ -329,10 +372,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               }
             }
           }
-          else {
-            ptr++;
-            break;
-          }
         }
         else {
           // Print the received character
@@ -341,48 +380,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
         }
       }
 
-      // Sleep(2000);
+      // Sleep(500);
       // Prompt user for input and send it to the remote host
       "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
       U8 *line = input_buffer;
-      // U8 *end_of_line = line;
       input_len = 0;
       while (1) {
-        // switch (KeyGet(&sc))
-        // {
-        //   case 0:
-        //     switch (sc.u8[0])
-        //     {
-        //       case SC_CURSOR_UP:
-        //         TCPSocketSendString(sock, "CU01");
-        //         SysLog("Cursor up");
-        //         break;
-        //       case SC_CURSOR_DOWN:
-        //         TCPSocketSendString(sock, "CD01");
-        //         SysLog("Cursor down");
-        //         break;
-        //       case SC_CURSOR_LEFT:
-        //         TCPSocketSendString(sock, "CB01");
-        //         SysLog("Cursor left");
-        //         if (line > input_buffer) {
-        //           line--;
-        //           "%c", 8;
-        //         }
-        //         break;
-        //       case SC_CURSOR_RIGHT:
-        //         SysLog("Cursor right");
-        //         TCPSocketSendString(sock, "CF01");
-        //         if (line < end_of_line) {
-        //           "%c", *line++;
-        //         }
-        //         break;
-        //       default:
-        //         break;
-        //     }
-        //   default:
-        //     break;
-        // }
         ch = CharGet(, FALSE);
         if (ch == '\r' || ch == '\n') {
           break;
@@ -391,20 +395,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           force_disconnect = TRUE;
           break;
         }
-        // if (ch == CH_BACKSPACE || ch == 127) { // Backspace or Delete key
-        //   if (line != input_buffer) {
-        //     line--; // Move the pointer back
-        //     "%c%c%c", 8, ' ', 8; // Move the cursor back, erase the character, and move the cursor back again
-        //   }
-        // } 
-        // *line++ = ch;
         input_buffer[input_len++] = ch;
         "%c", ch;
       }
       input_buffer[input_len] = '\0';
-      // *line++ = '\r';
-      // *line++ = '\n';
-      // *line = '\0';
       
       if (!force_disconnect) {
         input_buffer[input_len++] = '\r';
