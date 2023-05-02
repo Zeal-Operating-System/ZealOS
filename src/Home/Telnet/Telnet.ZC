@@ -122,15 +122,14 @@ U0 HandleControlCodes(U8 ch) {
 }
 
 U0 HandleMCICode(U8 *ptr, I64 *index) {
-  // U8 code[4];
-  // MemCopy(code, ptr + *index, 3);
-  // *index += 3;
+  U8 code[4];
+  MemCopy(code, ptr + *index, 3);
+  *index += 3;
 
-  // if (StrCompare(code, "ET1") == 0) {
-  //   // Handle ET1 MCI code here
-  // }
-  // SysLog("MCI code: %s\n", code);
-  SysLog("MCI Code not implemented\n");
+  if (StrCompare(code, "ET1") == 0) {
+    // Handle ET1 MCI code here
+  }
+  SysLog("MCI code: %s\n", code);
   // Add support for other MCI codes if needed
 }
 
@@ -266,8 +265,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++;
                 break;
               } else if (*ptr == 'C') {
-                // Custom 'C' escape code for centering text
-                // TODO: Handle the centering here
+                I64 i;
+                for (i = 0; i < ansi_code; i++) {
+                  Print(" ");
+                }
                 ptr++;
                 break;
               } else if (*ptr == '?') {
@@ -279,19 +280,17 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               } else {
                 ptr++;
                 break; // Invalid character, exit loop
-              }
+              } 
             }
           }
-          else if (*ptr == ';') {
-            SysLog("; event\n");
-            ptr++;
-          }
-        } else if (*ptr == '%' || *ptr == '|') {
+        }
+        else if (*ptr == '%' || *ptr == '|') {
           // MCI code detected
-          ptr++;
           HandleMCICode(ptr, &ptr);
           ptr++;
-        } else {
+          break;
+        }
+        else {
           // Print the received character
           HandleControlCodes(*ptr);
           ptr++;
@@ -400,7 +399,7 @@ U0 TelnetPrompt() {
 }
 
 // Dev auto-connect to test server
-Telnet("mbrserver.com");
+// Telnet("mbrserver.com");
 // Telnet("freechess.org");
 // Telnet("dura-bbs.net", 6359);
 // Telnet("darkrealms.ca");
@@ -409,4 +408,4 @@ Telnet("mbrserver.com");
 // Telnet("20forbeers.com", 1337);
 
 // ZealBBS dev server
-// Telnet("localhost", 8888);
+Telnet("localhost", 8888);
