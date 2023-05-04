@@ -2,7 +2,7 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 2048 // way too big?
+#define BUF_SIZE 4096 // way too big?
 #define TIMEOUT_DURATION 5000
 
 #define NEGOTIATE 0xFF
@@ -14,6 +14,7 @@
 #define ECHO 0x01
 #define SUPPRESS_GO_AHEAD 0x03
 #define TERMINAL_TYPE 0x18
+#define LINEMODE 0x22
 #define NAWS 0x1F
 #define IS 0x00
 #define SE 0xF0
@@ -98,7 +99,7 @@ U0 HandleControlCodes(U8 ch) {
       case 0: // NUL (Null) - Typically ignored
         break;
       case 7: // BEL (Bell)
-        Beep;
+        // Beep;
         break;
       case 8: // BS (Backspace)
         "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
@@ -198,6 +199,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               } else {
                 response[1] = WONT;
               }
+            } else if (option_code == LINEMODE) { 
+              if (negotiation_code == DO) {
+                response[1] = WILL;
+                // Do we need LINEMODE?
+              } else {
+                response[1] = WONT;
+              }
             } else {
               response[1] = WONT;
             }
@@ -233,17 +241,21 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
               else {
                 // this helps for ANSI detection
                 if (*ptr == 'n') {
-                  if (ansi_code == 6) {
-                    // Respond with cursor position
-                    // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
-                    TCPSocketSendString(sock, "\x1B[25;80R");
-                  } else if (ansi_code == 5) {
+                  if (ansi_code == 5) {
                     // Respond with terminal readiness
+                    SysLog("reported terminal readiness\n");
                     TCPSocketSendString(sock, "\x1B[0n");
                   }
+                  else if (ansi_code == 6) {
+                    // Respond with cursor position
+                    // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
+                    SysLog("reported cursor position\n");
+                    TCPSocketSendString(sock, "\x1B[25;80R");
+                  } 
                   ptr++;
                 } else if (*ptr == 'c') {
                   // Respond with device attributes
+                  SysLog("reported device attributes\n");
                   TCPSocketSendString(sock, "\x1B[?1;0c");
                   ptr++;
                 } else if (*ptr == 'm') {
@@ -344,16 +356,15 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     ptr++;
                   }
 
-                  // SysLog("?%d\n", code);
                   switch (code) {
                     case 25:
-                      if (*ptr == 'l') SysLog("code 25l");// Hide cursor
-                      if (*ptr == 'h') SysLog("code 25h");// Show cursor
+                      if (*ptr == 'l') SysLog("code 25l\n");// Hide cursor
+                      if (*ptr == 'h') SysLog("code 25h\n");// Show cursor
                       ptr++; // Move past 'l' or 'h'
                       break;
                     case 1049:
-                      if (*ptr == 'l') SysLog("code 1049l"); // Save screen and switch to alternate screen buffer
-                      if (*ptr == 'h') SysLog("code 1049h"); // Restore screen and switch back to main screen buffer
+                      if (*ptr == 'l') SysLog("code 1049l\n"); // Save screen and switch to alternate screen buffer
+                      if (*ptr == 'h') SysLog("code 1049h\n"); // Restore screen and switch back to main screen buffer
                       ptr++; // Move past 'l' or 'h'
                       break;
                     default:
