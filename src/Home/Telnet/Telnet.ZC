@@ -140,7 +140,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   
   return sock;
 }
@@ -474,10 +474,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
     }
   }
 
+	// sock(CTCPSocket *)->timeout = 0;
   while (TaskValidate(input_task))
   {
     Refresh;
   }
+
+	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
 }
@@ -498,7 +501,6 @@ U0 TelnetPrompt() {
   }
 }
 
-// Dev auto-connect to test server
 // Telnet("mbrserver.com");
 // Telnet("freechess.org");
 // Telnet("dura-bbs.net", 6359);
@@ -527,16 +529,13 @@ U0 TelnetPrompt() {
 // Telnet("TextMMOde.com"); // Sands of Time / Deep Space MMO
 // Telnet("legendofthereddragon.ca"); // Legend of the Red Dragon (Canada)
 // Telnet("lord.stabs.org"); // Legend of the Red Dragon
-// Telnet("thehatshop.mudhosting.net", 3000); // Hallowed Halls
-// Telnet("eclipse.cs.pdx.edi", 7680); // New Moon
+Telnet("thehatshop.mudhosting.net", 3000); // Hallowed Halls
 // Telnet("batmud.bat.org"); // BatMUD
 // Telnet("forgottenkingdoms.org", 4000); // Forgotten Kingdoms
-// Telnet("mush.shelteringcolorado.com"), 2601; // Sheltering Sky: Colorado by Night
-Telnet("igormud.org", 1701);// Igor MUD
+// Telnet("igormud.org", 1701);// Igor MUD
 // Telnet("achaea.com"); // Achaea, Dreams of Divine Lands
 // Telnet("gcomm.com"); // Galacticomm BBS
 // Telnet("1984.ws"); // 1984
-
 
 // ZealBBS dev server
 // Telnet("localhost", 8888);
