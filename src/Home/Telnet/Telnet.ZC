@@ -2,7 +2,7 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 4096 // way too big?
+#define BUF_SIZE 40960 // way too big?
 #define TIMEOUT_DURATION 5000
 
 #define NEGOTIATE 0xFF
@@ -24,6 +24,15 @@
 
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
+}
+
+Bool CursorInWin(CTask *task, I64 x, I64 y)
+{
+	if (	0 <= x + task->scroll_x < task->pix_width &&
+			0 <= y + task->scroll_y < task->pix_height)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 I64 TelnetOpen(U8 *host, U16 port) {
@@ -133,10 +142,10 @@ U0 HandleControlCodes(U8 ch) {
 }
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
-  I64 sock, bytes_received, input_len, sc = 0;
+  I64 sock, bytes_received, input_len, sc;
   U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
   Bool force_disconnect = FALSE;
-  Bool request_input = FALSE;
+  Bool input_request = FALSE;
 
   I64 window_width = 80;
   I64 window_height = 25;
@@ -293,14 +302,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 } else if (*ptr == 'A') {
-                  // TODO: Cursor Up
-                  // arg = isNaN(args[0]) ? 1 : args[0];
-                  // self.moveCursor(0, -arg);
+                  CursorInWin(Fs, 0, -1);  // Cursor Up
                   ptr++;
                 } else if (*ptr == 'B') {
-                  // TODO: Cursor Down
-                  // arg = isNaN(args[0]) ? 1 : args[0];
-                  // self.moveCursor(0, arg);
+                  CursorInWin(Fs, 0, 1);  // Cursor Down
                   ptr++;
                 } else if (*ptr == 'C') {
                   // Cursor Right
@@ -314,28 +319,23 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     move_count = 1; // Default value if no number is provided
                   }
 
-                  for (i = 0; i < move_count; i++) {
-                    Print(" ");
-                  }
-                  // arg = isNaN(args[0]) ? 1 : args[0];
-                  // self.moveCursor(arg, 0);
+                  // for (i = 0; i < move_count; i++) {
+                    // Print(" ");
+                  // }
+                  CursorInWin(Fs, move_count, 0);  // Cursor Right
                   ptr++;
                 } else if (*ptr == 'D') {
-                  // TODO: Cursor Left
-                  // arg = isNaN(args[0]) ? 1 : args[0];
-                  // self.moveCursor(-arg, 0);
+                  CursorInWin(Fs, -1, 0);  // Cursor Left
                   ptr++;
                 } else if (*ptr == 'E') {
                   "\n";
                   ptr++;
                 } else if (*ptr == 'H' || *ptr == 'f') {
                   // TODO: Cursor Position
-                  // self.row = isNaN(args[0]) ? 1 : args[0];
-                  // self.column = isNaN(args[1]) ? 1 : args[1];
-                  // self.positionUpdated();
+                  // CursorInWin(Fs, arg1, arg2);  
                   ptr++;
                 } else if (*ptr == 'J') {
-                  // TODO: Erase in Display
+                  // Erase in Display
                   DocClear;
                   ptr++;
                 } else if (*ptr == 'K') {
@@ -399,37 +399,47 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       // related refs
       // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/connect.js#L137
 
-      if (request_input) {
+      if (!input_request) {
         // Prompt user for input and send it to the remote host
         "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
 
+        U8 *temp;
         U8 *line = input_buffer;
         input_len = 0;
         while (1) {
           ch = CharGet(, FALSE);
           if (ch == '\r' || ch == '\n') {
+            input_buffer[input_len++] = '\r';
+            input_buffer[input_len++] = '\n';
             break;
           }
-          else if (ch == CH_SHIFT_ESC) { // ESC key
+          else if (ch == CH_SHIFT_ESC) {
             force_disconnect = TRUE;
             break;
           }
-          input_buffer[input_len++] = ch;
-          "%c", ch;
+          else if (ch == CH_ESC) {
+            input_buffer[input_len++] = 0x1B;
+            break;
+          }
+          else {
+            input_buffer[input_len++] = ch;
+            "%c", ch;
+          }
         }
-        // input_buffer[input_len] = '\0';
+        input_buffer[input_len++] = '\0';
         
         if (!force_disconnect) {
-          // input_buffer[input_len++] = '\r';
-          // input_buffer[input_len++] = '\n';
-          TCPSocketSend(sock, input_buffer, input_len);
-          // TCPSocketSend(sock, "\x0D\x0A", 2); // CR followed by LF
+          // SysLog(input_buffer);
+            temp = MStrPrint("%s\r\n", input_buffer);
+						TCPSocketSendString(sock, temp);
+						Free(temp);
+            MemSet(input_buffer, 0, BUF_SIZE);
+          // TCPSocketSend(sock, input_buffer, input_len);
         } else {
           "Force disconnecting...\n";
           goto disconnect;
           break;
         }
-        request_input = FALSE;
       }
     } else {
       // SysLog("Error: %0x%02X\n", ch);
@@ -437,6 +447,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       break;
     }
   }
+
+// Free(input_buffer);
+// Free(buffer);
 disconnect:
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
@@ -467,5 +480,36 @@ U0 TelnetPrompt() {
 // good to test refresh, line feed, etc
 // Telnet("20forbeers.com", 1337);
 
+// view public IP
+// Telnet("telnetmyip.com")
+
+// time
+// Telnet("india.colorado.edu", 13);
+
+// telehack
+// Telnet("telehack.com");
+
+// star trek game
+// Telnet("mtrek.com", 1701);
+// Telnet("xmltrek.com", 1701);
+
+// Telnet("bbs.archaicbinary.net"); // Archaic Binary
+// Telnet("ateraan.com", 4002); //  New Worlds - Ateraan
+// Telnet("avalon-rpg.com"); // Avalon: The Legend Lives
+// Telnet("aardmud.org", 4000); // Aardwolf MUD
+// Telnet("TextMMOde.com"); // Sands of Time / Deep Space MMO
+// Telnet("legendofthereddragon.ca"); // Legend of the Red Dragon (Canada)
+// Telnet("lord.stabs.org"); // Legend of the Red Dragon
+// Telnet("thehatshop.mudhosting.net", 3000); // Hallowed Halls
+// Telnet("eclipse.cs.pdx.edi", 7680); // New Moon
+// Telnet("batmud.bat.org"); // BatMUD
+// Telnet("forgottenkingdoms.org", 4000); // Forgotten Kingdoms
+// Telnet("mush.shelteringcolorado.com"), 2601; // Sheltering Sky: Colorado by Night
+Telnet("igormud.org", 1701);// Igor MUD
+// Telnet("achaea.com"); // Achaea, Dreams of Divine Lands
+// Telnet("gcomm.com"); // Galacticomm BBS
+// Telnet("1984.ws"); // 1984
+
+
 // ZealBBS dev server
-Telnet("localhost", 8888);
+// Telnet("localhost", 8888);
