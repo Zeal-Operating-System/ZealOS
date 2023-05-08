@@ -22,6 +22,10 @@
 #define ANSI_ESC 0x1B
 #define ANSI_CSI 0x5B // [
 
+CTask *input_task	= NULL;
+Bool force_disconnect = FALSE;
+Bool input_request = FALSE;
+
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
 }
@@ -33,25 +37,6 @@ Bool CursorInWin(CTask *task, I64 x, I64 y)
 		return TRUE;
 	else
 		return FALSE;
-}
-
-I64 TelnetOpen(U8 *host, U16 port) {
-  I64 sock;
-
-  if (host == NULL) {
-    return -1;
-  }
-
-  sock = TCPConnectionCreate(host, port);
-  "$$RED$$Conecting to %s:%d.$$FG$$$$BG$$\n", host, port;
-  if (sock <= 0) {
-    PrintErr("Failed to connect to %s:%d\n", host, port);
-    return sock;
-  }
-
-	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
-  
-  return sock;
 }
 
 U0 AppendColorString(I64 color_code) {
@@ -141,11 +126,89 @@ U0 HandleControlCodes(U8 ch) {
   }
 }
 
+I64 TelnetOpen(U8 *host, U16 port) {
+  I64 sock;
+
+  if (host == NULL) {
+    return -1;
+  }
+
+  sock = TCPConnectionCreate(host, port);
+  "$$RED$$Conecting to %s:%d.$$FG$$$$BG$$\n", host, port;
+  if (sock <= 0) {
+    PrintErr("Failed to connect to %s:%d\n", host, port);
+    return sock;
+  }
+
+	sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
+  
+  return sock;
+}
+
+U0 InputTask(U0 *args) {
+  I64 sock = *args;
+
+	DocTermNew;
+	DocPrint(, "$$WW,1$$");
+
+  U8 input_buffer[BUF_SIZE];
+  U8 *temp, ch;
+  U8 *line = input_buffer;
+  I64 input_len = 0;
+
+  while (!force_disconnect) {
+    if (!input_request) {
+
+      DocBottom(input_task->put_doc);
+      "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
+
+      input_len = 0;
+      while (1) {
+        ch = CharGet(, FALSE);
+        if (ch == '\r' || ch == '\n') {
+          // input_buffer[input_len++] = '\r';
+          // input_buffer[input_len++] = '\n';
+          break;
+        }
+        else if (ch == CH_SHIFT_ESC) {
+          force_disconnect = TRUE;
+          break;
+        }
+        else if (ch == CH_ESC) {
+          input_buffer[input_len++] = 0x1B;
+          break;
+        }
+        else {
+          input_buffer[input_len++] = ch;
+          // "%c", ch;
+          // DocBottom(input_task->put_doc);
+          DocPrint(input_task->put_doc, "%c", ch);
+        }
+      }
+      input_buffer[input_len++] = '\0';
+      
+      if (!force_disconnect) {
+        SysLog(input_buffer);
+        temp = MStrPrint("%s\r\n", input_buffer);
+
+        TCPSocketSendString(sock, temp);
+        Free(temp);
+        MemSet(input_buffer, 0, BUF_SIZE);
+        DocClear;
+        
+      } else {
+        "Force disconnecting...\n";
+        break;
+      }
+    }
+  }
+
+}
+
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
+  
   I64 sock, bytes_received, input_len, sc;
-  U8 buffer[BUF_SIZE], input_buffer[BUF_SIZE], *ptr, ch;
-  Bool force_disconnect = FALSE;
-  Bool input_request = FALSE;
+  U8 buffer[BUF_SIZE], *ptr;
 
   I64 window_width = 80;
   I64 window_height = 25;
@@ -158,12 +221,22 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   WinToTop(Fs);
   WinFocus(Fs);
 
-  DocClear;
-
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
     return;
   }
+
+	input_task = Spawn(&InputTask, &sock, "Telnet Input");
+	input_task->win_inhibit = WIG_USER_TASK_DEFAULT;
+	LBts(&input_task->display_flags, DISPLAYf_SHOW);
+	WinFocus(input_task);
+
+  input_task->win_top = Fs->win_top + window_top;
+	input_task->win_bottom = Fs->win_top + 40;
+	input_task->win_left	= Fs->win_left;
+	input_task->win_right	= Fs->win_left+window_width;
+
+  DocClear;
 
   "$$BG,RED$$$$WHITE$$Connected$$FG$$$$BG$$\n";
 
@@ -393,54 +466,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
       }
-
-      // TODO: setting this to OFF makes the login/account creation process display
-      // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/config_default.js#LL30C13-L30C34
-      // related refs
-      // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/connect.js#L137
-
-      if (!input_request) {
-        // Prompt user for input and send it to the remote host
-        "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$: ";
-
-        U8 *temp;
-        U8 *line = input_buffer;
-        input_len = 0;
-        while (1) {
-          ch = CharGet(, FALSE);
-          if (ch == '\r' || ch == '\n') {
-            input_buffer[input_len++] = '\r';
-            input_buffer[input_len++] = '\n';
-            break;
-          }
-          else if (ch == CH_SHIFT_ESC) {
-            force_disconnect = TRUE;
-            break;
-          }
-          else if (ch == CH_ESC) {
-            input_buffer[input_len++] = 0x1B;
-            break;
-          }
-          else {
-            input_buffer[input_len++] = ch;
-            "%c", ch;
-          }
-        }
-        input_buffer[input_len++] = '\0';
-        
-        if (!force_disconnect) {
-          // SysLog(input_buffer);
-            temp = MStrPrint("%s\r\n", input_buffer);
-						TCPSocketSendString(sock, temp);
-						Free(temp);
-            MemSet(input_buffer, 0, BUF_SIZE);
-          // TCPSocketSend(sock, input_buffer, input_len);
-        } else {
-          "Force disconnecting...\n";
-          goto disconnect;
-          break;
-        }
-      }
+      
     } else {
       // SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
@@ -448,9 +474,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
     }
   }
 
-// Free(input_buffer);
-// Free(buffer);
-disconnect:
+  while (TaskValidate(input_task))
+  {
+    Refresh;
+  }
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
 }
