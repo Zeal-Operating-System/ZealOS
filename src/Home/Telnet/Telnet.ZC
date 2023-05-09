@@ -47,9 +47,10 @@ U0 AppendColorString(I64 color_code) {
     case 2: color = "$$GREEN$$"; break;
     case 3: color = "$$YELLOW$$"; break;
     case 4: color = "$$BLUE$$"; break;
-    case 5: color = "$$BROWN$$"; break;
+    case 5: color = "$$PURPLE$$"; break;
     case 6: color = "$$CYAN$$"; break;
     case 7: color = "$$WHITE$$"; break;
+    case 8: color = "$$FG$$"; break;
     default: color = ""; break;
   }
   "%s", color;
@@ -120,7 +121,7 @@ U0 HandleControlCodes(U8 ch) {
   } 
   else {
     if (ch == 0x24) {
-      ch = "//$$$$";
+      // ch = "//$$$$";
     }
     "%c", ch;
   }
@@ -150,7 +151,7 @@ U0 InputTask(U0 *args) {
 
 	DocTermNew;
 	DocPrint(, "$$WW,1$$");
-  DocCursor;
+  // DocCursor;
 
   U8 input_buffer[BUF_SIZE];
   U8 *temp, ch;
@@ -212,7 +213,6 @@ U0 InputTask(U0 *args) {
       }
     }
   }
-
 }
 
 U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
@@ -228,7 +228,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
   WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
   WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height, Fs);
-  DocCursor(OFF);
+  // DocCursor(OFF);
+
   // WinToTop(Fs);
   // WinFocus(Fs);
 
@@ -268,7 +269,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           U8 response[4];
           response[0] = IAC;
 
-          if (negotiation_code == DO || negotiation_code == DO) {
+          if (negotiation_code == DO || negotiation_code == DONT) {
             if (option_code == ECHO) {
               if (negotiation_code == DO) {
                 response[1] = WILL;
@@ -471,6 +472,17 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             }
           }
         }
+        else if (*ptr == '|') {
+          // U8 code[3];
+          // code[0] = ptr++;
+          // code[1] = ptr++;
+          // code[2] = '\0';
+          // I64 color_code = ToI64(code);
+          // AppendColorString(color_code);
+          SysLog("Pipe code: %c%c\n", ptr[1], ptr[2]);
+          ptr += 3; // Skip the pipe code characters
+          // ptr++;
+        }
         else {
           // Print the received character
           HandleControlCodes(*ptr);
@@ -548,7 +560,7 @@ U0 TelnetPrompt() {
 // Telnet("gcomm.com"); // Galacticomm BBS
 // Telnet("1984.ws"); // 1984
 
-Telnet("telnet.holdfastbbs.ca", 2323);
+// Telnet("telnet.holdfastbbs.ca", 2323);
 
 // ZealBBS dev server
-// Telnet("localhost", 8888);
+Telnet("localhost", 8888);
