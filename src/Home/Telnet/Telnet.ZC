@@ -15,8 +15,9 @@
 #define SUPPRESS_GO_AHEAD 0x03
 #define TERMINAL_TYPE 0x18
 #define LINEMODE 0x22
-#define NAWS 0x1F
+#define NAWS 0x1F // NAWS (Negotiate About Window Size)
 #define IS 0x00
+#define SB 0xFA
 #define SE 0xF0
 
 #define ANSI_ESC 0x1B
@@ -42,16 +43,17 @@ Bool CursorInWin(CTask *task, I64 x, I64 y)
 U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
   U8 buf[9];
 
-  buf[0] = 0xFF; // IAC
-  buf[1] = 0xFA; // SB
-  buf[2] = 0x1F; // NAWS (Negotiate About Window Size)
+  buf[0] = IAC;
+  buf[1] = SB; 
+  buf[2] = NAWS;
   buf[3] = cols >> 8; // High byte of columns
   buf[4] = cols & 0xFF; // Low byte of columns
   buf[5] = rows >> 8; // High byte of rows
   buf[6] = rows & 0xFF; // Low byte of rows
-  buf[7] = 0xFF; // IAC
-  buf[8] = 0xF0; // SE
+  buf[7] = IAC;
+  buf[8] = SE;
 
+  SysLog("SendWindowSize: %d x %d\n", cols, rows);
   TCPSocketSendString(sock, buf);
 }
 
@@ -59,20 +61,22 @@ U0 SendTerminalType(I64 sock, U8 *terminal_type) {
   U8 response[256];
   I64 len = StrLen(terminal_type);
 
-  response[0] = 0xFF; // IAC
-  response[1] = 0xFA; // SB
-  response[2] = 0x18; // TERMINAL TYPE
-  response[3] = 0x00; // IS
+  response[0] = IAC;
+  response[1] = SB;
+  response[2] = TERMINAL_TYPE;
+  response[3] = IS;
   MemCopy(response + 4, terminal_type, len);
 
-  response[len + 4] = 0xFF; // IAC
-  response[len + 5] = 0xF0; // SE
+  SysLog("SendTerminalType: %s\n", terminal_type);
+
+  response[len + 4] = IAC;
+  response[len + 5] = SE;
   response[len + 6] = '\0';
   TCPSocketSendString(sock, response);
 }
 
 U0 HandleControlCodes(U8 ch) {
-  if (ch < 32 && ch != 20) { // ASCII code below 32 (control character)
+  if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
       case 0: // NUL (Null) - Typically ignored
         break;
@@ -103,6 +107,9 @@ U0 HandleControlCodes(U8 ch) {
     }
   } 
   else {
+    if (ch == 127) {
+        SysLog("case 127");
+    }
     if (ch == 0x24) {
       // ch = "//$$$$";
     }
@@ -268,18 +275,18 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             } else if (option_code == TERMINAL_TYPE) {
               if (negotiation_code == DO) {
                 response[1] = WILL;
-                response[2] = option_code;
-                response[3] = '\0';
-                TCPSocketSendString(sock, response);
-                SendTerminalType(sock, "ANSI-BBS");
-                SendWindowSize(sock, 25, 80);
+              } else {
+                response[1] = WONT;
+              }
+            } else if (option_code == NAWS) {
+              if (negotiation_code == DO) {
+                response[1] = WILL;
               } else {
                 response[1] = WONT;
               }
             } else if (option_code == LINEMODE) { 
               if (negotiation_code == DO) {
                 response[1] = WILL;
-                // Do we need LINEMODE?
               } else {
                 response[1] = WONT;
               }
@@ -293,6 +300,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           response[2] = option_code;
           response[3] = '\0';
           TCPSocketSendString(sock, response);
+          // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
+          // if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
+          // else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
           ptr += 3;
         }
         // check for pipecode here?? 
@@ -399,7 +409,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                 } else if (*ptr == 'H' || *ptr == 'f') {
                   // TODO: Cursor Position
-                  // CursorInWin(Fs, arg1, arg2);  
+                  // CursorInWin(Fs, arg1, arg2);
                   ptr++;
                 } else if (*ptr == 'J') {
                   // Erase in Display
