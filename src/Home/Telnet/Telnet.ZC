@@ -299,7 +299,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
           response[2] = option_code;
           response[3] = '\0';
-          TCPSocketSendString(sock, response);
+          // TCPSocketSendString(sock, response);
           // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
           // if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
           // else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
@@ -353,7 +353,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     color_code = ansi_code - 30; // Set foreground color
                   } else if (ansi_code >= 40 && ansi_code <= 47) {
                     color_code = ansi_code - 40; // Set background color
-                  } else {
+                  } 
+                  else {
                     switch (ansi_code) {
                       case 0: "$$BG$$$$FG$$"; break; // reset
                       // case 1: ""; break; // TODO: bold
