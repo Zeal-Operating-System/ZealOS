@@ -354,21 +354,21 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   } else if (ansi_code >= 40 && ansi_code <= 47) {
                     color_code = ansi_code - 40; // Set background color
                   } 
-                  else {
-                    switch (ansi_code) {
-                      case 0: "$$BG$$$$FG$$"; break; // reset
-                      // case 1: ""; break; // TODO: bold
-                      // case 2: ""; break; // TODO: dim
-                      // case 3: ""; break; // TODO: italic
-                      // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
-                      // case 5: "$$"; break; // TODO: blink
-                      // case 6: ""; break; // TODO: fast blink
-                      // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
-                      // case 8: ""; break; // TODO: hide (rare)
-                      // case 9: ""; break; // TODO: strikethrough
-                      // case 10: ""; break; // TODO: primary font
-                    }
-                  }
+                  // else {
+                  //   switch (ansi_code) {
+                  //     case 0: "$$BG$$$$FG$$"; break; // reset
+                  //     // case 1: ""; break; // TODO: bold
+                  //     // case 2: ""; break; // TODO: dim
+                  //     // case 3: ""; break; // TODO: italic
+                  //     // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
+                  //     // case 5: "$$"; break; // TODO: blink
+                  //     // case 6: ""; break; // TODO: fast blink
+                  //     // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
+                  //     // case 8: ""; break; // TODO: hide (rare)
+                  //     // case 9: ""; break; // TODO: strikethrough
+                  //     // case 10: ""; break; // TODO: primary font
+                  //   }
+                  // }
                   switch (color_code) {
                     case 0: "$$BLACK$$"; break;
                     case 1: "$$RED$$"; break;
@@ -384,26 +384,29 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 } else if (*ptr == 'A') {
-                  CursorInWin(Fs, 0, -1);  // Cursor Up
+                  //CursorInWin(Fs, 0, -1);  // Cursor Up
                   ptr++;
                 } else if (*ptr == 'B') {
-                  CursorInWin(Fs, 0, 1);  // Cursor Down
+                  //CursorInWin(Fs, 0, 1);  // Cursor Down
                   ptr++;
                 } else if (*ptr == 'C') {
                   // Cursor Right
                   I64 i;
-                  I64 move_count = 0;
-                  while (IsDigit(*ptr)) {
-                    move_count = move_count * 10 + (*ptr - '0');
-                    ptr++;
+                  // I64 move_count = 0;
+                  // while (IsDigit(*ptr)) {
+                  //   move_count = move_count * 10 + (*ptr - '0');
+                  //   ptr++;
+                  // }
+                  // if (move_count == 0) {
+                  //   move_count = 1; // Default value if no number is provided
+                  // }
+                  for (i = 0; i < ansi_code; i++) {
+                    Print(" ");
                   }
-                  if (move_count == 0) {
-                    move_count = 1; // Default value if no number is provided
-                  }
-                  CursorInWin(Fs, move_count, 0);  // Cursor Right
+                  // CursorInWin(Fs, move_count, 0);  // Cursor Right
                   ptr++;
                 } else if (*ptr == 'D') {
-                  CursorInWin(Fs, -1, 0);  // Cursor Left
+                  // CursorInWin(Fs, -1, 0);  // Cursor Left
                   ptr++;
                 } else if (*ptr == 'E') {
                   "\n";
