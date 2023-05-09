@@ -25,7 +25,6 @@
 CTask *input_task	= NULL;
 Bool force_disconnect = FALSE;
 Bool input_request = FALSE;
-I64 color_code;
 
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
@@ -339,6 +338,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   TCPSocketSendString(sock, "\x1B[?1;0c");
                   ptr++;
                 } else if (*ptr == 'm') {
+                  I64 color_code;
                   if (ansi_code >= 30 && ansi_code <= 37) {
                     color_code = ansi_code - 30; // Set foreground color
                   } else if (ansi_code >= 40 && ansi_code <= 47) {
@@ -429,9 +429,14 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       if (*ptr == 'h') SysLog("code 25h\n");// Show cursor
                       ptr++; // Move past 'l' or 'h'
                       break;
+                    case 47:
+                      if (*ptr == 'l') SysLog("code 47l\n"); // restore screen
+                      if (*ptr == 'h') SysLog("code 47h\n"); // save screen
+                      ptr++; // Move past 'l' or 'h'
+                      break;
                     case 1049:
-                      if (*ptr == 'l') SysLog("code 1049l\n"); // Save screen and switch to alternate screen buffer
-                      if (*ptr == 'h') SysLog("code 1049h\n"); // Restore screen and switch back to main screen buffer
+                      if (*ptr == 'l') SysLog("code 1049l\n"); // enables the alternative buffer
+                      if (*ptr == 'h') SysLog("code 1049h\n"); // disables the alternative buffer
                       ptr++; // Move past 'l' or 'h'
                       break;
                     default:
@@ -447,10 +452,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 } else if (*ptr == 'h' || *ptr == 'l') {
                   // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
                   ptr++; // Skip 'h' or 'l'
+                } else if (*ptr == '=') {
+                  SysLog("ScreenMode attempt\n");
+                  ptr++;
                 } else {
                   ptr++;
                 }
-                ptr++;
+                // ptr++;
                 break;
               }
             }
@@ -546,5 +554,5 @@ U0 TelnetPrompt() {
 
 // Telnet("telnet.holdfastbbs.ca", 2323);
 
-// ZealBBS dev server
+// dev server
 Telnet("localhost", 8888);
