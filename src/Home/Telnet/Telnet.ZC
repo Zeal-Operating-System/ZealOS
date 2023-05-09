@@ -25,6 +25,7 @@
 CTask *input_task	= NULL;
 Bool force_disconnect = FALSE;
 Bool input_request = FALSE;
+I64 color_code;
 
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
@@ -37,23 +38,6 @@ Bool CursorInWin(CTask *task, I64 x, I64 y)
 		return TRUE;
 	else
 		return FALSE;
-}
-
-U0 AppendColorString(I64 color_code) {
-  U8 *color;
-  switch (color_code) {
-    case 0: color = "$$BLACK$$"; break;
-    case 1: color = "$$RED$$"; break;
-    case 2: color = "$$GREEN$$"; break;
-    case 3: color = "$$YELLOW$$"; break;
-    case 4: color = "$$BLUE$$"; break;
-    case 5: color = "$$PURPLE$$"; break;
-    case 6: color = "$$CYAN$$"; break;
-    case 7: color = "$$WHITE$$"; break;
-    case 8: color = "$$FG$$"; break;
-    default: color = ""; break;
-  }
-  "%s", color;
 }
 
 U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
@@ -123,9 +107,9 @@ U0 HandleControlCodes(U8 ch) {
     if (ch == 0x24) {
       // ch = "//$$$$";
     }
-    "%c", ch;
+      "%c", ch;
+    }
   }
-}
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -311,7 +295,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           response[3] = '\0';
           TCPSocketSendString(sock, response);
           ptr += 3;
-        } 
+        }
+        // check for pipecode here?? 
+        // https://github.com/wwivbbs/docs/blob/main/docs/cfg/displaying_text.md#pipe-screen-and-cursor-control
         else if (*ptr == ANSI_ESC) {
           // ANSI escape sequence
           ptr++;
@@ -325,11 +311,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 ptr++;
               }
               // Process ansi_code
-              if (*ptr == ' ') {
-                // skip empty space
-                ptr++;
-              }
-              else if (*ptr == ';') {
+              // if (*ptr == ' ') {
+              //   // skip empty space
+              //   ptr++;
+              // }
+              if (*ptr == ';') {
                 ptr++;
               }
               else {
@@ -353,7 +339,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   TCPSocketSendString(sock, "\x1B[?1;0c");
                   ptr++;
                 } else if (*ptr == 'm') {
-                  I64 color_code;
                   if (ansi_code >= 30 && ansi_code <= 37) {
                     color_code = ansi_code - 30; // Set foreground color
                   } else if (ansi_code >= 40 && ansi_code <= 47) {
@@ -379,9 +364,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     case 2: "$$GREEN$$"; break;
                     case 3: "$$YELLOW$$"; break;
                     case 4: "$$BLUE$$"; break;
-                    case 5: "$$BROWN$$"; break;
+                    case 5: "$$PURPLE$$"; break;
                     case 6: "$$CYAN$$"; break;
                     case 7: "$$WHITE$$"; break;
+                    case 8: "$$BG$$$$FG$$"; break; // reset
                     default: break;
                   }
                   ptr++;
@@ -403,10 +389,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   if (move_count == 0) {
                     move_count = 1; // Default value if no number is provided
                   }
-
-                  // for (i = 0; i < move_count; i++) {
-                    // Print(" ");
-                  // }
                   CursorInWin(Fs, move_count, 0);  // Cursor Right
                   ptr++;
                 } else if (*ptr == 'D') {
@@ -453,6 +435,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       ptr++; // Move past 'l' or 'h'
                       break;
                     default:
+                      ptr++;
                       break;
                   }
                 } else if (*ptr == 's') {
@@ -467,6 +450,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 } else {
                   ptr++;
                 }
+                ptr++;
                 break;
               }
             }
