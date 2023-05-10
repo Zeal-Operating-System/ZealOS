@@ -1,3 +1,52 @@
+#define IAC 0xFF
+#define WILL 0xFB
+#define WONT 0xFC
+#define DO 0xFD
+#define DONT 0xFE
+#define ECHO 0x01
+#define SUPPRESS_GO_AHEAD 0x03
+#define TERMINAL_TYPE 0x18
+#define LINEMODE 0x22
+#define NAWS 0x1F // (Negotiate About Window Size)
+#define IS 0x00
+#define SB 0xFA
+#define SE 0xF0
+
+U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
+  U8 buf[9];
+
+  buf[0] = IAC;
+  buf[1] = SB; 
+  buf[2] = NAWS;
+  buf[3] = cols >> 8; // High byte of columns
+  buf[4] = cols & 0xFF; // Low byte of columns
+  buf[5] = rows >> 8; // High byte of rows
+  buf[6] = rows & 0xFF; // Low byte of rows
+  buf[7] = IAC;
+  buf[8] = SE;
+
+  SysLog("SendWindowSize: %d x %d\n", cols, rows);
+  TCPSocketSendString(sock, buf);
+}
+
+U0 SendTerminalType(I64 sock, U8 *terminal_type) {
+  U8 response[256];
+  I64 len = StrLen(terminal_type);
+
+  response[0] = IAC;
+  response[1] = SB;
+  response[2] = TERMINAL_TYPE;
+  response[3] = IS;
+  MemCopy(response + 4, terminal_type, len);
+
+  SysLog("SendTerminalType: %s\n", terminal_type);
+
+  response[len + 4] = IAC;
+  response[len + 5] = SE;
+  response[len + 6] = '\0';
+  TCPSocketSendString(sock, response);
+}
+
 U0 TelnetNegotiate()
 {
   U8 negotiation_code = *(ptr + 1);

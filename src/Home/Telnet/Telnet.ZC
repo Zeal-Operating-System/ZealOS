@@ -26,13 +26,15 @@ U0 HandleControlCodes(U8 ch) {
       case 0: // NUL (Null) - Typically ignored
         break;
       case 7: // BEL (Bell)
-        // Beep;
+        Beep;
         break;
       case 8: // BS (Backspace)
-        "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        "$$CM,-8,0$$";
         break;
       case 9: // HT (Horizontal Tab)
-        "        "; // 8 spaces
+        // "        "; // 8 spaces
+        "$$CM,8,0$$";
         break;
       case 10: // LF (Line Feed)
         "\n";
@@ -117,9 +119,9 @@ U0 InputTask(U0 *args) {
           TCPSocketSendString(sock, 0x27);
           break;
         }
-        else if (ch == CH_BACKSPACE) {
-          break;
-        }
+        // else if (ch == CH_BACKSPACE) {
+        //   break;
+        // }
         else if (ch == 0x0F) { // TAB?
           TCPSocketSendString(sock, 0x09);
           break;
@@ -366,7 +368,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
                   // Not sure if really should do -1...
                   if (row > window_height)
-                    row = window_heigh-1;
+                    row = window_height-1;
                   if (col > window_width)
                     col = window_width-1;
 
@@ -375,7 +377,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'J':
-                  // SysLog("J code\n");
+                  // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
                   // Erase in Display
                   if (ansi_code[0] == 0) {
                     // Erase from cursor to end of display
@@ -433,8 +435,16 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
                   switch (code) {
                     case 25:
-                      // if (*ptr == 'l') SysLog("code 25l\n");// Hide cursor
-                      // if (*ptr == 'h') SysLog("code 25h\n");// Show cursor
+                      if (*ptr == 'l') {
+                        // Hide cursor
+                        // SysLog("code 25l\n");
+                        DocCursor(OFF);
+                      }
+                      if (*ptr == 'h') {
+                        // Show cursor
+                        // SysLog("code 25h\n");
+                        DocCursor(ON);
+                      }
                       ptr++; // Move past 'l' or 'h'
                       break;
                     case 47:
