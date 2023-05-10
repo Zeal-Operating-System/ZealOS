@@ -15,7 +15,7 @@
 #define SUPPRESS_GO_AHEAD 0x03
 #define TERMINAL_TYPE 0x18
 #define LINEMODE 0x22
-#define NAWS 0x1F // NAWS (Negotiate About Window Size)
+#define NAWS 0x1F // (Negotiate About Window Size)
 #define IS 0x00
 #define SB 0xFA
 #define SE 0xF0
@@ -113,9 +113,9 @@ U0 HandleControlCodes(U8 ch) {
     if (ch == 0x24) {
       // ch = "//$$$$";
     }
-      "%c", ch;
-    }
+    "%c", ch;
   }
+}
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -142,6 +142,7 @@ U0 InputTask(U0 *args) {
 	DocTermNew;
 	DocPrint(, "$$WW,1$$");
   // DocCursor;
+  // WinBorder(OFF);
 
   U8 input_buffer[BUF_SIZE];
   U8 *temp, ch;
@@ -171,22 +172,28 @@ U0 InputTask(U0 *args) {
           TCPSocketSendString(sock, 0x27);
           break;
         }
-        // else if (ch == CH_BACKSPACE) {
-        //   TCPSocketSendString(sock, 0x08);
-        //   break;
-        // }
+        else if (ch == CH_BACKSPACE) {
+          // if (input_len > 0) {
+          //   // Decrease the length of the input
+          //   input_len--;
+          //   // Remove the character from the input buffer
+          //   input_buffer[input_len] = '\0';
+          //   DocClear;
+          //   DocBottom(input_task->put_doc);
+          //   "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
+          //   temp = MStrPrint("%s", input_buffer);
+          //   DocPrint(input_task->put_doc, "%s", temp);
+          // }
+        }
         else if (ch == 0x0F) { // TAB?
           TCPSocketSendString(sock, 0x09);
           break;
         }
         else {
           input_buffer[input_len++] = ch;
-          // "%c", ch;
-          // DocBottom(input_task->put_doc);
           DocPrint(input_task->put_doc, "%c", ch);
         }
       }
-      // input_buffer[input_len++] = '\0';
       
       if (!force_disconnect) {
         SysLog(input_buffer);
@@ -216,6 +223,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 window_left = (GR_WIDTH - window_width) / 2;
   I64 window_top = (Fs->win_bottom - Fs->win_top - window_height) / 2;
 
+	DocPrint(, "$$WW,1$$");
   WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
   WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height, Fs);
   // DocCursor(OFF);
@@ -354,21 +362,21 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   } else if (ansi_code >= 40 && ansi_code <= 47) {
                     color_code = ansi_code - 40; // Set background color
                   } 
-                  // else {
-                  //   switch (ansi_code) {
-                  //     case 0: "$$BG$$$$FG$$"; break; // reset
-                  //     // case 1: ""; break; // TODO: bold
-                  //     // case 2: ""; break; // TODO: dim
-                  //     // case 3: ""; break; // TODO: italic
-                  //     // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
-                  //     // case 5: "$$"; break; // TODO: blink
-                  //     // case 6: ""; break; // TODO: fast blink
-                  //     // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
-                  //     // case 8: ""; break; // TODO: hide (rare)
-                  //     // case 9: ""; break; // TODO: strikethrough
-                  //     // case 10: ""; break; // TODO: primary font
-                  //   }
-                  // }
+                  else if (ansi_code < 10) {
+                    switch (ansi_code) {
+                      case 0: "$$BG$$$$FG$$"; break; // reset
+                      // case 1: ""; break; // TODO: bold
+                      // case 2: ""; break; // TODO: dim
+                      // case 3: ""; break; // TODO: italic
+                      // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
+                      // case 5: "$$"; break; // TODO: blink
+                      // case 6: ""; break; // TODO: fast blink
+                      // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
+                      // case 8: ""; break; // TODO: hide (rare)
+                      // case 9: ""; break; // TODO: strikethrough
+                      // case 10: ""; break; // TODO: primary font
+                    }
+                  }
                   switch (color_code) {
                     case 0: "$$BLACK$$"; break;
                     case 1: "$$RED$$"; break;
@@ -384,13 +392,14 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 } else if (*ptr == 'A') {
-                  //CursorInWin(Fs, 0, -1);  // Cursor Up
+                  // Cursor Up
+                  "$$CM+LY,0,-%d$$", ansi_code;
                   ptr++;
                 } else if (*ptr == 'B') {
-                  //CursorInWin(Fs, 0, 1);  // Cursor Down
+                  // Cursor Down
+                  "$$CM+LY,0,+%d$$", ansi_code;
                   ptr++;
                 } else if (*ptr == 'C') {
-                  // Cursor Right
                   I64 i;
                   // I64 move_count = 0;
                   // while (IsDigit(*ptr)) {
@@ -400,27 +409,71 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // if (move_count == 0) {
                   //   move_count = 1; // Default value if no number is provided
                   // }
-                  for (i = 0; i < ansi_code; i++) {
-                    Print(" ");
-                  }
-                  // CursorInWin(Fs, move_count, 0);  // Cursor Right
+                  // for (i = 0; i < ansi_code; i++) {
+                  //   Print(" ");
+                  // }
+
+                  // Cursor Right
+                  "$$CM+LX,+%d,0$$", ansi_code;
                   ptr++;
                 } else if (*ptr == 'D') {
-                  // CursorInWin(Fs, -1, 0);  // Cursor Left
+                  // Cursor Left
+                  "$$CM+LX,-%d,0$$", ansi_code;
                   ptr++;
                 } else if (*ptr == 'E') {
                   "\n";
                   ptr++;
                 } else if (*ptr == 'H' || *ptr == 'f') {
-                  // TODO: Cursor Position
-                  // CursorInWin(Fs, arg1, arg2);
-                  ptr++;
+                  I64 row = 1, col = 1;  // default values
+                  U8 *next_ptr = ptr + 1;
+
+                  // Parse the row number
+                  if (IsDigit(*next_ptr)) {
+                    row = ToI64(next_ptr);
+                    while (IsDigit(*next_ptr)) next_ptr++;  // Advance the pointer
+                  }
+
+                  // If there's a semicolon, parse the column number
+                  if (*next_ptr == ';') {
+                    next_ptr++;
+                    if (IsDigit(*next_ptr)) {
+                      col = ToI64(next_ptr);
+                      while (IsDigit(*next_ptr)) next_ptr++;  // Advance the pointer
+                    }
+                  }
+
+                  // Now you can use row and col
+                  Print("$$CM,%d,%d$$", row, col);
+                  ptr = next_ptr;  // update ptr to point to the character after the parsed sequence
                 } else if (*ptr == 'J') {
                   // Erase in Display
-                  DocClear;
+                  if (ansi_code == 0) {
+                    // Erase from cursor to end of display
+                    // DocDelToNum(Fs->display_doc, Fs->display_doc->cur_entry->line_num);
+                  } else if (ansi_code == 1) {
+                    // Erase from cursor to beginning of display
+                    // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
+                  } else if (ansi_code == 2) {
+                    // Erase entire display
+                    DocClear;
+                  }
                   ptr++;
                 } else if (*ptr == 'K') {
-                  // TODO: Erase in Line
+                  // Erase in Line
+                  CDocEntry *cur_entry = Fs->display_doc->cur_entry;
+                  CDocEntry *next_entry = cur_entry->next;
+                  
+                  // Delete the current entry
+                  if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
+                    Fs->display_doc->cur_entry = next_entry;
+                    Fs->display_doc->cur_col = next_entry->min_col;
+                    DocEntryDel(Fs->display_doc, cur_entry);
+                  }
+                  
+                  // Create a new entry (line) in its place
+                  CDocEntry *new_entry = DocEntryNew(Fs->display_doc, DOCT_TEXT, "", 0);
+                  DocInsEntry(Fs->display_doc, new_entry);
+                  
                   ptr++;
                 } else if (*ptr == 'S') {
                   // TODO: Scroll Up
@@ -478,6 +531,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             }
           }
         }
+        // is this handled by the client or the server?
         else if (*ptr == '|') {
           // U8 code[3];
           // code[0] = ptr++;
@@ -514,7 +568,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   "Telnet connection closed.\n";
 }
 
-
 class CHostForm {
   U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
   U16 port format "A=\"Port:%d\"";
@@ -530,43 +583,6 @@ U0 TelnetPrompt() {
   }
 }
 
-// Telnet("mbrserver.com");
-// Telnet("freechess.org");
-// Telnet("dura-bbs.net", 6359);
-// Telnet("darkrealms.ca");
-
-// good to test refresh, line feed, etc
-// Telnet("20forbeers.com", 1337);
-
-// view public IP
-// Telnet("telnetmyip.com")
-
-// time
-// Telnet("india.colorado.edu", 13);
-
-// telehack
-// Telnet("telehack.com");
-
-// star trek game
-// Telnet("mtrek.com", 1701);
-// Telnet("xmltrek.com", 1701);
-
-// Telnet("bbs.archaicbinary.net"); // Archaic Binary
-// Telnet("ateraan.com", 4002); //  New Worlds - Ateraan
-// Telnet("avalon-rpg.com"); // Avalon: The Legend Lives
-// Telnet("aardmud.org", 4000); // Aardwolf MUD
-// Telnet("TextMMOde.com"); // Sands of Time / Deep Space MMO
-// Telnet("legendofthereddragon.ca"); // Legend of the Red Dragon (Canada)
-// Telnet("lord.stabs.org"); // Legend of the Red Dragon
-// Telnet("thehatshop.mudhosting.net", 3000); // Hallowed Halls
-// Telnet("batmud.bat.org"); // BatMUD
-// Telnet("forgottenkingdoms.org", 4000); // Forgotten Kingdoms
-// Telnet("igormud.org", 1701);// Igor MUD
-// Telnet("achaea.com"); // Achaea, Dreams of Divine Lands
-// Telnet("gcomm.com"); // Galacticomm BBS
-// Telnet("1984.ws"); // 1984
-
-// Telnet("telnet.holdfastbbs.ca", 2323);
-
 // dev server
 Telnet("localhost", 8888);
+// Telnet("bbs.bottomlessabyss.net", 2023);
