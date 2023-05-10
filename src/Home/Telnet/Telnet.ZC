@@ -138,10 +138,11 @@ U0 InputTask(U0 *args) {
             }
             break;
           
+          case CH_ESC:
+            TCPSocketSendString(sock, 0x27);
+            break;
           case CH_SHIFT_ESC:
             force_disconnect = TRUE;
-            TCPSocketClose(sock);
-            "Telnet connection closed.\n";
             break;
           // send buffer on enter
 					case '\n':
@@ -551,11 +552,12 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   }
 
 	// sock(CTCPSocket *)->timeout = 0;
-  while (TaskValidate(input_task))
+  while (TaskValidate(input_task) && !force_disconnect)
   {
     Refresh;
   }
 
+  Kill(input_task);
 	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
