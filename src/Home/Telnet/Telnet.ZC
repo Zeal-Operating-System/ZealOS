@@ -178,12 +178,24 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 window_width = 80;
   I64 window_height = 25;
 
-  I64 window_left = (GR_WIDTH - window_width) / 2;
-  I64 window_top = (Fs->win_bottom - Fs->win_top - window_height+1) / 2;
+  // I64 window_left = (GR_WIDTH - window_width) / 2;
+  // I64 window_top = (Fs->win_bottom - Fs->win_top - window_height+1) / 2;
 
-	// DocPrint(, "$$WW,1$$");
-  WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
-  WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height+1, Fs);
+  // WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
+  // WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height+1, Fs);
+
+  
+  Fs->win_width = window_width;
+  WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
+          (TEXT_COLS / 2) - (Fs->win_width / 2) +
+              (Fs->win_width - 1),
+          Fs);
+  Fs->win_height = window_height;
+  WinVert((TEXT_ROWS / 2) - (Fs->win_height / 2),
+          (TEXT_ROWS / 2) - (Fs->win_height / 2) +
+              (Fs->win_height - 1),
+          Fs);
+  DocPrint(, "$$WW,1$$");
   // DocCursor(OFF);
 
   // WinToTop(Fs);
@@ -199,10 +211,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 	LBts(&input_task->display_flags, DISPLAYf_SHOW);
 	WinFocus(input_task);
 
-  input_task->win_top = Fs->win_top + window_top;
-	input_task->win_bottom = Fs->win_top + 40;
+  input_task->win_top = Fs->win_top + window_height + 1;
+	input_task->win_bottom = Fs->win_top + 30;
 	input_task->win_left	= Fs->win_left;
-	input_task->win_right	= Fs->win_left+window_width;
+	input_task->win_right	= Fs->win_left+window_width - 1;
 
   DocClear;
 
