@@ -269,23 +269,28 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           if (*ptr == ANSI_CSI) {
             ptr++;
             I64 ansi_code = 0;
-            I64 x_code = 0;
-            I64 y_code = 0;
+            I64 x_code = 1;
+            I64 y_code = 1;
             Bool parsing_y = FALSE;
             while (IsDigit(*ptr) || *ptr == ';') {
                 if (IsDigit(*ptr)) {
                     ansi_code = ansi_code * 10 + (*ptr - '0');
+                    SysLog("ANSICODE: %d\n", ansi_code);
                     if (!parsing_y) {
-                        x_code = x_code * 10 + (*ptr - '0');
+                      x_code = x_code * 10 + (*ptr - '0');
+                      SysLog("row: %d\n", x_code);
                     } else {
-                        y_code = y_code * 10 + (*ptr - '0');
+                      y_code = y_code * 10 + (*ptr - '0');
+                      SysLog("col: %d\n", y_code);
                     }
                     ptr++;
                 }
                 else if (*ptr == ';') {
                     parsing_y = TRUE; 
                     ptr++;
-                }
+                    if(!IsDigit(*ptr)) {
+                      break;
+                    }
             }
 
             // Handle specific ANSI escape sequences
@@ -311,13 +316,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'm':
-                  I64 color_code;
-                  if (ansi_code >= 30 && ansi_code <= 37) {
-                    color_code = ansi_code - 30; // Set foreground color
-                  } else if (ansi_code >= 40 && ansi_code <= 47) {
-                    color_code = ansi_code - 40; // Set background color
-                  } 
-                  else if (ansi_code < 10) {
+                  // I64 fg_code, bg_code;
+                  // if (x_code >= 30 && x_code <= 37) {
+                  //   fg_code = x_code - 30; // Set foreground color
+                  // } else if (y_code >= 40 && y_code <= 47) {
+                  //   bg_code = y_code - 40; // Set background color
+                  // }
+                  if (ansi_code <= 10) {
                     switch (ansi_code) {
                       case 0: "$$BG$$$$FG$$"; break; // reset
                       // case 1: ""; break; // TODO: bold
@@ -332,16 +337,30 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       // case 10: ""; break; // TODO: primary font
                     }
                   }
-                  switch (color_code) {
-                    case 0: "$$BLACK$$"; break;
-                    case 1: "$$RED$$"; break;
-                    case 2: "$$GREEN$$"; break;
-                    case 3: "$$YELLOW$$"; break;
-                    case 4: "$$BLUE$$"; break;
-                    case 5: "$$PURPLE$$"; break;
-                    case 6: "$$CYAN$$"; break;
-                    case 7: "$$WHITE$$"; break;
-                    case 8: "$$BG$$$$FG$$"; break; // reset
+                  switch (x_code) {
+                    case 30: "$$BLACK$$"; break;
+                    case 31: "$$RED$$"; break;
+                    case 32: "$$GREEN$$"; break;
+                    case 33: "$$YELLOW$$"; break;
+                    case 34: "$$BLUE$$"; break;
+                    case 35: "$$PURPLE$$"; break;
+                    case 36: "$$CYAN$$"; break;
+                    case 37: "$$WHITE$$"; break;
+                    case 39: "$$BFG$$"; break; // reset
+                    default: break;
+                  }
+                  // this is a dumb approach, just do a CatPrint or something
+                  // until we properly catch the `;` it will stay fucked
+                  switch (y_code) {
+                    case 40: "$$BG,BLACK$$"; break;
+                    case 41: "$$BG,RED$$"; break;
+                    case 42: "$$BG,GREEN$$"; break;
+                    case 43: "$$BG,YELLOW$$"; break;
+                    case 44: "$$BG,BLUE$$"; break;
+                    case 45: "$$BG,PURPLE$$"; break;
+                    case 46: "$$BG,CYAN$$"; break;
+                    case 47: "$$BG,WHITE$$"; break;
+                    case 49: "$$BG$$"; break; // reset
                     default: break;
                   }
                   ptr++;
@@ -511,8 +530,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           // code[0] = ptr++;
           // code[1] = ptr++;
           // code[2] = '\0';
-          // I64 color_code = ToI64(code);
-          // AppendColorString(color_code);
+          // I64 fg_code = ToI64(code);
+          // AppendColorString(fg_code);
           SysLog("Pipe code: %c%c\n", ptr[1], ptr[2]);
           ptr += 3; // Skip the pipe code characters
           // ptr++;
