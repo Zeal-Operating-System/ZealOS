@@ -1,0 +1,55 @@
+U0 TelnetNegotiate()
+{
+  U8 negotiation_code = *(ptr + 1);
+  U8 option_code = *(ptr + 2);
+
+  // Send a response to the server
+  U8 response[4];
+  response[0] = IAC;
+
+  if (negotiation_code == DO || negotiation_code == DONT) {
+    if (option_code == ECHO) {
+      if (negotiation_code == DO) {
+        response[1] = WILL;
+      } else {
+        response[1] = WONT;
+      }
+    } else if (option_code == SUPPRESS_GO_AHEAD) { 
+      if (negotiation_code == DO) {
+        response[1] = WILL;
+      } else {
+        response[1] = WONT;
+      }
+    } else if (option_code == TERMINAL_TYPE) {
+      if (negotiation_code == DO) {
+        response[1] = WILL;
+      } else {
+        response[1] = WONT;
+      }
+    } else if (option_code == NAWS) {
+      if (negotiation_code == DO) {
+        response[1] = WILL;
+      } else {
+        response[1] = WONT;
+      }
+    } else if (option_code == LINEMODE) { 
+      if (negotiation_code == DO) {
+        response[1] = WILL;
+      } else {
+        response[1] = WONT;
+      }
+    } else {
+      response[1] = WONT;
+    }
+  } else {
+    response[1] = DONT;
+  }
+
+  response[2] = option_code;
+  response[3] = '\0';
+  // TCPSocketSendString(sock, response);
+  // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
+  // if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
+  // else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
+  ptr += 3;
+}

@@ -2,7 +2,7 @@
 // Public Domain
 
 #define TELNET_PORT 23
-#define BUF_SIZE 40960 // way too big?
+#define BUF_SIZE 8192 // way too big?
 #define TIMEOUT_DURATION 5000
 
 #define NEGOTIATE 0xFF
@@ -260,84 +260,37 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       while (*ptr) {
          // Telnet negotiation sequence
         if (*ptr == NEGOTIATE) {
-          U8 negotiation_code = *(ptr + 1);
-          U8 option_code = *(ptr + 2);
-
-          // Send a response to the server
-          U8 response[4];
-          response[0] = IAC;
-
-          if (negotiation_code == DO || negotiation_code == DONT) {
-            if (option_code == ECHO) {
-              if (negotiation_code == DO) {
-                response[1] = WILL;
-              } else {
-                response[1] = WONT;
-              }
-            } else if (option_code == SUPPRESS_GO_AHEAD) { 
-              if (negotiation_code == DO) {
-                response[1] = WILL;
-              } else {
-                response[1] = WONT;
-              }
-            } else if (option_code == TERMINAL_TYPE) {
-              if (negotiation_code == DO) {
-                response[1] = WILL;
-              } else {
-                response[1] = WONT;
-              }
-            } else if (option_code == NAWS) {
-              if (negotiation_code == DO) {
-                response[1] = WILL;
-              } else {
-                response[1] = WONT;
-              }
-            } else if (option_code == LINEMODE) { 
-              if (negotiation_code == DO) {
-                response[1] = WILL;
-              } else {
-                response[1] = WONT;
-              }
-            } else {
-              response[1] = WONT;
-            }
-          } else {
-            response[1] = DONT;
-          }
-
-          response[2] = option_code;
-          response[3] = '\0';
-          // TCPSocketSendString(sock, response);
-          // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
-          // if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
-          // else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
+          // include TelnetNegotiation.ZC here i guess
           ptr += 3;
         }
-        // check for pipecode here?? 
-        // https://github.com/wwivbbs/docs/blob/main/docs/cfg/displaying_text.md#pipe-screen-and-cursor-control
         else if (*ptr == ANSI_ESC) {
           // ANSI escape sequence
           ptr++;
           if (*ptr == ANSI_CSI) {
             ptr++;
-            I64 ansi_code;
-            while (1) {
-              ansi_code = 0;
-              while (IsDigit(*ptr)) {
-                ansi_code = ansi_code * 10 + (*ptr - '0');
-                ptr++;
-              }
-              // Process ansi_code
-              // if (*ptr == ' ') {
-              //   // skip empty space
-              //   ptr++;
-              // }
-              if (*ptr == ';') {
-                ptr++;
-              }
-              else {
-                // this helps for ANSI detection
-                if (*ptr == 'n') {
+            I64 ansi_code = 0;
+            I64 x_code = 0;
+            I64 y_code = 0;
+            Bool parsing_y = FALSE;
+            while (IsDigit(*ptr) || *ptr == ';') {
+                if (IsDigit(*ptr)) {
+                    ansi_code = ansi_code * 10 + (*ptr - '0');
+                    if (!parsing_y) {
+                        x_code = x_code * 10 + (*ptr - '0');
+                    } else {
+                        y_code = y_code * 10 + (*ptr - '0');
+                    }
+                    ptr++;
+                }
+                else if (*ptr == ';') {
+                    parsing_y = TRUE; 
+                    ptr++;
+                }
+            }
+
+            // Handle specific ANSI escape sequences
+            switch (*ptr) {
+                case 'n':
                   if (ansi_code == 5) {
                     // Respond with terminal readiness
                     SysLog("reported terminal readiness\n");
@@ -350,12 +303,14 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     TCPSocketSendString(sock, "\x1B\[25;80R");
                   } 
                   ptr++;
-                } else if (*ptr == 'c') {
+                  break;
+                case 'c':
                   // Respond with device attributes
                   SysLog("reported device attributes\n");
                   TCPSocketSendString(sock, "\x1B[?1;0c");
                   ptr++;
-                } else if (*ptr == 'm') {
+                  break;
+                case 'm':
                   I64 color_code;
                   if (ansi_code >= 30 && ansi_code <= 37) {
                     color_code = ansi_code - 30; // Set foreground color
@@ -391,61 +346,66 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   }
                   ptr++;
                   break;
-                } else if (*ptr == 'A') {
+                case 'A':
                   // Cursor Up
-                  "$$CM+LY,0,-%d$$", ansi_code;
+                  SysLog("Cursor Up\n");
+                  "$$CM+TY,0,-%d$$", ansi_code;
                   ptr++;
-                } else if (*ptr == 'B') {
+                  break;
+                case 'B':
                   // Cursor Down
-                  "$$CM+LY,0,+%d$$", ansi_code;
+                  SysLog("Cursor Down\n");
+                  "$$CM+TY,0,+%d$$", ansi_code;
                   ptr++;
-                } else if (*ptr == 'C') {
-                  I64 i;
-                  // I64 move_count = 0;
-                  // while (IsDigit(*ptr)) {
-                  //   move_count = move_count * 10 + (*ptr - '0');
-                  //   ptr++;
-                  // }
-                  // if (move_count == 0) {
-                  //   move_count = 1; // Default value if no number is provided
-                  // }
-                  // for (i = 0; i < ansi_code; i++) {
-                  //   Print(" ");
-                  // }
-
+                  break;
+                case 'C':
                   // Cursor Right
+                  SysLog("Cursor Right\n");
                   "$$CM+LX,+%d,0$$", ansi_code;
                   ptr++;
-                } else if (*ptr == 'D') {
+                  break;
+                case 'D':
                   // Cursor Left
-                  "$$CM+LX,-%d,0$$", ansi_code;
+                  SysLog("Cursor Left\n");
+                  "$$CM+TY,-%d,0$$", ansi_code;
                   ptr++;
-                } else if (*ptr == 'E') {
+                  break;
+                case 'E':
+                  // Cursor Next Line
+                  SysLog("Cursor Next Line\n");
+                  "$$CM+TY,0,+%d$$", ansi_code;
+                  "\n";
+                  break;
+                  ptr++;
+                case 'F':
+                  // Cursor Previous Line
+                  SysLog("Cursor Previous Line\n");
+                  "$$CM+LY,0,-%d$$", ansi_code;
                   "\n";
                   ptr++;
-                } else if (*ptr == 'H' || *ptr == 'f') {
+                  break;
+                case 'G':
+                  // Cursor Horizontal Absolute	
+                  SysLog("Cursor Horizontal Absolute\n");
+                  "$$CM,%d,0$$", ansi_code;
+                  "\n";
+                  ptr++;
+                  break;
+                case 'H':
+                case 'f':
                   I64 row = 1, col = 1;  // default values
-                  U8 *next_ptr = ptr + 1;
 
                   // Parse the row number
-                  if (IsDigit(*next_ptr)) {
-                    row = ToI64(next_ptr);
-                    while (IsDigit(*next_ptr)) next_ptr++;  // Advance the pointer
-                  }
+                  row = x_code;
+                  col = y_code;
 
-                  // If there's a semicolon, parse the column number
-                  if (*next_ptr == ';') {
-                    next_ptr++;
-                    if (IsDigit(*next_ptr)) {
-                      col = ToI64(next_ptr);
-                      while (IsDigit(*next_ptr)) next_ptr++;  // Advance the pointer
-                    }
-                  }
-
-                  // Now you can use row and col
-                  Print("$$CM,%d,%d$$", row, col);
-                  ptr = next_ptr;  // update ptr to point to the character after the parsed sequence
-                } else if (*ptr == 'J') {
+                  SysLog("H or f row:%d, col:%d\n", row, col);
+                  // "$$CM,%d,%d$$", row, col;
+                  "$$CM,LE=%d,RE=%d$$", col, row;
+                  ptr++;
+                  break;
+                case 'J':
+                  SysLog("J code\n");
                   // Erase in Display
                   if (ansi_code == 0) {
                     // Erase from cursor to end of display
@@ -458,7 +418,9 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     DocClear;
                   }
                   ptr++;
-                } else if (*ptr == 'K') {
+                  break;
+                case 'K':
+                  SysLog("K code");
                   // Erase in Line
                   CDocEntry *cur_entry = Fs->display_doc->cur_entry;
                   CDocEntry *next_entry = cur_entry->next;
@@ -471,18 +433,27 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   }
                   
                   // Create a new entry (line) in its place
-                  CDocEntry *new_entry = DocEntryNew(Fs->display_doc, DOCT_TEXT, "", 0);
+                  CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
                   DocInsEntry(Fs->display_doc, new_entry);
                   
                   ptr++;
-                } else if (*ptr == 'S') {
+                  break;
+                case 'S':
                   // TODO: Scroll Up
+                  SysLog("Scroll Up");
                   ptr++;
-                } else if (*ptr == 'T') {
+                  break;
+                case 'T':
                   // TODO: Scroll Down
+                  SysLog("Scroll Down");
                   ptr++;
-                } else if (*ptr == '?') {
+                  break;
+                case '?':
                   ptr++;
+                  
+                  if (*ptr == 's') SysLog("SaveCurrentCursorPosition\n");
+                  if (*ptr == 'u') SysLog("RestoreCurrentCursorPosition\n");
+
                   I64 code = 0;
 
                   while (IsDigit(*ptr)) {
@@ -510,24 +481,27 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       ptr++;
                       break;
                   }
-                } else if (*ptr == 's') {
+                  break;
+                case 's':
                   // self.saveCursorPosition();
                   ptr++;
-                } else if (*ptr == 'r') {
+                  break;
+                case 'r':
                   // self.restoreCursorPosition();
                   ptr++;
-                } else if (*ptr == 'h' || *ptr == 'l') {
+                  break;
+                case 'h':
+                case 'l':
                   // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
                   ptr++; // Skip 'h' or 'l'
-                } else if (*ptr == '=') {
+                  break;
+                case '=':
                   SysLog("ScreenMode attempt\n");
                   ptr++;
-                } else {
+                  break;
+                default:
                   ptr++;
-                }
-                // ptr++;
-                break;
-              }
+                  break;
             }
           }
         }
@@ -549,7 +523,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
       }
-      
+
     } else {
       // SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
