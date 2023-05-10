@@ -271,7 +271,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     }
                     else if (ansi_code[m] >= 30 && ansi_code[m] <= 37) {
                       // Set foreground color
-                      SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+                      // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       switch (ansi_code[m]) {
                         case 30: "$$BLACK$$"; break;
                         case 31: "$$RED$$"; break;
@@ -289,7 +289,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     // until we properly catch the `;` it will stay fucked
                     else if (ansi_code[m] >= 40 && ansi_code[m] <= 47) {
                       // Set background color
-                      SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+                      // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       switch (ansi_code[m]) {
                         case 40: "$$BG,BLACK$$"; break;
                         case 41: "$$BG,RED$$"; break;
@@ -329,7 +329,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   break;
                 case 'D':
                   // Cursor Left
-                  SysLog("Cursor Left\n");
+                  // SysLog("Cursor Left\n");
                   // "$$CM+TY,-%d,0$$", ansi_code[0];
                   "$$CM,-%d,0$$", ansi_code[0];
                   ptr++;
@@ -358,21 +358,24 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 case 'H':
                 case 'f':
                   I64 row = 1, col = 1;  // default values
-
                   // Parse the row number
-                  // if(ansi_code[0] != 0)
-                  //   row = ansi_code[0];
-                  // if(ansi_code[1] != 0)
-                  //   col = ansi_code[1];
+                  if(ansi_code[0] != 1)
+                    row = ansi_code[0];
+                  if(ansi_code[1] != 1)
+                    col = ansi_code[1];
 
-                  // SysLog("H or f row:%d, col:%d\n", row, col);
-                  // "$$CM,%d,%d$$", row, col;
+                  // Not sure if really should do -1...
+                  if (row > window_height)
+                    row = window_heigh-1;
+                  if (col > window_width)
+                    col = window_width-1;
 
-                  // "$$CM,LE=%d,RE=%d$$", col, row;
+                  // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+                  "$$CM,%d,%d$$", row, col;
                   ptr++;
                   break;
                 case 'J':
-                  SysLog("J code\n");
+                  // SysLog("J code\n");
                   // Erase in Display
                   if (ansi_code[0] == 0) {
                     // Erase from cursor to end of display
