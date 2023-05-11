@@ -1,3 +1,7 @@
+U8 IsDigit(U8 ch) {
+  return '0' <= ch <= '9';
+}
+
 class CHostForm {
   U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
   U16 port format "A=\"Port:%d\"";
@@ -9,6 +13,6 @@ U0 TelnetPrompt() {
   form.host[0] = 0;
   form.port = TELNET_PORT;
   if (PopUpForm(&form)) {
-    Telnet(form.host, form.port);
+    // Telnet(form.host, form.port);
   }
 }

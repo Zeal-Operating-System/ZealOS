@@ -1,5 +1,6 @@
 // Telnet client for ZealOS by y4my4m
 // Public Domain
+Cd(__DIR__);;
 
 #define TELNET_PORT 23
 #define BUF_SIZE 8192 // way too big?
@@ -13,12 +14,11 @@
 
 #define MAX_ANSI_PARAMS 32
 
+#include "TelnetNegotiation"
+#include "TelnetHelpers"
+
 CTask *input_task	= NULL;
 Bool force_disconnect = FALSE;
-
-U8 IsDigit(U8 ch) {
-  return '0' <= ch <= '9';
-}
 
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32) { // ASCII code below 32 (control character)
@@ -86,15 +86,15 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
+	// sock(CTCPSocket *)->timeout = 0;
 	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   return sock;
 }
 
 U0 InputTask(U0 *args) {
   I64 sock = *args;
-
-	DocTermNew;
-	DocPrint(, "$$WW,1$$");
+  DocTermNew;
+  DocPrint(, "$$WW,1$$");
   // DocCursor;
   // WinBorder(OFF);
 
@@ -214,7 +214,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   DocClear;
 
   // probably should use word wrap?
-  DocPrint(, "$$WW,1$$");
+  // DocPrint(, "$$WW,1$$");
+  DocCursor(OFF);
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
@@ -245,6 +246,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
          // Telnet negotiation sequence
         if (*ptr == NEGOTIATE) {
           // include TelnetNegotiation.ZC here i guess
+          TelnetNegotiate(sock, ptr);
           ptr += 3;
         }
         else if (*ptr == ANSI_ESC) {
@@ -334,35 +336,28 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   Bool isBright = FALSE;
                   for (m = 0; m < ansi_param_count; m++) {
                     if (ansi_code[m] <= 10) {
-                      if (ansi_param_count == 0)
-                      {
-                        switch (ansi_code[m]) {
-                          // case 0: "$$BG$$$$FG$$"; break; // reset
-                          case 0: "$$BG,BLACK$$$$WHITE$$"; break; // reset
-                          // case 1: ""; break; // TODO: bold
-                          // case 2: ""; break; // TODO: dim
-                          // case 3: ""; break; // TODO: italic
-                          // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
-                          // case 5: "$$"; break; // TODO: blink
-                          // case 6: ""; break; // TODO: fast blink
-                          // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
-                          // case 8: ""; break; // TODO: hide (rare)
-                          // case 9: ""; break; // TODO: strikethrough
-                          // case 10: ""; break; // TODO: primary font
-                        }
-                      }
-                      else {
-                        switch (ansi_code[m]) {
-                          case 1: isBright = TRUE; break;
-                        }
+                      switch (ansi_code[m]) {
+                        // case 0: "$$BG$$$$FG$$"; break; // reset
+                        case 0: "$$BG,BLACK$$$$WHITE$$"; break; // reset
+                        // case 1: ""; break; // TODO: bold
+                        case 1: isBright = TRUE; break;
+                        // case 2: ""; break; // TODO: dim
+                        // case 3: ""; break; // TODO: italic
+                        // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
+                        // case 5: "$$"; break; // TODO: blink
+                        // case 6: ""; break; // TODO: fast blink
+                        // case 7: "$$IV,1$$" + string + "$$IV,0$$"; break; // TODO: invert
+                        // case 8: ""; break; // TODO: hide (rare)
+                        // case 9: ""; break; // TODO: strikethrough
+                        // case 10: ""; break; // TODO: primary font
                       }
                     }
-                    else if (ansi_code[m] >= 30 && ansi_code[m] <= 37) {
+                    else if ((ansi_code[m] >= 30 && ansi_code[m] <= 39) || (ansi_code[m] >= 90 && ansi_code[m] <= 97)) {
                       // Set foreground color
                       // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       if(!isBright){
                         switch (ansi_code[m]) {
-                          case 30: "$$DKGRAY$$"; break;
+                          case 30: "$$BLACK$$"; break;
                           case 31: "$$RED$$"; break;
                           case 32: "$$GREEN$$"; break;
                           case 33: "$$YELLOW$$"; break;
@@ -400,7 +395,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     }
                     // this is a dumb approach, just do a CatPrint or something
                     // until we properly catch the `;` it will stay buggy
-                    else if (ansi_code[m] >= 40 && ansi_code[m] <= 47) {
+                    else if ((ansi_code[m] >= 40 && ansi_code[m] <= 49) || (ansi_code[m] >= 100 && ansi_code[m] <= 107)) {
                       // Set background color
                       // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       if(!isBright){
@@ -565,7 +560,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'M':
-                  // SysLog("Case M\n");
+                  SysLog("Case M\n");
                   // TODO: is this correct? cursor should go one line up
                   "$$CM,0,-1$$";
                   ptr++;
