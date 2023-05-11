@@ -44,7 +44,6 @@ U0 InputTask(U0 *args) {
   I64 sock = *args;
   DocTermNew;
   DocPrint(, "$$WW,1$$");
-  // DocCursor;
   // WinBorder(OFF);
 
   U8 input_buffer[INPUT_BUF_SIZE];
@@ -53,97 +52,94 @@ U0 InputTask(U0 *args) {
   U8 *line = input_buffer;
   I64 input_len = 0;
 
-  while (!force_disconnect) {
+  DocBottom(input_task->put_doc);
+  "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
 
-      DocBottom(input_task->put_doc);
-      "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
-
-      // https://theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
-      input_len = 0;
-      while (1) {
-        U8 key = KeyGet(&sc);
-        switch (key)
+  // https://theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
+  input_len = 0;
+  while (1) {
+    U8 key = KeyGet(&sc);
+    switch (key)
+    {
+      case 0:
+        switch (sc.u8[0])
         {
-          case 0:
-            switch (sc.u8[0])
-            {
-              case SC_CURSOR_LEFT:
-                // SysLog("Pressed Cursor Left");
-                TCPSocketSendString(sock, "\x1B[D");
-                break;
-
-              case SC_CURSOR_RIGHT:
-                // SysLog("Pressed Cursor Right");
-                TCPSocketSendString(sock, "\x1B[C");
-                break;
-
-              case SC_CURSOR_UP:
-                // SysLog("Pressed Cursor Up");
-                TCPSocketSendString(sock, "\x1B[A");
-                break;
-
-              case SC_CURSOR_DOWN:
-                // SysLog("Pressed Cursor Down");
-                TCPSocketSendString(sock, "\x1B[B");
-                break;
-              default:
-                break;
-            }
+          case SC_CURSOR_LEFT:
+            // SysLog("Pressed Cursor Left");
+            TCPSocketSendString(sock, "\x1B[D");
             break;
-          case 9:
-            switch (sc.u8[0])
-            {
-              case SC_TAB:
-                TCPSocketSendString(sock, "\x09");
-                break;
-              default:
-                break;
-            }
-          case CH_BACKSPACE:
-            // TCPSocketSendString(sock, "\x7F\x1B[D");
-            // TCPSocketSendString(sock, "\x7F");
-            // TCPSocketSendString(sock, "\x08\x20\x08");
-            TCPSocketSendString(sock, "\x08");
-            break;
-          case CH_ESC:
-            TCPSocketSendString(sock, "\x1B");
-            break;
-          case CH_SHIFT_ESC:
-            force_disconnect = TRUE;
-            break;
-          // send buffer on enter
-					case '\n':
-            // SysLog(input_buffer);
-            temp = MStrPrint("%s\r\n", input_buffer);
-            TCPSocketSendString(sock, temp);
 
-            input_len = 0;
-            Free(temp);
-            MemSet(input_buffer, 0, INPUT_BUF_SIZE);
-            DocClear;
+          case SC_CURSOR_RIGHT:
+            // SysLog("Pressed Cursor Right");
+            TCPSocketSendString(sock, "\x1B[C");
+            break;
 
-            DocBottom(input_task->put_doc);
-            "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
+          case SC_CURSOR_UP:
+            // SysLog("Pressed Cursor Up");
+            TCPSocketSendString(sock, "\x1B[A");
+            break;
+
+          case SC_CURSOR_DOWN:
+            // SysLog("Pressed Cursor Down");
+            TCPSocketSendString(sock, "\x1B[B");
             break;
           default:
-            if (key >= ' ' && key <= '~') {
-              // Handle regular keys
-              input_buffer[input_len++] = key;
-              // DocPrint(input_task->put_doc, "%c", key);
-              temp = MStrPrint("%s", input_buffer);
-              TCPSocketSendString(sock, temp);
-
-              input_len = 0;
-              Free(temp);
-              MemSet(input_buffer, 0, INPUT_BUF_SIZE);
-              DocClear;
-
-              DocBottom(input_task->put_doc);
-              "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
-            }
             break;
         }
-      }
+        break;
+      case 9:
+        switch (sc.u8[0])
+        {
+          case SC_TAB:
+            TCPSocketSendString(sock, "\x09");
+            break;
+          default:
+            break;
+        }
+      case CH_BACKSPACE:
+        // TCPSocketSendString(sock, "\x7F\x1B[D");
+        // TCPSocketSendString(sock, "\x7F");
+        // TCPSocketSendString(sock, "\x08\x20\x08");
+        TCPSocketSendString(sock, "\x08");
+        break;
+      case CH_ESC:
+        TCPSocketSendString(sock, "\x1B");
+        break;
+      case CH_SHIFT_ESC:
+        force_disconnect = TRUE;
+        break;
+      // send buffer on enter
+      case '\n':
+        // SysLog(input_buffer);
+        temp = MStrPrint("%s\r\n", input_buffer);
+        TCPSocketSendString(sock, temp);
+
+        input_len = 0;
+        Free(temp);
+        MemSet(input_buffer, 0, INPUT_BUF_SIZE);
+        DocClear;
+
+        DocBottom(input_task->put_doc);
+        "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
+        break;
+      default:
+        if (key >= ' ' && key <= '~') {
+          // Handle regular keys
+          input_buffer[input_len++] = key;
+          // DocPrint(input_task->put_doc, "%c", key);
+          temp = MStrPrint("%s", input_buffer);
+          TCPSocketSendString(sock, temp);
+
+          input_len = 0;
+          Free(temp);
+          MemSet(input_buffer, 0, INPUT_BUF_SIZE);
+          DocClear;
+
+          DocBottom(input_task->put_doc);
+          "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
+        }
+        break;
+    }
   }
 }
 
@@ -293,7 +289,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // like, <Esc>[1;40m and now <Esc>[40m;1m
                   I64 m;
                   Bool isBright = FALSE;
-                  for (m = 0; m < ansi_param_count; m++) {
+                  for (m = 0; m <= ansi_param_count; m++) {
                     if (ansi_code[m] <= 10) {
                       switch (ansi_code[m]) {
                         case 0: "$$BG,BLACK$$$$WHITE$$"; isBright = FALSE; break; // reset
@@ -477,7 +473,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'J':
-                  SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
+                  // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
                   // Erase in Display
                   if (ansi_code[0] == 0) {
                     // Erase from cursor to end of display
@@ -492,8 +488,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'K':
-                  SysLog("K code\n");
                   // TODO: I have no idea if this actually works
+                  SysLog("K code\n");
                   // Erase in Line
                   CDocEntry *cur_entry = Fs->display_doc->cur_entry;
                   CDocEntry *next_entry = cur_entry->next;
@@ -504,7 +500,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     Fs->display_doc->cur_col = next_entry->min_col;
                     DocEntryDel(Fs->display_doc, cur_entry);
                   }
-                  
+
                   // Create a new entry (line) in its place
                   CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
                   DocInsEntry(Fs->display_doc, new_entry);
