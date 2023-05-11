@@ -29,17 +29,17 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 8: // BS (Backspace)
         // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
-        SysLog("CC Backspace happened\n");
         "$$CM,-8,0$$";
         break;
       case 9: // HT (Horizontal Tab)
-        "        "; // 8 spaces
-        // "$$CM,8,0$$";
+        // "        "; // 8 spaces
+        "$$CM,8,0$$";
         break;
       case 10: // LF (Line Feed)
         "\n";
         break;
       case 11: // VT (Vertical Tab)
+        SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
         DocClear;
@@ -50,6 +50,7 @@ U0 HandleControlCodes(U8 ch) {
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
       default:
+        SysLog("Other CC happened\n");
         break;
     }
   } 
@@ -58,9 +59,15 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("case 127");
     }
     if (ch == 0x24) {
-      // ch = "//$$$$";
+      ch = "//$$$$";
     }
-    "%c", ch;
+    if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
+    {
+      "%c", ch;
+    }
+    else {
+      "%c", '?'; // unrecognized character
+    }
   }
 }
 
@@ -254,24 +261,53 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             // Handle specific ANSI escape sequences
             switch (*ptr) {
                 case 'n':
-                  SysLog("Case n\n");
+                  SysLog("Case n, %d\n",ansi_code[0]);
                   if (ansi_code[0] == 5) {
                     // Respond with terminal readiness
                     SysLog("reported terminal readiness\n");
-                    TCPSocketSendString(sock, "\x1B[0n");
+                    U8 deviceStatusResponse[5];
+                    deviceStatusResponse[0] = ANSI_ESC;
+                    deviceStatusResponse[1] = ANSI_CSI;
+                    deviceStatusResponse[2] = 0x30; // '0'
+                    deviceStatusResponse[3] = 0x6E; // 'n'
+                    deviceStatusResponse[4] = 0x00; // Null-terminator
+                    TCPSocketSend(sock, deviceStatusResponse, 4);
+                    // TCPSocketSendString(sock, "\x1B[0n");
                   }
                   else if (ansi_code[0] == 6) {
                     // Respond with cursor position
                     // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
                     SysLog("reported cursor position\n");
-                    TCPSocketSendString(sock, "\x1B\[25;80R");
+                    U8 cursorResponse[32];
+                    cursorResponse[0] = ANSI_ESC;
+                    cursorResponse[1] = ANSI_CSI;
+                    cursorResponse[2] = 0x32;
+                    cursorResponse[3] = 0x35;
+                    cursorResponse[4] = 0x3B;
+                    cursorResponse[5] = 0x38;
+                    cursorResponse[6] = 0x30;
+                    cursorResponse[6] = 0x52;
+                    cursorResponse[7] = 0x00;
+                    TCPSocketSend(sock, cursorResponse, 7);
+                    // TCPSocketSendString(sock, "\x1B\[25;80R");
                   } 
                   ptr++;
                   break;
                 case 'c':
                   // Respond with device attributes
                   SysLog("reported device attributes\n");
-                  TCPSocketSendString(sock, "\x1B[?1;0c");
+                  // TCPSocketSendString(sock, "\x1B[?1;0c");
+                  // Reports at VT101 (not sure why though)
+                  U8 deviceAttributesResponse[8];
+                  deviceAttributesResponse[0] = ANSI_ESC;
+                  deviceAttributesResponse[1] = ANSI_CSI;
+                  deviceAttributesResponse[2] = 0x3F; // '?' 
+                  deviceAttributesResponse[3] = 0x31; // '1' 
+                  deviceAttributesResponse[4] = 0x3B; // ';' 
+                  deviceAttributesResponse[5] = 0x32; // '0' 
+                  deviceAttributesResponse[6] = 0x63; // 'c' 
+                  deviceAttributesResponse[7] = 0x00; // Null-terminator
+                  TCPSocketSend(sock, deviceAttributesResponse, 7);
                   ptr++;
                   break;
                 case 'm':
@@ -284,8 +320,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       if (ansi_param_count == 0)
                       {
                         switch (ansi_code[m]) {
-                          case 0: "$$BG$$$$FG$$"; break; // reset
-                          // case 0: "$$BG,TRANSPARENT$$$$WHITE$$"; break; // reset
+                          // case 0: "$$BG$$$$FG$$"; break; // reset
+                          case 0: "$$BG,BLACK$$$$WHITE$$"; break; // reset
                           // case 1: ""; break; // TODO: bold
                           // case 2: ""; break; // TODO: dim
                           // case 3: ""; break; // TODO: italic
@@ -309,7 +345,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       if(!isBright){
                         switch (ansi_code[m]) {
-                          case 30: "$$BLACK$$"; break;
+                          case 30: "$$DKGRAY$$"; break;
                           case 31: "$$RED$$"; break;
                           case 32: "$$GREEN$$"; break;
                           case 33: "$$YELLOW$$"; break;
@@ -402,15 +438,15 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 case 'B':
                   // Cursor Down
                   SysLog("Cursor Down\n");
-                  // "$$CM+TY,0,+%d$$", ansi_code[0];
                   "$$CM,0,%d$$", ansi_code[0];
                   ptr++;
                   break;
                 case 'C':
                   // Cursor Right
-                  SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
-                  // "$$CM+LX,+%d,0$$", ansi_code[0];
+                  // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
                   // "$$CM,%d,0$$", ansi_code[0];
+                  // if we just move the cursor, 
+                  // you dont get the colored background since we skip over it directly
                   I64 C;
                   for (C = 0; C < ansi_code[0]; C++) {
                     " ";
@@ -419,8 +455,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   break;
                 case 'D':
                   // Cursor Left
-                  // SysLog("Cursor Left\n");
-                  // "$$CM+TY,-%d,0$$", ansi_code[0];
+                  SysLog("Cursor Left\n");
                   "$$CM,-%d,0$$", ansi_code[0];
                   ptr++;
                   break;
@@ -428,20 +463,20 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // Cursor Next Line
                   SysLog("Cursor Next Line\n");
                   // "$$CM+TY,0,+%d$$", ansi_code[0];
-                  // "\n";
+                  "\n";
                   ptr++;
                   break;
                 case 'F':
                   // Cursor Previous Line
                   SysLog("Cursor Previous Line\n");
-                  // "$$CM+LY,0,-%d$$", ansi_code[0];
+                  "$$CM+LY,0,-%d$$", ansi_code[0];
                   // "\n";
                   ptr++;
                   break;
                 case 'G':
                   // Cursor Horizontal Absolute	
                   SysLog("Cursor Horizontal Absolute\n");
-                  // "$$CM,%d,0$$", ansi_code[0];
+                  "$$CM,%d,0$$", ansi_code[0];
                   // "\n";
                   ptr++;
                   break;
@@ -462,16 +497,14 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
                   if (row > window_height)
-                    row = window_height-2;
+                    row = window_height-1;
                   if (col > window_width)
                     col = window_width;
-
-                  "$$CM,%d,%d$$", row, col;
-                  // "$$CM,LE=%d,RE=%d$$", row, col;
+                  "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1;
                   ptr++;
                   break;
                 case 'J':
-                  // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
+                  SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
                   // Erase in Display
                   if (ansi_code[0] == 0) {
                     // Erase from cursor to end of display
