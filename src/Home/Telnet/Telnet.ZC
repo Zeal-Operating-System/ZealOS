@@ -5,7 +5,7 @@ Cd(__DIR__);;
 #define TELNET_PORT 23
 #define BUF_SIZE 8192 // way too big?
 #define INPUT_BUF_SIZE 32
-#define TIMEOUT_DURATION 5000
+#define TIMEOUT_DURATION 500000
 
 #define NEGOTIATE 0xFF
 
@@ -463,19 +463,19 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // TODO: I have no idea if this actually works
                   SysLog("K code\n");
                   // Erase in Line
-                  CDocEntry *cur_entry = Fs->display_doc->cur_entry;
-                  CDocEntry *next_entry = cur_entry->next;
+                  // CDocEntry *cur_entry = Fs->display_doc->cur_entry;
+                  // CDocEntry *next_entry = cur_entry->next;
                   
-                  // Delete the current entry
-                  if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
-                    Fs->display_doc->cur_entry = next_entry;
-                    Fs->display_doc->cur_col = next_entry->min_col;
-                    DocEntryDel(Fs->display_doc, cur_entry);
-                  }
+                  // // Delete the current entry
+                  // if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
+                  //   Fs->display_doc->cur_entry = next_entry;
+                  //   Fs->display_doc->cur_col = next_entry->min_col;
+                  //   DocEntryDel(Fs->display_doc, cur_entry);
+                  // }
 
-                  // Create a new entry (line) in its place
-                  CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
-                  DocInsEntry(Fs->display_doc, new_entry);
+                  // // Create a new entry (line) in its place
+                  // CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
+                  // DocInsEntry(Fs->display_doc, new_entry);
                   
                   ptr++;
                   break;
@@ -573,14 +573,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
     }
   }
 
-	// sock(CTCPSocket *)->timeout = 0;
-  // while (TaskValidate(input_task) && !force_disconnect)
-  // {
-  //   Refresh;
-  // }
-
   Kill(input_task);
-	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   TCPSocketClose(sock);
   "Telnet connection closed.\n";
 }
