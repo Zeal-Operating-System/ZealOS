@@ -590,12 +590,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           HandleControlCodes(*ptr);
           ptr++;
         }
-        // Reset ansi_param_count and ansi_code
-        ansi_param_count = 0;
-        I64 wtv;
-        for (wtv = 0; wtv < MAX_ANSI_PARAMS; wtv++) {
-            ansi_code[wtv] = 0;
-        }
       }
 
     } else {
