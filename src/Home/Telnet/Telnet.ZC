@@ -137,14 +137,19 @@ U0 InputTask(U0 *args) {
                 // SysLog("Pressed Cursor Down");
                 TCPSocketSendString(sock, "\x1B[B");
                 break;
-              case SC_TAB:
-                TCPSocketSend(sock, 0x09, 1);
-                break;
               default:
                 break;
             }
             break;
-
+          case 9:
+            switch (sc.u8[0])
+            {
+              case SC_TAB:
+                TCPSocketSendString(sock, "\x09");
+                break;
+              default:
+                break;
+            }
           case CH_BACKSPACE:
             // TCPSocketSendString(sock, "\x7F\x1B[D");
             // TCPSocketSendString(sock, "\x7F");
