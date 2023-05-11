@@ -245,7 +245,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       while (*ptr) {
          // Telnet negotiation sequence
         if (*ptr == NEGOTIATE) {
-          // include TelnetNegotiation.ZC here i guess
+          // FIXME: i don't think the telnet negotiation is actually working properly?
           TelnetNegotiate(sock, ptr);
           ptr += 3;
         }
@@ -297,7 +297,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     // Respond with cursor position
                     // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
                     SysLog("reported cursor position\n");
-                    U8 cursorResponse[32];
+                    U8 cursorResponse[8];
                     cursorResponse[0] = ANSI_ESC;
                     cursorResponse[1] = ANSI_CSI;
                     cursorResponse[2] = 0x32;
@@ -310,6 +310,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     TCPSocketSend(sock, cursorResponse, 7);
                     // TCPSocketSendString(sock, "\x1B\[25;80R");
                   } 
+                  else if (ansi_code[0] == 255) {
+                    // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
+                    SysLog("reported screensize?\n");
+                    SendWindowSize(sock, 25, 80);
+                  }
                   ptr++;
                   break;
                 case 'c':
@@ -337,7 +342,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   for (m = 0; m < ansi_param_count; m++) {
                     if (ansi_code[m] <= 10) {
                       switch (ansi_code[m]) {
-                        case 0: "$$BG,BLACK$$$$WHITE$$"; break; // reset
+                        case 0: "$$BG,BLACK$$$$WHITE$$"; isBright = FALSE; break; // reset
                         case 1: isBright = TRUE; break;
                         case 2: isBright = FALSE; break;
                         // case 0: "$$BG$$$$FG$$"; break; // reset
@@ -502,7 +507,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   if(ansi_code[1] != 1)
                     col = ansi_code[1];
                   
-                  // TODO: This is a hack, dont skip row 0, col 0
+                  // TODO: This is a hack, dont skip row 0, col 0 (maybe?)
                   if (row == 0 && col == 0) {
                     ptr++; 
                     break;
@@ -533,7 +538,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   ptr++;
                   break;
                 case 'K':
-                  SysLog("K code");
+                  SysLog("K code\n");
+                  // TODO: I have no idea if this actually works
                   // Erase in Line
                   CDocEntry *cur_entry = Fs->display_doc->cur_entry;
                   CDocEntry *next_entry = cur_entry->next;
@@ -549,6 +555,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
                   DocInsEntry(Fs->display_doc, new_entry);
                   
+                  ptr++;
+                  break;
+                case 'L':
+                  SysLog("L code\n");
                   ptr++;
                   break;
                 case 'S':
@@ -575,7 +585,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     code = code * 10 + (*ptr - '0');
                     ptr++;
                   }
-
                   switch (code) {
                     case 25:
                       if (*ptr == 'l') DocCursor(OFF); // Hide cursor
