@@ -337,10 +337,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   for (m = 0; m < ansi_param_count; m++) {
                     if (ansi_code[m] <= 10) {
                       switch (ansi_code[m]) {
-                        // case 0: "$$BG$$$$FG$$"; break; // reset
                         case 0: "$$BG,BLACK$$$$WHITE$$"; break; // reset
-                        // case 1: ""; break; // TODO: bold
                         case 1: isBright = TRUE; break;
+                        case 2: isBright = FALSE; break;
+                        // case 0: "$$BG$$$$FG$$"; break; // reset
+                        // case 1: ""; break; // TODO: bold
                         // case 2: ""; break; // TODO: dim
                         // case 3: ""; break; // TODO: italic
                         // case 4: "$$UL,1$$" + string + "$$UL,0$$"; break; // TODO: underline
@@ -388,7 +389,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                           case 36: "$$LTCYAN$$"; break;
                           case 97:
                           case 37: "$$LTGRAY$$"; break;
-                          case 39: "$$LTGRAY$$"; break; // reset
+                          case 39: "$$WHITE$$"; break; // reset
                           default: break;
                         }
                       }
@@ -431,7 +432,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                           case 46: "$$BG,LTCYAN$$"; break;
                           case 107:
                           case 47: "$$BG,LTGRAY$$"; break;
-                          case 49: "$$BG,DKGRAY$$"; break; // reset
+                          case 49: "$$BG,BLACK$$"; break; // reset
                           // case 49: "$$BG$$"; break; // would normally call $$BG$$ but telnet actually resets to black
                           default: break;
                         }
@@ -506,12 +507,13 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     ptr++; 
                     break;
                   }
-                  SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+                  // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
                   if (row > window_height)
                     row = window_height-1;
                   if (col > window_width)
-                    col = window_width;
+                    col = window_width-1;
+                  // "$$CM,0,0$$";
                   "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1;
                   ptr++;
                   break;
