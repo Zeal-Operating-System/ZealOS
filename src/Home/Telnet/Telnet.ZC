@@ -79,7 +79,6 @@ I64 TelnetOpen(U8 *host, U16 port) {
   }
 
 	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
-  
   return sock;
 }
 
@@ -146,7 +145,7 @@ U0 InputTask(U0 *args) {
             break;
           // send buffer on enter
 					case '\n':
-            SysLog(input_buffer);
+            // SysLog(input_buffer);
             temp = MStrPrint("%s\r\n", input_buffer);
             TCPSocketSendString(sock, temp);
             
@@ -178,13 +177,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   I64 window_width = 80;
   I64 window_height = 25;
 
-  // I64 window_left = (GR_WIDTH - window_width) / 2;
-  // I64 window_top = (Fs->win_bottom - Fs->win_top - window_height+1) / 2;
-
-  // WinHorz(Fs->win_left, Fs->win_left+window_width, Fs);
-  // WinVert(Fs->win_top + window_top, Fs->win_top + window_top + window_height+1, Fs);
-
-  
   Fs->win_width = window_width;
   WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
           (TEXT_COLS / 2) - (Fs->win_width / 2) +
@@ -195,17 +187,17 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           (TEXT_ROWS / 2) - (Fs->win_height / 2) +
               (Fs->win_height - 1),
           Fs);
-  DocPrint(, "$$WW,1$$");
-  // DocCursor(OFF);
+  DocClear;
 
-  // WinToTop(Fs);
-  // WinFocus(Fs);
+  // probably should use word wrap?
+  // DocPrint(, "$$WW,1$$");
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
     return;
   }
 
+  // Spawn input window
 	input_task = Spawn(&InputTask, &sock, "Telnet Input");
 	input_task->win_inhibit = WIG_USER_TASK_DEFAULT;
 	LBts(&input_task->display_flags, DISPLAYf_SHOW);
@@ -215,8 +207,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 	input_task->win_bottom = Fs->win_top + 30;
 	input_task->win_left	= Fs->win_left;
 	input_task->win_right	= Fs->win_left+window_width - 1;
-
-  DocClear;
 
   "$$BG,RED$$$$WHITE$$Connected$$FG$$$$BG$$\n";
 
@@ -405,7 +395,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   if (col > window_width)
                     col = window_width-1;
 
-                  // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+                  SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
                   // "$$CM,%d,%d$$", row, col;
                   "$$CM,LE=%d,RE=%d$$", row, col;
                   ptr++;
@@ -471,16 +461,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
                   switch (code) {
                     case 25:
-                      if (*ptr == 'l') {
-                        // Hide cursor
-                        // SysLog("code 25l\n");
-                        DocCursor(OFF);
-                      }
-                      if (*ptr == 'h') {
-                        // Show cursor
-                        // SysLog("code 25h\n");
-                        DocCursor(ON);
-                      }
+                      if (*ptr == 'l') DocCursor(OFF); // Hide cursor
+                      if (*ptr == 'h') DocCursor(ON); // Show cursor
                       ptr++; // Move past 'l' or 'h'
                       break;
                     case 47:
@@ -530,19 +512,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
             }
           }
         }
-        // is this handled by the client or the server?
-        // regardless, this is not taking <esc> into account, any actual | is captured
-        // else if (*ptr == '|') {
-        //   // U8 code[3];
-        //   // code[0] = ptr++;
-        //   // code[1] = ptr++;
-        //   // code[2] = '\0';
-        //   // I64 fg_code = ToI64(code);
-        //   // AppendColorString(fg_code);
-        //   SysLog("Pipe code: %c%c\n", ptr[1], ptr[2]);
-        //   ptr += 3; // Skip the pipe code characters
-        //   // ptr++;
-        // }
         else {
           // Print the received character
           HandleControlCodes(*ptr);
@@ -557,7 +526,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
       }
 
     } else {
-      // SysLog("Error: %0x%02X\n", ch);
       "Error: Connection closed by the remote host.\n";
       break;
     }
@@ -575,20 +543,6 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   "Telnet connection closed.\n";
 }
 
-class CHostForm {
-  U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
-  U16 port format "A=\"Port:%d\"";
-};
-
-U0 TelnetPrompt() {
-  CHostForm form;
-
-  form.host[0] = 0;
-  form.port = TELNET_PORT;
-  if (PopUpForm(&form)) {
-    Telnet(form.host, form.port);
-  }
-}
 
 // dev server
 Telnet("localhost", 8888);
