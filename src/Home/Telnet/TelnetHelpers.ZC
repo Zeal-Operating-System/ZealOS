@@ -16,3 +16,87 @@ U0 TelnetPrompt() {
     // Telnet(form.host, form.port);
   }
 }
+
+U0 HandleControlCodes(U8 ch) {
+  if (ch < 32) { // ASCII code below 32 (control character)
+    switch (ch) {
+      case 0: // NUL (Null) - Typically ignored
+        break;
+      case 7: // BEL (Bell)
+        Beep;
+        break;
+      case 8: // BS (Backspace)
+        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        "$$CM,-8,0$$";
+        break;
+      case 9: // HT (Horizontal Tab)
+        // "        "; // 8 spaces
+        "$$CM,8,0$$";
+        break;
+      case 10: // LF (Line Feed)
+        "\n";
+        break;
+      case 11: // VT (Vertical Tab)
+        SysLog("Vertical Tab\n");
+        break;
+      case 12: // FF (Form Feed)
+        DocClear;
+        break;
+      case 13: // CR (Carriage Return)
+        "\r";
+        break;
+      case 14: // SO (Shift Out) - Switch to an alternate character set
+      case 15: // SI (Shift In)  - Switch back to the default character set
+        SysLog("Shift In/Out\n");
+        break;
+      case 22:
+        SysLog("Synchronous Idle\n");
+        break;
+      case 23:
+        SysLog("End of Transmission Block\n");
+        break;
+      case 24:
+        SysLog("Cancel\n");
+        break;
+      case 25:
+        SysLog("End of Medium\n");
+        break;
+      case 26:
+        SysLog("Sub\n");
+        break;
+      case 27:
+        SysLog("Esc\n");
+        break;
+      case 28:
+        SysLog("Fs\n");
+        break;
+      case 29:
+        SysLog("Gs\n");
+        break;
+      case 30:
+        SysLog("Rs\n");
+        break;
+      case 31:
+        SysLog("Unit Separator\n");
+        break;
+      default:
+        SysLog("CC happened\n", ch);
+        break;
+    }
+  } 
+  else {
+    if (ch == 127) {
+        SysLog("case 127");
+    }
+    if (ch == 0x24) {
+      ch = "//$$$$";
+    }
+    if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
+    {
+      "%c", ch;
+    }
+    else {
+      "%c", '?'; // unrecognized character
+    }
+  }
+}
