@@ -3,6 +3,7 @@
 
 #define TELNET_PORT 23
 #define BUF_SIZE 8192 // way too big?
+#define INPUT_BUF_SIZE 32
 #define TIMEOUT_DURATION 5000
 
 #define NEGOTIATE 0xFF
@@ -97,7 +98,7 @@ U0 InputTask(U0 *args) {
   // DocCursor;
   // WinBorder(OFF);
 
-  U8 input_buffer[BUF_SIZE];
+  U8 input_buffer[INPUT_BUF_SIZE];
   U8 *temp, ch;
   I64 sc;
   U8 *line = input_buffer;
@@ -137,7 +138,7 @@ U0 InputTask(U0 *args) {
                 TCPSocketSendString(sock, "\x1B[B");
                 break;
               case SC_TAB:
-                TCPSocketSendString(sock, 0x09);
+                TCPSocketSend(sock, 0x09, 0);
                 break;
               default:
                 break;
@@ -145,7 +146,7 @@ U0 InputTask(U0 *args) {
             break;
           
           case CH_ESC:
-            TCPSocketSendString(sock, 0x27);
+            TCPSocketSend(sock, 0x27, 0);
             break;
           case CH_SHIFT_ESC:
             force_disconnect = TRUE;
@@ -155,10 +156,10 @@ U0 InputTask(U0 *args) {
             // SysLog(input_buffer);
             temp = MStrPrint("%s\r\n", input_buffer);
             TCPSocketSendString(sock, temp);
-            
+
             input_len = 0;
             Free(temp);
-            MemSet(input_buffer, 0, BUF_SIZE);
+            MemSet(input_buffer, 0, INPUT_BUF_SIZE);
             DocClear;
 
             DocBottom(input_task->put_doc);
@@ -168,7 +169,17 @@ U0 InputTask(U0 *args) {
             if (key >= ' ' && key <= '~') {
               // Handle regular keys
               input_buffer[input_len++] = key;
-              DocPrint(input_task->put_doc, "%c", key);
+              // DocPrint(input_task->put_doc, "%c", key);
+              temp = MStrPrint("%s", input_buffer);
+              TCPSocketSendString(sock, temp);
+
+              input_len = 0;
+              Free(temp);
+              MemSet(input_buffer, 0, INPUT_BUF_SIZE);
+              DocClear;
+
+              DocBottom(input_task->put_doc);
+              "\n$$RED$$$BK,1$Input$BK,0$$$BLACK$$:";
             }
             break;
         }
