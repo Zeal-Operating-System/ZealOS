@@ -153,7 +153,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
 	// CDoc *doc = DocPut;
 	// Fs->display_doc->flags |= DOCF_SIZE_MIN;
-  StrCopy(Fs->task_title, "TELNET - %d:%d", host, port);
+  StrCopy(Fs->task_title, "TELNET");
 	Fs->border_src  = BDS_CONST;
 	Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
 	Fs->text_attr   = BLACK << 4 + WHITE;
