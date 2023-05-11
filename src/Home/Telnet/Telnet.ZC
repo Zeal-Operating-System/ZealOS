@@ -152,7 +152,7 @@ U0 InputTask(U0 *args) {
             TCPSocketSendString(sock, "\x08");
             break;
           case CH_ESC:
-            TCPSocketSend(sock, 0x27, 1);
+            TCPSocketSendString(sock, "\x1B");
             break;
           case CH_SHIFT_ESC:
             force_disconnect = TRUE;
