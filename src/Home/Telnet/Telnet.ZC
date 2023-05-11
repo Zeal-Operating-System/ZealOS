@@ -138,15 +138,21 @@ U0 InputTask(U0 *args) {
                 TCPSocketSendString(sock, "\x1B[B");
                 break;
               case SC_TAB:
-                TCPSocketSend(sock, 0x09, 0);
+                TCPSocketSend(sock, 0x09, 1);
                 break;
               default:
                 break;
             }
             break;
-          
+
+          case CH_BACKSPACE:
+            // TCPSocketSendString(sock, "\x7F\x1B[D");
+            // TCPSocketSendString(sock, "\x7F");
+            // TCPSocketSendString(sock, "\x08\x20\x08");
+            TCPSocketSendString(sock, "\x08");
+            break;
           case CH_ESC:
-            TCPSocketSend(sock, 0x27, 0);
+            TCPSocketSend(sock, 0x27, 1);
             break;
           case CH_SHIFT_ESC:
             force_disconnect = TRUE;
@@ -208,7 +214,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
   DocClear;
 
   // probably should use word wrap?
-  // DocPrint(, "$$WW,1$$");
+  DocPrint(, "$$WW,1$$");
 
   sock = TelnetOpen(host, port);
   if (sock <= 0) {
