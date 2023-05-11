@@ -245,7 +245,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                         break;
                     }
                     ptr++;
-                    if(!IsDigit(*ptr)){
+                    if(!IsDigit(*ptr) || *ptr == ';'){
                         break;
                     }
                 }
@@ -324,13 +324,21 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       }
                       else {
                         switch (ansi_code[m]) {
+                          case 90:
                           case 30: "$$DKGRAY$$"; break;
+                          case 91:
                           case 31: "$$LTRED$$"; break;
+                          case 92:
                           case 32: "$$LTGREEN$$"; break;
+                          case 93:
                           case 33: "$$YELLOW$$"; break;
+                          case 94:
                           case 34: "$$LTBLUE$$"; break;
+                          case 95:
                           case 35: "$$LTPURPLE$$"; break;
+                          case 96:
                           case 36: "$$LTCYAN$$"; break;
+                          case 97:
                           case 37: "$$LTGRAY$$"; break;
                           case 39: "$$LTGRAY$$"; break; // reset
                           default: break;
@@ -359,13 +367,21 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       }
                       else {
                         switch (ansi_code[m]) {
+                          case 100:
                           case 40: "$$BG,DKGRAY$$"; break;
+                          case 101:
                           case 41: "$$BG,LTRED$$"; break;
+                          case 102:
                           case 42: "$$BG,LTGREEN$$"; break;
+                          case 103:
                           case 43: "$$BG,YELLOW$$"; break;
+                          case 104:
                           case 44: "$$BG,LTBLUE$$"; break;
+                          case 105:
                           case 45: "$$BG,LTPURPLE$$"; break;
+                          case 106:
                           case 46: "$$BG,LTCYAN$$"; break;
+                          case 107:
                           case 47: "$$BG,LTGRAY$$"; break;
                           case 49: "$$BG,DKGRAY$$"; break; // reset
                           // case 49: "$$BG$$"; break; // would normally call $$BG$$ but telnet actually resets to black
@@ -438,10 +454,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   if(ansi_code[1] != 1)
                     col = ansi_code[1];
                   
-                  // if (row == 0 && col == 0) {
-                  //   ptr++; 
-                  //   break;
-                  // }
+                  // TODO: This is a hack, dont skip row 0, col 0
+                  if (row == 0 && col == 0) {
+                    ptr++; 
+                    break;
+                  }
                   SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
                   if (row > window_height)
@@ -571,11 +588,11 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
         // Reset ansi_param_count and ansi_code
-        // ansi_param_count = 0;
-        // I64 wtv;
-        // for (wtv = 0; wtv < MAX_ANSI_PARAMS; wtv++) {
-        //     ansi_code[wtv] = 0;
-        // }
+        ansi_param_count = 0;
+        I64 wtv;
+        for (wtv = 0; wtv < MAX_ANSI_PARAMS; wtv++) {
+            ansi_code[wtv] = 0;
+        }
       }
 
     } else {
