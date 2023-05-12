@@ -17,89 +17,392 @@ U0 TelnetPrompt() {
   }
 }
 
-U0 HandleControlCodes(U8 ch) {
-  if (ch < 32) { // ASCII code below 32 (control character)
-    switch (ch) {
-      case 0: // NUL (Null) - Typically ignored
-        break;
-      case 7: // BEL (Bell)
-        Beep;
-        break;
-      case 8: // BS (Backspace)
-        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
-        "$$CM,-8,0$$";
-        break;
-      case 9: // HT (Horizontal Tab)
-        // "        "; // 8 spaces
-        "$$CM,8,0$$";
-        break;
-      case 10: // LF (Line Feed)
-        "\n";
-        break;
-      case 11: // VT (Vertical Tab)
-        SysLog("Vertical Tab\n");
-        break;
-      case 12: // FF (Form Feed)
-        DocClear;
-        break;
-      case 13: // CR (Carriage Return)
-        "\r";
-        break;
-      case 14: // SO (Shift Out) - Switch to an alternate character set
-      case 15: // SI (Shift In)  - Switch back to the default character set
-        SysLog("Shift In/Out\n");
-        break;
-      case 22:
-        SysLog("Synchronous Idle\n");
-        break;
-      case 23:
-        SysLog("End of Transmission Block\n");
-        break;
-      case 24:
-        SysLog("Cancel\n");
-        break;
-      case 25:
-        SysLog("End of Medium\n");
-        break;
-      case 26:
-        SysLog("Sub\n");
-        break;
-      case 27:
-        SysLog("Esc\n");
-        break;
-      case 28:
-        SysLog("Fs\n");
-        break;
-      case 29:
-        SysLog("Gs\n");
-        break;
-      case 30:
-        SysLog("Rs\n");
-        break;
-      case 31:
-        SysLog("Unit Separator\n");
-        break;
-      default:
-        SysLog("CC happened\n", ch);
-        break;
-    }
-  } 
-  else {
-    if (ch == 127) {
-        SysLog("case 127");
-    }
-    if (ch == 0x24) {
-      ch = "//$$$$";
-    }
-    if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
-    {
-      "%c", ch;
-    }
-    else {
-      "%c", '?'; // unrecognized character
-    }
-  }
-}
+
+// U0 SplashScreen(U8 ch) {
+//  
+// }
+
+// Eventually would like to parse it here:
+
+// U0 TelnetANSIParser(I64 sock, U8 *ptr) {
+//   U8 buffer[BUF_SIZE];
+
+//   I64 window_width = 80;
+//   I64 window_height = 25;
+//   if (*ptr == ANSI_CSI) {
+//     ptr++;
+//     I64 ansi_code[MAX_ANSI_PARAMS], counter;
+//     for (counter = 0; counter < MAX_ANSI_PARAMS; counter++) {
+//         ansi_code[counter] = 0;  // Initialize all elements to 0
+//     }
+//     I64 ansi_param_count = 0;
+//     while (IsDigit(*ptr) || *ptr == ';') {
+//         if (IsDigit(*ptr)) {
+//             ansi_code[ansi_param_count] = ansi_code[ansi_param_count] * 10 + (*ptr - '0');
+//             ptr++;
+//         }
+//         else if (*ptr == ';') {
+//             ansi_param_count++;
+//             if (ansi_param_count >= MAX_ANSI_PARAMS) {
+//                 // Error handling: too many parameters
+//                 break;
+//             }
+//             ptr++;
+//             if(!IsDigit(*ptr) || *ptr == ';'){
+//                 break;
+//             }
+//         }
+//     }
+
+//     // Handle specific ANSI escape sequences
+//     switch (*ptr) {
+//         case 'n':
+//           SysLog("Case n, %d\n",ansi_code[0]);
+//           if (ansi_code[0] == 5) {
+//             // Respond with terminal readiness
+//             SysLog("reported terminal readiness\n");
+//             U8 deviceStatusResponse[5];
+//             deviceStatusResponse[0] = ANSI_ESC;
+//             deviceStatusResponse[1] = ANSI_CSI;
+//             deviceStatusResponse[2] = 0x30; // '0'
+//             deviceStatusResponse[3] = 0x6E; // 'n'
+//             deviceStatusResponse[4] = 0x00; // Null-terminator
+//             TCPSocketSend(sock, deviceStatusResponse, 4);
+//             // TCPSocketSendString(sock, "\x1B[0n");
+//           }
+//           else if (ansi_code[0] == 6) {
+//             // Respond with cursor position
+//             // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
+//             SysLog("reported cursor position\n");
+//             U8 cursorResponse[8];
+//             cursorResponse[0] = ANSI_ESC;
+//             cursorResponse[1] = ANSI_CSI;
+//             cursorResponse[2] = 0x32;
+//             cursorResponse[3] = 0x35;
+//             cursorResponse[4] = 0x3B;
+//             cursorResponse[5] = 0x38;
+//             cursorResponse[6] = 0x30;
+//             cursorResponse[6] = 0x52;
+//             cursorResponse[7] = 0x00;
+//             TCPSocketSend(sock, cursorResponse, 7);
+//             // TCPSocketSendString(sock, "\x1B\[25;80R");
+//           } 
+//           else if (ansi_code[0] == 255) {
+//             // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
+//             SysLog("reported screensize?\n");
+//             SendWindowSize(sock, 25, 80);
+//           }
+//           ptr++;
+//           break;
+//         case 'c':
+//           // Respond with device attributes
+//           SysLog("reported device attributes\n");
+//           // TCPSocketSendString(sock, "\x1B[?1;0c");
+//           // Reports at VT101 (not sure why though)
+//           U8 deviceAttributesResponse[8];
+//           deviceAttributesResponse[0] = ANSI_ESC;
+//           deviceAttributesResponse[1] = ANSI_CSI;
+//           deviceAttributesResponse[2] = 0x3F; // '?' 
+//           deviceAttributesResponse[3] = 0x31; // '1' 
+//           deviceAttributesResponse[4] = 0x3B; // ';' 
+//           deviceAttributesResponse[5] = 0x32; // '0' 
+//           deviceAttributesResponse[6] = 0x63; // 'c' 
+//           deviceAttributesResponse[7] = 0x00; // Null-terminator
+//           TCPSocketSend(sock, deviceAttributesResponse, 7);
+//           ptr++;
+//           break;
+//         case 'm':
+//           // colors might be printed in the wrong order?
+//           // like, <Esc>[1;40m and now <Esc>[40m;1m
+//           I64 m;
+//           Bool isBright = FALSE;
+//           for (m = 0; m <= ansi_param_count; m++) {
+//             if (ansi_code[m] <= 10) {
+//               switch (ansi_code[m]) {
+//                 case 0: "$$BG$$$$FG$$"; isBright = FALSE; break; // reset
+//                 case 1: isBright = TRUE; break;
+//                 case 2: isBright = FALSE; break;
+//               }
+//             }
+//             else if ((ansi_code[m] >= 30 && ansi_code[m] <= 39) || (ansi_code[m] >= 90 && ansi_code[m] <= 97)) {
+//               // Set foreground color
+//               // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+//               if(!isBright){
+//                 switch (ansi_code[m]) {
+//                   case 30: "$$BLACK$$"; break;
+//                   case 31: "$$RED$$"; break;
+//                   case 32: "$$GREEN$$"; break;
+//                   case 33: "$$YELLOW$$"; break;
+//                   case 34: "$$BLUE$$"; break;
+//                   case 35: "$$PURPLE$$"; break;
+//                   case 36: "$$CYAN$$"; break;
+//                   case 37: "$$WHITE$$"; break;
+//                   case 39: "$$FG$$"; break;
+//                   default: break;
+//                 }
+//               }
+//               else {
+//                 switch (ansi_code[m]) {
+//                   case 90:
+//                   case 30: "$$DKGRAY$$"; break;
+//                   case 91:
+//                   case 31: "$$LTRED$$"; break;
+//                   case 92:
+//                   case 32: "$$LTGREEN$$"; break;
+//                   case 93:
+//                   case 33: "$$YELLOW$$"; break;
+//                   case 94:
+//                   case 34: "$$LTBLUE$$"; break;
+//                   case 95:
+//                   case 35: "$$LTPURPLE$$"; break;
+//                   case 96:
+//                   case 36: "$$LTCYAN$$"; break;
+//                   case 97:
+//                   case 37: "$$LTGRAY$$"; break;
+//                   case 39: "$$FG$$"; break;
+//                   default: break;
+//                 }
+//               }
+//             }
+//             // this is a dumb approach, just do a CatPrint or something
+//             // until we properly catch the `;` it will stay buggy
+//             else if ((ansi_code[m] >= 40 && ansi_code[m] <= 49) || (ansi_code[m] >= 100 && ansi_code[m] <= 107)) {
+//               // Set background color
+//               // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+//               if(!isBright){
+//                 switch (ansi_code[m]) {
+//                   case 40: "$$BG,BLACK$$"; break;
+//                   case 41: "$$BG,RED$$"; break;
+//                   case 42: "$$BG,GREEN$$"; break;
+//                   case 43: "$$BG,YELLOW$$"; break;
+//                   case 44: "$$BG,BLUE$$"; break;
+//                   case 45: "$$BG,PURPLE$$"; break;
+//                   case 46: "$$BG,CYAN$$"; break;
+//                   case 47: "$$BG,WHITE$$"; break;
+//                   case 49: "$$BG$$"; break; // reset
+//                   default: break;
+//                 }
+//               }
+//               else {
+//                 switch (ansi_code[m]) {
+//                   case 100:
+//                   case 40: "$$BG,DKGRAY$$"; break;
+//                   case 101:
+//                   case 41: "$$BG,LTRED$$"; break;
+//                   case 102:
+//                   case 42: "$$BG,LTGREEN$$"; break;
+//                   case 103:
+//                   case 43: "$$BG,YELLOW$$"; break;
+//                   case 104:
+//                   case 44: "$$BG,LTBLUE$$"; break;
+//                   case 105:
+//                   case 45: "$$BG,LTPURPLE$$"; break;
+//                   case 106:
+//                   case 46: "$$BG,LTCYAN$$"; break;
+//                   case 107:
+//                   case 47: "$$BG,LTGRAY$$"; break;
+//                   case 49: "$$BG$$"; break; // reset
+//                   default: break;
+//                 }
+//               }
+//             }
+//           }
+//           ptr++;
+//           break;
+//         case 'A':
+//           // Cursor Up
+//           SysLog("Cursor Up\n");
+//           // "$$CM+TY,0,-%d$$", ansi_code[0];
+//           "$$CM,0,-%d$$", ansi_code[0];
+//           ptr++;
+//           break;
+//         case 'B':
+//           // Cursor Down
+//           SysLog("Cursor Down\n");
+//           "$$CM,0,%d$$", ansi_code[0];
+//           ptr++;
+//           break;
+//         case 'C':
+//           // Cursor Right
+//           // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
+//           "$$CM,%d,0$$", ansi_code[0];
+//           // NOTE: this has been "fixed" since we now change the window's background color
+//           // if we just move the cursor, 
+//           // you dont get the colored background since we skip over it directly
+//           // I64 C;
+//           // for (C = 0; C < ansi_code[0]; C++) {
+//           //   " ";
+//           // }
+//           ptr++;
+//           break;
+//         case 'D':
+//           // Cursor Left
+//           SysLog("Cursor Left\n");
+//           "$$CM,-%d,0$$", ansi_code[0];
+//           ptr++;
+//           break;
+//         case 'E':
+//           // Cursor Next Line
+//           SysLog("Cursor Next Line\n");
+//           // "$$CM+TY,0,+%d$$", ansi_code[0];
+//           "\n";
+//           ptr++;
+//           break;
+//         case 'F':
+//           // Cursor Previous Line
+//           SysLog("Cursor Previous Line\n");
+//           "$$CM+LY,0,-%d$$", ansi_code[0];
+//           // "\n";
+//           ptr++;
+//           break;
+//         case 'G':
+//           // Cursor Horizontal Absolute	
+//           SysLog("Cursor Horizontal Absolute\n");
+//           "$$CM,%d,0$$", ansi_code[0];
+//           // "\n";
+//           ptr++;
+//           break;
+//         case 'H':
+//         case 'f':
+//           I64 row = 1, col = 1;  // default values
+//           // Parse the row number
+//           if(ansi_code[0] != 1)
+//             row = ansi_code[0];
+//           if(ansi_code[1] != 1)
+//             col = ansi_code[1];
+          
+//           // TODO: This is a hack, dont skip row 0, col 0 (maybe?)
+//           if (row == 0 && col == 0) {
+//             ptr++; 
+//             break;
+//           }
+//           // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+
+//           if (row > window_height)
+//             row = window_height-1;
+//           if (col > window_width)
+//             col = window_width-1;
+//           // "$$CM,0,0$$";
+//           "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1;
+//           ptr++;
+//           break;
+//         case 'J':
+//           // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
+//           // Erase in Display
+//           if (ansi_code[0] == 0) {
+//             // Erase from cursor to end of display
+//             // DocDelToNum(Fs->display_doc, Fs->display_doc->cur_entry->line_num);
+//           } else if (ansi_code[0] == 1) {
+//             // Erase from cursor to beginning of display
+//             // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
+//           } else if (ansi_code[0] == 2) {
+//             // Erase entire display
+//             DocClear;
+//           }
+//           ptr++;
+//           break;
+//         case 'K':
+//           // TODO: I have no idea if this actually works
+//           SysLog("K code\n");
+//           // Erase in Line
+//           // CDocEntry *cur_entry = Fs->display_doc->cur_entry;
+//           // CDocEntry *next_entry = cur_entry->next;
+          
+//           // // Delete the current entry
+//           // if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
+//           //   Fs->display_doc->cur_entry = next_entry;
+//           //   Fs->display_doc->cur_col = next_entry->min_col;
+//           //   DocEntryDel(Fs->display_doc, cur_entry);
+//           // }
+
+//           // // Create a new entry (line) in its place
+//           // CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
+//           // DocInsEntry(Fs->display_doc, new_entry);
+          
+//           ptr++;
+//           break;
+//         case 'L':
+//           SysLog("L code\n");
+//           ptr++;
+//           break;
+//         case 'S':
+//           // TODO: Scroll Up
+//           SysLog("Scroll Up");
+//           ptr++;
+//           break;
+//         case 'T':
+//           // TODO: Scroll Down
+//           SysLog("Scroll Down");
+//           ptr++;
+//           break;
+//         case 'M':
+//           SysLog("Case M\n");
+//           // TODO: is this correct? cursor should go one line up
+//           "$$CM,0,-1$$";
+//           ptr++;
+//           break;
+//         case '?':
+//           ptr++;
+//           I64 code = 0;
+
+//           while (IsDigit(*ptr)) {
+//             code = code * 10 + (*ptr - '0');
+//             ptr++;
+//           }
+//           switch (code) {
+//             case 25:
+//               if (*ptr == 'l') DocCursor(OFF); // Hide cursor
+//               if (*ptr == 'h') DocCursor(ON); // Show cursor
+//               ptr++; // Move past 'l' or 'h'
+//               break;
+//             case 47:
+//               if (*ptr == 'l') SysLog("code 47l\n"); // restore screen
+//               if (*ptr == 'h') SysLog("code 47h\n"); // save screen
+//               ptr++; // Move past 'l' or 'h'
+//               break;
+//             case 1049:
+//               if (*ptr == 'l') SysLog("code 1049l\n"); // enables the alternative buffer
+//               if (*ptr == 'h') SysLog("code 1049h\n"); // disables the alternative buffer
+//               ptr++; // Move past 'l' or 'h'
+//               break;
+//             default:
+//               ptr++;
+//               break;
+//           }
+//           break;
+//         case 's':
+//           SysLog("SaveCurrentCursorPosition\n");
+//           ptr++;
+//           break;
+//         case 'u':
+//           SysLog("RestoreCurrentCursorPosition\n");
+//           ptr++;
+//           break;
+//         case 'r':
+//           // self.restoreCursorPosition();
+//           SysLog("r case \n");
+//           ptr++;
+//           break;
+//         case 'h':
+//         case 'l':
+//           // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
+//           SysLog("h or l case \n");
+//           ptr++; // Skip 'h' or 'l'
+//           break;
+//         case '=':
+//           SysLog("ScreenMode attempt\n");
+//           ptr++;
+//           break;
+//         default:
+//           if(!IsDigit(*ptr)) {
+//             SysLog("Unknown code: %c\n", *ptr);
+//           }
+//           ptr++;
+//           break;
+//     }
+//   }
+// }
+
 
 // Placeholder for the full ANSI text styling
 // if (ansi_code[m] <= 10) {
