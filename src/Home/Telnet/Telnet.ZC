@@ -56,7 +56,6 @@ I64 TelnetOpen(U8 *host, U16 port) {
 }
 
 U0 HandleControlCodes(U8 ch) {
-  Sleep(100);
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
       case 0: // NUL (Null) - Typically ignored
@@ -73,7 +72,7 @@ U0 HandleControlCodes(U8 ch) {
         DocPrint(term.doc, "$$CM,8,0$$");
         break;
       case 10: // LF (Line Feed)
-        DocPrint(term.doc, "\n");
+        // DocPrint(term.doc, "\n");
         break;
       case 11: // VT (Vertical Tab)
         SysLog("Vertical Tab\n");
