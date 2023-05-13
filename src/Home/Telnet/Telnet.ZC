@@ -39,6 +39,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
 	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
   return sock;
 }
+
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
@@ -48,22 +49,24 @@ U0 HandleControlCodes(U8 ch) {
         Beep;
         break;
       case 8: // BS (Backspace)
-        term.cursor_x--;
+        // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
+        "$$CM,-8,0$$";
         break;
       case 9: // HT (Horizontal Tab)
-        term.cursor_x += 8;
+        // "        "; // 8 spaces
+        "$$CM,8,0$$";
         break;
       case 10: // LF (Line Feed)
-        term.cursor_y++;
+        "\n";
         break;
       case 11: // VT (Vertical Tab)
         SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
-        DocClear(term.doc);
+        DocClear;
         break;
       case 13: // CR (Carriage Return)
-        term.cursor_y++;
+        "\r";
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -100,6 +103,7 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Unit Separator\n");
         break;
       default:
+        // some ch make Zeal crash or behave weird because they're commands?
         // SysLog("CC %c happened\n", ch);
         SysLog("CC happened\n");
         break;
@@ -107,10 +111,10 @@ U0 HandleControlCodes(U8 ch) {
   } 
   else {
     if (ch == 127) {
-      SysLog("case 127");
+        SysLog("case 127");
     }
     if (ch == 0x24) {
-      // ch = "//$$$$";
+      ch = "//$$$$";
     }
     if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
     {
@@ -121,6 +125,7 @@ U0 HandleControlCodes(U8 ch) {
     }
   }
 }
+
 U0 InputTask(U0 *args) {
   I64 sock = *args;
   I64 sc;

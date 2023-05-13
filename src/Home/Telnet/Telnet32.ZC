@@ -27,7 +27,8 @@ Bool redraw_needed = FALSE;
 class ScreenCell {
   U8 ch;
   I64 color;
-} 
+  I64 bgcolor;
+}
 class Terminal {
   I64 sock;
   Bool sock_ready;
@@ -40,6 +41,7 @@ class Terminal {
   ScreenCell screen[25][80];
 
   I64 current_color;
+  I64 current_bgcolor;
   I64 cursor_x;
   I64 cursor_y;
 
@@ -154,6 +156,7 @@ U0 HandleControlCodes(U8 ch) {
     {
       term.screen[term.cursor_y][term.cursor_x].ch = ch;
       term.screen[term.cursor_y][term.cursor_x].color = term.current_color;
+      term.screen[term.cursor_y][term.cursor_x].bgcolor = term.current_bgcolor;
       term.cursor_x++;
       if (term.cursor_x >= term.window_width) {
         term.cursor_x = 0;
@@ -184,6 +187,7 @@ U0 TerminalDrawIt(CTask *task, CDC *dc)
 
       // Set the color
       dc->color = term.screen[row][col].color;
+      dc->bkcolor = term.screen[row][col].bgcolor;
       // term.dc->color = WHITE;
 
       // Draw the character
@@ -313,6 +317,7 @@ U0 TerminalTask() {
                     if (ansi_code[m] <= 10) {
                       switch (ansi_code[m]) {
                         case 0: 
+                          term.current_bgcolor = BLACK; // should be BG  FG for full reset 
                           term.current_color = WHITE; // should be BG  FG for full reset 
                           isBright = FALSE; 
                           break; // reset
@@ -404,32 +409,32 @@ U0 TerminalTask() {
                       if(!isBright){
                         switch (ansi_code[m]) {
                           case 40:
-                            term.current_color = BLACK;
+                            term.current_bgcolor = BLACK;
                             break;
                           case 41:
-                            term.current_color = RED;
+                            term.current_bgcolor = RED;
                             break;
                           case 42:
-                            term.current_color = GREEN;
+                            term.current_bgcolor = GREEN;
                             break;
                           case 43:
-                            term.current_color = YELLOW;
+                            term.current_bgcolor = YELLOW;
                             break;
                           case 44:
-                            term.current_color = BLUE;
+                            term.current_bgcolor = BLUE;
                             break;
                           case 45:
-                            term.current_color = PURPLE;
+                            term.current_bgcolor = PURPLE;
                             break;
                           case 46:
-                            term.current_color = CYAN;
+                            term.current_bgcolor = CYAN;
                             break;
                           case 47:
-                            term.current_color = WHITE;
+                            term.current_bgcolor = WHITE;
                             break;
                           case 49:
                             // reset
-                            term.current_color = BLACK;
+                            term.current_bgcolor = BLACK;
                             break;
                           default: break;
                         }
@@ -438,39 +443,39 @@ U0 TerminalTask() {
                         switch (ansi_code[m]) {
                           case 100:
                           case 40:
-                            term.current_color = DKGRAY;
+                            term.current_bgcolor = DKGRAY;
                             break;
                           case 101:
                           case 41:
-                            term.current_color = LTRED;
+                            term.current_bgcolor = LTRED;
                             break;
                           case 102:
                           case 42:
-                            term.current_color = LTGREEN;
+                            term.current_bgcolor = LTGREEN;
                             break;
                           case 103:
                           case 43:
-                            term.current_color = YELLOW;
+                            term.current_bgcolor = YELLOW;
                             break;
                           case 104:
                           case 44:
-                            term.current_color = LTBLUE;
+                            term.current_bgcolor = LTBLUE;
                             break;
                           case 105:
                           case 45:
-                            term.current_color = LTPURPLE;
+                            term.current_bgcolor = LTPURPLE;
                             break;
                           case 106:
                           case 46:
-                            term.current_color = LTCYAN;
+                            term.current_bgcolor = LTCYAN;
                             break;
                           case 107:
                           case 47:
-                            term.current_color = LTGRAY;
+                            term.current_bgcolor = LTGRAY;
                             break;
                           case 49:
                             // reset
-                            term.current_color = BLACK;
+                            term.current_bgcolor = BLACK;
                           default: break;
                         }
                       }
