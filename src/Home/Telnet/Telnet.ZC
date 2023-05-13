@@ -2,6 +2,8 @@
 // Public Domain
 Cd(__DIR__);;
 
+// PaletteSet("Temple");
+
 #define TELNET_PORT 23
 #define BUF_SIZE 8192 // way too big?
 #define INPUT_BUF_SIZE 32
@@ -141,6 +143,530 @@ U0 HandleControlCodes(U8 ch) {
   }
 }
 
+I64 LoadSplashScreen(U8 *filename) {
+  CFile *file = FOpen(filename, "rb");
+  if (!file) {
+    PrintErr("Failed to open file");
+    return -1;
+  }
+
+  // Ensure that the file size isn't larger than the buffer
+  if (file->de.size > BUF_SIZE) {
+    PrintErr("File is too large for the buffer.");
+    FClose(file);
+    return -1;
+  }
+
+  // Calculate the number of full blocks to read based on file size and block size
+  I64 full_blocks = file->de.size / BLK_SIZE;
+  I64 remaining_bytes = file->de.size % BLK_SIZE;
+
+  SysLog("File size: %d, Number of full blocks: %d, Remaining bytes: %d\n", file->de.size, full_blocks, remaining_bytes);
+
+  // Read the full blocks into the buffer
+  I64 i, blocks_read = 0;
+  for (i = 0; i < full_blocks; i++) {
+    blocks_read += FBlkRead(file, term.buffer + i * BLK_SIZE, i, 1);
+  }
+
+  // Check if there are any remaining bytes in the last block
+  if (remaining_bytes != 0) {
+    // Read the remaining bytes
+    U8 temp_buffer[BLK_SIZE];
+    if (FBlkRead(file, temp_buffer, full_blocks, 1)) {
+      blocks_read++;
+      MemCopy(term.buffer + full_blocks * BLK_SIZE, temp_buffer, remaining_bytes);
+    }
+  }
+
+  FClose(file);
+
+  if (blocks_read != (full_blocks + (remaining_bytes != 0))) {
+    PrintErr("Failed to read all the blocks");
+    return -1;
+  }
+
+  return file->de.size;  // Return the number of bytes read
+}
+
+U0 ANSIParse()
+{
+  // Basic Telnet protocol parser
+  U8 *ptr = term.buffer;
+  while (ptr < term.buffer + term.buffer_len) {
+    // disable all SAUCE00 art signature? dsnt work
+    // if (StrNCompare(ptr, "\033SAUCE", 6) == 0) 
+    // {
+    //   SysLog("SAUCE found\n");
+    //   term.buffer_len = ptr - term.buffer;
+    // }
+    // Telnet negotiation sequence
+    if (*ptr == NEGOTIATE) {
+      // FIXME: i don't think the telnet negotiation is actually working properly?
+      TelnetNegotiate(term.sock, ptr);
+      ptr += 3;
+    }
+    else if (*ptr == ANSI_ESC) {
+      // ANSI escape sequence
+      ptr++;
+      if (*ptr == ANSI_CSI) {
+        ptr++;
+        I64 ansi_code[MAX_ANSI_PARAMS], counter;
+        for (counter = 0; counter < MAX_ANSI_PARAMS; counter++) {
+            ansi_code[counter] = 0;  // Initialize all elements to 0
+        }
+        I64 ansi_param_count = 0;
+        while (IsDigit(*ptr) || *ptr == ';') {
+            if (IsDigit(*ptr)) {
+                ansi_code[ansi_param_count] = ansi_code[ansi_param_count] * 10 + (*ptr - '0');
+                ptr++;
+            }
+            else if (*ptr == ';') {
+                ansi_param_count++;
+                if (ansi_param_count >= MAX_ANSI_PARAMS) {
+                    // Error handling: too many parameters
+                    break;
+                }
+                ptr++;
+                if(!IsDigit(*ptr) || *ptr == ';'){
+                    break;
+                }
+            }
+        }
+
+        // Handle specific ANSI escape sequences
+        switch (*ptr) {
+            case 'n':
+              SysLog("Case n, %d\n",ansi_code[0]);
+              if (ansi_code[0] == 5) {
+                // Respond with terminal readiness
+                SysLog("reported terminal readiness\n");
+                U8 deviceStatusResponse[5];
+                deviceStatusResponse[0] = ANSI_ESC;
+                deviceStatusResponse[1] = ANSI_CSI;
+                deviceStatusResponse[2] = 0x30; // '0'
+                deviceStatusResponse[3] = 0x6E; // 'n'
+                deviceStatusResponse[4] = 0x00; // Null-terminator
+                TCPSocketSend(term.sock, deviceStatusResponse, 4);
+                // TCPSocketSendString(term.sock, "\x1B[0n");
+              }
+              else if (ansi_code[0] == 6) {
+                // Respond with cursor position
+                // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
+                SysLog("reported cursor position\n");
+                U8 cursorResponse[8];
+                cursorResponse[0] = ANSI_ESC;
+                cursorResponse[1] = ANSI_CSI;
+                cursorResponse[2] = 0x32;
+                cursorResponse[3] = 0x35;
+                cursorResponse[4] = 0x3B;
+                cursorResponse[5] = 0x38;
+                cursorResponse[6] = 0x30;
+                cursorResponse[6] = 0x52;
+                cursorResponse[7] = 0x00;
+                TCPSocketSend(term.sock, cursorResponse, 7);
+                // TCPSocketSendString(term.sock, "\x1B\[25;80R");
+              } 
+              else if (ansi_code[0] == 255) {
+                // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
+                SysLog("reported screensize?\n");
+                SendWindowSize(term.sock, 25, 80);
+              }
+              ptr++;
+              break;
+            case 'c':
+              // Respond with device attributes
+              SysLog("reported device attributes\n");
+              // TCPSocketSendString(term.sock, "\x1B[?1;0c");
+              // Reports at VT101 (not sure why though)
+              U8 deviceAttributesResponse[8];
+              deviceAttributesResponse[0] = ANSI_ESC;
+              deviceAttributesResponse[1] = ANSI_CSI;
+              deviceAttributesResponse[2] = 0x3F; // '?' 
+              deviceAttributesResponse[3] = 0x31; // '1' 
+              deviceAttributesResponse[4] = 0x3B; // ';' 
+              deviceAttributesResponse[5] = 0x32; // '0' 
+              deviceAttributesResponse[6] = 0x63; // 'c' 
+              deviceAttributesResponse[7] = 0x00; // Null-terminator
+              TCPSocketSend(term.sock, deviceAttributesResponse, 7);
+              ptr++;
+              break;
+            case 'm':
+              // colors might be printed in the wrong order?
+              // like, <Esc>[1;40m and now <Esc>[40m;1m
+              I64 m;
+              Bool isBright = FALSE;
+              for (m = 0; m <= ansi_param_count; m++) {
+                if (ansi_code[m] <= 10) {
+                  switch (ansi_code[m]) {
+                    case 0: 
+                      DocPrint(term.doc, "$$BG$$$$FG$$"); 
+                      isBright = FALSE; 
+                      break; // reset
+                    case 1: isBright = TRUE; break;
+                    case 2: isBright = FALSE; break;
+                  }
+                }
+                else if ((ansi_code[m] >= 30 && ansi_code[m] <= 39) || (ansi_code[m] >= 90 && ansi_code[m] <= 97)) {
+                  // Set foreground color
+                  // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+                  if(!isBright){
+                    switch (ansi_code[m]) {
+                      case 30:   
+                        DocPrint(term.doc, "$$BLACK$$"); 
+                        break;
+                      case 31:   
+                        DocPrint(term.doc, "$$RED$$"); 
+                        break;
+                      case 32:   
+                        DocPrint(term.doc, "$$GREEN$$"); 
+                        break;
+                      case 33:   
+                        DocPrint(term.doc, "$$YELLOW$$"); 
+                        break;
+                      case 34:   
+                        DocPrint(term.doc, "$$BLUE$$"); 
+                        break;
+                      case 35:   
+                        DocPrint(term.doc, "$$PURPLE$$"); 
+                        break;
+                      case 36:   
+                        DocPrint(term.doc, "$$CYAN$$"); 
+                        break;
+                      case 37:   
+                        DocPrint(term.doc, "$$WHITE$$"); 
+                        break;
+                      case 39:   
+                        DocPrint(term.doc, "$$FG$$"); 
+                        break;
+                      default: break;
+                    }
+                  }
+                  else {
+                    switch (ansi_code[m]) {
+                      case 90:
+                      case 30:  
+                        DocPrint(term.doc, "$$DKGRAY$$"); 
+                        break;
+                      case 91:
+                      case 31:  
+                        DocPrint(term.doc, "$$LTRED$$"); 
+                        break;
+                      case 92:
+                      case 32:  
+                        DocPrint(term.doc, "$$LTGREEN$$"); 
+                        break;
+                      case 93:
+                      case 33:  
+                        DocPrint(term.doc, "$$YELLOW$$"); 
+                        break;
+                      case 94:
+                      case 34:  
+                        DocPrint(term.doc, "$$LTBLUE$$"); 
+                        break;
+                      case 95:
+                      case 35:  
+                        DocPrint(term.doc, "$$LTPURPLE$$"); 
+                        break;
+                      case 96:
+                      case 36:  
+                        DocPrint(term.doc, "$$LTCYAN$$"); 
+                        break;
+                      case 97:
+                      case 37:  
+                        DocPrint(term.doc, "$$LTGRAY$$"); 
+                        break;
+                      case 39:  
+                        DocPrint(term.doc, "$$FG$$"); 
+                        break;
+                      default: break;
+                    }
+                  }
+                }
+                // this is a dumb approach, just do a CatPrint or something
+                // until we properly catch the `;` it will stay buggy
+                else if ((ansi_code[m] >= 40 && ansi_code[m] <= 49) || (ansi_code[m] >= 100 && ansi_code[m] <= 107)) {
+                  // Set background color
+                  // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
+                  if(!isBright){
+                    switch (ansi_code[m]) {
+                      case 40:
+                        DocPrint(term.doc,"$$BG,BLACK$$");
+                        break;
+                      case 41:
+                        DocPrint(term.doc,"$$BG,RED$$");
+                        break;
+                      case 42:
+                        DocPrint(term.doc,"$$BG,GREEN$$");
+                        break;
+                      case 43:
+                        DocPrint(term.doc,"$$BG,YELLOW$$");
+                        break;
+                      case 44:
+                        DocPrint(term.doc,"$$BG,BLUE$$");
+                        break;
+                      case 45:
+                        DocPrint(term.doc,"$$BG,PURPLE$$");
+                        break;
+                      case 46:
+                        DocPrint(term.doc,"$$BG,CYAN$$");
+                        break;
+                      case 47:
+                        DocPrint(term.doc,"$$BG,WHITE$$");
+                        break;
+                      case 49:
+                        DocPrint(term.doc,"$$BG$$");
+                        break;
+                      default: break;
+                    }
+                  }
+                  else {
+                    switch (ansi_code[m]) {
+                      case 100:
+                      case 40:
+                        DocPrint(term.doc,"$$BG,DKGRAY$$");
+                        break;
+                      case 101:
+                      case 41:
+                        DocPrint(term.doc,"$$BG,LTRED$$");
+                        break;
+                      case 102:
+                      case 42:
+                        DocPrint(term.doc,"$$BG,LTGREEN$$");
+                        break;
+                      case 103:
+                      case 43:
+                        DocPrint(term.doc,"$$BG,YELLOW$$");
+                        break;
+                      case 104:
+                      case 44:
+                        DocPrint(term.doc,"$$BG,LTBLUE$$");
+                        break;
+                      case 105:
+                      case 45:
+                        DocPrint(term.doc,"$$BG,LTPURPLE$$");
+                        break;
+                      case 106:
+                      case 46:
+                        DocPrint(term.doc,"$$BG,LTCYAN$$");
+                        break;
+                      case 107:
+                      case 47:
+                        DocPrint(term.doc,"$$BG,LTGRAY$$");
+                        break;
+                      case 49:
+                        DocPrint(term.doc,"$$BG$$");
+                        break;
+                          // reset
+                      default: break;
+                    }
+                  }
+                }
+              }
+              ptr++;
+              break;
+            case 'A':
+              // Cursor Up
+              SysLog("Cursor Up\n");
+              // "$$CM+TY,0,-%d$$", ansi_code[0];
+              DocPrint(term.doc, "$$CM,0,-%d$$", ansi_code[0]);
+              ptr++;
+              break;
+            case 'B':
+              // Cursor Down
+              SysLog("Cursor Down\n");
+              DocPrint(term.doc, "$$CM,0,%d$$", ansi_code[0]);
+              ptr++;
+              break;
+            case 'C':
+              // Cursor Right
+              // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
+              DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
+              // NOTE: this has been "fixed" since we now change the window's background color
+              // if we just move the cursor, 
+              // you dont get the colored background since we skip over it directly
+              // I64 C;
+              // for (C = 0; C < ansi_code[0]; C++) {
+              //   " ";
+              // }
+              ptr++;
+              break;
+            case 'D':
+              // Cursor Left
+              SysLog("Cursor Left\n");
+              DocPrint(term.doc, "$$CM,-%d,0$$", ansi_code[0]);
+              ptr++;
+              break;
+            case 'E':
+              // Cursor Next Line
+              SysLog("Cursor Next Line\n");
+              // "$$CM+TY,0,+%d$$", ansi_code[0];
+              DocPrint(term.doc, "\n");
+              ptr++;
+              break;
+            case 'F':
+              // Cursor Previous Line
+              SysLog("Cursor Previous Line\n");
+              DocPrint(term.doc, "$$CM+LY,0,-%d$$", ansi_code[0]);
+              // "\n";
+              ptr++;
+              break;
+            case 'G':
+              // Cursor Horizontal Absolute	
+              SysLog("Cursor Horizontal Absolute\n");
+              DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
+              // "\n";
+              ptr++;
+              break;
+            case 'H':
+            case 'f':
+              I64 row = 1, col = 1;  // default values
+              // Parse the row number
+              if(ansi_code[0] != 1)
+                row = ansi_code[0];
+              if(ansi_code[1] != 1)
+                col = ansi_code[1];
+              
+              // TODO: This is a hack, dont skip row 0, col 0 (maybe?)
+              if (row == 0 && col == 0) {
+                ptr++; 
+                break;
+              }
+              // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+
+              if (row > term.window_height)
+                row = term.window_height-1;
+              if (col > term.window_width)
+                col = term.window_width-1;
+              // "$$CM,0,0$$";
+              DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1);
+              ptr++;
+              break;
+            case 'J':
+              // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
+              // Erase in Display
+              if (ansi_code[0] == 0) {
+                // Erase from cursor to end of display
+                // DocDelToNum(Fs->display_doc, Fs->display_doc->cur_entry->line_num);
+              } else if (ansi_code[0] == 1) {
+                // Erase from cursor to beginning of display
+                // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
+              } else if (ansi_code[0] == 2) {
+                // Erase entire display
+                DocClear(term.doc);
+              }
+              ptr++;
+              break;
+            case 'K':
+              // TODO: I have no idea if this actually works
+              SysLog("K code\n");
+              // Erase in Line
+              // CDocEntry *cur_entry = Fs->display_doc->cur_entry;
+              // CDocEntry *next_entry = cur_entry->next;
+              
+              // // Delete the current entry
+              // if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
+              //   Fs->display_doc->cur_entry = next_entry;
+              //   Fs->display_doc->cur_col = next_entry->min_col;
+              //   DocEntryDel(Fs->display_doc, cur_entry);
+              // }
+
+              // // Create a new entry (line) in its place
+              // CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
+              // DocInsEntry(Fs->display_doc, new_entry);
+              
+              ptr++;
+              break;
+            case 'L':
+              SysLog("L code\n");
+              ptr++;
+              break;
+            case 'S':
+              // TODO: Scroll Up
+              SysLog("Scroll Up");
+              ptr++;
+              break;
+            case 'T':
+              // TODO: Scroll Down
+              SysLog("Scroll Down");
+              ptr++;
+              break;
+            case 'M':
+              SysLog("Case M\n");
+              // TODO: is this correct? cursor should go one line up
+              DocPrint(term.doc, "$$CM,0,-1$$");
+              ptr++;
+              break;
+            case '?':
+              ptr++;
+              I64 code = 0;
+
+              while (IsDigit(*ptr)) {
+                code = code * 10 + (*ptr - '0');
+                ptr++;
+              }
+              switch (code) {
+                case 25:
+                  // need to specify which doc?
+                  if (*ptr == 'l') DocCursor(OFF); // Hide cursor
+                  if (*ptr == 'h') DocCursor(ON); // Show cursor
+                  ptr++; // Move past 'l' or 'h'
+                  break;
+                case 47:
+                  if (*ptr == 'l') SysLog("code 47l\n"); // restore screen
+                  if (*ptr == 'h') SysLog("code 47h\n"); // save screen
+                  ptr++; // Move past 'l' or 'h'
+                  break;
+                case 1049:
+                  if (*ptr == 'l') SysLog("code 1049l\n"); // enables the alternative buffer
+                  if (*ptr == 'h') SysLog("code 1049h\n"); // disables the alternative buffer
+                  ptr++; // Move past 'l' or 'h'
+                  break;
+                default:
+                  ptr++;
+                  break;
+              }
+              break;
+            case 's':
+              SysLog("SaveCurrentCursorPosition\n");
+              ptr++;
+              break;
+            case 'u':
+              SysLog("RestoreCurrentCursorPosition\n");
+              ptr++;
+              break;
+            case 'r':
+              // self.restoreCursorPosition();
+              SysLog("r case \n");
+              ptr++;
+              break;
+            case 'h':
+            case 'l':
+              // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
+              SysLog("h or l case \n");
+              ptr++; // Skip 'h' or 'l'
+              break;
+            case '=':
+              SysLog("ScreenMode attempt\n");
+              ptr++;
+              break;
+            default:
+              if(!IsDigit(*ptr)) {
+                SysLog("Unknown code: %c\n", *ptr);
+              }
+              ptr++;
+              break;
+        }
+      }
+    }
+    else {
+      // Print the received character
+      HandleControlCodes(*ptr);
+      ptr++;
+    }
+  }
+}
+
 U0 TerminalTask() {
   while (!term.sock_ready) {
     Sleep(100); // Avoid busy waiting
@@ -150,475 +676,9 @@ U0 TerminalTask() {
     term.buffer_len = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
     if (term.buffer_len > 0) {
       term.buffer[term.buffer_len] = '\0';
+      // parse the buffer
+      ANSIParse;
 
-      // Basic Telnet protocol parser
-      U8 *ptr = term.buffer;
-      while (ptr < term.buffer + term.buffer_len) {
-         // Telnet negotiation sequence
-        if (*ptr == NEGOTIATE) {
-          // FIXME: i don't think the telnet negotiation is actually working properly?
-          TelnetNegotiate(term.sock, ptr);
-          ptr += 3;
-        }
-        else if (*ptr == ANSI_ESC) {
-          // ANSI escape sequence
-          ptr++;
-          if (*ptr == ANSI_CSI) {
-            ptr++;
-            I64 ansi_code[MAX_ANSI_PARAMS], counter;
-            for (counter = 0; counter < MAX_ANSI_PARAMS; counter++) {
-                ansi_code[counter] = 0;  // Initialize all elements to 0
-            }
-            I64 ansi_param_count = 0;
-            while (IsDigit(*ptr) || *ptr == ';') {
-                if (IsDigit(*ptr)) {
-                    ansi_code[ansi_param_count] = ansi_code[ansi_param_count] * 10 + (*ptr - '0');
-                    ptr++;
-                }
-                else if (*ptr == ';') {
-                    ansi_param_count++;
-                    if (ansi_param_count >= MAX_ANSI_PARAMS) {
-                        // Error handling: too many parameters
-                        break;
-                    }
-                    ptr++;
-                    if(!IsDigit(*ptr) || *ptr == ';'){
-                        break;
-                    }
-                }
-            }
-
-            // Handle specific ANSI escape sequences
-            switch (*ptr) {
-                case 'n':
-                  SysLog("Case n, %d\n",ansi_code[0]);
-                  if (ansi_code[0] == 5) {
-                    // Respond with terminal readiness
-                    SysLog("reported terminal readiness\n");
-                    U8 deviceStatusResponse[5];
-                    deviceStatusResponse[0] = ANSI_ESC;
-                    deviceStatusResponse[1] = ANSI_CSI;
-                    deviceStatusResponse[2] = 0x30; // '0'
-                    deviceStatusResponse[3] = 0x6E; // 'n'
-                    deviceStatusResponse[4] = 0x00; // Null-terminator
-                    TCPSocketSend(term.sock, deviceStatusResponse, 4);
-                    // TCPSocketSendString(term.sock, "\x1B[0n");
-                  }
-                  else if (ansi_code[0] == 6) {
-                    // Respond with cursor position
-                    // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
-                    SysLog("reported cursor position\n");
-                    U8 cursorResponse[8];
-                    cursorResponse[0] = ANSI_ESC;
-                    cursorResponse[1] = ANSI_CSI;
-                    cursorResponse[2] = 0x32;
-                    cursorResponse[3] = 0x35;
-                    cursorResponse[4] = 0x3B;
-                    cursorResponse[5] = 0x38;
-                    cursorResponse[6] = 0x30;
-                    cursorResponse[6] = 0x52;
-                    cursorResponse[7] = 0x00;
-                    TCPSocketSend(term.sock, cursorResponse, 7);
-                    // TCPSocketSendString(term.sock, "\x1B\[25;80R");
-                  } 
-                  else if (ansi_code[0] == 255) {
-                    // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
-                    SysLog("reported screensize?\n");
-                    SendWindowSize(term.sock, 25, 80);
-                  }
-                  ptr++;
-                  break;
-                case 'c':
-                  // Respond with device attributes
-                  SysLog("reported device attributes\n");
-                  // TCPSocketSendString(term.sock, "\x1B[?1;0c");
-                  // Reports at VT101 (not sure why though)
-                  U8 deviceAttributesResponse[8];
-                  deviceAttributesResponse[0] = ANSI_ESC;
-                  deviceAttributesResponse[1] = ANSI_CSI;
-                  deviceAttributesResponse[2] = 0x3F; // '?' 
-                  deviceAttributesResponse[3] = 0x31; // '1' 
-                  deviceAttributesResponse[4] = 0x3B; // ';' 
-                  deviceAttributesResponse[5] = 0x32; // '0' 
-                  deviceAttributesResponse[6] = 0x63; // 'c' 
-                  deviceAttributesResponse[7] = 0x00; // Null-terminator
-                  TCPSocketSend(term.sock, deviceAttributesResponse, 7);
-                  ptr++;
-                  break;
-                case 'm':
-                  // colors might be printed in the wrong order?
-                  // like, <Esc>[1;40m and now <Esc>[40m;1m
-                  I64 m;
-                  Bool isBright = FALSE;
-                  for (m = 0; m <= ansi_param_count; m++) {
-                    if (ansi_code[m] <= 10) {
-                      switch (ansi_code[m]) {
-                        case 0: 
-                          DocPrint(term.doc, "$$BG$$$$FG$$"); 
-                          isBright = FALSE; 
-                          break; // reset
-                        case 1: isBright = TRUE; break;
-                        case 2: isBright = FALSE; break;
-                      }
-                    }
-                    else if ((ansi_code[m] >= 30 && ansi_code[m] <= 39) || (ansi_code[m] >= 90 && ansi_code[m] <= 97)) {
-                      // Set foreground color
-                      // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
-                      if(!isBright){
-                        switch (ansi_code[m]) {
-                          case 30:   
-                            DocPrint(term.doc, "$$BLACK$$"); 
-                            break;
-                          case 31:   
-                            DocPrint(term.doc, "$$RED$$"); 
-                            break;
-                          case 32:   
-                            DocPrint(term.doc, "$$GREEN$$"); 
-                            break;
-                          case 33:   
-                            DocPrint(term.doc, "$$YELLOW$$"); 
-                            break;
-                          case 34:   
-                            DocPrint(term.doc, "$$BLUE$$"); 
-                            break;
-                          case 35:   
-                            DocPrint(term.doc, "$$PURPLE$$"); 
-                            break;
-                          case 36:   
-                            DocPrint(term.doc, "$$CYAN$$"); 
-                            break;
-                          case 37:   
-                            DocPrint(term.doc, "$$WHITE$$"); 
-                            break;
-                          case 39:   
-                            DocPrint(term.doc, "$$FG$$"); 
-                            break;
-                          default: break;
-                        }
-                      }
-                      else {
-                        switch (ansi_code[m]) {
-                          case 90:
-                          case 30:  
-                            DocPrint(term.doc, "$$DKGRAY$$"); 
-                            break;
-                          case 91:
-                          case 31:  
-                            DocPrint(term.doc, "$$LTRED$$"); 
-                            break;
-                          case 92:
-                          case 32:  
-                            DocPrint(term.doc, "$$LTGREEN$$"); 
-                            break;
-                          case 93:
-                          case 33:  
-                            DocPrint(term.doc, "$$YELLOW$$"); 
-                            break;
-                          case 94:
-                          case 34:  
-                            DocPrint(term.doc, "$$LTBLUE$$"); 
-                            break;
-                          case 95:
-                          case 35:  
-                            DocPrint(term.doc, "$$LTPURPLE$$"); 
-                            break;
-                          case 96:
-                          case 36:  
-                            DocPrint(term.doc, "$$LTCYAN$$"); 
-                            break;
-                          case 97:
-                          case 37:  
-                            DocPrint(term.doc, "$$LTGRAY$$"); 
-                            break;
-                          case 39:  
-                            DocPrint(term.doc, "$$FG$$"); 
-                            break;
-                          default: break;
-                        }
-                      }
-                    }
-                    // this is a dumb approach, just do a CatPrint or something
-                    // until we properly catch the `;` it will stay buggy
-                    else if ((ansi_code[m] >= 40 && ansi_code[m] <= 49) || (ansi_code[m] >= 100 && ansi_code[m] <= 107)) {
-                      // Set background color
-                      // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
-                      if(!isBright){
-                        switch (ansi_code[m]) {
-                          case 40:
-                            DocPrint(term.doc,"$$BG,BLACK$$");
-                            break;
-                          case 41:
-                            DocPrint(term.doc,"$$BG,RED$$");
-                            break;
-                          case 42:
-                            DocPrint(term.doc,"$$BG,GREEN$$");
-                            break;
-                          case 43:
-                            DocPrint(term.doc,"$$BG,YELLOW$$");
-                            break;
-                          case 44:
-                            DocPrint(term.doc,"$$BG,BLUE$$");
-                            break;
-                          case 45:
-                            DocPrint(term.doc,"$$BG,PURPLE$$");
-                            break;
-                          case 46:
-                            DocPrint(term.doc,"$$BG,CYAN$$");
-                            break;
-                          case 47:
-                            DocPrint(term.doc,"$$BG,WHITE$$");
-                            break;
-                          case 49:
-                            DocPrint(term.doc,"$$BG$$");
-                            break;
-                          default: break;
-                        }
-                      }
-                      else {
-                        switch (ansi_code[m]) {
-                          case 100:
-                          case 40:
-                            DocPrint(term.doc,"$$BG,DKGRAY$$");
-                            break;
-                          case 101:
-                          case 41:
-                            DocPrint(term.doc,"$$BG,LTRED$$");
-                            break;
-                          case 102:
-                          case 42:
-                            DocPrint(term.doc,"$$BG,LTGREEN$$");
-                            break;
-                          case 103:
-                          case 43:
-                            DocPrint(term.doc,"$$BG,YELLOW$$");
-                            break;
-                          case 104:
-                          case 44:
-                            DocPrint(term.doc,"$$BG,LTBLUE$$");
-                            break;
-                          case 105:
-                          case 45:
-                            DocPrint(term.doc,"$$BG,LTPURPLE$$");
-                            break;
-                          case 106:
-                          case 46:
-                            DocPrint(term.doc,"$$BG,LTCYAN$$");
-                            break;
-                          case 107:
-                          case 47:
-                            DocPrint(term.doc,"$$BG,LTGRAY$$");
-                            break;
-                          case 49:
-                            DocPrint(term.doc,"$$BG$$");
-                            break;
-                             // reset
-                          default: break;
-                        }
-                      }
-                    }
-                  }
-                  ptr++;
-                  break;
-                case 'A':
-                  // Cursor Up
-                  SysLog("Cursor Up\n");
-                  // "$$CM+TY,0,-%d$$", ansi_code[0];
-                  DocPrint(term.doc, "$$CM,0,-%d$$", ansi_code[0]);
-                  ptr++;
-                  break;
-                case 'B':
-                  // Cursor Down
-                  SysLog("Cursor Down\n");
-                  DocPrint(term.doc, "$$CM,0,%d$$", ansi_code[0]);
-                  ptr++;
-                  break;
-                case 'C':
-                  // Cursor Right
-                  // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
-                  DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
-                  // NOTE: this has been "fixed" since we now change the window's background color
-                  // if we just move the cursor, 
-                  // you dont get the colored background since we skip over it directly
-                  // I64 C;
-                  // for (C = 0; C < ansi_code[0]; C++) {
-                  //   " ";
-                  // }
-                  ptr++;
-                  break;
-                case 'D':
-                  // Cursor Left
-                  SysLog("Cursor Left\n");
-                  DocPrint(term.doc, "$$CM,-%d,0$$", ansi_code[0]);
-                  ptr++;
-                  break;
-                case 'E':
-                  // Cursor Next Line
-                  SysLog("Cursor Next Line\n");
-                  // "$$CM+TY,0,+%d$$", ansi_code[0];
-                  DocPrint(term.doc, "\n");
-                  ptr++;
-                  break;
-                case 'F':
-                  // Cursor Previous Line
-                  SysLog("Cursor Previous Line\n");
-                  DocPrint(term.doc, "$$CM+LY,0,-%d$$", ansi_code[0]);
-                  // "\n";
-                  ptr++;
-                  break;
-                case 'G':
-                  // Cursor Horizontal Absolute	
-                  SysLog("Cursor Horizontal Absolute\n");
-                  DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
-                  // "\n";
-                  ptr++;
-                  break;
-                case 'H':
-                case 'f':
-                  I64 row = 1, col = 1;  // default values
-                  // Parse the row number
-                  if(ansi_code[0] != 1)
-                    row = ansi_code[0];
-                  if(ansi_code[1] != 1)
-                    col = ansi_code[1];
-                  
-                  // TODO: This is a hack, dont skip row 0, col 0 (maybe?)
-                  if (row == 0 && col == 0) {
-                    ptr++; 
-                    break;
-                  }
-                  // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
-
-                  if (row > term.window_height)
-                    row = term.window_height-1;
-                  if (col > term.window_width)
-                    col = term.window_width-1;
-                  // "$$CM,0,0$$";
-                  DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1);
-                  ptr++;
-                  break;
-                case 'J':
-                  // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
-                  // Erase in Display
-                  if (ansi_code[0] == 0) {
-                    // Erase from cursor to end of display
-                    // DocDelToNum(Fs->display_doc, Fs->display_doc->cur_entry->line_num);
-                  } else if (ansi_code[0] == 1) {
-                    // Erase from cursor to beginning of display
-                    // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
-                  } else if (ansi_code[0] == 2) {
-                    // Erase entire display
-                    DocClear(term.doc);
-                  }
-                  ptr++;
-                  break;
-                case 'K':
-                  // TODO: I have no idea if this actually works
-                  SysLog("K code\n");
-                  // Erase in Line
-                  // CDocEntry *cur_entry = Fs->display_doc->cur_entry;
-                  // CDocEntry *next_entry = cur_entry->next;
-                  
-                  // // Delete the current entry
-                  // if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
-                  //   Fs->display_doc->cur_entry = next_entry;
-                  //   Fs->display_doc->cur_col = next_entry->min_col;
-                  //   DocEntryDel(Fs->display_doc, cur_entry);
-                  // }
-
-                  // // Create a new entry (line) in its place
-                  // CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
-                  // DocInsEntry(Fs->display_doc, new_entry);
-                  
-                  ptr++;
-                  break;
-                case 'L':
-                  SysLog("L code\n");
-                  ptr++;
-                  break;
-                case 'S':
-                  // TODO: Scroll Up
-                  SysLog("Scroll Up");
-                  ptr++;
-                  break;
-                case 'T':
-                  // TODO: Scroll Down
-                  SysLog("Scroll Down");
-                  ptr++;
-                  break;
-                case 'M':
-                  SysLog("Case M\n");
-                  // TODO: is this correct? cursor should go one line up
-                  DocPrint(term.doc, "$$CM,0,-1$$");
-                  ptr++;
-                  break;
-                case '?':
-                  ptr++;
-                  I64 code = 0;
-
-                  while (IsDigit(*ptr)) {
-                    code = code * 10 + (*ptr - '0');
-                    ptr++;
-                  }
-                  switch (code) {
-                    case 25:
-                      // need to specify which doc?
-                      if (*ptr == 'l') DocCursor(OFF); // Hide cursor
-                      if (*ptr == 'h') DocCursor(ON); // Show cursor
-                      ptr++; // Move past 'l' or 'h'
-                      break;
-                    case 47:
-                      if (*ptr == 'l') SysLog("code 47l\n"); // restore screen
-                      if (*ptr == 'h') SysLog("code 47h\n"); // save screen
-                      ptr++; // Move past 'l' or 'h'
-                      break;
-                    case 1049:
-                      if (*ptr == 'l') SysLog("code 1049l\n"); // enables the alternative buffer
-                      if (*ptr == 'h') SysLog("code 1049h\n"); // disables the alternative buffer
-                      ptr++; // Move past 'l' or 'h'
-                      break;
-                    default:
-                      ptr++;
-                      break;
-                  }
-                  break;
-                case 's':
-                  SysLog("SaveCurrentCursorPosition\n");
-                  ptr++;
-                  break;
-                case 'u':
-                  SysLog("RestoreCurrentCursorPosition\n");
-                  ptr++;
-                  break;
-                case 'r':
-                  // self.restoreCursorPosition();
-                  SysLog("r case \n");
-                  ptr++;
-                  break;
-                case 'h':
-                case 'l':
-                  // TODO: Handle 'h' (set mode) or 'l' (reset mode) codes
-                  SysLog("h or l case \n");
-                  ptr++; // Skip 'h' or 'l'
-                  break;
-                case '=':
-                  SysLog("ScreenMode attempt\n");
-                  ptr++;
-                  break;
-                default:
-                  if(!IsDigit(*ptr)) {
-                    SysLog("Unknown code: %c\n", *ptr);
-                  }
-                  ptr++;
-                  break;
-            }
-          }
-        }
-        else {
-          // Print the received character
-          HandleControlCodes(*ptr);
-          ptr++;
-        }
-      }
     } else {
       "Error: Connection closed by the remote host.\n";
       break;
@@ -626,20 +686,12 @@ U0 TerminalTask() {
   }
 }
 
-U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
-  
-  term.sock_ready = 0; // Initialize the semaphore
-  term.sock = TelnetOpen(host, port);
+U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
+  I64 sc;
+
   term.window_width = 80;
   term.window_height = 25;
-  if (term.sock <= 0) {
-    return;
-  }
-  term.sock_ready = 1; // Signal that the socket is ready
   term.doc = Fs->display_doc;
-
-  // Spawn a task to receive data from the socket
-  term.task = Spawn(&TerminalTask, NULL, "Telnet");
 
   StrCopy(Fs->task_title, "TELNET");
 	Fs->border_src  = BDS_CONST;
@@ -660,14 +712,46 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           Fs);
   DocClear;
 
+  if (host == NULL) {
+    term.buffer_len = LoadSplashScreen("Art/TelnetSplash.ans");
+    if (term.buffer_len > 0) {
+      term.buffer[term.buffer_len] = '\0';
+      // parse the buffer
+      ANSIParse;
+      try
+      {
+        while (host == NULL) {
+          CHostForm form;
+          TelnetPrompt(&form);
+          host = form.host;
+          port = form.port;
+          DocClear;
+          break;
+        }
+      }
+      catch
+        PutExcept;
+    }
+    else {
+      "Error: Could not load splash screen.\n";
+    }
+  }
+  // Spawn a task to receive data from the socket
+  term.task = Spawn(&TerminalTask, NULL, "Telnet");
+
   // probably should use word wrap?
   DocPrint(, "$$WW,1$$");
   DocCursor(OFF);
 
+  term.sock_ready = 0; // Initialize the semaphore
+  term.sock = TelnetOpen(host, port);
+  if (term.sock <= 0) {
+    return;
+  }
+  term.sock_ready = 1; // Signal that the socket is ready
+
   "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
 
-  I64 sc;
-  // https://theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 	try
 	{
     while (!force_disconnect) {
@@ -740,4 +824,5 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
 
 
 // dev server
-Telnet("localhost", 8888);
+// Telnet("localhost", 8888);
+Telnet;
