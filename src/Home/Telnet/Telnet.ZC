@@ -827,8 +827,11 @@ init_connection:
           break;
         case CH_CTRLT:
           original_colors = !original_colors;
-          if (original_colors) = GrPaletteSetStd;
-          else GrPaletteSet(original_palette);
+          if (original_colors) PaletteSetStd(FALSE);
+          else {
+            GrPaletteSet(original_palette);
+            LFBFlush;
+          }
           break;
         case CH_CTRLL:
           PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
@@ -855,9 +858,9 @@ init_connection:
 
   MenuPop;
   SettingsPop;
-
+  GrPaletteSet(original_palette);
+  LFBFlush;
 }
-
 
 // dev server
 // Telnet("localhost", 8888);
