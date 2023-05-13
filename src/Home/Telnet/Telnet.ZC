@@ -19,8 +19,8 @@ Cd(__DIR__);;
 #include "TelnetHelpers"
 
 // If you're using a custom palette, the colors might not seem right.
-PaletteSet("Temple");
-
+// PaletteSet("DarkTemple");
+Bool dark_mode = FALSE;
 Bool force_disconnect = FALSE;
 
 I64 TelnetOpen(U8 *host, U16 port) {
@@ -238,7 +238,10 @@ U0 ANSIParse()
                 if (ansi_code[m] <= 10) {
                   switch (ansi_code[m]) {
                     case 0: 
-                      DocPrint(term.doc, "$$BG$$$$FG$$"); 
+                      if (dark_mode)
+                        DocPrint(term.doc, "$$BG,WHITE$$$$BLACK$$"); 
+                      else
+                        DocPrint(term.doc, "$$BG$$$$FG$$"); 
                       isBright = FALSE; 
                       break; // reset
                     case 1: isBright = TRUE; break;
@@ -251,8 +254,9 @@ U0 ANSIParse()
                   // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                   if(!isBright){
                     switch (ansi_code[m]) {
-                      case 30:   
-                        DocPrint(term.doc, "$$BLACK$$"); 
+                      case 30:
+                        if (dark_mode) DocPrint(term.doc, "$$WHITE$$");
+                        else DocPrint(term.doc, "$$BLACK$$");
                         break;
                       case 31:   
                         DocPrint(term.doc, "$$RED$$"); 
@@ -273,10 +277,12 @@ U0 ANSIParse()
                         DocPrint(term.doc, "$$CYAN$$"); 
                         break;
                       case 37:   
-                        DocPrint(term.doc, "$$WHITE$$"); 
+                        if (dark_mode) DocPrint(term.doc, "$$BLACK$$");
+                        else DocPrint(term.doc, "$$WHITE$$");
                         break;
-                      case 39:   
-                        DocPrint(term.doc, "$$FG$$"); 
+                      case 39:
+                        if (dark_mode) DocPrint(term.doc, "$$WHITE$$");
+                        else DocPrint(term.doc, "$$FG$$");
                         break;
                       default: break;
                     }
@@ -285,7 +291,8 @@ U0 ANSIParse()
                     switch (ansi_code[m]) {
                       case 90:
                       case 30:  
-                        DocPrint(term.doc, "$$DKGRAY$$"); 
+                        if (dark_mode) DocPrint(term.doc, "$$LTGRAY$$");
+                        else DocPrint(term.doc, "$$DKGRAY$$");
                         break;
                       case 91:
                       case 31:  
@@ -313,10 +320,12 @@ U0 ANSIParse()
                         break;
                       case 97:
                       case 37:  
-                        DocPrint(term.doc, "$$LTGRAY$$"); 
+                        if (dark_mode) DocPrint(term.doc, "$$DKGRAY$$");
+                        else DocPrint(term.doc, "$$LTGRAY$$");
                         break;
                       case 39:  
-                        DocPrint(term.doc, "$$FG$$"); 
+                        if (dark_mode) DocPrint(term.doc, "$$WHITE$$");
+                        else DocPrint(term.doc, "$$FG$$");
                         break;
                       default: break;
                     }
@@ -330,7 +339,8 @@ U0 ANSIParse()
                   if(!isBright){
                     switch (ansi_code[m]) {
                       case 40:
-                        DocPrint(term.doc,"$$BG,BLACK$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,WHITE$$");
+                        else DocPrint(term.doc, "$$BG,BLACK$$");
                         break;
                       case 41:
                         DocPrint(term.doc,"$$BG,RED$$");
@@ -351,10 +361,12 @@ U0 ANSIParse()
                         DocPrint(term.doc,"$$BG,CYAN$$");
                         break;
                       case 47:
-                        DocPrint(term.doc,"$$BG,WHITE$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,BLACK$$");
+                        else DocPrint(term.doc, "$$BG,WHITE$$");
                         break;
                       case 49:
-                        DocPrint(term.doc,"$$BG$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,WHITE$$");
+                        else DocPrint(term.doc, "$$BG$$");
                         break;
                       default: break;
                     }
@@ -363,7 +375,8 @@ U0 ANSIParse()
                     switch (ansi_code[m]) {
                       case 100:
                       case 40:
-                        DocPrint(term.doc,"$$BG,DKGRAY$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,LTGRAY$$");
+                        else DocPrint(term.doc, "$$BG,DKGRAY$$");
                         break;
                       case 101:
                       case 41:
@@ -391,10 +404,12 @@ U0 ANSIParse()
                         break;
                       case 107:
                       case 47:
-                        DocPrint(term.doc,"$$BG,LTGRAY$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,DKGRAY$$");
+                        else DocPrint(term.doc, "$$BG,LTGRAY$$");
                         break;
                       case 49:
-                        DocPrint(term.doc,"$$BG$$");
+                        if (dark_mode) DocPrint(term.doc, "$$BG,LTGRAY$$");
+                        else DocPrint(term.doc, "$$BG$$");
                         break;
                           // reset
                       default: break;
@@ -619,6 +634,7 @@ U0 TerminalTask() {
       ANSIParse;
 
     } else {
+      // Buffer full or connection closed
       DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
       break;
     }
@@ -643,6 +659,10 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
     "Load {"
     "  ANSIArt(,CH_CTRLO);"
     "}"
+    "Config {"
+    "  ToggleDarkMode(,CH_CTRLD);"
+    "  SetDarkColors(,CH_CTRLT);"
+    "}"
 		"About {"
 		"	Info(,CH_CTRLL);"
 		"}"
@@ -651,7 +671,8 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   StrCopy(Fs->task_title, "TELNET");
   Fs->border_src  = BDS_CONST;
   Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
-  Fs->text_attr   = BLACK << 4 + WHITE;
+  if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
+  else Fs->text_attr = BLACK << 4 + WHITE;
   Fs->title_src = TTS_LOCKED_CONST;
   DocClear(Fs->border_doc, TRUE);
 
@@ -670,12 +691,16 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 show_splash:
   // SplashScreen
   DocClear;
+  // probably should use word wrap?
+  DocPrint(, "$$WW,1$$");
+  DocCursor(OFF);
   // Load the file into the buffer and get its size
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
   if (term.buffer_len > 0) {
     term.buffer[term.buffer_len] = '\0';
     // parse the buffer
     ANSIParse;
+    // Free(term.buffer);
   }
   else {
     Print("Error: Could not load splash screen.\n");
@@ -690,9 +715,6 @@ init_connection:
     // Spawn a task to receive data from the socket
     term.task = Spawn(&TerminalTask, NULL, "Telnet");
 
-    // probably should use word wrap?
-    DocPrint(, "$$WW,1$$");
-    DocCursor(OFF);
 
     term.sock = TelnetOpen(host, port);
     if (term.sock <= 0) {
@@ -792,6 +814,17 @@ init_connection:
           else {
             "Error: Could not load art.\n";
           }
+          break;
+        case CH_CTRLD:
+          SysLog("Dark mode: %d\n", dark_mode);
+          dark_mode = !dark_mode;
+          if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
+          else Fs->text_attr = BLACK << 4 + WHITE;
+          DocRecalc(doc);
+          DocRecalc(term.doc);
+          break;
+        case CH_CTRLT:
+          PaletteSet("DarkTemple");
           break;
         case CH_CTRLL:
           PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
