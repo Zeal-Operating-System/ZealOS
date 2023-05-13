@@ -16,27 +16,10 @@ Cd(__DIR__);;
 
 #define MAX_ANSI_PARAMS 32
 
-#include "TelnetNegotiation"
+#include "TelnetClass"
 #include "TelnetHelpers"
 
 Bool force_disconnect = FALSE;
-
-class Terminal {
-  I64 sock;
-  Bool sock_ready;
-  I64 window_width;
-  I64 window_height;
-  CDoc *doc;
-  CTask *task;
-
-  I64 current_color;
-  I64 current_bgcolor;
-  I64 cursor_x;
-  I64 cursor_y;
-
-  U8 buffer[BUF_SIZE];
-  I64 buffer_len;
-} term;
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -143,52 +126,6 @@ U0 HandleControlCodes(U8 ch) {
   }
 }
 
-I64 LoadSplashScreen(U8 *filename) {
-  CFile *file = FOpen(filename, "rb");
-  if (!file) {
-    PrintErr("Failed to open file");
-    return -1;
-  }
-
-  // Ensure that the file size isn't larger than the buffer
-  if (file->de.size > BUF_SIZE) {
-    PrintErr("File is too large for the buffer.");
-    FClose(file);
-    return -1;
-  }
-
-  // Calculate the number of full blocks to read based on file size and block size
-  I64 full_blocks = file->de.size / BLK_SIZE;
-  I64 remaining_bytes = file->de.size % BLK_SIZE;
-
-  SysLog("File size: %d, Number of full blocks: %d, Remaining bytes: %d\n", file->de.size, full_blocks, remaining_bytes);
-
-  // Read the full blocks into the buffer
-  I64 i, blocks_read = 0;
-  for (i = 0; i < full_blocks; i++) {
-    blocks_read += FBlkRead(file, term.buffer + i * BLK_SIZE, i, 1);
-  }
-
-  // Check if there are any remaining bytes in the last block
-  if (remaining_bytes != 0) {
-    // Read the remaining bytes
-    U8 temp_buffer[BLK_SIZE];
-    if (FBlkRead(file, temp_buffer, full_blocks, 1)) {
-      blocks_read++;
-      MemCopy(term.buffer + full_blocks * BLK_SIZE, temp_buffer, remaining_bytes);
-    }
-  }
-
-  FClose(file);
-
-  if (blocks_read != (full_blocks + (remaining_bytes != 0))) {
-    PrintErr("Failed to read all the blocks");
-    return -1;
-  }
-
-  return file->de.size;  // Return the number of bytes read
-}
-
 U0 ANSIParse()
 {
   // Basic Telnet protocol parser
@@ -247,8 +184,7 @@ U0 ANSIParse()
                 deviceStatusResponse[2] = 0x30; // '0'
                 deviceStatusResponse[3] = 0x6E; // 'n'
                 deviceStatusResponse[4] = 0x00; // Null-terminator
-                TCPSocketSend(term.sock, deviceStatusResponse, 4);
-                // TCPSocketSendString(term.sock, "\x1B[0n");
+                if (term.sock_ready) TCPSocketSend(term.sock, deviceStatusResponse, 4);
               }
               else if (ansi_code[0] == 6) {
                 // Respond with cursor position
@@ -264,8 +200,7 @@ U0 ANSIParse()
                 cursorResponse[6] = 0x30;
                 cursorResponse[6] = 0x52;
                 cursorResponse[7] = 0x00;
-                TCPSocketSend(term.sock, cursorResponse, 7);
-                // TCPSocketSendString(term.sock, "\x1B\[25;80R");
+                if (term.sock_ready) TCPSocketSend(term.sock, cursorResponse, 7);
               } 
               else if (ansi_code[0] == 255) {
                 // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
@@ -277,7 +212,6 @@ U0 ANSIParse()
             case 'c':
               // Respond with device attributes
               SysLog("reported device attributes\n");
-              // TCPSocketSendString(term.sock, "\x1B[?1;0c");
               // Reports at VT101 (not sure why though)
               U8 deviceAttributesResponse[8];
               deviceAttributesResponse[0] = ANSI_ESC;
@@ -288,7 +222,7 @@ U0 ANSIParse()
               deviceAttributesResponse[5] = 0x32; // '0' 
               deviceAttributesResponse[6] = 0x63; // 'c' 
               deviceAttributesResponse[7] = 0x00; // Null-terminator
-              TCPSocketSend(term.sock, deviceAttributesResponse, 7);
+              if (term.sock_ready) TCPSocketSend(term.sock, deviceAttributesResponse, 7);
               ptr++;
               break;
             case 'm':
@@ -687,18 +621,20 @@ U0 TerminalTask() {
 }
 
 U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
-  I64 sc;
-
+  CHostForm form;
   term.window_width = 80;
   term.window_height = 25;
   term.doc = Fs->display_doc;
+  term.waiting_for_input = TRUE;
+  term.sock_ready = 0;
+  I64 art_path = "Art/TelnetSplash.ans";
 
   StrCopy(Fs->task_title, "TELNET");
-	Fs->border_src  = BDS_CONST;
-	Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
-	Fs->text_attr   = BLACK << 4 + WHITE;
-	Fs->title_src = TTS_LOCKED_CONST;
-	DocClear(Fs->border_doc, TRUE);
+  Fs->border_src  = BDS_CONST;
+  Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
+  Fs->text_attr   = BLACK << 4 + WHITE;
+  Fs->title_src = TTS_LOCKED_CONST;
+  DocClear(Fs->border_doc, TRUE);
 
   Fs->win_width = term.window_width;
   WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
@@ -712,8 +648,11 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
           Fs);
   DocClear;
 
+show_splash:
   // SplashScreen
-  term.buffer_len = LoadSplashScreen("Art/TelnetSplash.ans");
+  // I64 buffer_size = sizeof(term.buffer);
+  term.buffer_len = ANSIArtLoad(art_path, term.buffer);
+
   if (term.buffer_len > 0) {
     term.buffer[term.buffer_len] = '\0';
     // parse the buffer
@@ -723,41 +662,35 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
     "Error: Could not load splash screen.\n";
   }
   
-  // PopUp if no host is specified
-  if (host == NULL) {
-    try
-    {
-      while (host == NULL) {
-        CHostForm form;
-        TelnetPrompt(&form);
-        host = form.host;
-        port = form.port;
-        DocClear;
-        break;
-      }
+
+init_connection:
+  while (!term.waiting_for_input || host != NULL)
+  {
+    // if(term.sock != NULL) TCPSocketClose(term.sock);
+    // TODO: should probably kill the task if it already exists too?
+
+    // Spawn a task to receive data from the socket
+    term.task = Spawn(&TerminalTask, NULL, "Telnet");
+
+    // probably should use word wrap?
+    DocPrint(, "$$WW,1$$");
+    DocCursor(OFF);
+
+    term.sock = TelnetOpen(host, port);
+    if (term.sock <= 0) {
+      return;
     }
-    catch
-      PutExcept;
+    term.sock_ready = 1; // Signal that the socket is ready
+    term.waiting_for_input = FALSE;
+
+    "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
+    Sleep(1000);
+    DocClear;
+    break;
   }
 
-  // Spawn a task to receive data from the socket
-  term.task = Spawn(&TerminalTask, NULL, "Telnet");
-
-  // probably should use word wrap?
-  DocPrint(, "$$WW,1$$");
-  DocCursor(OFF);
-
-  term.sock_ready = 0; // Initialize the semaphore
-  term.sock = TelnetOpen(host, port);
-  if (term.sock <= 0) {
-    return;
-  }
-  term.sock_ready = 1; // Signal that the socket is ready
-
-  "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
-  Sleep(1000);
-  DocClear;
-
+  
+  I64 sc;
 	try
 	{
     while (!force_disconnect) {
@@ -768,19 +701,19 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
           switch (sc.u8[0])
           {
             case SC_CURSOR_LEFT:
-              TCPSocketSendString(term.sock, "\x1B[D");
+              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[D");
               break;
 
             case SC_CURSOR_RIGHT:
-              TCPSocketSendString(term.sock, "\x1B[C");
+              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[C");
               break;
 
             case SC_CURSOR_UP:
-              TCPSocketSendString(term.sock, "\x1B[A");
+              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[A");
               break;
 
             case SC_CURSOR_DOWN:
-              TCPSocketSendString(term.sock, "\x1B[B");
+              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[B");
               break;
             default:
               break;
@@ -790,24 +723,43 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
           switch (sc.u8[0])
           {
             case SC_TAB:
-              TCPSocketSendString(term.sock, "\x09");
+              if (term.sock_ready) TCPSocketSendString(term.sock, "\x09");
               break;
             default:
               break;
           }
         case CH_BACKSPACE:
-          TCPSocketSendString(term.sock, "\x08");
+          if (term.sock_ready) TCPSocketSendString(term.sock, "\x08");
           break;
         case CH_ESC:
-          TCPSocketSendString(term.sock, "\x1B");
+          if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
           break;
         case CH_SHIFT_ESC:
           force_disconnect = TRUE;
           break;
         // send buffer on enter
         case '\n':
-          TCPSocketSendString(term.sock, "\r\n");
-
+          if (term.sock_ready) TCPSocketSendString(term.sock, "\r\n");
+          break;
+        case CH_CTRLN:
+          TelnetPrompt(&form);
+          host = form.host;
+          port = form.port;
+          DocClear;
+          term.waiting_for_input = FALSE;
+          goto init_connection;
+          break;
+        case CH_CTRLO:
+          art_path = ANSIArtBrowser;
+          if (art_path != NULL) {
+            term.sock_ready = 0;
+            term.waiting_for_input = TRUE;
+            SysLog("%s\n", art_path);
+            goto show_splash;
+          }
+          else {
+            "Error: Could not load art.\n";
+          }
           break;
         default:
           if (key >= ' ' && key <= '~') {
@@ -815,7 +767,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
             U8 input_buf[2];
             input_buf[0] = key;
             input_buf[1] = '\0';
-            TCPSocketSend(term.sock, input_buf, 1);
+            if (term.sock_ready) TCPSocketSend(term.sock, input_buf, 1);
           }
           break;
       }
@@ -830,5 +782,5 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
 
 // dev server
-Telnet("localhost", 8888);
-// Telnet;
+// Telnet("localhost", 8888);
+Telnet;

@@ -1,3 +1,7 @@
+Cd(__DIR__);
+#include "TelnetClass"
+#include "TelnetNegotiation"
+
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
 }
@@ -12,6 +16,87 @@ U0 TelnetPrompt(CHostForm *form) {
   form->port = TELNET_PORT;
   PopUpForm(form);
 }
+
+I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
+  CFile *file = FOpen(filename, "rb");
+  if (!file) {
+    PrintErr("Failed to open file");
+    return -1;
+  }
+
+  // Allocate memory for the buffer based on file size
+  *buffer = MAlloc(file->de.size);
+  if (!(*buffer)) {
+    PrintErr("Failed to allocate memory for the buffer");
+    FClose(file);
+    return -1;
+  }
+
+  // Calculate the number of full blocks to read based on file size and block size
+  I64 full_blocks = file->de.size / BLK_SIZE;
+  I64 remaining_bytes = file->de.size % BLK_SIZE;
+
+  SysLog("File size: %d, Number of full blocks: %d, Remaining bytes: %d\n", file->de.size, full_blocks, remaining_bytes);
+
+  // Read the full blocks into the buffer
+  I64 i, blocks_read = 0;
+  for (i = 0; i < full_blocks; i++) {
+    blocks_read += FBlkRead(file, buffer + i * BLK_SIZE, i, 1);
+  }
+
+  // Check if there are any remaining bytes in the last block
+  if (remaining_bytes != 0) {
+    // Read the remaining bytes
+    U8 temp_buffer[BLK_SIZE];
+    if (FBlkRead(file, temp_buffer, full_blocks, 1)) {
+      blocks_read++;
+      MemCopy(buffer + full_blocks * BLK_SIZE, temp_buffer, remaining_bytes);
+    }
+  }
+
+  FClose(file);
+
+  if (blocks_read != (full_blocks + (remaining_bytes != 0))) {
+    PrintErr("Failed to read all the blocks");
+    return -1;
+  }
+
+  return file->de.size;  // Return the number of bytes read
+}
+
+public I64 ANSIArtBrowser()
+{
+  CDirEntry *tmpde1 = NULL, *tmpde2;
+  CDoc *doc = DocNew;
+  I64 res = 0;
+  I64 res2 = 0;
+
+  DocPrint(doc, "$$LTBLUE$$\n\n");
+
+  tmpde1 = FilesFind("Art/*.ans");
+
+  if (tmpde1)
+  {
+    while (tmpde1)
+    {
+      tmpde2 = tmpde1->next;
+      res++;
+      
+      DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n", res, tmpde1->name, tmpde1->name);
+      DirEntryDel(tmpde1);
+      
+      tmpde1 = tmpde2;
+    }
+  }
+
+  DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=0$$\n\n");
+  res2 = PopUpMenu(doc);
+  DocDel(doc);
+
+
+  return MStrPrint("%Q%Q", "Art/", res2);
+}
+
 
 
 // Placeholder for the full ANSI text styling
