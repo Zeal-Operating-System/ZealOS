@@ -20,7 +20,7 @@ Cd(__DIR__);;
 
 // If you're using a custom palette, the colors might not seem right.
 CBGR24 original_palette[COLORS_NUM];
-Bool dark_mode = FALSE;
+Bool dark_mode = TRUE; // since ZealOS is dark by default
 Bool original_colors = FALSE;
 Bool force_disconnect = FALSE;
 
@@ -53,7 +53,7 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 8: // BS (Backspace)
         // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
-        DocPrint(term.doc, "$$CM,-8,0$$");
+        DocPrint(term.doc, "$$CM,-1,0$$");
         break;
       case 9: // HT (Horizontal Tab)
         // "        "; // 8 spaces
@@ -66,7 +66,9 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
+        SysLog("form feed");
         DocClear(term.doc);
+        // DocPrint(term.doc, "\f");
         break;
       case 13: // CR (Carriage Return)
         DocPrint(term.doc, "\r");
@@ -108,7 +110,7 @@ U0 HandleControlCodes(U8 ch) {
       default:
         // some ch make Zeal crash or behave weird because they're commands?
         // SysLog("CC %c happened\n", ch);
-        SysLog("CC happened\n");
+        SysLog("CC 0x%X happened\n", ch);
         break;
     }
   } 
@@ -487,18 +489,20 @@ U0 ANSIParse()
                 ptr++; 
                 break;
               }
-              // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+              // row--;
+              // col--;
+              SysLog("H or f row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
-              if (row > term.window_height)
-                row = term.window_height-1;
-              if (col > term.window_width)
-                col = term.window_width-1;
+              // if (row > term.window_height)
+              //   row = term.window_height-1;
+              // else if (col > term.window_width)
+              //   col = term.window_width-1;
               // "$$CM,0,0$$";
               DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1);
               ptr++;
               break;
             case 'J':
-              // SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
+              SysLog("J code, %d  %d\n", ansi_param_count, ansi_code[0]);
               // Erase in Display
               if (ansi_code[0] == 0) {
                 // Erase from cursor to end of display
@@ -534,6 +538,7 @@ U0 ANSIParse()
               break;
             case 'L':
               SysLog("L code\n");
+              // DocPrint(term.doc, "\n");
               ptr++;
               break;
             case 'S':
@@ -601,13 +606,37 @@ U0 ANSIParse()
               SysLog("h or l case \n");
               ptr++; // Skip 'h' or 'l'
               break;
+            case 't':
+              // for (m = 0; m <= ansi_param_count; m++) {
+              //   // SysLog("ansi_code[%d]: %d\n", m, ansi_code[m]);
+              // }
+              if (ansi_param_count == 3) {
+                if (ansi_code[0] == 8) {
+                  term.window_width = ansi_code[1];
+                  term.window_height = ansi_code[2];
+                  Fs->win_width = term.window_width;
+                  WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
+                          (TEXT_COLS / 2) - (Fs->win_width / 2) +
+                              (Fs->win_width - 1),
+                          Fs);
+                  Fs->win_height = term.window_height;
+                  WinVert((TEXT_ROWS / 2) - (Fs->win_height / 2),
+                          (TEXT_ROWS / 2) - (Fs->win_height / 2) +
+                              (Fs->win_height - 1),
+                          Fs);
+                }
+              }
+
+              ptr++;
+              break;
             case '=':
               SysLog("ScreenMode attempt\n");
               ptr++;
               break;
             default:
-              if(!IsDigit(*ptr)) {
-                SysLog("Unknown code: %c\n", *ptr);
+              // if(!IsDigit(*ptr)) {
+              if(*ptr > 32) {
+                SysLog("Unknown code: 0x%X\n", *ptr);
               }
               ptr++;
               break;
@@ -774,8 +803,32 @@ init_connection:
             default:
               break;
           }
+        case 255:
+          switch (sc.u8[0])
+          {
+            case SC_PAGE_UP:  if (term.sock_ready) TCPSocketSendString(term.sock, "\033[V"); break;
+            case SC_PAGE_DOWN:if (term.sock_ready) TCPSocketSendString(term.sock, "\033[U"); break;
+            case SC_HOME:     if (term.sock_ready) TCPSocketSendString(term.sock, "\033[H"); break;
+            case SC_END:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[K"); break;
+            case SC_DELETE:   if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F"); break;
+            case SC_F1:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OP"); break;
+            case SC_F2:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OQ"); break;
+            case SC_F3:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OR"); break;
+            case SC_F4:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OS"); break;
+            case SC_F5:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033Ot"); break;
+            case SC_F6:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[17~"); break;
+            case SC_F7:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[18~"); break;
+            case SC_F8:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[19~"); break;
+            case SC_F9:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[20~"); break;
+            case SC_F10:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[21~"); break;
+            case SC_F11:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[23~"); break;
+            case SC_F12:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[24~"); break;
+            default:
+              break;
+          }
+
         case CH_BACKSPACE:
-          if (term.sock_ready) TCPSocketSendString(term.sock, "\x08");
+          if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F");
           break;
         case CH_ESC:
           if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");

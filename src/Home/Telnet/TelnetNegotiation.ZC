@@ -12,15 +12,33 @@
 #define SB 0xFA
 #define SE 0xF0
 
-U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
+// #define TELNET_IAC 255  /* 0xff - Interpret as command */
+// #define TELNET_DONT 254 /* 0xfe - Don't do option */
+// #define TELNET_DO 253   /* 0xfd - Do option */
+// #define TELNET_WONT 252 /* 0xfc - Won't do option */
+// #define TELNET_WILL 251 /* 0xfb - Will do option */
+
+// #define TELNET_SB 250   /* 0xfa - sub-negotiation */
+// #define TELNET_GA 249   /* 0xf9 - Go ahead */
+// #define TELNET_EL 248   /* 0xf8 - Erase line */
+// #define TELNET_EC 247   /* 0xf7 - Erase char */
+// #define TELNET_AYT 246  /* 0xf6 - Are you there? */
+// #define TELNET_AO 245   /* 0xf5 - Abort output */
+// #define TELNET_IP 244   /* 0xf4 - Interrupt process */
+// #define TELNET_BRK 243  /* 0xf3 - Break */
+// #define TELNET_SYNC 242 /* 0xf2 - Data mark */
+// #define TELNET_NOP 241  /* 0xf1 - No operation */
+
+U0 SendWindowSize(I64 sock, U16 rows, U16 cols)
+{
   U8 buf[9];
 
   buf[0] = IAC;
-  buf[1] = SB; 
+  buf[1] = SB;
   buf[2] = NAWS;
-  buf[3] = cols >> 8; // High byte of columns
+  buf[3] = cols >> 8;   // High byte of columns
   buf[4] = cols & 0xFF; // Low byte of columns
-  buf[5] = rows >> 8; // High byte of rows
+  buf[5] = rows >> 8;   // High byte of rows
   buf[6] = rows & 0xFF; // Low byte of rows
   buf[7] = IAC;
   buf[8] = SE;
@@ -29,7 +47,8 @@ U0 SendWindowSize(I64 sock, U16 rows, U16 cols) {
   TCPSocketSendString(sock, buf);
 }
 
-U0 SendTerminalType(I64 sock, U8 *terminal_type) {
+U0 SendTerminalType(I64 sock, U8 *terminal_type)
+{
   U8 response[256];
   I64 len = StrLen(terminal_type);
 
@@ -56,49 +75,84 @@ U0 TelnetNegotiate(I64 sock, U8 ptr)
   U8 response[4];
   response[0] = IAC;
 
-  if (negotiation_code == DO || negotiation_code == DONT) {
-    if (option_code == ECHO) {
-      if (negotiation_code == DO) {
+  if (negotiation_code == DO || negotiation_code == DONT)
+  {
+    if (option_code == ECHO)
+    {
+      if (negotiation_code == DO)
+      {
         response[1] = WILL;
-      } else {
+      }
+      else
+      {
         response[1] = WONT;
       }
-    } else if (option_code == SUPPRESS_GO_AHEAD) { 
-      if (negotiation_code == DO) {
+    }
+    else if (option_code == SUPPRESS_GO_AHEAD)
+    {
+      if (negotiation_code == DO)
+      {
         response[1] = WILL;
-      } else {
+      }
+      else
+      {
         response[1] = WONT;
       }
-    } else if (option_code == TERMINAL_TYPE) {
-      if (negotiation_code == DO) {
+    }
+    else if (option_code == TERMINAL_TYPE)
+    {
+      if (negotiation_code == DO)
+      {
         response[1] = WILL;
-      } else {
+      }
+      else
+      {
         response[1] = WONT;
       }
-    } else if (option_code == NAWS) {
-      if (negotiation_code == DO) {
+    }
+    else if (option_code == NAWS)
+    {
+      if (negotiation_code == DO)
+      {
         response[1] = WILL;
-      } else {
+      }
+      else
+      {
         response[1] = WONT;
       }
-    } else if (option_code == LINEMODE) { 
-      if (negotiation_code == DO) {
+    }
+    else if (option_code == LINEMODE)
+    {
+      if (negotiation_code == DO)
+      {
         response[1] = WILL;
-      } else {
+      }
+      else
+      {
         response[1] = WONT;
       }
-    } else {
+    }
+    else
+    {
       response[1] = WONT;
     }
-  } else {
+  }
+  else
+  {
     response[1] = DONT;
   }
 
   response[2] = option_code;
   response[3] = '\0';
-  // TCPSocketSendString(sock, response);
-  // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
-  // if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
-  // else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
+
+  if (term.sock_ready) 
+  {
+    TCPSocketSendString(sock, response);
+    // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
+    if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
+    else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
+    // TCPSocketSendString(term.sock, "\xdb\b \xdb\b \xdb\b[\xdb\b[\xdb\b \xdb\bM\xdb\ba\xdb\bi\xdb\bn\xdb\bt\xdb\be\xdb\bn\xdb\ba\xdb\bn\xdb\bc\xdb\be\xdb\b \xdb\bC\xdb\bo\xdb\bm\xdb\bp\xdb\bl\xdb\be\xdb\bt\xdb\be\xdb\b \xdb\b]\xdb\b]\xdb\b \b\r\n\r\n\x1b[0m\x1b[2J\r\n\r\n\x1b[0;1;30mHX Force retinal scan in progress ... \x1b[0;0;30m");
+    // TCPSocketSendString(term.sock, "\033[s\033[99B\033[99B\033[99B_\033[99C\033[99C\033[99C_\033[6n\033[u\033[0m_\033[2J\033[H");
+  }
   ptr += 3;
 }
