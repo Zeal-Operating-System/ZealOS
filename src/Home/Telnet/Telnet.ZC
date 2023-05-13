@@ -116,7 +116,7 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("case 127");
     }
     if (ch == 0x24) {
-      DocPrint(term.doc, "$$");
+      DocPrint(term.doc, "$$$$");
     }
     if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
     {
@@ -670,18 +670,16 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 show_splash:
   // SplashScreen
   DocClear;
-  MemSet(term.buffer, 0, sizeof(term.buffer));
+  // Load the file into the buffer and get its size
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
-
   if (term.buffer_len > 0) {
     term.buffer[term.buffer_len] = '\0';
     // parse the buffer
     ANSIParse;
   }
   else {
-    "Error: Could not load splash screen.\n";
+    Print("Error: Could not load splash screen.\n");
   }
-  
 
 init_connection:
   while (!term.waiting_for_input || host != NULL)

@@ -36,7 +36,7 @@ I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
   I64 full_blocks = file->de.size / BLK_SIZE;
   I64 remaining_bytes = file->de.size % BLK_SIZE;
 
-  SysLog("File size: %d, Number of full blocks: %d, Remaining bytes: %d\n", file->de.size, full_blocks, remaining_bytes);
+  // SysLog("File size: %d, Number of full blocks: %d, Remaining bytes: %d\n", file->de.size, full_blocks, remaining_bytes);
 
   // Read the full blocks into the buffer
   I64 i, blocks_read = 0;
@@ -54,6 +54,7 @@ I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
     }
   }
 
+  I64 file_size = file->de.size;
   FClose(file);
 
   if (blocks_read != (full_blocks + (remaining_bytes != 0))) {
@@ -61,7 +62,7 @@ I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
     return -1;
   }
 
-  return file->de.size;  // Return the number of bytes read
+  return file_size;  // Return the number of bytes read
 }
 
 public I64 ANSIArtBrowser()
