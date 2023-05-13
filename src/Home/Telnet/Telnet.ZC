@@ -1,8 +1,7 @@
 // Telnet client for ZealOS by y4my4m
 // Public Domain
-Cd(__DIR__);;
 
-// PaletteSet("Temple");
+Cd(__DIR__);;
 
 #define TELNET_PORT 23
 #define BUF_SIZE 8192 // way too big?
@@ -19,6 +18,9 @@ Cd(__DIR__);;
 #include "TelnetClass"
 #include "TelnetHelpers"
 
+// If you're using a custom palette, the colors might not seem right.
+// PaletteSet("Temple");
+
 Bool force_disconnect = FALSE;
 
 I64 TelnetOpen(U8 *host, U16 port) {
@@ -31,7 +33,8 @@ I64 TelnetOpen(U8 *host, U16 port) {
   sock = TCPConnectionCreate(host, port);
   "$$GREEN$$Connecting to %s:%d.$$FG$$$$BG$$\n", host, port;
   if (sock <= 0) {
-    PrintErr("Failed to connect to %s:%d\n", host, port);
+    // PrintErr("Failed to connect to %s:%d\n", host, port);
+    PopUpOk("\n\n\tFailed to connect\n\n");
     return sock;
   }
 
@@ -138,9 +141,11 @@ U0 ANSIParse()
     //   term.buffer_len = ptr - term.buffer;
     // }
     // Telnet negotiation sequence
-    if (*ptr == NEGOTIATE) {
-      // FIXME: i don't think the telnet negotiation is actually working properly?
-      TelnetNegotiate(term.sock, ptr);
+    if (*ptr == NEGOTIATE) { 
+      // TODO: verify this is working, somehow
+      // i see it being sent out as multiple short burst instead of one long answer
+      // anyway, i'm not sure how to verify if it's working or not but the code seems OK
+      if (term.sock_ready) TelnetNegotiate(term.sock, ptr);
       ptr += 3;
     }
     else if (*ptr == ANSI_ESC) {
@@ -239,6 +244,7 @@ U0 ANSIParse()
                       break; // reset
                     case 1: isBright = TRUE; break;
                     case 2: isBright = FALSE; break;
+                    default: break;
                   }
                 }
                 else if ((ansi_code[m] >= 30 && ansi_code[m] <= 39) || (ansi_code[m] >= 90 && ansi_code[m] <= 97)) {
@@ -606,7 +612,7 @@ U0 TerminalTask() {
     Sleep(100); // Avoid busy waiting
   }
 
-  while (!force_disconnect) {
+  while (term.sock_ready) {
     term.buffer_len = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
     if (term.buffer_len > 0) {
       term.buffer[term.buffer_len] = '\0';
@@ -614,7 +620,7 @@ U0 TerminalTask() {
       ANSIParse;
 
     } else {
-      "Error: Connection closed by the remote host.\n";
+      DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
       break;
     }
   }
@@ -628,6 +634,20 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   term.waiting_for_input = TRUE;
   term.sock_ready = 0;
   I64 art_path = "Art/TelnetSplash.ans";
+
+  SettingsPush;
+  MenuPush(
+    "Telnet {"
+    " Connect(,CH_CTRLN);"
+    " Exit(,CH_SHIFT_ESC);"
+    "}"
+    "Load {"
+    "  ANSIArt(,CH_CTRLO);"
+    "}"
+		"About {"
+		"	Info(,CH_CTRLL);"
+		"}"
+  );
 
   StrCopy(Fs->task_title, "TELNET");
   Fs->border_src  = BDS_CONST;
@@ -646,11 +666,12 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
           (TEXT_ROWS / 2) - (Fs->win_height / 2) +
               (Fs->win_height - 1),
           Fs);
-  DocClear;
+
 
 show_splash:
   // SplashScreen
-  // I64 buffer_size = sizeof(term.buffer);
+  DocClear;
+  MemSet(term.buffer, 0, sizeof(term.buffer));
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
 
   if (term.buffer_len > 0) {
@@ -678,7 +699,10 @@ init_connection:
 
     term.sock = TelnetOpen(host, port);
     if (term.sock <= 0) {
-      return;
+      // return;
+      term.waiting_for_input = TRUE;
+      host = NULL;
+      goto show_splash;
     }
     term.sock_ready = 1; // Signal that the socket is ready
     term.waiting_for_input = FALSE;
@@ -689,7 +713,6 @@ init_connection:
     break;
   }
 
-  
   I64 sc;
 	try
 	{
@@ -735,7 +758,19 @@ init_connection:
           if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
           break;
         case CH_SHIFT_ESC:
-          force_disconnect = TRUE;
+          if (term.sock_ready)
+          {
+            if (term.sock_ready) TCPSocketClose(term.sock);
+            host = NULL;
+            term.sock_ready = 0;
+            term.waiting_for_input = TRUE;
+            "Telnet connection closed.\n";
+            Sleep(100);
+            goto show_splash;
+          }
+          else 
+            force_disconnect = TRUE;
+            break;
           break;
         // send buffer on enter
         case '\n':
@@ -754,12 +789,15 @@ init_connection:
           if (art_path != NULL) {
             term.sock_ready = 0;
             term.waiting_for_input = TRUE;
-            SysLog("%s\n", art_path);
+            // SysLog("%s\n", art_path);
             goto show_splash;
           }
           else {
             "Error: Could not load art.\n";
           }
+          break;
+        case CH_CTRLL:
+          PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
           break;
         default:
           if (key >= ' ' && key <= '~') {
@@ -773,11 +811,17 @@ init_connection:
       }
     }
   }
-	catch
-		PutExcept;
+  catch
+    PutExcept;
 
-  TCPSocketClose(term.sock);
-  "Telnet connection closed.\n";
+  // ideally go back to the splashscreen and wait for another input?
+  // term.sock_ready = 0;
+  // term.waiting_for_input = TRUE;
+  // goto show_splash;
+
+  MenuPop;
+  SettingsPop;
+
 }
 
 

@@ -7,8 +7,8 @@ U8 IsDigit(U8 ch) {
 }
 
 class CHostForm {
-  U8 host[256] format "$$DA-P,LEN=255,A=\"Host:%s\"$$";
-  U16 port format "$$DA,LEN=255,A=\"Port:%d\"$$";
+  U8 host[256] format "\n\n \t$$DA-P,LEN=255,A=\"Host:%s\"$$\t\n";
+  U16 port format "\t$$DA,LEN=255,A=\"Port:%d\"$$\t\n \n\n";
 };
 
 U0 TelnetPrompt(CHostForm *form) {
@@ -73,7 +73,7 @@ public I64 ANSIArtBrowser()
 
   DocPrint(doc, "$$LTBLUE$$\n\n");
 
-  tmpde1 = FilesFind("Art/*.ans");
+  tmpde1 = FilesFind("Art/*.*", 1);
 
   if (tmpde1)
   {

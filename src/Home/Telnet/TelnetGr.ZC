@@ -227,7 +227,7 @@ U0 TerminalDrawIt(CTask *task, CDC *dc)
 {
   // Clear the document
   // DocClear(term.doc);
-  Sleep(100);
+  // Sleep(100);
   DCFill;
 
   I64 row, col;
