@@ -20,7 +20,6 @@ Cd(__DIR__);;
 #include "TelnetNegotiation"
 #include "TelnetHelpers"
 
-CTask *input_task	= NULL;
 Bool force_disconnect = FALSE;
 Bool redraw_needed = FALSE;
 
@@ -74,7 +73,7 @@ U0 HandleControlCodes(U8 ch) {
     switch (ch) {
       case 0: // NUL (Null) - Typically ignored
         break;
-      case 7: // BEL (Bell)
+      case 7: // BEL (Bell)d
         Beep;
         break;
       case 8: // BS (Backspace)
@@ -85,9 +84,13 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 10: // LF (Line Feed)
         term.cursor_y++;
-        // if (term.cursor_y >= term.window_height) {
-        //   term.cursor_y = 0; // reset Y position to 0 when it exceeds window height
-        // }
+        if (term.cursor_y >= term.window_height) {
+          // DocClear(term.doc);
+
+          // DCFill(DCAlias,BLACK);
+          // term.cursor_x = 0;
+          term.cursor_y = 0; // reset Y position to 0 when it exceeds window height
+        }
         // If the next character is CR, ignore it
         // TODO: dont directly manipulate the buffer
         // if (*(term.buffer + 1) == 13) term.buffer++;
@@ -96,9 +99,10 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
-        DocClear(term.doc);
-        // term.cursor_x = 0;
-        // term.cursor_y = 0;
+        // DocClear(term.doc);
+        // DCFill(DCAlias,BLACK);
+        term.cursor_x = 0;
+        term.cursor_y = 0;
         break;
       case 13: // CR (Carriage Return)
         term.cursor_x = 0;
@@ -176,7 +180,8 @@ U0 HandleControlCodes(U8 ch) {
 U0 TerminalDrawIt(CTask *task, CDC *dc)
 {
   // Clear the document
-  // DocClear;
+  // DocClear(term.doc);
+  DCFill(dc,BLUE);
 
   I64 row, col;
   // Loop over the screen array and draw each character
@@ -196,11 +201,11 @@ U0 TerminalDrawIt(CTask *task, CDC *dc)
     }
   }
   
-  // Draw the cursor
+  // Draw the curso
   // Note: this draws the cursor as a white rectangle. You may want to customize this.
-  // term.dc->color = WHITE;
-  // GrRect(term.dc, term.cursor_x * CHAR_WIDTH, term.cursor_y * CHAR_HEIGHT, 
-  //        (term.cursor_x + 1) * CHAR_WIDTH - 1, (term.cursor_y + 1) * CHAR_HEIGHT - 1);
+  // dc->color = WHITE;
+  // GrRect(dc, term.cursor_x * 8, term.cursor_y * 8, 
+  //        (term.cursor_x + 1) * 8 - 1, (term.cursor_y + 1) * 8 - 1);
 }
 
 U0 TerminalTask() {
@@ -309,8 +314,7 @@ U0 TerminalTask() {
                   ptr++;
                   break;
                 case 'm':
-                  // colors might be printed in the wrong order?
-                  // like, <Esc>[1;40m and now <Esc>[40m;1m
+                  // Set graphics mode (colors)
                   I64 m;
                   Bool isBright = FALSE;
                   for (m = 0; m <= ansi_param_count; m++) {
@@ -556,15 +560,13 @@ U0 TerminalTask() {
                   }
                   // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
-                  if (row >= term.window_height)
-                    row = term.window_height;
-                  if (col >= term.window_width)
-                    col = term.window_width;
+                  if (row > term.window_height)
+                    row = term.window_height - 1;
+                  if (col > term.window_width)
+                    col = term.window_width - 1;
                   // "$$CM,0,0$$";
-                  // term.cursor_x = col-1;
-                  // term.cursor_y = row-1;
-                  term.cursor_x = col;
-                  term.cursor_y = row;
+                  term.cursor_x = col-1;
+                  term.cursor_y = row-1;
                   ptr++;
                   break;
                 case 'J':
@@ -578,9 +580,11 @@ U0 TerminalTask() {
                     // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
                   } else if (ansi_code[0] == 2) {
                     // Erase entire display
-                    DocClear(term.doc);
-                    term.cursor_x = 0;
-                    term.cursor_y = 0;
+                    // DocClear(term.doc);
+                    // DCFill(dc,BLACK);
+                    // term.cursor_x = 0;
+                    // term.cursor_y = 0;
+                    // redraw_needed = TRUE;
                   }
                   ptr++;
                   break;
@@ -692,10 +696,12 @@ U0 TerminalTask() {
       }
       if (redraw_needed) {
         // TerminalDrawIt(term.task, term.task);
-        DocClear(term.doc);
-        term.cursor_x = 0;
-        term.cursor_y = 0;
-        redraw_needed = TRUE;
+        // DocClear(term.doc);
+
+        // DCFill(,RED);
+        // term.cursor_x = 0;
+        // term.cursor_y = 0;
+        redraw_needed = FALSE;
       }
     } else {
       "Error: Connection closed by the remote host.\n";

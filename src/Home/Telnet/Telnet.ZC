@@ -17,9 +17,24 @@ Cd(__DIR__);;
 #include "TelnetNegotiation"
 #include "TelnetHelpers"
 
-CTask *input_task	= NULL;
 Bool force_disconnect = FALSE;
 
+class Terminal {
+  I64 sock;
+  Bool sock_ready;
+  I64 window_width;
+  I64 window_height;
+  CDoc *doc;
+  CTask *task;
+
+  I64 current_color;
+  I64 current_bgcolor;
+  I64 cursor_x;
+  I64 cursor_y;
+
+  U8 buffer[BUF_SIZE];
+  I64 buffer_len;
+} term;
 
 I64 TelnetOpen(U8 *host, U16 port) {
   I64 sock;
@@ -29,7 +44,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
   }
 
   sock = TCPConnectionCreate(host, port);
-  "$$GREEN$$Conecting to %s:%d.$$FG$$$$BG$$\n", host, port;
+  "$$GREEN$$Connecting to %s:%d.$$FG$$$$BG$$\n", host, port;
   if (sock <= 0) {
     PrintErr("Failed to connect to %s:%d\n", host, port);
     return sock;
@@ -41,6 +56,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
 }
 
 U0 HandleControlCodes(U8 ch) {
+  Sleep(100);
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
       case 0: // NUL (Null) - Typically ignored
@@ -50,23 +66,23 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 8: // BS (Backspace)
         // "%c%c%c", 8, ' ', 8; // Move cursor back, erase character, move cursor back again
-        "$$CM,-8,0$$";
+        DocPrint(term.doc, "$$CM,-8,0$$");
         break;
       case 9: // HT (Horizontal Tab)
         // "        "; // 8 spaces
-        "$$CM,8,0$$";
+        DocPrint(term.doc, "$$CM,8,0$$");
         break;
       case 10: // LF (Line Feed)
-        "\n";
+        DocPrint(term.doc, "\n");
         break;
       case 11: // VT (Vertical Tab)
         SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
-        DocClear;
+        DocClear(term.doc);
         break;
       case 13: // CR (Carriage Return)
-        "\r";
+        DocPrint(term.doc, "\r");
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -114,160 +130,35 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("case 127");
     }
     if (ch == 0x24) {
-      ch = "//$$$$";
+      DocPrint(term.doc, "%s", "//$$$$");
     }
     if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
     {
-      "%c", ch;
+      DocPrint(term.doc, "%c", ch);
     }
     else {
-      "%c", '?'; // unrecognized character
+      DocPrint(term.doc, "%c", '?'); // unrecognized character
     }
   }
 }
 
-U0 InputTask(U0 *args) {
-  I64 sock = *args;
-  I64 sc;
-  DocTermNew;
-  DocPrint(, "$$WW,1$$");
-  // WinBorder(OFF);
-  DocBottom(input_task->put_doc);
-  "\n$$GREEN$$$BK,1$Input$BK,0$$$BLACK$$:";
-
-  // https://theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
-	try
-	{
-    while (!force_disconnect) {
-      U8 key = KeyGet(&sc);
-      switch (key)
-      {
-        case 0:
-          switch (sc.u8[0])
-          {
-            case SC_CURSOR_LEFT:
-              TCPSocketSendString(sock, "\x1B[D");
-              break;
-
-            case SC_CURSOR_RIGHT:
-              TCPSocketSendString(sock, "\x1B[C");
-              break;
-
-            case SC_CURSOR_UP:
-              TCPSocketSendString(sock, "\x1B[A");
-              break;
-
-            case SC_CURSOR_DOWN:
-              TCPSocketSendString(sock, "\x1B[B");
-              break;
-            default:
-              break;
-          }
-          break;
-        case 9:
-          switch (sc.u8[0])
-          {
-            case SC_TAB:
-              TCPSocketSendString(sock, "\x09");
-              break;
-            default:
-              break;
-          }
-        case CH_BACKSPACE:
-          TCPSocketSendString(sock, "\x08");
-          break;
-        case CH_ESC:
-          TCPSocketSendString(sock, "\x1B");
-          break;
-        case CH_SHIFT_ESC:
-          force_disconnect = TRUE;
-          break;
-        // send buffer on enter
-        case '\n':
-          TCPSocketSendString(sock, "\r\n");
-
-          break;
-        default:
-          if (key >= ' ' && key <= '~') {
-            // Handle regular keys
-            U8 input_buf[2];
-            input_buf[0] = key;
-            input_buf[1] = '\0';
-            TCPSocketSend(sock, input_buf, 1);
-          }
-          break;
-      }
-    }
+U0 TerminalTask() {
+  while (!term.sock_ready) {
+    Sleep(100); // Avoid busy waiting
   }
-	catch
-		PutExcept;
-}
-
-U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
-  
-  I64 sock, bytes_received;
-  U8 buffer[BUF_SIZE], *ptr;
-
-  I64 window_width = 80;
-  I64 window_height = 25;
-
-	// CDoc *doc = DocPut;
-	// Fs->display_doc->flags |= DOCF_SIZE_MIN;
-  StrCopy(Fs->task_title, "TELNET");
-	Fs->border_src  = BDS_CONST;
-	Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
-	Fs->text_attr   = BLACK << 4 + WHITE;
-	Fs->title_src = TTS_LOCKED_CONST;
-	DocClear(Fs->border_doc, TRUE);
-	// LBtr(&Fs->display_flags, DISPLAYf_SHOW);
-
-  Fs->win_width = window_width;
-  WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
-          (TEXT_COLS / 2) - (Fs->win_width / 2) +
-              (Fs->win_width - 1),
-          Fs);
-  Fs->win_height = window_height;
-  WinVert((TEXT_ROWS / 2) - (Fs->win_height / 2),
-          (TEXT_ROWS / 2) - (Fs->win_height / 2) +
-              (Fs->win_height - 1),
-          Fs);
-  DocClear;
-
-  // probably should use word wrap?
-  DocPrint(, "$$WW,1$$");
-  DocCursor(OFF);
-
-  sock = TelnetOpen(host, port);
-  if (sock <= 0) {
-    return;
-  }
-
-  // Spawn input window
-	input_task = Spawn(&InputTask, &sock, "Telnet Input");
-	input_task->win_inhibit = WIG_USER_TASK_DEFAULT;
-	LBts(&input_task->display_flags, DISPLAYf_SHOW);
-	WinFocus(input_task);
-
-	input_task->text_attr   = TRANSPARENT << 4 + WHITE;
-  input_task->win_top = Fs->win_top + window_height + 1;
-	input_task->win_bottom = Fs->win_top + 30;
-	input_task->win_left	= Fs->win_left;
-	input_task->win_right	= Fs->win_left+window_width - 1;
-
-  "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
 
   while (!force_disconnect) {
-    bytes_received = TCPSocketReceive(sock, buffer, BUF_SIZE - 1);
-    if (bytes_received > 0) {
-      buffer[bytes_received] = '\0';
+    term.buffer_len = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
+    if (term.buffer_len > 0) {
+      term.buffer[term.buffer_len] = '\0';
 
       // Basic Telnet protocol parser
-      ptr = buffer;
-      while (*ptr) {
+      U8 *ptr = term.buffer;
+      while (ptr < term.buffer + term.buffer_len) {
          // Telnet negotiation sequence
         if (*ptr == NEGOTIATE) {
           // FIXME: i don't think the telnet negotiation is actually working properly?
-          TelnetNegotiate(sock, ptr);
+          TelnetNegotiate(term.sock, ptr);
           ptr += 3;
         }
         else if (*ptr == ANSI_ESC) {
@@ -311,8 +202,8 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     deviceStatusResponse[2] = 0x30; // '0'
                     deviceStatusResponse[3] = 0x6E; // 'n'
                     deviceStatusResponse[4] = 0x00; // Null-terminator
-                    TCPSocketSend(sock, deviceStatusResponse, 4);
-                    // TCPSocketSendString(sock, "\x1B[0n");
+                    TCPSocketSend(term.sock, deviceStatusResponse, 4);
+                    // TCPSocketSendString(term.sock, "\x1B[0n");
                   }
                   else if (ansi_code[0] == 6) {
                     // Respond with cursor position
@@ -328,20 +219,20 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     cursorResponse[6] = 0x30;
                     cursorResponse[6] = 0x52;
                     cursorResponse[7] = 0x00;
-                    TCPSocketSend(sock, cursorResponse, 7);
-                    // TCPSocketSendString(sock, "\x1B\[25;80R");
+                    TCPSocketSend(term.sock, cursorResponse, 7);
+                    // TCPSocketSendString(term.sock, "\x1B\[25;80R");
                   } 
                   else if (ansi_code[0] == 255) {
                     // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
                     SysLog("reported screensize?\n");
-                    SendWindowSize(sock, 25, 80);
+                    SendWindowSize(term.sock, 25, 80);
                   }
                   ptr++;
                   break;
                 case 'c':
                   // Respond with device attributes
                   SysLog("reported device attributes\n");
-                  // TCPSocketSendString(sock, "\x1B[?1;0c");
+                  // TCPSocketSendString(term.sock, "\x1B[?1;0c");
                   // Reports at VT101 (not sure why though)
                   U8 deviceAttributesResponse[8];
                   deviceAttributesResponse[0] = ANSI_ESC;
@@ -352,7 +243,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   deviceAttributesResponse[5] = 0x32; // '0' 
                   deviceAttributesResponse[6] = 0x63; // 'c' 
                   deviceAttributesResponse[7] = 0x00; // Null-terminator
-                  TCPSocketSend(sock, deviceAttributesResponse, 7);
+                  TCPSocketSend(term.sock, deviceAttributesResponse, 7);
                   ptr++;
                   break;
                 case 'm':
@@ -363,7 +254,10 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   for (m = 0; m <= ansi_param_count; m++) {
                     if (ansi_code[m] <= 10) {
                       switch (ansi_code[m]) {
-                        case 0: "$$BG$$$$FG$$"; isBright = FALSE; break; // reset
+                        case 0: 
+                          DocPrint(term.doc, "$$BG$$$$FG$$"); 
+                          isBright = FALSE; 
+                          break; // reset
                         case 1: isBright = TRUE; break;
                         case 2: isBright = FALSE; break;
                       }
@@ -373,37 +267,73 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       if(!isBright){
                         switch (ansi_code[m]) {
-                          case 30: "$$BLACK$$"; break;
-                          case 31: "$$RED$$"; break;
-                          case 32: "$$GREEN$$"; break;
-                          case 33: "$$YELLOW$$"; break;
-                          case 34: "$$BLUE$$"; break;
-                          case 35: "$$PURPLE$$"; break;
-                          case 36: "$$CYAN$$"; break;
-                          case 37: "$$WHITE$$"; break;
-                          case 39: "$$FG$$"; break;
+                          case 30:   
+                            DocPrint(term.doc, "$$BLACK$$"); 
+                            break;
+                          case 31:   
+                            DocPrint(term.doc, "$$RED$$"); 
+                            break;
+                          case 32:   
+                            DocPrint(term.doc, "$$GREEN$$"); 
+                            break;
+                          case 33:   
+                            DocPrint(term.doc, "$$YELLOW$$"); 
+                            break;
+                          case 34:   
+                            DocPrint(term.doc, "$$BLUE$$"); 
+                            break;
+                          case 35:   
+                            DocPrint(term.doc, "$$PURPLE$$"); 
+                            break;
+                          case 36:   
+                            DocPrint(term.doc, "$$CYAN$$"); 
+                            break;
+                          case 37:   
+                            DocPrint(term.doc, "$$WHITE$$"); 
+                            break;
+                          case 39:   
+                            DocPrint(term.doc, "$$FG$$"); 
+                            break;
                           default: break;
                         }
                       }
                       else {
                         switch (ansi_code[m]) {
                           case 90:
-                          case 30: "$$DKGRAY$$"; break;
+                          case 30:  
+                            DocPrint(term.doc, "$$DKGRAY$$"); 
+                            break;
                           case 91:
-                          case 31: "$$LTRED$$"; break;
+                          case 31:  
+                            DocPrint(term.doc, "$$LTRED$$"); 
+                            break;
                           case 92:
-                          case 32: "$$LTGREEN$$"; break;
+                          case 32:  
+                            DocPrint(term.doc, "$$LTGREEN$$"); 
+                            break;
                           case 93:
-                          case 33: "$$YELLOW$$"; break;
+                          case 33:  
+                            DocPrint(term.doc, "$$YELLOW$$"); 
+                            break;
                           case 94:
-                          case 34: "$$LTBLUE$$"; break;
+                          case 34:  
+                            DocPrint(term.doc, "$$LTBLUE$$"); 
+                            break;
                           case 95:
-                          case 35: "$$LTPURPLE$$"; break;
+                          case 35:  
+                            DocPrint(term.doc, "$$LTPURPLE$$"); 
+                            break;
                           case 96:
-                          case 36: "$$LTCYAN$$"; break;
+                          case 36:  
+                            DocPrint(term.doc, "$$LTCYAN$$"); 
+                            break;
                           case 97:
-                          case 37: "$$LTGRAY$$"; break;
-                          case 39: "$$FG$$"; break;
+                          case 37:  
+                            DocPrint(term.doc, "$$LTGRAY$$"); 
+                            break;
+                          case 39:  
+                            DocPrint(term.doc, "$$FG$$"); 
+                            break;
                           default: break;
                         }
                       }
@@ -415,37 +345,74 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                       // SysLog("ansi_code[%d] = %d\n", m, ansi_code[m]);
                       if(!isBright){
                         switch (ansi_code[m]) {
-                          case 40: "$$BG,BLACK$$"; break;
-                          case 41: "$$BG,RED$$"; break;
-                          case 42: "$$BG,GREEN$$"; break;
-                          case 43: "$$BG,YELLOW$$"; break;
-                          case 44: "$$BG,BLUE$$"; break;
-                          case 45: "$$BG,PURPLE$$"; break;
-                          case 46: "$$BG,CYAN$$"; break;
-                          case 47: "$$BG,WHITE$$"; break;
-                          case 49: "$$BG$$"; break; // reset
+                          case 40:
+                            DocPrint(term.doc,"$$BG,BLACK$$");
+                            break;
+                          case 41:
+                            DocPrint(term.doc,"$$BG,RED$$");
+                            break;
+                          case 42:
+                            DocPrint(term.doc,"$$BG,GREEN$$");
+                            break;
+                          case 43:
+                            DocPrint(term.doc,"$$BG,YELLOW$$");
+                            break;
+                          case 44:
+                            DocPrint(term.doc,"$$BG,BLUE$$");
+                            break;
+                          case 45:
+                            DocPrint(term.doc,"$$BG,PURPLE$$");
+                            break;
+                          case 46:
+                            DocPrint(term.doc,"$$BG,CYAN$$");
+                            break;
+                          case 47:
+                            DocPrint(term.doc,"$$BG,WHITE$$");
+                            break;
+                          case 49:
+                            DocPrint(term.doc,"$$BG$$");
+                            break;
                           default: break;
                         }
                       }
                       else {
                         switch (ansi_code[m]) {
                           case 100:
-                          case 40: "$$BG,DKGRAY$$"; break;
+                          case 40:
+                            DocPrint(term.doc,"$$BG,DKGRAY$$");
+                            break;
                           case 101:
-                          case 41: "$$BG,LTRED$$"; break;
+                          case 41:
+                            DocPrint(term.doc,"$$BG,LTRED$$");
+                            break;
                           case 102:
-                          case 42: "$$BG,LTGREEN$$"; break;
+                          case 42:
+                            DocPrint(term.doc,"$$BG,LTGREEN$$");
+                            break;
                           case 103:
-                          case 43: "$$BG,YELLOW$$"; break;
+                          case 43:
+                            DocPrint(term.doc,"$$BG,YELLOW$$");
+                            break;
                           case 104:
-                          case 44: "$$BG,LTBLUE$$"; break;
+                          case 44:
+                            DocPrint(term.doc,"$$BG,LTBLUE$$");
+                            break;
                           case 105:
-                          case 45: "$$BG,LTPURPLE$$"; break;
+                          case 45:
+                            DocPrint(term.doc,"$$BG,LTPURPLE$$");
+                            break;
                           case 106:
-                          case 46: "$$BG,LTCYAN$$"; break;
+                          case 46:
+                            DocPrint(term.doc,"$$BG,LTCYAN$$");
+                            break;
                           case 107:
-                          case 47: "$$BG,LTGRAY$$"; break;
-                          case 49: "$$BG$$"; break; // reset
+                          case 47:
+                            DocPrint(term.doc,"$$BG,LTGRAY$$");
+                            break;
+                          case 49:
+                            DocPrint(term.doc,"$$BG$$");
+                            break;
+                             // reset
                           default: break;
                         }
                       }
@@ -457,19 +424,19 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   // Cursor Up
                   SysLog("Cursor Up\n");
                   // "$$CM+TY,0,-%d$$", ansi_code[0];
-                  "$$CM,0,-%d$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM,0,-%d$$", ansi_code[0]);
                   ptr++;
                   break;
                 case 'B':
                   // Cursor Down
                   SysLog("Cursor Down\n");
-                  "$$CM,0,%d$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM,0,%d$$", ansi_code[0]);
                   ptr++;
                   break;
                 case 'C':
                   // Cursor Right
                   // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
-                  "$$CM,%d,0$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
                   // NOTE: this has been "fixed" since we now change the window's background color
                   // if we just move the cursor, 
                   // you dont get the colored background since we skip over it directly
@@ -482,27 +449,27 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 case 'D':
                   // Cursor Left
                   SysLog("Cursor Left\n");
-                  "$$CM,-%d,0$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM,-%d,0$$", ansi_code[0]);
                   ptr++;
                   break;
                 case 'E':
                   // Cursor Next Line
                   SysLog("Cursor Next Line\n");
                   // "$$CM+TY,0,+%d$$", ansi_code[0];
-                  "\n";
+                  DocPrint(term.doc, "\n");
                   ptr++;
                   break;
                 case 'F':
                   // Cursor Previous Line
                   SysLog("Cursor Previous Line\n");
-                  "$$CM+LY,0,-%d$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM+LY,0,-%d$$", ansi_code[0]);
                   // "\n";
                   ptr++;
                   break;
                 case 'G':
                   // Cursor Horizontal Absolute	
                   SysLog("Cursor Horizontal Absolute\n");
-                  "$$CM,%d,0$$", ansi_code[0];
+                  DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
                   // "\n";
                   ptr++;
                   break;
@@ -522,12 +489,12 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   }
                   // SysLog("H or f AFTER row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
-                  if (row > window_height)
-                    row = window_height-1;
-                  if (col > window_width)
-                    col = window_width-1;
+                  if (row > term.window_height)
+                    row = term.window_height-1;
+                  if (col > term.window_width)
+                    col = term.window_width-1;
                   // "$$CM,0,0$$";
-                  "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1;
+                  DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", col-1, row-1);
                   ptr++;
                   break;
                 case 'J':
@@ -541,7 +508,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                     // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
                   } else if (ansi_code[0] == 2) {
                     // Erase entire display
-                    DocClear;
+                    DocClear(term.doc);
                   }
                   ptr++;
                   break;
@@ -582,7 +549,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                 case 'M':
                   SysLog("Case M\n");
                   // TODO: is this correct? cursor should go one line up
-                  "$$CM,0,-1$$";
+                  DocPrint(term.doc, "$$CM,0,-1$$");
                   ptr++;
                   break;
                 case '?':
@@ -595,6 +562,7 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
                   }
                   switch (code) {
                     case 25:
+                      // need to specify which doc?
                       if (*ptr == 'l') DocCursor(OFF); // Hide cursor
                       if (*ptr == 'h') DocCursor(ON); // Show cursor
                       ptr++; // Move past 'l' or 'h'
@@ -652,15 +620,122 @@ U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
           ptr++;
         }
       }
-
     } else {
       "Error: Connection closed by the remote host.\n";
       break;
     }
   }
+}
 
-  Kill(input_task);
-  TCPSocketClose(sock);
+U0 Telnet(U8 *host, U16 port=TELNET_PORT) {
+  
+  term.sock_ready = 0; // Initialize the semaphore
+  term.sock = TelnetOpen(host, port);
+  term.window_width = 80;
+  term.window_height = 25;
+  if (term.sock <= 0) {
+    return;
+  }
+  term.sock_ready = 1; // Signal that the socket is ready
+  term.doc = Fs->display_doc;
+
+  // Spawn a task to receive data from the socket
+  term.task = Spawn(&TerminalTask, NULL, "Telnet");
+
+  StrCopy(Fs->task_title, "TELNET");
+	Fs->border_src  = BDS_CONST;
+	Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
+	Fs->text_attr   = BLACK << 4 + WHITE;
+	Fs->title_src = TTS_LOCKED_CONST;
+	DocClear(Fs->border_doc, TRUE);
+
+  Fs->win_width = term.window_width;
+  WinHorz((TEXT_COLS / 2) - (Fs->win_width / 2),
+          (TEXT_COLS / 2) - (Fs->win_width / 2) +
+              (Fs->win_width - 1),
+          Fs);
+  Fs->win_height = term.window_height;
+  WinVert((TEXT_ROWS / 2) - (Fs->win_height / 2),
+          (TEXT_ROWS / 2) - (Fs->win_height / 2) +
+              (Fs->win_height - 1),
+          Fs);
+  DocClear;
+
+  // probably should use word wrap?
+  DocPrint(, "$$WW,1$$");
+  DocCursor(OFF);
+
+  "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
+
+  I64 sc;
+  // https://theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
+	try
+	{
+    while (!force_disconnect) {
+      U8 key = KeyGet(&sc);
+      switch (key)
+      {
+        case 0:
+          switch (sc.u8[0])
+          {
+            case SC_CURSOR_LEFT:
+              TCPSocketSendString(term.sock, "\x1B[D");
+              break;
+
+            case SC_CURSOR_RIGHT:
+              TCPSocketSendString(term.sock, "\x1B[C");
+              break;
+
+            case SC_CURSOR_UP:
+              TCPSocketSendString(term.sock, "\x1B[A");
+              break;
+
+            case SC_CURSOR_DOWN:
+              TCPSocketSendString(term.sock, "\x1B[B");
+              break;
+            default:
+              break;
+          }
+          break;
+        case 9:
+          switch (sc.u8[0])
+          {
+            case SC_TAB:
+              TCPSocketSendString(term.sock, "\x09");
+              break;
+            default:
+              break;
+          }
+        case CH_BACKSPACE:
+          TCPSocketSendString(term.sock, "\x08");
+          break;
+        case CH_ESC:
+          TCPSocketSendString(term.sock, "\x1B");
+          break;
+        case CH_SHIFT_ESC:
+          force_disconnect = TRUE;
+          break;
+        // send buffer on enter
+        case '\n':
+          TCPSocketSendString(term.sock, "\r\n");
+
+          break;
+        default:
+          if (key >= ' ' && key <= '~') {
+            // Handle regular keys
+            U8 input_buf[2];
+            input_buf[0] = key;
+            input_buf[1] = '\0';
+            TCPSocketSend(term.sock, input_buf, 1);
+          }
+          break;
+      }
+    }
+  }
+	catch
+		PutExcept;
+
+  TCPSocketClose(term.sock);
   "Telnet connection closed.\n";
 }
 
