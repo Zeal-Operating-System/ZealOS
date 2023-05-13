@@ -820,7 +820,6 @@ init_connection:
           }
           break;
         case CH_CTRLD:
-          SysLog("Dark mode: %d\n", dark_mode);
           dark_mode = !dark_mode;
           if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
           else Fs->text_attr = BLACK << 4 + WHITE;
