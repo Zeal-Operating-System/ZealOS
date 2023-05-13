@@ -29,9 +29,8 @@ I64 TelnetOpen(U8 *host, U16 port) {
   if (host == NULL) {
     return -1;
   }
-
+  DocPrint(term.doc, "$$GREEN$$Connecting to %s:%d.$$FG$$$$BG$$\n", host, port);
   sock = TCPConnectionCreate(host, port);
-  "$$GREEN$$Connecting to %s:%d.$$FG$$$$BG$$\n", host, port;
   if (sock <= 0) {
     // PrintErr("Failed to connect to %s:%d\n", host, port);
     PopUpOk("\n\n\tFailed to connect\n\n");
