@@ -19,7 +19,7 @@ Cd(__DIR__);;
 #include "TelnetHelpers"
 
 // If you're using a custom palette, the colors might not seem right.
-// PaletteSet("Temple");
+PaletteSet("Temple");
 
 Bool force_disconnect = FALSE;
 
@@ -116,14 +116,14 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("case 127");
     }
     if (ch == 0x24) {
-      DocPrint(term.doc, "%s", "//$$$$");
+      DocPrint(term.doc, "$$");
     }
     if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
     {
       DocPrint(term.doc, "%c", ch);
     }
     else {
-      DocPrint(term.doc, "%c", '?'); // unrecognized character
+      DocPrint(term.doc, "?"); // unrecognized character
     }
   }
 }
