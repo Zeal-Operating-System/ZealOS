@@ -712,30 +712,34 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
           Fs);
   DocClear;
 
-  if (host == NULL) {
-    term.buffer_len = LoadSplashScreen("Art/TelnetSplash.ans");
-    if (term.buffer_len > 0) {
-      term.buffer[term.buffer_len] = '\0';
-      // parse the buffer
-      ANSIParse;
-      try
-      {
-        while (host == NULL) {
-          CHostForm form;
-          TelnetPrompt(&form);
-          host = form.host;
-          port = form.port;
-          DocClear;
-          break;
-        }
-      }
-      catch
-        PutExcept;
-    }
-    else {
-      "Error: Could not load splash screen.\n";
-    }
+  // SplashScreen
+  term.buffer_len = LoadSplashScreen("Art/TelnetSplash.ans");
+  if (term.buffer_len > 0) {
+    term.buffer[term.buffer_len] = '\0';
+    // parse the buffer
+    ANSIParse;
   }
+  else {
+    "Error: Could not load splash screen.\n";
+  }
+  
+  // PopUp if no host is specified
+  if (host == NULL) {
+    try
+    {
+      while (host == NULL) {
+        CHostForm form;
+        TelnetPrompt(&form);
+        host = form.host;
+        port = form.port;
+        DocClear;
+        break;
+      }
+    }
+    catch
+      PutExcept;
+  }
+
   // Spawn a task to receive data from the socket
   term.task = Spawn(&TerminalTask, NULL, "Telnet");
 
@@ -751,6 +755,8 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   term.sock_ready = 1; // Signal that the socket is ready
 
   "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
+  Sleep(1000);
+  DocClear;
 
 	try
 	{
@@ -824,5 +830,5 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
 
 // dev server
-// Telnet("localhost", 8888);
-Telnet;
+Telnet("localhost", 8888);
+// Telnet;
