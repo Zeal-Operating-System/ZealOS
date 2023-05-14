@@ -9,8 +9,8 @@ class Terminal {
 
   I64 current_color;
   I64 current_bgcolor;
-  I64 cursor_x;
-  I64 cursor_y;
+  I64 current_row;
+  I64 current_col;
 
   U8 buffer[BUF_SIZE];
   I64 buffer_len;

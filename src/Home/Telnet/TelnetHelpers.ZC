@@ -5,7 +5,9 @@ Cd(__DIR__);
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
 }
-
+U8 IsAlpha(U8 ch) {
+  return ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z');
+}
 class CHostForm {
   U8 host[256] format "\n\n \t$$DA-P,LEN=255,A=\"Host:%s\"$$\t\n";
   U16 port format "\t$$DA,LEN=255,A=\"Port:%d\"$$\t\n \n\n";
