@@ -69,7 +69,8 @@ U0 HandleControlCodes(U8 ch) {
         // DocPrint(term.doc, "\f");
         break;
       case 13: // CR (Carriage Return)
-        DocPrint(term.doc, "\r");
+        // DocPrint(term.doc, "\r");
+        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -528,6 +529,10 @@ U0 ANSIParse()
               } else if (ansi_code[0] == 2) {
                 // Erase entire display
                 DocClear(term.doc);
+                // Clear the buffer
+                // term.buffer_len = 0; 
+                // MemSet(term.buffer, 0, BUF_SIZE);
+                // Sleep(100);
               }
               ptr++;
               break;
