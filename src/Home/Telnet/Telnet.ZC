@@ -4,7 +4,8 @@
 Cd(__DIR__);;
 
 #define TELNET_PORT 23
-#define BUF_SIZE 8192 // way too big?
+// #define BUF_SIZE 8192 // way too big?
+#define BUF_SIZE 819200 // way too big?
 #define INPUT_BUF_SIZE 32
 #define TIMEOUT_DURATION 500000
 
@@ -90,7 +91,8 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 13: // CR (Carriage Return)
         // DocPrint(term.doc, "\r");
-        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+        // DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+        CursorUpdate(term.task, 0,1);
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -535,7 +537,9 @@ U0 ANSIParse()
               term.current_row = row;
               term.current_col = col;
               
-              DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
+
+              CursorUpdate(term.task, term.current_col, term.current_row);
+              // DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
               
               term.current_row = 1;
               term.current_col = 1;
@@ -771,6 +775,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
 show_splash:
   // SplashScreen
+  DocMax;
   DocClear;
   // probably should use word wrap?
   DocPrint(, "$$WW,1$$");
