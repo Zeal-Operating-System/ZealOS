@@ -91,8 +91,7 @@ U0 HandleControlCodes(U8 ch) {
         break;
       case 13: // CR (Carriage Return)
         // DocPrint(term.doc, "\r");
-        // DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
-        CursorUpdate(term.task, 0,1);
+        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -537,9 +536,9 @@ U0 ANSIParse()
               term.current_row = row;
               term.current_col = col;
               
-
-              CursorUpdate(term.task, term.current_col, term.current_row);
-              // DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
+              // can use WinCursorPosSet instead??
+              // WinCursorPosSet(term.task, term.current_col-1, term.current_row-1);
+              DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
               
               term.current_row = 1;
               term.current_col = 1;
