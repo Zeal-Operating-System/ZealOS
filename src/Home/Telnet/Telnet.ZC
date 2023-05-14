@@ -438,7 +438,12 @@ U0 ANSIParse()
             case 'C':
               // Cursor Right
               // SysLog("Cursor Right %d %d\n", ansi_param_count, ansi_code[0]);
-              DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
+              // DocPrint(term.doc, "$$CM,%d,0$$", ansi_code[0]);
+              // seems to be less prone to bugs?
+              I64 cr;
+              for (cr=0; cr<ansi_code[0]; cr++){
+                DocPrint(term.doc, " ");
+              }
               ptr++;
               break;
             case 'D':
@@ -677,6 +682,7 @@ U0 TerminalTask() {
   }
 
   while (term.sock_ready) {
+receive_data:
     term.buffer_len = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
     if (term.buffer_len > 0) {
       term.buffer[term.buffer_len] = '\0';
@@ -684,6 +690,8 @@ U0 TerminalTask() {
       ANSIParse;
 
     } else {
+      // SysLog("BUF_SIZE: %d\n", BUF_SIZE);
+      goto receive_data;
       // Buffer full or connection closed
       DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
       break;
