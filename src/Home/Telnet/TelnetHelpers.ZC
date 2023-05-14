@@ -100,7 +100,74 @@ public I64 ANSIArtBrowser()
   return MStrPrint("%Q%Q", "Art/", res2);
 }
 
+// U0 SetTermColor(CBGR24 *color) {
+//   DocPrint(term.doc, "$$TC,0x%06X$$\n", color->bgr);
+// }
 
+// U0 SetTermBGColor(CBGR24 *color) {
+//   DocPrint(term.doc, "$$BC,0x%06X$$\n", color->bgr);
+// }
+
+// U0 SetTermPalette(CBGR24 *palette) {
+//   I64 i;
+//   for (i = 0; i < COLORS_NUM; i++) {
+//     DocPrint(term.doc, "$$PC,%d,%d,%d,0x%06X$$\n", i, palette[i].r, palette[i].g, palette[i].bgr);
+//   }
+// }
+
+// U0 SetTermDarkMode(Bool dark) {
+//   if (dark) {
+//     DocPrint(term.doc, "$$DM,1$$\n");
+//   }
+//   else {
+//     DocPrint(term.doc, "$$DM,0$$\n");
+//   }
+// }
+
+// U0 SetTermOriginalColors(Bool original) {
+//   if (original) {
+//     DocPrint(term.doc, "$$OC,1$$\n");
+//   }
+//   else {
+//     DocPrint(term.doc, "$$OC,0$$\n");
+//   }
+// }
+
+// function to clear screen and move cursor to 0,0
+// U0 Reset() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=0$$");
+//   DocClear(term.doc);
+// }
+
+// // function to move cursor to 0,0
+// U0 Home() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=0$$");
+// }
+
+// // function to move cursor to 0,0 and clear screen
+// U0 ClearScreen() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=0$$");
+//   DocClear(term.doc);
+// }
+
+// // function to move cursor to 0,0 and clear line
+// U0 ClearLine() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+// }
+
+// // function to move cursor to 0,0 and clear line
+// U0 ClearLineRight() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=1,RE=0$$");
+// }
+
+// // function to move cursor to 0,0 and clear line
+// U0 ClearLineLeft() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+// }
+
+// // function to move cursor to 0,0 and clear line
+// U0 ClearLineAll() {
+//   DocPrint(term.doc, "$$CM+LX+PRY,LE=1,RE=1$$");
 
 // Placeholder for the full ANSI text styling
 // if (ansi_code[m] <= 10) {

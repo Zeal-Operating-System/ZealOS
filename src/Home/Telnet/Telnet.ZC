@@ -43,6 +43,26 @@ I64 TelnetOpen(U8 *host, U16 port) {
   return sock;
 }
 
+// function to increase/decrease col or row
+U0 SetPos(I64 col, I64 row, Bool relativeCol=TRUE, Bool relativeRow=TRUE) {
+  if (col < 0) {
+    if (relativeCol)
+      term.current_col += col;
+    else
+      term.current_col = col;
+    if (term.current_col > term.window_width)
+      term.current_col = 1;
+  }
+  if (row < 0) {
+    if (relativeCol)
+      term.current_row += row;
+    else
+      term.current_row = row;
+    if (term.current_row > term.window_height)
+      term.current_row = 1;
+  }
+}
+
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
