@@ -151,8 +151,10 @@ U0 TelnetNegotiate(I64 sock, U8 ptr)
     // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
     if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
     else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
+
+    // send out the dimension regardless
+    TCPSocketSendString(term.sock, "\x1B[8;25;80t");
     // TCPSocketSendString(term.sock, "\xdb\b \xdb\b \xdb\b[\xdb\b[\xdb\b \xdb\bM\xdb\ba\xdb\bi\xdb\bn\xdb\bt\xdb\be\xdb\bn\xdb\ba\xdb\bn\xdb\bc\xdb\be\xdb\b \xdb\bC\xdb\bo\xdb\bm\xdb\bp\xdb\bl\xdb\be\xdb\bt\xdb\be\xdb\b \xdb\b]\xdb\b]\xdb\b \b\r\n\r\n\x1b[0m\x1b[2J\r\n\r\n\x1b[0;1;30mHX Force retinal scan in progress ... \x1b[0;0;30m");
     // TCPSocketSendString(term.sock, "\033[s\033[99B\033[99B\033[99B_\033[99C\033[99C\033[99C_\033[6n\033[u\033[0m_\033[2J\033[H");
   }
-  ptr += 3;
 }

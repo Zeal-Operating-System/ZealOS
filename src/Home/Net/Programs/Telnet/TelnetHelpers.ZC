@@ -67,38 +67,54 @@ I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
   return file_size;  // Return the number of bytes read
 }
 
-public I64 ANSIArtBrowser()
+public U8 *ANSIArtBrowser()
 {
-  CDirEntry *tmpde1 = NULL, *tmpde2;
-  CDoc *doc = DocNew;
-  I64 res = 0;
-  I64 res2 = 0;
-
-  DocPrint(doc, "$$LTBLUE$$\n\n");
-
-  tmpde1 = FilesFind("Art/*.*", 1);
-
-  if (tmpde1)
-  {
-    while (tmpde1)
-    {
-      tmpde2 = tmpde1->next;
-      res++;
-      
-      DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n", res, tmpde1->name, tmpde1->name);
-      DirEntryDel(tmpde1);
-      
-      tmpde1 = tmpde2;
+  // would be nice to keep last opened file path in memory...
+  // U8 *selectedFile = PopUpPickFile(CatPrint(__DIR__,"/Art"))
+  // FIXME: dont hardcode path
+  U8 *selectedFile = PopUpPickFile("::/Home/Net/Programs/Telnet/Art");
+  if (selectedFile) {
+    if (StrCompare(selectedFile, "")) {
+      SysLog(selectedFile);
+      return selectedFile;
     }
   }
-
-  DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=0$$\n\n");
-  res2 = PopUpMenu(doc);
-  DocDel(doc);
-
-
-  return MStrPrint("%Q%Q", "Art/", res2);
+  // Handle the case where no file was selected, if necessary.
+  return NULL;
 }
+
+// public I64 ANSIArtBrowser()
+// {
+//   CDirEntry *tmpde1 = NULL, *tmpde2;
+//   CDoc *doc = DocNew;
+//   I64 res = 0;
+//   I64 res2 = 0;
+
+//   DocPrint(doc, "$$LTBLUE$$\n\n");
+
+//   tmpde1 = FilesFind("Art/", 1);
+
+//   if (tmpde1)
+//   {
+//     while (tmpde1)
+//     {
+//       tmpde2 = tmpde1->next;
+//       res++;
+      
+//       DocPrint(doc, "  $$MU,\"%d.%s\",LE=0x%X$$\n", res, tmpde1->name, tmpde1->name);
+//       DirEntryDel(tmpde1);
+      
+//       tmpde1 = tmpde2;
+//     }
+//   }
+
+//   DocPrint(doc, "\n\n$$BT+CX,\"CANCEL\",LE=0$$\n\n");
+//   res2 = PopUpMenu(doc);
+//   DocDel(doc);
+
+
+//   return MStrPrint("%Q%Q", "Art/", res2);
+// }
 
 // U0 SetTermColor(CBGR24 *color) {
 //   DocPrint(term.doc, "$$TC,0x%06X$$\n", color->bgr);
