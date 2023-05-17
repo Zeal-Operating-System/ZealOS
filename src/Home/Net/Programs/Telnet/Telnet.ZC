@@ -164,9 +164,8 @@ U0 ANSIParse()
     // }
     // Telnet negotiation sequence
     if (*ptr == NEGOTIATE) { 
-      // TODO: verify this is working, somehow
-      // i see it being sent out as multiple short burst instead of one long answer
-      // anyway, i'm not sure how to verify if it's working or not but the code seems OK
+      /*telnet negotiation seems proper...however i don't really see any BBS systems relying on this too much...
+        for instance, the screen size tends to be reported using the Curser Report and not Telnet's NAWS */
       if (term.sock_ready) TelnetNegotiate(term.sock, ptr);
       ptr += 3;
     }
@@ -216,11 +215,9 @@ U0 ANSIParse()
               }
               else if (ansi_code[0] == 6) {
                 // Respond with cursor position
-                // U8 response[7] = "\x1B[%d;%dR", term.window_width, term.window_height;
                 SysLog("reported cursor position\n");
-                // TODO: hardcoded the position 80x24
-                // U8 response[9] = "\x1B[80;24R";
-                // if (term.sock_ready) TCPSocketSend(term.sock, response, 9);
+                // TODO: position 24rows x 80cols is hardcoded, should actually report the real cursor position
+                // U8 cursorResponse[9] = "\x1B[24;80R";
                 U8 cursorResponse[9];
                 cursorResponse[0] = ANSI_ESC;
                 cursorResponse[1] = '[';  // Start of CSI
@@ -235,7 +232,7 @@ U0 ANSIParse()
               } 
               else if (ansi_code[0] == 255) {
                 // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
-                SysLog("reported screensize?\n");
+                SysLog("TODO: reported screensize?\n");
                 // SendWindowSize(term.sock, 80, 25);
               }
               ptr++;
@@ -257,8 +254,8 @@ U0 ANSIParse()
               ptr++;
               break;
             case 'm':
+              // this is where colors are being set
               // TODO: what happens in this case??? --> [0;1;34;44m
-              
               I64 m;
               Bool isBright = FALSE;
               for (m = 0; m <= ansi_param_count; m++) {
@@ -719,8 +716,10 @@ receive_data:
       //SysLog("BUF_SIZE: %d\n", BUF_SIZE);
       if (!term.sock_ready || force_disconnect)
         DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
-      else
+      else {
+        SysLog("goto received_data\n");
         goto receive_data;
+      }
       break;
     }
   }
@@ -885,7 +884,7 @@ init_connection:
           }
 
         case CH_BACKSPACE:
-          if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F");
+          if (term.sock_ready) TCPSocketSendString(term.sock, "\x08\x7F");
           break;
         case CH_ESC:
           if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
@@ -901,9 +900,8 @@ init_connection:
             Sleep(100);
             goto show_splash;
           }
-          else 
+          else
             force_disconnect = TRUE;
-            break;
           break;
         // send buffer on enter
         case '\n':
