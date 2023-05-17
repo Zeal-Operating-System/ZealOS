@@ -22,14 +22,29 @@ U0 NetLogInit()
 
 	DocPrint(net_log_task->put_doc, "$$WW+H,1$$");
 
+//	net_log_task->put_doc->max_entries = I64_MAX;
+
 	Bts(&net_log_task->win_inhibit, WIf_SELF_FOCUS);
+}
+
+U0 NetLogBottom()
+{//Move cursor, cur_entry, to bottom.
+	Bool unlock;
+	CDoc *doc = net_log_task->put_doc;
+
+	unlock = DocLock(doc);
+	doc->cur_entry	= doc;
+	doc->cur_col	= 0;
+	if (unlock)
+		DocUnlock(doc);
 }
 
 U0 NetLog(U8 *format, ...)
 { // Output text to NetLogTask as Log.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	DocBottom(net_log_task->put_doc);
+	NetLogBottom;
+
 	DocPrint(net_log_task->put_doc, "%s\n", buf);
 
 	Free(buf);
@@ -39,7 +54,8 @@ U0 NetWarn(U8 *format, ...)
 { // Output text to NetLogTask as Warning.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	DocBottom(net_log_task->put_doc);
+	NetLogBottom;
+
 	DocPrint(net_log_task->put_doc, "$$BG,BROWN$$$$WHITE$$%s$$BG$$$$FG$$\n", buf);
 
 	Free(buf);
@@ -49,7 +65,8 @@ U0 NetErr(U8 *format, ...)
 { // Output text to NetLogTask as Error.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	DocBottom(net_log_task->put_doc);
+	NetLogBottom;
+
 	DocPrint(net_log_task->put_doc, "$$BG,RED$$$$WHITE$$%s$$BG$$$$FG$$\n", buf);
 
 	Free(buf);
@@ -59,7 +76,8 @@ U0 NetDebug(U8 *format, ...)
 { // Output text to NetLogTask as Debug.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	DocBottom(net_log_task->put_doc);
+	NetLogBottom;
+
 	DocPrint(net_log_task->put_doc, "$$BG,YELLOW$$$$DKGRAY$$%s$$BG$$$$FG$$\n", buf);
 
 	Free(buf);
