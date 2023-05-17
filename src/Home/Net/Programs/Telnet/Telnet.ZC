@@ -85,7 +85,7 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Vertical Tab\n");
         break;
       case 12: // FF (Form Feed)
-        SysLog("form feed");
+        // SysLog("form feed\n");
         DocClear(term.doc);
         // DocPrint(term.doc, "\f");
         break;
@@ -216,24 +216,27 @@ U0 ANSIParse()
               }
               else if (ansi_code[0] == 6) {
                 // Respond with cursor position
-                // U8 response[32] = "\x1B[%d;%dR", window_width, window_height;
+                // U8 response[7] = "\x1B[%d;%dR", term.window_width, term.window_height;
                 SysLog("reported cursor position\n");
-                U8 cursorResponse[8];
+                // TODO: hardcoded the position 80x24
+                // U8 response[9] = "\x1B[80;24R";
+                // if (term.sock_ready) TCPSocketSend(term.sock, response, 9);
+                U8 cursorResponse[9];
                 cursorResponse[0] = ANSI_ESC;
-                cursorResponse[1] = ANSI_CSI;
-                cursorResponse[2] = 0x32;
-                cursorResponse[3] = 0x35;
-                cursorResponse[4] = 0x3B;
-                cursorResponse[5] = 0x38;
-                cursorResponse[6] = 0x30;
-                cursorResponse[6] = 0x52;
-                cursorResponse[7] = 0x00;
-                if (term.sock_ready) TCPSocketSend(term.sock, cursorResponse, 7);
+                cursorResponse[1] = '[';  // Start of CSI
+                cursorResponse[2] = '2';  // First digit of "24"
+                cursorResponse[3] = '4';  // Second digit of "24"
+                cursorResponse[4] = ';';  // Separator
+                cursorResponse[5] = '8';  // First digit of "80"
+                cursorResponse[6] = '0';  // Second digit of "80"
+                cursorResponse[7] = 'R';  // End of CPR
+                cursorResponse[8] = 0x00; // Null-terminator
+                if (term.sock_ready) TCPSocketSend(term.sock, cursorResponse, 9);
               } 
               else if (ansi_code[0] == 255) {
                 // https://github.com/NuSkooler/enigma-bbs/blob/97cd0c3063b0c9f93a0fa4a44a85318ca81aef43/core/ansi_term.js#L140
                 SysLog("reported screensize?\n");
-                SendWindowSize(term.sock, 25, 80);
+                // SendWindowSize(term.sock, 80, 25);
               }
               ptr++;
               break;
@@ -254,8 +257,8 @@ U0 ANSIParse()
               ptr++;
               break;
             case 'm':
-              // colors might be printed in the wrong order?
-              // like, <Esc>[1;40m and now <Esc>[40m;1m
+              // TODO: what happens in this case??? --> [0;1;34;44m
+              
               I64 m;
               Bool isBright = FALSE;
               for (m = 0; m <= ansi_param_count; m++) {
@@ -506,7 +509,7 @@ U0 ANSIParse()
               //   break;
               // }
 
-              SysLog("H or f row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+              // SysLog("H or f row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
 
               // Adjust the position based on the window size
@@ -713,7 +716,7 @@ receive_data:
       // parse the buffer
       ANSIParse;
     } else {
-      SysLog("BUF_SIZE: %d\n", BUF_SIZE);
+      //SysLog("BUF_SIZE: %d\n", BUF_SIZE);
       if (!term.sock_ready || force_disconnect)
         DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
       else

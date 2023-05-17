@@ -9,6 +9,7 @@
 #define LINEMODE 0x22
 #define NAWS 0x1F // (Negotiate About Window Size)
 #define IS 0x00
+#define SEND 0x01
 #define SB 0xFA
 #define SE 0xF0
 
@@ -28,14 +29,33 @@
 // #define TELNET_BRK 243  /* 0xf3 - Break */
 // #define TELNET_SYNC 242 /* 0xf2 - Data mark */
 // #define TELNET_NOP 241  /* 0xf1 - No operation */
+#define SE_END 240
 
-U0 SendWindowSize(I64 sock, U16 rows, U16 cols)
+// #define TELNET_NAWS 31
+// #define TELNET_TERMINAL_TYPE 24
+#define SEND_LOCATION 23 
+#define BINARY_TRANSMISSION 0
+
+
+
+U0 TelnetRequest(I64 sock, U8 option_code)
+{
+  U8 request[3];
+  request[0] = IAC;
+  request[1] = WILL;
+  request[2] = option_code;
+
+  TCPSocketSend(sock, request, 3);
+}
+
+U0 SendWindowSize(I64 sock, U16 cols, U16 rows)
 {
   U8 buf[9];
 
   buf[0] = IAC;
   buf[1] = SB;
   buf[2] = NAWS;
+  // if dynamic resolution, make sure to account for 255 AIC (byte stuffing needs to be done)
   buf[3] = cols >> 8;   // High byte of columns
   buf[4] = cols & 0xFF; // Low byte of columns
   buf[5] = rows >> 8;   // High byte of rows
@@ -44,42 +64,66 @@ U0 SendWindowSize(I64 sock, U16 rows, U16 cols)
   buf[8] = SE;
 
   SysLog("SendWindowSize: %d x %d\n", cols, rows);
-  TCPSocketSendString(sock, buf);
+  TCPSocketSend(sock, buf, 9);
 }
 
-U0 SendTerminalType(I64 sock, U8 *terminal_type)
+U0 SendTerminalType(I64 sock)
 {
-  U8 response[256];
-  I64 len = StrLen(terminal_type);
+
+  U8 response[14];
 
   response[0] = IAC;
   response[1] = SB;
   response[2] = TERMINAL_TYPE;
   response[3] = IS;
-  MemCopy(response + 4, terminal_type, len);
 
-  SysLog("SendTerminalType: %s\n", terminal_type);
+  response[4]  = 'A';
+  response[5]  = 'N';
+  response[6]  = 'S';
+  response[7]  = 'I';
+  response[8]  = '-';
+  response[9]  = 'B';
+  response[10] = 'B';
+  response[11] = 'S';
 
-  response[len + 4] = IAC;
-  response[len + 5] = SE;
-  response[len + 6] = '\0';
-  TCPSocketSendString(sock, response);
+  response[12] = IAC;
+  response[13] = SE;
+
+  SysLog("SendTerminalType: ANSI-BBS\n");
+  TCPSocketSend(sock, response, 14); 
 }
 
-U0 TelnetNegotiate(I64 sock, U8 ptr)
+U0 TelnetNegotiate(I64 sock, U8 *ptr)
 {
   U8 negotiation_code = *(ptr + 1);
   U8 option_code = *(ptr + 2);
 
-  // Send a response to the server
-  U8 response[4];
-  response[0] = IAC;
+  
+  SysLog("Negotiation code: %d | Option code: %d\n", negotiation_code, option_code);
 
+  // Check if this is a subnegotiation request
+  if (negotiation_code == SB)
+  {
+    SysLog("SB: %d\n", option_code);
+    if (option_code == TERMINAL_TYPE && *(ptr + 3) == SEND)
+    {
+      SendTerminalType(sock);
+    }
+    else if (option_code == NAWS && *(ptr + 3) == SEND)
+    {
+      SendWindowSize(sock, 80, 25);
+    }
+    return;
+  }
+
+  // Otherwise, handle it as a normal negotiation...
+  U8 response[3];
+  response[0] = IAC;
   if (negotiation_code == DO || negotiation_code == DONT)
   {
     if (option_code == ECHO)
     {
-      if (negotiation_code == DO)
+      if (negotiation_code == DO || negotiation_code == WILL)
       {
         response[1] = WILL;
       }
@@ -101,23 +145,29 @@ U0 TelnetNegotiate(I64 sock, U8 ptr)
     }
     else if (option_code == TERMINAL_TYPE)
     {
+      SysLog("TERMINAL_TYPE negotiation\n");
       if (negotiation_code == DO)
       {
+        SysLog("TERMINAL_TYPE WILL\n");
         response[1] = WILL;
       }
       else
       {
+        SysLog("TERMINAL_TYPE WONT\n");
         response[1] = WONT;
       }
     }
     else if (option_code == NAWS)
     {
-      if (negotiation_code == DO)
+      SysLog("NAWS negotiation\n");
+      if (negotiation_code == DO || negotiation_code == WILL)
       {
+        SysLog("NAWS WILL\n");
         response[1] = WILL;
       }
       else
       {
+        SysLog("NAWS WONT\n");
         response[1] = WONT;
       }
     }
@@ -139,22 +189,14 @@ U0 TelnetNegotiate(I64 sock, U8 ptr)
   }
   else
   {
-    response[1] = DONT;
+    response[1] = WONT;
   }
 
   response[2] = option_code;
-  response[3] = '\0';
-
-  if (term.sock_ready) 
-  {
-    TCPSocketSendString(sock, response);
-    // the bugged out SendTerminalType and SendWindowsSize was what crashed the BBS...
-    if (option_code == TERMINAL_TYPE) SendTerminalType(sock, "ANSI-BBS");
-    else if (option_code == NAWS) SendWindowSize(sock, 25, 80);
-
-    // send out the dimension regardless
-    TCPSocketSendString(term.sock, "\x1B[8;25;80t");
-    // TCPSocketSendString(term.sock, "\xdb\b \xdb\b \xdb\b[\xdb\b[\xdb\b \xdb\bM\xdb\ba\xdb\bi\xdb\bn\xdb\bt\xdb\be\xdb\bn\xdb\ba\xdb\bn\xdb\bc\xdb\be\xdb\b \xdb\bC\xdb\bo\xdb\bm\xdb\bp\xdb\bl\xdb\be\xdb\bt\xdb\be\xdb\b \xdb\b]\xdb\b]\xdb\b \b\r\n\r\n\x1b[0m\x1b[2J\r\n\r\n\x1b[0;1;30mHX Force retinal scan in progress ... \x1b[0;0;30m");
-    // TCPSocketSendString(term.sock, "\033[s\033[99B\033[99B\033[99B_\033[99C\033[99C\033[99C_\033[6n\033[u\033[0m_\033[2J\033[H");
-  }
+  TCPSocketSend(sock, response, 3);
+  // if (option_code == NAWS && negotiation_code == DO)
+  // {
+  //   SysLog("Sending NAWS right away\n");
+  //   SendWindowSize(sock, 80, 25);
+  // }
 }
