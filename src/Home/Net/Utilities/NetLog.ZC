@@ -1,14 +1,5 @@
 CTask *net_log_task = NULL;
 
-U0 NetLogTask(I64)
-{
-
-	while (TRUE)
-	{
-		Refresh;
-	}
-}
-
 U0 NetLogSave()
 {
 	StrCopy(net_log_task->put_doc->filename.name, "::/Home/Net/Log.DD");
