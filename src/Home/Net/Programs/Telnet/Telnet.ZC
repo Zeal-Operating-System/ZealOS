@@ -567,22 +567,21 @@ U0 ANSIParse()
               break;
             case 'K':
               // TODO: I have no idea if this actually works
-              SysLog("K code\n");
-              // Erase in Line
-              // CDocEntry *cur_entry = Fs->display_doc->cur_entry;
-              // CDocEntry *next_entry = cur_entry->next;
-              
-              // // Delete the current entry
-              // if (!(cur_entry->de_flags & (DOCEF_HOLD | DOCEF_FILTER_SKIP))) {
-              //   Fs->display_doc->cur_entry = next_entry;
-              //   Fs->display_doc->cur_col = next_entry->min_col;
-              //   DocEntryDel(Fs->display_doc, cur_entry);
-              // }
 
-              // // Create a new entry (line) in its place
-              // CDocEntry *new_entry = DocEntryNewTag(Fs->display_doc, cur_entry, "");
-              // DocInsEntry(Fs->display_doc, new_entry);
-              
+              if (ansi_param_count == 0 || ansi_code[0] == 0) {
+                // Erase from cursor to end of line
+                // I'm not calculating current_row properly yet so it wont work as expected.
+                SysLog("K code 0, cur: %d\n", term.doc->cur_entry->y);
+                DocDelToNum(term.doc, term.doc->cur_entry->y);
+              } else if (ansi_code[0] == 1) {
+                // Erase from cursor to beginning of line
+                SysLog("K code 1, cur: %d\n", term.doc->cur_entry->y);
+                DocDelToEntry(term.doc, term.doc->cur_entry, TRUE);
+              } else if (ansi_code[0] == 2) {
+                // Erase entire line
+                SysLog("K code 2, cur: %d\n", term.doc->cur_entry->y);
+                DocDelEntry(term.doc, term.doc->cur_entry);
+              }
               ptr++;
               break;
             case 'L':
@@ -940,6 +939,11 @@ init_connection:
             LFBFlush;
           }
           break;
+        case CH_CTRLU:
+          if(term.sock_ready) TCPSocketSendString(term.sock, "\x15");
+          break;
+        // case CH_CTRLP:
+        //   DocFlagsToggle(doc, DOCF_PLAIN_TEXT);
         case CH_CTRLL:
           PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
           break;
@@ -972,3 +976,12 @@ init_connection:
 // dev server
 // Telnet("localhost", 8888);
 Telnet;
+
+
+/*
+TODO:
+- refactor ANSIParser's TCPSocketSends to send everything to a "TelnetSend" function
+- TelnetSend will handle whether there's a connection or not
+- This will make easier to transform this software into an ANSI viewer / Telnet client/ general purpose Term.
+- There's a lot more to fix, but this is a good start.
+*/
