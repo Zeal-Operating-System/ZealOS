@@ -75,12 +75,66 @@ public U8 *ANSIArtBrowser()
   U8 *selectedFile = PopUpPickFile("::/Home/Net/Programs/Telnet/Art");
   if (selectedFile) {
     if (StrCompare(selectedFile, "")) {
-      SysLog(selectedFile);
+      // SysLog(selectedFile);
+      StrCopy(Fs->task_title, selectedFile);
       return selectedFile;
     }
   }
   // Handle the case where no file was selected, if necessary.
   return NULL;
+}
+
+U0 DocCursorPosSet(CDoc *doc, I64 x, I64 y)
+{
+	Bool unlock;
+	
+	unlock = DocLock(doc);
+	if (doc->doc_signature == DOC_SIGNATURE_VAL)
+	{
+		doc->x = x;
+		doc->y = y;
+		DocRecalc(doc, RECALCt_FIND_CURSOR);
+		if (unlock)
+			DocUnlock(doc);
+	}
+}
+
+U0 DocRelCursorPosSet(CDoc *doc, I64 dx, I64 dy) {
+    Bool unlock;
+
+    if (!doc && !(doc = DocPut)) {
+        return;
+    }
+
+    unlock = DocLock(doc);
+
+    doc->x += dx;
+    doc->y += dy;
+
+    DocRecalc(doc, RECALCt_FIND_CURSOR);
+
+    if (unlock)
+        DocUnlock(doc);
+}
+
+// function to increase/decrease col or row
+U0 SetPos(I64 col, I64 row, Bool relativeCol=TRUE, Bool relativeRow=TRUE) {
+  if (col < 0) {
+    if (relativeCol)
+      term.current_col += col;
+    else
+      term.current_col = col;
+    if (term.current_col > term.window_width)
+      term.current_col = 1;
+  }
+  if (row < 0) {
+    if (relativeCol)
+      term.current_row += row;
+    else
+      term.current_row = row;
+    if (term.current_row > term.window_height)
+      term.current_row = 1;
+  }
 }
 
 // public I64 ANSIArtBrowser()

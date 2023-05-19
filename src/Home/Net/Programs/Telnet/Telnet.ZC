@@ -44,26 +44,6 @@ I64 TelnetOpen(U8 *host, U16 port) {
   return sock;
 }
 
-// function to increase/decrease col or row
-U0 SetPos(I64 col, I64 row, Bool relativeCol=TRUE, Bool relativeRow=TRUE) {
-  if (col < 0) {
-    if (relativeCol)
-      term.current_col += col;
-    else
-      term.current_col = col;
-    if (term.current_col > term.window_width)
-      term.current_col = 1;
-  }
-  if (row < 0) {
-    if (relativeCol)
-      term.current_row += row;
-    else
-      term.current_row = row;
-    if (term.current_row > term.window_height)
-      term.current_row = 1;
-  }
-}
-
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
@@ -90,8 +70,8 @@ U0 HandleControlCodes(U8 ch) {
         // DocPrint(term.doc, "\f");
         break;
       case 13: // CR (Carriage Return)
-        // DocPrint(term.doc, "\r");
-        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+        DocPrint(term.doc, "\r");
+        // DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -543,7 +523,7 @@ U0 ANSIParse()
               term.current_col = col;
               
               DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
-              
+              //DocCursorPosSet(term.doc, col, row);
               ptr++;
               break;
             case 'J':
@@ -568,20 +548,16 @@ U0 ANSIParse()
             case 'K':
               // TODO: I have no idea if this actually works
 
-              if (ansi_param_count == 0 || ansi_code[0] == 0) {
-                // Erase from cursor to end of line
-                // I'm not calculating current_row properly yet so it wont work as expected.
-                SysLog("K code 0, cur: %d\n", term.doc->cur_entry->y);
-                DocDelToNum(term.doc, term.doc->cur_entry->y);
-              } else if (ansi_code[0] == 1) {
-                // Erase from cursor to beginning of line
-                SysLog("K code 1, cur: %d\n", term.doc->cur_entry->y);
-                DocDelToEntry(term.doc, term.doc->cur_entry, TRUE);
-              } else if (ansi_code[0] == 2) {
-                // Erase entire line
-                SysLog("K code 2, cur: %d\n", term.doc->cur_entry->y);
-                DocDelEntry(term.doc, term.doc->cur_entry);
-              }
+              // if (ansi_param_count == 0 || ansi_code[0] == 0) {
+              //     // Erase from cursor to end of line
+              //     LineDeleteToEnd(term.doc->cur_entry, doc.term->cur_col);
+              // } else if (ansi_code[0] == 1) {
+              //     // Erase from cursor to beginning of line
+              //     LineDeleteToStart(term.doc->cur_entry, doc.term->cur_col);
+              // } else if (ansi_code[0] == 2) {
+              //     // Erase entire line
+              //     LineDeleteEntire(term.doc->cur_entry);
+              // }
               ptr++;
               break;
             case 'L':
@@ -925,6 +901,11 @@ init_connection:
           else {
             "Error: Could not load art.\n";
           }
+          break;
+        case CH_CTRLS:
+          // Save as DD image.
+          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/Default.DD");
+          DocWrite(term.doc, TRUE);
           break;
         case CH_CTRLD:
           dark_mode = !dark_mode;
