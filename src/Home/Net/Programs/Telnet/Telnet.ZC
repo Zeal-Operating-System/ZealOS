@@ -904,7 +904,7 @@ init_connection:
           break;
         case CH_CTRLS:
           // Save as DD image.
-          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/Default.DD");
+          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
           DocWrite(term.doc, TRUE);
           break;
         case CH_CTRLD:
@@ -956,7 +956,7 @@ init_connection:
 
 // dev server
 // Telnet("localhost", 8888);
-Telnet;
+//Telnet;
 
 
 /*

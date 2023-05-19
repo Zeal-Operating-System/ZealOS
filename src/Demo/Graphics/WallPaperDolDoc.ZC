@@ -12,7 +12,7 @@ U0 WallPaperDolDocInit(I64 filepath="::/Home/Wallpapers/Default.DD")
     wallpaper_doc = DocRead(filepath, DOCF_DBL_DOLLARS | DOCF_NO_CURSOR);
 
     sys_winmgr_task->display_doc = wallpaper_doc;
-    DocCursor(OFF);
+    DocCursor(OFF, wallpaper_doc);
     
     // if (gr_palette[0] > gr_palette[15])
     //   Fs->text_attr = WHITE << 4 + WHITE;
