@@ -63,7 +63,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 				tempColor = 0x000000;
 			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
 		}
-	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color + 1);
+	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
 	if (selected_color == 15)
 		dc->color = LTGRAY;	
 	else if (gr_palette[selected_color] > 0xCCCCCC)
@@ -198,8 +198,8 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		bias = (size / 2) - 4;
 		if (i >= 9)
 			bias = (size / 2) - 8;
-		GrPrint(dc, bias + (i * size), c->win_task->pix_height - (size * .6) + (size / 4), "%d", i + 1);
-		GrPrint(dc, 10, (size2 * 2) + 70 + 16 * i, "#%d: Test", i + 1);
+		GrPrint(dc, bias + (i * size), c->win_task->pix_height - (size * .6) + (size / 4), "%d", i);
+		GrPrint(dc, 10, (size2 * 2) + 70 + 16 * i, "#%d: Test", i);
 	}
 
 
