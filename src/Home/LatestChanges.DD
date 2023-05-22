@@ -1,9 +1,0 @@
-There is a Telnet client, you can use it to navigate BBS systems.
-ZealOS community has it's own, feel free to join us at Telnet("bbs.zealos.net", 4001);
-
-You can now add an ANSI wallpaper using WallPaperAnsiInit;.
-If you'd like for it to run at the start, make the following changes:
-
-In ::/StartOS.ZC add the following lines after the WallPaperInit 
-#include "::/Demo/Graphics/WallPaperAnsi"
-WallPaperAnsiInit("::/Home/Wallpapers/MyWallPaper.DD");
