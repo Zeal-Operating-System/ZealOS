@@ -99,7 +99,7 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Fs\n");
         break;
       case 29:
-        SysLog("Gs\n");
+        SysLog("Gs\n");
         break;
       case 30:
         SysLog("Rs\n");
@@ -692,7 +692,7 @@ receive_data:
       if (!term.sock_ready || force_disconnect)
         DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
       else {
-        SysLog("goto received_data\n");
+        //SysLog("goto received_data\n");
         goto receive_data;
       }
       break;
@@ -732,7 +732,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
   StrCopy(Fs->task_title, "TELNET");
   Fs->border_src  = BDS_CONST;
-  Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
+  // Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
   if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
   else Fs->text_attr = BLACK << 4 + WHITE;
   Fs->title_src = TTS_LOCKED_CONST;
@@ -752,6 +752,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
 show_splash:
   // SplashScreen
+  Fs->border_attr = WHITE << 4 + LTRED;
   DocMax;
   DocClear;
   // probably should use word wrap?
@@ -766,6 +767,7 @@ show_splash:
     // Free(term.buffer);
   }
   else {
+    DocClear;
     Print("Error: Could not load splash screen.\n");
   }
 
@@ -786,6 +788,7 @@ init_connection:
       host = NULL;
       goto show_splash;
     }
+    Fs->border_attr = WHITE << 4 + GREEN;
     term.sock_ready = 1; // Signal that the socket is ready
     term.waiting_for_input = FALSE;
 
@@ -871,6 +874,7 @@ init_connection:
             host = NULL;
             term.sock_ready = 0;
             term.waiting_for_input = TRUE;
+            DocClear;
             "Telnet connection closed.\n";
             Sleep(100);
             goto show_splash;
@@ -904,7 +908,7 @@ init_connection:
           break;
         case CH_CTRLS:
           // Save as DD image.
-          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
+          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
           DocWrite(term.doc, TRUE);
           break;
         case CH_CTRLD:
@@ -956,7 +960,7 @@ init_connection:
 
 // dev server
 // Telnet("localhost", 8888);
-//Telnet;
+Telnet;
 
 
 /*

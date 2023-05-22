@@ -1,5 +1,5 @@
 Cd(__DIR__);
-#include "TelnetClass"
+#include "TelnetClass"
 #include "TelnetNegotiation"
 
 U8 IsDigit(U8 ch) {
@@ -118,7 +118,7 @@ U0 DocRelCursorPosSet(CDoc *doc, I64 dx, I64 dy) {
 }
 
 // function to increase/decrease col or row
-U0 SetPos(I64 col, I64 row, Bool relativeCol=TRUE, Bool relativeRow=TRUE) {
+U0 SetPos(I64 col, I64 row, Bool relativeCol=TRUE) {
   if (col < 0) {
     if (relativeCol)
       term.current_col += col;

@@ -95,7 +95,7 @@ U0 SendTerminalType(I64 sock)
 
 U0 TelnetNegotiate(I64 sock, U8 *ptr)
 {
-  U8 negotiation_code = *(ptr + 1);
+  U8 negotiation_code = *(ptr + 1);
   U8 option_code = *(ptr + 2);
 
   
