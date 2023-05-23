@@ -38,15 +38,15 @@
 
 
 
-U0 TelnetRequest(I64 sock, U8 option_code)
-{
-  U8 request[3];
-  request[0] = IAC;
-  request[1] = WILL;
-  request[2] = option_code;
+// U0 TelnetRequest(I64 sock, U8 option_code)
+// {
+//   U8 request[3];
+//   request[0] = IAC;
+//   request[1] = WILL;
+//   request[2] = option_code;
 
-  TCPSocketSend(sock, request, 3);
-}
+//   TCPSocketSend(sock, request, 3);
+// }
 
 U0 SendWindowSize(I64 sock, U16 cols, U16 rows)
 {

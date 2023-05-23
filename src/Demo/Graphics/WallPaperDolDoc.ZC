@@ -1,6 +1,42 @@
 U0 (*old_wall_paper)(CTask *task);
 CDoc *wallpaper_doc;
 
+RegDefault("Wallpapers/Current", "1;\n");
+RegExe("Wallpapers/Current");
+
+U0 WallPaperSet(I8 direction) {
+    CDirEntry *tmpde1;
+    // read the current wallpaper index from the registry
+    I64 current = RegExe("Wallpapers/Current");
+    I64 max = 0;
+
+    // SysLog("Reading current wallpaper index from registry: %d\n", current);
+
+    // search the wallpapers directory for .DD files
+    tmpde1 = FilesFind("~/Wallpapers/1024/*.DD", 1);
+    if (tmpde1) {
+        do {
+            max++;
+            tmpde1 = tmpde1->next;
+        } while (tmpde1);
+    }
+
+    // move to the next/previous wallpaper
+    current += direction;
+    if (current < 1)
+        current = max;  // wrap around to the end
+    if (current > max)
+        current = 1;  // wrap around to the start
+
+    // write the new current index back to the registry
+    RegWrite("Wallpapers/Current", "%d;\n", current);
+
+    // SysLog("Current: %d\n", current);
+    // Change the wallpaper
+    Sys("WallPaperDolDocInit(\"~/Wallpapers/1024/%d.DD\");\n", current);
+}
+
+
 U0 WallPaperDolDocInit(I64 filepath="::/Home/Wallpapers/Default.DD")
 {
     if (Fs != sys_task)

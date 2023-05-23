@@ -705,6 +705,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   term.window_width = 80;
   term.window_height = 25;
   term.doc = Fs->display_doc;
+  // IsEditableText(term.doc->cur_entry);
   term.waiting_for_input = TRUE;
   term.sock_ready = 0;
   I64 art_path = "::/Home/Net/Programs/Telnet/Art/TelnetSplash.ans";
