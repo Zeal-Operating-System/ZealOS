@@ -681,7 +681,7 @@ U0 ANSIParse()
 }
 
 U0 TerminalTask() {
-  while (!term.sock_ready) {
+  while (!term.sock_ready)  {
     Sleep(100); // Avoid busy waiting
   }
 
@@ -907,16 +907,13 @@ init_connection:
           case CH_BACKSPACE:
             if (term.sock_ready) TCPSocketSendString(term.sock, "\x08\x7F");
             break;
-          case CH_ESC:
-            if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
-            break;
           case CH_SHIFT_ESC:
             if (term.sock_ready)
             {
-              if (term.sock_ready) TCPSocketClose(term.sock);
-              host = NULL;
-              term.sock_ready = 0;
               term.waiting_for_input = TRUE;
+              term.sock_ready = 0;
+              host = NULL;
+              TCPSocketClose(term.sock);
               DocClear;
               "Telnet connection closed.\n";
               Sleep(100);
@@ -924,6 +921,9 @@ init_connection:
             }
             else
               force_disconnect = TRUE;
+            break;
+          case CH_ESC:
+            if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
             break;
           // send buffer on enter
           case '\n':
