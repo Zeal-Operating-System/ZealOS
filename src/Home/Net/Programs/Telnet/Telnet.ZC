@@ -70,8 +70,8 @@ U0 HandleControlCodes(U8 ch) {
         // DocPrint(term.doc, "\f");
         break;
       case 13: // CR (Carriage Return)
-        DocPrint(term.doc, "\r");
-        // DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
+        // DocPrint(term.doc, "\r");
+        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
         break;
       case 14: // SO (Shift Out) - Switch to an alternate character set
       case 15: // SI (Shift In)  - Switch back to the default character set
@@ -99,7 +99,7 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("Fs\n");
         break;
       case 29:
-        SysLog("Gs\n");
+        SysLog("Gs\n");
         break;
       case 30:
         SysLog("Rs\n");
@@ -486,7 +486,7 @@ U0 ANSIParse()
               //   break;
               // }
 
-              // SysLog("H or f row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
+              SysLog("H or f row:%d, col:%d, cnt:%d\n", row, col, ansi_param_count);
 
 
               // Adjust the position based on the window size
@@ -523,7 +523,6 @@ U0 ANSIParse()
               term.current_col = col;
               
               DocPrint(term.doc, "$$CM+LX+TY,LE=%d,RE=%d$$", term.current_col-1, term.current_row-1);
-              //DocCursorPosSet(term.doc, col, row);
               ptr++;
               break;
             case 'J':
@@ -531,9 +530,11 @@ U0 ANSIParse()
               // Erase in Display
               if (ansi_code[0] == 0) {
                 // Erase from cursor to end of display
+                // TODO: dont think this is working
                 // DocDelToNum(Fs->display_doc, Fs->display_doc->cur_entry->line_num);
               } else if (ansi_code[0] == 1) {
                 // Erase from cursor to beginning of display
+                // TODO: dont think this is working
                 // DocDelToEntry(Fs->display_doc, Fs->display_doc->cur_entry, FALSE);
               } else if (ansi_code[0] == 2) {
                 // Erase entire display
@@ -547,17 +548,21 @@ U0 ANSIParse()
               break;
             case 'K':
               // TODO: I have no idea if this actually works
+              SysLog("K code, %d  %d\n", ansi_param_count, ansi_code[0]);
+              if (ansi_param_count == 0 || ansi_code[0] == 0) {
+                  // Erase from cursor to end of line
+                  // LineDeleteToEnd(term.doc->cur_entry, doc.term->cur_col);
+                  // DocDelToEntry(term.doc, term.doc->cur_entry, TRUE);
 
-              // if (ansi_param_count == 0 || ansi_code[0] == 0) {
-              //     // Erase from cursor to end of line
-              //     LineDeleteToEnd(term.doc->cur_entry, doc.term->cur_col);
-              // } else if (ansi_code[0] == 1) {
-              //     // Erase from cursor to beginning of line
-              //     LineDeleteToStart(term.doc->cur_entry, doc.term->cur_col);
-              // } else if (ansi_code[0] == 2) {
-              //     // Erase entire line
-              //     LineDeleteEntire(term.doc->cur_entry);
-              // }
+                  // DocDelToNum(term.doc, 80);
+                  // DocRecalc(term.doc);
+              } else if (ansi_code[0] == 1) {
+                  // Erase from cursor to beginning of line
+                  // LineDeleteToStart(term.doc->cur_entry, doc.term->cur_col);
+              } else if (ansi_code[0] == 2) {
+                  // Erase entire line
+                  // LineDeleteEntire(term.doc->cur_entry);
+              }
               ptr++;
               break;
             case 'L':
@@ -567,12 +572,12 @@ U0 ANSIParse()
               break;
             case 'S':
               // TODO: Scroll Up
-              SysLog("Scroll Up");
+              SysLog("S Scroll Up");
               ptr++;
               break;
             case 'T':
               // TODO: Scroll Down
-              SysLog("Scroll Down");
+              SysLog("T Scroll Down");
               ptr++;
               break;
             case 'M':
@@ -705,7 +710,6 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   term.window_width = 80;
   term.window_height = 25;
   term.doc = Fs->display_doc;
-  // IsEditableText(term.doc->cur_entry);
   term.waiting_for_input = TRUE;
   term.sock_ready = 0;
   I64 art_path = "::/Home/Net/Programs/Telnet/Art/TelnetSplash.ans";
@@ -713,21 +717,24 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   GrPaletteGet(original_palette);
   AutoComplete(OFF);
 
+  DocMax;
+  DocCursor(OFF);
+
   SettingsPush;
   MenuPush(
     "Telnet {"
-    " Connect(,CH_CTRLN);"
+    " Connect(,SCF_ALT+'n');"
     " Exit(,CH_SHIFT_ESC);"
     "}"
     "Load {"
-    "  ANSIArt(,CH_CTRLO);"
+    "  ANSIArt(,SCF_ALT);"
     "}"
     "Config {"
-    "  ToggleDarkMode(,CH_CTRLD);"
-    "  SetDarkColors(,CH_CTRLT);"
+    "  ToggleDarkMode(,SCF_ALT);"
+    "  SetDarkColors(,SCF_ALT);"
     "}"
 		"About {"
-		"	Info(,CH_CTRLL);"
+		"	Info(,SCF_ALT);"
 		"}"
   );
 
@@ -750,15 +757,15 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
               (Fs->win_height - 1),
           Fs);
 
+  // this flag will make the term auto-size to the content (ish)
+  // term.doc->flags |= DOCEG_DONT_EDIT;
 
 show_splash:
   // SplashScreen
   Fs->border_attr = WHITE << 4 + LTRED;
-  DocMax;
   DocClear;
-  // probably should use word wrap?
+  // probably should use word wrap? dunno if it actually changes anything in this context...
   DocPrint(, "$$WW,1$$");
-  DocCursor(OFF);
   // Load the file into the buffer and get its size
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
   if (term.buffer_len > 0) {
@@ -804,145 +811,139 @@ init_connection:
 	{
     while (!force_disconnect) {
       U8 key = KeyGet(&sc);
-      // fix the bug of holding Ctrl triggers all the CH_CTRL, needs to be handled like in Demo/Graphics/FontEd.ZC:104
-      switch (key)
+
+      // ALT
+      if (sc & SCF_ALT && !(sc & SCF_CTRL))
       {
-        case 0:
-          switch (sc.u8[0])
-          {
-            case SC_CURSOR_LEFT:
-              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[D");
-              break;
-
-            case SC_CURSOR_RIGHT:
-              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[C");
-              break;
-
-            case SC_CURSOR_UP:
-              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[A");
-              break;
-
-            case SC_CURSOR_DOWN:
-              if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[B");
-              break;
-            default:
-              break;
-          }
-          break;
-        case 9:
-          switch (sc.u8[0])
-          {
-            case SC_TAB:
-              if (term.sock_ready) TCPSocketSendString(term.sock, "\x09");
-              break;
-            default:
-              break;
-          }
-        case 255:
-          switch (sc.u8[0])
-          {
-            case SC_PAGE_UP:  if (term.sock_ready) TCPSocketSendString(term.sock, "\033[V"); break;
-            case SC_PAGE_DOWN:if (term.sock_ready) TCPSocketSendString(term.sock, "\033[U"); break;
-            case SC_HOME:     if (term.sock_ready) TCPSocketSendString(term.sock, "\033[H"); break;
-            case SC_END:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[K"); break;
-            case SC_DELETE:   if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F"); break;
-            case SC_F1:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OP"); break;
-            case SC_F2:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OQ"); break;
-            case SC_F3:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OR"); break;
-            case SC_F4:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OS"); break;
-            case SC_F5:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033Ot"); break;
-            case SC_F6:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[17~"); break;
-            case SC_F7:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[18~"); break;
-            case SC_F8:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[19~"); break;
-            case SC_F9:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[20~"); break;
-            case SC_F10:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[21~"); break;
-            case SC_F11:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[23~"); break;
-            case SC_F12:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[24~"); break;
-            default:
-              break;
-          }
-
-        case CH_BACKSPACE:
-          if (term.sock_ready) TCPSocketSendString(term.sock, "\x08\x7F");
-          break;
-        case CH_ESC:
-          if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
-          break;
-        case CH_SHIFT_ESC:
-          if (term.sock_ready)
-          {
-            if (term.sock_ready) TCPSocketClose(term.sock);
-            host = NULL;
-            term.sock_ready = 0;
-            term.waiting_for_input = TRUE;
+        switch (key)
+        {
+          // case 0:
+          //   switch (sc.u8[0])
+          //   {
+          //   }
+          case 'n':
+            TelnetPrompt(&form);
+            host = form.host;
+            port = form.port;
             DocClear;
-            "Telnet connection closed.\n";
-            Sleep(100);
-            goto show_splash;
-          }
-          else
-            force_disconnect = TRUE;
-          break;
-        // send buffer on enter
-        case '\n':
-          if (term.sock_ready) TCPSocketSendString(term.sock, "\r\n");
-          break;
-        case CH_CTRLN:
-          TelnetPrompt(&form);
-          host = form.host;
-          port = form.port;
-          DocClear;
-          term.waiting_for_input = FALSE;
-          goto init_connection;
-          break;
-        case CH_CTRLO:
-          art_path = ANSIArtBrowser;
-          if (art_path != NULL) {
-            term.sock_ready = 0;
-            term.waiting_for_input = TRUE;
-            // SysLog("%s\n", art_path);
-            goto show_splash;
-          }
-          else {
-            "Error: Could not load art.\n";
-          }
-          break;
-        case CH_CTRLS:
-          // Save as DD image.
-          StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
-          DocWrite(term.doc, TRUE);
-          break;
-        case CH_CTRLD:
-          dark_mode = !dark_mode;
-          if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
-          else Fs->text_attr = BLACK << 4 + WHITE;
-          break;
-        case CH_CTRLT:
-          original_colors = !original_colors;
-          if (original_colors) PaletteSetStd(FALSE);
-          else {
-            GrPaletteSet(original_palette);
-            LFBFlush;
-          }
-          break;
-        case CH_CTRLU:
-          if(term.sock_ready) TCPSocketSendString(term.sock, "\x15");
-          break;
-        // case CH_CTRLP:
-        //   DocFlagsToggle(doc, DOCF_PLAIN_TEXT);
-        case CH_CTRLL:
-          PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
-          break;
-        default:
-          if (key >= ' ' && key <= '~') {
-            // Handle regular keys
-            U8 input_buf[2];
-            input_buf[0] = key;
-            input_buf[1] = '\0';
-            if (term.sock_ready) TCPSocketSend(term.sock, input_buf, 1);
-          }
-          break;
+            term.waiting_for_input = FALSE;
+            goto init_connection;
+            break;
+          case 'o':
+            art_path = ANSIArtBrowser;
+            if (art_path != NULL) {
+              term.sock_ready = 0;
+              term.waiting_for_input = TRUE;
+              // SysLog("%s\n", art_path);
+              goto show_splash;
+            }
+            else {
+              "Error: Could not load art.\n";
+            }
+            break;
+          case 's':
+            // Save as DD image.
+            StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
+            DocWrite(term.doc, TRUE);
+            break;
+          case 'd':
+            dark_mode = !dark_mode;
+            if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
+            else Fs->text_attr = BLACK << 4 + WHITE;
+            break;
+          case 't':
+            original_colors = !original_colors;
+            if (original_colors) PaletteSetStd(FALSE);
+            else {
+              GrPaletteSet(original_palette);
+              LFBFlush;
+            }
+            break;
+          case 'l':
+            PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
+            break;
+        }
       }
+      else {      // fix the bug of holding Ctrl triggers all the CH_CTRL, needs to be handled like in Demo/Graphics/FontEd.ZC:104
+        switch (key)
+        {
+          case 0:
+            switch (sc.u8[0])
+            {
+              case SC_CURSOR_LEFT: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[D");  break;
+              case SC_CURSOR_RIGHT: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[C"); break;
+              case SC_CURSOR_UP: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[A"); break;
+              case SC_CURSOR_DOWN: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[B"); break;
+              case SC_PAGE_UP:  if (term.sock_ready) TCPSocketSendString(term.sock, "\033[V"); break;
+              case SC_PAGE_DOWN:if (term.sock_ready) TCPSocketSendString(term.sock, "\033[U"); break;
+              case SC_HOME:     if (term.sock_ready) TCPSocketSendString(term.sock, "\033[H"); break;
+              case SC_END:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[K"); break;
+              case SC_DELETE:   if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F"); break;
+              case SC_F1:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OP"); break;
+              case SC_F2:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OQ"); break;
+              case SC_F3:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OR"); break;
+              case SC_F4:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033OS"); break;
+              case SC_F5:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033Ot"); break;
+              case SC_F6:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[17~"); break;
+              case SC_F7:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[18~"); break;
+              case SC_F8:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[19~"); break;
+              case SC_F9:       if (term.sock_ready) TCPSocketSendString(term.sock, "\033[20~"); break;
+              case SC_F10:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[21~"); break;
+              case SC_F11:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[23~"); break;
+              case SC_F12:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[24~"); break;
+              default:
+                break;
+            }
+            break;
+          case 9:
+            switch (sc.u8[0])
+            {
+              case SC_TAB:
+                if (term.sock_ready) TCPSocketSendString(term.sock, "\x09");
+                break;
+              default:
+                break;
+            }
+          case CH_BACKSPACE:
+            if (term.sock_ready) TCPSocketSendString(term.sock, "\x08\x7F");
+            break;
+          case CH_ESC:
+            if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B");
+            break;
+          case CH_SHIFT_ESC:
+            if (term.sock_ready)
+            {
+              if (term.sock_ready) TCPSocketClose(term.sock);
+              host = NULL;
+              term.sock_ready = 0;
+              term.waiting_for_input = TRUE;
+              DocClear;
+              "Telnet connection closed.\n";
+              Sleep(100);
+              goto show_splash;
+            }
+            else
+              force_disconnect = TRUE;
+            break;
+          // send buffer on enter
+          case '\n':
+            if (term.sock_ready) TCPSocketSendString(term.sock, "\r\n");
+            break;
+          case CH_CTRLU:
+            if(term.sock_ready) TCPSocketSendString(term.sock, "\x15");
+            break;
+          default:
+            if (key >= ' ' && key <= '~') {
+              // Handle regular keys
+              U8 input_buf[2];
+              input_buf[0] = key;
+              input_buf[1] = '\0';
+              if (term.sock_ready) TCPSocketSend(term.sock, input_buf, 1);
+            }
+            break;
+        }
+      }
+
     }
   }
   catch
