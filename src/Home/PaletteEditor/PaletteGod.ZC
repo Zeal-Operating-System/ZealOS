@@ -1,43 +1,22 @@
-
-public U0 PaletteGodGenerate()
+public U0 PaletteGod(Bool seedUse=TRUE, Bool instant=TRUE)
 {
+	// Instantly generate a random palette, seed-based or not
 	I64		i;
 	CBGR24	palette;
+	I32		color;
 
-	for (i = 0; i < 16; i++)
-	{
-		palette = GodPick & 0xFFFFFF;
-		gr_palette[i] = palette;
-		LFBFlush;
-	}
-}
-
-public U0 PaletteGodGenerate2(Bool NeedForSneed=0)
-{
-	//This one will involve a lot less tapping
-	//and be a lot more random
-
-	I64		i;
-	CBGR24	palette;
-	I64 	SNEED;
-	I32		FEED;
-
-	if(!NeedForSneed)	//By default if no args are passed, it assumes  the user 
-	{					//doesn't want or care for a seed.
-		goto Generate;
-	}
-	else				//If a 1 is passed of course, we seed the RNG
-	{
-
-	SNEED = GodPick;
-	Seed(SNEED);
-	}
-Generate:
-
+	if (seedUse)
+		Seed(GodPick);
 	for (i=0; i < 16; i++)
 	{
-		FEED = RandI32;
-		palette = FEED & 0xFFFFFF;
+		if (instant || seedUse)
+		{
+			color = RandI32;
+			palette = color & 0xFFFFFF;
+		}
+		else {
+			palette = GodPick & 0xFFFFFF;
+		}
 		gr_palette[i] = palette;
 		LFBFlush;
 	}
