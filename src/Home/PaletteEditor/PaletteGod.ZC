@@ -21,3 +21,5 @@ public U0 PaletteGod(Bool seedUse=TRUE, Bool instant=TRUE)
 		LFBFlush;
 	}
 }
+
+PaletteGod;
