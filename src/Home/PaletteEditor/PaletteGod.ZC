@@ -12,4 +12,33 @@ public U0 PaletteGodGenerate()
 	}
 }
 
-PaletteGodGenerate;
+public U0 PaletteGodGenerate2(Bool NeedForSneed=0)
+{
+	//This one will involve a lot less tapping
+	//and be a lot more random
+
+	I64		i;
+	CBGR24	palette;
+	I64 	SNEED;
+	I32		FEED;
+
+	if(!NeedForSneed)	//By default if no args are passed, it assumes  the user 
+	{					//doesn't want or care for a seed.
+		goto Generate;
+	}
+	else				//If a 1 is passed of course, we seed the RNG
+	{
+
+	SNEED = GodPick;
+	Seed(SNEED);
+	}
+Generate:
+
+	for (i=0; i < 16; i++)
+	{
+		FEED = RandI32;
+		palette = FEED & 0xFFFFFF;
+		gr_palette[i] = palette;
+		LFBFlush;
+	}
+}
