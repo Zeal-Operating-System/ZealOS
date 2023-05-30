@@ -148,7 +148,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		// color label and text preview
 		// TODO: THIS LOGIC DOESNT WORK ON LIGHT THEMES		
 		// if color too light or too dark add bg
-
+		
 		if (i == 15)
 			dc->color = LTGRAY;
 		else if (gr_palette[i] < gr_palette[15])
@@ -159,10 +159,6 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 			dc->color = LTRED;*/
 		else
 			dc->color = 15;
-
-		// Border for preview box
-		GrRect(dc, (size * i)-1, c->win_task->pix_height - (size*1.5)-1, size+2, size+2);
-
 	
 		if (i == selected_color)
 			dc->color = 0;
@@ -170,19 +166,27 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		GrRect(dc, (size * i), c->win_task->pix_height - (size - size / 2), size, size * 1.5);
 		
 		GrRect(dc, 6, (size2 * 2) + 65 + 16 * i, 80, 18);
+
 	
 		if (i == selected_color)
 			dc->color = 15;
 		else
 			dc->color = i;
+
 		bias = (size / 2) - 4;
 		if (i >= 9)
 			bias = (size / 2) - 8;
+
 		GrPrint(dc, bias + (i * size), c->win_task->pix_height - (size * .6) + (size / 4), "%d", i);
 		GrPrint(dc, 10, (size2 * 2) + 70 + 16 * i, "#%d: Test", i);
-
+		// Border for preview box
+		GrRect(dc, (size * i)-2, c->win_task->pix_height - (size*1.5)-1, size+2, size+1);
 		// preview box
+		dc->color = i;
 		GrRect(dc, (size * i), c->win_task->pix_height - (size*1.5), size, size);
+
+
+
 	}
 
 
@@ -429,11 +433,11 @@ public U0 PaletteEditor()
 					current_palette = PaletteSelect;
 					break;
 				case 'r':
-					gr_palette[selected_color] = ColorGod(TRUE);
+					gr_palette[selected_color] = ColorGod;
 					LFBFlush;
 					break;
 				case 'R':	
-					PaletteGod(FALSE, TRUE);
+					PaletteGod;
 					break;
 				case CH_CTRLI:
 					PopUpOk("\n\n  Use the arrows to select color\n\n  # to manually input hex value","\n\n\n\t\tMade by y4my4m\n\n");
