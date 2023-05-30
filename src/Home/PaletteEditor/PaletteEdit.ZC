@@ -171,7 +171,6 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		
 		GrRect(dc, 6, (size2 * 2) + 65 + 16 * i, 80, 18);
 	
-			
 		if (i == selected_color)
 			dc->color = 15;
 		else
@@ -421,7 +420,7 @@ public U0 PaletteEditor()
 							if (selected_color == 15)
 								selected_color = -1;
 							SelectColor(selected_color + 1, c);
-							break;		
+							break;
 					}
 					break;
 				case CH_CTRLO:
@@ -429,7 +428,7 @@ public U0 PaletteEditor()
 					current_palette = PaletteSelect;
 					break;
 				case 'r':
-					gr_palette[selected_color] = ColorGod(FALSE, TRUE);
+					gr_palette[selected_color] = ColorGod(TRUE);
 					LFBFlush;
 					break;
 				case 'R':	

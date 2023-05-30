@@ -1,9 +1,7 @@
-CBGR24 ColorGod(Bool seedUse=TRUE, Bool instant=TRUE)
+CBGR24 ColorGod(Bool instant=TRUE)
 {
  	// Generate a random color, seed-based or not
- 	if (seedUse)
- 		Seed(GodPick);
- 	if (instant || seedUse)
+ 	if (instant)
  		return RandI32 & 0xFFFFFF;
  	else
  		return GodPick & 0xFFFFFF;
@@ -13,8 +11,10 @@ public U0 PaletteGod(Bool seedUse=TRUE, Bool instant=TRUE)
 {
  	// Generate a random palette, seed-based or not
 	I64		i;
+	if (seedUse)
+		Seed(GodPick);
  	for (i=0; i < 16; i++)
- 		gr_palette[i] = ColorGod(seedUse, instant);
+ 		gr_palette[i] = ColorGod(instant);
 	LFBFlush;
 }
 
