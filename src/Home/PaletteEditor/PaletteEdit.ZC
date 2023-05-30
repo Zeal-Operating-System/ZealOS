@@ -364,6 +364,7 @@ public U0 PaletteEditor()
 		"}"
 		);
 	DocClear;
+	DocCursor(OFF);
 	WinBorder(ON);
 
 	CCtrl *c = SliderNew;
