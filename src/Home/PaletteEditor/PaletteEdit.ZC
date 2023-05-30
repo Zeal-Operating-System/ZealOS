@@ -357,6 +357,8 @@ public U0 PaletteEditor()
 		"	PreviousColor(,,SC_CURSOR_UP);"
 		"	NextColor(,,SC_CURSOR_RIGHT);"
 		"	NextColor(,,SC_CURSOR_DOWN);"
+		"	RandomColor(,,'r');"
+		"	RandomPalette(,,'R');"
 		"}"
 		"About {"
 		"	Info(,CH_CTRLI);"
@@ -431,7 +433,7 @@ public U0 PaletteEditor()
 					LFBFlush;
 					break;
 				case 'R':	
-					gr_palette[selected_color] = PaletteGod(FALSE, TRUE);
+					gr_palette[selected_color] = PaletteGod(FALSE, TRUE);
 					LFBFlush;
 					break;
 				case CH_CTRLI:
