@@ -44,6 +44,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		i, k, j,// l,
 		pos, col,
 		bias;
+    I64 rectSize = size / 16;  // Size of each color rectangle
 	CBGR24 tempColor;
 
 	///////////////////////
@@ -53,20 +54,8 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 	// current color box preview
 	dc->color = BLACK;
 	GrPrint(dc, 10, 10, "Preview:");
+	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
 
-	// pixel loop for current color preview
-	for (i = 0; i <= 12; i++)
-		for (j = 0; j <= 12; j++)
-		{
-			tempColor = gr_palette[selected_color];
-			if (i < border || i > 12 - border || j < border || j > 12 - border)
-				tempColor = 0x000000;
-			// draw color preview
-			dc->color = tempColor;
-		    GrPlot(dc, c->win_task->pix_left + 78 + i, t + 7 + j);
-			// DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
-		}
-	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
 	if (selected_color == 15)
 		dc->color = LTGRAY;	
 	else if (gr_palette[selected_color] > 0xCCCCCC)
@@ -76,6 +65,9 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 	GrRect(dc, 94, 8, 58, 12);
 
 	dc->color = selected_color;
+	// Color preview next to #hex
+	GrRect(dc, 78, 8, 12, 12);
+	// #Hex value
 	GrPrint(dc, 95, 10, "#%x%x%x",	gr_palette[selected_color].r,
 									gr_palette[selected_color].g,
 									gr_palette[selected_color].b);
@@ -155,25 +147,6 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 
 	for (i = 0; i < COLORS_NUM; i++)
 	{
-		for (j = 0; j <= size; j++)
-		{
-			for (k = 0; k <= size; k++)
-			{
-				tempColor = gr_palette[i];
-				// black borders
-				if (k < border || k > size - border || j < border || j > size - border - 1)
-				{
-					if (selected_color == i)
-						tempColor = 0xFFFFFF;
-					else
-						tempColor = 0x000000;
-				}
-				// draw color preview
-				dc->color = tempColor;
-				GrPlot(dc, c->win_task->pix_left + j + (size * i), c->win_task->pix_bottom - size * 1.5 + k);			
-				// DrawPixel(c->win_task->pix_left + j + (size * i), c->win_task->pix_bottom - size * 1.5 + k, tempColor);
-			}
-		}
 		// color label and text preview
 		// TODO: THIS LOGIC DOESNT WORK ON LIGHT THEMES		
 		// if color too light or too dark add bg
@@ -188,6 +161,11 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 			dc->color = LTRED;*/
 		else
 			dc->color = 15;
+
+		// Border for preview box
+		GrRect(dc, (size * i)-1, c->win_task->pix_height - (size*1.5)-1, size+2, size+2);
+
+	
 		if (i == selected_color)
 			dc->color = 0;
 		GrRect(dc, 6, (size2 * 2) + 65 + 16 * i, 80, 18);
@@ -195,7 +173,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		
 		GrRect(dc, 6, (size2 * 2) + 65 + 16 * i, 80, 18);
 	
-	
+			
 		if (i == selected_color)
 			dc->color = 15;
 		else
@@ -205,6 +183,9 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 			bias = (size / 2) - 8;
 		GrPrint(dc, bias + (i * size), c->win_task->pix_height - (size * .6) + (size / 4), "%d", i);
 		GrPrint(dc, 10, (size2 * 2) + 70 + 16 * i, "#%d: Test", i);
+
+		// preview box
+		GrRect(dc, (size * i), c->win_task->pix_height - (size*1.5), size, size);
 	}
 
 
