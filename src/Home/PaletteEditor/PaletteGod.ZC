@@ -14,7 +14,7 @@ public U0 PaletteGod(Bool seedUse=TRUE, Bool instant=TRUE)
 	if (seedUse)
 		Seed(GodPick);
  	for (i=0; i < 16; i++)
- 		gr_palette[i] = ColorGod(instant);
+ 		gr_palette[i] = ColorGod(instant);
 	LFBFlush;
 }
 
