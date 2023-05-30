@@ -1,6 +1,6 @@
 CBGR24 ColorGod(Bool instant=TRUE)
 {
- 	// Generate a random color, seed-based or not
+ 	// Generate a random color
  	if (instant)
  		return RandI32 & 0xFFFFFF;
  	else
