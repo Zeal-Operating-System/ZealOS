@@ -38,14 +38,12 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 
 	CSliderState *s = c->state;
 	I64	size = (c->win_task->pix_width / 16),
-		border = size / 16,
+//		border = size / 16,
 		size2 = (c->win_task->pix_height / 32),
 //		slider_amount = 3,
-		i, k, j,// l,
+		i,
 		pos, col,
 		bias;
-    I64 rectSize = size / 16;  // Size of each color rectangle
-	CBGR24 tempColor;
 
 	///////////////////////
 	// CURRENT SELECTION //
@@ -54,7 +52,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 	// current color box preview
 	dc->color = BLACK;
 	GrPrint(dc, 10, 10, "Preview:");
-	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
+	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
 
 	if (selected_color == 15)
 		dc->color = LTGRAY;	
@@ -427,6 +425,14 @@ public U0 PaletteEditor()
 				case CH_CTRLO:
 					current_palette = "";
 					current_palette = PaletteSelect;
+					break;
+				case 'r':
+					gr_palette[selected_color] = ColorGod(FALSE, TRUE);
+					LFBFlush;
+					break;
+				case 'R':	
+					gr_palette[selected_color] = PaletteGod(FALSE, TRUE);
+					LFBFlush;
 					break;
 				case CH_CTRLI:
 					PopUpOk("\n\n  Use the arrows to select color\n\n  # to manually input hex value","\n\n\n\t\tMade by y4my4m\n\n");

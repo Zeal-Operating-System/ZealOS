@@ -1,25 +1,40 @@
 public U0 PaletteGod(Bool seedUse=TRUE, Bool instant=TRUE)
 {
-	// Instantly generate a random palette, seed-based or not
+ 	// Instantly generate a random palette, seed-based or not
 	I64		i;
-	CBGR24	palette;
-	I32		color;
+ 	CBGR24	color;
 
-	if (seedUse)
-		Seed(GodPick);
-	for (i=0; i < 16; i++)
-	{
-		if (instant || seedUse)
-		{
-			color = RandI32;
-			palette = color & 0xFFFFFF;
-		}
-		else {
-			palette = GodPick & 0xFFFFFF;
-		}
-		gr_palette[i] = palette;
-		LFBFlush;
-	}
+ 	if (seedUse)
+ 		Seed(GodPick);
+ 	for (i=0; i < 16; i++)
+ 	{
+ 		if (instant || seedUse)
+ 		{
+ 			color = RandI32 & 0xFFFFFF;
+ 		}
+ 		else {
+ 			color = GodPick & 0xFFFFFF;
+ 		}
+ 		gr_palette[i] = color;
+ 		LFBFlush;
+ 	}
 }
 
-PaletteGod;
+CBGR24 ColorGod(Bool seedUse=TRUE, Bool instant=TRUE)
+{
+ 	// Instantly generate a random color, seed-based or not
+
+ 	if (seedUse)
+ 		Seed(GodPick);
+ 	if (instant || seedUse)
+ 	{
+ 		return RandI32 & 0xFFFFFF;
+ 	}
+ 	else {
+ 		return GodPick & 0xFFFFFF;
+ 	}
+
+}
+
+
+// PaletteGod;
