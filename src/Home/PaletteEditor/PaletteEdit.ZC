@@ -38,9 +38,7 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 
 	CSliderState *s = c->state;
 	I64	size = (c->win_task->pix_width / 16),
-//		border = size / 16,
 		size2 = (c->win_task->pix_height / 32),
-//		slider_amount = 3,
 		i,
 		pos, col,
 		bias;
@@ -62,10 +60,9 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		dc->color = 15;
 	GrRect(dc, 94, 8, 58, 12);
 
-	dc->color = selected_color;
-	// Color preview next to #hex
-	GrRect(dc, 78, 8, 12, 12);
 	// #Hex value
+	dc->color = selected_color;
+	GrRect(dc, 78, 8, 12, 12);
 	GrPrint(dc, 95, 10, "#%x%x%x",	gr_palette[selected_color].r,
 									gr_palette[selected_color].g,
 									gr_palette[selected_color].b);
@@ -184,9 +181,6 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 		// preview box
 		dc->color = i;
 		GrRect(dc, (size * i), c->win_task->pix_height - (size*1.5), size, size);
-
-
-
 	}
 
 
