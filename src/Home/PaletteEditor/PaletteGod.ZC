@@ -1,5 +1,5 @@
 CBGR24 ColorGod(Bool instant=TRUE)
-{	// Generate a random color, seed-based or not
+{// Generate a random color, seed-based or not
  	if (instant)
  		return RandI32 & 0xFFFFFF;
  	else
@@ -7,7 +7,7 @@ CBGR24 ColorGod(Bool instant=TRUE)
 }
 
 public U0 PaletteGod(Bool seedUse=FALSE, Bool instant=TRUE)
-{	// Generate a random palette, seed-based or not
+{// Generate a random palette, seed-based or not
 	I64		i;
 
 	if (seedUse) Seed(GodPick);
