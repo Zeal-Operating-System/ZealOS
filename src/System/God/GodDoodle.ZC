@@ -30,10 +30,10 @@ U0 GodDoodleSmooth(I64 num)
     for (x=0;x<god.doodle_dc->width;x++) {
       MemSet(histogram,0,sizeof(histogram));
       for (y1=y-num;y1<=y+num;y1++)
-	for (x1=x-num;x1<=x+num;x1++) {
-	  c=GrPeek(dc,x1,y1);
-	  if (0<=c<=15)
-	    histogram[c]++;
+	    for (x1=x-num;x1<=x+num;x1++) {
+	      c=GrPeek(dc,x1,y1);
+	      if (0<=c<=15)
+	        histogram[c]++;
 	}
       best=BLACK;
       best_cnt=-1;
@@ -65,7 +65,7 @@ U0 GodDoodleHexIns(U8 *st)
     buf[1]=0;
     while (*buf=*st++)
       if (Bt(char_bmp_hex_numeric,*buf))
-	GodDoodleBitsIns(4,rev_bits_table[Str2I64(buf,16)]>>4);
+	    GodDoodleBitsIns(4,rev_bits_table[Str2I64(buf,16)]>>4);
   }
 }
 
@@ -80,14 +80,14 @@ I64 GodDoodleBits(I64 num_bits)
     } else {
       god.doodle_ch=CharGet(,FALSE);
       if (god.doodle_ch==CH_ESC||god.doodle_ch==CH_SHIFT_ESC)
-	throw;
+	     throw;
       else if (god.doodle_ch=='\n') {
-	DCFill(god.doodle_dc,WHITE);
-	FifoU8Flush(god.doodle_fifo);
+	    DCFill(god.doodle_dc,WHITE);
+	    FifoU8Flush(god.doodle_fifo);
       } else if ('0'<=god.doodle_ch<='9')
-	GodDoodleSmooth(god.doodle_ch-'0');
+	    GodDoodleSmooth(god.doodle_ch-'0');
       else
-	GodDoodleBitsIns(GOD_GOOD_BITS,KbdMouseEventTime>>GOD_BAD_BITS);
+	    GodDoodleBitsIns(GOD_GOOD_BITS,KbdMouseEventTime>>GOD_BAD_BITS);
     }
   }
   return res;
