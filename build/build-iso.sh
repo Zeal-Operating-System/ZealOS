@@ -64,7 +64,7 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 $QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
-LIMINE_BINARY_BRANCH="v4.x-branch-binary"
+LIMINE_BINARY_BRANCH="v5.x-branch-binary"
 
 if [ -d "limine" ]
 then
@@ -74,8 +74,7 @@ then
 	git remote set-head origin $LIMINE_BINARY_BRANCH
 	git switch $LIMINE_BINARY_BRANCH
 	git pull
-	rm limine-deploy
-	rm limine-version
+	rm limine
 
 	cd ..
 fi
@@ -84,13 +83,13 @@ if [ ! -d "limine" ]; then
 fi
 make -C limine
 
-touch limine/Limine-HDD.HH
-echo "/*\$WW,1\$" > limine/Limine-HDD.HH
-cat limine/LICENSE.md >> limine/Limine-HDD.HH
-echo "*/\$WW,0\$" >> limine/Limine-HDD.HH
-cat limine/limine-hdd.h >> limine/Limine-HDD.HH
-sed -i 's/const uint8_t/U8/g' limine/Limine-HDD.HH
-sed -i "s/\[\]/\[$(grep -o "0x" ./limine/limine-hdd.h | wc -l)\]/g" limine/Limine-HDD.HH
+touch limine/Limine-BIOS-HDD.HH
+echo "/*\$WW,1\$" > limine/Limine-BIOS-HDD.HH
+cat limine/LICENSE >> limine/Limine-BIOS-HDD.HH
+echo "*/\$WW,0\$" >> limine/Limine-BIOS-HDD.HH
+cat limine/limine-bios-hdd.h >> limine/Limine-BIOS-HDD.HH
+sed -i 's/const uint8_t/U8/g' limine/Limine-BIOS-HDD.HH
+sed -i "s/\[\]/\[$(grep -o "0x" ./limine/limine-bios-hdd.h | wc -l)\]/g" limine/Limine-BIOS-HDD.HH
 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
@@ -101,11 +100,11 @@ sudo cp -rf $TMPMOUNT/* $TMPISODIR
 sudo rm $TMPISODIR/Boot/OldMBR.BIN 2> /dev/null
 sudo rm $TMPISODIR/Boot/BootMHD2.BIN 2> /dev/null
 sudo mkdir -p $TMPISODIR/EFI/BOOT
-sudo cp limine/Limine-HDD.HH $TMPISODIR/Boot/Limine-HDD.HH
+sudo cp limine/Limine-BIOS-HDD.HH $TMPISODIR/Boot/Limine-BIOS-HDD.HH
 sudo cp limine/BOOTX64.EFI $TMPISODIR/EFI/BOOT/BOOTX64.EFI
-sudo cp limine/limine-cd-efi.bin $TMPISODIR/Boot/Limine-CD-EFI.BIN
-sudo cp limine/limine-cd.bin $TMPISODIR/Boot/Limine-CD.BIN
-sudo cp limine/limine.sys $TMPISODIR/Boot/Limine.SYS
+sudo cp limine/limine-uefi-cd.bin $TMPISODIR/Boot/Limine-UEFI-CD.BIN
+sudo cp limine/limine-bios-cd.bin $TMPISODIR/Boot/Limine-BIOS-CD.BIN
+sudo cp limine/limine-bios.sys $TMPISODIR/Boot/Limine-BIOS.SYS
 sudo cp ../zealbooter/zealbooter.elf $TMPISODIR/Boot/ZealBooter.ELF
 sudo cp ../zealbooter/Limine.CFG $TMPISODIR/Boot/Limine.CFG
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
@@ -113,13 +112,13 @@ sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
 sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
 umount_tempdisk
 
-xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-CD.BIN \
+xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-BIOS-CD.BIN \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
-        --efi-boot Boot/Limine-CD-EFI.BIN \
+        --efi-boot Boot/Limine-UEFI-CD.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
         $TMPISODIR -o ZealOS-limine.iso
 
-./limine/limine-deploy ZealOS-limine.iso
+./limine/limine bios-install ZealOS-limine.iso
 
 if [ "$TESTING" = true ]; then
 	if [ ! -d "ovmf" ]; then

@@ -1,5 +1,5 @@
 
-#define LIMINE_HDD_FILE			"/Boot/Limine-HDD.HH"
+#define LIMINE_HDD_FILE			"/Boot/Limine-BIOS-HDD.HH"
 #define LIMINE_HDD_INSTALLER	"/System/Boot/LimineMHDIns.ZC"
 #include LIMINE_HDD_FILE
 #include LIMINE_HDD_INSTALLER
@@ -127,8 +127,8 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 
 	CopyTree("B:/", dst);
 
-	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", dst_drv);
-	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine-BIOS-CD.BIN\");", dst_drv);
+	ExePrint("Del(\"%C:/Boot/Limine-UEFI-CD.BIN\");", dst_drv);
 	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", dst_drv);
 	ExePrint("Del(\"%C:/boot.catalog\");", dst_drv);
 
@@ -245,8 +245,8 @@ U0 InstallDrive(U8 drv_let)
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
 
-	ExePrint("Del(\"%C:/Boot/Limine-CD.BIN\");", drv_let);
-	ExePrint("Del(\"%C:/Boot/Limine-CD-EFI.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine-BIOS-CD.BIN\");", drv_let);
+	ExePrint("Del(\"%C:/Boot/Limine-UEFI-CD.BIN\");", drv_let);
 	ExePrint("Del(\"%C:/Boot/Limine.CFG\");", drv_let);
 	ExePrint("Del(\"%C:/boot.catalog\");", drv_let);
 

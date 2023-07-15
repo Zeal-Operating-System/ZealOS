@@ -45,8 +45,8 @@ SECTIONS
     /* If you need, for example, .init_array and .fini_array, those should be placed */
     /* above this. */
     .bss : {
-        *(COMMON)
         *(.bss .bss.*)
+        *(COMMON)
     } :data
 
     /* Discard .note.* and .eh_frame since they may cause issues on some hosts. */
