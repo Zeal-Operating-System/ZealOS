@@ -1,5 +1,5 @@
 I64 Str2I64(U8 *st, I64 radix=10, U8 **_end_ptr=NULL)
-{//String to I64. Similar to strtoul().
+{//String to I64. Similar to strtol().
 //Allows radix change with "0x20" "0b1010" "0d123" "0o18".
 	//Be careful of Str2I64("0b101", 16)-->0xB101.
 	Bool neg = FALSE;
@@ -32,6 +32,7 @@ I64 Str2I64(U8 *st, I64 radix=10, U8 **_end_ptr=NULL)
 					switch (ch)
 					{
 						case 'B': radix = 2;  st++; break;
+						case 'O': radix = 8;  st++; break;
 						case 'D': radix = 10; st++; break;
 						case 'X': radix = 16; st++; break;
 					}
@@ -86,13 +87,13 @@ to avoid this.
 	}
 	if (!StrNCompare(src - 1, "inf", 3))
 	{
-		d=ì;
+		d=Ã¬;
 		src += 3;
 		goto a2f_end;
 	}
-	if (*src == 'ì')
+	if (*src == 'Ã¬')
 	{
-		d = ì;
+		d = Ã¬;
 		src++;
 		goto a2f_end;
 	}
