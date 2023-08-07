@@ -87,13 +87,13 @@ to avoid this.
 	}
 	if (!StrNCompare(src - 1, "inf", 3))
 	{
-		d=Ã¬;
+		d=ì;
 		src += 3;
 		goto a2f_end;
 	}
-	if (*src == 'Ã¬')
+	if (*src == 'ì')
 	{
-		d = Ã¬;
+		d = ì;
 		src++;
 		goto a2f_end;
 	}
