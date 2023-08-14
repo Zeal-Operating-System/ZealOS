@@ -1,77 +1,22 @@
-#define SERVER_ADDR "mymiddleware.server.com"
+#define SERVER_ADDR "skynet.middleware.com"
 #define SERVER_PORT 9000
+#define INITIAL_BUF_SIZE 8192
 
-U8* ExtractGPTCompletion(U8 *response) {
-    U8 *start = StrFind("\"text\": \"", response);
-    if (!start) {
-        return NULL;  // Pattern not found
+class Message {
+    U8 role[10]; // "user" or "assistant"
+    U8 content[1048];
+} history[100];
+I64 currentHistoryCount = 0;
+
+U0 AppendToHistory(U8 *role, U8 *content) {
+    if (currentHistoryCount < 100) {
+        StrCopy(history[currentHistoryCount].role, role);
+        StrCopy(history[currentHistoryCount].content, content);
+        currentHistoryCount++;
     }
-
-    start += 10;  // Move pointer after '"text": "'
-
-    U8 *end = StrFind("\",", start);  // Find the closing double quote
-    if (!end) {
-        return NULL;
-    }
-
-    *end = 0;  // Null terminate the completion string
-
-    return start;
 }
 
-public I64 Skynet(U8 *prompt)
-{
-    U8 responseBuf[8192];
-    I64 sock;
-
-    sock = TCPConnectionCreate(SERVER_ADDR, SERVER_PORT);
-    if (sock <= 0) 
-    {
-        PrintErr("Failed to connect to middleware server");
-        return sock;
-    }
-
-    U8 *payload = StrPrint(NULL, "{\"model\": \"text-davinci-003\",\"prompt\": \"%s\",\"max_tokens\": 100,\"temperature\": 1}", prompt);
-    U8 *requestHeader = StrPrint(NULL, 
-        "POST /gpt3 HTTP/1.1\r\n"
-        "Host: %s:%d\r\n"
-        "User-Agent: ZealOSClient/1.0\r\n"
-        "Accept: */*\r\n"
-        "Content-Type: application/json\r\n"
-        "Content-Length: %d\r\n"
-        "\r\n", 
-        SERVER_ADDR,
-        SERVER_PORT,
-        StrLen(payload)
-    );
-    U8 *fullRequest = StrPrint(NULL, "%s%s\n\n", requestHeader, payload);
-
-    TCPSocketSendString(sock, fullRequest);
-    Free(requestHeader);
-    Free(payload);
-    Free(fullRequest);
-
-
-    I64 responseLength = TCPSocketReceive(sock, responseBuf, sizeof(responseBuf) - 1); // -1 to ensure space for null terminator
-
-    responseBuf[responseLength] = 0;  // Null-terminate the response
-    
-    // Assuming the headers and payload are separated by two newline sequences (standard HTTP)
-    U8 *jsonPayload = StrFind("\r\n\r\n", responseBuf);
-    if (!jsonPayload) {
-        TCPSocketClose(sock);
-        return -1;  // or some error code
-    }
-    jsonPayload += 4;  // Move past the header separator
-
-    U8 *completion = ExtractGPTCompletion(jsonPayload);
-    Print("$$RED$$Skynet: $$YELLOW$$%s$$FG$$\n", completion);
-
-    TCPSocketClose(sock);
-    return 0;
-}
-
-U8* ExtractGPT4Completion(U8 *response) 
+U8* ParseCompletion(U8 *response) 
 {
     U8 *start = StrFind("\"content\": \"", response);
     if (!start) 
@@ -92,11 +37,10 @@ U8* ExtractGPT4Completion(U8 *response)
     return start;
 }
 
-
-public I64 Skynet4(U8 *message, U8 *model="gpt-3.5-turbo") // gpt-3.5-turbo || gpt-4
+I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
 {
-    U8 responseBuf[8192];
-    I64 sock;
+    I64 sock, index, bufferSize = INITIAL_BUF_SIZE;
+    U8 *responseBuf = MAlloc(bufferSize);  // Dynamic allocation of the buffer
 
     sock = TCPConnectionCreate(SERVER_ADDR, SERVER_PORT);
     if (sock <= 0) 
@@ -105,23 +49,22 @@ public I64 Skynet4(U8 *message, U8 *model="gpt-3.5-turbo") // gpt-3.5-turbo || g
         return sock;
     }
 
-    U8 *payload = StrPrint(NULL, 
-        "{"
-        "\"model\": \"%s\","
-        "\"messages\": ["
-        "{"
-        "\"role\": \"system\","
-        "\"content\": \"You are a helpful assistant.\""
-        "},"
-        "{"
-        "\"role\": \"user\","
-        "\"content\": \"%s\""
-        "}"
-        "]"
-        "}",
-        model,
-        message
-    );
+    U8 *messages = StrPrint(NULL, "{\"role\": \"system\",\"content\": \"You are an NPC in a videogame, you roleplay as skynet from Terminator.\"},");
+    
+    for (index = 0; index < currentHistoryCount; index++) {
+        U8 *msg = StrPrint(NULL, "{\"role\": \"%s\",\"content\": \"%s\"},", history[index].role, history[index].content);
+        messages = CatPrint(messages, msg);
+        // Free(msg);
+    }
+
+    U8 *currentUserMsg = StrPrint(NULL, "{\"role\": \"user\",\"content\": \"%s\"}", message);
+    messages = CatPrint(messages, currentUserMsg);
+    // Free(currentUserMsg);
+
+    U8 *payload = StrPrint(NULL, "{\"model\": \"%s\",\"messages\": [%s]}", model, messages);
+    // Free(messages);
+
+    // SysLog(payload);
 
     U8 *requestHeader = StrPrint(NULL, 
         "POST /chat HTTP/1.1\r\n"
@@ -137,29 +80,70 @@ public I64 Skynet4(U8 *message, U8 *model="gpt-3.5-turbo") // gpt-3.5-turbo || g
     );
 
     U8 *fullRequest = StrPrint(NULL, "%s%s", requestHeader, payload);
-
     TCPSocketSendString(sock, fullRequest);
-    Free(requestHeader);
-    Free(payload);
-    Free(fullRequest);
 
-    I64 responseLength = TCPSocketReceive(sock, responseBuf, sizeof(responseBuf) - 1);
-    responseBuf[responseLength] = 0;
+    // Free(requestHeader);
+    // Free(payload);
+    // Free(fullRequest);
 
-    // "HTTP Response:\r\n";
-    // "%s",responseBuf;
-    // "\r\nPARSED:\r\n";
+    I64 responseLength = TCPSocketReceive(sock, responseBuf, bufferSize - 1);
+    responseBuf[responseLength] = 0;  // Null-terminate the buffer for safety
+
+    if (responseLength == sizeof(responseBuf) - 1) {
+        PrintErr("Warning: responseBuf might be full. Some data could be truncated.");
+    }
+    // Check if buffer might be full
+    while (responseLength == bufferSize - 1) 
+    {
+        // Double the buffer size and reallocate
+        bufferSize *= 2;
+        Free(responseBuf);
+        responseBuf = MAlloc(bufferSize);
+
+        // Continue receiving data from where you left off
+        responseLength += TCPSocketReceive(sock, responseBuf + responseLength, bufferSize - responseLength - 1);
+        responseBuf[responseLength] = 0;
+    }
+    
+    // SysLog(responseBuf);
 
     U8 *jsonPayload = StrFind("\r\n\r\n", responseBuf);
     if (!jsonPayload) {
+        PrintErr("Warning: bad Json payload.");
         TCPSocketClose(sock);
         return -1;
     }
     jsonPayload += 4;
 
-    U8 *completion = ExtractGPT4Completion(jsonPayload);
-    Print("$$RED$$Skynet: $$YELLOW$$%s$$FG$$\n", completion);
+    U8 *completion = ParseCompletion(jsonPayload);
+
+    "\n$$RED$$ Skynet: $$YELLOW$$%s$$FG$$\n", completion;
+
+    AppendToHistory("user", message);
+    AppendToHistory("assistant", completion);
 
     TCPSocketClose(sock);
+    Free(responseBuf);
     return 0;
 }
+
+public U0 ChatUI() {
+  U8 *userInput;
+  DocClear;
+
+  try{
+    "\t\t\t\t\t\t\t$$LTRED$$Welcome to Skynet$$FG$$\n";
+
+    while(1) {
+        "\n$$LTBLUE$$ You: $$GREEN$$";
+
+        LBts(&Fs->task_flags, TASKf_CMD_LINE_PROMPT);
+        userInput = StrGet(,, SGF_SHIFT_ESC_EXIT);
+        LBtr(&Fs->task_flags, TASKf_CMD_LINE_PROMPT);
+        Skynet(userInput);
+    }
+  }
+  catch
+    PutExcept;
+}
+ChatUI;
