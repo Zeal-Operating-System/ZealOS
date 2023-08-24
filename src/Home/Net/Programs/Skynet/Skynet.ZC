@@ -1,11 +1,11 @@
 #define SERVER_ADDR "skynet.middleware.com"
 #define SERVER_PORT 9000
-#define INITIAL_BUF_SIZE 8192
+#define INITIAL_BUF_SIZE 2048
 #define DEFAULT_SYSTEMPROMPT "You are a helpful assistant but roleplay as skynet from Terminator."
 #include "::/Home/Net/Utilities/JSON/JSON"
 class Message {
     U8 role[10]; // "user" or "assistant"
-    U8 content[1048];
+    U8 content[1024];
 } history[100];
 I64 currentHistoryCount = 0;
 
@@ -17,26 +17,6 @@ U0 AppendToHistory(U8 *role, U8 *content) {
     }
 }
 
-U8* ParseCompletion(U8 *response) 
-{
-    U8 *start = StrFind("\"content\": \"", response);
-    if (!start) 
-    {
-        return NULL;  // Pattern not found
-    }
-
-    start += 12;  // Move pointer after '"content": "'
-
-    U8 *end = StrFind("\"", start);  // Find the closing double quote
-    if (!end) 
-    {
-        return NULL;
-    }
-
-    *end = 0;  // Null terminate the completion string
-
-    return start;
-}
 U8 *StrChr(U8 *Str,U8 Pivot)
 {
   //U8 *Orig=Str;
@@ -70,15 +50,15 @@ I64 Skynet(U8 *message, U8 *system, U8 *model)
     for (index = 0; index < currentHistoryCount; index++) {
         U8 *msg = StrPrint(NULL, "{\"role\": \"%s\",\"content\": \"%s\"},", history[index].role, history[index].content);
         messages = CatPrint(messages, msg);
-        // Free(msg);
+        Free(msg);
     }
 
     U8 *currentUserMsg = StrPrint(NULL, "{\"role\": \"user\",\"content\": \"%s\"}", message);
     messages = CatPrint(messages, currentUserMsg);
-    // Free(currentUserMsg);
+    Free(currentUserMsg);
 
     U8 *payload = StrPrint(NULL, "{\"model\": \"%s\",\"messages\": [%s]}", model, messages);
-    // Free(messages);
+    Free(messages);
 
     //SysLog(payload);
 
@@ -98,9 +78,9 @@ I64 Skynet(U8 *message, U8 *system, U8 *model)
     U8 *fullRequest = StrPrint(NULL, "%s%s", requestHeader, payload);
     TCPSocketSendString(sock, fullRequest);
 
-    // Free(requestHeader);
-    // Free(payload);
-    // Free(fullRequest);
+    Free(requestHeader);
+    Free(payload);
+    Free(fullRequest);
 
     I64 responseLength = TCPSocketReceive(sock, responseBuf, bufferSize - 1);
     responseBuf[responseLength] = 0;  // Null-terminate the buffer for safety
@@ -120,19 +100,7 @@ I64 Skynet(U8 *message, U8 *system, U8 *model)
         responseLength += TCPSocketReceive(sock, responseBuf + responseLength, bufferSize - responseLength - 1);
         responseBuf[responseLength] = 0;
     }
-    
     //SysLog(responseBuf);
-
-    //U8 *jsonPayload = StrFind("\r\n\r\n", responseBuf);
-    //if (!jsonPayload) {
-    //    PrintErr("Warning: bad Json payload.");
-    //    TCPSocketClose(sock);
-    //    return -1;
-    //}
-    //jsonPayload += 4;
-
-    // U8 *completion = ParseCompletion(jsonPayload);
-    // U8 *completion = JSONKeyValueGet(RemoveBeforeJSON(responseBuf), "content");
 
     CCompCtrl *cc = CompCtrlNew(MStrPrint("%s", RemoveBeforeJSON(responseBuf)));
     CJSONDataEntry *jsonData = JSONParse(cc);
@@ -166,7 +134,7 @@ I64 Skynet(U8 *message, U8 *system, U8 *model)
     }
 
     U8 *completion = contentEntry->string_data;
-    SysLog(completion);
+    //SysLog(completion);
     CompCtrlDel(cc);
 
     "\n$$RED$$ Skynet: $$YELLOW$$%s$$FG$$\n", completion;
