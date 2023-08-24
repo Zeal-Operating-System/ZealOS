@@ -95,7 +95,7 @@ else
 		vm)
 			mount_vdisk
 			echo "Copying src to vdisk..."
-			sudo cp -r ../src/* $TMPMOUNT
+			sudo rsync -av --exclude='.*' ../src/ $TMPMOUNT/
 			umount_vdisk
 			echo "Finished."
 			;;
