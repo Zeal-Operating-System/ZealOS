@@ -38,12 +38,9 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 
 	CSliderState *s = c->state;
 	I64	size = (c->win_task->pix_width / 16),
-		border = size / 16,
 		size2 = (c->win_task->pix_height / 32),
-//		slider_amount = 3,
-		i, k, j,// l,
 		pos, col,
-		bias;
+		i, bias;
 	CBGR24 tempColor;
 
 	///////////////////////
@@ -55,14 +52,18 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 	GrPrint(dc, 10, 10, "Preview:");
 
 	// pixel loop for current color preview
-	for (i = 0; i <= 12; i++)
-		for (j = 0; j <= 12; j++)
-		{
-			tempColor = gr_palette[selected_color];
-			if (i < border || i > 12 - border || j < border || j > 12 - border)
-				tempColor = 0x000000;
-			DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
-		}
+	// for (i = 0; i <= 12; i++)
+	// 	for (j = 0; j <= 12; j++)
+	// 	{
+	// 		tempColor = gr_palette[selected_color];
+	// 		if (i < border || i > 12 - border || j < border || j > 12 - border)
+	// 			tempColor = 0x000000;
+	// 		// DrawPixel(c->win_task->pix_left + 78 + i, t + 7 + j, tempColor);
+	// 	}
+  tempColor = gr_palette[selected_color];
+  dc->color = tempColor;
+  GrRect(dc, c->win_task->pix_left + 78 , t + 7,c->win_task->pix_left + 78 + 12, t + 7 +12);
+
 	GrPrint(dc, 10, 26, "Current Color: #%d", selected_color);
 	if (selected_color == 15)
 		dc->color = LTGRAY;	
@@ -152,23 +153,28 @@ U0 DrawCtrlSlider(CDC *dc, CCtrl *c)
 
 	for (i = 0; i < COLORS_NUM; i++)
 	{
-		for (j = 0; j <= size; j++)
-		{
-			for (k = 0; k <= size; k++)
-			{
-				tempColor = gr_palette[i];
-				// black borders
-				if (k < border || k > size - border || j < border || j > size - border - 1)
-				{
-					if (selected_color == i)
-						tempColor = 0xFFFFFF;
-					else
-						tempColor = 0x000000;
-				}
-				// color preview
-				DrawPixel(c->win_task->pix_left + j + (size * i), c->win_task->pix_bottom - size * 1.5 + k, tempColor);
-			}
-		}
+		// for (j = 0; j <= size; j++)
+		// {
+		// 	for (k = 0; k <= size; k++)
+		// 	{
+		// 		tempColor = gr_palette[i];
+		// 		// black borders
+		// 		if (k < border || k > size - border || j < border || j > size - border - 1)
+		// 		{
+		// 			if (selected_color == i)
+		// 				tempColor = 0xFFFFFF;
+		// 			else
+		// 				tempColor = 0x000000;
+		// 		}
+		// 		// color preview
+		// 		DrawPixel(c->win_task->pix_left + j + (size * i), c->win_task->pix_bottom - size * 1.5 + k, tempColor);
+		// 	}
+		// }
+
+    tempColor = gr_palette[i];
+    dc->color = tempColor;
+    GrRect(dc, c->win_task->pix_left + i, c->win_task->pix_bottom - size * 1.5, c->win_task->pix_left + (size * i), c->win_task->pix_bottom - size * 1.5);
+
 		// color label and text preview
 		// TODO: THIS LOGIC DOESNT WORK ON LIGHT THEMES		
 		// if color too light or too dark add bg
