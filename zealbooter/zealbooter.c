@@ -21,7 +21,7 @@ static volatile struct limine_memmap_request memmap_request = {
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 1
+    .revision = 0
 };
 
 static volatile struct limine_smbios_request smbios_request = {
