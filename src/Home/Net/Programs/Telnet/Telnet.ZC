@@ -44,6 +44,18 @@ I64 TelnetOpen(U8 *host, U16 port) {
   return sock;
 }
 
+U0 TermBottom()
+{
+	Bool unlock;
+	CDoc *doc = term.doc;
+
+	unlock = DocLock(doc);
+	doc->cur_entry = doc;
+	doc->cur_col = 0;
+	if (unlock)
+		DocUnlock(doc);
+}
+
 U0 HandleControlCodes(U8 ch) {
   if (ch < 32) { // ASCII code below 32 (control character)
     switch (ch) {
@@ -772,6 +784,7 @@ show_splash:
     term.buffer[term.buffer_len] = '\0';
     // parse the buffer
     ANSIParse;
+    TermBottom;
     // Free(term.buffer);
   }
   else {
@@ -962,11 +975,16 @@ init_connection:
 
 // dev server
 // Telnet("localhost", 8888);
+
+// ZealOS's official BBS zealos
+// Telnet("bbs.zealos.net", 4001);
+
 Telnet;
 
 
 /*
 TODO:
+- make all keys send their respective signals (like Ctrl+Key, etc)
 - refactor ANSIParser's TCPSocketSends to send everything to a "TelnetSend" function
 - TelnetSend will handle whether there's a connection or not
 - This will make easier to transform this software into an ANSI viewer / Telnet client/ general purpose Term.
