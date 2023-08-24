@@ -1,7 +1,8 @@
 #define SERVER_ADDR "skynet.middleware.com"
 #define SERVER_PORT 9000
 #define INITIAL_BUF_SIZE 8192
-
+#define DEFAULT_SYSTEMPROMPT "You are a helpful assistant but roleplay as skynet from Terminator."
+#include "::/Home/Net/Utilities/JSON/JSON"
 class Message {
     U8 role[10]; // "user" or "assistant"
     U8 content[1048];
@@ -36,8 +37,23 @@ U8* ParseCompletion(U8 *response)
 
     return start;
 }
+U8 *StrChr(U8 *Str,U8 Pivot)
+{
+  //U8 *Orig=Str;
+  while (*Str!=Pivot&&*Str!=0)Str++;
+  if (*Str==Pivot) return Str;
+  else return 0;
+}
+U8* RemoveBeforeJSON(U8 *input) {
+    U8 *jsonStart = StrChr(input, '{');
 
-I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
+    if (jsonStart != NULL) {
+        return jsonStart;
+    }
+    return NULL;  // No JSON detected
+}
+
+I64 Skynet(U8 *message, U8 *system, U8 *model)
 {
     I64 sock, index, bufferSize = INITIAL_BUF_SIZE;
     U8 *responseBuf = MAlloc(bufferSize);  // Dynamic allocation of the buffer
@@ -49,7 +65,7 @@ I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
         return sock;
     }
 
-    U8 *messages = StrPrint(NULL, "{\"role\": \"system\",\"content\": \"You are an NPC in a videogame, you roleplay as skynet from Terminator.\"},");
+    U8 *messages = StrPrint(NULL, "{\"role\": \"system\",\"content\": \"%s\"},", system);
     
     for (index = 0; index < currentHistoryCount; index++) {
         U8 *msg = StrPrint(NULL, "{\"role\": \"%s\",\"content\": \"%s\"},", history[index].role, history[index].content);
@@ -64,7 +80,7 @@ I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
     U8 *payload = StrPrint(NULL, "{\"model\": \"%s\",\"messages\": [%s]}", model, messages);
     // Free(messages);
 
-    // SysLog(payload);
+    //SysLog(payload);
 
     U8 *requestHeader = StrPrint(NULL, 
         "POST /chat HTTP/1.1\r\n"
@@ -105,17 +121,53 @@ I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
         responseBuf[responseLength] = 0;
     }
     
-    // SysLog(responseBuf);
+    //SysLog(responseBuf);
 
-    U8 *jsonPayload = StrFind("\r\n\r\n", responseBuf);
-    if (!jsonPayload) {
-        PrintErr("Warning: bad Json payload.");
-        TCPSocketClose(sock);
-        return -1;
+    //U8 *jsonPayload = StrFind("\r\n\r\n", responseBuf);
+    //if (!jsonPayload) {
+    //    PrintErr("Warning: bad Json payload.");
+    //    TCPSocketClose(sock);
+    //    return -1;
+    //}
+    //jsonPayload += 4;
+
+    // U8 *completion = ParseCompletion(jsonPayload);
+    // U8 *completion = JSONKeyValueGet(RemoveBeforeJSON(responseBuf), "content");
+
+    CCompCtrl *cc = CompCtrlNew(MStrPrint("%s", RemoveBeforeJSON(responseBuf)));
+    CJSONDataEntry *jsonData = JSONParse(cc);
+
+    // Retrieve the 'choices' array
+    CJSONDataEntry *choicesEntry = JSONKeyValueGet(jsonData, "choices");
+    if (!choicesEntry || choicesEntry->type != JSONT_ARRAY) {
+        // Handle error: choices key not found or not an array
+        return;
     }
-    jsonPayload += 4;
 
-    U8 *completion = ParseCompletion(jsonPayload);
+    // Retrieve the first object from the 'choices' array
+    CJSONDataEntry *firstChoice = JSONIndexValueGet(choicesEntry, 0);
+    if (!firstChoice || firstChoice->type != JSONT_OBJ) {
+        // Handle error: First choice not found or not an object
+        return;
+    }
+
+    // Retrieve the 'message' object from the first choice
+    CJSONDataEntry *messageEntry = JSONKeyValueGet(firstChoice, "message");
+    if (!messageEntry || messageEntry->type != JSONT_OBJ) {
+        // Handle error: message key not found or not an object
+        return;
+    }
+
+    // Retrieve the 'content' string from the 'message' object
+    CJSONDataEntry *contentEntry = JSONKeyValueGet(messageEntry, "content");
+    if (!contentEntry || contentEntry->type != JSONT_STRING) {
+        // Handle error: content key not found or not a string
+        return;
+    }
+
+    U8 *completion = contentEntry->string_data;
+    SysLog(completion);
+    CompCtrlDel(cc);
 
     "\n$$RED$$ Skynet: $$YELLOW$$%s$$FG$$\n", completion;
 
@@ -127,7 +179,8 @@ I64 Skynet(U8 *message, U8 *model="gpt-4") // gpt-3.5-turbo || gpt-4
     return 0;
 }
 
-public U0 ChatUI() {
+// gpt-3.5-turbo || gpt-4
+public U0 ChatUI(U8 *system=DEFAULT_SYSTEMPROMPT, U8 *model="gpt-4") {
   U8 *userInput;
   DocClear;
 
@@ -140,7 +193,7 @@ public U0 ChatUI() {
         LBts(&Fs->task_flags, TASKf_CMD_LINE_PROMPT);
         userInput = StrGet(,, SGF_SHIFT_ESC_EXIT);
         LBtr(&Fs->task_flags, TASKf_CMD_LINE_PROMPT);
-        Skynet(userInput);
+        Skynet(userInput, system, model);
     }
   }
   catch
