@@ -4,6 +4,8 @@ CDoc *wallpaper_doc;
 RegDefault("Wallpapers/Current", "1;\n");
 RegExe("Wallpapers/Current");
 
+Bool show_stats = FALSE;
+
 U0 WallPaperSet(I8 direction) {
     CDirEntry *tmpde1;
     // read the current wallpaper index from the registry
@@ -36,6 +38,20 @@ U0 WallPaperSet(I8 direction) {
     Sys("WallPaperDolDocInit(\"~/Wallpapers/1024/%d.DD\");\n", current);
 }
 
+U0 WallPaperToggle()
+{
+	if (Fs != sys_task)
+	{
+		"\nMust be ran as system";	
+		return;
+	}
+
+	show_stats = !show_stats;
+	if(show_stats)
+	    sys_winmgr_task->display_doc = old_wall_paper;
+	else
+	    sys_winmgr_task->display_doc = wallpaper_doc;
+}
 
 U0 WallPaperDolDocInit(I64 filepath="::/Home/Wallpapers/Default.DD")
 {

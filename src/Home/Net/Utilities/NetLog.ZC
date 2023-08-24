@@ -30,6 +30,11 @@ U0 NetLogInit()
 }
 
 U0 NetLogToggle() {
+	if (Fs != sys_task)
+	{
+		"\nMust be ran as system";	
+		return;
+	}
     net_log_enabled = !net_log_enabled;
 	if(!net_log_enabled)
 		Kill(net_log_task);

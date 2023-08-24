@@ -1,12 +1,14 @@
 Cd(__DIR__);;
 
-// Takes 2 boot to see but whatever
+
+// Takes 2 boot to see but whatever
 Silent;
 Copy("WallPaper.ZC", "::/System/WallPaper.ZC");
 Silent(OFF); //no output to screen
 
 #include "~/PaletteEditor/Palettes/Tradition"
 PaletteSetTradition;
+
 #include "::/Demo/Graphics/WallPaperDolDoc"
 WallPaperSet(0);
 
@@ -24,11 +26,11 @@ Silent(OFF);
 
 #include "~/HomeSys"
 
-// Hide SysLog
-Yuugure;
-
 // Start Net
 Sys("#include \"::/Home/Net/Start\"");
+Sys("NetLogToggle;");
+
+Yuugure;
 
 
 Cd("..");;
