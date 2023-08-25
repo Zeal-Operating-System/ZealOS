@@ -7,4 +7,4 @@ public U0 PaletteSetTradition(Bool persistent=TRUE)
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetTradition;
-}
+} 
