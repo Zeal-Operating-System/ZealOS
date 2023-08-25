@@ -4,11 +4,11 @@ Cd(__DIR__);;
 class FontMapping {
 	I32 character;
 	I32 rows[4];
-} fontMap[44];
+} fontMap[70];
 
 #include "Small"
 
-U0 Font(U8 *text, U8 *color="BLUE") {
+U0 Font(U8 *text, U8 *color="BLUE") {
     I64 i, j, row, lineWidth = 0;
     I32 c;
 
@@ -21,8 +21,8 @@ U0 Font(U8 *text, U8 *color="BLUE") {
             c = text[i];
 
 			// Convert to lowercase
-			if (c >= 'A' && c <= 'Z')
-				c = c + ('a' - 'A');
+			//if (c >= 'A' && c <= 'Z')
+			//	c = c + ('a' - 'A');
 
             for (j = 0; fontMap[j].character; j++) {
                 if (fontMap[j].character == c) {
