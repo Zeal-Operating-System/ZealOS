@@ -8,6 +8,7 @@ Cd(__DIR__);;
 #include "~/HomeWrappers"
 MapFileLoad("::/Kernel/Kernel");
 MapFileLoad("::/Compiler/Compiler");
+#include "~/Yuugure"
 #include "~/HomeKeyPlugIns"
 #include "~/HomeSys"
 Cd("..");;
