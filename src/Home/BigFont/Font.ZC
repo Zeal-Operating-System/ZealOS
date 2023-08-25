@@ -8,7 +8,7 @@ class FontMapping {
 
 #include "Small"
 
-U0 Font(U8 *text, U8 *color="RED") {
+U0 Font(U8 *text, U8 *color="BLUE") {
     I64 i, j, row, lineWidth = 0;
     I32 c;
 
@@ -41,4 +41,4 @@ U0 Font(U8 *text, U8 *color="RED") {
 	"$$FG$$";
 }
 
-// Font("ABCDEFGHIJKLMNOPQRSTUVWX`YZ");
+// Font("ABCDEFGHIJKLMNOPQRSTUVWX`YZ");

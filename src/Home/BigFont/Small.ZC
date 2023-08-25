@@ -36,7 +36,7 @@ U0 InitFontMap() {
 	fontMap[5].rows[3] = " Û  ";
 
 	fontMap[6].character = 'g';
-	fontMap[6].rows[0] = "    ";
+	fontMap[6].rows[0] = "    ";
 	fontMap[6].rows[1] = " Üßß";
 	fontMap[6].rows[2] = " Û Û";
 	fontMap[6].rows[3] = "  ßß";
@@ -84,10 +84,10 @@ U0 InitFontMap() {
 	fontMap[13].rows[3] = " ß  ß";
 
 	fontMap[14].character = 'o';
-	fontMap[14].rows[0] = "   ";
+	fontMap[14].rows[0] = "    ";
 	fontMap[14].rows[1] = " ÜßÜ";
 	fontMap[14].rows[2] = " Û Û";
-	fontMap[14].rows[3] = "  ß ";
+	fontMap[14].rows[3] = "  ß ";
 
 	fontMap[15].character = 'p';
 	fontMap[15].rows[0] = "    ";
