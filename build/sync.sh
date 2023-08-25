@@ -95,7 +95,8 @@ else
 		vm)
 			mount_vdisk
 			echo "Copying src to vdisk..."
-			sudo rsync -av --exclude='.*' ../src/ $TMPMOUNT/
+			cd ../src/
+			sudo find . \( ! -path './.*' -and ! -name '.*' \) -and ! -path '*/.*/*' -type f -exec cp --parents {} $TMPMOUNT/ \;
 			umount_vdisk
 			echo "Finished."
 			;;
