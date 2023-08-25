@@ -48,10 +48,10 @@ U0 InitFontMap() {
 	fontMap[7].rows[3] = " ﬂ ﬂ";
 
 	fontMap[8].character = 'i';
-	fontMap[8].rows[0] = "  ";
+	fontMap[8].rows[0] = " ﬂ";
 	fontMap[8].rows[1] = " €";
 	fontMap[8].rows[2] = " €";
-	fontMap[8].rows[3] = " €";
+	fontMap[8].rows[3] = " ﬂ";
 
 	fontMap[9].character = 'j';
 	fontMap[9].rows[0] = "   ";
@@ -429,11 +429,11 @@ U0 InitFontMap() {
 	fontMap[70].rows[0] = " ﬂﬂ€";
 	fontMap[70].rows[1] = "  ‹ﬂ";
 	fontMap[70].rows[2] = " ‹ﬂ ";
-	fontMap[70].rows[3] = " €‹‹";
+	fontMap[70].rows[3] = " €‹‹";
 }
 InitFontMap();
 
-//     ‹         ‹      ‹‹     ‹        ‹
+//     ‹         ‹      ‹‹     ‹   ﬂ    ‹
 // ﬂﬂ‹ €ﬂ‹ ‹ﬂ‹ €ﬂ€ ‹ﬂ‹ €   ‹ﬂﬂ €ﬂ‹ €  € € € €   €‹ ‹€ €‹ € ‹ﬂ‹ €ﬂ‹ ‹ﬂ€ €ﬂ‹ ‹ﬂﬂ
 // €ﬂ€ € € € ‹ € € €ﬂﬂ €ﬂ  € € € € €  € €ﬂ‹ €   € ﬂ € € ﬂ€ € € € € € € €ﬂ‹  ﬂ‹
 //  ﬂﬂ ﬂﬂ   ﬂ   ﬂﬂ  ﬂﬂ €    ﬂﬂ ﬂ ﬂ ﬂ ‹ﬂ ﬂ ﬂ ﬂﬂﬂ ﬂ   ﬂ ﬂ  ﬂ  ﬂ  €ﬂ   ﬂ€ ﬂ ﬂ ﬂﬂ
