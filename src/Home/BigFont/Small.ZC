@@ -43,7 +43,7 @@ U0 InitFontMap() {
 
 	fontMap[7].character = 'h';
 	fontMap[7].rows[0] = " ‹  ";
-	fontMap[7].rows[1] = " €ﬂ‹";
+	fontMap[7].rows[1] = " €‹ ";
 	fontMap[7].rows[2] = " € €";
 	fontMap[7].rows[3] = " ﬂ ﬂ";
 
@@ -51,7 +51,7 @@ U0 InitFontMap() {
 	fontMap[8].rows[0] = " ﬂ";
 	fontMap[8].rows[1] = " €";
 	fontMap[8].rows[2] = " €";
-	fontMap[8].rows[3] = " ﬂ";
+	fontMap[8].rows[3] = " ﬂ";
 
 	fontMap[9].character = 'j';
 	fontMap[9].rows[0] = "   ";
@@ -186,21 +186,21 @@ U0 InitFontMap() {
 	fontMap[29].rows[3] = "  ﬂﬂﬂ";
 
 	fontMap[30].character = '?';
-	fontMap[30].rows[0] = "    ";
-	fontMap[30].rows[1] = " ‹ﬂ‹";
-	fontMap[30].rows[2] = "  ‹ﬂ";
-	fontMap[30].rows[3] = "  ‹ ";
+	fontMap[30].rows[0] = " ‹ﬂ‹";
+	fontMap[30].rows[1] = "  ‹ﬂ";
+	fontMap[30].rows[2] = "  ﬂ ";
+	fontMap[30].rows[3] = "  ﬂ ";
 
 	fontMap[31].character = '!';
-	fontMap[31].rows[0] = "   ";
+	fontMap[31].rows[0] = "  ‹";
 	fontMap[31].rows[1] = "  €";
 	fontMap[31].rows[2] = "  ﬂ";
 	fontMap[31].rows[3] = "  ﬂ";
 
 	fontMap[32].character = ':';
 	fontMap[32].rows[0] = "   ";
-	fontMap[32].rows[1] = "   ";
-	fontMap[32].rows[2] = "  ﬂ";
+	fontMap[32].rows[1] = "  ﬂ";
+	fontMap[32].rows[2] = "   ";
 	fontMap[32].rows[3] = "  ﬂ";
 
 	fontMap[33].character = '#';
@@ -213,7 +213,7 @@ U0 InitFontMap() {
 	fontMap[34].rows[0] = "     ";
 	fontMap[34].rows[1] = " ‹ﬂﬂ‹";
 	fontMap[34].rows[2] = " € €€";
-	fontMap[34].rows[3] = " ﬂ‹‹ ";
+	fontMap[34].rows[3] = " ﬂ‹‹ ";
 
 	fontMap[35].character = '1';
 	fontMap[35].rows[0] = " ‹‹ ";
@@ -279,157 +279,157 @@ U0 InitFontMap() {
 	fontMap[45].rows[0] = " ‹€‹";
 	fontMap[45].rows[1] = " € €";
 	fontMap[45].rows[2] = " €ﬂ€";
-	fontMap[45].rows[3] = " € €";
+	fontMap[45].rows[3] = " ﬂ ﬂ";
 
 	fontMap[46].character = 'B';
-	fontMap[46].rows[0] = " €€‹";
-	fontMap[46].rows[1] = " € €";
-	fontMap[46].rows[2] = " €ﬂ‹";
-	fontMap[46].rows[3] = " €‹ﬂ";
+	fontMap[46].rows[0] = " €ﬂ‹";
+	fontMap[46].rows[1] = " €‹ﬂ";
+	fontMap[46].rows[2] = " € €";
+	fontMap[46].rows[3] = " ﬂﬂ ";
 
 	fontMap[47].character = 'C';
 	fontMap[47].rows[0] = " ‹ﬂ‹";
 	fontMap[47].rows[1] = " €  ";
-	fontMap[47].rows[2] = " €  ";
-	fontMap[47].rows[3] = " ﬂ‹ﬂ";
+	fontMap[47].rows[2] = " € ‹";
+	fontMap[47].rows[3] = "  ﬂ ";
 
 	fontMap[48].character = 'D';
-	fontMap[48].rows[0] = " €€‹";
+	fontMap[48].rows[0] = " €ﬂ‹";
 	fontMap[48].rows[1] = " € €";
 	fontMap[48].rows[2] = " € €";
-	fontMap[48].rows[3] = " €‹ﬂ";
+	fontMap[48].rows[3] = " ﬂﬂ ";
 
 	fontMap[49].character = 'E';
-	fontMap[49].rows[0] = " €€€";
-	fontMap[49].rows[1] = " €  ";
-	fontMap[49].rows[2] = " €ﬂ ";
-	fontMap[49].rows[3] = " €€€";
+	fontMap[49].rows[0] = " €ﬂﬂ";
+	fontMap[49].rows[1] = " €‹ ";
+	fontMap[49].rows[2] = " €  ";
+	fontMap[49].rows[3] = " ﬂﬂﬂ";
 
 	fontMap[50].character = 'F';
-	fontMap[50].rows[0] = " €€€";
+	fontMap[50].rows[0] = " €ﬂﬂ";
 	fontMap[50].rows[1] = " €  ";
 	fontMap[50].rows[2] = " €ﬂ ";
-	fontMap[50].rows[3] = " €  ";
+	fontMap[50].rows[3] = " ﬂ  ";
 
 	fontMap[51].character = 'G';
 	fontMap[51].rows[0] = " ‹ﬂﬂ";
 	fontMap[51].rows[1] = " € ‹";
 	fontMap[51].rows[2] = " € €";
-	fontMap[51].rows[3] = " ﬂ‹ﬂ";
+	fontMap[51].rows[3] = "  ﬂ ";
 
 	fontMap[52].character = 'H';
 	fontMap[52].rows[0] = " € €";
-	fontMap[52].rows[1] = " € €";
+	fontMap[52].rows[1] = " €‹€";
 	fontMap[52].rows[2] = " €ﬂ€";
-	fontMap[52].rows[3] = " € €";
+	fontMap[52].rows[3] = " ﬂ ﬂ";
 
 	fontMap[53].character = 'I';
 	fontMap[53].rows[0] = " ﬂ€ﬂ";
 	fontMap[53].rows[1] = "  € ";
 	fontMap[53].rows[2] = "  € ";
-	fontMap[53].rows[3] = " ‹€‹";
+	fontMap[53].rows[3] = " ﬂﬂﬂ";
 
 	fontMap[54].character = 'J';
 	fontMap[54].rows[0] = "  €";
 	fontMap[54].rows[1] = "  €";
 	fontMap[54].rows[2] = "  €";
-	fontMap[54].rows[3] = " ‹€";
+	fontMap[54].rows[3] = " ﬂﬂ";
 
 	fontMap[55].character = 'K';
 	fontMap[55].rows[0] = " € €";
 	fontMap[55].rows[1] = " € €";
 	fontMap[55].rows[2] = " €ﬂ‹";
-	fontMap[55].rows[3] = " € €";
+	fontMap[55].rows[3] = " ﬂ ﬂ";
 
 	fontMap[56].character = 'L';
 	fontMap[56].rows[0] = " €  ";
 	fontMap[56].rows[1] = " €  ";
 	fontMap[56].rows[2] = " €  ";
-	fontMap[56].rows[3] = " €‹‹";
+	fontMap[56].rows[3] = " ﬂﬂﬂ";
 
 	fontMap[57].character = 'M';
 	fontMap[57].rows[0] = " €‹ ‹€";
 	fontMap[57].rows[1] = " € ﬂ €";
 	fontMap[57].rows[2] = " €   €";
-	fontMap[57].rows[3] = " €   €";
+	fontMap[57].rows[3] = " ﬂ   ﬂ";
 
 	fontMap[58].character = 'N';
 	fontMap[58].rows[0] = " €‹ €";
 	fontMap[58].rows[1] = " € ﬂ€";
 	fontMap[58].rows[2] = " €  €";
-	fontMap[58].rows[3] = " €  €";
+	fontMap[58].rows[3] = " ﬂ  ﬂ";
 
 	fontMap[59].character = 'O';
 	fontMap[59].rows[0] = " ‹ﬂ‹";
 	fontMap[59].rows[1] = " € €";
 	fontMap[59].rows[2] = " € €";
-	fontMap[59].rows[3] = " ﬂ‹ﬂ";
+	fontMap[59].rows[3] = "  ﬂ ";
 
 	fontMap[60].character = 'P';
 	fontMap[60].rows[0] = " €ﬂ€";
 	fontMap[60].rows[1] = " € €";
 	fontMap[60].rows[2] = " €ﬂﬂ";
-	fontMap[60].rows[3] = " €  ";
+	fontMap[60].rows[3] = " ﬂ  ";
 
 	fontMap[61].character = 'Q';
 	fontMap[61].rows[0] = " €€€";
 	fontMap[61].rows[1] = " € €";
-	fontMap[61].rows[2] = " €‹€";
-	fontMap[61].rows[3] = "   €";
+	fontMap[61].rows[2] = " ﬂﬂ€";
+	fontMap[61].rows[3] = "   ﬂ";
 
 	fontMap[62].character = 'R';
 	fontMap[62].rows[0] = " €ﬂ‹";
 	fontMap[62].rows[1] = " € €";
 	fontMap[62].rows[2] = " €ﬂ‹";
-	fontMap[62].rows[3] = " € €";
+	fontMap[62].rows[3] = " ﬂ ﬂ";
 
 	fontMap[63].character = 'S';
-	fontMap[63].rows[0] = " ‹€€";
-	fontMap[63].rows[1] = " €  ";
-	fontMap[63].rows[2] = "  ﬂ‹";
-	fontMap[63].rows[3] = " €€ﬂ";
+	fontMap[63].rows[0] = " ‹ﬂ‹";
+	fontMap[63].rows[1] = " ﬂ‹ ";
+	fontMap[63].rows[2] = " ‹ €";
+	fontMap[63].rows[3] = "  ﬂ ";
 
 	fontMap[64].character = 'T';
-	fontMap[64].rows[0] = " ‹€€";
-	fontMap[64].rows[1] = " €  ";
-	fontMap[64].rows[2] = "  ﬂ‹";
-	fontMap[64].rows[3] = " €€ﬂ";
+	fontMap[64].rows[0] = " ﬂ€ﬂ";
+	fontMap[64].rows[1] = "  € ";
+	fontMap[64].rows[2] = "  € ";
+	fontMap[64].rows[3] = "  ﬂ ";
 
 	fontMap[65].character = 'U';
-	fontMap[65].rows[0] = " ‹€€";
-	fontMap[65].rows[1] = " €  ";
-	fontMap[65].rows[2] = "  ﬂ‹";
-	fontMap[65].rows[3] = " €€ﬂ";
+	fontMap[65].rows[0] = " € €";
+	fontMap[65].rows[1] = " € €";
+	fontMap[65].rows[2] = " € €";
+	fontMap[65].rows[3] = " ﬂﬂﬂ";
 
 	fontMap[66].character = 'V';
-	fontMap[66].rows[0] = " ‹€€";
-	fontMap[66].rows[1] = " €  ";
-	fontMap[66].rows[2] = "  ﬂ‹";
-	fontMap[66].rows[3] = " €€ﬂ";
+	fontMap[66].rows[0] = " € €";
+	fontMap[66].rows[1] = " € €";
+	fontMap[66].rows[2] = " € €";
+	fontMap[66].rows[3] = " ﬂ€ﬂ";
 
 	fontMap[67].character = 'W';
-	fontMap[67].rows[0] = " ‹€€";
-	fontMap[67].rows[1] = " €  ";
-	fontMap[67].rows[2] = "  ﬂ‹";
-	fontMap[67].rows[3] = " €€ﬂ";
+	fontMap[67].rows[0] = " €   €";
+	fontMap[67].rows[1] = " € € €";
+	fontMap[67].rows[2] = " €‹ﬂ‹€";
+	fontMap[67].rows[3] = " ﬂ€ €ﬂ";
 
 	fontMap[68].character = 'X';
-	fontMap[68].rows[0] = " ‹€€";
-	fontMap[68].rows[1] = " €  ";
-	fontMap[68].rows[2] = "  ﬂ‹";
-	fontMap[68].rows[3] = " €€ﬂ";
+	fontMap[68].rows[0] = " € €";
+	fontMap[68].rows[1] = "  € ";
+	fontMap[68].rows[2] = " € €";
+	fontMap[68].rows[3] = " ﬂ ﬂ";
 
 	fontMap[69].character = 'Y';
-	fontMap[69].rows[0] = " ‹€€";
-	fontMap[69].rows[1] = " €  ";
-	fontMap[69].rows[2] = "  ﬂ‹";
-	fontMap[69].rows[3] = " €€ﬂ";
+	fontMap[69].rows[0] = " € €";
+	fontMap[69].rows[1] = " € €";
+	fontMap[69].rows[2] = "  € ";
+	fontMap[69].rows[3] = "  ﬂ ";
 
 	fontMap[70].character = 'Z';
 	fontMap[70].rows[0] = " ﬂﬂ€";
 	fontMap[70].rows[1] = "  ‹ﬂ";
 	fontMap[70].rows[2] = " ‹ﬂ ";
-	fontMap[70].rows[3] = " €‹‹";
+	fontMap[70].rows[3] = " ﬂﬂﬂ";
 }
 InitFontMap();
 
@@ -448,12 +448,12 @@ InitFontMap();
 //  €  ‹ﬂ    €  ﬂ€   € € €  €  € €   € € €
 // ﬂﬂﬂ ﬂﬂﬂ ﬂﬂ    ﬂ ﬂﬂ   ﬂ   ﬂ   ﬂ  ﬂﬂ   ﬂ
 
-// ‹€‹ €€‹ ‹ﬂ‹ €€‹ €€€ €€€ ‹ﬂﬂ € € ﬂ€ﬂ  € € € €   €‹ ‹€ €‹ € ‹ﬂ‹ €ﬂ€ €€€ €ﬂ‹ ‹€€                  
+// ‹€‹ €€‹ ‹ﬂ‹ €€‹ €€€ €€€ ‹ﬂﬂ € € ﬂ€ﬂ  € € € €   €‹ ‹€ €‹ € ‹ﬂ‹ €ﬂ€ €€€ €ﬂ‹ ‹€‹                  
 // € € € € €   € € €   €   € ‹ € €  €   € € € €   € ﬂ € € ﬂ€ € € € € € € € € €  
-// €ﬂ€ €ﬂ‹ €   € € €ﬂ  €ﬂ  € € €ﬂ€  €   € €ﬂ‹ €   €   € €  € € € €ﬂﬂ €‹€ €ﬂ‹  ﬂ‹
-// € € €‹ﬂ ﬂ‹ﬂ €‹ﬂ €€€ €   ﬂ‹ﬂ € € ‹€‹ ‹€ € € €‹‹ €   € €  € ﬂ‹ﬂ €     € € € €€ﬂ
+// €ﬂ€ €ﬂ‹ €   € € €ﬂ  €ﬂ  € € €ﬂ€  €   € €ﬂ‹ €   €   € €  € € € €ﬂﬂ ﬂﬂ€ €ﬂ‹  ﬂ‹
+// ﬂ ﬂ ﬂﬂﬂ ﬂ‹ﬂ €‹ﬂ ﬂﬂﬂ ﬂ   ﬂ‹ﬂ ﬂ ﬂ ﬂﬂﬂ ﬂﬂ ﬂ ﬂ ﬂﬂﬂ ﬂ   ﬂ ﬂ  ﬂ ﬂ‹ﬂ ﬂ     ﬂ ﬂ ﬂ ﬂ€ﬂ
 
-// ﬂﬂ€
-//  ‹ﬂ
-// ‹ﬂ 
-// €‹‹
+// ﬂ€ﬂ € € € € €   € € € € € ﬂﬂ€
+//  €  € € € € € € €  €  € €  ‹ﬂ
+//  €  € € € € €‹ﬂ‹€ € €  €  ‹ﬂ 
+//  ﬂ  ﬂﬂﬂ ﬂ‹ﬂ ﬂ€ €ﬂ ﬂ ﬂ  ﬂ  €‹‹
