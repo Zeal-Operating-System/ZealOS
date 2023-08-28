@@ -16,4 +16,3 @@
 *.o
 *.d
 /zealbooter/limine.h
-src/.*
