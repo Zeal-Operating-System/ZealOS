@@ -94,9 +94,17 @@ else
 			;;
 		vm)
 			mount_vdisk
-			echo "Copying src to vdisk..."
-			cd ../src/
-			sudo find . \( ! -path './.*' -and ! -name '.*' \) -and ! -path '*/.*/*' -type f -exec cp --parents {} $TMPMOUNT/ \;
+			case $2 in
+				--ignore-dots | --dots)
+					echo "Copying src to vdisk ignoring dotfiles and dotfolders..."
+					cd ../src/
+					sudo find . \( ! -path './.*' -and ! -name '.*' \) -and ! -path '*/.*/*' -type f -exec cp --parents {} $TMPMOUNT/ \;
+					;;
+				*)
+					echo "Copying entire src to vdisk..."
+					sudo cp -r ../src/* $TMPMOUNT
+					;;
+			esac
 			umount_vdisk
 			echo "Finished."
 			;;
