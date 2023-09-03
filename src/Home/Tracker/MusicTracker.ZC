@@ -2,9 +2,26 @@
 #include "WaveformGen"
 
 U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
-    U32 buffer[SAMPLE_RATE];
+
+	// ultimately, we should use AC97OutputMix to be multi channel
+
+    //U32 buffer[SAMPLE_RATE];
+
+	U32 *buffer;
+	I64 bufferSize;
+
+	if (instrument == SAMPLE)
+	{
+		bufferSize = 132300;
+	 	buffer = MAlloc(bufferSize * sizeof(U32));
+	}
+	else
+	{
+		bufferSize = SAMPLE_RATE;
+		buffer = MAlloc(bufferSize * sizeof(U32));
+	}
+
     F64 freq = MidiToFreq(note);
-    // GenerateSineWave(buffer, SAMPLE_RATE, freq, velocity);
 
     switch(instrument) {
         case PULSE1:
@@ -20,7 +37,7 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
             GenerateNoiseWave(buffer, SAMPLE_RATE, freq, velocity);
             break;
         case SAMPLE:
-            PlaySample(buffer, SAMPLE_RATE, velocity);
+            PlaySample(buffer, 132300, velocity);
             break;
         default:
             GenerateSineWave(buffer, SAMPLE_RATE, freq, velocity);
@@ -31,7 +48,28 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
 
     // Play the buffer using the AC97 driver:
     AudioSFXPlay(buffer, SAMPLE_RATE);
-	"Instrument: $$LTGREEN$$ %d $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", instrument, note;
+	U8 *instrument_name = "DEFAULT";
+	if (instrument == SAMPLE) instrument_name = "SAMPLE";
+	if (instrument == PULSE1) instrument_name = "PULSE1";
+	if (instrument == PULSE2) instrument_name = "PULSE2";
+	if (instrument == TRIANGLE) instrument_name = "TRIANGLE";
+	if (instrument == NOISE) instrument_name = "NOISE";
+	"Instrument: $$LTGREEN$$ %s $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", instrument_name, note;
+
+	Free(buffer);
+}
+
+U0 PlayPattern(Pattern *pattern) {
+    I64 row;
+    NoteCell *cell;
+    for (row = 0; row < TRACK_LENGTH; row++) {
+        cell = &pattern->cells[row];
+        if (cell->note) {
+            AudioPlayNote(cell->note, cell->velocity, cell->instrument);
+        }
+		//if (cell->instrument == SAMPLE) Sleep(2000);
+        Sleep(1000);  // Adjust for tempo
+    }
 }
 
 U0 EnterPattern(Pattern *pattern) {
@@ -48,21 +86,9 @@ U0 EnterPattern(Pattern *pattern) {
     }
 }
 
-U0 PlayPattern(Pattern *pattern) {
-    I64 row;
-    NoteCell *cell;
-    for (row = 0; row < TRACK_LENGTH; row++) {
-        cell = &pattern->cells[row];
-        if (cell->note) {
-            AudioPlayNote(cell->note, cell->velocity, cell->instrument);
-        }
-        Sleep(2900);  // Adjust for tempo
-    }
-}
-
 U0 MusicTracker() {
 
-	LoadSample("~/Tracker/Samples/Sample.WAV");
+	LoadSample("~/Tracker/Samples/OrchHit.WAV");
 
     Song song;
 

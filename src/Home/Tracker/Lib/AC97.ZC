@@ -107,7 +107,7 @@ I64 AudioSFXPlay(U32 *data, I64 length)
 		return stream;
 	for (i = 0; i < length; i++)
 		FifoI64Ins(audio.output[stream].data, data[i]);
-	return stream;
+	return stream;
 }
 
 U0 AC97OutputMix(U32 *buf, I64 length = NULL)
@@ -187,6 +187,13 @@ I64 AC97Init()
 
 	OutU32(ac97.nabm + GLOBAL_CTL, 0x03);
 	OutU16(ac97.nam + RESET, 0xFFFF);
+
+	// FIXME: 
+	// i set the frequency to 44.1 manually
+	// DONT DO THIS!!!	
+	OutU16(ac97.nam + EXT_FRONT_RATE, 44100);
+
+
 
 	// Set PCM Output to Max volume
 	OutU16(ac97.nam + PCM_VOL, 0x0000);
