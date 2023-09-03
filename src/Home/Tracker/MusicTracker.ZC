@@ -1,0 +1,67 @@
+#include "MIDIHandling"
+#include "WaveformGen"
+
+U0 AudioPlayNote(U8 note, U8 velocity) {
+    U32 buffer[44100];  // One second buffer at 44.1kHz sample rate.
+    F64 freq = MidiToFreq(note);
+    GenerateSineWave(buffer, SAMPLE_RATE, freq, velocity);
+
+    // Play the buffer using your AC97 driver:
+    AudioSFXPlay(buffer, 44100);  // Assuming your AudioSFXPlay function can handle this
+}
+
+U0 EnterPattern(Pattern *pattern) {
+    I64 row, choice;
+    NoteCell *cell;
+    for (row = 0; row < TRACK_LENGTH; row++) {
+        cell = &pattern->cells[row];
+        Print("Enter note for row %d (0-127, 0 for none): ", row);
+        // cell->note = InU8;
+        // if (cell->note) {
+        //     Print("Enter velocity for note (1-127): ");
+        //     cell->velocity = InU8;
+        // }
+    }
+}
+
+U0 PlayPattern(Pattern *pattern) {
+    I64 row;
+    NoteCell *cell;
+    for (row = 0; row < TRACK_LENGTH; row++) {
+        cell = &pattern->cells[row];
+        if (cell->note) {
+            // Here, use your audio driver to play the note
+            // Assume a function AudioPlayNote(note, velocity) exists
+            AudioPlayNote(cell->note, cell->velocity);
+        }
+        Sleep(100);  // Adjust for tempo
+    }
+}
+
+U0 MusicTracker() {
+    Song song;
+    // Clear(&song);
+    I64 choice, sc;
+    while (1) {
+        Print("\nMusic Tracker:\n");
+        Print("1. Enter Pattern\n");
+        Print("2. Play Pattern\n");
+        Print("3. Exit\n");
+        Print("Choice: ");
+        // choice = InU8;
+		choice = KeyGet(&sc);
+
+        switch (choice) {
+            case '1':
+                EnterPattern(&song.patterns[0]);  // Only one pattern for simplicity
+                break;
+            case '2':
+                PlayPattern(&song.patterns[0]);
+                break;
+            case '3':
+                return;
+            default:
+                Print("Invalid choice.\n");
+        }
+    }
+}

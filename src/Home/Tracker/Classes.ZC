@@ -1,0 +1,21 @@
+class NoteCell {
+    U8 note;      // MIDI note number
+    U8 velocity;  // Volume/Intensity
+    U8 instrument;
+    U8 effect;    // Future expansion for effects
+};
+
+#define TRACK_LENGTH 64  // Length of each pattern in rows
+class Pattern {
+    NoteCell cells[TRACK_LENGTH];
+};
+
+#define MAX_PATTERNS 64  // Maximum patterns in a song
+class Song {
+    U8 patternOrder[MAX_PATTERNS]; // Which pattern is played when
+    Pattern patterns[MAX_PATTERNS]; 
+};
+
+
+#define SAMPLE_RATE 44100
+#define PI 3.1415926535897932 // i know i can just use the pi symbol
