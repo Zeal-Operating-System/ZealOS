@@ -1,3 +1,10 @@
+#define INSTRUMENT_NONE   0
+#define PULSE1            1
+#define PULSE2            2
+#define TRIANGLE          3
+#define NOISE             4
+#define SAMPLE            5
+
 class NoteCell {
     U8 note;      // MIDI note number
     U8 velocity;  // Volume/Intensity
@@ -5,7 +12,7 @@ class NoteCell {
     U8 effect;    // Future expansion for effects
 };
 
-#define TRACK_LENGTH 64  // Length of each pattern in rows
+#define TRACK_LENGTH 10  // Length of each pattern in rows
 class Pattern {
     NoteCell cells[TRACK_LENGTH];
 };
@@ -19,3 +26,14 @@ class Song {
 
 #define SAMPLE_RATE 44100
 #define PI 3.1415926535897932 // i know i can just use the pi symbol
+
+// globals
+U8 *gSampleData = NULL;  // Global sample buffer
+I64 gSampleSize = 0;     // Size of the loaded sample
+
+U0 CleanupWaveformGen() {
+    if (gSampleData) {
+        Free(gSampleData);
+        gSampleData = NULL;  // Reset the pointer
+    }
+}

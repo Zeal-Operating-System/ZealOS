@@ -27,6 +27,4 @@ include_noreindex "Lib/ELF64";
 
 AutoComplete(0);
 
-MusicTracker;
-
-//InitPlayer;
+MusicTracker;

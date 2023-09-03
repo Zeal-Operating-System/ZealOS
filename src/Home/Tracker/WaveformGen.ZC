@@ -1,7 +1,7 @@
 U0 GenerateSineWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
     I64 i;
     F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;  // Adjust the amplitude based on velocity
-    F64 phase_increment = (2.0 * PI * freq) / 44100.0;  // Assuming a sample rate of 44.1kHz
+    F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;  // Assuming a sample rate of 44.1kHz
 
     F64 phase = 0.0;
     for (i = 0; i < length; i++) {
@@ -12,6 +12,185 @@ U0 GenerateSineWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
     }
 }
 
+U0 GeneratePulse1Wave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+    I64 i;
+    F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+    F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+    F64 phase = 0.0;
+    
+    for (i = 0; i < length; i++) {
+        I16 sample_value;
+        if (phase < PI) {
+            sample_value = ToI64(amplitude);
+        } else {
+            sample_value = -ToI64(amplitude);
+        }
+        buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+        phase += phase_increment;
+        if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+    }
+}
+
+U0 GeneratePulse2Wave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value;
+		if (phase < 0.5 * PI) {
+			sample_value = -ToI64(amplitude);
+		} else {
+			sample_value = ToI64(amplitude);
+		}
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 GenerateTriangleWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value;
+		if (phase < PI) {
+			sample_value = ToI64((phase / PI) * amplitude);
+		} else {
+			sample_value = ToI64((2.0 - (phase / PI)) * amplitude);
+		}
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 GenerateNoiseWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value = ToI64((RandI64 / 0x7FFFFFFF) * amplitude);
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 ApplyEnvelope(U32 *buffer, I64 length) {
+	I64 i;
+	for (i = 0; i < length; i++) {
+		I64 sample = buffer[i];
+		I64 left = sample >> 16;
+		I64 right = sample & 0xFFFF;
+		left = (left * i) / length;
+		right = (right * (length - i)) / length;
+		buffer[i] = (left << 16) | (right & 0xFFFF);
+	}
+}
+
+// U0 ApplyEnvelope(U32 *buffer, I64 length) {
+//      I64 fadeLength = length * 0.1;  // 10% fade in and fade out
+//  	I64 i;
+//      for (i = 0; i < fadeLength; i++) {
+//          F64 factor = ToI64(i / fadeLength);
+//          buffer[i] = ToI64(buffer[i] * factor);
+//          buffer[length - i - 1] = ToI64(buffer[length - i - 1] * factor);
+//      }
+// }
+
+class WAVHeader {
+    U8  riff[4];        // RIFF string
+    U32 overall_size;   // overall size of file in bytes
+    U8  wave[4];        // WAVE string
+    U8  fmt_chunk[4];   // fmt string with trailing null char
+    U32 length;         // length of format data. Should be 16 for PCM
+    U16 format_type;    // format type. 1 for PCM
+    U16 channels;       // number of channels
+    U32 sample_rate;    // sampling rate (blocks per second)
+    U32 byterate;       // SampleRate * NumChannels * BitsPerSample/8
+    U16 block_align;    // channels * bits/sample / 8
+    U16 bits_per_sample;// bits per sample, 8- 8bits, 16- 16 bits etc
+};
+
+
+
+U0 LoadSample(U8 *filename) {
+    //WAVHeader header;
+	I64 fileSize;
+
+
+    // Free any previously loaded sample
+    if (gSampleData) {
+        Free(gSampleData);
+    }
+
+    gSampleSize = fileSize - sizeof(WAVHeader);
+    //gSampleData = MAlloc(gSampleSize);
+
+
+    //U8 *buffer = FileRead(filename, &fileSize);
+	
+	//if (buffer)
+	//{
+	//	MemCopy(&header, buffer, sizeof(WAVHeader));
+	//	Print("Got: %c %c %c %c\n", header.riff[0], header.riff[1], header.riff[2], header.riff[3]);
+	    // Basic validation - check the RIFF and WAVE tags
+    //	if (!StrCompare("RIFF", header.riff) || !StrCompare("WAVE", header.wave)) {
+    //    	Print("Invalid WAV file.\n");
+	//		Free(buffer);
+	//        return;
+    //	}
+
+
+	//} else {
+	//	Print("Failed to read the file.\n");
+	//}
+
+
+	//U8 *fileContent = FileRead(filename, &fileSize);
+	//U8 *audioDataStart = fileContent + sizeof(WAVHeader); // Move pointer after header
+	//MemCopy(gSampleData, audioDataStart, gSampleSize);
+
+
+
+	// DEBUG
+	//gSampleSize = sizeof(fileContent) - 36;
+	//U8 *audioDataStart = fileContent + 36; // Move pointer after header MANUAL 36 bytes
+	//MemCopy(gSampleData, audioDataStart, 36);
+
+
+	//Free(fileContent);
+
+	// test without skipping header
+	gSampleData = FileRead(filename, &gSampleSize);
+
+    // Print some info about the sample
+    //Print("Sample rate: %d\n", header.sample_rate);
+    //Print("Channels: %d\n", header.channels);
+    //Print("Bits per sample: %d\n", header.bits_per_sample);
+
+
+}
+
+U0 PlaySample(U32 *buffer, I64 duration, U8 velocity) {
+    if (!gSampleData || !gSampleSize) {
+        Print("Sample not loaded.\n");
+        return;
+    }
+    // Just as an example: copy loaded sample to buffer
+    // This step will depend on how you are processing and playing the audio
+    I64 samplesToCopy = Min(gSampleSize, duration); // don't overflow the buffer
+    MemCopy(buffer, gSampleData, samplesToCopy);
+
+    // Here you'd typically send the buffer to your audio playing routine
+}
 
 // I64 sample_rate = SAMPLE_RATE // whatever your sample rate is
 // for (I64 i = 0; i < sample_duration * sample_rate; i++) {
