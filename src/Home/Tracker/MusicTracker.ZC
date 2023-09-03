@@ -1,17 +1,30 @@
 #include "MIDIHandling"
 #include "WaveformGen"
 
+U0 ApplyEnvelope(U32 *buffer, I64 length) {
+     I64 fadeLength = length * 0.1;  // 10% fade in and fade out
+ 	I64 i;
+     for (i = 0; i < fadeLength; i++) {
+         F64 factor = ToI64(i / fadeLength);
+         buffer[i] = ToI64(buffer[i] * factor);
+         buffer[length - i - 1] = ToI64(buffer[length - i - 1] * factor);
+     }
+}
+
+
 U0 AudioPlayNote(U8 note, U8 velocity) {
-    U32 buffer[44100];  // One second buffer at 44.1kHz sample rate.
+    U32 buffer[SAMPLE_RATE];
     F64 freq = MidiToFreq(note);
     GenerateSineWave(buffer, SAMPLE_RATE, freq, velocity);
+    ApplyEnvelope(buffer, SAMPLE_RATE); // TODO: Apply fade in and fade out
 
-    // Play the buffer using your AC97 driver:
-    AudioSFXPlay(buffer, 44100);  // Assuming your AudioSFXPlay function can handle this
+    // Play the buffer using the AC97 driver:
+    AudioSFXPlay(buffer, SAMPLE_RATE);
+	"$$YELLOW$$%d$$FG$$ ", note;
 }
 
 U0 EnterPattern(Pattern *pattern) {
-    I64 row, choice;
+    I64 row;
     NoteCell *cell;
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
@@ -30,35 +43,74 @@ U0 PlayPattern(Pattern *pattern) {
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
         if (cell->note) {
-            // Here, use your audio driver to play the note
-            // Assume a function AudioPlayNote(note, velocity) exists
             AudioPlayNote(cell->note, cell->velocity);
         }
-        Sleep(100);  // Adjust for tempo
+        Sleep(900);  // Adjust for tempo
     }
 }
 
 U0 MusicTracker() {
     Song song;
+
+	song.patterns[0].cells[0].note = 60;  // C3
+	song.patterns[0].cells[0].velocity = 100;
+
+	song.patterns[0].cells[1].note = 62;  // D
+	song.patterns[0].cells[1].velocity = 100;
+
+	song.patterns[0].cells[2].note = 64;  // E
+	song.patterns[0].cells[2].velocity = 100;
+
+	song.patterns[0].cells[3].note = 60;  // C
+	song.patterns[0].cells[3].velocity = 100;
+
+	song.patterns[0].cells[4].note = 62;  // D
+	song.patterns[0].cells[4].velocity = 100;
+
+	song.patterns[0].cells[5].note = 64;  // E
+	song.patterns[0].cells[5].velocity = 100;
+
+	song.patterns[0].cells[6].note = 60;  // C
+	song.patterns[0].cells[6].velocity = 100;
+
+	song.patterns[0].cells[7].note = 62;  // D
+	song.patterns[0].cells[7].velocity = 100;
+
+	song.patterns[0].cells[8].note = 64;  // E
+	song.patterns[0].cells[8].velocity = 100;
+
+	song.patterns[0].cells[9].note = 65;  // F
+	song.patterns[0].cells[9].velocity = 100;
+
+	song.patterns[0].cells[10].note = 72;  // C4
+	song.patterns[0].cells[10].velocity = 100;
+
+	song.patterns[0].cells[11].note = 76;  // E4
+	song.patterns[0].cells[11].velocity = 100;
+
+	song.patterns[0].cells[12].note = 36;  // C1
+	song.patterns[0].cells[12].velocity = 100;
+
     // Clear(&song);
-    I64 choice, sc;
+    I64 sc;
     while (1) {
         Print("\nMusic Tracker:\n");
         Print("1. Enter Pattern\n");
         Print("2. Play Pattern\n");
         Print("3. Exit\n");
         Print("Choice: ");
-        // choice = InU8;
-		choice = KeyGet(&sc);
 
-        switch (choice) {
+        switch (KeyGet(&sc)) {
             case '1':
+				"1\n";
                 EnterPattern(&song.patterns[0]);  // Only one pattern for simplicity
                 break;
             case '2':
+				"2\n";
                 PlayPattern(&song.patterns[0]);
                 break;
             case '3':
+				"3\n";
                 return;
             default:
                 Print("Invalid choice.\n");

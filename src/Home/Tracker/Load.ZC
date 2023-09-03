@@ -18,11 +18,11 @@ include_noreindex "Lib/ELF64";
 //include_noreindex "Lib/uPNG";
 // include_noreindex "Player";
 
-include_noreindex "Classes"
-include_noreindex "MIDIHandling"
-include_noreindex "WaveformGen"
+#include "Classes"
+// include_noreindex "MIDIHandling"
+// include_noreindex "WaveformGen"
 // include_noreindex "UITracker"
-include_noreindex "MusicTracker"
+#include "MusicTracker"
 
 
 AutoComplete(0);
