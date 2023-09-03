@@ -15,8 +15,8 @@ define DEFAULT_VAR =
     endif
 endef
 
-# It is highly recommended to use a custom built cross toolchain to build a kernel.
-# We are only using "cc" as a placeholder here. It may work by using
+# It is suggested to use a custom built cross toolchain to build a kernel.
+# We are using the standard "cc" here, it may work by using
 # the host system's toolchain, but this is not guaranteed.
 override DEFAULT_CC := cc
 $(eval $(call DEFAULT_VAR,CC,$(DEFAULT_CC)))
@@ -103,22 +103,22 @@ limine.h:
 	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h || cp ../build/limine/limine.h limine.h || echo "ERROR"
 
 # Link rules for the final kernel executable.
-$(KERNEL): $(OBJ)
+$(KERNEL): GNUmakefile linker.ld $(OBJ)
 	$(LD) $(OBJ) $(LDFLAGS) -o $@
 
 # Include header dependencies.
 -include $(HEADER_DEPS)
 
 # Compilation rules for *.c files.
-%.c.o: %.c limine.h
+%.c.o: %.c GNUmakefile limine.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
-%.S.o: %.S limine.h
+%.S.o: %.S GNUmakefile limine.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
-%.asm.o: %.asm
+%.asm.o: %.asm GNUmakefile
 	nasm $(NASMFLAGS) $< -o $@
 
 # Remove object files and the final executable.
