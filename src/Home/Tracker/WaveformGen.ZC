@@ -105,33 +105,18 @@ U0 ApplyEnvelope(U32 *buffer, I64 length) {
 //      }
 // }
 
-class WAVHeader {
-    U8  riff[4];        // RIFF string
-    U32 overall_size;   // overall size of file in bytes
-    U8  wave[4];        // WAVE string
-    U8  fmt_chunk[4];   // fmt string with trailing null char
-    U32 length;         // length of format data. Should be 16 for PCM
-    U16 format_type;    // format type. 1 for PCM
-    U16 channels;       // number of channels
-    U32 sample_rate;    // sampling rate (blocks per second)
-    U32 byterate;       // SampleRate * NumChannels * BitsPerSample/8
-    U16 block_align;    // channels * bits/sample / 8
-    U16 bits_per_sample;// bits per sample, 8- 8bits, 16- 16 bits etc
-};
-
-
-
 U0 LoadSample(U8 *filename) {
     //WAVHeader header;
 	I64 fileSize;
 
 
     // Free any previously loaded sample
-    if (gSampleData) {
-        Free(gSampleData);
-    }
+    // if (gSampleData) {
+    //     Free(gSampleData);
+    // }
 
     gSampleSize = fileSize - sizeof(WAVHeader);
+
 	//gSampleData = MAlloc(gSampleSize);
 
 
@@ -154,17 +139,17 @@ U0 LoadSample(U8 *filename) {
 	//}
 
 
-	//U8 *fileContent = FileRead(filename, &fileSize);
+	//U8 *fileContent = FileRead(filename, &gSampleSize);
 	//U8 *audioDataStart = fileContent + sizeof(WAVHeader); // Move pointer after header
 	//MemCopy(gSampleData, audioDataStart, gSampleSize);
 
 
 
 	// DEBUG
-	//gSampleSize = sizeof(fileContent) - 36;
-	//gSampleSize = fileSize - 36;
-	//U8 *audioDataStart = fileContent + 36; // Move pointer after header MANUAL 36 bytes
-	//MemCopy(gSampleData, audioDataStart, 36);
+	// gSampleSize = fileSize - 44;
+
+	//U8 *audioDataStart = fileContent + 44; // Move pointer after header MANUAL 36 bytes
+	//MemCopy(gSampleData, audioDataStart, gSampleSize);
 
 
 	//Free(fileContent);
@@ -180,42 +165,95 @@ U0 LoadSample(U8 *filename) {
 
 
 }
+// // Clamping function without casting
+// I16 ClampI16(I16 value) {
+// 	if (value < -32768) return -32768;
+// 	if (value > 32767) return 32767;
+// 	return value;
+// }
 
-U0 PlaySample(U32 *buffer, I64 duration, U8 velocity) {
+
+F64 GetPlaybackRateMultiplier(U8 targetNote, U8 referenceNote) {
+    I64 semitoneDifference = targetNote - referenceNote;
+    return Pow(2.0, semitoneDifference / 12.0);
+}
+
+U0 PlaySample(U32 *buffer, I64 duration, U8 note, U8 velocity) {
     if (!gSampleData || !gSampleSize) {
         Print("Sample not loaded.\n");
         return;
     }
-    // Just as an example: copy loaded sample to buffer
-	I64 samplesToCopy = Min(gSampleSize, duration); // don't overflow the buffer
-    MemCopy(buffer, gSampleData, samplesToCopy);
+
+    // F64 multiplier = GetPlaybackRateMultiplier(note, C3_NOTE_VALUE);
+    // Print("Playing with multiplier: %f\n", multiplier); // Add this print statement
+
+    // I64 srcIndex = 0;
+	// I64 destIndex;
+    // for (destIndex = 0; destIndex < duration; destIndex++) {
+    //     if (srcIndex < gSampleSize) {
+    //         buffer[destIndex] = gSampleData[srcIndex];
+    //         srcIndex = ToI64(srcIndex + multiplier);
+    //     } else {
+    //         buffer[destIndex] = 0; // fill the rest with silence
+    //     }
+    // }
+    // Print("Last srcIndex: %d\n", srcIndex); // Print the last value of srcIndex after the loop
+    // Start after the WAV header
+
+    // I64 destIndex;
+    // F64 srcPosition = 44.0; // Start after WAV header
+
+
+    // for (destIndex = 0; destIndex < duration; destIndex++) {
+    //     I64 baseIndex = ToI64(srcPosition);
+
+    //     if (baseIndex < gSampleSize - 8) { // Ensure there are enough samples ahead for interpolation
+    //         // Read the two stereo samples we're interpolating between
+    //         I16 leftSample1 = (gSampleData[baseIndex + 1] << 8) | gSampleData[baseIndex];
+    //         I16 rightSample1 = (gSampleData[baseIndex + 3] << 8) | gSampleData[baseIndex + 2];
+
+    //         I16 leftSample2 = (gSampleData[baseIndex + 5] << 8) | gSampleData[baseIndex + 4];
+    //         I16 rightSample2 = (gSampleData[baseIndex + 7] << 8) | gSampleData[baseIndex + 6];
+
+    //         F64 fraction = srcPosition - baseIndex;
+	// 		// Linearly interpolate between the two samples for each channel
+	// 		I16 leftMixed = ClampI16((1 - fraction) * leftSample1 + fraction * leftSample2);
+	// 		I16 rightMixed = ClampI16((1 - fraction) * rightSample1 + fraction * rightSample2);
+
+    //         buffer[destIndex] = (leftMixed & 0xFFFF) | ((rightMixed & 0xFFFF) << 16);
+    //     } else {
+    //         buffer[destIndex] = 0; // fill the rest with silence
+    //     }
+
+    //     srcPosition += 4.0 * multiplier; // Move by one stereo sample, adjusted by the multiplier
+    // }
+
+    I64 destIndex;
+    F64 srcIndex = 44.0; // Start after WAV header
+
+    for (destIndex = 0; destIndex < duration; destIndex++) {
+        F64 realIndex = srcIndex + destIndex * multiplier * 4;
+        I64 baseIndex = ToI64(realIndex);
+        F64 fraction = realIndex - baseIndex;
+
+        if (baseIndex < gSampleSize - 8) { // Ensure we can access two stereo samples
+            U32 leftSample1 = gSampleData[baseIndex] + (gSampleData[baseIndex + 1] << 8);
+            U32 rightSample1 = gSampleData[baseIndex + 2] + (gSampleData[baseIndex + 3] << 8);
+
+            U32 leftSample2 = gSampleData[baseIndex + 4] + (gSampleData[baseIndex + 5] << 8);
+            U32 rightSample2 = gSampleData[baseIndex + 6] + (gSampleData[baseIndex + 7] << 8);
+
+            // Linear interpolation
+            U32 leftSample = leftSample1 + ((leftSample2 - leftSample1) * fraction);
+            U32 rightSample = rightSample1 + ((rightSample2 - rightSample1) * fraction);
+
+            buffer[destIndex] = (leftSample & 0xFFFF) | ((rightSample & 0xFFFF) << 16);
+        } else {
+            buffer[destIndex] = 0; // fill the rest with silence
+        }
+    }
+	Print("Last srcIndex: %d\n", srcIndex);
     
-	//I64 numSamples = gSampleSize / 2;
-	//I64 numStereoPairs = numSamples / 2;
-	//I64 pairsToCopy = Min(numStereoPairs, duration);
-
-	//I64 i;
-
-	//for (i = 0; i < pairsToCopy; i++) {
-	//	I64 leftSample = (gSampleData[4*i] | (gSampleData[4*i + 1] << 8));
-	//	I64 rightSample = (gSampleData[4*i + 2] | (gSampleData[4*i + 3] << 8));
-	//	buffer[i] = (leftSample << 16) | (rightSample & 0xFFFF);
-	//}
-
-
-	// speed is almost good but right ear only...
-	//I64 numSamples = gSampleSize / 2;
-	//I64 samplesToCopy = Min(numSamples, duration); // don't overflow the buffer
-	//I64 i;
-
-	//for (i=0; i < samplesToCopy; i++)
-	//{
-	//	I64 sample = (gSampleData[2 * i] | (gSampleData[2 *i + 1] << 8));
-	//	buffer[i] = sample << 16;
-	//}
-	
-
-
     //F64 playbackStep = 1.0;  // 1.0 means original speed. <1.0 is slower, >1.0 is faster.
     //F64 playbackPointer = 0.0;
 	//I64 i;
@@ -228,6 +266,10 @@ U0 PlaySample(U32 *buffer, I64 duration, U8 velocity) {
     //       buffer[i] = 0;  // or whatever value represents silence in your buffer
     //   }
     //}
+
+	// Simply play the buffer
+	//I64 samplesToCopy = Min(gSampleSize, duration); // don't overflow the buffer
+    //MemCopy(buffer, gSampleData, samplesToCopy);
 }
 
 // I64 sample_rate = SAMPLE_RATE // whatever your sample rate is

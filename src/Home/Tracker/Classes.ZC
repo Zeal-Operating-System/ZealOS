@@ -12,7 +12,7 @@ class NoteCell {
     U8 effect;    // Future expansion for effects
 };
 
-#define TRACK_LENGTH 10  // Length of each pattern in rows
+#define TRACK_LENGTH 13  // Length of each pattern in rows
 class Pattern {
     NoteCell cells[TRACK_LENGTH];
 };
@@ -21,6 +21,21 @@ class Pattern {
 class Song {
     U8 patternOrder[MAX_PATTERNS]; // Which pattern is played when
     Pattern patterns[MAX_PATTERNS]; 
+};
+
+
+class WAVHeader {
+    U8  riff[4];        // RIFF string
+    U32 overall_size;   // overall size of file in bytes
+    U8  wave[4];        // WAVE string
+    U8  fmt_chunk[4];   // fmt string with trailing null char
+    U32 length;         // length of format data. Should be 16 for PCM
+    U16 format_type;    // format type. 1 for PCM
+    U16 channels;       // number of channels
+    U32 sample_rate;    // sampling rate (blocks per second)
+    U32 byterate;       // SampleRate * NumChannels * BitsPerSample/8
+    U16 block_align;    // channels * bits/sample / 8
+    U16 bits_per_sample;// bits per sample, 8- 8bits, 16- 16 bits etc
 };
 
 
