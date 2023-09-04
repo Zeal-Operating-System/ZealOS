@@ -101,43 +101,38 @@ U0 EnterPattern(Pattern *pattern) {
     NoteCell *cell;
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
-        Print("Enter note for row $$LTGREEN$$%d$$FG$$ (0-127, 0 for none): ", row);
-        cell->note = KeyGet(&sc);
-		"%d\n", cell->note;
+         cell->note = I64Get("Enter note for row $$LTGREEN$$%d$$FG$$ (0-127, 0 for none): ", row);
         if (cell->note) {
-            Print("Enter velocity for note (1-127): ");
-            cell->velocity = KeyGet(&sc);
-			"%d\n", cell->velocity;
+            cell->velocity = I64Get("Enter velocity for note (1-127): ");
 			if (cell->velocity) {
-				Print("Enter instrument for note (1-5): ");
+				Print("Enter instrument for note (1-5): ");
 		        switch (KeyGet(&sc)) {
-        	    case '1':
-					cell->instrument = PULSE1;
-					"PULSE1\n";
-	                break;
-    	        case '2':
-					cell->instrument = PULSE2;
-					"PULSE2\n";
-            	    break;
-	            case '3':
-					cell->instrument = TRIANGLE;
-					"TRIANGLE\n";
-            	    break;
-	            case '4':
-					cell->instrument = NOISE;
-					"NOISE\n";
-            	    break;
-	            case '5':
-					cell->instrument = SAMPLE;
-					"SAMPLE\n";
-            	    break;
-            	default:
-					cell->instrument = INSTRUMENT_NONE;
-					"SINE\n";
-            	    break;
-					// return;
+        	    	case '1':
+						cell->instrument = PULSE1;
+						"PULSE1\n";
+		                break;
+    		        case '2':
+						cell->instrument = PULSE2;
+						"PULSE2\n";
+	            	    break;
+		            case '3':
+						cell->instrument = TRIANGLE;
+						"TRIANGLE\n";
+            		    break;
+		            case '4':
+						cell->instrument = NOISE;
+						"NOISE\n";
+            		    break;
+	            	case '5':
+						cell->instrument = SAMPLE;
+						"SAMPLE\n";
+    	        	    break;
+        	    	default:
+						cell->instrument = INSTRUMENT_NONE;
+						"SINE\n";
+            	    	break;
         		}
-
+	
 				AudioPlayNote(cell->note, cell->velocity, cell->instrument);
 			}
         }
@@ -229,5 +224,5 @@ U0 MusicTracker() {
         }
     }
 	CleanupWaveformGen(); // Free the sample buffer
-	Kill("Oscilloscope");
+	//Kill("Oscilloscope");
 }
