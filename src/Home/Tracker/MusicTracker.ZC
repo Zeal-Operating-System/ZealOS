@@ -51,11 +51,14 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
 
     //ApplyEnvelope(buffer, SAMPLE_RATE); // TODO: Apply fade in and fade out
 
-	// I64 i;
-	// for (i = 0; i < bufferSize; i++) {
-	// 	// Copy data to the shared oscilloscope buffer
-	// 	gSharedBuffer[i] = buffer[i];
-	// }
+	//I64 i;
+	//for (i = 0; i < bufferSize; i++) {
+		// Copy data to the shared oscilloscope buffer
+		//gSharedBuffer[i] = buffer[i];
+	//}
+
+
+	UpdateSharedBuffer(buffer, SAMPLE_RATE/winmgr.fps);
 
     // Play the buffer using the AC97 driver:
     AudioSFXPlay(buffer, bufferSize);
@@ -105,7 +108,7 @@ U0 EnterPattern(Pattern *pattern) {
         if (cell->note) {
             cell->velocity = I64Get("Enter velocity for note (1-127): ");
 			if (cell->velocity) {
-				Print("Enter instrument for note (1-5): ");
+				Print("Enter instrument for note (1-5): ");
 		        switch (KeyGet(&sc)) {
         	    	case '1':
 						cell->instrument = PULSE1;

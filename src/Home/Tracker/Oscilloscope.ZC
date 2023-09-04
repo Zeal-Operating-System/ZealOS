@@ -1,73 +1,178 @@
+
+// #define CHUNK_SIZE 1470 // (44100 / 30)  // 30 FPS
+// winmgr.fps
+
 // Globals
 U32 *gSharedBuffer;
 I64 gSharedBufferPosition = 0;
 I64 gSharedBufferSize;
 
 // Initialize shared buffer
-U0 InitSharedBuffer(I64 size) {
+U0 InitSharedBuffer(I64 size)
+{
     gSharedBuffer = MAlloc(size * sizeof(U32));
     gSharedBufferSize = size;
     gSharedBufferPosition = 0;
 }
 
 // Update shared buffer in your audio playback function
-U0 UpdateSharedBuffer(U32 *buffer, I64 size) {
-	I64 i;
-    for (i = 0; i < size; i++) {
+U0 UpdateSharedBuffer(U32 *buffer, I64 size)
+{
+    I64 i;
+    for (i = 0; i < size; i++) 
+    {
         gSharedBuffer[gSharedBufferPosition] = buffer[i];
         gSharedBufferPosition = (gSharedBufferPosition + 1) % gSharedBufferSize;
     }
-}
-U0 OscilloscopeDraw() {
-    I64 i, y;
-    //GrClear(0); // Clear the screen
 
-    I64 startPosition = gSharedBufferPosition;
-    for (i = 0; i < 400; i++) {
-        I16 sample_value = (gSharedBuffer[startPosition] & 0xFFFF) - 32768;  // extract left channel and center around 0
+	// I64 i;
+    // for (i = 0; i < size; i++) {
+    //     gSharedBuffer[gSharedBufferPosition] = buffer[i];
+    //     gSharedBufferPosition = (gSharedBufferPosition + 1) % gSharedBufferSize;
+    // }
+}
+
+U0 OscilloscopeDraw(CTask *task, CDC *dc)
+{
+    I64 i, y;
+	I64 CHUNK_SIZE = SAMPLE_RATE / winmgr.fps;
+    // Start from the most recent sample and display CHUNK_SIZE samples
+    I64 startPosition = (gSharedBufferPosition - CHUNK_SIZE + gSharedBufferSize) % gSharedBufferSize;
+    
+    for (i = 0; i < CHUNK_SIZE; i++) 
+    {
+        I16 sample_value = (gSharedBuffer[startPosition] & 0xFFFF) - 32768;  
         F64 normalized_sample = ToF64(sample_value) / 32768.0;
         y = 300 / 2 - (normalized_sample * 300 / 2);
 
-        GrPlot(i, y, WHITE);  // Using GrPlot instead of DrawPoint
+        GrPlot(dc, i, y); 
             
         startPosition = (startPosition + 1) % gSharedBufferSize;
     }
+
+    // I64 i, y;
+	
+	// //DCClear(dc);
+
+    // I64 startPosition = gSharedBufferPosition;
+    // for (i = 0; i < 400; i++) {
+    //     I16 sample_value = (gSharedBuffer[startPosition] & 0xFFFF) - 32768;  // extract left channel and center around 0
+    //     F64 normalized_sample = ToF64(sample_value) / 32768.0;
+    //     y = 300 / 2 - (normalized_sample * 300 / 2);
+
+    //     GrPlot(dc, i, y);  // Using GrPlot instead of DrawPoint
+            
+    //     startPosition = (startPosition + 1) % gSharedBufferSize;
+    // }
+
 }
 
-// Oscilloscope task
-U0 OscilloscopeTask() {
-    // Fs->draw_it = &OscilloscopeDraw; // Set the draw callback
+U0 StartOscilloscope() 
+{
+	I64 ch, sc;
 
-	while (TRUE)
-	{
-		Refresh;
-	}
-    
-}
-
-U0 StartOscilloscope() {
     InitSharedBuffer(44100);  // For example, buffer to store 1 second of audio at 44100Hz
+	
+	U8 *name = "Oscilloscope";
+	CTask *task = Spawn(&ServerCmdLine, NULL, name,, Fs);
+
+	StrCopy(task->task_title, name);
+	task->title_src = TTS_LOCKED_CONST;
+    task->border_src  = BDS_CONST;
+    task->border_attr = LTGREEN << 4 + WHITE;
+
+	TaskExe(task, Fs, ";", 1 << JOBf_WAKE_MASTER | 1 << JOBf_FREE_ON_COMPLETE);
+
+	WinHorz((TEXT_COLS / 2) - 32, (TEXT_COLS / 2) + 32, task);
+    WinVert((TEXT_ROWS / 2) - 16, (TEXT_ROWS / 2) + 16, task);
+	task->win_inhibit = WIG_NO_FOCUS_TASK_DEFAULT;
+	// WinHorz(task->win_left, task->win_left + 50, task);
+	// WinVert(2, 2 + 8, task);
+	// task->animate_task = Spawn(&OscilloscopeAnimate, NULL, "Animate",, task);
+    task->draw_it = &OscilloscopeDraw; // Set the draw callback
+
+	// DocPut(task)->max_entries = 100;
+	
+	// CCtrl *oscWindow = OscWindow;
+	// windowed	
+	// oscWindow->win_task->win_left = (GR_WIDTH / 23);
+	// oscWindow->win_task->win_right = (GR_WIDTH / 13);
+	// oscWindow->win_task->win_top = GR_HEIGHT / 80;
+	// oscWindow->win_task->win_bottom = GR_HEIGHT / 10;
 
     // SettingsPush();  // Push current settings
-    // Fs->win_width = 400;  // Width of the oscilloscope window
-    // Fs->win_height = 300;  // Height of the oscilloscope window
-    WinHorz((TEXT_COLS / 2) - 200,
-            (TEXT_COLS / 2) - 200 + (200 - 1),
-            Fs);
-    WinVert((TEXT_ROWS / 2) - 150,
-            (TEXT_ROWS / 2) - 150 + (Fs->win_height - 1),
-            Fs);
-    // Fs->border_src  = BDS_CONST;
-    // Fs->border_attr = LTGREEN << 4 + WHITE;
-    // StrCopy(Fs->task_title, "Oscilloscope");
+    //Fs->win_width = 400;  // Width of the oscilloscope window
+    //Fs->win_height = 300;  // Height of the oscilloscope window
     
-    Fs->draw_it = &OscilloscopeDraw; // Set the draw callback
+	// WinHorz((TEXT_COLS / 2) - 32, (TEXT_COLS / 2) + 32, Fs);
+    // WinVert((TEXT_ROWS / 2) - 16, (TEXT_ROWS / 2) + 16, Fs);
 
-	while (TRUE)
-	{
-		Refresh;
-	}
-    // Spawn("Oscilloscope", OscilloscopeTask);  // Start the oscilloscope task
+    // oscWindow->win_task->border_src  = BDS_CONST;
+    // oscWindow->win_task->border_attr = LTGREEN << 4 + WHITE;
+    // StrCopy(oscWindow->win_task->task_title, "Oscilloscope");
+
+    
+	//Spawn("Oscilloscope", OscilloscopeTask);  // Start the oscilloscope task
+    
+    // Fs->draw_it = &OscilloscopeDraw; // Set the draw callback
+
+	//try
+	//{
+	//	do
+	//		switch (ch = KeyGet(&sc))
+	//		{
+	//			case '\n':
+	//				"dood\n";
+	//				break;
+	//		}
+	//	while (ch != CH_ESC && ch != CH_SHIFT_ESC);
+	//}
+	//catch
+	//	PutExcept;
+
+	// OscWindowDel(c);
     
     // SettingsPop();  // Pop settings
 }
+
+// U0 OscilloscopeAnimate()
+// {
+// 	while (TRUE)
+// 	{
+// 		UpdateSharedBuffer(gSharedBuffer[gSharedBufferPosition], gSharedBufferSize);
+// 		Sleep(200);
+// 		Refresh;
+// 	}
+// }
+
+// class @Oscilloscope
+// {
+// 	U8		buffer;
+// 	CBGR24	color;
+// 	I64		width;
+// 	I64		height;
+
+// } osc;
+
+// CCtrl *OscWindow()
+// {
+// 	CCtrl *c = CAlloc(sizeof(CCtrl));
+// 	c->win_task = Fs;
+// 	c->flags				= CTRLF_SHOW | CTRLF_CAPTURE_LEFT_MS;
+// 	c->type					= CTRLT_GENERIC;
+// 	c->state				= &osc;
+// 	MemSet(&osc,0,sizeof(@Oscilloscope));
+// 	c->draw_it				= &OscilloscopeDraw;
+// 	// c->left_click			= &LeftClickSlider;
+// 	// c->update_derived_vals	= &UpdateDerivedCtrlSlider;
+// 	QueueInsert(c, Fs->last_ctrl);
+// 	TaskDerivedValsUpdate;
+// 	return c;
+// }
+
+// U0 OscWindowDel(CCtrl *c)
+// {
+// 	QueueRemove(c);
+// 	Free(c);
+// }
+//StartOscilloscope;
