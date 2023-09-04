@@ -95,9 +95,36 @@ U0 EnterPattern(Pattern *pattern) {
             cell->velocity = KeyGet(&sc);
 			"%d\n", cell->velocity;
 			if (cell->velocity) {
-				Print("Enter instrument for note (0-4): ");
-				cell->instrument = KeyGet(&sc);
-				"%d\n", cell->instrument;
+				Print("Enter instrument for note (1-5): ");
+		        switch (KeyGet(&sc)) {
+        	    case '1':
+					cell->instrument = PULSE1;
+					"PULSE1\n";
+	                break;
+    	        case '2':
+					cell->instrument = PULSE2;
+					"PULSE2\n";
+            	    break;
+	            case '3':
+					cell->instrument = TRIANGLE;
+					"TRIANGLE\n";
+            	    break;
+	            case '4':
+					cell->instrument = NOISE;
+					"NOISE\n";
+            	    break;
+	            case '5':
+					cell->instrument = SAMPLE;
+					"SAMPLE\n";
+            	    break;
+            	default:
+                	Print("Invalid choice.\n");
+					cell->instrument = INSTRUMENT_NONE;
+					"SINE\n";
+            	    break;
+					// return;
+        		}
+
 				AudioPlayNote(cell->note, cell->velocity, cell->instrument);
 			}
         }
