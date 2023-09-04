@@ -21,12 +21,15 @@ U16 currentRate = InU16(ac97.nam + EXT_FRONT_RATE);
 "currentRate: %d\n", currentRate;
 
 #include "Classes"
+#include "Utils"
 // include_noreindex "MIDIHandling"
 // include_noreindex "WaveformGen"
 // include_noreindex "UITracker"
+#include "Oscilloscope"
 #include "MusicTracker"
 
 
 AutoComplete(0);
 
-MusicTracker;
+MusicTracker;
+StartOscilloscope;

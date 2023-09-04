@@ -1,0 +1,73 @@
+// Globals
+U32 *gSharedBuffer;
+I64 gSharedBufferPosition = 0;
+I64 gSharedBufferSize;
+
+// Initialize shared buffer
+U0 InitSharedBuffer(I64 size) {
+    gSharedBuffer = MAlloc(size * sizeof(U32));
+    gSharedBufferSize = size;
+    gSharedBufferPosition = 0;
+}
+
+// Update shared buffer in your audio playback function
+U0 UpdateSharedBuffer(U32 *buffer, I64 size) {
+	I64 i;
+    for (i = 0; i < size; i++) {
+        gSharedBuffer[gSharedBufferPosition] = buffer[i];
+        gSharedBufferPosition = (gSharedBufferPosition + 1) % gSharedBufferSize;
+    }
+}
+U0 OscilloscopeDraw() {
+    I64 i, y;
+    //GrClear(0); // Clear the screen
+
+    I64 startPosition = gSharedBufferPosition;
+    for (i = 0; i < 400; i++) {
+        I16 sample_value = (gSharedBuffer[startPosition] & 0xFFFF) - 32768;  // extract left channel and center around 0
+        F64 normalized_sample = ToF64(sample_value) / 32768.0;
+        y = 300 / 2 - (normalized_sample * 300 / 2);
+
+        GrPlot(i, y, WHITE);  // Using GrPlot instead of DrawPoint
+            
+        startPosition = (startPosition + 1) % gSharedBufferSize;
+    }
+}
+
+// Oscilloscope task
+U0 OscilloscopeTask() {
+    // Fs->draw_it = &OscilloscopeDraw; // Set the draw callback
+
+	while (TRUE)
+	{
+		Refresh;
+	}
+    
+}
+
+U0 StartOscilloscope() {
+    InitSharedBuffer(44100);  // For example, buffer to store 1 second of audio at 44100Hz
+
+    // SettingsPush();  // Push current settings
+    // Fs->win_width = 400;  // Width of the oscilloscope window
+    // Fs->win_height = 300;  // Height of the oscilloscope window
+    WinHorz((TEXT_COLS / 2) - 200,
+            (TEXT_COLS / 2) - 200 + (200 - 1),
+            Fs);
+    WinVert((TEXT_ROWS / 2) - 150,
+            (TEXT_ROWS / 2) - 150 + (Fs->win_height - 1),
+            Fs);
+    // Fs->border_src  = BDS_CONST;
+    // Fs->border_attr = LTGREEN << 4 + WHITE;
+    // StrCopy(Fs->task_title, "Oscilloscope");
+    
+    Fs->draw_it = &OscilloscopeDraw; // Set the draw callback
+
+	while (TRUE)
+	{
+		Refresh;
+	}
+    // Spawn("Oscilloscope", OscilloscopeTask);  // Start the oscilloscope task
+    
+    // SettingsPop();  // Pop settings
+}

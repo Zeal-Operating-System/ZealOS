@@ -42,7 +42,7 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
             break;
         case SAMPLE:
             PlaySample(buffer, bufferSize, note, velocity);
-			Print("Buffer first values: %d, %d, %d, %d...\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+			//Print("Buffer first values: %d, %d, %d, %d...\n", buffer[0], buffer[1], buffer[2], buffer[3]);
             break;
         default:
             GenerateSineWave(buffer, bufferSize, freq, velocity);
@@ -51,35 +51,49 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
 
     //ApplyEnvelope(buffer, SAMPLE_RATE); // TODO: Apply fade in and fade out
 
+	// I64 i;
+	// for (i = 0; i < bufferSize; i++) {
+	// 	// Copy data to the shared oscilloscope buffer
+	// 	gSharedBuffer[i] = buffer[i];
+	// }
+
     // Play the buffer using the AC97 driver:
     AudioSFXPlay(buffer, bufferSize);
 	// silly debug print
-	if (instrument == SAMPLE)
-		"Instrument: $$RED$$ SAMPLE   $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", note;	
 	if (instrument == PULSE1)
-		"Instrument: $$GREEN$$ PULSE1   $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", note;
+		"³ $$GREEN$$PULSE1     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
 	if (instrument == PULSE2)
-		"Instrument: $$CYAN$$ PULSE2   $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", note;
+		"³ $$CYAN$$PULSE2     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
 	if (instrument == TRIANGLE)
-		"Instrument: $$YELLOW$$ TRIANGLE $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", note;
+		"³ $$YELLOW$$TRIANGLE   $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
 	if (instrument == NOISE)
-		"Instrument: $$BROWN$$ NOISE    $$DKGRAY$$|$$FG$$ Note: $$YELLOW$$%d$$FG$$\n", note;
-	
+		"³ $$BROWN$$NOISE      $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
+	if (instrument == SAMPLE)
+		"³ $$RED$$SAMPLE     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;	
+	if (instrument == INSTRUMENT_NONE)
+		"³            ³    \t³", note;	
+
+	"\n";
 	Free(buffer);
 }
 
 U0 PlayPattern(Pattern *pattern) {
     I64 row;
     NoteCell *cell;
+	"ÚÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄ¿\n";
+	"³ INSTRUMENT ³ NOTE ³\n";
+	"ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄ´\n";
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
         if (cell->note) {
             AudioPlayNote(cell->note, cell->velocity, cell->instrument);
+			if (row < TRACK_LENGTH-1) "ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄ´\n";
         }
 		if (cell->instrument == SAMPLE) Sleep(1000); // wait for 6sec for the 7sec sample test
         //Sleep(1200);  // Adjust for tempo
 		Sleep(300);
     }
+	"ÀÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÙ\n";
 }
 
 U0 EnterPattern(Pattern *pattern) {
@@ -87,7 +101,7 @@ U0 EnterPattern(Pattern *pattern) {
     NoteCell *cell;
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
-        Print("Enter note for row %d (0-127, 0 for none): ", row);
+        Print("Enter note for row $$LTGREEN$$%d$$FG$$ (0-127, 0 for none): ", row);
         cell->note = KeyGet(&sc);
 		"%d\n", cell->note;
         if (cell->note) {
@@ -118,11 +132,10 @@ U0 EnterPattern(Pattern *pattern) {
 					"SAMPLE\n";
             	    break;
             	default:
-                	Print("Invalid choice.\n");
 					cell->instrument = INSTRUMENT_NONE;
-					"SINE\n";
+					"SINE\n";
             	    break;
-					// return;
+					// return;
         		}
 
 				AudioPlayNote(cell->note, cell->velocity, cell->instrument);
@@ -216,4 +229,5 @@ U0 MusicTracker() {
         }
     }
 	CleanupWaveformGen(); // Free the sample buffer
+	Kill("Oscilloscope");
 }
