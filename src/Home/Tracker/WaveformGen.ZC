@@ -165,67 +165,71 @@ U0 LoadSample(U8 *filename) {
 
 
 }
-// // Clamping function without casting
-// I16 ClampI16(I16 value) {
-// 	if (value < -32768) return -32768;
-// 	if (value > 32767) return 32767;
-// 	return value;
+
+// Interpolation (works? but slow and distorted)
+// #define WINDOW_SIZE 10
+
+// F64 Sinc(F64 x) {
+//     if (x == 0.0) {
+//         return 1.0;
+//     } else {
+//         return Sin(PI * x) / (PI * x);
+//     }
 // }
 
+// I16 RoundF64(F64 val) {
+//     if (val < 0.0) {
+//         return val - 0.5;
+//     } else {
+//         return val + 0.5;
+//     }
+// }
+
+// I16 ClampToI16(I64 value) {
+//     if (value > 32767) return 32767;
+//     if (value < -32768) return -32768;
+//     return value;
+// }
+
+// I64 ConvertU8PairToI64(U8 msb, U8 lsb) {
+//     I64 val = (msb << 8) | lsb;
+//     if (val & 0x8000) {
+//         val |= 0xFFFF0000;  // sign extend if negative
+//     }
+//     return val;
+// }
+
+// I16 ConvertU8ToI16(U8 lowByte, U8 highByte) {
+//     I16 result = highByte;
+//     result = (result << 8) | lowByte;
+//     return result;
+// }
+
+// I16 WindowedSincInterpolation(F64 position) {
+//     I64 baseIndex = ToI64(position);
+//     F64 fraction = position - baseIndex;
+//     F64 result = 0.0;
+// 	I64 i;
+//     for (i = -WINDOW_SIZE; i <= WINDOW_SIZE; i++) {
+//         F64 sample;
+//         if (baseIndex + i >= 0 && baseIndex + i < gSampleSize) {
+//             sample = ConvertU8ToI16(gSampleData[2 * (baseIndex + i)], gSampleData[2 * (baseIndex + i) + 1]);
+//         } else {
+//             sample = 0.0;
+//         }
+//         result += sample * Sinc(i - fraction) * 0.54 - 0.46 * Cos(2.0 * PI * (i - fraction) / (2 * WINDOW_SIZE + 1));
+//     }
+
+//     return ClampToI16(RoundF64(result));
+// }
+
+F64 RoundToNearestHalf(F64 value) {
+    return Round(value * 2.0) / 2.0;
+}
 
 F64 GetPlaybackRateMultiplier(U8 targetNote, U8 referenceNote) {
     I64 semitoneDifference = targetNote - referenceNote;
     return Pow(2.0, semitoneDifference / 12.0);
-}
-
-#define WINDOW_SIZE 10
-
-F64 sinc(F64 x) {
-    if (x == 0.0) {
-        return 1.0;
-    } else {
-        return sin(PI * x) / (PI * x);
-    }
-}
-
-I16 RoundF64(F64 val) {
-    if (val < 0.0) {
-        return val - 0.5;
-    } else {
-        return val + 0.5;
-    }
-}
-
-I16 ClampToI16(I64 value) {
-    if (value > 32767) return 32767;
-    if (value < -32768) return -32768;
-    return value;
-}
-
-I64 ConvertU8PairToI64(U8 msb, U8 lsb) {
-    I64 val = (msb << 8) | lsb;
-    if (val & 0x8000) {
-        val |= 0xFFFF0000;  // sign extend if negative
-    }
-    return val;
-}
-
-I16 WindowedSincInterpolation(F64 position) {
-    I64 baseIndex = ToI64(position);
-    F64 fraction = position - baseIndex;
-    F64 result = 0.0;
-	I64 i;
-    for (i = -WINDOW_SIZE; i <= WINDOW_SIZE; i++) {
-        F64 sample;
-        if (baseIndex + i >= 0 && baseIndex + i < gSampleSize) {
-            sample = ConvertU8ToI16(gSampleData[2 * (baseIndex + i)], gSampleData[2 * (baseIndex + i) + 1]);
-        } else {
-            sample = 0.0;
-        }
-        result += sample * sinc(i - fraction) * 0.54 - 0.46 * cos(2.0 * PI * (i - fraction) / (2 * WINDOW_SIZE + 1));
-    }
-
-    return ClampToI16(RoundF64(result));
 }
 
 U0 PlaySample(U32 *buffer, I64 duration, U8 note, U8 velocity) {
@@ -234,55 +238,36 @@ U0 PlaySample(U32 *buffer, I64 duration, U8 note, U8 velocity) {
         return;
     }
 
-	
-
-    F64 multiplier = GetPlaybackRateMultiplier(playedNote, 60);
-    Print("multiplier: %f\n", multiplier);
+    F64 multiplier = GetPlaybackRateMultiplier(note, 60);
+	multiplier = RoundToNearestHalf(multiplier);
 
     I64 destIndex;
     F64 srcIndex = 44.0; // Start after WAV header
 
-	for (destIndex = 0; destIndex < duration; destIndex++) {
-		F64 realIndex = srcIndex + destIndex * multiplier;
-		
-		I16 sample_value = WindowedSincInterpolation(realIndex);
-		buffer[destIndex] = (sample_value << 16) | (sample_value & 0xFFFF);
-	}
+    for (destIndex = 0; destIndex < duration; destIndex++) {
+        F64 realIndex = srcIndex + destIndex * multiplier * 4;
+        I64 baseIndex = ToI64(realIndex);
+        F64 fraction = realIndex - baseIndex;
 
+        if (baseIndex < gSampleSize - 8) { // Ensure we can access two stereo samples
+            U32 leftSample1 = gSampleData[baseIndex] + (gSampleData[baseIndex + 1] << 8);
+            U32 rightSample1 = gSampleData[baseIndex + 2] + (gSampleData[baseIndex + 3] << 8);
 
-    // I64 destIndex;
-    // F64 srcIndex = 44.0; // Start after WAV header
+            U32 leftSample2 = gSampleData[baseIndex + 4] + (gSampleData[baseIndex + 5] << 8);
+            U32 rightSample2 = gSampleData[baseIndex + 6] + (gSampleData[baseIndex + 7] << 8);
 
-    // for (destIndex = 0; destIndex < duration; destIndex++) {
-    //     F64 realIndex = srcIndex + destIndex * multiplier * 4;
-    //     I64 baseIndex = ToI64(realIndex);
-    //     F64 fraction = realIndex - baseIndex;
+            // Linear interpolation
+            U32 leftSample = leftSample1 + ((leftSample2 - leftSample1) * fraction);
+            U32 rightSample = rightSample1 + ((rightSample2 - rightSample1) * fraction);
 
-    //     if (baseIndex < gSampleSize - 8) { // Ensure we can access two stereo samples
-    //         U32 leftSample1 = gSampleData[baseIndex] + (gSampleData[baseIndex + 1] << 8);
-    //         U32 rightSample1 = gSampleData[baseIndex + 2] + (gSampleData[baseIndex + 3] << 8);
-
-    //         U32 leftSample2 = gSampleData[baseIndex + 4] + (gSampleData[baseIndex + 5] << 8);
-    //         U32 rightSample2 = gSampleData[baseIndex + 6] + (gSampleData[baseIndex + 7] << 8);
-
-    //         // Linear interpolation
-    //         U32 leftSample = leftSample1 + ((leftSample2 - leftSample1) * fraction);
-    //         U32 rightSample = rightSample1 + ((rightSample2 - rightSample1) * fraction);
-
-    //         buffer[destIndex] = (leftSample & 0xFFFF) | ((rightSample & 0xFFFF) << 16);
-    //     } else {
-    //         buffer[destIndex] = 0; // fill the rest with silence
-    //     }
-    // }
+            buffer[destIndex] = (leftSample & 0xFFFF) | ((rightSample & 0xFFFF) << 16);
+        } else {
+            buffer[destIndex] = 0; // fill the rest with silence
+        }
+    }
 	// Print("Last srcIndex: %d\n", srcIndex);
     
 	// Simply play the buffer
 	//I64 samplesToCopy = Min(gSampleSize, duration); // don't overflow the buffer
     //MemCopy(buffer, gSampleData, samplesToCopy);
 }
-
-// I64 sample_rate = SAMPLE_RATE // whatever your sample rate is
-// for (I64 i = 0; i < sample_duration * sample_rate; i++) {
-//     sample = sin(2.0 * PI * freq * i / sample_rate);
-//     // Then send 'sample' to your audio buffer/output.
-// }

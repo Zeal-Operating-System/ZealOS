@@ -83,16 +83,24 @@ U0 PlayPattern(Pattern *pattern) {
 }
 
 U0 EnterPattern(Pattern *pattern) {
-    I64 row;
+    I64 row, sc;
     NoteCell *cell;
     for (row = 0; row < TRACK_LENGTH; row++) {
         cell = &pattern->cells[row];
         Print("Enter note for row %d (0-127, 0 for none): ", row);
-        // cell->note = InU8;
-        // if (cell->note) {
-        //     Print("Enter velocity for note (1-127): ");
-        //     cell->velocity = InU8;
-        // }
+        cell->note = KeyGet(&sc);
+		"%d\n", cell->note;
+        if (cell->note) {
+            Print("Enter velocity for note (1-127): ");
+            cell->velocity = KeyGet(&sc);
+			"%d\n", cell->velocity;
+			if (cell->velocity) {
+				Print("Enter instrument for note (0-4): ");
+				cell->instrument = KeyGet(&sc);
+				"%d\n", cell->instrument;
+				AudioPlayNote(cell->note, cell->velocity, cell->instrument);
+			}
+        }
     }
 }
 
