@@ -51,15 +51,9 @@ U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
 
     //ApplyEnvelope(buffer, SAMPLE_RATE); // TODO: Apply fade in and fade out
 
-	//I64 i;
-	//for (i = 0; i < bufferSize; i++) {
-		// Copy data to the shared oscilloscope buffer
-		//gSharedBuffer[i] = buffer[i];
-	//}
-
-
-	UpdateSharedBuffer(buffer, SAMPLE_RATE/winmgr.fps);
-
+	gSharedBuffer = buffer;
+	gSharedBufferSize = bufferSize;
+	gSharedBufferPosition = 0;  // Resetting the position
     // Play the buffer using the AC97 driver:
     AudioSFXPlay(buffer, bufferSize);
 	// silly debug print
