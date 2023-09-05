@@ -3728,17 +3728,25 @@ public class CKbdStateGlobals
 };
 
 #help_index "Mouse"
+class CMouseRawQueue:CQueue
+{
+	CTask *task;
+};
+
 public class CMouseHardStateGlobals
 {
 	CD3I64	 pos, 					//Position in pixels
-			 prescale;
+			 prescale,
+			 raw_data;
 	CD3 	 scale;
 	F64 	 speed;					//Output: How fast the user is moving it.
 	I64 	 timestamp,				//Output: TSCGet when event.
 			 install_attempts,		//Private
 			 pkt_size;				//Private
 	CFifoU8	*fifo, *fifo2;			//Private
+	CQueue	*raw_queue;
 	Bool	 bttns[5],
+			 raw_bttns[5],
 			 has_wheel,
 			 has_ext_bttns,
 			 enabled,

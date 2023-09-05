@@ -34,7 +34,7 @@ Bool LimineCFGMake(U8 drv_let)
 			bd = drive->bd;
 			drv_let = Drive2Letter(drive);
 
-			filename_sys = MStrPrint("%C:/Boot/Limine.SYS", drv_let);
+			filename_sys = MStrPrint("%C:/Boot/Limine-BIOS.SYS", drv_let);
 			filename_elf = MStrPrint("%C:/Boot/ZealBooter.ELF", drv_let);
 			filename_zxe = MStrPrint("%C:/Boot/Kernel.ZXE", drv_let);
 			if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))

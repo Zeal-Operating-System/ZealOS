@@ -1,8 +1,11 @@
+# Nuke built-in rules and variables.
+override MAKEFLAGS += -rR
+
 # This is the name that our final kernel executable will have.
 # Change as needed.
 override KERNEL := zealbooter.elf
 
-# Convenience macro to reliably declare overridable command variables.
+# Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =
     ifeq ($(origin $1),default)
         override $(1) := $(2)
@@ -15,75 +18,90 @@ endef
 # It is highly recommended to use a custom built cross toolchain to build a kernel.
 # We are only using "cc" as a placeholder here. It may work by using
 # the host system's toolchain, but this is not guaranteed.
-$(eval $(call DEFAULT_VAR,CC,cc))
+override DEFAULT_CC := cc
+$(eval $(call DEFAULT_VAR,CC,$(DEFAULT_CC)))
 
 # Same thing for "ld" (the linker).
-$(eval $(call DEFAULT_VAR,LD,ld))
+override DEFAULT_LD := ld
+$(eval $(call DEFAULT_VAR,LD,$(DEFAULT_LD)))
 
-# User controllable CFLAGS.
-CFLAGS ?= -g -O2 -pipe -Wall -Wextra
+# User controllable C flags.
+override DEFAULT_CFLAGS := -g -O2 -pipe
+$(eval $(call DEFAULT_VAR,CFLAGS,$(DEFAULT_CFLAGS)))
 
-# User controllable preprocessor flags. We set none by default.
-CPPFLAGS ?=
+# User controllable C preprocessor flags. We set none by default.
+override DEFAULT_CPPFLAGS :=
+$(eval $(call DEFAULT_VAR,CPPFLAGS,$(DEFAULT_CPPFLAGS)))
 
 # User controllable nasm flags.
-NASMFLAGS ?= -F dwarf -g
+override DEFAULT_NASMFLAGS := -F dwarf -g
+$(eval $(call DEFAULT_VAR,NASMFLAGS,$(DEFAULT_NASMFLAGS)))
 
 # User controllable linker flags. We set none by default.
-LDFLAGS ?=
+override DEFAULT_LDFLAGS :=
+$(eval $(call DEFAULT_VAR,LDFLAGS,$(DEFAULT_LDFLAGS)))
 
 # Internal C flags that should not be changed by the user.
-override CFLAGS +=       \
-    -std=gnu11           \
-    -ffreestanding       \
+override CFLAGS += \
+    -Wall \
+    -Wextra \
+    -std=gnu11 \
+    -ffreestanding \
     -fno-stack-protector \
-    -fno-stack-check     \
-    -fno-lto             \
-    -fno-pie             \
-    -fno-pic             \
-    -m64                 \
-    -march=x86-64        \
-    -mabi=sysv           \
-    -mno-80387           \
-    -mno-mmx             \
-    -mno-sse             \
-    -mno-sse2            \
-    -mno-red-zone        \
-    -mcmodel=kernel      \
-    -MMD                 \
-    -I.                  \
-    -I./lib
+    -fno-stack-check \
+    -fno-lto \
+    -fno-PIE \
+    -fno-PIC \
+    -m64 \
+    -march=x86-64 \
+    -mabi=sysv \
+    -mno-80387 \
+    -mno-mmx \
+    -mno-sse \
+    -mno-sse2 \
+    -mno-red-zone \
+    -mcmodel=kernel
+
+# Internal C preprocessor flags that should not be changed by the user.
+override CPPFLAGS := \
+    -I. \
+    -I./lib \
+    $(CPPFLAGS) \
+    -MMD \
+    -MP
 
 # Internal linker flags that should not be changed by the user.
-override LDFLAGS +=         \
-    -nostdlib               \
-    -static                 \
-    -m elf_x86_64           \
+override LDFLAGS += \
+    -m elf_x86_64 \
+    -nostdlib \
+    -static \
     -z max-page-size=0x1000 \
     -T linker.ld
 
-# Check if the linker supports -no-pie and enable it if it does
+# Check if the linker supports -no-pie and enable it if it does.
 ifeq ($(shell $(LD) --help 2>&1 | grep 'no-pie' >/dev/null 2>&1; echo $$?),0)
     override LDFLAGS += -no-pie
 endif
 
 # Internal nasm flags that should not be changed by the user.
 override NASMFLAGS += \
+    -Wall \
     -f elf64
 
-# Use find to glob all *.c, *.S, and *.asm files in the directory and extract the object names.
-override CFILES := $(shell find . -type f -name '*.c')
-override ASFILES := $(shell find . -type f -name '*.S')
-override NASMFILES := $(shell find . -type f -name '*.asm')
-override OBJ := $(CFILES:.c=.o) $(ASFILES:.S=.o) $(NASMFILES:.asm=.o)
-override HEADER_DEPS := $(CFILES:.c=.d) $(ASFILES:.S=.d)
+# Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
+# object and header dependency file names.
+override CFILES := $(shell find -L . -type f -name '*.c')
+override ASFILES := $(shell find -L . -type f -name '*.S')
+override NASMFILES := $(shell find -L . -type f -name '*.asm')
+override OBJ := $(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o)
+override HEADER_DEPS := $(CFILES:.c=.c.d) $(ASFILES:.S=.S.d)
 
 # Default target.
 .PHONY: all
 all: $(KERNEL)
 
 limine.h:
-	curl https://raw.githubusercontent.com/limine-bootloader/limine/trunk/limine.h -o $@ || cp ../build/limine/limine.h limine.h || echo "ERROR"
+	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h || cp ../build/limine/limine.h limine.h || echo "ERROR"
 
 # Link rules for the final kernel executable.
 $(KERNEL): $(OBJ)
@@ -93,15 +111,15 @@ $(KERNEL): $(OBJ)
 -include $(HEADER_DEPS)
 
 # Compilation rules for *.c files.
-%.o: %.c limine.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+%.c.o: %.c limine.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
-%.o: %.S limine.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+%.S.o: %.S limine.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
-%.o: %.asm
+%.asm.o: %.asm
 	nasm $(NASMFLAGS) $< -o $@
 
 # Remove object files and the final executable.

@@ -578,9 +578,39 @@ U0 RotateMan(F64 d)
 	}
 }
 
+CTask *mouse_task = NULL;
+CTask *game_task = Fs;
+F64 mouse_scale = 32.0;
+
+U0 MouseHandler()
+{
+	Bool button;
+	I64 x;
+
+	while (MouseRawQueueFind(game_task))
+	{
+		button = mouse_hard.raw_bttns[0];
+		x = mouse_hard.raw_data.x;
+
+		if (button || x != 0)
+			MouseRawReset; // Mark mouse data as consumed
+		if (button)
+			MessagePostWait(game_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
+		if (x != 0)
+			man_é += (x / mouse_scale) / MICRO_STEPS;
+
+		Sleep(10);
+	}
+	mouse_task = NULL;
+}
+
 U0 CastleFrankenstein()
 {
 	I64 sc;
+	Bool is_raw = TRUE;
+
+	MouseRaw(is_raw);
+	mouse_task = Spawn(&MouseHandler, NULL, "MouseHandler");
 
 	MenuPush(
 				"File {"
@@ -594,6 +624,9 @@ U0 CastleFrankenstein()
 				"  Left(,,SC_CURSOR_LEFT);"
 				"  Right(,,SC_CURSOR_RIGHT);"
 				"  Fire(,CH_SPACE);"
+				"  MouseMode(,'m');"
+				"  MouseScaleUp(,'+');"
+				"  MouseScaleDown(,'-');"
 				"}"
 				);
 
@@ -616,6 +649,30 @@ U0 CastleFrankenstein()
 			{
 				case CH_SPACE:
 					Fire;
+					break;
+
+				case 'm':
+					if (is_raw)
+					{
+						is_raw = FALSE;
+						MouseRaw(is_raw);
+						Kill(mouse_task);
+					}
+					else
+					{
+						is_raw = TRUE;
+						MouseRaw(is_raw);
+						mouse_task = Spawn(&MouseHandler, NULL, "MouseHandler");
+					}
+					break;
+
+				case '+':
+				case '=':
+					mouse_scale *= 0.9;
+					break;
+
+				case '-':
+					mouse_scale *= 1.1;
 					break;
 
 				case '\n':
@@ -664,6 +721,7 @@ fs_done:
 }
 
 CastleFrankenstein;
+MouseRaw(FALSE);
         &        
              
               
