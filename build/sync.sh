@@ -44,11 +44,11 @@ DOCS_DIR=
 TMPMOUNT=/tmp/zealtmp
 
 print_usage() {
-	echo "Usage: $0 [ repo | vm ]"
-	echo
-	echo " repo - overwrites src/ with virtual disk contents."
-	echo " vm - overwrites virtual disk with src/ contents."
-	echo
+	echo "Usage: $0 ( repo | vm ) [OPTION]"
+	echo "    repo             Overwrites src/ with virtual disk contents."
+	echo "    vm               Overwrites virtual disk with src/ contents."
+	echo "Options:"
+	echo "    --ignore-dots    Ignore dotfiles/dotfolders during synchronize."
 }
 
 mount_vdisk() {
