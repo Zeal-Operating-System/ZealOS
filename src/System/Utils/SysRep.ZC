@@ -1220,3 +1220,20 @@ public U0 BIOSRep()
 {//Wrapper around $LK,"SysRep",A="MN:SysRep"$() to only show BIOS info.
 	SysRep(SMBIOSt_BIOS);
 }
+
+/*
+U0 SMBIOSWallPaperInit()
+{
+	CSMBIOSSystemInfo	*sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
+	U8					*company = SMBIOSStr(sys_info, sys_info->manufacturer);
+
+	if (!StrCompare(company, "VMware, Inc."))
+		wall->host_ch = 'W';
+	else if (!StrCompare(company, "innotek GmbH"))
+		wall->host_ch = 'V';
+	else if (!StrCompare(company, "QEMU"))
+		wall->host_ch = 'Q';
+	else
+		wall->host_ch = 'M';
+} SMBIOSWallPaperInit;
+*/

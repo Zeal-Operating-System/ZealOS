@@ -34,7 +34,7 @@ U0 GrUpdateTaskWin(CTask *task)
 			if (gr.fp_wall_paper)
 				(*gr.fp_wall_paper)(task);
 		}
-		else if (!(task->win_inhibit & WIF_SELF_DOC))
+		/*else*/ if (!(task->win_inhibit & WIF_SELF_DOC))
 			DocUpdateTaskDocs(task);
 		if (TaskValidate(task))
 		{
@@ -360,25 +360,45 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 U0 GrCalcScreenUpdates()
 {
 	U16 *screen, *last_screen = gr.screen_cache;
-	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+	U64 i, j, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+	U64 w, d;//, p;
+
+	w = GR_WIDTH;
+//	p = (GR_WIDTH + 7) & ~7;
+	d = GR_WIDTH / 8 * 8;
 
 	if (gr.screen_zoom == 1)
 		screen = gr.dc2->body;
 	else
 		screen = gr.zoomed_dc->body;
 
-	for (i = 0; i < diffs_size; i++)
+	for (i = j = 0; i < diffs_size; i++, j++)
 	{
+		if (j != 0 && j % (d/2) == 0 && d != w)
+		{
+			j += (w - d) / 2;
+		}
+//		if (screen[j] != last_screen[j])
 		if (screen[i] != last_screen[i])
-			dst[i] = src[i];
+//			dst[i] = src[i];
+			dst[j] = src[j];
+
 	}
 	MemCopy(gr.screen_cache, screen, diffs_size * 2);
 }
 
 U0 GrUpdateScreen32()
 {
-	U64 size, *dst;
+//	U64 size, *dst;
+	U64 size;
+	U32 *dst;
 	U8 *src;
+	U64 w, i, p, d;
+
+	w = GR_WIDTH;
+	i = 0;
+	p = (GR_WIDTH + 7) & ~7;
+	d = GR_WIDTH / 8 * 8;
 
 	if (gr.screen_zoom == 1)
 	{
@@ -392,8 +412,19 @@ U0 GrUpdateScreen32()
 		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
 	}
 	dst = text.raw_screen;
-	while (src < size) //draw 2 pixels at a time
-		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
+	while (src < size)
+	{
+		*dst++ = gr_palette[*src++ & 0xFF];
+		i++;
+
+		if (i == d && d != w)
+		{
+			i = w - d;
+			dst += i;
+			i = 0;
+		}
+
+	}
 
 
 	GrCalcScreenUpdates;

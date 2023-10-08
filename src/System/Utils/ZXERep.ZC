@@ -33,6 +33,8 @@ public Bool ZXERep(U8 *filename)
 	CZXE		*zxe;
 	CHashExport	*saved_hash_ptr = NULL;
 
+	"%c", 20;
+
 	fbuf = ExtDefault(filename, "ZXE");
 
 	if (!(zxe = FileRead(fbuf, &size)))
@@ -60,6 +62,7 @@ public Bool ZXERep(U8 *filename)
 	ptr = zxe(U8 *) + zxe->patch_table_offset;
 	while (etype = *ptr++)
 	{
+		saved_hash_ptr = NULL;
 		i = *ptr(U32 *)++;
 		sptr = ptr;
 		ptr += StrLen(sptr) + 1;
@@ -71,6 +74,30 @@ public Bool ZXERep(U8 *filename)
 					saved_hash_ptr = HashFind(sptr, Fs->hash_table, HTG_ALL);
 				if (!saved_hash_ptr)
 					"Unresolved Reference:%s\n", sptr;
+				else
+					"%s", sptr;
+				break;
+
+			case IET_REL32_EXPORT:
+				"$$TR,\"ASM\"$$\n$$ID,2$$";
+				Un(i + zxe(U8 *) + sizeof(CZXE));
+				"\n$$ID,-2$$\n";
+				"ZXERep REL32_EXPORT";
+				break;
+			case IET_IMM32_EXPORT:
+				"ZXERep IMM32_EXPORT";
+				break;
+			case IET_REL64_EXPORT:
+				"ZXERep REL64_EXPORT";
+				break;
+			case IET_IMM64_EXPORT:
+				"ZXERep IMM64_EXPORT";
+				break;
+			case IET_MAIN:
+				"ZXERep IET_MAIN";
+				break;
+			case IET_END:
+				"ZXERep IET_END";
 				break;
 
 			case IET_ABS_ADDR:
@@ -92,6 +119,10 @@ public Bool ZXERep(U8 *filename)
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
 				break;
+
+			default:
+				"ZXERep missing IET:%d", etype;
+				break;
 		}
 		'\n';
 	}
@@ -101,6 +132,8 @@ br_done2:
 	Free(zxe);
 br_done1:
 	Free(fbuf);
+
+	"%c", 20;
 
 	return res;
 }
