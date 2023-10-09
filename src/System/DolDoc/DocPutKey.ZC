@@ -455,12 +455,14 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 										}
 										else
 										{
-											if(sc & SCF_SHIFT) {
+											if (sc & SCF_SHIFT)
+											{
 												DocUnlock(doc);
 												GodDoodle;
 												DocLock(doc);
-											} else
-											GodSong;
+											}
+											else
+												GodSong;
 										}
 										break;
 
