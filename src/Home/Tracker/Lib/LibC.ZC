@@ -1,0 +1,151 @@
+U64 find_u32_in_memory(U64 offset, U32 value) {
+  I64 i = 0;
+  while (MemCompare(offset + i, &value, 4))
+    i++;
+  return offset + i;
+}
+
+#define PUSH_SYSV_REGS                                                         \
+  asm {PUSH RCX PUSH RDX PUSH RBX PUSH RBP PUSH RSI PUSH RDI PUSH R8 PUSH R9 PUSH   \
+      R10 PUSH R11 PUSH R12 PUSH R13 PUSH R14 PUSH R15}
+#define POP_SYSV_REGS                                                          \
+  asm {POP R15 POP R14 POP R13 POP R12 POP R11 POP R10 POP R9 POP R8 POP RDI POP    \
+      RSI POP RBP POP RBX POP RDX POP RCX}
+#define MOV_ANS_RAX asm {MOV [&ans], RAX}
+#define MOV_P0_RDI asm {MOV [&p0], RDI}
+#define MOV_P1_RSI asm {MOV [&p1], RSI}
+#define MOV_P2_RDX asm {MOV [&p2], RDX}
+#define MOV_P3_RCX asm {MOV [&p3], RCX}
+#define MOV_P4_R8 asm {MOV [&p4], R8}
+#define MOV_P5_R9 asm {MOV [&p5], R9}
+#define GET_SYSV_ARGS                                                          \
+  MOV_P0_RDI MOV_P1_RSI MOV_P2_RDX MOV_P3_RCX MOV_P4_R8 MOV_P5_R9
+
+I64 p0, p1, p2, p3, p4, p5;
+I64 elf_argc;
+U8 **elf_argv;
+
+#define stdin 0
+#define stdout 1
+#define stderr 2
+
+asm {
+_ELF_CALL::
+        PUSH    RBP
+        MOV     RBP,RSP
+        MOV     RAX,U64 SF_ARG1[RBP]
+        MOV     RDI,U64 SF_ARG2[RBP]
+        MOV     RSI,U64 SF_ARG3[RBP]
+        TEST    RAX,RAX
+        JZ      @@05
+        CALL    RAX
+@@05:   POP     RBP
+        RET1    8
+}
+
+U0 _main() {
+  MOV_P0_RDI
+  CallInd(_ELF_CALL, p0, elf_argc, elf_argv);
+  MOV_ANS_RAX
+  throw('end', TRUE);
+}
+
+U0 _exit() {
+  MOV_ANS_RAX
+  throw('end', TRUE);
+}
+
+U0 free() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called free(0x%08x)\n", p0);
+  Free(p0);
+  POP_SYSV_REGS
+}
+
+U64 @malloc(I64 size) {
+  U64 ptr = NULL;
+  ptr = MAlloc(p0);
+  debug_print("malloc(%d), result: 0x%08x\n", size, ptr);
+  return ptr;
+}
+
+U0 malloc() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called: malloc(%d)\n", p0);
+  @malloc(p0);
+  POP_SYSV_REGS
+}
+
+U0 memcpy() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called: memcpy(0x%08x, 0x%08x, %d)\n", p0, p1, p2);
+  MemCopy(p0, p1, p2);
+  POP_SYSV_REGS
+}
+
+U8 *@memmove(U8 *dest, U8 *src, I64 n) {
+  I64 i;
+  U8 *from = src;
+  U8 *to = dest;
+  if (from == to || n == 0)
+    return dest;
+  if (to > from && to - from < n) {
+    /* to overlaps with from */
+    /*  <from......>         */
+    /*         <to........>  */
+    /* copy in reverse, to avoid overwriting from */
+    for (i = n - 1; i >= 0; i--)
+      to[i] = from[i];
+    return dest;
+  }
+  if (from > to && from - to < n) {
+    /* to overlaps with from */
+    /*        <from......>   */
+    /*  <to........>         */
+    /* copy forwards, to avoid overwriting from */
+    for (i = 0; i < n; i++)
+      to[i] = from[i];
+    return dest;
+  }
+  MemCopy(dest, src, n);
+  return dest;
+}
+
+U0 memmove() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called: memmove(0x%08x, 0x%08x, %d)\n", p0, p1, p2);
+  @memmove(p0, p1, p2);
+  POP_SYSV_REGS
+}
+
+U0 memset() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called: memset(0x%08x, %d, %d)\n", p0, p1, p2);
+  MemSet(p0, p1, p2);
+  POP_SYSV_REGS
+}
+
+U8 *@realloc(U8 *ptr, I64 size) {
+  U8 *new;
+  if (!ptr) {
+    new = MAlloc(size);
+  } else {
+    new = MAlloc(size);
+    MemCopy(new, ptr, size);
+    Free(ptr);
+  }
+  return new;
+}
+
+U0 realloc() {
+  PUSH_SYSV_REGS
+  GET_SYSV_ARGS
+  debug_print("called: realloc(0x%08x, %d)\n", p0, p1);
+  @realloc(p0, p1);
+  POP_SYSV_REGS
+}

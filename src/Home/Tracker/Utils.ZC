@@ -1,0 +1,9 @@
+F64 RoundToNearestHalf(F64 value) {
+    return Round(value * 2.0) / 2.0;
+}
+
+F64 GetPlaybackRateMultiplier(U8 targetNote, U8 referenceNote) {
+    I64 semitoneDifference = targetNote - referenceNote;
+    return Pow(2.0, semitoneDifference / 12.0);
+}
+

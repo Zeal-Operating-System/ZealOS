@@ -1,0 +1,264 @@
+U0 GenerateSineWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+    I64 i;
+    F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;  // Adjust the amplitude based on velocity
+    F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;  // Assuming a sample rate of 44.1kHz
+
+    F64 phase = 0.0;
+    for (i = 0; i < length; i++) {
+        I16 sample_value = ToI64((Sin(phase) * amplitude)); // TODO should be ToI16
+        buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+        phase += phase_increment;
+        if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+    }
+}
+
+U0 GeneratePulse1Wave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+    I64 i;
+    F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+    F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+    F64 phase = 0.0;
+    
+    for (i = 0; i < length; i++) {
+        I16 sample_value;
+        if (phase < PI) {
+            sample_value = ToI64(amplitude);
+        } else {
+            sample_value = -ToI64(amplitude);
+        }
+        buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+        phase += phase_increment;
+        if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+    }
+}
+
+U0 GeneratePulse2Wave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value;
+		if (phase < 0.5 * PI) {
+			sample_value = -ToI64(amplitude);
+		} else {
+			sample_value = ToI64(amplitude);
+		}
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 GenerateTriangleWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value;
+		if (phase < PI) {
+			sample_value = ToI64((phase / PI) * amplitude);
+		} else {
+			sample_value = ToI64((2.0 - (phase / PI)) * amplitude);
+		}
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 GenerateNoiseWave(U32 *buffer, I64 length, F64 freq, U8 velocity) {
+	I64 i;
+	F64 amplitude = (ToF64(velocity) / 127.0) * 0x7FFF;
+	F64 phase_increment = (2.0 * PI * freq) / SAMPLE_RATE;
+	F64 phase = 0.0;
+	
+	for (i = 0; i < length; i++) {
+		I16 sample_value = ToI64((RandI64 / 0x7FFFFFFF) * amplitude);
+		buffer[i] = (sample_value << 16) | (sample_value & 0xFFFF);
+		phase += phase_increment;
+		if (phase >= 2.0 * PI) phase -= 2.0 * PI;
+	}
+}
+
+U0 ApplyEnvelope(U32 *buffer, I64 length) {
+	I64 i;
+	for (i = 0; i < length; i++) {
+		I64 sample = buffer[i];
+		I64 left = sample >> 16;
+		I64 right = sample & 0xFFFF;
+		left = (left * i) / length;
+		right = (right * (length - i)) / length;
+		buffer[i] = (left << 16) | (right & 0xFFFF);
+	}
+}
+
+// U0 ApplyEnvelope(U32 *buffer, I64 length) {
+//      I64 fadeLength = length * 0.1;  // 10% fade in and fade out
+//  	I64 i;
+//      for (i = 0; i < fadeLength; i++) {
+//          F64 factor = ToI64(i / fadeLength);
+//          buffer[i] = ToI64(buffer[i] * factor);
+//          buffer[length - i - 1] = ToI64(buffer[length - i - 1] * factor);
+//      }
+// }
+
+U0 LoadSample(U8 *filename) {
+    //WAVHeader header;
+	I64 fileSize;
+
+
+    // Free any previously loaded sample
+    // if (gSampleData) {
+    //     Free(gSampleData);
+    // }
+
+    gSampleSize = fileSize - sizeof(WAVHeader);
+
+	//gSampleData = MAlloc(gSampleSize);
+
+
+    //U8 *buffer = FileRead(filename, &fileSize);
+	
+	//if (buffer)
+	//{
+	//	MemCopy(&header, buffer, sizeof(WAVHeader));
+	//	Print("Got: %c %c %c %c\n", header.riff[0], header.riff[1], header.riff[2], header.riff[3]);
+	    // Basic validation - check the RIFF and WAVE tags
+    //	if (!StrCompare("RIFF", header.riff) || !StrCompare("WAVE", header.wave)) {
+    //    	Print("Invalid WAV file.\n");
+	//		Free(buffer);
+	//        return;
+    //	}
+
+
+	//} else {
+	//	Print("Failed to read the file.\n");
+	//}
+
+
+	//U8 *fileContent = FileRead(filename, &gSampleSize);
+	//U8 *audioDataStart = fileContent + sizeof(WAVHeader); // Move pointer after header
+	//MemCopy(gSampleData, audioDataStart, gSampleSize);
+
+
+
+	// DEBUG
+	// gSampleSize = fileSize - 44;
+
+	//U8 *audioDataStart = fileContent + 44; // Move pointer after header MANUAL 36 bytes
+	//MemCopy(gSampleData, audioDataStart, gSampleSize);
+
+
+	//Free(fileContent);
+
+	// test without skipping header
+
+	gSampleData = FileRead(filename, &gSampleSize);
+
+    // Print some info about the sample
+    //Print("Sample rate: %d\n", header.sample_rate);
+    //Print("Channels: %d\n", header.channels);
+    //Print("Bits per sample: %d\n", header.bits_per_sample);
+
+
+}
+
+// Interpolation (works? but slow and distorted)
+// #define WINDOW_SIZE 10
+
+// F64 Sinc(F64 x) {
+//     if (x == 0.0) {
+//         return 1.0;
+//     } else {
+//         return Sin(PI * x) / (PI * x);
+//     }
+// }
+
+// I16 RoundF64(F64 val) {
+//     if (val < 0.0) {
+//         return val - 0.5;
+//     } else {
+//         return val + 0.5;
+//     }
+// }
+
+// I16 ClampToI16(I64 value) {
+//     if (value > 32767) return 32767;
+//     if (value < -32768) return -32768;
+//     return value;
+// }
+
+// I64 ConvertU8PairToI64(U8 msb, U8 lsb) {
+//     I64 val = (msb << 8) | lsb;
+//     if (val & 0x8000) {
+//         val |= 0xFFFF0000;  // sign extend if negative
+//     }
+//     return val;
+// }
+
+// I16 ConvertU8ToI16(U8 lowByte, U8 highByte) {
+//     I16 result = highByte;
+//     result = (result << 8) | lowByte;
+//     return result;
+// }
+
+// I16 WindowedSincInterpolation(F64 position) {
+//     I64 baseIndex = ToI64(position);
+//     F64 fraction = position - baseIndex;
+//     F64 result = 0.0;
+// 	I64 i;
+//     for (i = -WINDOW_SIZE; i <= WINDOW_SIZE; i++) {
+//         F64 sample;
+//         if (baseIndex + i >= 0 && baseIndex + i < gSampleSize) {
+//             sample = ConvertU8ToI16(gSampleData[2 * (baseIndex + i)], gSampleData[2 * (baseIndex + i) + 1]);
+//         } else {
+//             sample = 0.0;
+//         }
+//         result += sample * Sinc(i - fraction) * 0.54 - 0.46 * Cos(2.0 * PI * (i - fraction) / (2 * WINDOW_SIZE + 1));
+//     }
+
+//     return ClampToI16(RoundF64(result));
+// }
+
+U0 PlaySample(U32 *buffer, I64 duration, U8 note, U8 velocity) {
+    if (!gSampleData || !gSampleSize) {
+        Print("Sample not loaded.\n");
+        return;
+    }
+
+    F64 multiplier = GetPlaybackRateMultiplier(note, 60);
+	multiplier = RoundToNearestHalf(multiplier);
+
+    I64 destIndex;
+    F64 srcIndex = 44.0; // Start after WAV header
+
+    for (destIndex = 0; destIndex < duration; destIndex++) {
+        F64 realIndex = srcIndex + destIndex * multiplier * 4;
+        I64 baseIndex = ToI64(realIndex);
+        F64 fraction = realIndex - baseIndex;
+
+        if (baseIndex < gSampleSize - 8) { // Ensure we can access two stereo samples
+            U32 leftSample1 = gSampleData[baseIndex] + (gSampleData[baseIndex + 1] << 8);
+            U32 rightSample1 = gSampleData[baseIndex + 2] + (gSampleData[baseIndex + 3] << 8);
+
+            U32 leftSample2 = gSampleData[baseIndex + 4] + (gSampleData[baseIndex + 5] << 8);
+            U32 rightSample2 = gSampleData[baseIndex + 6] + (gSampleData[baseIndex + 7] << 8);
+
+            // Linear interpolation
+            U32 leftSample = leftSample1 + ((leftSample2 - leftSample1) * fraction);
+            U32 rightSample = rightSample1 + ((rightSample2 - rightSample1) * fraction);
+
+            buffer[destIndex] = (leftSample & 0xFFFF) | ((rightSample & 0xFFFF) << 16);
+        } else {
+            buffer[destIndex] = 0; // fill the rest with silence
+        }
+    }
+	// Print("Last srcIndex: %d\n", srcIndex);
+    
+	// Simply play the buffer
+	//I64 samplesToCopy = Min(gSampleSize, duration); // don't overflow the buffer
+    //MemCopy(buffer, gSampleData, samplesToCopy);
+}

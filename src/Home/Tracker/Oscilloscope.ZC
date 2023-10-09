@@ -1,0 +1,179 @@
+// Globals
+//#define CHUNK_SIZE 1470
+
+#define SAMPLE_RATE 44100
+
+U32 *gSharedBuffer;
+I64 gSharedBufferPosition = 0;
+I64 gSharedBufferSize;
+
+I32 GetSignedSample(I64 index) {
+    U32 sample = gSharedBuffer[index];
+    I32 signedValue;
+    signedValue = sample - 0x80000000;  // Convert U32 to centered I32
+    return signedValue;
+}
+
+// Initialize shared buffer
+U0 InitSharedBuffer(I64 size)
+{
+    gSharedBuffer = MAlloc(size * sizeof(U32));
+    gSharedBufferSize = size;
+    gSharedBufferPosition = 0;
+}
+
+U0 DrawIt(CTask *task, CDC *dc) 
+{
+	I64 CHUNK_SIZE = SAMPLE_RATE/winmgr.fps;
+	F64 snd_vol = 1; // effectively the height of the lines?
+
+    I64 i, x1, y1, x2, y2, startIndex, endIndex,
+        cy = task->pix_height >> 1;
+
+    if(gSharedBufferPosition >= gSharedBufferSize) return; // If we reached the end of the buffer, don't draw.
+
+    // Start drawing from the current position
+    startIndex = gSharedBufferPosition;
+    endIndex = gSharedBufferPosition + CHUNK_SIZE;
+
+    // If endIndex goes beyond the buffer, adjust it.
+    if(endIndex > gSharedBufferSize) endIndex = gSharedBufferSize;
+
+    dc->color = BLACK;
+    x2 = 0; y2 = cy;
+    for (i = startIndex; i < endIndex; i += 2) // Assuming stereo, hence i+=2
+    {
+        I32 signedValue = GetSignedSample(i);
+        x1 = (i - startIndex) * task->pix_width / CHUNK_SIZE;
+        y1 = cy - (signedValue * cy / snd_vol / I32_MAX);
+        GrLine(dc, x2, y2, x1, y1);
+        x2 = x1; y2 = y1;
+    }
+
+ 
+    dc->color = PURPLE;
+    x2 = 0; y2 = cy;
+    for (i = startIndex + 1; i < endIndex; i += 2) 
+    {
+        I32 signedValueG = GetSignedSample(i);
+        x1 = (i - startIndex -1) * task->pix_width / CHUNK_SIZE;
+        y1 = cy - (signedValueG * cy / snd_vol / I32_MAX);
+        GrLine(dc, x2, y2, x1, y1);
+        x2 = x1; y2 = y1;
+    }
+
+    gSharedBufferPosition += CHUNK_SIZE;  // Move forward by the chunk size
+	//Sleep(10);
+}
+
+
+U0 StartOscilloscope() 
+{
+	I64 ch, sc;
+
+    InitSharedBuffer(44100);  // For example, buffer to store 1 second of audio at 44100Hz
+	
+	U8 *name = "Oscilloscope";
+	CTask *task = Spawn(&ServerCmdLine, NULL, name,, Fs);
+
+	// this permits the task not to clog MusicTracker	
+	TaskExe(task, Fs, ";", 1 << JOBf_WAKE_MASTER | 1 << JOBf_FREE_ON_COMPLETE);
+
+	TaskWait(task);	
+
+	StrCopy(task->task_title, name);
+	task->text_attr = DKGRAY << 4 + BLUE;
+	task->title_src = TTS_LOCKED_CONST;
+    task->border_src  = BDS_CONST;
+    task->border_attr = TRANSPARENT << 4 + WHITE;
+	//WinBorder(OFF,task);
+	DocClear(task->border_doc, TRUE);
+
+	DocCursor(OFF, task->display_doc);
+	//DocClear(task);
+
+
+	WinHorz((TEXT_COLS / 2) - 32, (TEXT_COLS / 2) + 32, task);
+    WinVert((TEXT_ROWS / 2) - 8, (TEXT_ROWS / 2) + 8, task);
+	task->win_inhibit = WIG_NO_FOCUS_TASK_DEFAULT;
+	
+	//task->animate_task = Spawn(&AnimateTask, NULL, "Animate",, Fs);
+    task->draw_it = &DrawIt; // Set the draw callback
+
+}
+
+
+//StartOscilloscope;
+
+// U0 OscilloscopeDraw(CTask *task, CDC *dc)
+// {
+//     I64 i, y;
+// 	I64 CHUNK_SIZE = SAMPLE_RATE / winmgr.fps;
+//     // Start from the most recent sample and display CHUNK_SIZE samples
+//     I64 startPosition = (gSharedBufferPosition - CHUNK_SIZE + gSharedBufferSize) % gSharedBufferSize;
+    
+//     for (i = 0; i < CHUNK_SIZE; i++) 
+//     {
+//         I16 sample_value = (gSharedBuffer[startPosition] & 0xFFFF) - 32768;  
+//         F64 normalized_sample = ToF64(sample_value) / 32768.0;
+//         y = 300 / 2 - (normalized_sample * 300 / 2);
+
+//         GrPlot(dc, i, y); 
+            
+//         startPosition = (startPosition + 1) % gSharedBufferSize;
+//     }
+
+// }
+
+// U0 OscilloscopeAnimate()
+// {
+// 	while (TRUE)
+// 	{
+// 		UpdateSharedBuffer(gSharedBuffer[gSharedBufferPosition], gSharedBufferSize);
+// 		Sleep(200);
+// 		Refresh;
+// 	}
+// }
+
+// class @Oscilloscope
+// {
+// 	U8		buffer;
+// 	CBGR24	color;
+// 	I64		width;
+// 	I64		height;
+
+// } osc;
+
+// CCtrl *OscWindow()
+// {
+// 	CCtrl *c = CAlloc(sizeof(CCtrl));
+// 	c->win_task = Fs;
+// 	c->flags				= CTRLF_SHOW | CTRLF_CAPTURE_LEFT_MS;
+// 	c->type					= CTRLT_GENERIC;
+// 	c->state				= &osc;
+// 	MemSet(&osc,0,sizeof(@Oscilloscope));
+// 	c->draw_it				= &OscilloscopeDraw;
+// 	// c->left_click			= &LeftClickSlider;
+// 	// c->update_derived_vals	= &UpdateDerivedCtrlSlider;
+// 	QueueInsert(c, Fs->last_ctrl);
+// 	TaskDerivedValsUpdate;
+// 	return c;
+// }
+
+// U0 OscWindowDel(CCtrl *c)
+// {
+// 	QueueRemove(c);
+// 	Free(c);
+// }
+
+
+// Update shared buffer in your audio playback function
+//U0 UpdateSharedBuffer(U32 *buffer, I64 size)
+//{
+//    I64 i;
+//    for (i = 0; i < size; i++) 
+//    {
+//        gSharedBuffer[gSharedBufferPosition] = buffer[i];
+//        gSharedBufferPosition = (gSharedBufferPosition + 1) % gSharedBufferSize;
+//    }
+//}

@@ -1,0 +1,225 @@
+#include "MIDIHandling"
+#include "WaveformGen"
+
+U0 AudioPlayNote(U8 note, U8 velocity, U8 instrument) {
+
+	// ultimately, we should use AC97OutputMix to be multi channel
+	FifoI64Flush(audio.output[0]);
+	FifoI64Flush(audio.output[1]);
+	FifoI64Flush(audio.output[2]);
+	FifoI64Flush(audio.output[3]);
+    //U32 buffer[SAMPLE_RATE];
+
+	U32 *buffer;
+	I64 bufferSize;
+
+	if (instrument == SAMPLE)
+	{
+		//bufferSize = SAMPLE_RATE * 14 * 2; // 7sec * 2 two channels * 2 for some reason?
+		bufferSize = 176400; // 1sec
+	 	buffer = MAlloc(bufferSize * sizeof(U32));
+	}
+	else
+	{
+		bufferSize = 11025; // SAMPLE_RATE change duration 
+		buffer = MAlloc(bufferSize * sizeof(U32));
+	}
+
+    F64 freq = MidiToFreq(note);
+
+    switch(instrument) {
+        case PULSE1:
+            GeneratePulse1Wave(buffer, bufferSize, freq, velocity);
+            break;
+        case PULSE2:
+            GeneratePulse2Wave(buffer, bufferSize, freq, velocity);
+            break;
+        case TRIANGLE:
+            GenerateTriangleWave(buffer, bufferSize, freq, velocity);
+            break;
+        case NOISE:
+            GenerateNoiseWave(buffer, bufferSize, freq, velocity);
+            break;
+        case SAMPLE:
+            PlaySample(buffer, bufferSize, note, velocity);
+			//Print("Buffer first values: %d, %d, %d, %d...\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+            break;
+        default:
+            GenerateSineWave(buffer, bufferSize, freq, velocity);
+            break;
+    }
+
+    //ApplyEnvelope(buffer, SAMPLE_RATE); // TODO: Apply fade in and fade out
+
+	gSharedBuffer = buffer;
+	gSharedBufferSize = bufferSize;
+	gSharedBufferPosition = 0;  // Resetting the position
+    // Play the buffer using the AC97 driver:
+    AudioSFXPlay(buffer, bufferSize);
+	// silly debug print
+	if (instrument == PULSE1)
+		"³ $$GREEN$$PULSE1     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
+	if (instrument == PULSE2)
+		"³ $$CYAN$$PULSE2     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
+	if (instrument == TRIANGLE)
+		"³ $$YELLOW$$TRIANGLE   $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
+	if (instrument == NOISE)
+		"³ $$BROWN$$NOISE      $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;
+	if (instrument == SAMPLE)
+		"³ $$RED$$SAMPLE     $$FG$$³  $$YELLOW$$%d$$FG$$\t³", note;	
+	if (instrument == INSTRUMENT_NONE)
+		"³            ³    \t³", note;	
+
+	"\n";
+	Free(buffer);
+}
+
+U0 PlayPattern(Pattern *pattern) {
+    I64 row;
+    NoteCell *cell;
+	"ÚÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄ¿\n";
+	"³ INSTRUMENT ³ NOTE ³\n";
+	"ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄ´\n";
+    for (row = 0; row < TRACK_LENGTH; row++) {
+        cell = &pattern->cells[row];
+        if (cell->note) {
+            AudioPlayNote(cell->note, cell->velocity, cell->instrument);
+			if (row < TRACK_LENGTH-1) "ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄ´\n";
+        }
+		if (cell->instrument == SAMPLE) Sleep(1000); // wait for 6sec for the 7sec sample test
+        //Sleep(1200);  // Adjust for tempo
+		Sleep(300);
+    }
+	"ÀÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÙ\n";
+}
+
+U0 EnterPattern(Pattern *pattern) {
+    I64 row, sc;
+    NoteCell *cell;
+    for (row = 0; row < TRACK_LENGTH; row++) {
+        cell = &pattern->cells[row];
+         cell->note = I64Get("Enter note for row $$LTGREEN$$%d$$FG$$ (0-127, 0 for none): ", row);
+        if (cell->note) {
+            cell->velocity = I64Get("Enter velocity for note (1-127): ");
+			if (cell->velocity) {
+				Print("Enter instrument for note (1-5): ");
+		        switch (KeyGet(&sc)) {
+        	    	case '1':
+						cell->instrument = PULSE1;
+						"PULSE1\n";
+		                break;
+    		        case '2':
+						cell->instrument = PULSE2;
+						"PULSE2\n";
+	            	    break;
+		            case '3':
+						cell->instrument = TRIANGLE;
+						"TRIANGLE\n";
+            		    break;
+		            case '4':
+						cell->instrument = NOISE;
+						"NOISE\n";
+            		    break;
+	            	case '5':
+						cell->instrument = SAMPLE;
+						"SAMPLE\n";
+    	        	    break;
+        	    	default:
+						cell->instrument = INSTRUMENT_NONE;
+						"SINE\n";
+            	    	break;
+        		}
+	
+				AudioPlayNote(cell->note, cell->velocity, cell->instrument);
+			}
+        }
+    }
+}
+
+U0 MusicTracker() {
+
+	LoadSample("~/Tracker/Samples/OrchHit.WAV");
+
+    Song song;
+
+
+	song.patterns[0].cells[0].note = 60;
+	song.patterns[0].cells[0].velocity = 100;
+	song.patterns[0].cells[0].instrument = SAMPLE;
+
+	song.patterns[0].cells[1].note = 48;  // C3
+	song.patterns[0].cells[1].velocity = 100;
+	song.patterns[0].cells[1].instrument = PULSE2;
+
+	song.patterns[0].cells[2].note = 60;  // C3
+	song.patterns[0].cells[2].velocity = 100;
+	song.patterns[0].cells[2].instrument = PULSE1;
+
+	song.patterns[0].cells[3].note = 62;  // D
+	song.patterns[0].cells[3].velocity = 100;
+	song.patterns[0].cells[3].instrument = PULSE1;
+
+	song.patterns[0].cells[4].note = 64;  // E
+	song.patterns[0].cells[4].velocity = 100;
+	song.patterns[0].cells[4].instrument = SAMPLE;
+
+	song.patterns[0].cells[5].note = 65;  // C
+	song.patterns[0].cells[5].velocity = 100;
+	song.patterns[0].cells[5].instrument = PULSE2;
+
+	song.patterns[0].cells[6].note = 68;  // D
+	song.patterns[0].cells[6].velocity = 100;
+	song.patterns[0].cells[6].instrument = PULSE2;
+
+	song.patterns[0].cells[7].note = 72;  // C
+	song.patterns[0].cells[7].velocity = 100;
+	song.patterns[0].cells[7].instrument = TRIANGLE;
+
+	song.patterns[0].cells[8].note = 48;  // D
+	song.patterns[0].cells[8].velocity = 100;
+	song.patterns[0].cells[8].instrument = TRIANGLE;
+
+	song.patterns[0].cells[9].note = 64;  // E
+	song.patterns[0].cells[9].velocity = 100;
+	song.patterns[0].cells[9].instrument = TRIANGLE;
+
+	song.patterns[0].cells[10].note = 102;  
+	song.patterns[0].cells[10].velocity = 70;
+	song.patterns[0].cells[10].instrument = NOISE;
+
+	song.patterns[0].cells[11].note = 125;  
+	song.patterns[0].cells[11].velocity = 35;
+	song.patterns[0].cells[11].instrument = NOISE;
+
+	song.patterns[0].cells[12].note = 65;  
+	song.patterns[0].cells[12].velocity = 80;
+	song.patterns[0].cells[12].instrument = NOISE;
+
+    // Clear(&song);
+    I64 sc;
+    while (1) {
+        Print("\nMusic Tracker:\n");
+        Print("1. Enter Pattern\n");
+        Print("2. Play Pattern\n");
+        Print("3. Exit\n");
+        Print("Choice: ");
+
+        switch (KeyGet(&sc)) {
+            case '1':
+				"1\n";
+                EnterPattern(&song.patterns[0]);  // Only one pattern for simplicity
+                break;
+            case '2':
+				"2\n";
+                PlayPattern(&song.patterns[0]);
+                break;
+            case '3':
+				"3\n";
+                return;
+            default:
+                Print("Invalid choice.\n");
+        }
+    }
+	CleanupWaveformGen(); // Free the sample buffer
+	//Kill("Oscilloscope");
+}

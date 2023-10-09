@@ -1,0 +1,82 @@
+//--------------------------
+// UI Functions
+//--------------------------
+
+Pattern myPattern;
+
+myPattern.cells[0].note = 60;  // Middle C
+myPattern.cells[0].velocity = 100;
+
+myPattern.cells[1].note = 62;  // D
+myPattern.cells[1].velocity = 100;
+
+myPattern.cells[2].note = 64;  // E
+myPattern.cells[2].velocity = 100;
+U64 InU64() {
+    U8 buf[32];
+    InStr(buf);
+    return ToI64(buf);
+}
+
+U0 DisplayMainUI() {
+    // Simple function to display a main menu
+	DocClear;
+    Print("\nMusic Tracker UI\n");
+    Print("1. Enter New Pattern\n");
+    Print("2. Play Pattern\n");
+    Print("3. Exit\n");
+}
+
+U0 HandleUserInput(Pattern *pattern) {
+    I64 choice, sc;
+    Print("Enter your choice: ");
+    // choice = InU64;
+    
+	switch (KeyGet(&sc)) {
+        case '1':
+            EnterPattern(pattern);
+            break;
+        case '2':
+            PlayPattern(pattern);
+            break;
+        case '3':
+			Print("Goodbye!\n");
+			return; // Exit the loop and function
+        default:
+            Print("Invalid choice!\n");
+			break;
+    }
+}
+
+U0 ShowError(String msg) {
+    // Display error messages to the user
+    Print("Error: %s\n", msg);
+}
+
+U0 RenderPattern(Pattern *pattern) {
+    // For simplicity, just listing the notes in the pattern
+    for (I64 i = 0; i < TRACK_LENGTH; i++) {
+        Print("Row %d: Note %d, Velocity %d\n", i, pattern->cells[i].note, pattern->cells[i].velocity);
+    }
+}
+
+U0 SettingsMenu() {
+    // Display and handle the settings menu
+    // ...
+}
+
+//--------------------------
+// Main UI Loop
+//--------------------------
+
+U0 UITrackerMainLoop(Pattern *pattern) {
+    while (1) {
+        DisplayMainUI();
+        HandleUserInput(pattern);
+    }
+}
+
+//--------------------------
+// Entry point to run the UI
+//--------------------------
+UITrackerMainLoop(&myPattern);
