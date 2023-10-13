@@ -32,8 +32,7 @@ public Bool ZXERep(U8 *filename)
 	Bool		 res = FALSE;
 	CZXE		*zxe;
 	CHashExport	*saved_hash_ptr = NULL;
-
-	"%c", 20;
+	Bool		 unlock_doc = DocLock(Fs->put_doc);
 
 	fbuf = ExtDefault(filename, "ZXE");
 
@@ -60,12 +59,19 @@ public Bool ZXERep(U8 *filename)
 	"    MODULE_ALIGN:%X\n", 1 << zxe->module_align_bits;
 
 	ptr = zxe(U8 *) + zxe->patch_table_offset;
+
+	progress1_max = size - zxe->patch_table_offset;
+	progress1 = 0;
+
 	while (etype = *ptr++)
 	{
+		progress1++;
 		saved_hash_ptr = NULL;
 		i = *ptr(U32 *)++;
+		progress1 += 4;
 		sptr = ptr;
 		ptr += StrLen(sptr) + 1;
+		progress1 += StrLen(sptr) + 1;
 		"$$LTCYAN$$%16Z:$$GREEN$$%s$$FG$$:%X ", etype, "ST_ZXE_FILE_TYPES", sptr, i;
 		switch (etype)
 		{
@@ -104,6 +110,7 @@ public Bool ZXERep(U8 *filename)
 				'\n';
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
+				progress1 += j * 4;
 				break;
 
 			case IET_CODE_HEAP:
@@ -111,6 +118,7 @@ public Bool ZXERep(U8 *filename)
 				"Size:%X\n", *ptr(U32 *)++;
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
+				progress1 += 4 + j * 4;
 				break;
 
 			case IET_DATA_HEAP:
@@ -118,6 +126,7 @@ public Bool ZXERep(U8 *filename)
 				"Size:%X\n", *ptr(I64 *)++;
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
+				progress1 += 8 + j * 4;
 				break;
 
 			default:
@@ -133,7 +142,10 @@ br_done2:
 br_done1:
 	Free(fbuf);
 
-	"%c", 20;
+	if (unlock_doc)
+		DocUnlock(Fs->put_doc);
+
+	progress1_max = 0;
 
 	return res;
 }
