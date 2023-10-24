@@ -1,5 +1,20 @@
 asm {
 /***********************************/
+_BZERO::
+		PUSH	RBP
+		MOV 	RBP, RSP
+		PUSH	RDI
+		CLD
+		MOV		RDI, U64 SF_ARG1[RBP]
+		MOV		RCX, U64 SF_ARG2[RBP]
+		XOR		RAX, RAX
+		REP_STOSB
+		MOV 	RAX, RDI
+		POP 	RDI
+		POP 	RBP
+		RET1	16
+
+/***********************************/
 _MEMSET::
 		PUSH	RBP
 		MOV 	RBP, RSP
