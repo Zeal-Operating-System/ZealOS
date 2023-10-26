@@ -13,13 +13,8 @@ I64 Str2I64(U8 *st, I64 radix=10, U8 **_end_ptr=NULL)
 	}
 	while (Bt(char_bmp_white_space, *st))
 		st++;
-	if (*st == '+')
-		st++;
-	else if (*st == '-')
-	{
-		neg = TRUE;
-		st++;
-	}
+	if (*st == '+' || *st == '-')
+		neg = *st++ == '-';
 	while (TRUE)
 		switch (*st)
 		{
