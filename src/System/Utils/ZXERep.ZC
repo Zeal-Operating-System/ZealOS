@@ -33,6 +33,11 @@ public Bool ZXERep(U8 *filename)
 	CZXE		*zxe;
 	CHashExport	*saved_hash_ptr = NULL;
 	Bool		 unlock_doc = DocLock(Fs->put_doc);
+	CQueueD3I32 *patch_offsets_queue = CAlloc(sizeof(CQueueD3I32));
+	CQueueD3I32 *patch; // x == i
+	I32			 t;
+
+	QueueInit(patch_offsets_queue);
 
 	fbuf = ExtDefault(filename, "ZXE");
 
@@ -72,6 +77,9 @@ public Bool ZXERep(U8 *filename)
 		sptr = ptr;
 		ptr += StrLen(sptr) + 1;
 		progress1 += StrLen(sptr) + 1;
+		patch = CAlloc(sizeof(CQueueD3I32));
+		patch->p.x = i;
+		QueueInsert(patch, patch_offsets_queue);
 		"$$LTCYAN$$%16Z:$$GREEN$$%s$$FG$$:%X ", etype, "ST_ZXE_FILE_TYPES", sptr, i;
 		switch (etype)
 		{
@@ -135,6 +143,30 @@ public Bool ZXERep(U8 *filename)
 		}
 		'\n';
 	}
+
+	progress2_max = QueueSize(patch_offsets_queue);
+	progress3_max = QueueSize(patch_offsets_queue);
+	progress3 = 0;
+br_patchloop:
+	progress2 = 0;
+	patch = patch_offsets_queue->next;
+	while (patch != patch_offsets_queue)
+	{
+		"%X ?--> %X", patch->p.x, patch->next->p.x;
+		if (patch->next != patch_offsets_queue && patch->p.x > patch->next->p.x)
+		{
+			t = patch->p.x;
+			patch->p.x = patch->next->p.x;
+			patch->next->p.x = t;
+			if (progress3 < progress2)
+				progress3++;
+			goto br_patchloop;
+		}
+		patch = patch->next;
+		progress2++;
+	}
+	"\n";
+
 	res = TRUE;
 	Free(absname);
 br_done2:
@@ -146,6 +178,8 @@ br_done1:
 		DocUnlock(Fs->put_doc);
 
 	progress1_max = 0;
+	progress2_max = 0;
+	progress3_max = 0;
 
 	return res;
 }
