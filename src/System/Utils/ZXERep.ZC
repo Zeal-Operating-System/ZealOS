@@ -32,12 +32,6 @@ public Bool ZXERep(U8 *filename)
 	Bool		 res = FALSE;
 	CZXE		*zxe;
 	CHashExport	*saved_hash_ptr = NULL;
-	Bool		 unlock_doc = DocLock(Fs->put_doc);
-	CQueueD3I32 *patch_offsets_queue = CAlloc(sizeof(CQueueD3I32));
-	CQueueD3I32 *patch; // x == i
-	I32			 t;
-
-	QueueInit(patch_offsets_queue);
 
 	fbuf = ExtDefault(filename, "ZXE");
 
@@ -64,22 +58,11 @@ public Bool ZXERep(U8 *filename)
 	"    MODULE_ALIGN:%X\n", 1 << zxe->module_align_bits;
 
 	ptr = zxe(U8 *) + zxe->patch_table_offset;
-
-	progress1_max = size - zxe->patch_table_offset;
-	progress1 = 0;
-
 	while (etype = *ptr++)
 	{
-		progress1++;
-		saved_hash_ptr = NULL;
 		i = *ptr(U32 *)++;
-		progress1 += 4;
 		sptr = ptr;
 		ptr += StrLen(sptr) + 1;
-		progress1 += StrLen(sptr) + 1;
-		patch = CAlloc(sizeof(CQueueD3I32));
-		patch->p.x = i;
-		QueueInsert(patch, patch_offsets_queue);
 		"$$LTCYAN$$%16Z:$$GREEN$$%s$$FG$$:%X ", etype, "ST_ZXE_FILE_TYPES", sptr, i;
 		switch (etype)
 		{
@@ -88,37 +71,12 @@ public Bool ZXERep(U8 *filename)
 					saved_hash_ptr = HashFind(sptr, Fs->hash_table, HTG_ALL);
 				if (!saved_hash_ptr)
 					"Unresolved Reference:%s\n", sptr;
-				else
-					"%s", sptr;
-				break;
-
-			case IET_REL32_EXPORT:
-				"$$TR,\"ASM\"$$\n$$ID,2$$";
-				Un(i + zxe(U8 *) + sizeof(CZXE));
-				"\n$$ID,-2$$\n";
-				"ZXERep REL32_EXPORT";
-				break;
-			case IET_IMM32_EXPORT:
-				"ZXERep IMM32_EXPORT";
-				break;
-			case IET_REL64_EXPORT:
-				"ZXERep REL64_EXPORT";
-				break;
-			case IET_IMM64_EXPORT:
-				"ZXERep IMM64_EXPORT";
-				break;
-			case IET_MAIN:
-				"ZXERep IET_MAIN";
-				break;
-			case IET_END:
-				"ZXERep IET_END";
 				break;
 
 			case IET_ABS_ADDR:
 				'\n';
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
-				progress1 += j * 4;
 				break;
 
 			case IET_CODE_HEAP:
@@ -126,7 +84,6 @@ public Bool ZXERep(U8 *filename)
 				"Size:%X\n", *ptr(U32 *)++;
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
-				progress1 += 4 + j * 4;
 				break;
 
 			case IET_DATA_HEAP:
@@ -134,52 +91,16 @@ public Bool ZXERep(U8 *filename)
 				"Size:%X\n", *ptr(I64 *)++;
 				for (j = 0; j < i; j++)
 					"%X ", *ptr(U32 *)++;
-				progress1 += 8 + j * 4;
-				break;
-
-			default:
-				"ZXERep missing IET:%d", etype;
 				break;
 		}
 		'\n';
 	}
-
-	progress2_max = QueueSize(patch_offsets_queue);
-	progress3_max = QueueSize(patch_offsets_queue);
-	progress3 = 0;
-br_patchloop:
-	progress2 = 0;
-	patch = patch_offsets_queue->next;
-	while (patch != patch_offsets_queue)
-	{
-		"%X ?--> %X", patch->p.x, patch->next->p.x;
-		if (patch->next != patch_offsets_queue && patch->p.x > patch->next->p.x)
-		{
-			t = patch->p.x;
-			patch->p.x = patch->next->p.x;
-			patch->next->p.x = t;
-			if (progress3 < progress2)
-				progress3++;
-			goto br_patchloop;
-		}
-		patch = patch->next;
-		progress2++;
-	}
-	"\n";
-
 	res = TRUE;
 	Free(absname);
 br_done2:
 	Free(zxe);
 br_done1:
 	Free(fbuf);
-
-	if (unlock_doc)
-		DocUnlock(Fs->put_doc);
-
-	progress1_max = 0;
-	progress2_max = 0;
-	progress3_max = 0;
 
 	return res;
 }

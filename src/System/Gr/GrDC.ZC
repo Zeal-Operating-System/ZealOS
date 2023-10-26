@@ -214,9 +214,7 @@ public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALS
 	res->win_task		= task;
 	res->mem_task		= task;
 	res->width			= width;
-//	res->width_internal	= (width + 7) & ~7;
-	res->width_internal	= width / 8 * 8;
-//	res->width_internal	= width;
+	res->width_internal	= (width + 7) & ~7;
 	res->height			= height;
 	if (null_bitmap)
 		res->flags |= DCF_DONT_DRAW;
