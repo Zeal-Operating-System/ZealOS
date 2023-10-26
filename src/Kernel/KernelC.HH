@@ -637,8 +637,13 @@ public extern I64 IntEntryAlloc();
 public extern I64 IntEntryFree(I64 irq);
 
 #help_index "ScreenCast;Cmd Line (Typically)"
-public extern Bool					ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.GR")
+public extern Bool					ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.GR");
 public extern CScreenCastGlobals	screencast;
+
+#help_index "SMBIOS"
+extern Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry);
+extern U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None");
+extern CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHeader *head=NULL);
 
 #help_index "Sound"
 #help_file "::/Doc/Sound"
