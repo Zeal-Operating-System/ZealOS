@@ -15,24 +15,19 @@ I64 Str2I64(U8 *st, I64 radix=10, U8 **_end_ptr=NULL)
 		st++;
 	if (*st == '+' || *st == '-')
 		neg = *st++ == '-';
-	while (TRUE)
-		switch (*st)
-		{
-			case '0':
-				st++;
-				ch = ToUpper(*st);
-				if (ch >= 'B' && (radix <= 10 || ch > 'A' + radix - 11))
-					switch (ch)
-					{
-						case 'B': radix = 2;  st++; break;
-						case 'O': radix = 8;  st++; break;
-						case 'D': radix = 10; st++; break;
-						case 'X': radix = 16; st++; break;
-					}
-			default:
-				goto ai_cont;
-		}
-ai_cont:
+	while (*st == '0')
+	{
+		st++;
+		ch = ToUpper(*st);
+		if (ch >= 'B' && (radix <= 10 || ch > 'A' + radix - 11))
+			switch (ch)
+			{
+				case 'B': radix = 2;  st++; break;
+				case 'O': radix = 8;  st++; break;
+				case 'D': radix = 10; st++; break;
+				case 'X': radix = 16; st++; break;
+			}
+	}
 	while (ch = ToUpper(*st++))
 	{
 		if (radix > 10)
