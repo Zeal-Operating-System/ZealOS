@@ -504,11 +504,3 @@ U8 *SysStrNew(U8 *buf)
 {//Alloc copy of string in System task's heap.
 	return StrNew(buf, sys_task);
 }
-
-U0 FreeAll(...)
-{// Free all pointers passed
-	U64 cur_arg = 0;
-
-	while (argc--)
-		Free(argv[cur_arg++]);
-}
