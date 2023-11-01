@@ -186,7 +186,7 @@ class MPCtrl
 	Bool app_done;
 } mp;
 
-F64  game_t0, game_tf, pitch, roll, heading, è, speed;
+F64  game_t0, game_tf, pitch, roll, heading, man_é, speed;
 Bool invert_pitch, rolled_over;
 I64  strip_height, x, y, z, fish_left;
 CD3  v;
@@ -195,8 +195,8 @@ U0 WrapAngles()
 {
 	I64 r[4][4], x, y, z;
 
-	è = Wrap(è);
-	pitch = Wrap(-è - ã / 2);
+	man_é = Wrap(man_é);
+	pitch = Wrap(-man_é - ã / 2);
 	if (Abs(pitch) > ã / 2)
 	{
 		invert_pitch = TRUE;
@@ -214,7 +214,7 @@ U0 WrapAngles()
 	//World to screen coordinates
 	Mat4x4IdentEqu(r);
 	Mat4x4RotZ(r, heading);
-	Mat4x4RotX(r, è);
+	Mat4x4RotX(r, man_é);
 	Mat4x4RotZ(r, roll);
 
 	//We use velocity vector for dog-fighting.
@@ -644,7 +644,7 @@ U0 MPDrawIt(CTask *task, CDC *dc)
 	//World to screen coordinates
 	Mat4x4IdentEqu(dc->r);
 	Mat4x4RotZ(dc->r, heading);
-	Mat4x4RotX(dc->r, è);
+	Mat4x4RotX(dc->r, man_é);
 	Mat4x4RotZ(dc->r, roll);
 	DCMat4x4Set(dc, dc->r);
 
@@ -657,7 +657,7 @@ U0 MPDrawIt(CTask *task, CDC *dc)
 
 	s2w = Mat4x4IdentNew;
 	Mat4x4RotZ(s2w, -roll);
-	Mat4x4RotX(s2w, -è);
+	Mat4x4RotX(s2w, -man_é);
 	Mat4x4RotZ(s2w, -heading);
 
 	xh = 0;
@@ -685,7 +685,7 @@ U0 MPDrawIt(CTask *task, CDC *dc)
 	Mat4x4TranslationEqu(dc->r, x1, y1, z1);
 
 	//This is a refinement.
-	if (Abs(è * 180 / ã) > 90)
+	if (Abs(man_é * 180 / ã) > 90)
 	{
 		x3 = 0;
 		y3 = -cy;
@@ -836,7 +836,7 @@ U0 DrawHorizon(CDC *dc)
 
 	if (game_tf && fish_left)
 		DCFill(dc, BLACK);
-	else if (-ã / 4 <= Wrap(è - ã) < ã / 4)
+	else if (-ã / 4 <= Wrap(man_é - ã) < ã / 4)
 		DCFill(dc, LTCYAN);
 	else
 	{
@@ -847,7 +847,7 @@ U0 DrawHorizon(CDC *dc)
 
 		Mat4x4IdentEqu(dc->r);
 		Mat4x4RotZ(dc->r, heading);
-		Mat4x4RotX(dc->r, è);
+		Mat4x4RotX(dc->r, man_é);
 		Mat4x4RotZ(dc->r, roll);
 
 		DCMat4x4Set(dc, dc->r);
@@ -857,7 +857,7 @@ U0 DrawHorizon(CDC *dc)
 		dc->y = cy;
 
 		Mat4x4RotZ(s2w, -roll);
-		Mat4x4RotX(s2w, -è);
+		Mat4x4RotX(s2w, -man_é);
 		Mat4x4RotZ(s2w, -heading);
 
 		xh = 0;
@@ -1080,7 +1080,7 @@ U0 AnimateTask(I64)
 			//Screen to world coordinates
 			s2w = Mat4x4IdentNew;
 			Mat4x4RotZ(s2w, -roll);
-			Mat4x4RotX(s2w, -è);
+			Mat4x4RotX(s2w, -man_é);
 			Mat4x4RotZ(s2w, -heading);
 
 			dx = 0;
@@ -1102,10 +1102,10 @@ U0 AnimateTask(I64)
 					if (invert_pitch)
 					{
 						if (pitch < -ã / 8)
-							è += ms / 1000.0 * Sign(3 * ã / 8 - è);
+							man_é += ms / 1000.0 * Sign(3 * ã / 8 - man_é);
 					}
 					else if (pitch < -ã / 8)
-						è += ms / 1000.0 * Sign(-3 * ã / 8 - è);
+						man_é += ms / 1000.0 * Sign(-3 * ã / 8 - man_é);
 					WrapAngles;
 				}
 				speed = 1.0;
@@ -1142,13 +1142,13 @@ U0 AnimateTask(I64)
 			else
 			{
 				claws_down = 0;
-				if (-ã / 4 <= è <= ã / 4)
+				if (-ã / 4 <= man_é <= ã / 4)
 					speed += 0.0005;
-				else if (-3 * ã / 4 <= è <= 3 * ã / 4)
+				else if (-3 * ã / 4 <= man_é <= 3 * ã / 4)
 					speed += 0.0001;
 				else
 					speed -= 0.0001;
-				speed = Clamp(speed + (0.0005 - 0.0002 * Abs(è) / (ã / 4)), 0.1, 5.0);
+				speed = Clamp(speed + (0.0005 - 0.0002 * Abs(man_é) / (ã / 4)), 0.1, 5.0);
 			}
 
 			for (i = 0; i < mp_count; i++)
@@ -1231,7 +1231,7 @@ U0 Init()
 
 	strip_height = 128;
 
-	è 			= -90.0 * ã / 180.0;
+	man_é 			= -90.0 * ã / 180.0;
 	roll		= 0;
 	heading 	= 0;
 	speed		= 2.5;
@@ -1287,6 +1287,43 @@ U0 CleanUp()
 	DCDel(main_dc);
 }
 
+
+//doodguy attempt at adding mouse support
+//credit to TinkerOS for showing how it's done 
+
+#define MICRO_STEPS 32
+
+
+
+
+CTask *mouse_task = NULL;
+CTask *game_task = Fs;
+F64 mouse_scale = 32.0;
+
+U0 MouseHandler()
+{
+	Bool button;
+	I64 x;
+	I64 z;
+	while (TRUE)
+	{
+		button = mouse_hard.raw_bttns[0];
+		x = mouse_hard.raw_data.x;
+		z = mouse_hard.raw_data.y;
+		if (button || x!=0 || y!=0)
+			MouseRawReset; // Mark mouse data as consumed
+		if ( x != 0) {
+			man_é += (z/mouse_scale)/MICRO_STEPS;
+		}
+		if ( z != 0) {
+			roll += (x/mouse_scale)/MICRO_STEPS;
+		}
+		Sleep(10);
+		}
+		// Don't ask me why the x and z are reversed. For some reason the coordinate system is 
+		// flipped for this game. 
+}
+
 U0 Talons()
 {
 	I64 ch, sc;
@@ -1323,18 +1360,38 @@ U0 Talons()
 			{
 				switch (ch)
 				{
+					case 'm':
+					if (!mouse_task) {
+						MouseRaw(TRUE);
+						mouse_task=Spawn(&MouseHandler,NULL);
+					}
+					else {
+						Kill(mouse_task);
+						mouse_task=NULL;
+						MouseRaw(FALSE);
+					}
+					break;
+
+				case '+':
+					mouse_scale *= 0.9;
+					break;
+
+				case '-':
+					mouse_scale *= 1.1;
+					break;
+					
 					case 0:
 						switch (sc.u8[0])
 						{
 							start:
 								case SC_CURSOR_DOWN:
-									è		-= CTRLS_SCALE * Cos(roll);
-									heading -= CTRLS_SCALE * Sin(roll) * Sin(è);
+									man_é		-= CTRLS_SCALE * Cos(roll);
+									heading -= CTRLS_SCALE * Sin(roll) * Sin(man_é);
 									break;
 
 								case SC_CURSOR_UP:
-									è		+= CTRLS_SCALE * Cos(roll);
-									heading += CTRLS_SCALE * Sin(roll) * Sin(è);
+									man_é		+= CTRLS_SCALE * Cos(roll);
+									heading += CTRLS_SCALE * Sin(roll) * Sin(man_é);
 									break;
 
 								case SC_CURSOR_RIGHT:
@@ -1372,7 +1429,11 @@ U0 Talons()
 	RegWrite("ZealOS/Talons", "F64 best_score=%5.4f;\n", best_score);
 }
 
+MouseRaw(TRUE);
+mouse_task=Spawn(&MouseHandler,NULL);
 Talons;
+if (mouse_task) Kill(mouse_task);
+MouseRaw(FALSE);
                   
    àÿÿÿýÿÿÿ   
 ýÿÿÿ      "   
