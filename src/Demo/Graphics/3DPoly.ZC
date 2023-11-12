@@ -1,6 +1,6 @@
 U0 Main()
 {
-	F64		 é = 0, è = 0, ê = 0;
+	F64		 Î˜ = 0, Î¦ = 0, Î© = 0;
 	CD3I32	 poly[4];
 	CDC		*dc = DCAlias;
 
@@ -20,9 +20,9 @@ U0 Main()
 							mouse.pos.y - Fs->pix_top  - Fs->scroll_y);
 
 			Mat4x4IdentEqu(dc->r);
-			Mat4x4RotX(dc->r, ê);
-			Mat4x4RotY(dc->r, è);
-			Mat4x4RotZ(dc->r, é);
+			Mat4x4RotX(dc->r, Î©);
+			Mat4x4RotY(dc->r, Î¦);
+			Mat4x4RotZ(dc->r, Î˜);
 			DCMat4x4Set(dc, dc->r);
 
 			dc->x = Fs->pix_width  / 2;
@@ -106,9 +106,9 @@ U0 Main()
 
 			Refresh;
 			DCFill;
-			é += 2.1 * ã / 180.0;
-			è += 1.1 * ã / 180.0;
-			ê += 0.5 * ã / 180.0;
+			Î˜ += 2.1 * Ï€ / 180.0;
+			Î¦ += 1.1 * Ï€ / 180.0;
+			Î© += 0.5 * Ï€ / 180.0;
 		}
 	}
 	catch

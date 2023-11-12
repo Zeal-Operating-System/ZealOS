@@ -290,17 +290,17 @@ U0 Matrix4DScaleSet(F32 x, F32 y, F32 z, CMatrix4D *dest)
 	@ingroup Math
 	@brief Clear 4x4 matrix and set it to a look-at transform.
 
-			 Ú                ¿   Ú            ¿   Ú                    ¿
-			 ³Rx   Ry   Rz   0³   ³1  0  0  -Ex³   ³Rx  Ry  Rz  -(R ù E)³ 
-	LookAt = ³Ux   Uy   Uz   0³ * ³0  1  0  -Ey³ = ³Ux  Uy  Ut  -(U ù E)³
-			 ³-Fx  -Fy  -Fz  0³   ³0  0  1  -Ez³   ³Fx  Fy  Fz  F ù E   ³
-			 ³0    0    0    1³   ³0  0  0  1  ³   ³0   0   0   1       ³
-             À                Ù   À            Ù   À                    Ù
+			 â”Œ                â”   â”Œ            â”   â”Œ                    â”
+			 â”‚Rx   Ry   Rz   0â”‚   â”‚1  0  0  -Exâ”‚   â”‚Rx  Ry  Rz  -(R âˆ™ E)â”‚ 
+	LookAt = â”‚Ux   Uy   Uz   0â”‚ * â”‚0  1  0  -Eyâ”‚ = â”‚Ux  Uy  Ut  -(U âˆ™ E)â”‚
+			 â”‚-Fx  -Fy  -Fz  0â”‚   â”‚0  0  1  -Ezâ”‚   â”‚Fx  Fy  Fz  F âˆ™ E   â”‚
+			 â”‚0    0    0    1â”‚   â”‚0  0  0  1  â”‚   â”‚0   0   0   1       â”‚
+             â””                â”˜   â””            â”˜   â””                    â”˜
 	Where:
-	ùR is the eye right direction.
-	ùU is the eye up direction.
-	ùF is the eye forward direction (away from target towards viewer).
-	ùE is the position of the eye.
+	âˆ™R is the eye right direction.
+	âˆ™U is the eye up direction.
+	âˆ™F is the eye forward direction (away from target towards viewer).
+	âˆ™E is the position of the eye.
 
 	@param[in]     eye		Position of eye.
 	@param[in]     center	Position to look at.

@@ -4,21 +4,21 @@
 #define ANGLES	35
 F64 angles[ANGLES] = {
 
-	-2 * ã / 1,  -2 * ã / 2,  -2 * ã / 3,  -2 * ã / 4, -2 * ã / 5, 
-	-2 * ã / 6,  -2 * ã / 8,  -2 * ã / 9,  -2 * ã / 10, 
-	-2 * ã / 12, -2 * ã / 15, -2 * ã / 18, -2 * ã / 20, 
-	-2 * ã / 24, -2 * ã / 30, -2 * ã / 36, -2 * ã / 40, 
+	-2 * Ï€ / 1,  -2 * Ï€ / 2,  -2 * Ï€ / 3,  -2 * Ï€ / 4, -2 * Ï€ / 5, 
+	-2 * Ï€ / 6,  -2 * Ï€ / 8,  -2 * Ï€ / 9,  -2 * Ï€ / 10, 
+	-2 * Ï€ / 12, -2 * Ï€ / 15, -2 * Ï€ / 18, -2 * Ï€ / 20, 
+	-2 * Ï€ / 24, -2 * Ï€ / 30, -2 * Ï€ / 36, -2 * Ï€ / 40, 
 	0, 
-	2 * ã / 40, 2 * ã / 36, 2 * ã / 30, 2 * ã / 24, 
-	2 * ã / 20, 2 * ã / 18, 2 * ã / 15, 2 * ã / 12, 
-	2 * ã / 10, 2 * ã / 9,  2 * ã / 8,  2 * ã / 6, 
-	2 * ã / 5,  2 * ã / 4,  2 * ã / 3,  2 * ã / 2, 2 * ã / 1
+	2 * Ï€ / 40, 2 * Ï€ / 36, 2 * Ï€ / 30, 2 * Ï€ / 24, 
+	2 * Ï€ / 20, 2 * Ï€ / 18, 2 * Ï€ / 15, 2 * Ï€ / 12, 
+	2 * Ï€ / 10, 2 * Ï€ / 9,  2 * Ï€ / 8,  2 * Ï€ / 6, 
+	2 * Ï€ / 5,  2 * Ï€ / 4,  2 * Ï€ / 3,  2 * Ï€ / 2, 2 * Ï€ / 1
 };
 
 class Turtle
 {
-	F64				x, y, z, speed, é, w;
-	I64				dé_idx;
+	F64				x, y, z, speed, Î˜, w;
+	I64				dÎ˜_idx;
 	CColorROPU16	edge, middle;
 	Bool			ends, first;
 
@@ -31,22 +31,22 @@ U0 TurtlePlot(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle)
 	if (w < 0)
 		w = 0;
 	dc->color = middle;
-	GrLine3(dc, t->x + w * Cos(t->é + ã / 2), t->y + w * Sin(t->é + ã / 2), t->z, 
-				t->x + w * Cos(t->é - ã / 2), t->y + w * Sin(t->é - ã / 2), t->z);
+	GrLine3(dc, t->x + w * Cos(t->Î˜ + Ï€ / 2), t->y + w * Sin(t->Î˜ + Ï€ / 2), t->z, 
+				t->x + w * Cos(t->Î˜ - Ï€ / 2), t->y + w * Sin(t->Î˜ - Ï€ / 2), t->z);
 	w = t->w / 2.0;
 	dc->color = edge;
-	GrPlot3(dc, t->x + w * Cos(t->é + ã / 2), t->y + w * Sin(t->é + ã / 2), t->z);
-	GrPlot3(dc, t->x + w * Cos(t->é - ã / 2), t->y + w * Sin(t->é - ã / 2), t->z);
+	GrPlot3(dc, t->x + w * Cos(t->Î˜ + Ï€ / 2), t->y + w * Sin(t->Î˜ + Ï€ / 2), t->z);
+	GrPlot3(dc, t->x + w * Cos(t->Î˜ - Ï€ / 2), t->y + w * Sin(t->Î˜ - Ï€ / 2), t->z);
 }
 
 U0 TurtleMicroMove(Turtle *t, F64 dt)
 {
-	t->x += dt * t->speed * Cos(t->é);
-	t->y += dt * t->speed * Sin(t->é);
-	t->é = Wrap(t->é + dt * angles[t->dé_idx]);
+	t->x += dt * t->speed * Cos(t->Î˜);
+	t->y += dt * t->speed * Sin(t->Î˜);
+	t->Î˜ = Wrap(t->Î˜ + dt * angles[t->dÎ˜_idx]);
 }
 
-U0 TurtleEnd(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle, F64 é)
+U0 TurtleEnd(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle, F64 Î˜)
 {
 	F64		r, x, y2;
 	Turtle	t2;
@@ -57,8 +57,8 @@ U0 TurtleEnd(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle, F64 é)
 		x = 0;
 		while (TRUE)
 		{
-			t->x += 1 / r *Cos(é);
-			t->y += 1 / r * Sin(é);
+			t->x += 1 / r *Cos(Î˜);
+			t->y += 1 / r * Sin(Î˜);
 			x += 1 / r;
 			y2 = r * r - 4 * x * x;
 			if (y2 >= 0)
@@ -78,7 +78,7 @@ U0 TurtleMove(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle)
 	I64 i, l = 16 * AbsI64(t->w + 1) * AbsI64(t->speed + 1);
 
 	if (t->ends && t->first)
-		TurtleEnd(dc, t, edge, middle, t->é + ã);
+		TurtleEnd(dc, t, edge, middle, t->Î˜ + Ï€);
 	t->first = FALSE;
 
 	for (i = 0; i < l; i++)
@@ -87,7 +87,7 @@ U0 TurtleMove(CDC *dc, Turtle *t, CColorROPU16 edge, CColorROPU16 middle)
 		TurtlePlot(dc, t, edge, middle);
 	}
 	if (t->ends)
-		TurtleEnd(dc, t, edge, middle, t->é);
+		TurtleEnd(dc, t, edge, middle, t->Î˜);
 }
 
 U0 TurtleInit(Turtle *t)
@@ -98,7 +98,7 @@ U0 TurtleInit(Turtle *t)
 	t->z		= 5;
 	t->edge		= BLACK;
 	t->middle	= YELLOW;
-	t->dé_idx	= ANGLES / 2;
+	t->dÎ˜_idx	= ANGLES / 2;
 	t->first	= TRUE;
 	t->ends		= TRUE;
 }
@@ -108,19 +108,19 @@ U0 DrawIt(CTask *, CDC *dc)
 	Turtle t2;
 
 	MemCopy(&t2, &tt, sizeof(Turtle));
-	GrPrint(dc, 0, 0, "Layer:%f Speed:%f é:%5.1f dé:%5.1f Width:%f", 
-			tt.z, tt.speed, tt.é * 180 / ã, angles[tt.dé_idx] * 180 / ã, tt.w);
+	GrPrint(dc, 0, 0, "Layer:%f Speed:%f Î˜:%5.1f dÎ˜:%5.1f Width:%f", 
+			tt.z, tt.speed, tt.Î˜ * 180 / Ï€, angles[tt.dÎ˜_idx] * 180 / Ï€, tt.w);
 
 	TurtleMove(dc, &t2, RED, LTRED);
 	dc->color  = LTRED;
-	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.é + ã / 2), t2.y + TURTLE_SIZE * Sin(t2.é + ã / 2), 
-				t2.x + TURTLE_SIZE * Cos(t2.é - ã / 2), t2.y + TURTLE_SIZE * Sin(t2.é - ã / 2));
+	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.Î˜ + Ï€ / 2), t2.y + TURTLE_SIZE * Sin(t2.Î˜ + Ï€ / 2), 
+				t2.x + TURTLE_SIZE * Cos(t2.Î˜ - Ï€ / 2), t2.y + TURTLE_SIZE * Sin(t2.Î˜ - Ï€ / 2));
 
-	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.é + ã / 2), t2.y + TURTLE_SIZE * Sin(t2.é + ã / 2), 
-				t2.x + TURTLE_SIZE * Cos(t2.é),			t2.y + TURTLE_SIZE * Sin(t2.é));
+	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.Î˜ + Ï€ / 2), t2.y + TURTLE_SIZE * Sin(t2.Î˜ + Ï€ / 2), 
+				t2.x + TURTLE_SIZE * Cos(t2.Î˜),			t2.y + TURTLE_SIZE * Sin(t2.Î˜));
 
-	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.é - ã / 2), t2.y + TURTLE_SIZE * Sin(t2.é - ã / 2), 
-				t2.x + TURTLE_SIZE * Cos(t2.é),			t2.y + TURTLE_SIZE * Sin(t2.é));
+	GrLine(dc,	t2.x + TURTLE_SIZE * Cos(t2.Î˜ - Ï€ / 2), t2.y + TURTLE_SIZE * Sin(t2.Î˜ - Ï€ / 2), 
+				t2.x + TURTLE_SIZE * Cos(t2.Î˜),			t2.y + TURTLE_SIZE * Sin(t2.Î˜));
 }
 
 U0 SetMenu()
@@ -210,16 +210,16 @@ U0 Lattice()
 
 				case MESSAGE_MS_R_DOWN:
 					aim = TRUE;
-					tt.é = Arg(arg1 - tt.x, arg2 - tt.y);
+					tt.Î˜ = Arg(arg1 - tt.x, arg2 - tt.y);
 					break;
 
 				case MESSAGE_MS_MOVE:
 					if (aim)
-						tt.é = Arg(arg1 - tt.x, arg2 - tt.y);
+						tt.Î˜ = Arg(arg1 - tt.x, arg2 - tt.y);
 					break;
 
 				case MESSAGE_MS_R_UP:
-					tt.é = Arg(arg1 - tt.x, arg2 - tt.y);
+					tt.Î˜ = Arg(arg1 - tt.x, arg2 - tt.y);
 					aim = FALSE;
 					break;
 
@@ -230,13 +230,13 @@ U0 Lattice()
 							switch (arg2.u8[0])
 							{
 								case SC_CURSOR_LEFT:
-									if (tt.dé_idx)
-										tt.dé_idx--;
+									if (tt.dÎ˜_idx)
+										tt.dÎ˜_idx--;
 									break;
 
 								case SC_CURSOR_RIGHT:
-									if (tt.dé_idx < ANGLES - 1)
-										tt.dé_idx++;
+									if (tt.dÎ˜_idx < ANGLES - 1)
+										tt.dÎ˜_idx++;
 									break;
 
 								case SC_CURSOR_UP:

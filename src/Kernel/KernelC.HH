@@ -683,7 +683,7 @@ public extern					I64		sys_num_spawned_tasks;
 extern							CTask	*sys_winmgr_task, *sys_task_being_screen_updated;
 
 #help_index "Task/Delay;Time/CPU Cycles"
-public extern	U0	Busy(I64 æS); //Loosely timed
+public extern	U0	Busy(I64 ÂµS); //Loosely timed
 public extern	U0	PortNop(); //On the order of 1uS
 extern			I64	TimeCal();
 

@@ -30,7 +30,7 @@ F64 CompileDemo(U8 *st)
 	return res;
 }
 
-CompileDemo("2 + Cos(ã)");
+CompileDemo("2 + Cos(Ï€)");
 CompileDemo("1; 2 + 4");
 CompileDemo("global = 1; global * 2; global / 3; Sin(global)");
 
