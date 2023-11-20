@@ -13,7 +13,7 @@ U8 face[8] = {
 
 text.font[255] = face[0](U64);
 
-"Face:ÿ\n";
+"Face:Â \n";
 
 //Chars 128-255 are treated as letters
 //by the compiler and everything else.
@@ -23,8 +23,8 @@ text.font[255] = face[0](U64);
 
 U0 SrcExample()
 {
-	I64 fÿÿ = 12345;
-	"fÿÿ=%d\n", fÿÿ;
+	I64 fÂ Â  = 12345;
+	"fÂ Â =%d\n", fÂ Â ;
 }
 
 SrcExample;

@@ -13,33 +13,21 @@ I64 Str2I64(U8 *st, I64 radix=10, U8 **_end_ptr=NULL)
 	}
 	while (Bt(char_bmp_white_space, *st))
 		st++;
-	while (TRUE)
-		switch (*st)
-		{
-			case '-':
-				st++;
-				neg = !neg;
-				break;
-
-			case '+':
-				st++;
-				break;
-
-			case '0':
-				st++;
-				ch = ToUpper(*st);
-				if (ch >= 'B' && (radix <= 10 || ch > 'A' + radix - 11))
-					switch (ch)
-					{
-						case 'B': radix = 2;  st++; break;
-						case 'O': radix = 8;  st++; break;
-						case 'D': radix = 10; st++; break;
-						case 'X': radix = 16; st++; break;
-					}
-			default:
-				goto ai_cont;
-		}
-ai_cont:
+	if (*st == '+' || *st == '-')
+		neg = *st++ == '-';
+	while (*st == '0')
+	{
+		st++;
+		ch = ToUpper(*st);
+		if (ch >= 'B' && (radix <= 10 || ch > 'A' + radix - 11))
+			switch (ch)
+			{
+				case 'B': radix = 2;  st++; break;
+				case 'O': radix = 8;  st++; break;
+				case 'D': radix = 10; st++; break;
+				case 'X': radix = 16; st++; break;
+			}
+	}
 	while (ch = ToUpper(*st++))
 	{
 		if (radix > 10)
@@ -87,13 +75,13 @@ to avoid this.
 	}
 	if (!StrNCompare(src - 1, "inf", 3))
 	{
-		d=ì;
+		d=âˆž;
 		src += 3;
 		goto a2f_end;
 	}
-	if (*src == 'ì')
+	if (*src == 'âˆž')
 	{
-		d = ì;
+		d = âˆž;
 		src++;
 		goto a2f_end;
 	}

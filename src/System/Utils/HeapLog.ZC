@@ -159,7 +159,7 @@ public U0 HeapLogAddrRep(Bool leave_it=OFF)
 			MemCopy(&hl, tmphl, sizeof(CHeapLog));
 			"$$PURPLE$$%08X$$FG$$ %08X %P", MSize(hl.addr), hl.addr, hl.caller[0];
 			for (j = 1; j < HL_CALLER_DEPTH; j++)
-				" © %P", hl.caller[j];
+				" âŒ %P", hl.caller[j];
 			'\n';
 			total += MSize(hl.addr);
 			tmphl = hl.next;
@@ -233,7 +233,7 @@ hl_found:
 			tmphls1 = tmphls->next;
 			"%08X*%08X=%08X %P", tmphls->size, tmphls->count, tmphls->size * tmphls->count, tmphls->caller[0];
 			for (j = 1; j < HL_CALLER_DEPTH; j++)
-				" © %P", tmphls->caller[j];
+				" âŒ %P", tmphls->caller[j];
 			'\n';
 			total += tmphls->size * tmphls->count;
 			Free(tmphls);

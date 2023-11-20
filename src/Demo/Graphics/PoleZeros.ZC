@@ -44,7 +44,7 @@ F64 F(Complex *x)
 
 	R2P(&m, &a, n1.x, n1.y);
 	if (mouse.rb)
-		return ã + a;
+		return Ï€ + a;
 	else
 		return m;
 }

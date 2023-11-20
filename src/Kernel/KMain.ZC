@@ -78,15 +78,15 @@ U0 SysGrInit()
 
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
-	text.aux_font[255]	= text.font[255]; //Block symbol ÿ
+	text.aux_font[255]	= text.font[255]; //Block symbol Â 
 
-	for (i = '³'; i < 'Û'; i++)
+	for (i = 'â”‚'; i < 'â–ˆ'; i++)
 		text.aux_font[i] = text.font[i];
 
-	text.aux_font['©'] = text.font['©'];
+	text.aux_font['âŒ'] = text.font['âŒ'];
 	
-	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
-	text.border_chars[10](U32) = 'ÀÈÙ¼';
+	text.border_chars[2] (I64) = 'â”€â•â”‚â•‘â”Œâ•”â”â•—';
+	text.border_chars[10](U32) = 'â””â•šâ”˜â•';
 
 	text.cols = sys_framebuffer_width  / FONT_WIDTH;
 	text.rows = sys_framebuffer_height / FONT_HEIGHT;
