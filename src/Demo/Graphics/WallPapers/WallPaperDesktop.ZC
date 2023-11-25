@@ -160,7 +160,7 @@ U0 WallPaper(CTask *_task)
 		if (sys_data_bp)
 			i += sys_data_bp->alloced_u8s - sys_data_bp->used_u8s;
 		StrPrint(wall->top_line,
-					" ð %3tZ %02d/%02d/%02d %02d:%02d:%02d ³ FPS: %2tf ³ Mem: %010X ³ CPU: ",
+					" â‰¡ %3tZ %02d/%02d/%02d %02d:%02d:%02d â”‚ FPS: %2tf â”‚ Mem: %010X â”‚ CPU: ",
 					ds.day_of_week, "ST_DAYS_OF_WEEK", ds.mon, ds.day_of_mon, ds.year % 100,
 					ds.hour, ds.min, ds.sec, winmgr.fps, i);
 	}
@@ -197,7 +197,7 @@ $SP,"<1>",BI=1$
 
 
 
-$SP,"<2>",BI=2,BP="::/Home/DesktopIcons.DD,1"$
+$SP,"<2>",BI=2,BP="::/Demo/Graphics/WallPapers/WallPaperDesktop/DesktopIcons.DD,1"$
 
 
 
@@ -207,7 +207,7 @@ $SP,"<2>",BI=2,BP="::/Home/DesktopIcons.DD,1"$
 
 
 
-$SP,"<3>",BI=3,BP="::/Home/DesktopIcons.DD,2"$
+$SP,"<3>",BI=3,BP="::/Demo/Graphics/WallPapers/WallPaperDesktop/DesktopIcons.DD,2"$
 
 
 
@@ -216,7 +216,7 @@ $SP,"<3>",BI=3,BP="::/Home/DesktopIcons.DD,2"$
 
 
 
-$SP,"<4>",BI=4,BP="::/Home/DesktopIcons.DD,3"$
+$SP,"<4>",BI=4,BP="::/Demo/Graphics/WallPapers/WallPaperDesktop/DesktopIcons.DD,3"$
 
 
 
@@ -470,6 +470,12 @@ CCtrl *ShowStatsIconNew()
 
 U0 WallPaperInit(Bool enableTermIcon = TRUE, Bool enableDesktopIcons = TRUE)
 {
+	if (Fs != sys_task)
+	{
+		"Must be System Included with SHIFT-F5.\n"
+		"(Would crash when code mem was freed.)\n";
+		return;
+	}
 	if(enableTermIcon)
 	{
 		TermBttnNew;
@@ -486,7 +492,7 @@ U0 WallPaperInit(Bool enableTermIcon = TRUE, Bool enableDesktopIcons = TRUE)
 	gr.fp_wall_paper = &WallPaper;
 }
 
-        ;               N            L       	   
+WallPaperInit;        ;               N            L       	   
    TERMINAL         n               6            5            1      	      BBS    !   6   0       &   Telnet         9               N            L          
    NetLog         8               N            L          
    Stats  
