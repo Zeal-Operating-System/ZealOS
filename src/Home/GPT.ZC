@@ -1,0 +1,42 @@
+
+
+/*
+https://en.wikipedia.org/wiki/GUID_Partition_Table
+GPT HEADER STRUCTURE:
+(bytes, name:)
+8	signature
+4	revision #
+4	header size little endian
+4	crc32 of header
+4	reserved zero
+8	current LBA location of header copy
+8	backup LBA location of header copy
+8	first usable LBA for partitions (primary partition table last LBA + 1)
+8	last usable LBA   secondary partition table first LBA - 1
+16	disk GUID mixed endian
+8	starting LBA array of partition entires (usually 2 for compat)
+4	number of partition entries in array
+4	size of single partition entry (usually 0x80 or 128)
+4	crc32 of partition entires array in little endian
+??	reserved, zeroes to the end of the block
+
+GPT PARTITIONS ENTRIES STRUCTURE:
+16	partition Type GUID mixed endian
+16	unique partition GUID mixed endian
+8	first LBA little endian
+8	last LBA inclusive usually odd
+8	attribute flags
+72	partition name 36 UTF-16LE code units
+
+GPT Partition attributes:
+(bit, details)
+0	platform required by computer
+1	efi firmware ignore content of this partition don't read from
+2	legacy bios bootable (equiv to active flag for MBR)
+3-47	reserved
+48-63	defined & used by individual partition type
+
+**/
+
+
+
