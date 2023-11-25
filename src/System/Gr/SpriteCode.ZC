@@ -44,7 +44,7 @@ U0 SpriteElem2Code(CDoc *doc, CSprite *tmpg)
 		case SPT_ROTATED_RECT:
 			DocPrint(doc, "{(%d,%d):(%d,%d),%0.4f}", tmpg->ppa.x1, tmpg->ppa.y1, 
 													 tmpg->ppa.x2 - tmpg->ppa.x1, tmpg->ppa.y2 - tmpg->ppa.y1,
-													 180 / ã * Wrap(tmpg->ppa.angle));
+													 180 / Ï€ * Wrap(tmpg->ppa.angle));
 			break;
 
 		case SPT_PT:
@@ -67,13 +67,13 @@ U0 SpriteElem2Code(CDoc *doc, CSprite *tmpg)
 
 		case SPT_ELLIPSE:
 			DocPrint(doc, "{(%d,%d):(%d,%d),%0.4f}", tmpg->pwha.x1, tmpg->pwha.y1, tmpg->pwha.width, tmpg->pwha.height,
-													 180 / ã * Wrap(tmpg->pwha.angle));
+													 180 / Ï€ * Wrap(tmpg->pwha.angle));
 			break;
 
 		case SPT_POLYGON:
 			DocPrint(doc, "{%d,(%d,%d):(%d,%d),%0.4f}", tmpg->pwhas.sides, tmpg->pwhas.x1, tmpg->pwhas.y1, 
 														tmpg->pwhas.width, tmpg->pwhas.height, 
-														180 / ã * Wrap(tmpg->pwhas.angle));
+														180 / Ï€ * Wrap(tmpg->pwhas.angle));
 			break;
 
 		case SPT_TEXT:
@@ -298,7 +298,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc, I64 type)
 				if (cc->token == ',')
 				{
 					Lex(cc); //Skip ,
-					g.ppa.angle = ã / 180 * LexExpressionF64(cc);
+					g.ppa.angle = Ï€ / 180 * LexExpressionF64(cc);
 					g.type = SPT_ROTATED_RECT;
 				}
 				else
@@ -362,7 +362,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc, I64 type)
 				if (cc->token != ',')
 					LexExcept(cc, "Expecting ',' at ");
 				Lex(cc); //Skip ,
-				g.pwha.angle = ã / 180 * LexExpressionF64(cc);
+				g.pwha.angle = Ï€ / 180 * LexExpressionF64(cc);
 				break;
 		end:
 			size = SpriteElemSize(&g) + offset(CSprite.start);

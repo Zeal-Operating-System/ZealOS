@@ -500,7 +500,7 @@ I64 ICBuiltInFloatConst(F64 d)
 		return 0xE8D9;
 	else if (OptionGet(OPTf_NO_BUILTIN_CONST))
 		return 0;
-	else if (d == ã)
+	else if (d == Ï€)
 		return 0xEBD9;
 	else if (d == log2_10)
 		return 0xE9D9;

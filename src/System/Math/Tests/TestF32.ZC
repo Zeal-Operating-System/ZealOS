@@ -19,13 +19,13 @@ GLTex2DInit(&graph, GL_TEX2D_RAW, 600, 512);
 GLTex2DColorFill(&graph, 0xFFFFFF);
 GLBindColorTarget(&graph);
 
-F64 temp = (ã / 2) * 100.0;
+F64 temp = (Ï€ / 2) * 100.0;
 GLDrawLine(temp, 0, temp, 512, 0x00FF00);
 
-F64 temp = (2 * ã / 2) * 100.0;
+F64 temp = (2 * Ï€ / 2) * 100.0;
 GLDrawLine(temp, 0, temp, 512, 0x00FF00);
 
-F64 temp = (3 * ã / 2) * 100.0;
+F64 temp = (3 * Ï€ / 2) * 100.0;
 GLDrawLine(temp, 0, temp, 512, 0x00FF00);
 
 I64 i;

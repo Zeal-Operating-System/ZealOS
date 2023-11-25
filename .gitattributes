@@ -1,4 +1,4 @@
-*.ZC linguist-language=HolyC
-*.HH linguist-language=HolyC
-*.PRJ linguist-language=HolyC
-*.IN linguist-language=HolyC
+*.ZC linguist-language=HolyC encoding=cp437 working-tree-encoding=cp437
+*.HH linguist-language=HolyC encoding=cp437 working-tree-encoding=cp437
+*.PRJ linguist-language=HolyC encoding=cp437 working-tree-encoding=cp437
+*.IN linguist-language=HolyC encoding=cp437 working-tree-encoding=cp437
