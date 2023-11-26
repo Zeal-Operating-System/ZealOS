@@ -581,6 +581,10 @@ public extern	I64	MessageScan(I64 *_arg1=NULL, I64 *_arg2=NULL, I64 mask=~1, CTa
 public extern U0	QuickSort(   U8  *base, I64 num, I64 width, I64 (*fp_compare)(U8 *e1, U8 *e2));
 public extern U0	QuickSortI64(I64 *base, I64 num,            I64 (*fp_compare)(I64 e1, I64 e2));
 public extern F64	sys_os_version;
+public extern U64	sys_os_version_sub;
+public extern U8	*sys_os_version_str;
+public extern U8	*sys_os_version_full;
+public extern U8	*sys_os_version_nice;
 
 #help_index "Misc/Progress Bars"
 public extern U0 ProgressBarsReset(U8 *path=NULL);
