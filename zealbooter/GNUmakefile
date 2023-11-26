@@ -3,7 +3,7 @@ override MAKEFLAGS += -rR
 
 # This is the name that our final kernel executable will have.
 # Change as needed.
-override KERNEL := zealbooter.elf
+override KERNEL := kernel
 
 # Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =
@@ -15,25 +15,31 @@ define DEFAULT_VAR =
     endif
 endef
 
-# It is highly recommended to use a custom built cross toolchain to build a kernel.
-# We are only using "cc" as a placeholder here. It may work by using
+# It is suggested to use a custom built cross toolchain to build a kernel.
+# We are using the standard "cc" here, it may work by using
 # the host system's toolchain, but this is not guaranteed.
-$(eval $(call DEFAULT_VAR,CC,cc))
+override DEFAULT_CC := cc
+$(eval $(call DEFAULT_VAR,CC,$(DEFAULT_CC)))
 
 # Same thing for "ld" (the linker).
-$(eval $(call DEFAULT_VAR,LD,ld))
+override DEFAULT_LD := ld
+$(eval $(call DEFAULT_VAR,LD,$(DEFAULT_LD)))
 
 # User controllable C flags.
-$(eval $(call DEFAULT_VAR,CFLAGS,-g -O2 -pipe))
+override DEFAULT_CFLAGS := -g -O2 -pipe
+$(eval $(call DEFAULT_VAR,CFLAGS,$(DEFAULT_CFLAGS)))
 
 # User controllable C preprocessor flags. We set none by default.
-$(eval $(call DEFAULT_VAR,CPPFLAGS,))
+override DEFAULT_CPPFLAGS :=
+$(eval $(call DEFAULT_VAR,CPPFLAGS,$(DEFAULT_CPPFLAGS)))
 
 # User controllable nasm flags.
-$(eval $(call DEFAULT_VAR,NASMFLAGS,-F dwarf -g))
+override DEFAULT_NASMFLAGS := -F dwarf -g
+$(eval $(call DEFAULT_VAR,NASMFLAGS,$(DEFAULT_NASMFLAGS)))
 
 # User controllable linker flags. We set none by default.
-$(eval $(call DEFAULT_VAR,LDFLAGS,))
+override DEFAULT_LDFLAGS :=
+$(eval $(call DEFAULT_VAR,LDFLAGS,$(DEFAULT_LDFLAGS)))
 
 # Internal C flags that should not be changed by the user.
 override CFLAGS += \
@@ -48,7 +54,6 @@ override CFLAGS += \
     -fno-PIC \
     -m64 \
     -march=x86-64 \
-    -mabi=sysv \
     -mno-80387 \
     -mno-mmx \
     -mno-sse \
@@ -58,17 +63,17 @@ override CFLAGS += \
 
 # Internal C preprocessor flags that should not be changed by the user.
 override CPPFLAGS := \
-    -I. \
-    -I./lib \
+    -I src \
+    -I src/lib \
     $(CPPFLAGS) \
     -MMD \
     -MP
 
 # Internal linker flags that should not be changed by the user.
 override LDFLAGS += \
+    -m elf_x86_64 \
     -nostdlib \
     -static \
-    -m elf_x86_64 \
     -z max-page-size=0x1000 \
     -T linker.ld
 
@@ -84,43 +89,47 @@ override NASMFLAGS += \
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override CFILES := $(shell find -L . -type f -name '*.c')
-override ASFILES := $(shell find -L . -type f -name '*.S')
-override NASMFILES := $(shell find -L . -type f -name '*.asm')
-override OBJ := $(CFILES:.c=.o) $(ASFILES:.S=.o) $(NASMFILES:.asm=.o)
-override HEADER_DEPS := $(CFILES:.c=.d) $(ASFILES:.S=.d)
+override CFILES := $(shell cd src && find -L . -type f -name '*.c')
+override ASFILES := $(shell cd src && find -L . -type f -name '*.S')
+override NASMFILES := $(shell cd src && find -L . -type f -name '*.asm')
+override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
+override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
 
 # Default target.
 .PHONY: all
-all: $(KERNEL)
+all: bin/$(KERNEL)
 
-limine.h:
-	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h || cp ../build/limine/limine.h limine.h || echo "ERROR"
+src/limine.h:
+	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h || cp ../build/limine/limine.h src/limine.h || echo "ERROR"
 
 # Link rules for the final kernel executable.
-$(KERNEL): $(OBJ)
+bin/$(KERNEL): GNUmakefile linker.ld $(OBJ)
+	mkdir -p "$$(dirname $@)"
 	$(LD) $(OBJ) $(LDFLAGS) -o $@
 
 # Include header dependencies.
 -include $(HEADER_DEPS)
 
 # Compilation rules for *.c files.
-%.o: %.c limine.h
+obj/%.c.o: src/%.c GNUmakefile src/limine.h
+	mkdir -p "$$(dirname $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
-%.o: %.S limine.h
+obj/%.S.o: src/%.S GNUmakefile src/limine.h
+	mkdir -p "$$(dirname $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
-%.o: %.asm
+obj/%.asm.o: src/%.asm GNUmakefile
+	mkdir -p "$$(dirname $@)"
 	nasm $(NASMFLAGS) $< -o $@
 
 # Remove object files and the final executable.
 .PHONY: clean
 clean:
-	rm -rf $(KERNEL) $(OBJ) $(HEADER_DEPS)
+	rm -rf bin obj
 
 .PHONY: distclean
 distclean: clean
-	rm -f limine.h
+	rm -f src/limine.h

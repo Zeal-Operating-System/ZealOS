@@ -239,7 +239,7 @@ U8 *MPrintq(U8 *ptr, I64 flags)
 }
 
 U8	*sys_pos_pows_lets = " KMGTPEZY",
-	*sys_neg_pows_lets = " mænpfazy",
+	*sys_neg_pows_lets = " mÂµnpfazy",
 	*sys_pos_pows_list = "kilo\0mega\0giga\0tera\0peta\0exa\0zetta\0yotta\0",
 	*sys_neg_pows_list = "milli\0micro\0nano\0pico\0femto\0atto\0zepto\0yocto\0";
 
@@ -639,7 +639,7 @@ sp_out_num:
 						d = -d;
 					}
 
-					if (d == ì)
+					if (d == âˆž)
 					{
 sp_out_inf:
 						if (flags & PRINTF_NEG)
@@ -658,7 +658,7 @@ sp_out_inf:
 						if (flags & PRINTF_NEG)
 							SPutChar(_dst, '-', _buf);
 						for (i = 0; i < k; i++)
-							SPutChar(_dst, 'ì', _buf);
+							SPutChar(_dst, 'âˆž', _buf);
 						break;
 					}
 
@@ -784,7 +784,7 @@ sp_out_f:
 						flags |= PRINTF_NEG;
 						d = -d;
 					}
-					if (d == ì)
+					if (d == âˆž)
 						goto sp_out_inf;
 
 					if (d)
@@ -854,7 +854,7 @@ sp_out_e:
 						flags |= PRINTF_NEG;
 						d = -d;
 					}
-					if (d == ì)
+					if (d == âˆž)
 						goto sp_out_inf;
 					if (d)
 						n = Floor(Log10(d));
@@ -878,7 +878,7 @@ sp_out_e:
 						d = -d;
 					}
 sp_out_eng: //Engineering notation
-					if (d == ì)
+					if (d == âˆž)
 						goto sp_out_inf;
 					if (d)
 						n = FloorI64(Floor(Log10(d)), 3);
@@ -1137,7 +1137,7 @@ U0 PrintErr(U8 *format, ...)
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
 	GetOutOfDollar;
-	"%,p © %,p © %,p © %,p " ST_ERR_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
+	"%,p âŒ %,p âŒ %,p âŒ %,p " ST_ERR_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
 	Free(buf);
 }
 
@@ -1146,6 +1146,6 @@ U0 PrintWarn(U8 *format, ...)
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
 	GetOutOfDollar;
-	"%,p © %,p © %,p © %,p " ST_WARN_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
+	"%,p âŒ %,p âŒ %,p âŒ %,p " ST_WARN_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
 	Free(buf);
 }

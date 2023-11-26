@@ -21,7 +21,7 @@ static volatile struct limine_memmap_request memmap_request = {
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 1
+    .revision = 0
 };
 
 static volatile struct limine_smbios_request smbios_request = {
@@ -123,8 +123,12 @@ struct CKernel {
     uint64_t sys_disk_uuid[2];
 	uint32_t sys_boot_stack;
 	uint8_t sys_is_uefi_booted;
+    uint8_t sys_bootloader_id;
 	struct CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
 } __attribute__((packed));
+
+#define BL_ZEAL    0
+#define BL_LIMINE  1
 
 #define BOOT_SRC_RAM 2
 #define BOOT_SRC_HDD 3
@@ -348,6 +352,8 @@ void _start(void) {
     {
         kernel->sys_is_uefi_booted = true;
     }
+
+    kernel->sys_bootloader_id = BL_LIMINE;
 
     memcpy(trampoline_phys, trampoline, trampoline_size);
     memcpy((void *)final_address, kernel, module_kernel->size);

@@ -258,5 +258,6 @@ public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;
 #help_index ""
 public _extern SYS_DISK_UUID  U64	sys_disk_uuid[2];
 public _extern SYS_IS_UEFI_BOOTED	Bool	sys_is_uefi_booted;
+public _extern SYS_BOOTLOADER_ID	U8		sys_bootloader_id;
 
 #help_index ""

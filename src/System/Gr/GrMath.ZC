@@ -139,9 +139,9 @@ public I64 *Mat4x4New(I64 *src, CTask *mem_task=NULL)
 	return Mat4x4Equ(MAlloc(sizeof(I64) * 16, mem_task), src);
 }
 
-public I64 *Mat4x4RotX(I64 *m, F64 è)
+public I64 *Mat4x4RotX(I64 *m, F64 Î¦)
 {//Rot matrix about X axis. Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.ZC"$.
-	F64 my_cos = Cos(è) * GR_SCALE, my_sin = Sin(è) * GR_SCALE;
+	F64 my_cos = Cos(Î¦) * GR_SCALE, my_sin = Sin(Î¦) * GR_SCALE;
 	I64 r[16], r2[16];
 
 	MemSet(r, 0, sizeof(r));
@@ -155,9 +155,9 @@ public I64 *Mat4x4RotX(I64 *m, F64 è)
 	return Mat4x4Equ(m, Mat4x4MulMat4x4Equ(r2, r, m));
 }
 
-public I64 *Mat4x4RotY(I64 *m, F64 ê)
+public I64 *Mat4x4RotY(I64 *m, F64 Î©)
 {//Rot matrix about Y axis. Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.ZC"$.
-	F64 my_cos = Cos(ê) * GR_SCALE, my_sin = Sin(ê) * GR_SCALE;
+	F64 my_cos = Cos(Î©) * GR_SCALE, my_sin = Sin(Î©) * GR_SCALE;
 	I64 r[16], r2[16];
 
 	MemSet(r, 0, sizeof(r));
@@ -171,9 +171,9 @@ public I64 *Mat4x4RotY(I64 *m, F64 ê)
 	return Mat4x4Equ(m, Mat4x4MulMat4x4Equ(r2, r, m));
 }
 
-public I64 *Mat4x4RotZ(I64 *m, F64 é)
+public I64 *Mat4x4RotZ(I64 *m, F64 Î˜)
 {//Rot matrix about Z axis. Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.ZC"$.
-	F64 my_cos=Cos(é)*GR_SCALE, my_sin=Sin(é)*GR_SCALE;
+	F64 my_cos=Cos(Î˜)*GR_SCALE, my_sin=Sin(Î˜)*GR_SCALE;
 	I64 r[16], r2[16];
 
 	MemSet(r, 0, sizeof(r));
@@ -339,7 +339,7 @@ public U0 DCReflect(CDC *dc, I64 *_x, I64 *_y, I64 *_z)
 #define GR_SCALE1_BITS	24
 #define GR_SCALE2_BITS	8
 public Bool Circle(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 radius, Bool (*fp_plot)(U8 *aux, I64 x, I64 y, I64 z), 
-				   I64 step=1, F64 start_radians=0, F64 len_radians=2*ã)
+				   I64 step=1, F64 start_radians=0, F64 len_radians=2*Ï€)
 {//Step through circle arc calling callback.
 	I64 i, j, len = Ceil(len_radians * radius), x, y, x1, y1, s1, s2, c;
 	F64 t;
@@ -389,7 +389,7 @@ public Bool Circle(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 radius, Bool (*fp_p
 
 public Bool Ellipse(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 x_radius, I64 y_radius,
 					Bool (*fp_plot)(U8 *aux, I64 x, I64 y, I64 z), F64 rot_angle=0,
-					I64 step=1, F64 start_radians=0, F64 len_radians=2*ã)
+					I64 step=1, F64 start_radians=0, F64 len_radians=2*Ï€)
 {//Step through ellipse arc calling callback.
 	I64  i, j, len, x, y, _x, _y, x1, y1, x2, y2,  s1, s2, c,  s12, s22, c2;
 	F64  t;
@@ -470,7 +470,7 @@ public Bool Ellipse(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 x_radius, I64 y_ra
 
 public Bool RegPoly(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 x_radius, I64 y_radius, I64 sides, 
 					Bool (*fp_plot)(U8 *aux, I64 x, I64 y, I64 z), 
-					F64 rot_angle=0, I64 step=1, F64 start_radians=0, F64 len_radians=2*ã)
+					F64 rot_angle=0, I64 step=1, F64 start_radians=0, F64 len_radians=2*Ï€)
 {//Step through regular polygon calling callback.
 	I64 i, n, x, y, x1, y1, x2, y2, xx1, yy1, xx2, yy2, s1, s2, c,  s12, s22, c2;
 	F64 angle_step;
@@ -478,8 +478,8 @@ public Bool RegPoly(U8 *aux_data, I64 cx, I64 cy, I64 cz, I64 x_radius, I64 y_ra
 	if (sides <= 0 || x_radius <= 0 || y_radius <= 0)
 		return TRUE;
 
-	angle_step = 2 * ã / sides;
-	n = len_radians * sides / (2 * ã);
+	angle_step = 2 * Ï€ / sides;
+	n = len_radians * sides / (2 * Ï€);
 
 	s1 = 1 << GR_SCALE1_BITS * Sin(angle_step);
 	s2 = -s1;
