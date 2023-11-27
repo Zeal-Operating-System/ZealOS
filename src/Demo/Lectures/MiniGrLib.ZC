@@ -142,7 +142,7 @@ U0 MGCircle(I64 x, I64 y, F64 r)
 	y1 = 0;
 	c = Cos(1 / r);
 	s = Sin(1 / r);
-	len = 2 * r * ã;
+	len = 2 * r * Ï€;
 	MGPlot(x + x1, y + y1);
 	while (len-- >= 0)
 	{

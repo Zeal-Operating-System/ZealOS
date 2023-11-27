@@ -64,6 +64,8 @@ SYS_BOOT_STACK::	DU32	BOOT_RAM_LIMIT;
 
 SYS_IS_UEFI_BOOTED::    DU8    0;
 
+SYS_BOOTLOADER_ID::		DU8	BL_ZEAL;
+
 SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
 
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
