@@ -95,14 +95,14 @@ U0 Init()
 
 	MemSetU16(map, CH_WATER + (BLUE << 4 + LTBLUE) << 8, MAP_WIDTH * MAP_HEIGHT);
 	for (i = 1; i < MAP_WIDTH - 1; i++)
-		map[0][i] = map[MAP_HEIGHT - 1][i] = 'Í' + (BLUE << 4 + RED) << 8;
+		map[0][i] = map[MAP_HEIGHT - 1][i] = 'â•' + (BLUE << 4 + RED) << 8;
 	for (i = 1; i < MAP_HEIGHT - 1; i++)
-		map[i][0] = map[i][MAP_WIDTH - 1]  = 'º' + (BLUE << 4 + RED) << 8;
+		map[i][0] = map[i][MAP_WIDTH - 1]  = 'â•‘' + (BLUE << 4 + RED) << 8;
 
-	map[0][0]							= 'É' + (BLUE << 4 + RED) << 8;
-	map[0][MAP_WIDTH - 1]				= '»' + (BLUE << 4 + RED) << 8;
-	map[MAP_HEIGHT - 1][0]				= 'È' + (BLUE << 4 + RED) << 8;
-	map[MAP_HEIGHT - 1][MAP_WIDTH - 1]	= '¼' + (BLUE << 4 + RED) << 8;
+	map[0][0]							= 'â•”' + (BLUE << 4 + RED) << 8;
+	map[0][MAP_WIDTH - 1]				= 'â•—' + (BLUE << 4 + RED) << 8;
+	map[MAP_HEIGHT - 1][0]				= 'â•š' + (BLUE << 4 + RED) << 8;
+	map[MAP_HEIGHT - 1][MAP_WIDTH - 1]	= 'â•' + (BLUE << 4 + RED) << 8;
 
 	for (i = 0; i < 20; i++)
 	{

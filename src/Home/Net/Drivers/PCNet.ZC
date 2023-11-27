@@ -147,7 +147,7 @@ U0 PCNetReset()
 
 	InU32(PCNetIOBaseGet + PCNET_DW_RESET);
 	InU16(PCNetIOBaseGet + PCNET_WD_RESET);
-	Busy(5); // OSDev says minimum 1 æS
+	Busy(5); // OSDev says minimum 1 ÂµS
 }
 
 U0 PCNet32BitModeEnable()

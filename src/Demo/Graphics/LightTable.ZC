@@ -129,22 +129,22 @@ U0 RayBurst(I64 x1, I64 y1, I64 x2, I64 y2)
 U0 RandomBurst()
 {
 	I64		i;
-	F64		é;
+	F64		Î˜;
 	Photon *tmpp;
 
 	for (i = 0; i < 256; i++)
 	{
 		tmpp = PhotonNew;
 		D3Equ(&tmpp->p, (Fs->pix_width - BORDER * 2) * Rand + BORDER, (Fs->pix_height - BORDER * 2) * Rand + BORDER);
-		é = 2 * ã * Rand;
-		D3Equ(&tmpp->v, Cos(é), Sin(é));
+		Î˜ = 2 * Ï€ * Rand;
+		D3Equ(&tmpp->v, Cos(Î˜), Sin(Î˜));
 	}
 }
 
 U0 FindNormal(U8 *bmp, Photon *tmpp)
 {
 	CD3 p, p1, p2;
-	F64 step, x, y, é = Arg(tmpp->v.x, tmpp->v.y), è;
+	F64 step, x, y, Î˜ = Arg(tmpp->v.x, tmpp->v.y), Î¦;
 	I64 state;
 
 	D3Copy(&tmpp->p_normal_inhibit, &tmpp->p);
@@ -165,21 +165,21 @@ U0 FindNormal(U8 *bmp, Photon *tmpp)
 	//Draw an arc one direction, finding point of contact.
 	for (step = 1.0; step >= 0.01; step /= 4)
 	{
-		for (è = 0; è <= ã / 4; è += step * ã / bmp_norm_radius)
+		for (Î¦ = 0; Î¦ <= Ï€ / 4; Î¦ += step * Ï€ / bmp_norm_radius)
 		{
-			x = p.x + bmp_norm_radius * Cos(é + ã - ã / 4 - è);
-			y = p.y + bmp_norm_radius * Sin(é + ã - ã / 4 - è);
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ - Ï€ / 4 - Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ - Ï€ / 4 - Î¦);
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p1;
-			x = p.x + bmp_norm_radius * Cos(é + ã - ã / 4 + è);
-			y = p.y + bmp_norm_radius * Sin(é + ã - ã / 4 + è);
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ - Ï€ / 4 + Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ - Ï€ / 4 + Î¦);
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p1;
 		}
-		for (; è <= 3 * ã / 4; è += step * ã / bmp_norm_radius)
+		for (; Î¦ <= 3 * Ï€ / 4; Î¦ += step * Ï€ / bmp_norm_radius)
 		{
-			x = p.x + bmp_norm_radius * Cos(é + ã - ã / 4 - è);
-			y = p.y + bmp_norm_radius * Sin(é + ã - ã / 4 - è);
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ - Ï€ / 4 - Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ - Ï€ / 4 - Î¦);
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p1;
 		}
@@ -193,21 +193,21 @@ fn_p1:
 		//Draw an arc other direction, finding point of contact.
 	for (step = 1.0; step >= 0.01; step /= 4)
 	{
-		for (è = 0; è <= ã / 4; è += step * ã / bmp_norm_radius)
+		for (Î¦ = 0; Î¦ <= Ï€ / 4; Î¦ += step * Ï€ / bmp_norm_radius)
 		{
-			x = p.x + bmp_norm_radius * Cos(é + ã + ã / 4 + è);
-			y = p.y + bmp_norm_radius * Sin(é + ã + ã / 4 + è);
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ + Ï€ / 4 + Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ + Ï€ / 4 + Î¦);
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p2;
-			x = p.x + bmp_norm_radius * Cos(é + ã + ã / 4 - è);
-			y = p.y + bmp_norm_radius * Sin(é + ã + ã / 4 - è) ;
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ + Ï€ / 4 - Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ + Ï€ / 4 - Î¦) ;
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p2;
 		}
-		for (; è <= 3 * ã / 4; è += step * ã / bmp_norm_radius)
+		for (; Î¦ <= 3 * Ï€ / 4; Î¦ += step * Ï€ / bmp_norm_radius)
 		{
-			x = p.x + bmp_norm_radius * Cos(é + ã + ã / 4 + è);
-			y = p.y + bmp_norm_radius * Sin(é + ã + ã / 4 + è);
+			x = p.x + bmp_norm_radius * Cos(Î˜ + Ï€ + Ï€ / 4 + Î¦);
+			y = p.y + bmp_norm_radius * Sin(Î˜ + Ï€ + Ï€ / 4 + Î¦);
 			if (state = BmpPeek(bmp, x, y))
 				goto fn_p2;
 		}
@@ -221,7 +221,7 @@ fn_p2:
 	D3Sub(&p, &p1, &p2);
 	if (D3NormSqr(&p) < 0.01)
 	{
-		D3Equ(&tmpp->n, Cos(é), Sin(é));
+		D3Equ(&tmpp->n, Cos(Î˜), Sin(Î˜));
 		lock {zero_normal++;}
 	}
 	else
@@ -245,23 +245,23 @@ U0 Mirror(Photon *tmpp)
 
 
 
-é$SY,3$out$SY,0$ = ã+é$SY,3$n$SY,0$ -  (é$SY,3$in$SY,0$-é$SY,3$n$SY,0$)
+Î˜$SY,3$out$SY,0$ = Ï€+Î˜$SY,3$n$SY,0$ -  (Î˜$SY,3$in$SY,0$-Î˜$SY,3$n$SY,0$)
 
 */
-	F64 é = Arg(tmpp->v.x, tmpp->v.y), é$SY,3$n$SY,0$;
+	F64 Î˜ = Arg(tmpp->v.x, tmpp->v.y), Î˜$SY,3$n$SY,0$;
 
 	FindNormal(bmp_reflect, tmpp);
-	é$SY,3$n$SY,0$ = Arg(tmpp->n.x, tmpp->n.y);
+	Î˜$SY,3$n$SY,0$ = Arg(tmpp->n.x, tmpp->n.y);
 
-	D3Equ(&tmpp->v, Cos(2 * é$SY,3$n$SY,0$ + ã - é), Sin(2 * é$SY,3$n$SY,0$ + ã - é));
+	D3Equ(&tmpp->v, Cos(2 * Î˜$SY,3$n$SY,0$ + Ï€ - Î˜), Sin(2 * Î˜$SY,3$n$SY,0$ + Ï€ - Î˜));
 	lock {mirror_count++;}
 }
 
 U0 SnellsLaw(Photon *tmpp, I64 last, I64 next)
 {
 //n1 and n2 are refraction index.
-//n1 Sin(é1)  ==  n2 Sin(é2)
-	F64 é = Arg(tmpp->v.x, tmpp->v.y), é$SY,3$n$SY,0$, n1, n2, é1, é2;
+//n1 Sin(Î˜1)  ==  n2 Sin(Î˜2)
+	F64 Î˜ = Arg(tmpp->v.x, tmpp->v.y), Î˜$SY,3$n$SY,0$, n1, n2, Î˜1, Î˜2;
 
 	if (last == LENS_COLOR)
 		n1 = 1.5;
@@ -272,17 +272,17 @@ U0 SnellsLaw(Photon *tmpp, I64 last, I64 next)
 	else
 		n2 = 1.0;
 	FindNormal(bmp_refract, tmpp);
-	é$SY,3$n$SY,0$ = Arg(tmpp->n.x, tmpp->n.y);
+	Î˜$SY,3$n$SY,0$ = Arg(tmpp->n.x, tmpp->n.y);
 
-	//Dot=m1m2Cos(é);
-	é1 = ACos(D3Dot(&tmpp->n, &tmpp->v));
-	é2 = ASin(n1 * Sin(é1) / n2);
-	if (Wrap(é - é$SY,3$n$SY,0$) >= 0)
-		é = é$SY,3$n$SY,0$ + é2;
+	//Dot=m1m2Cos(Î˜);
+	Î˜1 = ACos(D3Dot(&tmpp->n, &tmpp->v));
+	Î˜2 = ASin(n1 * Sin(Î˜1) / n2);
+	if (Wrap(Î˜ - Î˜$SY,3$n$SY,0$) >= 0)
+		Î˜ = Î˜$SY,3$n$SY,0$ + Î˜2;
 	else
-		é = é$SY,3$n$SY,0$ - é2;
+		Î˜ = Î˜$SY,3$n$SY,0$ - Î˜2;
 
-	D3Equ(&tmpp->v, Cos(é), Sin(é));
+	D3Equ(&tmpp->v, Cos(Î˜), Sin(Î˜));
 	lock {snell_count++;}
 }
 
@@ -716,4 +716,4 @@ lt_done:
 }
 
 LightTable;
-        ª      F   0   *      G   1   H      G   1      H   P      é$SY,3$n$SY,0$ G   2   H   N   K   <   ã+é$SY,3$n$SY,0$ 1   	   é$SY,3$in$SY,0$ %   F   é$SY,3$out$SY,0$  
+        Â¬      F   0   *      G   1   H      G   1      H   P      Î˜$SY,3$n$SY,0$ G   2   H   N   K   <   Ï€+Î˜$SY,3$n$SY,0$ 1   	   Î˜$SY,3$in$SY,0$ %   F   Î˜$SY,3$out$SY,0$  
