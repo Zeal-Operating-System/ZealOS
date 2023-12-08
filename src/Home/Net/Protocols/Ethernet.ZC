@@ -54,12 +54,17 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 U0 EthernetFrameFinish(I64 de_index)
 {//Alias for generic driver Finish TX function.
+	U8 *data = NetDriverPacketBufferGet(de_index);
+	I64 length = NetDriverPacketLengthGet(de_index);
+	U8 *mac = EthernetMACGet();
+	Bool is_loopback = !MemCompare(mac, data, MAC_ADDRESS_LENGTH); // check the TX packet MAC against local MAC
 
-	// check the TX packet MAC against local MAC, if they match: software loopback the TX packet to RX NetQueue
-	if (!MemCompare(EthernetMACGet(), NetDriverPacketBufferGet(de_index), MAC_ADDRESS_LENGTH))
-		NetQueuePush(NetDriverPacketBufferGet(de_index), NetDriverPacketLengthGet(de_index));
+	//  software loopback the TX packet to RX NetQueue if it's loopback
+	if (is_loopback)
+		NetQueueLazyPush(data, length);
 
 	NetDriverTransmitPacketFinish(de_index);
+
 }
 
 EthernetGlobalsInit;
