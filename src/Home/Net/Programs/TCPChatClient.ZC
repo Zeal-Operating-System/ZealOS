@@ -24,8 +24,8 @@ U0 ChatMessageTask(I64)
 	while (message = StrGet("> ",, SGF_SHIFT_ESC_EXIT))
 	{
 		DocBottom(chat_display_task->put_doc);
-		DocPrint(chat_display_task->put_doc,
-				 "$$BG,BLUE$$$$BLACK$$<local>$$FG$$$$BG$$ %s\n", message);
+//		DocPrint(chat_display_task->put_doc,
+//				 "$$BG,BLUE$$$$BLACK$$<local>$$FG$$$$BG$$ %s\n", message);
 
 		TCPSocketSendString(tcp, message);
 

@@ -563,6 +563,11 @@ I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 	return de_index;
 }
 
+U8 *EthernetMACGet()
+{
+	return pcnet.mac_address;
+}
+
 U0 PCNetTransmitPacketFinish(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
@@ -574,9 +579,21 @@ U0 PCNetTransmitPacketFinish(I64 de_index)
 				de_index, PCIBt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
-U0 EthernetFrameFinish(I64 de_index)
-{//Alias for driver Finish TX function.
+U0 NetDriverTransmitPacketFinish(I64 de_index)
+{//Alias for driver-specific Finish TX function.
 	PCNetTransmitPacketFinish(de_index);
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{
+	return pcnet.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{
+	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
+
+	return U16_MAX - (entry->status1 & 0xFFFF) + 1;
 }
 
 I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
@@ -807,11 +824,6 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	*packet_buffer_out = ethernet_frame + ETHERNET_MAC_HEADER_LENGTH;
 
 	return de_index;
-}
-
-U8 *EthernetMACGet()
-{
-	return pcnet.mac_address;
 }
 
 U0 NetStop()

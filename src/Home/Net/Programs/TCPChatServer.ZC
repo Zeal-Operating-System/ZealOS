@@ -37,7 +37,7 @@ U0 ChatServerBroadcast(CTCPSocket *tcp_socket, I64 length)
 	{
 		dest_socket = conn->socket;
 
-		if (dest_socket != tcp_socket)
+//		if (dest_socket != tcp_socket)
 		{
 			addr.address = EndianU32(dest_socket->destination_address(CSocketAddressIPV4).address.address);
 
@@ -51,7 +51,10 @@ U0 ChatServerBroadcast(CTCPSocket *tcp_socket, I64 length)
 			ip_string = NetworkToPresentation(AF_INET, &addr);
 			// TODO: is NetworkToPresentation backwards? or, do socket addrs store BE or LE ?
 
-			message_prefix = MStrPrint("$$BG,PURPLE$$$$BLACK$$<%s>$$FG$$$$BG$$ %%0%dts", ip_string, length);
+			if (dest_socket == tcp_socket)
+				message_prefix = MStrPrint("$$BG,PURPLE$$$$BLACK$$<%s (you)>$$FG$$$$BG$$ %%0%dts", ip_string, length);
+			else
+				message_prefix = MStrPrint("$$BG,PURPLE$$$$BLACK$$<%s>$$FG$$$$BG$$ %%0%dts", ip_string, length);
 
 			message = MStrPrint(message_prefix, buffer);
 
