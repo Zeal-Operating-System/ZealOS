@@ -203,7 +203,7 @@ I64 NetDriverPacketBufferGet(I64 de_index)
 
 I64 NetDriverPacketLengthGet(I64 de_index)
 { // TODO: ... de_index in Alec's VirtIO-Net driver don't match up to any way to get packet length...
-	return 0;
+	return ETHERNET_FRAME_SIZE;
 }
 
 U8 *EthernetMACGet() { return &VirtioNet.mac; }
