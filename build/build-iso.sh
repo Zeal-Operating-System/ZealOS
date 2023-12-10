@@ -64,7 +64,7 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 $QEMU_BIN_PATH/qemu-system-x86_64 -machine q35,accel=kvm -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit
 
-LIMINE_BINARY_BRANCH="v5.x-branch-binary"
+LIMINE_BINARY_BRANCH="v6.x-branch-binary"
 
 if [ -d "limine" ]
 then
