@@ -12,6 +12,7 @@
 #define SEND 0x01
 #define SB 0xFA
 #define SE 0xF0
+#define CHARSET 0x2A
 
 // #define TELNET_IAC 255  /* 0xff - Interpret as command */
 // #define TELNET_DONT 254 /* 0xfe - Don't do option */
@@ -47,7 +48,6 @@
 
 //   TCPSocketSend(sock, request, 3);
 // }
-
 U0 SendWindowSize(I64 sock, U16 cols, U16 rows)
 {
   U8 buf[9];
