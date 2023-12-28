@@ -1,6 +1,12 @@
-Cd(__DIR__);;
-#include "TweetNaCl.HH"
-extern U0 randombytes(U8 *, U64);
+// Cd(__DIR__);;
+// #include "TweetNaCl.HH"
+// U0 randombytes(U8 *, U64);
+U0 randombytes(U8 *array, U64 length) {
+	U64 i;
+    for (i = 0; i < length; i++) {
+        array[i] = RandU8();
+    }
+}
 
 class gf {
   I64 data[16];
@@ -381,9 +387,9 @@ U8 Par25519(gf a) {
 U0 Unpack25519(gf o, U8 *n) {
     I64 i;
     for(i=0;i<16;++i) {
-        o->data[i] = n[2 * i] + (n[2 * i + 1] << 8);
+        o.data[i] = n[2 * i] + (n[2 * i + 1] << 8);
     }
-    o->data[15] &= 0x7fff;
+    o.data[15] &= 0x7fff;
 }
 
 // addition
@@ -477,7 +483,7 @@ U0 Pack(U8 *r, gf *p) {
     r[31] ^= Par25519(tx) << 7;
 }
 
-U0 Scalarmult(gf p, gf q, U8 *s) {
+U0 Scalarmult(gf *p, gf q, U8 *s) {
     I64 i;
     Set25519(p[0], gf0);
     Set25519(p[1], gf1);
@@ -492,7 +498,7 @@ U0 Scalarmult(gf p, gf q, U8 *s) {
     }
 }
 
-U0 Scalarbase(gf p, U8 *s) {
+U0 Scalarbase(gf *p, U8 *s) {
     gf q[4];
     Set25519(q[0], X);
     Set25519(q[1], Y);
@@ -796,7 +802,7 @@ I64 crypto_sign(U8 *sm, U64 *smlen, U8 *m, U64 n, U8 *sk)
 
   return 0;
 }
-I64 UnpackNeg(gf r, U8 *p) {
+I64 UnpackNeg(gf *r, U8 *p) {
     gf t, chk, num, den, den2, den4, den6;
     Set25519(r[2], gf1);
     Unpack25519(r[1], p);
