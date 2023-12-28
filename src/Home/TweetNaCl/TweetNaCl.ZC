@@ -68,9 +68,9 @@ U0 InitGf() {
 
 InitGf;
 
-static U32 L32(U32 x, I64 c) { return (x << c) | ((x & 0xffffffff) >> (32 - c)); }
+U32 L32(U32 x, I64 c) { return (x << c) | ((x & 0xffffffff) >> (32 - c)); }
 
-static U32 Ld32(U8 *x)
+U32 Ld32(U8 *x)
 {
     U32 u = x[3];
     u = (u << 8) | x[2];
@@ -78,20 +78,11 @@ static U32 Ld32(U8 *x)
     return (u << 8) | x[0];
 }
 
-static I64 vn(U8 *x, U8 *y, I64 n) {
-  U32 i, d = 0;
-  for (i = 0;i < n;++i) d |= x[i] ^ y[i];
-  return (1 & ((d - 1) >> 8)) - 1;
-}
-static U64 dl64(U8 *x) {
+U64 Dl64(U8 *x) {
   U64 i, u = 0;
   for (i = 0;i < 8;++i) u |= x[i] << 8 * i; // (U64) x[i] << 8 * i;
   return u;
 }
-
-static U32 minusp[17] = {
-  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252
-};
 
 U0 St32(U8 *x, U32 u) {
   I64 i;
@@ -101,6 +92,12 @@ U0 St32(U8 *x, U32 u) {
 U0 ts64(U8 *x, U64 u) {
   I64 i;
   for (i = 7; i >= 0; --i) { x[i] = u; u >>= 8; }
+}
+
+I64 vn(U8 *x, U8 *y, I64 n) {
+  U32 i, d = 0;
+  for (i = 0;i < n;++i) d |= x[i] ^ y[i];
+  return (1 & ((d - 1) >> 8)) - 1;
 }
 
 I64 crypto_verify_16(U8 *x, U8 *y) {
@@ -160,7 +157,7 @@ I64 crypto_core_hsalsa20(U8 *out, U8 *in, U8 *k, U8 *c) {
   return 0;
 }
 
-static U8 sigma[16] = "expand 32-byte k";
+U8 sigma[16] = "expand 32-byte k";
 
 I64 crypto_stream_salsa20_xor(U8 *c, U8 *m, U64 b, U8 *n, U8 *k) {
   U8 z[16], x[64];
@@ -220,12 +217,16 @@ I64 crypto_stream_xor(U8 *c, U8 *m, U64 d, U8 *n, U8 *k) {
 
 U0 add1305(U32 *h, U32 *c) {
   U32 j, u = 0;
-for (j = 0;j < 17;++j){
+  for (j = 0;j < 17;++j){
     u += h[j] + c[j];
     h[j] = u & 255;
     u >>= 8;
   }
 }
+
+U32 minusp[17] = {
+  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252
+};
 
 I64 crypto_onetimeauth(U8 *out, U8 *m, U64 n, U8 *k) {
   U32 s, i, j, u, x[17], r[17], h[17], c[17], g[17];
@@ -309,45 +310,10 @@ I64 crypto_secretbox_open(U8 *m, U8 *c, U64 d, U8 *n, U8 *k) {
   return 0;
 }
 
-I64 crypto_Scalarmult_base(U8 *q, U8 *n) { 
-  return crypto_Scalarmult(q, n, _9);
-}
-
-I64 crypto_box_keypair(U8 *y, U8 *x) {
-  randombytes(x, 32);
-  return crypto_Scalarmult_base(y, x);
-}
-
-I64 crypto_box_beforenm(U8 *k, U8 *y, U8 *x) {
-  U8 s[32];
-  crypto_Scalarmult(s, x, y);
-  return crypto_core_hsalsa20(k, _0, s, sigma);
-}
-
-I64 crypto_box_afternm(U8 *c, U8 *m, U64 d, U8 *n, U8 *k) {
-  return crypto_secretbox(c, m, d, n, k);
-}
-
-I64 crypto_box_open_afternm(U8 *m, U8 *c, U64 d, U8 *n, U8 *k) {
-  return crypto_secretbox_open(m, c, d, n, k);
-}
-
-I64 crypto_box(U8 *c, U8 *m, U64 d, U8 *n, U8 *y, U8 *x) {
-  U8 k[32];
-  crypto_box_beforenm(k, y, x);
-  return crypto_box_afternm(c, m, d, n, k);
-}
-
-I64 crypto_box_open(U8 *m, U8 *c, U64 d, U8 *n, U8 *y, U8 *x) {
-  U8 k[32];
-  crypto_box_beforenm(k, y, x);
-  return crypto_box_open_afternm(m, c, d, n, k);
-}
-
-U0 Set25519(I64 *r, I64 *a) {
+U0 Set25519(gf r, gf a) {
     I64 i;
     for (i = 0; i < 16; ++i) {
-        r[i] = a[i];
+        r.data[i] = a.data[i];
     }
 }
 
@@ -403,7 +369,7 @@ I64 Neq25519(gf a, gf b) {
     U8 c[32], d[32];
     Pack25519(c, a);
     Pack25519(d, b);
-    return CryptoVerify32(c, d);
+    return crypto_verify_32(c, d);
 }
 
 U8 Par25519(gf a) {
@@ -511,12 +477,12 @@ U0 Pack(U8 *r, gf *p) {
     r[31] ^= Par25519(tx) << 7;
 }
 
-U0 Scalarmult(gf *p, gf *q, U8 *s) {
+U0 Scalarmult(gf p, gf q, U8 *s) {
     I64 i;
-    Set25519(p[0].data, gf0.data);
-    Set25519(p[1].data, gf1.data);
-    Set25519(p[2].data, gf1.data);
-    Set25519(p[3].data, gf0.data);
+    Set25519(p[0], gf0);
+    Set25519(p[1], gf1);
+    Set25519(p[2], gf1);
+    Set25519(p[3], gf0);
     for (i = 255; i >= 0; --i) {
         U8 b = (s[i / 8] >> (i & 7)) & 1;
         Cswap(p, q, b);
@@ -524,6 +490,15 @@ U0 Scalarmult(gf *p, gf *q, U8 *s) {
         Add(p, p);
         Cswap(p, q, b);
     }
+}
+
+U0 Scalarbase(gf p, U8 *s) {
+    gf q[4];
+    Set25519(q[0], X);
+    Set25519(q[1], Y);
+    Set25519(q[2], gf1);
+    M(q[3], X, Y);
+    Scalarmult(p, q, s);
 }
 
 I64 crypto_sign_keypair(U8 *pk, U8 *sk)
@@ -597,16 +572,50 @@ I64 crypto_Scalarmult(U8 *q, U8 *n, U8 *p) {
     return 0;
 }
 
+I64 crypto_Scalarmult_base(U8 *q, U8 *n) { 
+  return crypto_Scalarmult(q, n, _9);
+}
 
-static U64 R(U64 x, I64 c) { return (x >> c) | (x << (64 - c)); }
-static U64 Ch(U64 x, U64 y, U64 z) { return (x & y) ^ (~x & z); }
-static U64 Maj(U64 x, U64 y, U64 z) { return (x & y) ^ (x & z) ^ (y & z); }
-static U64 Sigma0(U64 x) { return R(x, 28) ^ R(x, 34) ^ R(x, 39); }
-static U64 Sigma1(U64 x) { return R(x, 14) ^ R(x, 18) ^ R(x, 41); }
-static U64 sigma0(U64 x) { return R(x, 1) ^ R(x, 8) ^ (x >> 7); }
-static U64 sigma1(U64 x) { return R(x, 19) ^ R(x, 61) ^ (x >> 6); }
+I64 crypto_box_keypair(U8 *y, U8 *x) {
+  randombytes(x, 32);
+  return crypto_Scalarmult_base(y, x);
+}
 
-static U64 K[80] = 
+I64 crypto_box_beforenm(U8 *k, U8 *y, U8 *x) {
+  U8 s[32];
+  crypto_Scalarmult(s, x, y);
+  return crypto_core_hsalsa20(k, _0, s, sigma);
+}
+
+I64 crypto_box_afternm(U8 *c, U8 *m, U64 d, U8 *n, U8 *k) {
+  return crypto_secretbox(c, m, d, n, k);
+}
+
+I64 crypto_box_open_afternm(U8 *m, U8 *c, U64 d, U8 *n, U8 *k) {
+  return crypto_secretbox_open(m, c, d, n, k);
+}
+
+I64 crypto_box(U8 *c, U8 *m, U64 d, U8 *n, U8 *y, U8 *x) {
+  U8 k[32];
+  crypto_box_beforenm(k, y, x);
+  return crypto_box_afternm(c, m, d, n, k);
+}
+
+I64 crypto_box_open(U8 *m, U8 *c, U64 d, U8 *n, U8 *y, U8 *x) {
+  U8 k[32];
+  crypto_box_beforenm(k, y, x);
+  return crypto_box_open_afternm(m, c, d, n, k);
+}
+
+U64 R(U64 x, I64 c) { return (x >> c) | (x << (64 - c)); }
+U64 Ch(U64 x, U64 y, U64 z) { return (x & y) ^ (~x & z); }
+U64 Maj(U64 x, U64 y, U64 z) { return (x & y) ^ (x & z) ^ (y & z); }
+U64 Sigma0(U64 x) { return R(x, 28) ^ R(x, 34) ^ R(x, 39); }
+U64 Sigma1(U64 x) { return R(x, 14) ^ R(x, 18) ^ R(x, 41); }
+U64 sigma0(U64 x) { return R(x, 1) ^ R(x, 8) ^ (x >> 7); }
+U64 sigma1(U64 x) { return R(x, 19) ^ R(x, 61) ^ (x >> 6); }
+
+U64 K[80] = 
 {
   0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
   0x3956c25bf348b538, 0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
@@ -634,10 +643,10 @@ I64 crypto_hashblocks(U8 *x, U8 *m, U64 n) {
   U64 z[8], b[8], a[8], w[16], t;
   I64 i, j;
 
-  for (i = 0;i < 8;++i) z[i] = a[i] = dl64(x + 8 * i); 
+  for (i = 0;i < 8;++i) z[i] = a[i] = Dl64(x + 8 * i); 
 
   while (n >= 128) {
-	for (i = 0;i < 16;++i) w[i] = dl64(m + 8 * i);
+	for (i = 0;i < 16;++i) w[i] = Dl64(m + 8 * i);
 
 	for (i = 0;i < 80;++i) {
 	  for (j = 0;j < 8;++j) b[j] = a[j];
@@ -659,7 +668,7 @@ I64 crypto_hashblocks(U8 *x, U8 *m, U64 n) {
 
   return n;
 }
-static U8 iv[64] = {
+U8 iv[64] = {
   0x6a,0x09,0xe6,0x67,0xf3,0xbc,0xc9,0x08,
   0xbb,0x67,0xae,0x85,0x84,0xca,0xa7,0x3b,
   0x3c,0x6e,0xf3,0x72,0xfe,0x94,0xf8,0x2b,
@@ -694,9 +703,6 @@ I64 crypto_hash(U8 *out, U8 *m, U64 n) {
   return 0;
 }
 
-
-// FIXME: cant predefine p[4][16] like that!!!
-
 U0 Add(gf *p, gf *q) {
     gf a, b, c, d, t, e, f, g, h;
     
@@ -719,15 +725,6 @@ U0 Add(gf *p, gf *q) {
     M(p[1], h, g);
     M(p[2], g, f);
     M(p[3], e, h);
-}
-
-U0 Scalarbase(gf p, U8 *s) {
-    gf q[4]; // need to create p[4] too?
-    Set25519(q[0].data, X.data);
-    Set25519(q[1].data, Y.data);
-    Set25519(q[2].data, gf1.data);
-    M(q[3], X, Y);
-    Scalarmult(p, q, s);
 }
 
 U64 L[32] = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
@@ -801,8 +798,8 @@ I64 crypto_sign(U8 *sm, U64 *smlen, U8 *m, U64 n, U8 *sk)
 }
 I64 UnpackNeg(gf r, U8 *p) {
     gf t, chk, num, den, den2, den4, den6;
-    Set25519(r.data[2], gf1.data);
-    Unpack25519(r[1], p.data);
+    Set25519(r[2], gf1);
+    Unpack25519(r[1], p);
     S(num, r[1]);
     M(den, num, D);
     Z(num, num, r[2]);
