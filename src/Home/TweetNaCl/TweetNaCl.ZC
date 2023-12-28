@@ -351,22 +351,22 @@ U0 Set25519(I64 *r, I64 *a) {
     }
 }
 
-U0 Car25519(I64 *o) {
+U0 Car25519(gf o) {
     I64 i, c;
     for (i = 0; i < 16; ++i) {
-        o[i] += (1 << 16);
-        c = o[i] >> 16;
-        o[(i + 1) * (i < 15)] += c - 1 + 37 * (c - 1) * (i == 15);
-        o[i] -= c << 16;
+        o.data[i] += (1 << 16);
+        c = o.data[i] >> 16;
+        o.data[(i + 1) * (i < 15)] += c - 1 + 37 * (c - 1) * (i == 15);
+        o.data[i] -= c << 16;
     }
 }
 
-U0 Sel25519(I64 *p, I64 *q, I64 b) {
+U0 Sel25519(gf p, gf q, I64 b) {
     I64 t, i, c = ~(b - 1);
     for (i = 0; i < 16; ++i) {
-        t = c & (p[i] ^ q[i]);
-        p[i] ^= t;
-        q[i] ^= t;
+        t = c & (p.data[i] ^ q.data[i]);
+        p.data[i] ^= t;
+        q.data[i] ^= t;
     }
 }
 
@@ -412,7 +412,7 @@ U8 Par25519(gf a) {
     return d[0] & 1;
 }
 
-U0 Unpack25519(gf *o, U8 *n) {
+U0 Unpack25519(gf o, U8 *n) {
     I64 i;
     for(i=0;i<16;++i) {
         o->data[i] = n[2 * i] + (n[2 * i + 1] << 8);
@@ -424,21 +424,21 @@ U0 Unpack25519(gf *o, U8 *n) {
 U0 A(gf o, gf a, gf b)
 {
   I64 i;
-  for (i = 0;i < 16;++i) o[i] = a[i] + b[i];
+  for (i = 0;i < 16;++i) o.data[i] = a.data[i] + b.data[i];
 }
 
 // substraction
 U0 Z(gf o, gf a, gf b) {
   I64 i;
-  for (i = 0;i < 16;++i) o[i] = a[i] - b[i];
+  for (i = 0;i < 16;++i) o.data[i] = a.data[i] - b.data[i];
 }
 // multiply
 U0 M(gf o, gf a, gf b) {
   I64 i, j, t[31];
   for (i = 0;i < 31;++i) t[i] = 0;
-  for (i = 0;i < 16;++i) { for (j = 0;j < 16;++j) {t[i + j] += a[i] * b[j];} }
+  for (i = 0;i < 16;++i) { for (j = 0;j < 16;++j) {t[i + j] += a.data[i] * b.data[j];} }
   for (i = 0;i < 15;++i) t[i] += 38 * t[i + 16];
-  for (i = 0;i < 16;++i) o[i] = t[i];
+  for (i = 0;i < 16;++i) o.data[i] = t[i];
   Car25519(o);
   Car25519(o);
 }
@@ -474,25 +474,25 @@ U0 Pow2523(gf *o, gf i) {
 U0 Add(gf *p, gf *q) {
     gf a, b, c, d, t, e, f, g, h;
 
-    Z(a.data, p[1].data, p[0].data);
-    Z(t.data, q[1].data, q[0].data);
-    M(a.data, a.data, t.data);
-    A(b.data, p[0].data, p[1].data);
-    A(t.data, q[0].data, q[1].data);
-    M(b.data, b.data, t.data);
-    M(c.data, p[3].data, q[3].data);
-    M(c.data, c.data, D2.data);
-    M(d.data, p[2].data, q[2].data);
-    A(d.data, d.data, d.data);
-    Z(e.data, b.data, a.data);
-    Z(f.data, d.data, c.data);
-    A(g.data, d.data, c.data);
-    A(h.data, b.data, a.data);
+    Z(a, p[1], p[0]);
+    Z(t, q[1], q[0]);
+    M(a, a, t);
+    A(b, p[0], p[1]);
+    A(t, q[0], q[1]);
+    M(b, b, t);
+    M(c, p[3], q[3]);
+    M(c, c, D2);
+    M(d, p[2], q[2]);
+    A(d, d, d);
+    Z(e, b, a);
+    Z(f, d, c);
+    A(g, d, c);
+    A(h, b, a);
 
-    M(p[0].data, e.data, f.data);
-    M(p[1].data, h.data, g.data);
-    M(p[2].data, g.data, f.data);
-    M(p[3].data, e.data, h.data);
+    M(p[0], e, f);
+    M(p[1], h, g);
+    M(p[2], g, f);
+    M(p[3], e, h);
 }
 
 U0 Cswap(gf *p, gf *q, U8 b) {
@@ -504,11 +504,11 @@ U0 Cswap(gf *p, gf *q, U8 b) {
 
 U0 Pack(U8 *r, gf *p) {
     gf tx, ty, zi;
-    Inv25519(zi.data, p[2].data);
-    M(tx.data, p[0].data, zi.data);
-    M(ty.data, p[1].data, zi.data);
-    Pack25519(r, ty.data);
-    r[31] ^= Par25519(tx.data) << 7;
+    Inv25519(zi, p[2]);
+    M(tx, p[0], zi);
+    M(ty, p[1], zi);
+    Pack25519(r, ty);
+    r[31] ^= Par25519(tx) << 7;
 }
 
 U0 Scalarmult(gf *p, gf *q, U8 *s) {
@@ -524,15 +524,6 @@ U0 Scalarmult(gf *p, gf *q, U8 *s) {
         Add(p, p);
         Cswap(p, q, b);
     }
-}
-
-U0 Scalarbase(gf *p, U8 *s) {
-    gf q[4];
-    Set25519(q[0].data, X.data);
-    Set25519(q[1].data, Y.data);
-    Set25519(q[2].data, gf1.data);
-    M(q[3].data, X.data, Y.data);
-    Scalarmult(p, q, s);
 }
 
 I64 crypto_sign_keypair(U8 *pk, U8 *sk)
@@ -556,55 +547,56 @@ I64 crypto_sign_keypair(U8 *pk, U8 *sk)
 
 
 I64 crypto_Scalarmult(U8 *q, U8 *n, U8 *p) {
-  U8 z[32];
-  I64 x[80], r, i;
-  gf a, b, c, d, e, f;
+    U8 z[32];
+    I64 x[80], r, i;
+    gf a, b, c, d, e, f;
 
-  for (i = 0;i < 31;++i) z[i] = n[i]; 
-  z[31] = (n[31] & 127) | 64;
-  z[0] &= 248;
-  Unpack25519(x, p);
-  for (i = 0;i < 16;++i) {
-    b[i] = x[i];
-    d[i] = a[i] = c[i] = 0;
-  }
-  a[0] = d[0] = 1;
-  for (i = 254; i >= 0; --i) {
-    r = (z[i >> 3] >> (i & 7)) & 1;
-    Cswap(a, b, r);
-    Cswap(c, d, r);
-    A(e, a, c);
-    Z(a, a, c);
-    A(c, b, d);
-    Z(b, b, d);
-    S(d, e);
-    S(f, a);
-    M(a, c, a);
-    M(c, b, e);
-    A(e, a, c);
-    Z(a, a, c);
-    S(b, a);
-    Z(c, d, f);
-    M(a, c, _121665);
-    A(a, a, d);
-    M(c, c, a);
-    M(a, d, f);
-    M(d, b, x);
-    S(b, e);
-    Cswap(a, b, r);
-    Cswap(c, d, r);
-  }
-  for (i = 0;i < 16;++i) {
-    x[i + 16] = a[i];
-    x[i + 32] = c[i];
-    x[i + 48] = b[i];
-    x[i + 64] = d[i];
-  }
-  Inv25519(x + 32, x + 32);
-  M(x + 16, x + 16, x + 32);
-  Pack25519(q, x + 16);
-  return 0;
+    for (i = 0; i < 31; ++i) {
+        z[i] = n[i];
+    }
+    z[31] = (n[31] & 127) | 64;
+    z[0] &= 248;
+
+    Unpack25519(x, p);
+
+    for (i = 0; i < 16; ++i) {
+        d.data[i] = a.data[i] = c.data[i] = 0;
+    }
+    a.data[0] = d.data[0] = 1;
+
+    for (i = 254; i >= 0; --i) {
+        r = (z[i >> 3] >> (i & 7)) & 1;
+		Sel25519(a.data,b.data,r);
+		Sel25519(c.data,d.data,r);
+		A(e,a,c);
+		Z(a,a,c);
+		A(c,b,d);
+		Z(b,b,d);
+		S(d,e);
+		S(f,a);
+		M(a,c,a);
+		M(c,b,e);
+		A(e,a,c);
+		Z(a,a,c);
+		S(b,a);
+		Z(c,d,f);
+		M(a,c,_121665);
+		A(a,a,d);
+		M(c,c,a);
+		M(a,d,f);
+		M(d,b,x);
+		S(b,e);
+		Sel25519(a.data,b.data,r);
+		Sel25519(c.data,d.data,r);
+    }
+
+    Inv25519(x+32, c+32);
+    M(x+16, a+16, x+32);
+    Pack25519(q, x+16);
+
+    return 0;
 }
+
 
 static U64 R(U64 x, I64 c) { return (x >> c) | (x << (64 - c)); }
 static U64 Ch(U64 x, U64 y, U64 z) { return (x & y) ^ (~x & z); }
@@ -708,64 +700,33 @@ I64 crypto_hash(U8 *out, U8 *m, U64 n) {
 U0 Add(gf *p, gf *q) {
     gf a, b, c, d, t, e, f, g, h;
     
-    Z(a.data, p[1].data, p[0].data);
-    Z(t.data, q[1].data, q[0].data);
-    M(a.data, a.data, t.data);
-    A(b.data, p[0].data, p[1].data);
-    A(t.data, q[0].data, q[1].data);
-    M(b.data, b.data, t.data);
-    M(c.data, p[3].data, q[3].data);
-    M(c.data, c.data, D2.data);
-    M(d.data, p[2].data, q[2].data);
-    A(d.data, d.data, d.data);
-    Z(e.data, b.data, a.data);
-    Z(f.data, d.data, c.data);
-    A(g.data, d.data, c.data);
-    A(h.data, b.data, a.data);
+    Z(a, p[1], p[0]);
+    Z(t, q[1], q[0]);
+    M(a, a, t);
+    A(b, p[0], p[1]);
+    A(t, q[0], q[1]);
+    M(b, b, t);
+    M(c, p[3], q[3]);
+    M(c, c, D2);
+    M(d, p[2], q[2]);
+    A(d, d, d);
+    Z(e, b, a);
+    Z(f, d, c);
+    A(g, d, c);
+    A(h, b, a);
 
-    M(p[0].data, e.data, f.data);
-    M(p[1].data, h.data, g.data);
-    M(p[2].data, g.data, f.data);
-    M(p[3].data, e.data, h.data);
+    M(p[0], e, f);
+    M(p[1], h, g);
+    M(p[2], g, f);
+    M(p[3], e, h);
 }
 
-U0 Cswap(gf *p, gf *q, U8 b) {
-    I64 i;
-    for (i = 0; i < 4; ++i) {
-        Sel25519(p[i].data, q[i].data, b);
-    }
-}
-
-U0 Pack(U8 *r, gf *p) {
-    gf tx, ty, zi;
-    Inv25519(&zi, p[2].data);
-    M(tx.data, p[0].data, zi.data);
-    M(ty.data, p[1].data, zi.data);
-    Pack25519(r, ty.data);
-    r[31] ^= Par25519(tx.data) << 7;
-}
-
-U0 Scalarmult(gf *p, gf *q, U8 *s) {
-    I64 i;
-    Set25519(p[0].data, gf0.data);
-    Set25519(p[1].data, gf1.data);
-    Set25519(p[2].data, gf1.data);
-    Set25519(p[3].data, gf0.data);
-    for (i = 255; i >= 0; --i) {
-        U8 b = (s[i / 8] >> (i & 7)) & 1;
-        Cswap(p, q, b);
-        Add(p, q);
-        Add(p, p);
-        Cswap(p, q, b);
-    }
-}
-
-U0 Scalarbase(gf *p, U8 *s) {
-    gf q[4];
+U0 Scalarbase(gf p, U8 *s) {
+    gf q[4]; // need to create p[4] too?
     Set25519(q[0].data, X.data);
     Set25519(q[1].data, Y.data);
     Set25519(q[2].data, gf1.data);
-    M(q[3].data, X.data, Y.data);
+    M(q[3], X, Y);
     Scalarmult(p, q, s);
 }
 
@@ -838,38 +799,38 @@ I64 crypto_sign(U8 *sm, U64 *smlen, U8 *m, U64 n, U8 *sk)
 
   return 0;
 }
-I64 UnpackNeg(gf *r, U8 *p) {
+I64 UnpackNeg(gf r, U8 *p) {
     gf t, chk, num, den, den2, den4, den6;
-    Set25519(r[2].data, gf1.data);
-    Unpack25519(r[1].data, p);
-    S(num.data, r[1].data);
-    M(den.data, num.data, D.data);
-    Z(num.data, num.data, r[2].data);
-    A(den.data, r[2].data, den.data);
+    Set25519(r.data[2], gf1.data);
+    Unpack25519(r[1], p.data);
+    S(num, r[1]);
+    M(den, num, D);
+    Z(num, num, r[2]);
+    A(den, r[2], den);
 
-    S(den2.data, den.data);
-    S(den4.data, den2.data);
-    M(den6.data, den4.data, den2.data);
-    M(t.data, den6.data, num.data);
-    M(t.data, t.data, den.data);
+    S(den2, den);
+    S(den4, den2);
+    M(den6, den4, den2);
+    M(t, den6, num);
+    M(t, t, den);
 
-    Pow2523(t.data, t.data);
-    M(t.data, t.data, num.data);
-    M(t.data, t.data, den.data);
-    M(t.data, t.data, den.data);
-    M(r[0].data, t.data, den.data);
+    Pow2523(t, t);
+    M(t, t, num);
+    M(t, t, den);
+    M(t, t, den);
+    M(r[0], t, den);
 
-    S(chk.data, r[0].data);
-    M(chk.data, chk.data, den.data);
-    if (Neq25519(chk.data, num.data)) M(r[0].data, r[0].data, I.data);
+    S(chk, r[0]);
+    M(chk, chk, den);
+    if (Neq25519(chk, num)) M(r[0], r[0], I);
 
-    S(chk.data, r[0].data);
-    M(chk.data, chk.data, den.data);
-    if (Neq25519(chk.data, num.data)) return -1;
+    S(chk, r[0]);
+    M(chk, chk, den);
+    if (Neq25519(chk, num)) return -1;
 
-    if (Par25519(r[0].data) == (p[31] >> 7)) Z(r[0].data, gf0.data, r[0].data);
+    if (Par25519(r[0]) == (p[31] >> 7)) Z(r[0], gf0, r[0]);
 
-    M(r[3].data, r[0].data, r[1].data);
+    M(r[3], r[0], r[1]);
     return 0;
 }
 
