@@ -1,5 +1,5 @@
-#define Nb 4
-#define Nk 4
+#define Nb 4 // The number of columns comprising a state in AES. This is a constant in AES. Value=4
+#define Nk 4 // The number of 32 bit words in a key.
 #define Nr 10 // amount of rounds to expand the key
 
 // could be calculated on the fly too... i guess
@@ -79,40 +79,49 @@ U0 InitMulTables() {
 }
 
 U0 KeyExpansion(U8 *RoundKey, U8 *Key) {
-    I64 i, j;
-    // Copy the original key to the round key
-    for (i = 0; i < Nk; i++) {
+    I64 i, j, k;
+    U8 tempa[4]; // Temporary storage array
+
+    // Copy the original key to the first round key
+    for (i = 0; i < Nk; ++i) {
         RoundKey[(i * 4) + 0] = Key[(i * 4) + 0];
         RoundKey[(i * 4) + 1] = Key[(i * 4) + 1];
         RoundKey[(i * 4) + 2] = Key[(i * 4) + 2];
         RoundKey[(i * 4) + 3] = Key[(i * 4) + 3];
     }
 
-    // Expand the round key
-    for (i = Nk; i < Nb * (Nr + 1); i++) {
-        U8 temp[4];
-        for (j = 0; j < 4; j++) {
-            temp[j] = RoundKey[(i-1) * 4 + j];
-        }
+    // Expand the keys for the remaining rounds
+    for (i = Nk; i < Nb * (Nr + 1); ++i) {
+        // Fetch the previous word
+        k = (i - 1) * 4;
+        tempa[0] = RoundKey[k + 0];
+        tempa[1] = RoundKey[k + 1];
+        tempa[2] = RoundKey[k + 2];
+        tempa[3] = RoundKey[k + 3];
 
         if (i % Nk == 0) {
-            // Perform the rotation within temp array, substitute with S-box, then XOR with Rcon[i/Nk]
-            I64 k = temp[0]; // should be I64 but kept throwing a warning about 64bit variable somehow???
-			k = k & 0xff; // this is an attempt at forcing U8
-            temp[0] = sBox[temp[1]] ^ Rcon[i/Nk];
-            temp[1] = sBox[temp[2]];
-            temp[2] = sBox[temp[3]];
-            temp[3] = sBox[k];
+            // Rotate the word and apply S-box substitution
+            U8 u8tmp = tempa[0];
+            tempa[0] = sBox[tempa[1]];
+            tempa[1] = sBox[tempa[2]];
+            tempa[2] = sBox[tempa[3]];
+            tempa[3] = sBox[u8tmp];
+
+            // XOR with Rcon[i/Nk]
+            tempa[0] = tempa[0] ^ Rcon[i / Nk];
         }
 
-        for (j = 0; j < 4; j++) {
-            RoundKey[i * 4 + j] = RoundKey[(i - Nk) * 4 + j] ^ temp[j];
-        }
+        // XOR tempa with the word Nk positions before
+        j = i * 4; k = (i - Nk) * 4;
+        RoundKey[j + 0] = RoundKey[k + 0] ^ tempa[0];
+        RoundKey[j + 1] = RoundKey[k + 1] ^ tempa[1];
+        RoundKey[j + 2] = RoundKey[k + 2] ^ tempa[2];
+        RoundKey[j + 3] = RoundKey[k + 3] ^ tempa[3];
     }
 }
 
 U0 AddRoundKey(U8 round, U8 *state, U8 *RoundKey) {
-	I64 i,j;
+    I64 i, j;
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
             state[j * 4 + i] ^= RoundKey[round * Nb * 4 + i * Nb + j];
@@ -128,47 +137,47 @@ U0 SubBytes(U8 *state) {
 }
 
 U0 ShiftRows(U8 *state) {
-   I64 i;
-   U8 temp[16];
+    U8 temp;
 
-    // Store state in temp
-    for (i = 0; i < 16; i++) {
-        temp[i] = state[i];
-    }
+    // Shift the second row (1 shift to the left)
+    temp = state[1];
+    state[1] = state[5];
+    state[5] = state[9];
+    state[9] = state[13];
+    state[13] = temp;
 
-    // Shift first row 1 columns to left  
-    state[0] = temp[0];
-    state[4] = temp[5];
-    state[8] = temp[10];
-    state[12] = temp[15];
+    // Shift the third row (2 shifts to the left)
+    temp = state[2];
+    state[2] = state[10];
+    state[10] = temp;
+    temp = state[6];
+    state[6] = state[14];
+    state[14] = temp;
 
-    // Shift third row 2 steps to the left
-    state[2] = temp[10];
-    state[6] = temp[14];
-    state[10] = temp[2];
-    state[14] = temp[6];
-
-    // Shift fourth row 3 steps to the left
-    state[3] = temp[15];
-    state[7] = temp[3];
-    state[11] = temp[7];
-    state[15] = temp[11];
+    // Shift the fourth row (3 shifts to the left)
+    temp = state[3];
+    state[3] = state[15];
+    state[15] = state[11];
+    state[11] = state[7];
+    state[7] = temp;
 }
 
 U0 MixColumns(U8 *state) {
-   U8 temp[16];
-   I64 i;
+    for (I64 i = 0; i < 4; ++i) {
+        U8 a0 = state[i * 4 + 0];
+        U8 a1 = state[i * 4 + 1];
+        U8 a2 = state[i * 4 + 2];
+        U8 a3 = state[i * 4 + 3];
 
-    // Store state in temp
-    for (i = 0; i < 16; i++) {
-        temp[i] = state[i];
-    }
+        U8 r0 = Mul2[a0] ^ Mul3[a1] ^ a2 ^ a3;
+        U8 r1 = a0 ^ Mul2[a1] ^ Mul3[a2] ^ a3;
+        U8 r2 = a0 ^ a1 ^ Mul2[a2] ^ Mul3[a3];
+        U8 r3 = Mul3[a0] ^ a1 ^ a2 ^ Mul2[a3];
 
-    for (i = 0; i < 4; i++) {
-        state[i * 4 + 0] = Mul2[temp[i * 4 + 0]] ^ Mul3[temp[i * 4 + 1]] ^ temp[i * 4 + 2] ^ temp[i * 4 + 3];
-        state[i * 4 + 1] = temp[i * 4 + 0] ^ Mul2[temp[i * 4 + 1]] ^ Mul3[temp[i * 4 + 2]] ^ temp[i * 4 + 3];
-        state[i * 4 + 2] = temp[i * 4 + 0] ^ temp[i * 4 + 1] ^ Mul2[temp[i * 4 + 2]] ^ Mul3[temp[i * 4 + 3]];
-        state[i * 4 + 3] = Mul3[temp[i * 4 + 0]] ^ temp[i * 4 + 1] ^ temp[i * 4 + 2] ^ Mul2[temp[i * 4 + 3]];
+        state[i * 4 + 0] = r0;
+        state[i * 4 + 1] = r1;
+        state[i * 4 + 2] = r2;
+        state[i * 4 + 3] = r3;
     }
 }
 
@@ -249,9 +258,9 @@ U8 HexCharToByte(U8 ch) {
 }
 
 U0 HexStringToByteArray(U8 *hexString, U8 *byteArray, I64 byteArrayLength) {
-	I64 i;
+    I64 i;
     for (i = 0; i < byteArrayLength; i++) {
-        byteArray[i] = HexCharToByte(hexString[2*i]) << 4 | HexCharToByte(hexString[2*i + 1]);
+        byteArray[i] = HexCharToByte(hexString[2 * i]) << 4 | HexCharToByte(hexString[2 * i + 1]);
     }
 }
 
@@ -264,7 +273,6 @@ U0 Main() {
     U8 ctx[176]; // Context (expanded key)
 
     InitMulTables();
-
     AES_init_ctx(ctx, key);
     AES_ECB_encrypt(ctx, buf);
 
