@@ -14,7 +14,7 @@ U8		*rev_bits_table; //Table with U8 bits reversed
 CDate	 local_time_offset;
 F64		*pow10_I64,
 		 sys_os_version = 2.03;
-U64		 sys_os_version_sub = 108;
+U64		 sys_os_version_sub = 109;
 U8		*sys_os_version_str;
 U8		*sys_os_version_full;
 U8		*sys_os_version_nice;
