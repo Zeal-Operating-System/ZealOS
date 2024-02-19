@@ -73,6 +73,8 @@ then
 	git fetch
 	git remote set-head origin $LIMINE_BINARY_BRANCH
 	git switch $LIMINE_BINARY_BRANCH
+	git config --local pull.ff true
+	git config --local pull.rebase true
 	git pull
 	rm limine
 
