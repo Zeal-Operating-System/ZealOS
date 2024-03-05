@@ -46,21 +46,110 @@ U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r)
 
 public U0 MouseRawReset()
 {
-	mouse_hard.raw_data.x=0;
-	mouse_hard.raw_data.y=0;
-	mouse_hard.raw_data.z=0;
-	mouse_hard.raw_bttns[0]=FALSE;
-	mouse_hard.raw_bttns[1]=FALSE;
-	mouse_hard.raw_bttns[2]=FALSE;
-	mouse_hard.raw_bttns[3]=FALSE;
-	mouse_hard.raw_bttns[4]=FALSE;
+	mouse_hard.raw_data.x = 0;
+	mouse_hard.raw_data.y = 0;
+	mouse_hard.raw_data.z = 0;
+	mouse_hard.raw_bttns[0] = FALSE;
+	mouse_hard.raw_bttns[1] = FALSE;
+	mouse_hard.raw_bttns[2] = FALSE;
+	mouse_hard.raw_bttns[3] = FALSE;
+	mouse_hard.raw_bttns[4] = FALSE;
 }
 
-public Bool MouseRaw(Bool val)
+CMouseRawQueue *MouseRawQueueFind(CTask *task)
+{
+	CMouseRawQueue *entry = mouse_hard.raw_queue->next;
+
+	while (entry != mouse_hard.raw_queue)
+	{
+		if (entry->task == task)
+			return entry;
+		entry = entry->next;
+	}
+
+	return NULL;
+}
+
+U0 MouseRawWatcherInner(CTask *task, CMouseRawQueue *entry, Bool *_found)
+{
+	CTask *task2;
+
+	if (task == entry->task)
+		*_found = TRUE;
+
+	task2 = task->next_child_task;
+	while (!*_found && task2 != (&task->next_child_task)(U8 *) - offset(CTask.next_sibling_task))
+	{
+		MouseRawWatcherInner(task2, entry, _found);
+		task2 = task2->next_sibling_task;
+	}
+}
+
+U0 MouseRawWatcher()
+{
+	CMouseRawQueue *entry, *next_entry;
+	I64 i;
+	CCPU *c;
+	Bool found;
+
+	while (TRUE)
+	{
+		entry = mouse_hard.raw_queue->next;
+		while (entry != mouse_hard.raw_queue)
+		{
+			found = FALSE;
+			next_entry = entry->next;
+			PUSHFD
+			CLI
+			for (i = 0; i < mp_count; i++)
+			{
+				c = &cpu_structs[i];
+				MouseRawWatcherInner(c->executive_task, entry, &found);
+			}
+			POPFD
+
+			if (!found)
+			{
+				QueueRemove(entry);
+				Free(entry);
+			}
+
+			entry = next_entry;
+		}
+		Sleep(1000);
+	}
+}
+
+public Bool MouseRaw(Bool val, CTask *task=NULL)
 { // Places mouse in "raw" mode, button presses will not go to windows manager when true
-	Bool old_val=mouse_hard.raw_mode;
-	mouse_hard.raw_mode=val;
-	mouse.show=!val;
+	CMouseRawQueue *entry;
+	Bool old_val;
+
+	if (!task)
+		task = Fs;
+
+	if (val)
+	{
+		old_val = TRUE;
+		if (!MouseRawQueueFind(task))
+		{
+			entry = CAlloc(sizeof(CMouseRawQueue));
+			entry->task = task;
+			QueueInsertRev(entry, mouse_hard.raw_queue);
+			old_val = FALSE;
+		}
+	}
+	else
+	{
+		old_val = FALSE;
+		if (entry = MouseRawQueueFind(task))
+		{
+			QueueRemove(entry);
+			Free(entry);
+			old_val = TRUE;
+		}
+	}
+
 	return old_val;
 }
 
@@ -277,8 +366,16 @@ U0 MouseHardHandler()
 {
 	I64 i, dx, dy, dz;
 	U8  mouse_buf[4];
-	if (!mouse_hard.raw_mode)
+	Bool is_raw_mode;
+
+	if (mouse_hard.raw_queue->next == mouse_hard.raw_queue)
+		is_raw_mode = FALSE; // queue check branch skips func call stack push/pop, small speedup
+	else
+		is_raw_mode = MouseRawQueueFind(sys_focus_task);
+
+	if (!is_raw_mode)
 		MouseHardSetPre;
+
 	for (i = 0; i < 4; i++)
 		mouse_buf[i] = 0;
 	for (i = 0; i < mouse_hard.pkt_size; i++)
@@ -298,7 +395,8 @@ U0 MouseHardHandler()
 	else
 		dz = mouse_buf[3] & 7;
 
-	if (mouse_hard.raw_mode) {
+	if (is_raw_mode)
+	{
 		// buttons / position data need to by consumed by app
 		// buttons stay down, positions keep accumulating until
 		// consumed by app and reset with MouseRawReset
@@ -310,8 +408,12 @@ U0 MouseHardHandler()
 		mouse_hard.raw_data.x += dx;
 		mouse_hard.raw_data.y += dy;
 		mouse_hard.raw_data.z += dz;
+		mouse.show = FALSE;
+		mouse.lb = FALSE;
+		mouse.rb = FALSE;
 	}
-	else {
+	else
+	{
 		mouse_hard.bttns[0] =  mouse_buf[0] & 1;
 		mouse_hard.bttns[1] = (mouse_buf[0] & 2)    >> 1;
 		mouse_hard.bttns[2] = (mouse_buf[0] & 4)    >> 2;
@@ -320,6 +422,7 @@ U0 MouseHardHandler()
 		mouse_hard.prescale.x += dx;
 		mouse_hard.prescale.y += dy;
 		mouse_hard.prescale.z += dz;
+		mouse.show = TRUE;
 		MouseHardSetPost;
 	}
 }
@@ -441,5 +544,7 @@ U0 KbdMouseInit()
 	mouse_hard.prescale.z	= 0 / mouse_hard.scale.z;
 	mouse_hard.pos.x		= sys_framebuffer_width >> 1;
 	mouse_hard.pos.y		= sys_framebuffer_height >> 1;
+	mouse_hard.raw_queue	= CAlloc(sizeof(CQueue)); // head of CMouseRawQueue queue
+	QueueInit(mouse_hard.raw_queue);
 	MemCopy(&mouse_hard_last, &mouse_hard, sizeof(CMouseHardStateGlobals));
 }

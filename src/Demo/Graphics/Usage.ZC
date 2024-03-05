@@ -1,0 +1,59 @@
+
+U0 UsageDrawIt(CTask *, CDC *dc)
+{
+	I64 i, b;
+	CCPU *c;
+	F64 f;
+
+	dc->thick = 1;
+
+	dc->color = GREEN;
+	GrPrint(dc, 8, 8, "CPU");
+
+	dc->color = DKGRAY;
+	GrRect(dc, 8, 16, 100, 8 + 16 * (mp_count - 1));
+
+	dc->color = GREEN;
+	for (i = 0; i < mp_count; i++)
+	{
+		c = &cpu_structs[i];
+
+		f = 100.0 * (1.0 - c->idle_factor);
+		if (f < 1.0)
+			f = 1.0;
+
+		GrRect(dc, 8, 16 + (16*i), ToI64(f), 8);
+	}
+
+	b = sys_code_bp->alloced_u8s - sys_code_bp->used_u8s;
+	if (sys_data_bp)
+		b += sys_data_bp->alloced_u8s - sys_data_bp->used_u8s;
+
+	f = 1.0 * b / MemBIOSTotal;
+
+
+	dc->color = RED;
+	GrPrint(dc, 116, 8, "RAM");
+
+	dc->color = DKGRAY;
+	GrRect(dc, 116, 16, 100, 8);
+	dc->color = RED;
+	GrRect(dc, 116, 16, ToI64(100.0 * (1.0 - f)), 8);
+
+	Sleep(1);
+}
+
+U0 Usage()
+{
+	SettingsPush;
+	DocClear;
+	DocCursor;
+	Fs->draw_it = &UsageDrawIt;
+	StrCopy(Fs->task_title, "Usage");
+
+	while (CharGet(,FALSE) != CH_SHIFT_ESC) {};
+
+	SettingsPop;
+};
+
+Usage;

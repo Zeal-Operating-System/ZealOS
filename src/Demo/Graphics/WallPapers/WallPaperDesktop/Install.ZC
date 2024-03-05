@@ -1,0 +1,5 @@
+Cd(__DIR__);;
+
+Copy("HomeSys.ZC", "~/HomeSys.ZC");
+Copy("DesktopIcons.DD", "~/DesktopIcons.DD");
+Copy("../WallPaperDesktop.ZC", "::/System/WallPaper.ZC");

@@ -395,16 +395,11 @@ U0 GrUpdateScreen32()
 	while (src < size) //draw 2 pixels at a time
 		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
 
+
+	GrCalcScreenUpdates;
+
 	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE], 0))
-	{
 		MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
-		src -= GR_WIDTH * GR_HEIGHT; // Reset src ptr
-		MemCopy(gr.screen_cache, src, GR_WIDTH * GR_HEIGHT);
-	}
-	else
-	{
-		GrCalcScreenUpdates;
-	}
 }
 
 U0 GrUpdateScreen()

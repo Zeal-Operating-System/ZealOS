@@ -47,9 +47,9 @@ extern class CTask;
 #define F64_MAX 	(0x7FEFFFFFFFFFFFFF(F64))
 #define F64_MIN 	(0xFFEFFFFFFFFFFFFF(F64))
 #define inf 		(0x7FF0000000000000(F64))
-#define ì 			(0x7FF0000000000000(F64))
+#define âˆž 			(0x7FF0000000000000(F64))
 #define pi			(0x400921FB54442D18(F64))
-#define ã 			(0x400921FB54442D18(F64))
+#define Ï€ 			(0x400921FB54442D18(F64))
 #define exp_1 		(0x4005BF0A8B145769(F64)) //The number "e"
 #define log2_10 	(0x400A934F0979A371(F64))
 #define log2_e		(0x3FF71547652B82FE(F64))
@@ -574,8 +574,13 @@ class CKernel
 	U64				sys_disk_uuid[2];
 	U32				sys_boot_stack;
 	Bool			sys_is_uefi_booted;
+	U8				sys_bootloader_id;
 	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
 };
+
+// Bootloader IDs
+#define BL_ZEAL		0
+#define BL_LIMINE	1
 
 //Run-Levels
 #define RLf_16BIT 					0
@@ -775,7 +780,7 @@ class CSema
 #define CTRL_ALT_DEL	0
 #define CTRL_ALT_C		1
 #define CTRL_ALT_X		2
-#define CTRL_ALT_TAB	3
+#define CTRL_ALT_N		3
 
 #help_index "Hash"
 public class CHash
@@ -1690,7 +1695,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_KEEP_PRIVATE 			7
 #define OPTf_NO_REG_VAR 			8	//Applied to functions, not statements
 #define OPTf_GLOBALS_ON_DATA_HEAP 	9
-//Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
+//Disable 10-byte float consts for Ï€,log2_10,log10_2,loge_2
 #define OPTf_NO_BUILTIN_CONST 		10	//Applied to functions, not statements
 #define OPTf_USE_IMM64				11	//Not completely implemented
 #define OPTf_DECIMAL_ONLY			12	//Only allow decimal numbers (no 0x or 0b prefixed numbers)
@@ -2703,7 +2708,7 @@ class CPCIDev
 //Physical Region Descriptor Table
 #define AHCI_PRD_MAX_BYTES		(4 * 1024 * 1024) //Max bytes that can go in one PRD entry ($ER$4 MiB). Section 4.2.3.3 Fig. 17 (DBC) 
 #define AHCI_PRDT_MAX_BLOCKS	(U16_MAX + 1) 	  //Max blocks you can transfer in one command. 
-#define AHCI_PRDT_MAX_LEN		8 				  //Max PRD entries in one command. This is equal to (MAX_BLOCKS * BLK_SIZE) ö MAX_BYTES.
+#define AHCI_PRDT_MAX_LEN		8 				  //Max PRD entries in one command. This is equal to (MAX_BLOCKS * BLK_SIZE) Ã· MAX_BYTES.
 
 //Global Host Control (Controller) flags
 #define AHCI_GHCf_HBA_RESET			0
@@ -3715,6 +3720,11 @@ public class CKbdStateGlobals
 };
 
 #help_index "Mouse"
+class CMouseRawQueue:CQueue
+{
+	CTask *task;
+};
+
 public class CMouseHardStateGlobals
 {
 	CD3I64	 pos, 					//Position in pixels
@@ -3726,9 +3736,9 @@ public class CMouseHardStateGlobals
 			 install_attempts,		//Private
 			 pkt_size;				//Private
 	CFifoU8	*fifo, *fifo2;			//Private
+	CQueue	*raw_queue;
 	Bool	 bttns[5],
 			 raw_bttns[5],
-			 raw_mode,
 			 has_wheel,
 			 has_ext_bttns,
 			 enabled,

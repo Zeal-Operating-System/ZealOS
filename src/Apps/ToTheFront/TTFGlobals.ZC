@@ -5,9 +5,9 @@
 U0 InitDefines()
 {
 	DefinePrint("MAP_HEIGHT",	"%d",		(GR_HEIGHT - FONT_HEIGHT * 2) * MAP_WIDTH / GR_WIDTH);
-	DefinePrint("DCOS", 		"%12.9f",	HEX_SIDE * Cos(60.0 / 180 * ã));
-	DefinePrint("DSIN", 		"%12.9f",	HEX_SIDE * Sin(60.0 / 180 * ã));
-	DefinePrint("HEX_RADIUS",	"%12.9f",	HEX_SIDE * Sin(60.0 / 180 * ã) + 0.01); //Slop
+	DefinePrint("DCOS", 		"%12.9f",	HEX_SIDE * Cos(60.0 / 180 * Ï€));
+	DefinePrint("DSIN", 		"%12.9f",	HEX_SIDE * Sin(60.0 / 180 * Ï€));
+	DefinePrint("HEX_RADIUS",	"%12.9f",	HEX_SIDE * Sin(60.0 / 180 * Ï€) + 0.01); //Slop
 } InitDefines;
 
 I64  map_cols = (MAP_WIDTH - DCOS)/(2 * HEX_SIDE + 2 * DCOS), 

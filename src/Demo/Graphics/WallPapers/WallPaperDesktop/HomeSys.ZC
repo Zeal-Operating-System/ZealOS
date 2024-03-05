@@ -1,0 +1,99 @@
+// HOME VERSION
+
+
+U0 UserStartUp()
+{//Run each time a user a spawned
+	DocTermNew;
+	Type("::/Doc/Start.DD");
+	LBts(&Fs->display_flags, DISPLAYf_SHOW);
+	Fs->title_src = TTS_LOCKED_CONST;
+	Fs->title_src = Fs->display_doc->filename.name;
+	WinToTop;
+	WinZBufUpdate;
+	Dir;
+}
+
+U0 ServerStartUp()
+{//Run each time a server task is spawned.
+	DocTermNew;
+	LBts(&Fs->display_flags, DISPLAYf_SHOW);
+	Fs->title_src = TTS_LOCKED_CONST;
+	WinToTop;
+	WinZBufUpdate;
+	
+}
+
+
+U0 StartUpTasks()
+{
+
+	//////////////////////////
+	// SysLog Window Config //
+	//////////////////////////
+
+	DocCursor(OFF);
+	Fs->title_src = TTS_LOCKED_CONST;
+	Fs->title_src = "SysLog";
+	DocClear(Fs->border_doc, TRUE);
+
+
+	/////////////////////////
+	// Initial Term Config //
+	/////////////////////////
+
+	CTask *user = User;	
+
+	user->border_src  = BDS_CONST;
+	user->text_attr = DKGRAY << 4 + BLUE;
+	user->title_src = TTS_LOCKED_CONST;
+	user->title_src = user->display_doc->filename.name;
+	DocClear(user->border_doc, TRUE);
+	
+	user->win_width = GR_WIDTH / 2;
+	WinHorz((user->win_width/8) - ((user->win_width/2)/7),
+            (user->win_width/8) + ((user->win_width/2)/7) - 1, user);
+	user->win_height = GR_HEIGHT / 2;
+	WinVert((user->win_height/8) - ((user->win_height/2)/8),
+          (user->win_height/8) + ((user->win_height/2)/8) - 1, user);
+
+
+  I64 initialWinTop = user->win_top;
+  I64 initialWinLeft = user->win_left;
+
+  user->win_top = (GR_HEIGHT/2)/8;
+  user->win_bottom = (GR_HEIGHT/2)/8;
+  user->win_left = (GR_WIDTH/2)/8;
+  user->win_right = (GR_WIDTH/2)/8;
+
+  while(user->win_left > initialWinLeft){
+    user->win_left--;
+    user->win_right++;
+	  Sleep(2);
+  }
+
+  while(user->win_top > initialWinTop){
+    user->win_top--;
+    user->win_bottom++;
+    Sleep(10);
+  }
+
+ 	WinToTop(user);
+	WinZBufUpdate;
+
+	"\n\n Boot Time:$$RED$$%7.3fs$$FG$$\n", tS;	
+
+	//XTalk(user, "Cd; #include \"Once\";\n");
+	Silent; //no output to screen
+	//ACInit("/*;!*/Bible.TXT;!*/Clementine.TXT;!*/PCIDevices.DD;!*/HTML/*;!*/ChangeLog.DD");
+	Silent(OFF); //no output to screen
+	//AutoComplete(OFF);
+	//if (sys_boot_src.u16[0] != BOOT_SRC_RAM)
+	//	PopUp("ExeFile2(\"::/System/ZSplash.ZC\");");
+}
+
+#include "~/PaletteEditor/Palettes/Tradition"
+PaletteSetTradition;
+
+StartUpTasks;
+
+"\n\n $$PURPLE$$ZealOS$$FG$$ V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;

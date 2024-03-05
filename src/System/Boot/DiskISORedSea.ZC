@@ -78,7 +78,7 @@ U0 RedSeaISO9660(U8 *iso_filename, U8 drv_let)
 		iso_pri->file_structure_version = 1;
 		StrCopy(iso_pri->publisher_id, "ZealOS RedSea");
 
-		st = MStrPrint("ZealOS V%0.2f %D %T", sys_os_version, Now, Now);
+		st = MStrPrint("%s %D %T", sys_os_version_str, Now, Now);
 		StrCopy(iso_pri->preparer_id, st);
 		Free(st);
 

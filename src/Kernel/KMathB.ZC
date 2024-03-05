@@ -27,7 +27,7 @@ F64 Max(F64 n1, F64 n2)
 F64 Pow10I64(I64 i)
 {//F64 int powers of ten.
 	if (i > 308)
-		return ì;
+		return âˆ;
 	else if (i < -308)
 		return 0.0;
 	else

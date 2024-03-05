@@ -212,7 +212,7 @@ U8 *FlagsStrPrint(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_
 	I64 i = 0;
 
 	*dst = 0;
-	if (!print_all_length)
+	if (!print_all_length || print_all_length > 64)
 		print_all_length =  64;
 	while (i < print_all_length)
 	{

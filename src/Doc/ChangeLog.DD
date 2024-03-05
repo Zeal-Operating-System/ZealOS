@@ -1,4 +1,31 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/22/23 22:27:05----$IV,0$
+* Raised version number to 2.03.
+* Created $LK+PU,"CMouseRawQueue",A="MN:CMouseRawQueue"$ to track tasks in raw-mouse mode, placed in $LK+PU,"CMouseHardStateGlobals mouse_hard.raw_queue",A="FF:::/Kernel/KernelA.HH,*raw_queue"$.
+* Created $LK+PU,"MouseRawQueueFind",A="MN:MouseRawQueueFind"$ to check whether a given task is in raw-mouse mode, externed in $LK+PU,"KernelC.HH",A="FF:::/Kernel/KernelC.HH,MouseRawQueueFind("$.
+* Created $LK+PU,"MouseRawWatcher",A="MN:MouseRawWatcher"$ and $LK+PU,"MouseRawWatcherInner",A="MN:MouseRawWatcherInner"$ to watch for killed tasks and remove them from raw_queue, spawned in $LK+PU,"KMain",A="FF:::/Kernel/KMain.ZC,&MouseRawWatcher:2"$.
+* Added task parameter to $LK+PU,"MouseRaw",A="MN:MouseRaw"$, changed behaviour from a global toggle to a task-based queue of $LK+PU,"CMouseRawQueue",A="MN:CMouseRawQueue"$ entries.
+* Changed $LK+PU,"MouseHardHandler",A="MN:MouseHardHandler"$ to use $LK+PU,"MouseRawQueueFind",A="MN:MouseRawQueueFind"$ with $LK+PU,"sys_focus_task",A="MN:sys_focus_task"$ to determine if currently in raw-mode or not, added $LK+PU,"clearing mouse.show, mouse.lb, mouse.rb",A="FF:::/Kernel/SerialDev/Mouse.ZC,mouse.lb = FALSE"$ to fix bug where clicking to refocus a mouse-raw application would register a repeated click on unfocus.
+* Added raw_queue init to $LK+PU,"KbdMouseInit",A="FF:::/Kernel/SerialDev/Mouse.ZC,QueueInit(mouse_hard.raw_queue);"$.
+* Changed $LK+PU,"CastleFrankenstein MouseHandler",A="FF:::/Demo/Games/CastleFrankenstein.ZC,MouseHandler"$ while loop condition to use $LK+PU,"MouseRawQueueFind",A="MN:MouseRawQueueFind"$ with game_task as parameter, added raw-mouse keybind descriptions to game's $LK+PU,"MenuPush",A="FF:::/Demo/Games/CastleFrankenstein.ZC,MouseMode"$.
+
+$IV,1$----03/17/23 17:44:24----$IV,0$
+* Rewrote $LK+PU,"MiniGrLib",A="FI:::/Demo/Lectures/MiniGrLib.ZC"$, replaced old VGA-specific code to work with 32-bit framebuffer.
+
+$IV,1$----03/14/23 03:23:46----$IV,0$
+* Created %o Bool $LK+PU,"StrPrint",A="FF:::/Kernel/StrPrint.ZC,'o'"$ format code, updated $LK+PU,"Print.DD",A="FI:::/Doc/Print.DD"$ with new %o code and previously undocumented format codes.
+
+$IV,1$----03/13/23 18:06:09----$IV,0$
+* Raised version number to 2.02.
+
+$IV,1$----02/25/23 16:35:04----$IV,0$
+* Created $LK+PU,"MouseRaw",A="MN:MouseRaw"$ and $LK+PU,"MouseRawReset",A="MN:MouseRawReset"$, externs added to $LK+PU,"KernelC.HH",A="FF:::/Kernel/KernelC.HH,MouseRaw("$, functions used in $MA-X+PU,"Mouse.ZC",LM="Find(\"MouseRawReset;\", \"::/Kernel/SerialDev/Mouse.ZC\");View;"$.
+* Added members to $LK+PU,"CMouseHardStateGlobals",A="MN:CMouseHardStateGlobals"$ and used in $MA-X+PU,"Mouse.ZC",LM="Find(\"raw_data\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_mode\", \"::/Kernel/SerialDev/Mouse.ZC\");Find(\"raw_bttns\", \"::/Kernel/SerialDev/Mouse.ZC\");View;"$:
+	- CD3I64 raw_data
+	- Bool raw_bttns[5]
+	- Bool raw_mode
+* $MA-X+PU,"Update CastleFrankenstein to use new MouseRaw functionality.",LM="Find(\"mouse_task\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseHandler\", \"::/Demo/Games/CastleFrankenstein.ZC\");Find(\"MouseRaw\", \"::/Demo/Games/CastleFrankenstein.ZC\");View;"$
+
 $IV,1$----12/21/22 03:38:35----$IV,0$
 * Raised version number to 2.01.
 * Created $LK+PU,"FreeAll",A="MN:FreeAll"$ method to /Kernel/Memory/MAllocFree.ZC and extern to $LK+PU,"/Kernel/KernelC.HH",A="FF:::/Kernel/KernelC.HH,FreeAll"$.

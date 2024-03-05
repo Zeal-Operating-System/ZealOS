@@ -31,8 +31,8 @@ U0 SunMoon()
 		radius = 75;
 		gr.dc->color = DKGRAY;
 		GrCircle(gr.dc, x, y, radius);
-		//<CTRL-ALT-a> for the "ã" character.
-		GrCircle(gr.dc, x + 0.5 * radius, y, 1.2 * radius,, ã - .31 * ã, 0.62 * ã);
+		//<CTRL-ALT-a> for the "Ï€" character.
+		GrCircle(gr.dc, x + 0.5 * radius, y, 1.2 * radius,, Ï€ - .31 * Ï€, 0.62 * Ï€);
 		gr.dc->color = ROPF_PROBABILITY_DITHER + LTGRAY << 16 + BLACK;
 		gr.dc->dither_probability_u16 = i;		//U16 can be [0,65535]
 		GrFloodFill(gr.dc,x + 0.5 * radius, y);
