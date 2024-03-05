@@ -2,13 +2,15 @@ name: Build Application
 
 on:
   push:
-    branches-ignore:
-      - 'stable'
+    branches:
+      - 'master'
     paths-ignore:
       - '**.md'
       - 'screenshots/**'
       - '**/LICENSE'
   pull_request:
+    branches:
+      - 'master'
     paths-ignore:
       - '**.md'
       - 'screenshots/**'
@@ -18,7 +20,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -37,11 +39,14 @@ jobs:
           ./build-iso.sh --headless
           cd ..
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+      - name: Releasing latest
+        if: ${{ success() }}
+        uses: "GutPuncher/action-automatic-releases@latest"
         with:
-          name: ISOs
-          path: |
-            build/*.iso
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Pre-Built ISOs [${{ github.sha }}]"
+          files: ./build/*.iso
           if-no-files-found: error
 
