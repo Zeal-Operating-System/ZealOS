@@ -37,6 +37,16 @@ U0 NetQueueEntryHandle(CNetQueueEntry *entry)
 
 	EthernetFrameParse(&ethernet_frame, entry->frame, entry->packet_length);
 
+	U8 *mac = EthernetMACGet();
+	Bool is_our_mac = !MemCompare(mac, ethernet_frame.destination_address, MAC_ADDRESS_LENGTH); // check the RX packet MAC against local MAC
+	Bool is_broadcast = !MemCompare(ethernet_globals.ethernet_broadcast, ethernet_frame.destination_address, MAC_ADDRESS_LENGTH); // check the RX packet MAC against broadcast MAC
+
+	if (!is_our_mac && !is_broadcast)
+	{
+		NetLog("HANDLE NETQUEUE ENTRY: Not for us, discarding.");
+		return;
+	}
+
 	switch (ethernet_frame.ethertype)
 	{
 		case ETHERTYPE_ARP:
