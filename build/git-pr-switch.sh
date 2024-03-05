@@ -15,7 +15,7 @@ read -p "Enter fork branch name: " FORK_BRANCH
 echo $FORK_BRANCH
 FORK_LOCAL=$FORK_BRANCH"-testing"
 echo "Creating new local branch for testing: "$FORK_LOCAL" ..."
-git checkout -b $FORK_LOCAL
+git checkout -B $FORK_LOCAL
 echo "Pulling changes from user's branch into new local branch..."
 git pull https://github.com/$FORK_USERNAME/ZealOS.git $FORK_BRANCH
 
