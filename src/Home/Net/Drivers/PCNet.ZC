@@ -59,6 +59,7 @@
 #define PCNET_INT_TINTM		9	// Transmit Interrupt Mask
 #define PCNET_INT_RINTM		10	// Receive Interrupt Mask
 
+#define PCNET_FEATURE_ASTRPRCV	10
 #define PCNET_FEATURE_APADXMT	11
 
 #define PCNET_BCR_MISC_CONFIG_ASEL	1
@@ -455,12 +456,25 @@ U0 PCNetInterruptCSRSet()
 U0 PCNetTXAutoPadEnable()
 {/* AMD PCNet datasheet p.1-958
 	Setting bit 11 (Auto Pad Transmit) allows
-	shoft transmit frames to be automatically
+	short transmit frames to be automatically
 	extended to 64 bytes. */
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
 
 	Bts(&csr, PCNET_FEATURE_APADXMT);
+
+	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
+}
+
+U0 PCNetRXAutoStripEnable()
+{/* AMD PCNet datasheet p.1-958
+	Setting bit 10 (Auto Strip Receive) allows
+	pad and FCS fields to be automatically
+	stripped. ONLY WORKS ON 802.3!!! */
+
+	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
+
+	Bts(&csr, PCNET_FEATURE_ASTRPRCV);
 
 	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
 }
@@ -748,6 +762,8 @@ U0 PCNetInit()
 	PCNetInterruptCSRSet;
 
 	PCNetTXAutoPadEnable;
+
+	PCNetRXAutoStripEnable;
 
 	PCNetAutoLinkSelect;
 

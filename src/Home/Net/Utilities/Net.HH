@@ -5,10 +5,13 @@
 #define ETHERNET_ETHERTYPE_OFFSET	12
 #define ETHERNET_DATA_OFFSET		14
 #define MAC_ADDRESS_LENGTH			6
+#define FCS_LENGTH					4
 
 /*	Ethernet Frame Size.
 	Linux uses 1544, OSDev and Shrine use 1548. Based on IEEE 802.3as, max frame size was agreed upon as 2000 bytes. */
 #define ETHERNET_FRAME_SIZE	2000
+
+#define ETHERNET_v2_MTU 1500
 
 #define HTYPE_ETHERNET	1
 #define HLEN_ETHERNET	6
