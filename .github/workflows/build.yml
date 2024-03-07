@@ -47,7 +47,7 @@ jobs:
           cd ..
 
       - name: Releasing Latest ISOs
-        if: ${{ success() && github.event_name = 'push'}}
+        if: ${{ success() && github.event_name == 'push'}}
         uses: "GutPuncher/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
