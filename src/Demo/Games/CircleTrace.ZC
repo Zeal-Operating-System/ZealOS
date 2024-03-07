@@ -22,7 +22,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 }
 
 #define CIRCLE_RADIUS 	100
-#define CIRCUMFERENCE 	(2 * ã * CIRCLE_RADIUS)
+#define CIRCUMFERENCE 	(2 * Ï€ * CIRCLE_RADIUS)
 
 Bool CTPlot(CDC *dc, I64 x, I64 y, I64)
 {

@@ -5,15 +5,15 @@ I64 x[16], y[16], dx[16], dy[16];
 U0 Init()
 {
 	I64 i;
-	F64 é;
+	F64 Î˜;
 
 	MemSet(x, 0, sizeof(x));
 	MemSet(y, 0, sizeof(y));
 	for (i = 0; i < 16; i++)
 	{
-		é = Rand*2*ã;
-		dx[i] = I32_MAX * Cos(é);
-		dy[i] = I32_MAX * Sin(é);
+		Î˜ = Rand*2*Ï€;
+		dx[i] = I32_MAX * Cos(Î˜);
+		dy[i] = I32_MAX * Sin(Î˜);
 	}
 }
  

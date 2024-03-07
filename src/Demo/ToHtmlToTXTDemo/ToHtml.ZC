@@ -53,12 +53,12 @@ U0 HtmlPutS(CDoc *doc, I64 u32_attr, I64 *_old_u32_attr, Bool underline_update, 
 				break;
 
 			start:
-				case 'ã':	ptr="pi"; 		break;
-				case 'é':	ptr="theta";	break;
-				case 'è':	ptr="phi";		break;
-				case 'ê':	ptr="omega";	break;
-				case 'ì':	ptr="inf";		break;
-				case 'æ':	ptr="u";		break;
+				case 'Ï€':	ptr="pi"; 		break;
+				case 'Î˜':	ptr="theta";	break;
+				case 'Î¦':	ptr="phi";		break;
+				case 'Î©':	ptr="omega";	break;
+				case 'âˆž':	ptr="inf";		break;
+				case 'Âµ':	ptr="u";		break;
 			end:
 				DocPrint(doc, ptr);
 				*_col = *_col + StrLen(ptr);

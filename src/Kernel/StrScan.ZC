@@ -75,13 +75,13 @@ to avoid this.
 	}
 	if (!StrNCompare(src - 1, "inf", 3))
 	{
-		d=ì;
+		d=âˆž;
 		src += 3;
 		goto a2f_end;
 	}
-	if (*src == 'ì')
+	if (*src == 'âˆž')
 	{
-		d = ì;
+		d = âˆž;
 		src++;
 		goto a2f_end;
 	}

@@ -15,7 +15,7 @@
 // set this either 24 or 12
 #define HOUR_MAX	12
 
-#define ç	2*ã
+#define Ï„	2*Ï€
 
 
 //EST NY -> India:		  9.5
@@ -57,24 +57,24 @@ public Bool GrLine3(CDC *dc=gr.dc,I64 x1,I64 y1,I64 z1,
 	dc->thick = 1;
 	dc->color = SECOND_HAND_COLOR;
 	GrLine3(dc, CLOCK_CENTER, CLOCK_CENTER, GR_Z_ALL,
-			  (CLOCK_CENTER + SECOND_HAND_LEN * Cos(3*ç/4 + sec * ç/60)),
-			  (CLOCK_CENTER + SECOND_HAND_LEN * Sin(3*ç/4 + sec * ç/60)),
+			  (CLOCK_CENTER + SECOND_HAND_LEN * Cos(3*Ï„/4 + sec * Ï„/60)),
+			  (CLOCK_CENTER + SECOND_HAND_LEN * Sin(3*Ï„/4 + sec * Ï„/60)),
 			   GR_Z_ALL);
 
 	// draw minute hand
 	dc->thick = 2;
 	dc->color = MINUTE_HAND_COLOR;
 	GrLine3(dc, CLOCK_CENTER, CLOCK_CENTER, GR_Z_ALL,
-			  (CLOCK_CENTER + MINUTE_HAND_LEN * Cos(3*ç/4 + min * ç/60)),
-			  (CLOCK_CENTER + MINUTE_HAND_LEN * Sin(3*ç/4 + min * ç/60)),
+			  (CLOCK_CENTER + MINUTE_HAND_LEN * Cos(3*Ï„/4 + min * Ï„/60)),
+			  (CLOCK_CENTER + MINUTE_HAND_LEN * Sin(3*Ï„/4 + min * Ï„/60)),
 			   GR_Z_ALL);
 
 	// draw hour hand
 	dc->thick = 3;
 	dc->color = HOUR_HAND_COLOR;
 	GrLine3(dc, CLOCK_CENTER, CLOCK_CENTER, GR_Z_ALL,
-			  (CLOCK_CENTER + HOUR_HAND_LEN * Cos(3*ç/4 + hr * ç/HOUR_MAX)),
-			  (CLOCK_CENTER + HOUR_HAND_LEN * Sin(3*ç/4 + hr * ç/HOUR_MAX)),
+			  (CLOCK_CENTER + HOUR_HAND_LEN * Cos(3*Ï„/4 + hr * Ï„/HOUR_MAX)),
+			  (CLOCK_CENTER + HOUR_HAND_LEN * Sin(3*Ï„/4 + hr * Ï„/HOUR_MAX)),
 			   GR_Z_ALL);
 
 

@@ -27,22 +27,22 @@ U0 DrawIt(CTask *, CDC *dc)
 
 U0 Box()
 {
-	F64 é = 0, è = 0, ê = 0, s = 1, s1 = 1.05;
+	F64 Î˜ = 0, Î¦ = 0, Î© = 0, s = 1, s1 = 1.05;
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	DocClear;
 	Fs->draw_it = &DrawIt;
 	while (!CharScan)
 	{
 		Mat4x4IdentEqu(global_r);
-		Mat4x4RotZ(global_r, é);
-		Mat4x4RotX(global_r, è);
-		Mat4x4RotZ(global_r, ê);
+		Mat4x4RotZ(global_r, Î˜);
+		Mat4x4RotX(global_r, Î¦);
+		Mat4x4RotZ(global_r, Î©);
 		Mat4x4Scale(global_r, s);
 
 		Sleep(20);
-		é += 2 * ã / 70;
-		è += 2 * ã / 90;
-		ê += 2 * ã / 110;
+		Î˜ += 2 * Ï€ / 70;
+		Î¦ += 2 * Ï€ / 90;
+		Î© += 2 * Ï€ / 110;
 		s *= s1;
 		if (!(0.2 < s < 1.4))
 			s1 = 1 / s1;

@@ -72,7 +72,7 @@ U0 AdjustLoads(CMathODE *ode)
 		{
 			if (tt)
 			{
-				d = Abs(Sin(tmpm->load_t * ã + tt)); //0.0<=d<=1.0
+				d = Abs(Sin(tmpm->load_t * Ï€ + tt)); //0.0<=d<=1.0
 				tmpm->mass = 100.0 * Sqr(Sqr(d + 1.0));
 				tmpm->radius = 7.0 * d + 2.0;
 			}

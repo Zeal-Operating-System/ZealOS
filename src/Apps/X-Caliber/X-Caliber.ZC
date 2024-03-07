@@ -431,9 +431,9 @@ I64 Tweaked()
 		D3Sub(&p2, &human->p[0].x, &human->p[4].x);
 		D3Unit(&p1);
 		D3Unit(&p2);
-		if (!(human->s[3].flags & SSF_INACTIVE) && D3Dot(&p, &p1) > Cos(20 * ã / 180))
+		if (!(human->s[3].flags & SSF_INACTIVE) && D3Dot(&p, &p1) > Cos(20 * Ï€ / 180))
 			return 3;
-		if (!(human->s[5].flags & SSF_INACTIVE) && D3Dot(&p, &p2) > Cos(20 * ã / 180))
+		if (!(human->s[5].flags & SSF_INACTIVE) && D3Dot(&p, &p2) > Cos(20 * Ï€ / 180))
 			return 4;
 		return 0;
 	}
@@ -541,7 +541,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 			if (tmpmi->launched && tmpmi->exploding)
 			{
 				d = (tS-tmpmi->fuse_time) / (tmpmi->die_timeout - tmpmi->fuse_time);
-				d = 70  *Sin(ã * d) * tmpmi->tons + 1;
+				d = 70  *Sin(Ï€ * d) * tmpmi->tons + 1;
 				for (i = 1; i < d; i++)
 				{
 					if (i & 1)
@@ -724,7 +724,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 			for (j = 0; j < tmpsp->masses; j++)
 			{
 				d = (tS - tmpsp->die_time) / (tmpsp->die_timeout - tmpsp->die_time);
-				d = 7 * Sin(ã * d) * (6 + j) + 1;
+				d = 7 * Sin(Ï€ * d) * (6 + j) + 1;
 				for (i = 1; i < d; i++)
 				{
 					if (i & 1)
@@ -825,7 +825,7 @@ Ship TargetGet(Missile *tmpmi)
 				D3Sub(&p1, &tmpsp->p[i].state->x, &tmpmi->p_front.state->x);
 				D3Unit(D3Copy(&p2, &p1));
 				D3Cross(&p1, &p, &p2);
-				if (D3Dot(&p, &p2) > 0 && D3Norm(&p1) <= ã / 16)
+				if (D3Dot(&p, &p2) > 0 && D3Norm(&p1) <= Ï€ / 16)
 				{
 					dd = D3NormSqr(&p1);
 					if (dd < best_dd)
@@ -844,7 +844,7 @@ Ship TargetGet(Missile *tmpmi)
 U0 MyDerivative(CMathODE *ode, F64, COrder2D3 *, COrder2D3 *)
 {
 	I64		 i;
-	F64		 d, dd, dd2, spin, t_left, t_right, é_err, é_thrust, DéDt;
+	F64		 d, dd, dd2, spin, t_left, t_right, Î˜_err, Î˜_thrust, DÎ˜Dt;
 	CTask	*task = ode->win_task;
 	CD3		 p, p1, p2;
 	Ship	*tmpsp;
@@ -1004,15 +1004,15 @@ U0 MyDerivative(CMathODE *ode, F64, COrder2D3 *, COrder2D3 *)
 						D3Sub(&p1, &tmpsp->p[0].state->x, &tmpmi->p_front.state->x);
 						d =D3Norm(&p1);
 						D3Unit(&p1);
-						é_err = D3Dot(&p, &p1);
+						Î˜_err = D3Dot(&p, &p1);
 						D3Sub(&p1, &tmpmi->p_front.state->DxDt, &tmpmi->p_back.state->DxDt);
 						D3Cross(&p2, &p, &p1);
-						DéDt = D3Norm(&p2);
+						DÎ˜Dt = D3Norm(&p2);
 						if (p2.z < 0)
-							DéDt = -DéDt;
-						é_thrust = Clamp(200 * (é_err + 2 * DéDt) / (d + 200), -ã / 8, ã / 8);
-						p2.x = p.x * Cos(é_thrust) - p.y * Sin(é_thrust);
-						p2.y = p.y * Cos(é_thrust) + p.x * Sin(é_thrust);
+							DÎ˜Dt = -DÎ˜Dt;
+						Î˜_thrust = Clamp(200 * (Î˜_err + 2 * DÎ˜Dt) / (d + 200), -Ï€ / 8, Ï€ / 8);
+						p2.x = p.x * Cos(Î˜_thrust) - p.y * Sin(Î˜_thrust);
+						p2.y = p.y * Cos(Î˜_thrust) + p.x * Sin(Î˜_thrust);
 						p2.z = 0;
 						D3AddEqu(&tmpmi->p_back.DstateDt->DxDt, D3MulEqu(&p2, THRUST_MAX));
 					}
@@ -1345,7 +1345,7 @@ U0 HumanFireLaserEnd()
 U0 SplatNew(Shot *tmps, F64 die_time, F64 start, F64 end)
 {
 	MyMass *tmpm;
-	F64		é = Arg(tmps->p.DxDt, tmps->p.DyDt);
+	F64		Î˜ = Arg(tmps->p.DxDt, tmps->p.DyDt);
 	I64		i;
 
 	for (i = 0; i < tmps->splats; i++)
@@ -1360,8 +1360,8 @@ U0 SplatNew(Shot *tmps, F64 die_time, F64 start, F64 end)
 		else
 			tmpm->type = MT_ANTIMATTER_SPLAT;
 		D3Copy(&tmpm->DxDt, &tmps->p.DxDt);
-		tmpm->DxDt += 50 * Sqr(tmps->radius) * Rand * Sin(start + é + (end - start) * i / tmps->splats);
-		tmpm->DyDt += 50 * Sqr(tmps->radius) * Rand * Cos(start + é + (end - start) * i / tmps->splats);
+		tmpm->DxDt += 50 * Sqr(tmps->radius) * Rand * Sin(start + Î˜ + (end - start) * i / tmps->splats);
+		tmpm->DyDt += 50 * Sqr(tmps->radius) * Rand * Cos(start + Î˜ + (end - start) * i / tmps->splats);
 		QueueInsert(tmpm, ode->last_mass);
 	}
 }
@@ -1376,9 +1376,9 @@ U0 ExpireShots()
 		if (tS > tmps->fuse_time)
 		{
 			if (tmps->p.type == MT_SOLAR_FLARE)
-				SplatNew(tmps, 1.0, 3 * ã / 8, 5 * ã / 8);
+				SplatNew(tmps, 1.0, 3 * Ï€ / 8, 5 * Ï€ / 8);
 			else
-				SplatNew(tmps, .2, 0, 2 * ã);
+				SplatNew(tmps, .2, 0, 2 * Ï€);
 			QueueRemove(tmps);
 			QueueRemove(&tmps->p);
 			Free(tmps);
@@ -1722,54 +1722,54 @@ U0 XCaliber()
 			 "I64 best_score=%d;\n"
 			 "I64 message_flags=%d;\n", best_score, message_flags);
 }
-        ž      
-    ÿÿÿÿ   ÿÿÿÿ
+        â‚§      
+    Â Â Â Â    Â Â Â Â 
              
             
-   ÿÿÿÿ   ýÿÿÿ
-   ÿÿÿÿ      
+   Â Â Â Â    Â²Â Â Â 
+   Â Â Â Â       
                
-   ÿÿÿÿ      
-   þÿÿÿ   þÿÿÿ
-                    ‚      øÿÿÿýÿÿÿ	      ÿÿÿÿÿÿ			ÿÿÿÿÿÿÿÿÿÿ			
-	ÿÿÿÿÿÿÿÿ		
+   Â Â Â Â       
+   â– Â Â Â    â– Â Â Â 
+                    Ã©      Â°Â Â Â Â²Â Â Â 	      Â Â Â Â Â Â 			Â Â Â Â Â Â Â Â Â Â 			
+	Â Â Â Â Â Â Â Â 		
 
 
 
-	ÿÿÿÿÿÿÿ			
+	Â Â Â Â Â Â Â 			
 
 
 
-	ÿÿÿÿÿÿÿÿÿÿ			
-	ÿÿÿÿÿÿÿÿÿÿÿÿÿ			ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ	ÿÿÿÿÿÿÿ        ‚      øÿÿÿýÿÿÿ	      ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ        À      
-ýÿÿÿüÿÿÿýÿÿÿ   
-þÿÿÿ   ÿÿÿÿüÿÿÿ
-þÿÿÿ   ýÿÿÿ   
-þÿÿÿýÿÿÿ    ÿÿÿÿ
-    ÿÿÿÿ   ýÿÿÿ
-    ýÿÿÿ       
-       ÿÿÿÿ   
-ÿÿÿÿ   ýÿÿÿ   
-    üÿÿÿ    ûÿÿÿ
+	Â Â Â Â Â Â Â Â Â Â 			
+	Â Â Â Â Â Â Â Â Â Â Â Â Â 			Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 	Â Â Â Â Â Â Â         Ã©      Â°Â Â Â Â²Â Â Â 	      Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â         â””      
+Â²Â Â Â â¿Â Â Â Â²Â Â Â    
+â– Â Â Â    Â Â Â Â â¿Â Â Â 
+â– Â Â Â    Â²Â Â Â    
+â– Â Â Â Â²Â Â Â     Â Â Â Â 
+    Â Â Â Â    Â²Â Â Â 
+    Â²Â Â Â        
+       Â Â Â Â    
+Â Â Â Â    Â²Â Â Â    
+    â¿Â Â Â     âˆšÂ Â Â 
               
-ÿÿÿÿüÿÿÿ    úÿÿÿ        â         
-    ýÿÿÿ      
-   ÷ÿÿÿ    ÿÿÿÿ
+Â Â Â Â â¿Â Â Â     Â·Â Â Â         Î“         
+    Â²Â Â Â       
+   â‰ˆÂ Â Â     Â Â Â Â 
 
-   ùÿÿÿ
+   âˆ™Â Â Â 
       
 
-   ýÿÿÿþÿÿÿÿÿÿÿ
-ÿÿÿÿýÿÿÿ   ÷ÿÿÿ
-ÿÿÿÿþÿÿÿ         
-úÿÿÿÿÿÿÿ      
-         õÿÿÿ
-   õÿÿÿúÿÿÿ       
-   þÿÿÿ
+   Â²Â Â Â â– Â Â Â Â Â Â Â 
+Â Â Â Â Â²Â Â Â    â‰ˆÂ Â Â 
+Â Â Â Â â– Â Â Â          
+Â·Â Â Â Â Â Â Â       
+         âŒ¡Â Â Â 
+   âŒ¡Â Â Â Â·Â Â Â        
+   â– Â Â Â 
        
 
-          ùÿÿÿ
-   ùÿÿÿ   þÿÿÿ        –      	   úÿÿÿûÿÿÿ    ÿÿÿÿÿÿÿÿ    ÿÿÿÿ       úÿÿÿ          úÿÿÿüÿÿÿ    þÿÿÿ       úÿÿÿ       
-ýÿÿÿ   ùÿÿÿ   
-ùÿÿÿ   ùÿÿÿÿÿÿÿ
-ùÿÿÿÿÿÿÿýÿÿÿÿÿÿÿ        b      üÿÿÿþÿÿÿ      ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ        b      ÷ÿÿÿþÿÿÿ      ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ 
+          âˆ™Â Â Â 
+   âˆ™Â Â Â    â– Â Â Â         Ã»      	   Â·Â Â Â âˆšÂ Â Â     Â Â Â Â Â Â Â Â     Â Â Â Â        Â·Â Â Â           Â·Â Â Â â¿Â Â Â     â– Â Â Â        Â·Â Â Â        
+Â²Â Â Â    âˆ™Â Â Â    
+âˆ™Â Â Â    âˆ™Â Â Â Â Â Â Â 
+âˆ™Â Â Â Â Â Â Â Â²Â Â Â Â Â Â Â         b      â¿Â Â Â â– Â Â Â       Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â         b      â‰ˆÂ Â Â â– Â Â Â       Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  
