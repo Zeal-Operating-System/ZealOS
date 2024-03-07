@@ -90,6 +90,7 @@ else
 			umount_vdisk
 			[ -f ../src/Tmp/AUTO.ISO.C ] && mv ../src/Tmp/AUTO.ISO.C ./AUTO.ISO
 			echo "Finished."
+			cd ../
 			git status
 			;;
 		vm)

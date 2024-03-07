@@ -180,7 +180,7 @@ I64 KeyGet(I64 *_scan_code=NULL, Bool echo=FALSE, Bool raw_cursor=FALSE)
 		{
 			if (!cursor_on && ToI64(TSCGet * 5 / counts.time_stamp_freq) & 1)
 			{
-				'Û';
+				'â–ˆ';
 				cursor_on = TRUE;
 			}
 			else if (cursor_on && !(ToI64(TSCGet * 5 / counts.time_stamp_freq) & 1))

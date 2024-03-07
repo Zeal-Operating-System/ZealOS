@@ -37,6 +37,7 @@ Insert
 	GodWord(,,0x4100000041);
 	GodBiblePassage(,,0x24100000241);
 	GodSong(,,0x4000000040);
+	GodDoodle(,,0x24000000240);
 	IndentIn(,CH_CTRLI,0x41700000417);
 	IndentOut(,CH_CTRLI,0x61700000617);
 	WordWrapOn(,CH_CTRLW,0x41100000411);

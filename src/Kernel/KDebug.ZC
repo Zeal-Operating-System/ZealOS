@@ -336,26 +336,26 @@ U0 RawDumpRegs(CTask *task=NULL)
 		task = Fs;
 
 	text.raw_col = RAWDR_COL;
-	'É';
+	'â•”';
 	for (j = 0; j < text.cols - RAWDR_COL - 1; j++)
-		'Í';
+		'â•';
 
 	for (i = 0; i < 16; i++)
 	{
 		text.raw_col = (i + 1) * text.cols + RAWDR_COL;
-		"º%3Z: %016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
+		"â•‘%3Z: %016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
 	}
 
 	i++;
 
 	text.raw_col = i++ * text.cols + RAWDR_COL;
-	"ºRIP: %016X\n", task->rip;
+	"â•‘RIP: %016X\n", task->rip;
 
 	text.raw_col = i++ * text.cols + RAWDR_COL;
-	"º%-*tp\n", text.cols - (RAWDR_COL + 1) - 1, Fs->rip;
+	"â•‘%-*tp\n", text.cols - (RAWDR_COL + 1) - 1, Fs->rip;
 
 	text.raw_col = i++ * text.cols + RAWDR_COL;
-	'º';
+	'â•‘';
 	if (Bt(&sys_run_level, RLf_COMPILER))
 	{
 		j = Fs->rip;
@@ -366,19 +366,19 @@ U0 RawDumpRegs(CTask *task=NULL)
 		'\n';
 
 	text.raw_col = i * text.cols + RAWDR_COL;
-	'È';
+	'â•š';
 	for (j = 0; j < text.cols - RAWDR_COL - 1; j++)
-		'Í';
+		'â•';
 
 	text.raw_col = text.cols - 1;
-	'»';
+	'â•—';
 	for (j = 2; j < i + 1; j++)
 	{
 		text.raw_col = j * text.cols - 1;
-		'º';
+		'â•‘';
 	}
 	text.raw_col = j * text.cols - 1;
-	'¼';
+	'â•';
 
 	text.raw_col = old_col;
 	Raw(old_raw);

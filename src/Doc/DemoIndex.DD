@@ -27,7 +27,7 @@ $LK,"::/Demo/RandDemo.ZC"$
 $LK,"::/Demo/KeyBitMap.ZC"$
 $LK,"::/Demo/Graphics/WinZBuf.ZC"$
 $LK,"::/Demo/Graphics/Elephant.ZC"$
-$LK,"::/Demo/Graphics/WallPaperFish.ZC"$ //Press SHIFT-F5 to System Include
+$LK,"::/Demo/Graphics/WallPapers/WallPaperFish.ZC"$ //Press SHIFT-F5 to System Include
 $LK,"::/Demo/Games/Digits.ZC"$
 $LK,"::/Demo/Progress.ZC"$ //has some ASM, just ignore
 $LK,"::/Demo/Graphics/Symmetry.ZC"$
@@ -77,7 +77,7 @@ $LK,"::/Demo/MultiCore/Palindrome.ZC"$
 $LK,"::/Demo/MultiCore/MPAdd.ZC"$
 $LK,"::/Demo/MultiCore/Lock.ZC"$
 $LK,"::/Demo/Graphics/Slider.ZC"$
-$LK,"::/Demo/Graphics/WallPaperCtrl.ZC"$ //Press SHIFT-F5 to System Include
+$LK,"::/Demo/Graphics/WallPapers/WallPaperCtrl.ZC"$ //Press SHIFT-F5 to System Include
 $LK,"::/Demo/Graphics/ScrollBars.ZC"$
 $LK,"::/Demo/RegistryDemo.ZC"$
 $LK,"::/Demo/Games/FlapBat.ZC"$
