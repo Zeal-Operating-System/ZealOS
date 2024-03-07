@@ -584,9 +584,9 @@ Bool MoveDo(GameState *state, I64 piece_num, I64 x2, I64 y2, Bool final)
 			game_over = TRUE;
 		}
 		GameSnapShot;
-  }
+	}
 
-  return ToBool(score_adjust);
+	return ToBool(score_adjust);
 }
 
 I64 MoveFind(I64 x, I64 y, Move *mvs, I64 mv_cnt)
@@ -664,17 +664,24 @@ I64 MoveCnt(GameState *state)
 {
 	I64  i, res = 0, mv_cnt;
 	Move mvs[32];
+	Bool king_stalemate = TRUE;
 
 	for (i = 0; i < 32; i++)
+	{
 		if (state->pieces[i].player == state->cur_player)
 		{
 			mv_cnt = PieceMoves(state, i, mvs);
 			mv_cnt = ChkPieceMoves(state, i, mvs,mv_cnt);
 			res += mv_cnt;
 		}
-	return res;
+		if (state->pieces[i].type != P_KING && state->pieces[i].player >= 0)
+			king_stalemate = FALSE;
+	}
+	if (king_stalemate)
+		return 0;
+	else
+		return res;
 }
-
 
 U0 DrawIt(CTask *task, CDC *dc)
 {

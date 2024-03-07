@@ -27,17 +27,13 @@ U0 EthernetGlobalsInit()
 	}
 }
 
-//TODO: check length , figure out the length+4 
 U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 {
-	//TODO: Check length ! We need to figure out what
-	//lengths are appropriate
-
-	//Shrine also says MemCopy has a
-	//high overhead. Almost tempted to say that means that a lot
-	//of the current system should be done with less extra allocation
-	//altogether, more passing.
-	//In practice, MemCopy causes the most slowdown on bare-metal.
+	// Shrine says MemCopy has a high overhead.
+	// Almost tempted to say that means that a lot
+	// of the current system should be done with 
+	// less extra allocation altogether, more passing.
+	// In practice, MemCopy causes the most slowdown on bare-metal.
 
 	NetLog("ETHERNET FRAME PARSE: Parsing frame, copying out to frame_out param.");
 
@@ -49,7 +45,10 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 	frame_out->data		 = frame + ETHERNET_DATA_OFFSET;
 
-	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH - 4;	// He has a comment literally just saying "??". + or - 4?
+	if (frame_out->ethertype <= ETHERNET_v2_MTU) // check if the field is a length or an ethertype
+		frame_out->length = frame_out->ethertype;
+	else
+		frame_out->length = length - ETHERNET_MAC_HEADER_LENGTH - FCS_LENGTH;
 }
 
 U0 EthernetFrameFinish(I64 de_index)
