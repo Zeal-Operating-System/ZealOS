@@ -581,6 +581,10 @@ public extern	I64	MessageScan(I64 *_arg1=NULL, I64 *_arg2=NULL, I64 mask=~1, CTa
 public extern U0	QuickSort(   U8  *base, I64 num, I64 width, I64 (*fp_compare)(U8 *e1, U8 *e2));
 public extern U0	QuickSortI64(I64 *base, I64 num,            I64 (*fp_compare)(I64 e1, I64 e2));
 public extern F64	sys_os_version;
+public extern U64	sys_os_version_sub;
+public extern U8	*sys_os_version_str;
+public extern U8	*sys_os_version_full;
+public extern U8	*sys_os_version_nice;
 
 #help_index "Misc/Progress Bars"
 public extern U0 ProgressBarsReset(U8 *path=NULL);
@@ -637,8 +641,13 @@ public extern I64 IntEntryAlloc();
 public extern I64 IntEntryFree(I64 irq);
 
 #help_index "ScreenCast;Cmd Line (Typically)"
-public extern Bool					ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.GR")
+public extern Bool					ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.GR");
 public extern CScreenCastGlobals	screencast;
+
+#help_index "SMBIOS"
+extern Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry);
+extern U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None");
+extern CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHeader *head=NULL);
 
 #help_index "Sound"
 #help_file "::/Doc/Sound"
@@ -678,7 +687,7 @@ public extern					I64		sys_num_spawned_tasks;
 extern							CTask	*sys_winmgr_task, *sys_task_being_screen_updated;
 
 #help_index "Task/Delay;Time/CPU Cycles"
-public extern	U0	Busy(I64 æS); //Loosely timed
+public extern	U0	Busy(I64 ÂµS); //Loosely timed
 public extern	U0	PortNop(); //On the order of 1uS
 extern			I64	TimeCal();
 

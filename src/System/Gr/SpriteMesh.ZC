@@ -621,7 +621,7 @@ I64 *MeshW2S(CMeshFrame *e, CTask *task)
 	if (e->flip_y)
 		Mat4x4RotX(r, s->ax);
 	else
-		Mat4x4RotX(r, s->ax + ã);
+		Mat4x4RotX(r, s->ax + Ï€);
 
 	return r;
 }
@@ -635,7 +635,7 @@ I64 *MeshS2W(CMeshFrame *e, CTask *task)
 	if (e->flip_y)
 		Mat4x4RotX(r, -s->ax);
 	else
-		Mat4x4RotX(r, -(s->ax + ã));
+		Mat4x4RotX(r, -(s->ax + Ï€));
 	Mat4x4RotY(r, -s->ay);
 	Mat4x4RotZ(r, -s->az);
 	Mat4x4Scale(r, 1 / e->view_scale);

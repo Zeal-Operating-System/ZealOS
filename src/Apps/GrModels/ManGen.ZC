@@ -146,9 +146,9 @@ U0 AddBox(ManDefineStruct *md, I64 c,
 		 h3x = 0, h3y = h3, h3z = 0, dx = 0, dy = 0, dz = d / 2;
 
 	r = Mat4x4IdentNew;
-	Mat4x4RotZ(r, az * ã / 180.0);
-	Mat4x4RotY(r, ay * ã / 180.0);
-	Mat4x4RotX(r, ax * ã / 180.0);
+	Mat4x4RotZ(r, az * Ï€ / 180.0);
+	Mat4x4RotY(r, ay * Ï€ / 180.0);
+	Mat4x4RotX(r, ax * Ï€ / 180.0);
 	Mat4x4MulXYZ(r, &wx, &wy, &wz);
 	Mat4x4MulXYZ(r, &hx, &hy, &hz);
 	Mat4x4MulXYZ(r, &h2x, &h2y, &h2z);

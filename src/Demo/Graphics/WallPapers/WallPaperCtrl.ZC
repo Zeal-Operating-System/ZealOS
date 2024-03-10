@@ -6,7 +6,7 @@ that you can place ctrls on the
 wall paper.
 
 See $LK,"::/Demo/Graphics/Slider.ZC"$
-and $LK,"::/Demo/Graphics/WallPaperFish.ZC"$
+and $LK,"::/Demo/Graphics/WallPapers/WallPaperFish.ZC"$
 before messing with this program.
 
 It must be "System Included".
