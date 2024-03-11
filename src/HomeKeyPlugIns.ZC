@@ -114,9 +114,9 @@ Bool MyPutKey(I64 ch, I64 sc)
 						if (!(sc & SCF_SHIFT))
 						{
 							if (sc & SCF_KEY_DESC)
-								KeyDescSet("Cmd /Yuugure");
+								KeyDescSet("Cmd /SysLogToggle");
 							else
-								Yuugure;
+								SysLogToggle;
 						}
 						return TRUE;
 
