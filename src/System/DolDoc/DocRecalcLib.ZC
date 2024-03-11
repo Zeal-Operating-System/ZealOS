@@ -137,11 +137,11 @@ public U0 DocClear(CDoc *doc=NULL, Bool clear_holds=FALSE)
 {//Clear all doc entries, except +H, hold entries.
 	Bool unlock;
 
+	text.raw_col = 0;
 	if (!doc && !(doc = DocPut))
 	{
 		if (IsRaw)
 		{
-			text.raw_col = 0;
 			MemSet(text.fb_alias, BLACK32, text.buffer_size);
 		}
 		return;

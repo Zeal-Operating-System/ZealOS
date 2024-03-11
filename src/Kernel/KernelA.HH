@@ -780,7 +780,7 @@ class CSema
 #define CTRL_ALT_DEL	0
 #define CTRL_ALT_C		1
 #define CTRL_ALT_X		2
-#define CTRL_ALT_TAB	3
+#define CTRL_ALT_N		3
 
 #help_index "Hash"
 public class CHash
