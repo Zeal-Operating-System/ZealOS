@@ -40,11 +40,18 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Run ISOs Build Script
+        timeout-minutes: 10
         if: ${{ success() }}
         run: |
           cd build
           ./build-iso.sh --headless
           cd ..
+
+      - name: ISO Check
+        if: ${{ success() && hashFiles('./build/*.iso') == '' }}
+        run: |
+          echo "ISOs not built!"
+          exit 1
 
       - name: Releasing Latest ISOs
         if: ${{ success() && github.event_name == 'push'}}
