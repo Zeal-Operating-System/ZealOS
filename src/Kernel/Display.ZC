@@ -47,9 +47,9 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 	}
 	else if (ch == '\n')
 	{
-		RawPutChar(CH_SPACE);
-		while (text.raw_col % text.cols)
+		do
 			RawPutChar(CH_SPACE);
+		while (text.raw_col % text.cols);
 	}
 	else if (Bt(char_bmp_displayable, ch))
 	{
