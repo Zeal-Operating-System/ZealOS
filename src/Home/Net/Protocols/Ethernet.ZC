@@ -29,6 +29,8 @@ U0 EthernetGlobalsInit()
 
 U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 {
+	// length is assumed to NOT include the FCS.
+
 	// Shrine says MemCopy has a high overhead.
 	// Almost tempted to say that means that a lot
 	// of the current system should be done with 
@@ -45,10 +47,7 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 	frame_out->data		 = frame + ETHERNET_DATA_OFFSET;
 
-	if (frame_out->ethertype <= ETHERNET_v2_MTU) // check if the field is a length or an ethertype
-		frame_out->length = frame_out->ethertype;
-	else
-		frame_out->length = length - ETHERNET_MAC_HEADER_LENGTH - FCS_LENGTH;
+	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH;
 }
 
 U0 EthernetFrameFinish(I64 de_index)

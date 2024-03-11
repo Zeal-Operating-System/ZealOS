@@ -635,7 +635,13 @@ I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 	NetDebug("PCNET RECEIVE PACKET: de_index incremented = 0x%0X", pcnet.current_rx_de_index);
 
 	*packet_buffer_out = pcnet.rx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
-	*packet_length_out = packet_length;
+
+	// ASTRPRCV causes 802.3 packets to be stripped and FCS to be checked
+	U16 ethertype = (*packet_buffer_out)[ETHERNET_ETHERTYPE_OFFSET + 1] | (*packet_buffer_out)[ETHERNET_ETHERTYPE_OFFSET] << 8;
+	if (ethertype < ETHERNET_v2_MTU)
+		*packet_length_out = ethertype;
+	else
+		*packet_length_out = packet_length - FCS_LENGTH;  // ethertype ii TODO: Validate FCS
 
 	return de_index;
 }
