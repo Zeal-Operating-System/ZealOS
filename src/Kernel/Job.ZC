@@ -504,6 +504,14 @@ I64 Sys(U8 *format, ...)
 	return res;
 }
 
+U0 SysLogToggle()
+{
+	if (Bt(&sys_task->display_flags, DISPLAYf_SHOW))
+		LBtr(&sys_task->display_flags, DISPLAYf_SHOW);
+	else
+		LBts(&sys_task->display_flags, DISPLAYf_SHOW);
+}
+
 U0 SysLog(U8 *format, ...)
 {//Display text in sys_task.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
