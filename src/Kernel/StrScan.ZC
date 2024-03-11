@@ -242,7 +242,7 @@ and take address.
 */
 	U8	*buf, *ptr, **pptr;
 	Bool left_justify = FALSE;
-	I64  ch, cur_arg = 0, i, len, *i_ptr, dec_len;
+	I64  ch, cur_arg = 0, len, *i_ptr, dec_len;
 	F64 *d_ptr;
 
 	if (!format)
@@ -301,9 +301,9 @@ and take address.
 					}
 				}
 				buf = MAlloc(len + 1);
-				for (i = 0; i < len; i++)
-					buf[i] = *src++;
-				buf[i] = 0;
+				MemCopy(buf, src, len);
+				buf[len] = 0;
+				src += len;
 				switch (ch)
 				{
 					case 's':
