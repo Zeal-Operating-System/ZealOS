@@ -12,19 +12,24 @@ U0 HashFunSegFind(CHashTable *h, U8 *addr, Bool *_has_lower, U64 *_best, CHash *
 {
 	Bool		*has_lower = *_has_lower;
 	CHashExport	*tmpex;
-	U64			 i, j, best = *_best;
-	CHash		*res = *_res;
+	U64			 i, j, best = *_best, reg mask = h->mask;
+	CHash		*res = *_res, **body = h->body;;
+	CHashFun	*temp_hashfun;
+	U16			 hf_flags;
 
-	for (i = 0; i <= h->mask; i++)
+	for (i = 0; i <= mask; i++)
 	{
-		tmpex = h->body[i];
+		tmpex = body[i];
+		
 		while (tmpex)
 		{
 			j = 0;
 			if (tmpex->type & HTT_FUN)
 			{
-				if (!Bt(&tmpex(CHashFun *)->flags, Cf_EXTERN) && !Bt(&tmpex(CHashFun *)->flags, Ff_INTERNAL))
-					j = tmpex(CHashFun *)->exe_addr;
+				temp_hashfun = tmpex; // cast
+				hf_flags = temp_hashfun->flags;
+				if (!Bt(&hf_flags, Cf_EXTERN) && !Bt(&hf_flags, Ff_INTERNAL))
+					j = temp_hashfun->exe_addr;
 			}
 			else if (tmpex->type & HTT_EXPORT_SYS_SYM)
 				j = tmpex->val;
