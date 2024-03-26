@@ -72,9 +72,8 @@ U0 SysGrInit()
 {
 	I64 i;
 
-    text.font = sys_font_std;
-
-	text.aux_font = sys_font_aux;
+    text.font = SYS_FONT_STD;
+	text.aux_font = SYS_FONT_AUX;
 
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
