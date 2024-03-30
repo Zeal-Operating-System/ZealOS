@@ -363,7 +363,7 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 	}
 }
 
-U0 GrCalcScreenUpdates()
+U0 GrCalcScreenUpdates()
 {
 	U64 reg *screen, reg *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, reg RDX diffs_size = GR_WIDTH * GR_HEIGHT / 8;
 
@@ -410,7 +410,7 @@ U0 GrUpdateScreen32()
 
 	while (src < size) // draw 8 pixels at a time
 	{
-		src64val = *(src(U64 *));
+		src64val = *src++;
 		a = src64val & 0xFF;
 		b = (src64val >>= 8) & 0xFF;
 		c = (src64val >>= 8) & 0xFF;
@@ -423,7 +423,6 @@ U0 GrUpdateScreen32()
 		d = (src64val >>= 8) & 0xFF;
 		*dst++ = gr_palette[a] | gr_palette[b] << 32;
 		*dst++ = gr_palette[c] | gr_palette[d] << 32;
-		src++;
 	}
 
 	GrCalcScreenUpdates;
