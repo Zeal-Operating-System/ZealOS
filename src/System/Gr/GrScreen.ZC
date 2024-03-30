@@ -344,13 +344,12 @@ U0 GrUpdateTextFG()
 
 U0 DCBlotColor8(CDC *dc, CDC *img)
 {
-	U8	*src = img->body, *b0 = dc->body;
-	I64  reg j, reg jj, v = 0, k, d0 = img->width_internal * img->height;
+	U8	*b0 = dc->body;
+	I64 *src = img->body, reg j, reg jj, v = 0, k, d0 = img->width_internal * img->height;
 
 	for (k = 0; k < d0; k += 8)
 	{
-		j = *(src(U64 *));
-		src += 8;
+		j = *src++;;
 		do
 		{
 			jj = j & 0xFF;
@@ -364,10 +363,13 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 	}
 }
 
-U0 GrCalcScreenUpdates()
+//#define GR_CALC_SCREEN_UPDATES_SKIP		2
+//#define GR_CALC_SCREEN_UPDATES_CHUNKS	4
+$IV,0$U0 GrCalcScreenUpdates()
 {
-	U64 *screen, *last_screen = gr.screen_cache;
-	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 8;
+	U64 reg *screen, reg *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, reg RDX diffs_size = GR_WIDTH * GR_HEIGHT / 8,
+//		 skip = gr.screen_cache[0], // use 1st U8 of cache as flag to skip cache MemCopy every-other call.
+/*		 reg R9 skip_size64, reg R8 skip_diff, skip_size8*/;
 
 	if (gr.screen_zoom == 1)
 		screen = gr.dc2->body;
@@ -376,38 +378,76 @@ U0 GrCalcScreenUpdates()
 
 	for (i = 0; i < diffs_size; i++)
 		if (screen[i] != last_screen[i])
-			MemCopy(dst + i * 4, src + i * 4, 4 * 64);
+		{
+			ii = i * 4;
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii];
+		}
 
+/*
+	if (skip < GR_CALC_SCREEN_UPDATES_CHUNKS * GR_CALC_SCREEN_UPDATES_SKIP)
+	{
+		if (skip % GR_CALC_SCREEN_UPDATES_SKIP == 0)
+		{
+			skip_size64 = skip / GR_CALC_SCREEN_UPDATES_SKIP * text.buffer_size / GR_CALC_SCREEN_UPDATES_CHUNKS / 8;
+//			skip_diff = diffs_size * 8 / GR_CALC_SCREEN_UPDATES_CHUNKS;
+//			skip_size8 = skip / GR_CALC_SCREEN_UPDATES_SKIP * skip_diff;
+			MemCopy(dst + skip_size64,
+					src + skip_size64,
+					text.buffer_size / GR_CALC_SCREEN_UPDATES_CHUNKS);
+//			MemCopy(gr.screen_cache + skip_size8, screen(U8 *) + skip_size8, skip_diff);
+		}
+	}
+	else
+		skip = -1;
+
+	gr.screen_cache[0] = ++skip;
+*/
 	MemCopy(gr.screen_cache, screen, diffs_size * 8);
+
 }
 
 U0 GrUpdateScreen32()
 {
-	U64 size, *dst, reg src64val;
-	U8 *src, reg a, reg b, c, reg d;
+	U64 size, *dst, src64val, *src;
+	U8  a, b, c, d;
+
+	PUSHFD
+	CLI
 
 	if (gr.screen_zoom == 1)
 	{
 		src = gr.dc2->body;
-		size = src + gr.dc2->height * gr.dc2->width_internal;
+		size = src(U8 *) + gr.dc2->height * gr.dc2->width_internal;
 	}
 	else
 	{
 		GrZoomInScreen;
 		src = gr.zoomed_dc->body;
-		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
+		size = src(U8 *) + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
 	}
+	POPFD
+
 	dst = text.raw_screen;
-	while (src < size) // draw 4 pixels at a time
+
+	while (src < size) // draw 8 pixels at a time
 	{
 		src64val = *(src(U64 *));
 		a = src64val & 0xFF;
 		b = (src64val >>= 8) & 0xFF;
 		c = (src64val >>= 8) & 0xFF;
 		d = (src64val >>= 8) & 0xFF;
-		src += 4;
 		*dst++ = gr_palette[a] | gr_palette[b] << 32;
 		*dst++ = gr_palette[c] | gr_palette[d] << 32;
+		a = (src64val >>= 8) & 0xFF;
+		b = (src64val >>= 8) & 0xFF;
+		c = (src64val >>= 8) & 0xFF;
+		d = (src64val >>= 8) & 0xFF;
+		*dst++ = gr_palette[a] | gr_palette[b] << 32;
+		*dst++ = gr_palette[c] | gr_palette[d] << 32;
+		src++;
 	}
 
 	GrCalcScreenUpdates;
