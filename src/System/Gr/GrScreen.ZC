@@ -387,8 +387,7 @@ U0 GrCalcScreenUpdates()
 
 U0 GrUpdateScreen32()
 {
-	U64 size, *dst, src64val, *src;
-	U8  a, b, c, d;
+	U64 size, *dst, src64val, *src, a, b, c, d;
 
 	PUSHFD
 	CLI
