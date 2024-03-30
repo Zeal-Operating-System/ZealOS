@@ -68,10 +68,10 @@ _MEMCOPY::
 		MOV 	RDI, U64 SF_ARG1[RBP] // dst
 		MOV 	RSI, U64 SF_ARG2[RBP] // src
 		MOV 	RCX, U64 SF_ARG3[RBP] // count
-		TEST RDI, 0xF // check if dst is 16byte aligned
-		JNZ @@05 // if not 16byte aligned, jump down to MOVUPS unaligned checks
-		TEST RSI, 0xF // check if src is 16byte aligned
-		JNZ @@05 // if not 16byte aligned, jump down to MOVUPS unaligned checks
+		TEST	RDI, 0xF	// check if dst is 16byte aligned
+		JNZ		@@05		// if not 16byte aligned, jump down to MOVUPS unaligned checks
+		TEST	RSI, 0xF	// check if src is 16byte aligned
+		JNZ		@@05		// if not 16byte aligned, jump down to MOVUPS unaligned checks
 @@03: // SSE 128-bit ALIGNED memcopy (count >= 16)
 		CMP		RCX, 16		// count <, >, == 16 bytes?
 		JL		@@10		// if count less than 16, jump down
