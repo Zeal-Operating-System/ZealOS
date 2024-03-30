@@ -363,13 +363,9 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 	}
 }
 
-//#define GR_CALC_SCREEN_UPDATES_SKIP		2
-//#define GR_CALC_SCREEN_UPDATES_CHUNKS	4
-$IV,0$U0 GrCalcScreenUpdates()
+U0 GrCalcScreenUpdates()
 {
-	U64 reg *screen, reg *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, reg RDX diffs_size = GR_WIDTH * GR_HEIGHT / 8,
-//		 skip = gr.screen_cache[0], // use 1st U8 of cache as flag to skip cache MemCopy every-other call.
-/*		 reg R9 skip_size64, reg R8 skip_diff, skip_size8*/;
+	U64 reg *screen, reg *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, reg RDX diffs_size = GR_WIDTH * GR_HEIGHT / 8;
 
 	if (gr.screen_zoom == 1)
 		screen = gr.dc2->body;
@@ -386,27 +382,7 @@ $IV,0$U0 GrCalcScreenUpdates()
 			dst[ii] = src[ii];
 		}
 
-/*
-	if (skip < GR_CALC_SCREEN_UPDATES_CHUNKS * GR_CALC_SCREEN_UPDATES_SKIP)
-	{
-		if (skip % GR_CALC_SCREEN_UPDATES_SKIP == 0)
-		{
-			skip_size64 = skip / GR_CALC_SCREEN_UPDATES_SKIP * text.buffer_size / GR_CALC_SCREEN_UPDATES_CHUNKS / 8;
-//			skip_diff = diffs_size * 8 / GR_CALC_SCREEN_UPDATES_CHUNKS;
-//			skip_size8 = skip / GR_CALC_SCREEN_UPDATES_SKIP * skip_diff;
-			MemCopy(dst + skip_size64,
-					src + skip_size64,
-					text.buffer_size / GR_CALC_SCREEN_UPDATES_CHUNKS);
-//			MemCopy(gr.screen_cache + skip_size8, screen(U8 *) + skip_size8, skip_diff);
-		}
-	}
-	else
-		skip = -1;
-
-	gr.screen_cache[0] = ++skip;
-*/
 	MemCopy(gr.screen_cache, screen, diffs_size * 8);
-
 }
 
 U0 GrUpdateScreen32()
