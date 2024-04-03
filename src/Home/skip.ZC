@@ -1,0 +1,112 @@
+/*
+
+U8 skip = 0;
+
+while (TRUE)
+{
+	"skip %d\n", skip;
+	"skip and 3... %d\n", skip & 3;
+	"skip and 7... %d\n", skip & 7;
+	"skip and 15... %d\n", skip & 15;
+
+
+
+	if (skip > 4 * 15)
+		skip = 0;
+
+
+
+
+
+
+skip++;
+}
+
+*/
+
+
+U0 GrCalcScreenUpdates1()
+{
+	U64 *screen, *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 8;
+
+	U8 skip = gr.screen_cache[0]; // use 1st U8 of cache as flag to skip cache MemCopy every-other call.
+	U8 skip_inactives = 2, skip_chunks = 7;
+
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
+
+	for (i = 0; i < diffs_size; i++)
+		if (screen[i] != last_screen[i])
+		{
+			ii = i * 4;
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii];
+		}
+
+	if (skip < skip_chunks * skip_inactives)
+	{
+		if (skip % skip_inactives == 0)
+		{
+			MemCopy(dst + ((skip/skip_inactives)*text.buffer_size / skip_chunks / 8),
+					src + ((skip/skip_inactives)*text.buffer_size / skip_chunks / 8),
+					text.buffer_size / skip_chunks);
+			MemCopy(gr.screen_cache + ((skip/skip_inactives)*diffs_size * 8 / skip_chunks), screen + ((skip/skip_inactives)*diffs_size * 8 / skip_chunks / 8), diffs_size * 8 / skip_chunks);
+		}
+	}
+	else
+		skip = -1;
+
+	gr.screen_cache[0] = ++skip;
+}
+
+U0 GrCalcScreenUpdates2()
+{
+	U64 *screen, *last_screen = gr.screen_cache, i, ii, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 8,
+		 skip = gr.screen_cache[0], // use 1st U8 of cache as flag to skip cache MemCopy every-other call.
+		 skip_inactives = 2, skip_chunks = 7, skip_size64 = skip / skip_inactives * text.buffer_size / skip_chunks / 8, skip_diff = diffs_size * 8 / skip_chunks, skip_size8 = skip / skip_inactives * skip_diff;
+
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
+
+	for (i = 0; i < diffs_size; i++)
+		if (screen[i] != last_screen[i])
+		{
+			ii = i * 4;
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii++];
+			dst[ii] = src[ii];
+		}
+
+	if (skip < skip_chunks * skip_inactives)
+	{
+		if (skip % skip_inactives == 0)
+		{
+			MemCopy(dst + skip_size64,
+					src + skip_size64,
+					text.buffer_size / skip_chunks);
+			MemCopy(gr.screen_cache + skip_size8, screen(U8 *) + skip_size8, skip_diff);
+		}
+	}
+	else
+		skip = -1;
+
+	gr.screen_cache[0] = ++skip;
+}
+
+Uf "GrCalcScreenUpdates1";
+
+"\n\n";
+
+Uf "GrCalcScreenUpdates2";
+
+"\n";
+

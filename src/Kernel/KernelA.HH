@@ -498,6 +498,7 @@ class CPatchTableAbsAddr
 
 #define BLACK32			0x000000
 #define WHITE32			0xFFFFFF
+#define RED32			0xFF0000
 #define VBE_MODES_NUM	32
 
 class CVBEInfo

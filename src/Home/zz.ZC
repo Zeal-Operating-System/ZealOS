@@ -1,0 +1,45 @@
+
+
+//In("B\n2*1024*1024\n\n");Mount;
+
+// See BlkDevRep
+I64 i, dst_blks;
+CBlkDev *b = blkdev.blkdevs;
+U8 *dst_disk, dst_let, got = FALSE;
+
+for (i = 0; i < BLKDEVS_NUM; i++)
+{ // look for a RAM Disk
+	if (b[i].bd_signature == BD_SIGNATURE_VAL)
+	{
+		if (b[i].RAM_disk)
+		{
+			dst_disk = b[i].RAM_disk;
+			dst_let = b[i].first_drive_let;
+			dst_blks = b[i].max_blk;
+			"\tRAM disk address:\t0x%X\n", dst_disk;
+			"\tDrive Letter:\t%C\n", dst_let;
+			"\tDrive Max Block:\t0x%X\n", dst_blks;
+			got = TRUE;
+			break;
+		}
+	}
+}
+
+if (!got)
+	Break;
+
+U8 *dst_str = MStrPrint("%C:/", dst_let);
+U8 *dst_disk_str = MStrPrint("0x%0X", dst_disk);
+U8 *dst_blks_str = MStrPrint("%d", dst_blks);
+
+//CopyTree("::/", dst_str);
+Drive(dst_let);
+In("BB");
+In(dst_disk_str);
+In("\n");
+In(dst_blks_str);
+In("\n\n\n\n");
+MakeAll;
+Cd("Kernel");
+Sleep(3333);
+BootRAM("Kernel.ZXE");

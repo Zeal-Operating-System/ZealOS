@@ -1,0 +1,60 @@
+
+
+U0 zz()
+{
+	U16 *screen, *last_screen = gr.screen_cache;
+	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+/*
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
+*/
+
+	for (i = 0; i < diffs_size; i++)
+	{
+		if (screen[i] != last_screen[i])
+			dst[i] = src[i];
+	}
+
+//	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+
+}
+
+U0 zzz()
+{
+	U16 *screen, *last_screen = gr.screen_cache;
+	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+/*
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
+*/
+
+	
+	for (i = 0; i < diffs_size; i++)
+	{
+		if (*(screen + i) != *(last_screen + i))
+			*(dst + i) = *(src + i);
+	}
+
+//	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+
+}
+
+"\n\n\n";
+Uf("zz");
+"\n\n\n";
+Uf("zzz");"\n\n\n";
+
+
+
+/*
+
+	The only way to make this faster,
+	is to force usage of XMM into this ? ?
+
+*/

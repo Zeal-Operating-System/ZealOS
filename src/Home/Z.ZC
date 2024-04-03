@@ -1,0 +1,11 @@
+/*
+	F("sys_os_v");
+	"\n\n\n";
+	F("DD_OS_");
+*/
+	I64 line_count = LineRep("/*", "-r") + LineRep("/System/*") + LineRep("/Compiler/*", "-S+$$") + LineRep("/Kernel/*");
+
+	DocTreeFWrite("/System/Define.ZC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", line_count);
+	DefinePrint("DD_ZEALOS_LOC", "%,d", line_count);
+
+	"Total LOC:%12,d\n\n", line_count;

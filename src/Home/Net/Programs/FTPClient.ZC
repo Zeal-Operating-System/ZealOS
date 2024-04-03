@@ -41,7 +41,7 @@ I64 FTPReplyPassiveParse(CTCPSocket *message_socket, CSocketAddressIPV4 *dest_ad
 		recv_sum += recv;
 	}
 	str = StrNew(buf);
-	cc = CompCtrlNew(str);
+	cc = CompCtrlNew(str, CCF_NO_CHAR_CONST);
 
 	while ((tk = Lex(cc)))
 	{
@@ -91,6 +91,8 @@ parse_done:
 	}
 
 	CompCtrlDel(cc);
+	if (res < 0) // error on parse
+		"\n[FTPReplyPassiveParse]: buf='%s'\n", buf;
 	return res;
 }
 

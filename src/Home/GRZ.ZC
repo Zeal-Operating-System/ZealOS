@@ -1,0 +1,72 @@
+U0 GrZoomInScreen1()
+{
+	I64 i, j, k, l;
+	U8 *src, *src2, *dst;
+
+	GrFixZoomScale;
+
+	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
+	dst = gr.zoomed_dc->body;
+
+	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
+	{
+		k = gr.screen_zoom;
+		while (k--)
+		{
+			src2 = src;
+			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
+			{
+				for (j = 0; j < gr.screen_zoom - 1; j++)
+					*dst++ = *src2;
+
+				*dst++ = *src2++;
+			}
+		}
+		src += GR_WIDTH;
+	}
+}
+
+
+
+
+
+U0 GrZoomInScreen2()
+{
+	I64 i, j, k, l,
+		bobus = GR_HEIGHT / gr.screen_zoom,
+		beebus = GR_WIDTH / gr.screen_zoom,
+		sprinkle = gr.screen_zoom - 1;
+	U8 *src, *src2, *dst;
+
+	GrFixZoomScale;
+
+	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
+	dst = gr.zoomed_dc->body;
+
+	for (i = 0; i < bobus; i++)
+	{
+		k = gr.screen_zoom;
+		while (k--)
+		{
+			src2 = src;
+			for (l = 0; l < beebus; l++)
+			{
+				for (j = 0; j < sprinkle; j++)
+					*dst++ = *src2;
+
+				*dst++ = *src2++;
+			}
+		}
+		src += GR_WIDTH;
+	}
+}
+
+
+Uf "GrZoomInScreen1";
+
+"\n\n";
+
+Uf "GrZoomInScreen2";
+
+"\n";
+

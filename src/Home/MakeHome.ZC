@@ -1,0 +1,22 @@
+Cd(__DIR__);;
+
+//If these are not present in /Home, it uses the version in the root dir.  You
+//can make your own, modified, version of these files in your /Home directory.
+#include "~/HomeLocalize"
+#include "/System/Boot/MakeBoot"
+#include "/System/Utils/MakeUtils"
+#include "~/HomeWrappers"
+MapFileLoad("::/Kernel/Kernel");
+MapFileLoad("::/Compiler/Compiler");
+#include "~/HomeKeyPlugIns"
+#include "~/HomeSys"
+Cd("..");;
+Sys("#include \"C:/Home/PaletteEditor/Palettes/Amicus.ZC\";;;PaletteSetAmicus;;");
+//Sys("SwapI64(&text.font, &text.aux_font);;");
+Sys("U0 Z(){Spawn(&MouseHardDriverInstall);};;;");
+Sys("U0 MouseFix(){ Spawn(&MouseHardDriverInstall);; } ;; ");
+Sys("#include \"C:/Home/PaletteEditor/Palettes/Vapor.ZC\";;;PaletteSetVapor;;;" );
+
+Sys("PaletteSetAmicus;;;");
+
+Sys("mouse_hard.scale.x = mouse_hard.scale.y = mouse_hard.scale.z = 2.0;;;;");

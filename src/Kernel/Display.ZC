@@ -79,7 +79,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 			if (ch_bitmap & 1)
 				*framebuffer++ = WHITE32;
 			else
-				*framebuffer++ = BLACK32;
+				*framebuffer++ = RED32;
 			if (i & (FONT_WIDTH - 1) == FONT_WIDTH - 1)
 				framebuffer += sys_framebuffer_width - FONT_WIDTH;
 			ch_bitmap >>= 1;

@@ -1,0 +1,3 @@
+In("CC\n1\n\n\n\n\n");
+BootHDIns('c');
+//Reboot;

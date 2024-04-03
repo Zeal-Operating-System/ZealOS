@@ -119,3 +119,6 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 }
 
 //Cvt("Sup1/*");
+
+//TODO add flushmessages
+// TODO D( --> Dump(
