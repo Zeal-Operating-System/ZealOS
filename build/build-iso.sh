@@ -66,7 +66,7 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 $QEMU_BIN_PATH/qemu-system-x86_64 -machine q35 $KVM -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit $QEMU_HEADLESS
 
-LIMINE_BINARY_BRANCH="v6.x-branch-binary"
+LIMINE_BINARY_BRANCH="v8.x-binary"
 
 if [ -d "limine" ]
 then
@@ -110,7 +110,7 @@ sudo cp limine/limine-uefi-cd.bin $TMPISODIR/Boot/Limine-UEFI-CD.BIN
 sudo cp limine/limine-bios-cd.bin $TMPISODIR/Boot/Limine-BIOS-CD.BIN
 sudo cp limine/limine-bios.sys $TMPISODIR/Boot/Limine-BIOS.SYS
 sudo cp ../zealbooter/bin/kernel $TMPISODIR/Boot/ZealBooter.ELF
-sudo cp ../zealbooter/Limine.CFG $TMPISODIR/Boot/Limine.CFG
+sudo cp ../zealbooter/limine.conf $TMPISODIR/Boot/Limine.CONF
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
 sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
 sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
