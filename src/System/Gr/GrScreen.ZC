@@ -157,13 +157,15 @@ U0 GrZoomInScreen()
 	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
 	dst = gr.zoomed_dc->body;
 
-	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
+//	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
+	for (i = 0; i < gr.dc2->height / gr.screen_zoom; i++)
 	{
 		k = gr.screen_zoom;
 		while (k--)
 		{
 			src2 = src;
-			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
+//			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
+			for (l = 0; l < gr.dc2->width_internal / gr.screen_zoom; l++)
 			{
 				for (j = 0; j < gr.screen_zoom - 1; j++)
 					*dst++ = *src2;
@@ -171,7 +173,8 @@ U0 GrZoomInScreen()
 				*dst++ = *src2++;
 			}
 		}
-		src += GR_WIDTH;
+//		src += GR_WIDTH;
+		src += gr.dc2->width_internal;
 	}
 }
 
@@ -367,34 +370,62 @@ U0 GrCalcScreenUpdates()
 	else
 		screen = gr.zoomed_dc->body;
 
+/*
 	for (i = 0; i < diffs_size; i++)
 	{
 		if (screen[i] != last_screen[i])
 			dst[i] = src[i];
 	}
-	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+*/
+//	MemCopy(gr.screen_cache, screen, diffs_size * 2);
 }
 
 U0 GrUpdateScreen32()
 {
-	U64 size, *dst;
+//	U64 size, *dst;
+	U64 size;
+	U32 *dst;
 	U8 *src;
+	U64 x;
+	U64 y;
+	U64 w = sys_framebuffer_pitch / (sys_framebuffer_bpp / 8);
+	U64 wi;
+	U64 yi;
 
 	if (gr.screen_zoom == 1)
 	{
 		src = gr.dc2->body;
 		size = src + gr.dc2->height * gr.dc2->width_internal;
+		wi = gr.dc2->width_internal;
+		yi = gr.dc2->height;
 	}
 	else
 	{
 		GrZoomInScreen;
 		src = gr.zoomed_dc->body;
 		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
+		wi = gr.zoomed_dc->width_internal;
+		yi = gr.zoomed_dc->height;
+//		SysLog("%d\n", wi);
+//		SysLog("%d\n\n", yi);
 	}
-	dst = text.raw_screen;
-	while (src < size) //draw 2 pixels at a time
-		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
+//	dst = text.raw_screen;
+//	while (src < size) // need to do 1 pixel at a time...  //draw 2 pixels at a time
+//		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
 
+	for (y = 0; y < yi; y++)
+	{
+		for (x = 0; x < wi; x++)
+		{
+//			dst = text.raw_screen[x + (y * sys_framebuffer_width)];
+			dst = text.fb_alias + x + (y * w);
+//			dst = text.raw_screen + x + (y * w);
+//			*dst = gr_palette[*src++ & 0xFF];
+//			*dst = gr_palette[src[x + (y * sys_framebuffer_width)] & 0xFF];
+			*dst = gr_palette[src[x + (y * wi)] & 0xFF];
+//			*dst = 0xFFFF0000;
+		}
+	}
 
 	GrCalcScreenUpdates;
 
