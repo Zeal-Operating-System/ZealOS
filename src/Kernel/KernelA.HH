@@ -1272,7 +1272,7 @@ public class CDocBin
 #assert !($$ & 7)
 };
 
-#define DOC_SCROLL_SPEED	8
+#define DOC_SCROLL_SPEED	6
 
 #define DOCSS_NORMAL			0
 #define DOCSS_SINGLE_QUOTE		1
