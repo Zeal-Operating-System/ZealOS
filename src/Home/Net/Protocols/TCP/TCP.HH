@@ -6,7 +6,10 @@
 #define TCP_RTO_MIN		0.2
 #define TCP_RTO_MAX		10
 
-#define TCP_WINDOW_SIZE	8192
+#define TCP_WINDOW_SIZE	8192 // Should not be static. For now it's okay
+
+U16 RECEIVE_WINDOW; // gets host window size. It is not static.
+U16 SEND_WINDOW; // gets receive window size from host, then adjust accordingly. 
 
 #define TCP_MSS			536 // Max Segment Size default
 
@@ -24,7 +27,7 @@
 #define TCP_STATE_LAST_ACK		9
 #define TCP_STATE_TIME_WAIT		10
 
-// TCP header flags. Test with Bt(), e.g. Bt(&flags, TCPf_RST)
+// TCP header flags. Order of Operation matters. Test with Bt(), e.g. Bt(&flags, TCPf_RST)
 #define TCPf_FIN	0
 #define TCPf_SYN	1
 #define TCPf_RST	2
