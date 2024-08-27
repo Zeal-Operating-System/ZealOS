@@ -101,7 +101,7 @@ I64 TCPPacketAllocate(U8 **frame_out,
 	header->ack_num				= EndianU32(ack_num);
 	header->data_offset			= (sizeof(CTCPHeader) / 4) << 4; // ???
 	header->flags				= flags;
-	header->window_size			= EndianU16(TCP_WINDOW_SIZE);// Window Size allocation data. Adjusted based on receive window. 
+	header->window_size			= EndianU16(WINDOW_SIZE);// Window Size allocation data. Adjusted based on receive window. 
 	header->checksum			= 0;
 	header->urgent_pointer		= 0;
 

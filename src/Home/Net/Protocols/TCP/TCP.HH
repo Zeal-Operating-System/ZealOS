@@ -6,8 +6,8 @@
 #define TCP_RTO_MIN		0.2
 #define TCP_RTO_MAX		10
 
-#define TCP_WINDOW_SIZE	8192 // Should not be static. For now it's okay
-
+// #define TCP_WINDOW_SIZE	8192 // Should not be static. For now it's okay
+U16 WINDOW_SIZE; // Init window size in CTPCPacketAllocate{} ?? Need more study
 U16 RECEIVE_WINDOW; // gets host window size. It is not static.
 U16 SEND_WINDOW; // gets receive window size from host, then adjust accordingly. 
 
