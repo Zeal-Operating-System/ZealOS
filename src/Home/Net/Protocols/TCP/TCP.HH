@@ -11,6 +11,8 @@
 U16 RECEIVE_WINDOW; // gets host window size. It is not static.
 U16 SEND_WINDOW; // gets receive window size from host, then adjust accordingly. 
 
+U32 RECEIVE_BUFFER; // is 32 too much? receive_buffer holds TCP data that has not yet been processed
+
 #define TCP_MSS			536 // Max Segment Size default
 
 #define TCP_TIMEOUT		5000

@@ -647,8 +647,8 @@ CTCPSocket TCPSocket(U16 domain=AF_UNSPEC)
 	QueueInit(accept_queue); // init pending connection queue
 	tcp_socket->accept_queue = accept_queue;
 
-	tcp_socket->receive_buffer_size = RECEIVE_WINDOW;
-	tcp_socket->receive_buffer = CAlloc(RECEIVE_WINDOW);
+	tcp_socket->receive_buffer_size = RECEIVE_BUFFER;
+	tcp_socket->receive_buffer = CAlloc(RECEIVE_BUFFER);
 
 	tcp_socket->max_segment_size = TCP_MSS;
 
