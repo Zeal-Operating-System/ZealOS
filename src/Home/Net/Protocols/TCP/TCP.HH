@@ -2,20 +2,28 @@
 
 #define TCP_SRTT_ALPHA	0.9
 
+// Transmission Time Out to prevent network slugglish performance
 #define TCP_RTO_BETA	2
-#define TCP_RTO_MIN		0.2
-#define TCP_RTO_MAX		10
+#define TCP_RTO_MIN		JIFFY_FREQ/5 // (linux TCP.H) should be using system timer/clock instead hardcoded
+#define TCP_RTO_MAX		120*JIFFY_FREQ // JIFFY_FREZ = Hz. Hz is software clock ticks
 
-// #define TCP_WINDOW_SIZE	8192 // Should not be static. For now it's okay
-U16 WINDOW_SIZE; // Init window size in CTPCPacketAllocate{} ?? Need more study
-U16 RECEIVE_WINDOW; // gets host window size. It is not static.
-U16 SEND_WINDOW; // gets receive window size from host, then adjust accordingly. 
+#define TCP_MAX_WINDOW	32676	// Beyond this number, use window_scale(not implemented). 8192 is recommended/default.
+U16 WINDOW_SIZE; 		// Initiate window size in CTPCPacketAllocate{} ?? Need more study
+U16 RECEIVE_WINDOW; 		// gets host window size. It is not static.
+U16 SEND_WINDOW; 		// gets receive window size from host, then adjust accordingly.
 
-U32 RECEIVE_BUFFER; // is 32 too much? receive_buffer holds TCP data that has not yet been processed
+U32 RECEIVE_BUFFER; 		// is 32 too much? receive_buffer holds TCP data that has not yet been processed
 
 #define TCP_MSS			536 // Max Segment Size default
+#define TCP_MIN_MSS		88  // Min Segment Size
 
-#define TCP_TIMEOUT		5000
+#define TCP_INIT_TIMEOUT	1*JIFFY_FREQ  // TODO... Init RTO Value. Not sure if this is needed.
+#define TCP_TIMEOUT		20*JIFFY_FREQ // Roughly a minute based on software clock
+#define TCP_KEEPALIVE		120*JIFFY_FREQ // TODO... 1 hour
+
+#define TCP_MAX_INCREASEACK	16 //TODO... At Initial start up, it's generally slow. This accelerates the process.
+#define TCP_MAX_DELAYACK	JIFFY_FREQ/5 //TODO... Delay max time ack
+#define TCP_MIN_DELAYACK	JIFFY_FREQ/25 //TODO... Delay min time ack
 
 #define TCP_STATE_CLOSED		0
 #define TCP_STATE_LISTEN		1
@@ -43,6 +51,8 @@ U32 RECEIVE_BUFFER; // is 32 too much? receive_buffer holds TCP data that has no
 //#define TCPF_PSH	(1 << TCPf_PSH) // most stacks don't implement PUSH.
 #define TCPF_ACK	(1 << TCPf_ACK)
 //#define TCPF_URG	(1 << TCPf_URG) // most stacks don't implement URGENT.
+
+// U32 TCP_MAX_DELAYACK(CSocket *Socket); // TODO 
 
 
 class CTCPAckQueue:CQueue
