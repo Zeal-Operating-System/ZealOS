@@ -384,7 +384,7 @@ U0 GrCalcScreenUpdates()
 			}
 		}
 	}
-	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+	MemCopy(gr.screen_cache, screen, diffs_size);
 }
 
 U0 GrUpdateScreen32()
