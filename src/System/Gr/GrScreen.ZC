@@ -157,15 +157,13 @@ U0 GrZoomInScreen()
 	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
 	dst = gr.zoomed_dc->body;
 
-//	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
-	for (i = 0; i < gr.dc2->height / gr.screen_zoom; i++)
+	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
 	{
 		k = gr.screen_zoom;
 		while (k--)
 		{
 			src2 = src;
-//			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
-			for (l = 0; l < gr.dc2->width_internal / gr.screen_zoom; l++)
+			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
 			{
 				for (j = 0; j < gr.screen_zoom - 1; j++)
 					*dst++ = *src2;
@@ -173,8 +171,7 @@ U0 GrZoomInScreen()
 				*dst++ = *src2++;
 			}
 		}
-//		src += GR_WIDTH;
-		src += gr.dc2->width_internal;
+		src += GR_WIDTH;
 	}
 }
 
@@ -389,31 +386,23 @@ U0 GrCalcScreenUpdates()
 
 U0 GrUpdateScreen32()
 {
-	U64 size, x, y, wi, yi, w = sys_framebuffer_pitch / (sys_framebuffer_bpp / 8);
+	U64 x, y, wi, yi, w = sys_framebuffer_pitch / (sys_framebuffer_bpp / 8);
 	U32 *dst;
 	U8 *src;
 
 	if (gr.screen_zoom == 1)
-	{
 		src = gr.dc2->body;
-		size = src + gr.dc2->height * gr.dc2->width_internal;
-		wi = gr.dc2->width_internal;
-		yi = gr.dc2->height;
-	}
 	else
 	{
 		GrZoomInScreen;
 		src = gr.zoomed_dc->body;
-		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
-		wi = gr.zoomed_dc->width_internal;
-		yi = gr.zoomed_dc->height;
 	}
-	for (y = 0; y < yi; y++)
+	for (y = 0; y < GR_HEIGHT; y++)
 	{
-		for (x = 0; x < wi; x++)
+		for (x = 0; x < GR_WIDTH; x++)
 		{
 			dst = text.raw_screen + x + y * w;
-			*dst = gr_palette[src[x + y * wi] & 0xFF];
+			*dst = gr_palette[src[x + y * GR_WIDTH] & 0xFF];
 		}
 	}
 
