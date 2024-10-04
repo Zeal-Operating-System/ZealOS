@@ -1,43 +1,40 @@
 # Nuke built-in rules and variables.
-override MAKEFLAGS += -rR
+MAKEFLAGS += -rR
+.SUFFIXES:
 
 # This is the name that our final executable will have.
 # Change as needed.
 override OUTPUT := kernel
 
 # Convenience macro to reliably declare user overridable variables.
-define DEFAULT_VAR =
-    ifeq ($(origin $1),default)
-        override $(1) := $(2)
-    endif
-    ifeq ($(origin $1),undefined)
-        override $(1) := $(2)
-    endif
-endef
+override USER_VARIABLE = $(if $(filter $(origin $(1)),default undefined),$(eval override $(1) := $(2)))
 
 # User controllable C compiler command.
-override DEFAULT_KCC := cc
-$(eval $(call DEFAULT_VAR,KCC,$(DEFAULT_KCC)))
+$(call USER_VARIABLE,KCC,cc)
 
 # User controllable linker command.
-override DEFAULT_KLD := ld
-$(eval $(call DEFAULT_VAR,KLD,$(DEFAULT_KLD)))
+$(call USER_VARIABLE,KLD,ld)
 
 # User controllable C flags.
-override DEFAULT_KCFLAGS := -g -O2 -pipe
-$(eval $(call DEFAULT_VAR,KCFLAGS,$(DEFAULT_KCFLAGS)))
+$(call USER_VARIABLE,KCFLAGS,-g -O2 -pipe)
 
 # User controllable C preprocessor flags. We set none by default.
-override DEFAULT_KCPPFLAGS :=
-$(eval $(call DEFAULT_VAR,KCPPFLAGS,$(DEFAULT_KCPPFLAGS)))
+$(call USER_VARIABLE,KCPPFLAGS,)
 
 # User controllable nasm flags.
-override DEFAULT_KNASMFLAGS := -F dwarf -g
-$(eval $(call DEFAULT_VAR,KNASMFLAGS,$(DEFAULT_KNASMFLAGS)))
+$(call USER_VARIABLE,KNASMFLAGS,-F dwarf -g)
 
 # User controllable linker flags. We set none by default.
-override DEFAULT_KLDFLAGS :=
-$(eval $(call DEFAULT_VAR,KLDFLAGS,$(DEFAULT_KLDFLAGS)))
+$(call USER_VARIABLE,KLDFLAGS,)
+
+# Check if KCC is Clang.
+override KCC_IS_CLANG := $(shell ! $(KCC) --version 2>/dev/null | grep 'clang' >/dev/null 2>&1; echo $$?)
+
+# If the C compiler is Clang, set the target as needed.
+ifeq ($(KCC_IS_CLANG),1)
+    override KCC += \
+        -target x86_64-unknown-none
+endif
 
 # Internal C flags that should not be changed by the user.
 override KCFLAGS += \
