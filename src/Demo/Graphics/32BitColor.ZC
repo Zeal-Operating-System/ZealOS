@@ -4,7 +4,7 @@
 
 I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 {
-	text.fb_alias[x + y * GR_WIDTH] = color;
+	text.fb_alias[x + y * sys_framebuffer_width] = color;
 }
 
 I0 Color32Demo()

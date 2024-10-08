@@ -74,6 +74,12 @@ else
 	sudo modprobe nbd
 	[ ! -d $TMPMOUNT ] && mkdir $TMPMOUNT
 	case $1 in
+		flush)
+			mount_vdisk
+			sudo blockdev --flushbufs /dev/nbd0
+			sudo dosfsck -w -r -l -v -t /dev/nbd0
+			umount_vdisk
+			;;
 		diff)
 			mount_vdisk
 			diff -x *.MAP --color=always -r ../src/ $TMPMOUNT/ | less -R -p "diff -x.*|Only in.*"
