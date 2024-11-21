@@ -44,9 +44,11 @@ I0 DrawScreenChar(I64 x, I64 y, I64 char)
 {
 	I64 i, j;
 
+	U8 *fontPointer = text.font(U8*) + (char & 0xFF) * FONT_HEIGHT;
+
 	for (i = 0; i < FONT_HEIGHT; i++)
 		for (j = 0; j < FONT_WIDTH; j++)
-			if ((text.font[char] >> (i * 8)) & (1 << j))
+			if (Bt(fontPointer, i * FONT_WIDTH + j))
 				DrawScreenPixel(x + j, y + i, BLACK32);
 }
 

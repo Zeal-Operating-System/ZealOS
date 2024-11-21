@@ -145,155 +145,40 @@ _DC_BLOT_COLOR4::
 				POP 		RSI
 				POP 		RBP
 				RET1		32
-//************************************
-_IS_PIX_COVERED0::
-				PUSH		RBP
-				MOV 		RBP, RSP
-#assert FONT_WIDTH == FONT_HEIGHT == 8
-				MOV 		RCX, U64 SF_ARG3[RBP]
-				SAR 		RCX, 3
-				MOV 		RAX, U64 SF_ARG2[RBP]
-				SAR 		RAX, 3
-				MOV 		RDX, U64 SF_ARG1[RBP]
-				IMUL2		RCX, TEXT_COLS
-				MOV 		RBX, U64 [&gr.win_z_buf]
-				MOV 		DX,  U16 CTask.win_z_num[RDX]
-				ADD 		RCX, RAX
-				XOR 		RAX, RAX
-				CMP 		DX, U16 [RBX + RCX * 2]
-				JAE 		@@05		//Jump not covered
-				INC 		RAX
-@@05:			POP 		RBP
-				RET1		24
-//************************************
-_GR_ROP_EQU_U8_NO_CLIPPING::
-//Puts foreground char shape onto gr.dc2.
-//ch.u8[1] is color as a whole byte
-//ch ATTRf_UNDERLINE attr flag is used.
-				PUSH		RBP
-				MOV 		RBP, RSP
-				MOVZX		RAX, U8 SF_ARG1[RBP]
-				MOV 		RDX, U64 [&text.font]
-				MOV 		RAX, U64 [RDX + RAX * 8] 		//RAX is 8x8 char font data, 64-bits
-				BT			U64 SF_ARG1[RBP], ATTRf_UNDERLINE
-				JNC 		@@05
-				MOV 		RBX, 0xFF00000000000000
-				OR			RAX, RBX
-@@05:			TEST		RAX, RAX
-				JZ			I32 @@10
+}
 
-				PUSH		RSI
-				PUSH		RDI
-				MOVZX		RBX, U8 SF_ARG1 + 1[RBP] 	//Warning color is 8-bit
-				MOV 		RDX, U64 [&gr.to_8_colors]
-				MOV 		R8,  U64 [RDX + RBX * 8]			//R8 is color repeated 8 times.
-				MOV 		R9,  U64 SF_ARG3[RBP] 		//R9 is width_internal
-				MOV 		RDI, U64 SF_ARG2[RBP]
-				MOV 		RSI, U64 [&gr.to_8_bits] //RSI is gr.to_8_bits
+U0 GrRopEquU8NoClipping(I64 ch, U8 reg *dst, I64 width_internal)
+{ // render the Font to the Display contexts frame buffer
+	U8 *fontPointer = text.font(U8*) + ((ch & &0xFF) * FONT_HEIGHT),
+		reg fgColor = ch.u8[1]; 
+	U64 ix = FONT_WIDTH -1, i = 0, colInc = width_internal - FONT_WIDTH;
 
-//			m=my_1_to_8_bits[ch&255];ch>>=8;
-//			*dst=*dst&~m|c&m;
-//			dst(U8 *)+=w1;
+	for (; i < FONT_WIDTH * FONT_HEIGHT; i++) {
+		if (Bt(fontPointer, i)) {
+			*dst = fgColor;
+		}
+		dst++;
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
+		if (i & ix == ix) {
+			dst += colInc;
+		}
+	}
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
+	if (ch & ATTRF_UNDERLINE && DISPLAY_UNDERLINE) {
+		dst -= width_internal;
+		for (i = 0; i < FONT_WIDTH; i++, dst++) {
+			*dst = fgColor;
+		}
+	}
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
+}
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
+Bool IsPixCovered0(CTask *task, I64 x, I64 y)//No clipping
+{// No Clipping
+	U64 offset = (y / FONT_HEIGHT) * TEXT_COLS + (x / FONT_WIDTH);
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
+	// is this the task drawing this char
+	return gr.win_z_buf[offset] == (task->win_z_num -1);
+}
 
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
-
-				MOVZX		RBX, AL
-				MOV 		RDX, U64 [RSI + RBX * 8]
-				SHR 		RAX, 8
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-				ADD 		RDI, R9
-
-				MOV 		RDX, U64 [RSI + RAX * 8]
-				MOV 		RBX, U64 [RDI]
-				MOV 		RCX, RDX
-				NOT 		RCX
-				AND 		RDX, R8
-				AND 		RCX, RBX
-				OR			RCX, RDX
-				MOV 		U64 [RDI], RCX
-
-				POP 		RDI
-				POP 		RSI
-@@10:			POP 		RBP
-				RET1		24
-};
-
-_extern			_GR_ROP_EQU_U8_NO_CLIPPING	U0	 GrRopEquU8NoClipping(I64 ch, U8 *dst, I64 width_internal);
-public _extern	_IS_PIX_COVERED0			Bool IsPixCovered0(CTask *task, I64 x, I64 y);//No clipping
 _extern			_DC_BLOT_COLOR4				U0	 DCBlotColor4(U8 *dst, I64 *img, I64 *img_cache, I64 count);
