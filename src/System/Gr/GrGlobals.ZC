@@ -47,7 +47,7 @@ public CBGR24 gr_palette[COLORS_NUM];
 //See $LK,"SysGrInit",A="MN:SysGrInit"$()
 //Allows consts to be used instead of variables.
 HashPublic("GR_WIDTH", HTT_DEFINE_STR);;
-DefinePrint("GR_WIDTH", "%d", sys_framebuffer_width);
+DefinePrint("GR_WIDTH", "%d", sys_framebuffer_width & ~7);
 HashPublic("GR_HEIGHT", HTT_DEFINE_STR);;
 DefinePrint("GR_HEIGHT", "%d", sys_framebuffer_height);
 
@@ -56,3 +56,5 @@ DefinePrint("TEXT_ROWS", "%d", text.rows);;
 HashPublic("TEXT_ROWS", HTT_DEFINE_STR);;
 DefinePrint("TEXT_COLS", "%d", text.cols);;
 HashPublic("TEXT_COLS", HTT_DEFINE_STR);;
+
+sys_framebuffer_pidth = sys_framebuffer_pitch / (sys_framebuffer_bpp / 8);
