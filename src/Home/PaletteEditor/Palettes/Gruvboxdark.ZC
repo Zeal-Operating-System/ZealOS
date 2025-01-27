@@ -1,0 +1,11 @@
+// Credit: Tsoding - from TempleOS AoC 2021 Stream -- Modified: Z8Griz
+public CBGR24 gr_palette_gruvboxdark[COLORS_NUM] = {
+0xEBDBB2, 0x458588, 0x98971A, 0x689D6A, 0xCC241D, 0xB16286, 0xFE8019, 0x3C3836, 0x504945, 0x83A598, 0xB8BB26, 0x8EC07C, 0xFB4934, 0xD3869B, 0xFABD2F, 0x282828
+};
+public U0 PaletteSetGruvboxdark(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_gruvboxdark);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetGruvboxdark;
+}
