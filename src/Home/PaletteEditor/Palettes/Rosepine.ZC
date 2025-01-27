@@ -1,4 +1,4 @@
-// OG Credit: bubstance -- Modified: Z8Griz
+// Credit: bubstance -- Modified: Z8Griz
 public CBGR24 gr_palette_Rosepine[COLORS_NUM] = {
   0xE0DEF4, 0x286983, 0x9CCFD8, 0xEBBCBA, 0xEB6F92, 0x907AA9, 0xB4637A, 0x393552, 0x6E6A86, 0x9893A5, 0x56949F, 0xEA9A97, 0xD7827E, 0xC4A7E7, 0xF6C177, 0x191724 
 };
