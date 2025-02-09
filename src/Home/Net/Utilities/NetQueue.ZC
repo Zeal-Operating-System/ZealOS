@@ -68,5 +68,32 @@ U0 NetQueuePush(U8 *data, I64 length)
 	MPInt(I_NETHANDLER, INT_DEST_CPU);
 }
 
+U0 NetQueueLazyPull()
+{
+	PUSHFD
+	CLI
+
+	if (net_queue->next != net_queue)
+	{
+		NetLog("NETQUEUE LAZY PULL: Generating NetHandler interrupt.");
+		MPInt(I_NETHANDLER, INT_DEST_CPU);
+	}
+
+	POPFD
+}
+
+U0 NetQueueLazyPush(U8 *data, I64 length)
+{ // Push into NetQueue, don't trigger interrupt in this func.
+  // Trigger interrupt by Spawn-ing another Task to check queue.
+
+	CNetQueueEntry *entry = CAlloc(sizeof(CNetQueueEntry));
+
+	entry->packet_length = length;
+	MemCopy(entry->frame, data, length);
+	QueueInsert(entry, net_queue->last);
+
+	Spawn(&NetQueueLazyPull,, "NetQueueLazyPull");
+}
 
 NetQueueInit;
+

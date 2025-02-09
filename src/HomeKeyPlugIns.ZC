@@ -110,6 +110,16 @@ Bool MyPutKey(I64 ch, I64 sc)
 						}
 						return TRUE;
 
+					case SC_F12:
+						if (!(sc & SCF_SHIFT))
+						{
+							if (sc & SCF_KEY_DESC)
+								KeyDescSet("Cmd /SysLogToggle");
+							else
+								SysLogToggle;
+						}
+						return TRUE;
+
 					case SC_DELETE:
 						if (sc & SCF_SHIFT)
 						{
@@ -203,30 +213,30 @@ Bool MyPutKey(I64 ch, I64 sc)
 
 			case '1':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ã");
+					KeyDescSet("Dol /Ï€");
 				else
-					'ã';
+					'Ï€';
 				return TRUE;
 
 			case '2':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /é");
+					KeyDescSet("Dol /Î˜");
 				else
-					'é';
+					'Î˜';
 				return TRUE;
 
 			case '3':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /è");
+					KeyDescSet("Dol /Î¦");
 				else
-					'è';
+					'Î¦';
 				return TRUE;
 
 			case '4':
 				if (sc & SCF_KEY_DESC)
-					KeyDescSet("Dol /ê");
+					KeyDescSet("Dol /Î©");
 				else
-					'ê';
+					'Î©';
 				return TRUE;
 
 			case '9':

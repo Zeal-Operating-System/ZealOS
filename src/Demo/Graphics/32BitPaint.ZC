@@ -32,12 +32,12 @@ U0 PaintGlobalsInit()
 
 I0 DrawImagePixel(I64 x, I64 y, CBGR24 color)
 {
-	paint.fb[x + y * GR_WIDTH] = color;
+	paint.fb[x + y * sys_framebuffer_width] = color;
 }
 
 I0 DrawScreenPixel(I64 x, I64 y, CBGR24 color)
 {
-	text.fb_alias[x + y * GR_WIDTH] = color;
+	text.fb_alias[x + y * sys_framebuffer_width] = color;
 }
 
 I0 DrawScreenChar(I64 x, I64 y, I64 char)
@@ -136,7 +136,7 @@ U0 PaintLoadImage()
 
 U32 PaintImagePeek(I64 x, I64 y)
 {
-	return paint.fb[x + y * GR_WIDTH];
+	return paint.fb[x + y * sys_framebuffer_width];
 }
 
 I0 Paint32()
@@ -176,7 +176,7 @@ I0 Paint32()
 		// draw the image where the brush was last covering it
 		for (i = paint.last_x; i < paint.last_x + paint.last_thick; i++)
 			for (j = paint.last_y; j < paint.last_y + paint.last_thick; j++)
-				DrawScreenPixel(i, j, paint.fb[i + j * GR_WIDTH]);
+				DrawScreenPixel(i, j, paint.fb[i + j * sys_framebuffer_width]);
 
 		// draw the brush on the screen
 		DrawScreenBrush(mouse.pos.x, mouse.pos.y, paint.color, paint.thick);
@@ -193,7 +193,7 @@ I0 Paint32()
 		// draw the image where the color strings where covering it 
 		for (i = 0; i < 3 * FONT_HEIGHT; i++)
 			for (j = 0; j < 12 * FONT_WIDTH; j++)
-				DrawScreenPixel(j, i, paint.fb[j + i * GR_WIDTH]);
+				DrawScreenPixel(j, i, paint.fb[j + i * sys_framebuffer_width]);
 
 		// draw the color strings on screen
 		DrawScreenStr(0, 0 * FONT_HEIGHT, str_r);

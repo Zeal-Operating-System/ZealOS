@@ -249,7 +249,7 @@ public _extern SYS_FRAMEBUFFER_WIDTH	U64	sys_framebuffer_width;
 public _extern SYS_FRAMEBUFFER_HEIGHT	U64	sys_framebuffer_height;
 public _extern SYS_FRAMEBUFFER_PITCH	U64	sys_framebuffer_pitch;
 public _extern SYS_FRAMEBUFFER_BPP		U8	sys_framebuffer_bpp;
-
+public									U64	sys_framebuffer_pidth;
 _extern SYS_FRAMEBUFFER_LIST CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
 
 #help_index "Processor/SMBIOS"
@@ -258,5 +258,6 @@ public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;
 #help_index ""
 public _extern SYS_DISK_UUID  U64	sys_disk_uuid[2];
 public _extern SYS_IS_UEFI_BOOTED	Bool	sys_is_uefi_booted;
+public _extern SYS_BOOTLOADER_ID	U8		sys_bootloader_id;
 
 #help_index ""

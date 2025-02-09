@@ -15,4 +15,6 @@
 *.hdd
 *.o
 *.d
-/zealbooter/limine.h
+/zealbooter/src/limine.h
+/zealbooter/bin
+/zealbooter/obj
