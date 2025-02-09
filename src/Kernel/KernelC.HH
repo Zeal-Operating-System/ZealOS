@@ -437,6 +437,7 @@ public extern I64 Scale2Mem(I64 min, I64 max, I64 limit=2*1024*1024*1024);
 public extern	U0		 SysErr( U8 *format, ...);
 public extern	U0		 SysWarn(U8 *format, ...);
 public extern	U0		 SysLog( U8 *format, ...);
+public extern   U0       SysLogToggle();
 public extern	I64		 ExeCmdLine(CCompCtrl *cc);
 public extern	U0		 JobDel(CJob *tmpc);
 public extern	I64		 JobsHandler(I64 run_flags, CTask *task=NULL);

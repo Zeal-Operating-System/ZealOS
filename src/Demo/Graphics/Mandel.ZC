@@ -1,0 +1,219 @@
+// Mandelbrot set explorer (multi-core).
+//
+// - Click-and drag to move around.
+// - PGUP/PGDN to zoom
+// - HOME/END to increase/decrease iterations
+// - ESC to exit
+
+I64 width = GR_WIDTH;
+I64 height = GR_HEIGHT;
+I64 iterations = 24;
+F64 xCenter = -0.5, yCenter = 0.0;
+F64 xExtent = 3.0;
+
+
+I64 numCores = mp_count - 1;
+
+// -------------------
+
+CDC* image;
+I64 rowsPerCore = height / numCores;
+I64 currentSequence;
+
+
+U0 MandelFrame(I64 core)
+{
+//  CDC* dc = DCAlias(image);
+  I64 mySequence = currentSequence;
+
+  I64 startX = 0;
+  I64 maxX = startX + width;
+  I64 startY = core * rowsPerCore;
+  I64 maxY = startY + rowsPerCore;
+
+  F64 xmin = xCenter - (xExtent / 2.0);
+  F64 xmax = xmin + xExtent;
+  F64 aspect = ToF64(width) / ToF64(height);
+  F64 ymin = yCenter - (xExtent / aspect / 2.0);
+  F64 ymax = ymin + (xExtent / aspect);
+
+  F64 x, y, x0, y0, x2, y2;
+  F64 xscale = (xmax - xmin) / ToF64(width);
+  F64 yscale = (ymax - ymin) / ToF64(height);
+  I64 iteration;
+  I64 px, py;
+
+  for (py = startY; py < maxY; py++) {
+    y0 = ymin + ToF64(py) * yscale;
+    if (mySequence != currentSequence)
+      break;
+
+    for (px = startX; px < maxX; px++) {
+      x = 0.0; y = 0.0;
+      x2 = 0.0; y2 = 0.0;
+      iteration = 0;
+      x0 = xmin + ToF64(px) * xscale;
+
+      while ((x2 + y2) < 4.0) {
+        y = (2.0 *x * y) + y0;
+        x = x2 - y2 + x0;
+        x2 = x * x;
+        y2 = y * y;
+        if (++iteration > iterations) {
+          break;
+        }
+      }
+
+/*       
+      if (iteration >= iterations) {
+        dc->color = BLACK;
+      } else {
+        dc->color = iteration & 15;
+      }
+      GrPlot0(dc, px, py);
+*/
+
+      // Instead of getting a DC handle
+      // every time, we can just poke
+      // into the body of the DC.
+      // (is that ok?)
+      if (iteration >= iterations)
+        image->body[py*width+px] = 15;
+      else
+        image->body[py*width+px] = iteration % 15;
+
+
+    }
+  }
+//  DCDel(dc);
+}
+
+U0 DrawIt(CTask *task, CDC *dc) {
+  image->flags |= DCF_NO_TRANSPARENTS;
+  GrBlot(dc, 0, 0, image);
+}
+
+U0 Mandel() {
+  SettingsPush;
+  AutoComplete;
+  WinBorder;
+  WinMax;
+
+  DocClear;
+  DCFill;  
+
+  Fs->win_inhibit = WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
+
+  I64 msg_code, arg1, arg2;
+  I64 i, j, lastx, lasty;
+  F64 aspect;
+  Bool moving = FALSE;
+  Bool renderFrame = TRUE;
+
+
+  // Make our own palette, if we like.
+  CBGR48 bgr;
+  for (i=0; i<COLORS_NUM; i++) {
+    j = 0xFFFF * i / (COLORS_NUM-1);
+    bgr.b = j;
+    bgr.g = j;
+    bgr.r = j;
+//    GrPaletteColorSet(i,bgr);
+  }
+
+
+  image = DCNew(width, height);
+
+  Fs->draw_it = &DrawIt;
+
+  while(TRUE) {
+
+    if (renderFrame) {
+      renderFrame = FALSE;
+      
+      currentSequence++;
+      for (i=0; i<numCores; i++) {
+        JobQueue(&MandelFrame, i, i+1);
+      }
+    }
+
+    msg_code = MessageGet(&arg1, &arg2,
+      1<<MESSAGE_KEY_DOWN + 1<<MESSAGE_MS_L_DOWN
+      + 1<<MESSAGE_MS_L_UP + 1<<MESSAGE_MS_MOVE);
+
+    switch(msg_code) {
+      case MESSAGE_MS_MOVE:
+        if (moving) {
+          renderFrame = TRUE;
+          xCenter += (xExtent / ToF64(width) * ToF64(lastx - arg1));
+          aspect = ToF64(width) / ToF64(height);
+          yCenter += (xExtent / aspect / ToF64(height) * (lasty - arg2));
+        }
+        lastx = arg1;
+        lasty = arg2;        
+        break;
+      case MESSAGE_MS_L_DOWN:
+        moving = TRUE;
+        break;
+      case MESSAGE_MS_L_UP:
+        moving = FALSE;
+        break;
+
+
+      case MESSAGE_KEY_DOWN:
+        switch(arg1) {
+          case 0:
+            U8 code = arg2.u8[0];
+            if (code == SC_PAGE_UP ||code == SC_PAGE_DOWN) {
+              F64 factor = 0.6666666;
+              if (code == SC_PAGE_DOWN) {
+                factor = 1.5;
+              }
+              aspect = ToF64(width) / ToF64(height);
+              F64 xmin = xCenter - (xExtent / 2.0);
+              F64 xmax = xmin + xExtent;
+              F64 xpos = xmin + (ToF64(lastx)*xExtent / ToF64(width));
+              F64 ymin = yCenter - (xExtent / aspect / 2.0);
+              F64 ymax = ymin + (xExtent / aspect);
+              F64 ypos = ymin + (ToF64(lasty) * xExtent / aspect / ToF64(height));
+
+              xmin = xpos - (xpos - xmin)*factor;
+              xmax = xpos + (xmax - xpos)*factor;
+              ymin = ypos - (ypos - ymin)*factor;
+              ymax = ypos = (ymax - ypos)*factor;
+
+              xExtent = xmax - xmin;
+              xCenter = xmin + xExtent/2.0;
+              yCenter = ymin + xExtent/aspect/2.0;
+              renderFrame = TRUE;
+            }
+            else if(code == SC_HOME) {
+              iterations++;
+              renderFrame = TRUE;
+            }
+            else if(code == SC_END) {
+              iterations--;
+              if (iterations < 2)
+                iterations = 2;
+              renderFrame = TRUE;
+            }
+            break;
+          case CH_ESC:
+          case CH_SHIFT_ESC:
+            goto m_done;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+m_done:
+  DCDel(image);
+  DCFill;
+  SettingsPop;
+}
+
+Mandel;

@@ -1,0 +1,69 @@
+name: Build ZealOS ISOs
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '**.md'
+      - 'screenshots/**'
+      - '**/LICENSE'
+  pull_request:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '**.md'
+      - 'screenshots/**'
+      - '**/LICENSE'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install build-essential git xorriso qemu-system-x86
+
+      - name: Enable KVM Group Perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run ISOs Build Script
+        timeout-minutes: 10
+        if: ${{ success() }}
+        run: |
+          cd build
+          ./build-iso.sh --headless
+          cd ..
+
+      - name: ISO Check
+        if: ${{ success() && hashFiles('./build/*.iso') == '' }}
+        run: |
+          echo "ISOs not built!"
+          exit 1
+
+      - name: Releasing Latest ISOs
+        if: ${{ success() && github.event_name == 'push'}}
+        uses: "GutPuncher/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Pre-Built ISOs [${{ github.sha }}]"
+          files: ./build/*.iso
+
+      - name: OK
+        if: ${{ success() }}
+        run: |
+          echo "Build OK"
