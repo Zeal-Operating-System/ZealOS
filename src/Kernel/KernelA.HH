@@ -1272,7 +1272,7 @@ public class CDocBin
 #assert !($$ & 7)
 };
 
-#define DOC_SCROLL_SPEED	8
+#define DOC_SCROLL_SPEED	6
 
 #define DOCSS_NORMAL			0
 #define DOCSS_SINGLE_QUOTE		1
@@ -3026,7 +3026,7 @@ class CAtapiModeWriteList
 #define FILEMASK_AOT	"*.ZC*;*.HH*;*.PRJ*"
 #define FILEMASK_SRC	"*.ZC*;*.HH*;*.IN*;*.PRJ*"
 #define FILEMASK_DD 	FILEMASK_SRC ";*.DD*"
-#define FILEMASK_TXT	FILEMASK_DD ";*.TXT*;*.CFG*"
+#define FILEMASK_TXT	FILEMASK_DD ";*.TXT*;*.CFG*;*.CONF*"
 #define FILEMASK_GR 	"*.GR*"
 
 #help_index "File/Low Level"
