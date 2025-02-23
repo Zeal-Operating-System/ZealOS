@@ -144,6 +144,44 @@ I64 FTPFileDownload(CTCPSocket *data_socket, U8 *dest)
 	return -1;
 }
 
+I64 FTPFileUpload(CTCPSocket *data_socket, U8 *source)
+{ // New upload function
+	CFile	*f;
+	I64		 read_bytes, total_sent = 0, res;
+	U8		 buf[BLK_SIZE];
+	I64		 offset;
+
+	progress4 = 0;
+	f = FOpen(source, "r");
+	if (!f)
+	{
+		ST_ERR_ST "Failed to open %s for reading\n", source;
+		return -1;
+	}
+
+	while ((read_bytes = FBlkRead(f, buf)) > 0)
+	{
+		offset = 0;
+		while (offset < read_bytes)
+		{
+			res = TCPSocketSend(data_socket, buf + offset, read_bytes - offset);
+			if (res <= 0)
+			{
+				ST_ERR_ST "Failed to send data\n";
+				FClose(f);
+				return -1;
+			}
+			offset += res;
+			total_sent += res;
+			progress4 += res;
+		}
+	}
+
+	FClose(f);
+	TCPSocketClose(data_socket);
+	return total_sent;
+}
+
 I64 FTPFileView(U8 *filename=NULL, CTask *parent=NULL, CTask **_pu_task=NULL)
 {
 	U8 *st = MStrPrint("Cd(\"%Q\");Plain(\"%Q\");", __DIR__, filename);
@@ -223,7 +261,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 	if (!hostname)
 		hostname = StrGet("\nEnter FTP server address (URL or IPV4): ");
 
-
 	if (!IPV4AddressParse(hostname, &addr))
 	{
 		error = DNSAddressInfoGet(hostname, NULL, &result);
@@ -238,7 +275,7 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 			if (current->family == AF_INET)
 			{
 				temp_ipv4 = current->address;
-				addr = EndianU32(temp_ipv4->address); // why does it need EndianU32
+				addr = EndianU32(temp_ipv4->address);
 				break;
 			}
 			current = current->next;
@@ -249,7 +286,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 			NetErr("FTP Client: Failed to resolve address.");
 			return -1;
 		}
-
 	}
 
 	ipv4_address.port				= EndianU16(port);
@@ -271,7 +307,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 
 	FTPMessageGet(message_socket, buf);
 
-
 	"\n\nType HELP for command list.\n\n";
 	while (TRUE)
 	{
@@ -282,7 +317,7 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 		{
 			switch (tk)
 			{
-				case TK_IDENT: // command
+				case TK_IDENT:
 					"COMMAND:%s\n", cc->cur_str;
 					for (i = 0; i < StrLen(cc->cur_str); i++)
 						cc->cur_str[i] = ToUpper(cc->cur_str[i]);
@@ -374,7 +409,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 							goto lex_done;
 						}
 
-
 						temp = MStrPrint("RETR %s\r\n", input_str);
 						TCPSocketSendString(message_socket, temp);
 						FTPFileDownload(data_socket, dest);
@@ -384,8 +418,62 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 							FTPFileView(dest);
 
 						goto lex_done;
+					}
+					else if (!StrCompare(cc->cur_str, "STOR") ||  // New STOR case
+							 !StrCompare(cc->cur_str, "PUT"))
+					{
+						StrFirstRemove(input_str, " ");
+						if (!StrCompare(input_str, ""))
+						{
+							ST_ERR_ST "Must provide argument!\n";
+							goto lex_done;
+						}
 
+						if (!FileExists(input_str))
+						{
+							ST_ERR_ST "File %s does not exist!\n", input_str;
+							goto lex_done;
+						}
 
+						U8 *remote_filename = FTPFilePrompt(input_str);
+						if (remote_filename == NULL)
+						{
+							ST_ERR_ST "Remote filename cannot be empty!";
+							goto lex_done;
+						}
+
+						TCPSocketSendString(message_socket, "PASV\r\n");
+						if (FTPReplyPassiveParse(message_socket, &data_ipv4) != 0)
+						{
+							ST_ERR_ST "Error parsing server response to PASV command!\n";
+							Free(remote_filename);
+							goto lex_done;
+						}
+
+						data_socket = TCPSocket(AF_INET);
+						data_socket->timeout = 2 * JIFFY_FREQ;
+
+						if (TCPSocketConnect(data_socket, &data_ipv4) != 0)
+						{
+							ST_ERR_ST "Failed to connect data socket!";
+							TCPSocketClose(data_socket);
+							Free(remote_filename);
+							goto lex_done;
+						}
+
+						temp = MStrPrint("STOR %s\r\n", remote_filename);
+						TCPSocketSendString(message_socket, temp);
+						Free(temp);
+						Free(remote_filename);
+
+						I64 upload_result = FTPFileUpload(data_socket, input_str);
+						if (upload_result < 0)
+							ST_ERR_ST "Upload failed!\n");
+						else
+							"\n%lld bytes uploaded successfully.\n", upload_result;
+
+						FTPMessageGet(message_socket, buf);
+						goto lex_done;
 					}
 					else if (!StrCompare(cc->cur_str, "VIEW")	||
 							 !StrCompare(cc->cur_str, "CAT"))
@@ -427,6 +515,12 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 						StrFirstRemove(input_str, " ");
 						if (!StrCompare(input_str, ""))
 						{
+							ST_ERR_ST "Must provide argument!\n");
+					else if (!StrCompare(cc->cur_str, "USER"))
+					{
+						StrFirstRemove(input_str, " ");
+						if (!StrCompare(input_str, ""))
+						{
 							ST_ERR_ST "Must provide argument!\n";
 							goto lex_done;
 						}
@@ -439,7 +533,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 						Free(temp);
 
 						goto lex_done;
-
 					}
 					else if (!StrCompare(cc->cur_str, "PASS"))
 					{
@@ -458,7 +551,6 @@ I64 FTPClient(U8 *hostname=NULL, U16 port=21)
 						Free(temp);
 
 						goto lex_done;
-
 					}
 					else if (!StrCompare(cc->cur_str, "QUIT") ||
 							 !StrCompare(cc->cur_str, "EXIT") ||
@@ -482,17 +574,16 @@ Command List:
 
 	(Alternate names separated by '/'; names case-insensitive)
 
-
-CWD/CD <path>		= Change Working Directory to <path>.
-LIST/DIR/LS			= List directory contents.
-PWD					= Print name of current directory.
-RETR/GET <file>		= Download copy of <file> from server.
-VIEW/CAT <file>		= Print the contents of <file> to the screen.
-USER <username>		= Set username to <username>.
-PASS <password>		= Set password to <password>.
-QUIT/EXIT/BYE		= End FTP session.\n\n";
+CWD/CD <path>      = Change Working Directory to <path>
+LIST/DIR/LS        = List directory contents
+PWD                = Print current directory
+RETR/GET <file>    = Download file from server
+STOR/PUT <file>    = Upload file to server
+VIEW/CAT <file>    = View file contents
+USER <username>    = Set username
+PASS <password>    = Set password
+QUIT/EXIT/BYE      = End session\n\n";
 					}
-
 					break;
 
 				default:
@@ -503,6 +594,6 @@ QUIT/EXIT/BYE		= End FTP session.\n\n";
 lex_done:
 		CompCtrlDel(cc);
 	}
-};
+}
 
 FTPClient;
