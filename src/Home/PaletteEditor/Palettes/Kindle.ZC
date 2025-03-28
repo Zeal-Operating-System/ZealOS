@@ -1,0 +1,12 @@
+// Credit: bubstance -- Modified and changed name for reasons: Z8Griz
+public CBGR24 gr_palette_kindle[COLORS_NUM] = {
+0xC2C2B0, 0x808080, 0xADADAD, 0xCCCCCC, 0x5F5F87, 0xA8A8A8, 0xE6E6E6, 0x4D4D4D, 0xBFBFBF, 0x808080, 0x424242, 0xCCCCCC, 0x5F5F87, 0xA8A8A8, 0x666666, 0x1C1C1C
+};
+public U0 PaletteSetKindle(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_kindle);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetKindle;
+}
+
