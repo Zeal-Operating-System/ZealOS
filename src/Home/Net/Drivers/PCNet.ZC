@@ -59,6 +59,7 @@
 #define PCNET_INT_TINTM		9	// Transmit Interrupt Mask
 #define PCNET_INT_RINTM		10	// Receive Interrupt Mask
 
+#define PCNET_FEATURE_ASTRPRCV	10
 #define PCNET_FEATURE_APADXMT	11
 
 #define PCNET_BCR_MISC_CONFIG_ASEL	1
@@ -147,7 +148,7 @@ U0 PCNetReset()
 
 	InU32(PCNetIOBaseGet + PCNET_DW_RESET);
 	InU16(PCNetIOBaseGet + PCNET_WD_RESET);
-	Busy(5); // OSDev says minimum 1 æS
+	Busy(5); // OSDev says minimum 1 ÂµS
 }
 
 U0 PCNet32BitModeEnable()
@@ -455,12 +456,25 @@ U0 PCNetInterruptCSRSet()
 U0 PCNetTXAutoPadEnable()
 {/* AMD PCNet datasheet p.1-958
 	Setting bit 11 (Auto Pad Transmit) allows
-	shoft transmit frames to be automatically
+	short transmit frames to be automatically
 	extended to 64 bytes. */
 
 	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
 
 	Bts(&csr, PCNET_FEATURE_APADXMT);
+
+	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
+}
+
+U0 PCNetRXAutoStripEnable()
+{/* AMD PCNet datasheet p.1-958
+	Setting bit 10 (Auto Strip Receive) allows
+	pad and FCS fields to be automatically
+	stripped. ONLY WORKS ON 802.3!!! */
+
+	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
+
+	Bts(&csr, PCNET_FEATURE_ASTRPRCV);
 
 	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
 }
@@ -563,6 +577,11 @@ I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 	return de_index;
 }
 
+U8 *EthernetMACGet()
+{
+	return pcnet.mac_address;
+}
+
 U0 PCNetTransmitPacketFinish(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
@@ -574,9 +593,21 @@ U0 PCNetTransmitPacketFinish(I64 de_index)
 				de_index, PCIBt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
-U0 EthernetFrameFinish(I64 de_index)
-{//Alias for driver Finish TX function.
+U0 NetDriverTransmitPacketFinish(I64 de_index)
+{//Alias for driver-specific Finish TX function.
 	PCNetTransmitPacketFinish(de_index);
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{
+	return pcnet.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{
+	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
+
+	return U16_MAX - (entry->status1 & 0xFFFF) + 1;
 }
 
 I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
@@ -604,7 +635,13 @@ I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 	NetDebug("PCNET RECEIVE PACKET: de_index incremented = 0x%0X", pcnet.current_rx_de_index);
 
 	*packet_buffer_out = pcnet.rx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
-	*packet_length_out = packet_length;
+
+	// ASTRPRCV causes 802.3 packets to be stripped and FCS to be checked
+	U16 ethertype = (*packet_buffer_out)[ETHERNET_ETHERTYPE_OFFSET + 1] | (*packet_buffer_out)[ETHERNET_ETHERTYPE_OFFSET] << 8;
+	if (ethertype < ETHERNET_v2_MTU)
+		*packet_length_out = ethertype;
+	else
+		*packet_length_out = packet_length - FCS_LENGTH;  // ethertype ii TODO: Validate FCS
 
 	return de_index;
 }
@@ -732,6 +769,8 @@ U0 PCNetInit()
 
 	PCNetTXAutoPadEnable;
 
+	PCNetRXAutoStripEnable;
+
 	PCNetAutoLinkSelect;
 
 	PCNetEnableFullDuplex;
@@ -807,11 +846,6 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	*packet_buffer_out = ethernet_frame + ETHERNET_MAC_HEADER_LENGTH;
 
 	return de_index;
-}
-
-U8 *EthernetMACGet()
-{
-	return pcnet.mac_address;
 }
 
 U0 NetStop()

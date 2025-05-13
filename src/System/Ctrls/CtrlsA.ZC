@@ -128,14 +128,14 @@ U0 DrawWinScroll(CDC *dc, CCtrl *c)
 	else
 		dc->color = s->color & 0xF;
 //	GrRect(dc, c->left, c->top, c->right - c->left + 1, c->bottom - c->top + 1);
-	GrPutS(dc, c->left, c->top, "Û");
+	GrPutS(dc, c->left, c->top, "â–ˆ");
 
 	if (c->flags & CTRLF_CLICKED)
 		dc->color = s->color & 0xF;
 	else
 		dc->color = s->color >> 4;
 //	GrRect(dc, c->left + 2, c->top + 2, c->right - c->left + 1 - 4, c->bottom - c->top + 1 - 4);
-	GrPutS(dc, c->left, c->top, "±");
+	GrPutS(dc, c->left, c->top, "â–’");
 
 }
 
@@ -340,9 +340,9 @@ U0 UpdateDerivedViewAnglesCtrl(CCtrl *c)
 	s->sx = ClampI64(RoundI64(s->sx, VIEWANGLES_SNAP), 0, VIEWANGLES_RANGE - 1);
 	s->sy = ClampI64(RoundI64(s->sy, VIEWANGLES_SNAP), 0, VIEWANGLES_RANGE - 1);
 	s->sz = ClampI64(RoundI64(s->sz, VIEWANGLES_SNAP), 0, VIEWANGLES_RANGE - 1);
-	s->ax = 2 * ã * s->sx / VIEWANGLES_RANGE;
-	s->ay = 2 * ã * s->sy / VIEWANGLES_RANGE;
-	s->az = 2 * ã * s->sz / VIEWANGLES_RANGE;
+	s->ax = 2 * Ï€ * s->sx / VIEWANGLES_RANGE;
+	s->ay = 2 * Ï€ * s->sy / VIEWANGLES_RANGE;
+	s->az = 2 * Ï€ * s->sz / VIEWANGLES_RANGE;
 }
 
 U0 LeftClickViewAngles(CCtrl *c, I64 x, I64 y, Bool)

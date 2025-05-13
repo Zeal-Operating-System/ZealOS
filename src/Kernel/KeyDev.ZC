@@ -179,7 +179,7 @@ U0 CtrlAltM(I64)
 
 U0 CtrlAltN(I64)
 {
-	LBts(sys_ctrl_alt_flags, CTRL_ALT_TAB);
+	LBts(sys_ctrl_alt_flags, CTRL_ALT_N);
 }
 
 U0 CtrlAltT(I64)

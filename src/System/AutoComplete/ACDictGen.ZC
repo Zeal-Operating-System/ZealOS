@@ -11,7 +11,7 @@ U0 ACDPreprocess(U8 *in_name, U8 *out_name)
 {/*
 <cr><nl>--> <nl>
 $$			--> $$$$
-\'89		--> ‰
+\'89		--> Ã«
 */
 	I64			 ch, i;
 	U8			*src, *dst;

@@ -44,11 +44,12 @@ DOCS_DIR=
 TMPMOUNT=/tmp/zealtmp
 
 print_usage() {
-	echo "Usage: $0 [ repo | vm ]"
-	echo
-	echo " repo - overwrites src/ with virtual disk contents."
-	echo " vm - overwrites virtual disk with src/ contents."
-	echo
+	echo "Usage: $0 ( repo | vm | diff ) [OPTION]"
+	echo "    repo             Overwrites src/ with virtual disk contents."
+	echo "    vm               Overwrites virtual disk with src/ contents."
+	echo "    diff             Runs a 'diff' between src/ and virtual disk."
+	echo "Options:"
+	echo "    --ignore-dots    Ignore dotfiles/dotfolders during synchronize."
 }
 
 mount_vdisk() {
@@ -73,6 +74,18 @@ else
 	sudo modprobe nbd
 	[ ! -d $TMPMOUNT ] && mkdir $TMPMOUNT
 	case $1 in
+		flush)
+			mount_vdisk
+			sudo blockdev --flushbufs /dev/nbd0
+			sudo dosfsck -w -r -l -v -t /dev/nbd0
+			umount_vdisk
+			;;
+		diff)
+			mount_vdisk
+			diff -x *.MAP --color=always -r ../src/ $TMPMOUNT/ | less -R -p "diff -x.*|Only in.*"
+			umount_vdisk
+			echo "Finished."
+			;;
 		repo)
 			echo "Emptying src..."
 			rm -rf ../src/*
@@ -90,12 +103,22 @@ else
 			umount_vdisk
 			[ -f ../src/Tmp/AUTO.ISO.C ] && mv ../src/Tmp/AUTO.ISO.C ./AUTO.ISO
 			echo "Finished."
+			cd ../
 			git status
 			;;
 		vm)
 			mount_vdisk
-			echo "Copying src to vdisk..."
-			sudo cp -r ../src/* $TMPMOUNT
+			case $2 in
+				--ignore-dots | --dots)
+					echo "Copying src to vdisk ignoring dotfiles and dotfolders..."
+					cd ../src/
+					sudo find . \( ! -path './.*' -and ! -name '.*' \) -and ! -path '*/.*/*' -type f -exec cp --parents {} $TMPMOUNT/ \;
+					;;
+				*)
+					echo "Copying entire src to vdisk..."
+					sudo cp -r ../src/* $TMPMOUNT
+					;;
+			esac
 			umount_vdisk
 			echo "Finished."
 			;;

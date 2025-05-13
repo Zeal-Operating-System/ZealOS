@@ -177,7 +177,7 @@ U0 UnitDirectFire(Unit *tmpu, Unit *target)
 		target_hit = FALSE;
 		Noise(1000 * animation_delay, 69, 74);
 		Sleep(1000 * animation_delay);
-		a = ã * 2 * Rand;
+		a = Ï€ * 2 * Rand;
 		d = (0.5 - d / 100) * HEX_SIDE;
 		Line(NULL, x1, y1, 0, x2 + d * Cos(a), y2 + d * Sin(a), 0, &BulletPlot);
 	}

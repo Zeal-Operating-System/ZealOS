@@ -85,11 +85,11 @@ Bool Blink(F64 Hz=2.5)
 	return ToI64(counts.jiffies * 2 * Hz / JIFFY_FREQ) & 1;
 }
 
-U0 Busy(I64 æS)
+U0 Busy(I64 ÂµS)
 {//Loosely timed.
 	I64 i;
 
-	for (i = 0; i < æS; i++)
+	for (i = 0; i < ÂµS; i++)
 		PortNop;
 }
 

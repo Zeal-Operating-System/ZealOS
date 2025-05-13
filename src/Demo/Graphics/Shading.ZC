@@ -60,8 +60,8 @@ U0 DrawIt(CTask *task, CDC *dc)
 {
 	CCtrl		*c = CtrlFindUnique(task, CTRLT_VIEWING_ANGLES);
 	CViewAngles	*s = c->state;
-	F64			 tt = 0.5 * (Sin(ã * 2 * (tS % 10.0) / 10.0) + 2.0), 
-				 é, é2, è, è2, radius, d;
+	F64			 tt = 0.5 * (Sin(Ï€ * 2 * (tS % 10.0) / 10.0) + 2.0), 
+				 Î˜, Î˜2, Î¦, Î¦2, radius, d;
 	I64			 i, j, cx = task->pix_width / 2, cy = task->pix_height / 2;
 	CD3I32		 poly[3], ls;
 
@@ -71,7 +71,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 	Mat4x4IdentEqu(dc->r);
 	Mat4x4RotZ(dc->r, s->az);
 	Mat4x4RotY(dc->r, s->ay);
-	Mat4x4RotX(dc->r, s->ax + ã);
+	Mat4x4RotX(dc->r, s->ax + Ï€);
 	Mat4x4Scale(dc->r, tt);
 	DCMat4x4Set(dc, dc->r);
 
@@ -90,60 +90,60 @@ U0 DrawIt(CTask *task, CDC *dc)
 
 	for (i = 0; i < RINGS; i++)
 	{
-		è  = i * ã / 2 / RINGS;
-		è2 = (i + 1) * ã / 2 / RINGS + SLOP;
+		Î¦  = i * Ï€ / 2 / RINGS;
+		Î¦2 = (i + 1) * Ï€ / 2 / RINGS + SLOP;
 		for (j = 0; j < FACES; j++)
 		{
-			é  = j * 2 * ã /FACES;
-			é2 = (j + 1) * 2 * ã / FACES + SLOP;
+			Î˜  = j * 2 * Ï€ /FACES;
+			Î˜2 = (j + 1) * 2 * Ï€ / FACES + SLOP;
 
 			//Upper half
-			poly[0].x = radius * Cos(è) * Cos(é);
-			poly[0].y = radius * Cos(è) * Sin(é);
-			poly[0].z = radius * Sin(è);
-			poly[1].x = radius * Cos(è) * Cos(é2);
-			poly[1].y = radius * Cos(è) * Sin(é2);
-			poly[1].z = radius * Sin(è);
-			poly[2].x = radius * Cos(è2) * Cos(é + 2 * ã / FACES / 2);
-			poly[2].y = radius * Cos(è2) * Sin(é + 2 * ã / FACES / 2);
-			poly[2].z = radius * Sin(è2);
+			poly[0].x = radius * Cos(Î¦) * Cos(Î˜);
+			poly[0].y = radius * Cos(Î¦) * Sin(Î˜);
+			poly[0].z = radius * Sin(Î¦);
+			poly[1].x = radius * Cos(Î¦) * Cos(Î˜2);
+			poly[1].y = radius * Cos(Î¦) * Sin(Î˜2);
+			poly[1].z = radius * Sin(Î¦);
+			poly[2].x = radius * Cos(Î¦2) * Cos(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[2].y = radius * Cos(Î¦2) * Sin(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[2].z = radius * Sin(Î¦2);
 			Lighting(dc, &ls, poly, BLUE);
 			GrFillPoly3(dc, 3, poly);
 
-			poly[2].x = radius * Cos(è2) * Cos(é + 2 * ã / FACES / 2);
-			poly[2].y = radius * Cos(è2) * Sin(é + 2 * ã / FACES / 2);
-			poly[2].z = radius * Sin(è2);
-			poly[1].x = radius * Cos(è2) * Cos(é2 + 2 * ã / FACES / 2);
-			poly[1].y = radius * Cos(è2) * Sin(é2 + 2 * ã / FACES / 2);
-			poly[1].z = radius * Sin(è2);
-			poly[0].x = radius * Cos(è) * Cos(é2);
-			poly[0].y = radius * Cos(è) * Sin(é2);
-			poly[0].z = radius * Sin(è);
+			poly[2].x = radius * Cos(Î¦2) * Cos(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[2].y = radius * Cos(Î¦2) * Sin(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[2].z = radius * Sin(Î¦2);
+			poly[1].x = radius * Cos(Î¦2) * Cos(Î˜2 + 2 * Ï€ / FACES / 2);
+			poly[1].y = radius * Cos(Î¦2) * Sin(Î˜2 + 2 * Ï€ / FACES / 2);
+			poly[1].z = radius * Sin(Î¦2);
+			poly[0].x = radius * Cos(Î¦) * Cos(Î˜2);
+			poly[0].y = radius * Cos(Î¦) * Sin(Î˜2);
+			poly[0].z = radius * Sin(Î¦);
 			Lighting(dc, &ls, poly, BLUE);
 			GrFillPoly3(dc, 3, poly);
 
 			//Lower half
-			poly[2].x =  radius * Cos(è) * Cos(é);
-			poly[2].y =  radius * Cos(è) * Sin(é);
-			poly[2].z = -radius * Sin(è);
-			poly[1].x =  radius * Cos(è) * Cos(é2);
-			poly[1].y =  radius * Cos(è) * Sin(é2);
-			poly[1].z = -radius * Sin(è);
-			poly[0].x =  radius * Cos(è2) * Cos(é + 2 * ã / FACES / 2);
-			poly[0].y =  radius * Cos(è2) * Sin(é + 2 * ã / FACES / 2);
-			poly[0].z = -radius * Sin(è2);
+			poly[2].x =  radius * Cos(Î¦) * Cos(Î˜);
+			poly[2].y =  radius * Cos(Î¦) * Sin(Î˜);
+			poly[2].z = -radius * Sin(Î¦);
+			poly[1].x =  radius * Cos(Î¦) * Cos(Î˜2);
+			poly[1].y =  radius * Cos(Î¦) * Sin(Î˜2);
+			poly[1].z = -radius * Sin(Î¦);
+			poly[0].x =  radius * Cos(Î¦2) * Cos(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[0].y =  radius * Cos(Î¦2) * Sin(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[0].z = -radius * Sin(Î¦2);
 			Lighting(dc, &ls, poly, RED);
 			GrFillPoly3(dc, 3, poly);
 
-			poly[0].x =  radius * Cos(è2) * Cos(é + 2 * ã / FACES / 2);
-			poly[0].y =  radius * Cos(è2) * Sin(é + 2 * ã / FACES / 2);
-			poly[0].z = -radius * Sin(è2);
-			poly[1].x =  radius * Cos(è2) * Cos(é2 + 2 * ã / FACES / 2);
-			poly[1].y =  radius * Cos(è2) * Sin(é2 + 2 * ã / FACES / 2);
-			poly[1].z = -radius * Sin(è2);
-			poly[2].x =  radius * Cos(è) * Cos(é2);
-			poly[2].y =  radius * Cos(è) * Sin(é2);
-			poly[2].z = -radius * Sin(è);
+			poly[0].x =  radius * Cos(Î¦2) * Cos(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[0].y =  radius * Cos(Î¦2) * Sin(Î˜ + 2 * Ï€ / FACES / 2);
+			poly[0].z = -radius * Sin(Î¦2);
+			poly[1].x =  radius * Cos(Î¦2) * Cos(Î˜2 + 2 * Ï€ / FACES / 2);
+			poly[1].y =  radius * Cos(Î¦2) * Sin(Î˜2 + 2 * Ï€ / FACES / 2);
+			poly[1].z = -radius * Sin(Î¦2);
+			poly[2].x =  radius * Cos(Î¦) * Cos(Î˜2);
+			poly[2].y =  radius * Cos(Î¦) * Sin(Î˜2);
+			poly[2].z = -radius * Sin(Î¦);
 			Lighting(dc, &ls, poly, RED);
 			GrFillPoly3(dc, 3, poly);
 		}

@@ -7,7 +7,7 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 
 * Low line count and low code complexity is the highest good, so it is easy to learn the whole thing.  Users should see the light at the end of the tunnel.
 
-* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"98,661",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned from being required$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
+* There is a limit of 100,000 lines of code for all time, not including applications and demos. Currently, there are $TX,"98,756",D="DD_ZEALOS_LOC"$ lines of code.  $FG,4$3rd party libraries are banned from being required$FG$ because they circumvent the intent of this limit.  The vision is a Commodore 64 ROM -- a fixed core API that is the only dependency of applications. Dependency on components and libraries creates a hell that is no longer blissful.
 
 * The primary metric for resolving all ZealOS code governance issues is how fast the compiler compiles itself and the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$(). The secondary metric is how understandable the code is. The $LK,"ZealC",A="FI:::/Doc/ZealC.DD"$ language should be changed to optimize these metrics, as Terry Davis did when he changed type casting from prefix to $LK+PU,"postfix",A="FF:::/Doc/ZealC.DD,postfix"$.
  
@@ -22,6 +22,8 @@ $FG,5$$WW,1$$TX+CX,"ZealOS Charter"$$FG$
 * $FG,4$No wireless$FG$ communications. Only wired communications like Ethernet and Serial IO will be used.
 
 * $FG,4$No GPU$FG$. We want one processing platform, the CPU, for everything.
+
+* $FG,4$No encryption$FG$, $FG,4$No compression$FG$. All formats, files, protocols, and algorithms must operate entirely in unobfuscated plain-text. Decrypting, encrypting, decompressing, and compressing creates redundant overhead that makes programs slow and complicated. Encoding/decoding of unencrypted uncompressed data in binary formats (.ZXE, .BIN, .GR, .GR32, DolDoc sprite binary data, etc.) is permitted.
 
 * Full access to everything.	All memory, I/O ports, instructions, and similar things must never be off limits.  All functions, variables and class members will be accessible.  There are no C++ $FG,2$public$FG$/$FG,2$private$FG$ protections and all functions, even secondary ones in the kernel, can be called.
 

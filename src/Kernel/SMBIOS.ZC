@@ -1,0 +1,75 @@
+//SMBIOS parsing.
+//See $LK+PU,"KDefine.ZC",A="FF:::/Kernel/KDefine.ZC,SMBIOS"$.
+//Based on SMBIOS specification 3.3.0 (document "DSP0134")
+
+Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry)
+{//Search 0xF0000 - 0x100000 for SMBIOS Entry Point structure.
+	I64		 i;
+	U8 noreg checksum = 0, *mem = 0xF0000;
+
+	if (sys_smbios_entry)
+	{
+		*entry = sys_smbios_entry;
+		return TRUE;
+	}
+
+	do
+	{
+		if (!MemCompare(mem, "_SM_", 4))
+		{
+			*entry = mem;
+			for (i = 0; i < (*entry)->length; i++)
+				checksum += mem[i];
+
+			if (checksum == 0) //valid checksums sum to zero
+				break;
+		}
+	}
+	while ((mem += 16) < 0x100000); //anchor sits on 16-byte boundary
+
+	return mem != 0x100000;
+}
+
+U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None")
+{//Get string str_num from end of structure (string section).
+	I64 i;
+	U8* ptr = header(U8 *) + header->length;
+
+	if (!str_num)
+		return default;
+
+	for (i = 1; i < str_num; i++)
+	{
+		while (*ptr++);
+		if (!ptr[0] && !ptr[1])  //structure ends in double NULL
+			return default;
+	}
+
+	return ptr;
+}
+
+CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHeader *head=NULL)
+{//Search for struct with type or handle. Return NULL if not found.
+	I64					 i;
+	CSMBIOSEntryPoint	*entry;
+
+	if (!head)
+	{
+		if (!SMBIOSEntryScan(&entry))
+			return NULL;
+		head = entry->table_address;
+	}
+	while (head->type != 127)
+	{
+		if (head->handle == handle)
+			return head;
+		if (head->type == type)
+			return head;
+
+		head = head(U8 *) + head->length;
+		for (i = 1; head(U8 *)[i - 1] || head(U8 *)[i]; i++);
+		head = head(U8 *) + i + 1;	
+	}
+
+	return NULL;
+}

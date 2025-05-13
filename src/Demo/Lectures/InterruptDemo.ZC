@@ -62,14 +62,14 @@ U0 TimeIns()
 	//Measure interrupt time
 	start = TSCGet;
 	for (i = 0; i < SAMPLE_SIZE; i++)
-		UnaryMinusInt(ã);
+		UnaryMinusInt(Ï€);
 	end = TSCGet;
 	"Interrupt Cycles: %10.5f\n", ToF64(end - start) / SAMPLE_SIZE;
 
 	//Measure call time
 	start = TSCGet;
 	for (i = 0; i < SAMPLE_SIZE; i++)
-		UnaryMinusCall(ã);
+		UnaryMinusCall(Ï€);
 	end = TSCGet;
 	"Call      Cycles: %10.5f\n", ToF64(end - start) / SAMPLE_SIZE;
 

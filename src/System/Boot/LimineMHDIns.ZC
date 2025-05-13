@@ -13,18 +13,18 @@ U8 binary_limine_hdd_bin_data[0];
 
 Bool LimineCFGMake(U8 drv_let)
 {
-	U8		*filename_cfg = MStrPrint("%C:/Boot/Limine.CFG", drv_let);
+	U8		*filename_cfg = MStrPrint("%C:/Boot/Limine.CONF", drv_let);
 	CDoc	*doc = DocNew(filename_cfg);
 	CDrive	*drive;
 	CBlkDev	*bd;
 	I64		 i;
 	U8		*filename_sys, *filename_elf, *filename_zxe, *st;
 
-	"\nGenerating Limine.CFG ...\n";
+	"\nGenerating Limine.CONF ...\n";
 
 	DocPrint(doc,
-		"TIMEOUT=2\n"
-		"INTERFACE_RESOLUTION=1024x768\n\n");
+		"timeout: 2\n"
+		"interface_resolution: 1024x768\n\n");
 
 	"Searching drives for Limine bootloader files ...\n";
 	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
@@ -39,15 +39,15 @@ Bool LimineCFGMake(U8 drv_let)
 			filename_zxe = MStrPrint("%C:/Boot/Kernel.ZXE", drv_let);
 			if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))
 			{
-				st = MStrPrint(":ZealOS %C:/\n"
-					"PROTOCOL=limine\n"
-					"RESOLUTION=1024x768\n"
-					"KERNEL_PATH=boot://%d/Boot/ZealBooter.ELF\n"
-					"MODULE_PATH=boot://%d/Boot/Kernel.ZXE\n"
+				st = MStrPrint("/ZealOS %C:/\n"
+					"protocol: limine\n"
+					"resolution: 1024x768\n"
+					"kernel_path: boot(%d):/Boot/ZealBooter.ELF\n"
+					"module_path: boot(%d):/Boot/Kernel.ZXE\n"
 					"\n", drv_let, drive->prt_num + 1, drive->prt_num + 1);
 
 				DocPrint(doc, st);
-				"%C:/ drive added as a Limine.CFG menu entry.\n", drv_let;
+				"%C:/ drive added as a Limine.CONF menu entry.\n", drv_let;
 			}
 			else
 				"%C:/ drive is missing Limine bootloader files.\n", drv_let;
@@ -56,9 +56,9 @@ Bool LimineCFGMake(U8 drv_let)
 	DocWrite(doc);
 	DocDel(doc);
 
-	"/Boot/Limine.CFG generated.\n";
+	"/Boot/Limine.CONF generated.\n";
 
-	"Copying Limine.CFG to all other drives ...\n";
+	"Copying Limine.CONF to all other drives ...\n";
 	for (i = 0, drive = blkdev.drvs; i < DRIVES_NUM; i++, drive++)
 	{
 		if (drive->drive_signature == DRIVE_SIGNATURE_VAL && drive->fs_type == FSt_FAT32 && DriveIsWritable(drive->drv_let))
@@ -66,7 +66,7 @@ Bool LimineCFGMake(U8 drv_let)
 			drv_let = Drive2Letter(drive);
 			if (FileFind(filename_sys) && FileFind(filename_elf) && FileFind(filename_zxe))
 			{
-				st = MStrPrint("%C:/Boot/Limine.CFG", drv_let);
+				st = MStrPrint("%C:/Boot/Limine.CONF", drv_let);
 				Copy(filename_cfg, st);
 			}
 		}

@@ -405,8 +405,8 @@ public U0 DiskView(U8 drv_let=0)
 		drive = &blkdev.drvs[i];
 		if (bd == drive->bd && drive->fs_type)
 		{
-			sect_start	= -(drive->drv_offset * 2 * ã / (bd->max_blk + 1));
-			sect_end	= -((drive->drv_offset + drive->size) * 2 * ã / (bd->max_blk + 1));
+			sect_start	= -(drive->drv_offset * 2 * Ï€ / (bd->max_blk + 1));
+			sect_end	= -((drive->drv_offset + drive->size) * 2 * Ï€ / (bd->max_blk + 1));
 			dc->color = BLACK;
 			GrLine(dc, h >> 1, v >> 1,
 					h >> 1 + radius * Cos(sect_start),
