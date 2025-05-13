@@ -142,8 +142,8 @@ public U0 GrScaleZoom(F64 scale)
 	mouse.offset.x = mouse.pos.x - (mouse.pos.x - mouse.offset.x) * s;
 	mouse.offset.y = mouse.pos.y - (mouse.pos.y - mouse.offset.y) * s;
 	mouse.offset.z = mouse.pos.z - (mouse.pos.z - mouse.offset.z) * s;
-	gr.sx = mouse.pos.x - gr.zoomed_dc->width  >> 1 / gr.screen_zoom;
-	gr.sy = mouse.pos.y - gr.zoomed_dc->height >> 1 / gr.screen_zoom;
+	gr.sx = mouse.pos.x - GR_WIDTH  >> 1 / gr.screen_zoom;
+	gr.sy = mouse.pos.y - GR_HEIGHT >> 1 / gr.screen_zoom;
 	GrFixZoomScale;
 }
 
@@ -154,7 +154,7 @@ U0 GrZoomInScreen()
 
 	GrFixZoomScale;
 
-	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
+	src = gr.dc2->body + gr.sx + gr.sy * GR_WIDTH;
 	dst = gr.zoomed_dc->body;
 
 	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
@@ -359,42 +359,53 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 
 U0 GrCalcScreenUpdates()
 {
-	U16 *screen, *last_screen = gr.screen_cache;
-	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+	U8 *screen, reg RCX *last_screen = gr.screen_cache;
+	U32 *src = text.raw_screen, *dst = text.fb_alias;
+	U64 i, j, x, y, yi;
 
 	if (gr.screen_zoom == 1)
 		screen = gr.dc2->body;
 	else
 		screen = gr.zoomed_dc->body;
 
-	for (i = 0; i < diffs_size; i++)
+	for (y = yi = 0; y < GR_HEIGHT; yi = ++y * GR_WIDTH)
 	{
-		if (screen[i] != last_screen[i])
-			dst[i] = src[i];
+		for (x = 0; x < GR_WIDTH; x++)
+		{
+			i = x + yi;
+			j = x + y * sys_framebuffer_pidth;
+			if (screen[i] != last_screen[i])
+			{
+				dst = text.fb_alias + j;
+				src = text.raw_screen + j;
+				*dst = *src;
+			}
+		}
 	}
-	MemCopy(gr.screen_cache, screen, diffs_size * 2);
+	MemCopy(gr.screen_cache, screen, GR_WIDTH * GR_HEIGHT);
 }
 
 U0 GrUpdateScreen32()
 {
-	U64 size, *dst;
+	U64 x, y, j, i;
+	U32 *dst;
 	U8 *src;
 
 	if (gr.screen_zoom == 1)
-	{
 		src = gr.dc2->body;
-		size = src + gr.dc2->height * gr.dc2->width_internal;
-	}
 	else
 	{
 		GrZoomInScreen;
 		src = gr.zoomed_dc->body;
-		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
 	}
-	dst = text.raw_screen;
-	while (src < size) //draw 2 pixels at a time
-		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
-
+	for (y = j = i = 0; y < GR_HEIGHT; j = ++y * sys_framebuffer_pidth, i = y * GR_WIDTH)
+	{
+		for (x = 0; x < GR_WIDTH; x++)
+		{
+			dst = text.raw_screen + x + j;
+			*dst = gr_palette[src[x + i] & 0xFF];
+		}
+	}
 
 	GrCalcScreenUpdates;
 
@@ -420,6 +431,6 @@ U0 GrUpdateScreen()
 		(*gr.fp_final_screen_update)(dc);
 	DCDel(dc);
 
-	DCBlotColor4(gr.dc1->body, gr.dc2->body, gr.dc_cache->body, gr.dc2->height * gr.dc2->width_internal >> 3);
+	DCBlotColor4(gr.dc1->body, gr.dc2->body, gr.dc_cache->body, GR_HEIGHT * GR_WIDTH >> 3);
 	GrUpdateScreen32;
 }

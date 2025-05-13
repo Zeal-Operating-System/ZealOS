@@ -66,7 +66,7 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 $QEMU_BIN_PATH/qemu-system-x86_64 -machine q35 $KVM -drive format=raw,file=$TMPDISK -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit $QEMU_HEADLESS
 
-LIMINE_BINARY_BRANCH="v8.x-binary"
+LIMINE_BINARY_BRANCH="v9.x-binary"
 
 if [ -d "limine" ]
 then
@@ -116,13 +116,13 @@ sudo mv $TMPMOUNT/Tmp/DVDKernel.ZXE $TMPISODIR/Boot/Kernel.ZXE
 sudo rm $TMPISODIR/Tmp/DVDKernel.ZXE 2> /dev/null
 umount_tempdisk
 
-xorriso -joliet "on" -rockridge "on" -as mkisofs -b Boot/Limine-BIOS-CD.BIN \
-        -no-emul-boot -boot-load-size 4 -boot-info-table \
-        --efi-boot Boot/Limine-UEFI-CD.BIN \
+xorriso -as mkisofs -R -r -J -b Boot/Limine-BIOS-CD.BIN \
+        -no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
+        -apm-block-size 2048 --efi-boot Boot/Limine-UEFI-CD.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
         $TMPISODIR -o ZealOS-limine.iso
 
-./limine/limine bios-install ZealOS-limine.iso
+./limine/limine bios-install ZealOS-limine.iso --no-gpt-to-mbr-isohybrid-conversion
 
 if [ "$TESTING" = true ]; then
 	if [ ! -d "ovmf" ]; then
