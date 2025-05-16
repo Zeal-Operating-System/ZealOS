@@ -4,43 +4,43 @@
 #include <limine.h>
 #include <lib.h>
 
-__attribute__((used, section(".requests_start_marker")))
+__attribute__((used, section(".limine_requests_start")))
 static volatile LIMINE_REQUESTS_START_MARKER;
 
-__attribute__((used, section(".requests_end_marker")))
+__attribute__((used, section(".limine_requests_end")))
 static volatile LIMINE_REQUESTS_END_MARKER;
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_module_request module_request = {
     .id = LIMINE_MODULE_REQUEST,
     .revision = 0
 };
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_hhdm_request hhdm_request = {
     .id = LIMINE_HHDM_REQUEST,
     .revision = 0
 };
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_memmap_request memmap_request = {
     .id = LIMINE_MEMMAP_REQUEST,
     .revision = 0
 };
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
 };
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_smbios_request smbios_request = {
     .id = LIMINE_SMBIOS_REQUEST,
     .revision = 0
 };
 
-__attribute__((used, section(".requests")))
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_efi_system_table_request efi_request = {
     .id = LIMINE_EFI_SYSTEM_TABLE_REQUEST,
     .revision = 0
@@ -292,7 +292,7 @@ void kmain(void) {
         printf("    ");
         switch (entry->type) {
             case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
-            case LIMINE_MEMMAP_KERNEL_AND_MODULES:
+            case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
             case LIMINE_MEMMAP_USABLE:
                 zeal_mem_type = MEM_E820T_USABLE;
                 printf("  USABLE: ");
@@ -343,7 +343,7 @@ void kmain(void) {
 
     printf("sys_gdt_ptr: 0x%X\n", sys_gdt_ptr);
 
-    void *sys_smbios_entry = smbios_request.response->entry_32;
+    void *sys_smbios_entry = (void *)smbios_request.response->entry_32;
     if (sys_smbios_entry != NULL) {
         kernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
     }
