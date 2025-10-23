@@ -1,0 +1,494 @@
+/*	Realtek 8139 Driver for TempleOS
+	Author: Anthony Atanasov <anatanasov@tu-sofia.bg>
+	
+	Driver is based on:
+	- ZealOS PCnet and E1000 driver implementations
+	- OSDev RTL8139 and PCI documentation
+	- Realtek RTL8139 programming guide and datasheet
+	- Linux RTL8139 driver (Kernel version 2.7 and 6.15)
+	- SanOS RTL8139 driver
+	- U-boot RTL8139 driver
+	- "Writing Network Device Drivers for Linux" - Mohan Lal Jangir
+	- Terry A Davis' TempleOS Documentation and Lectures 
+*/
+
+// PCI configuration space command register values for IO space access and Bus Master
+#define RTL8139_CMDf_IOEN 0 // Will use "IO space access" (Port mapped) instead of memory mapped 
+#define RTL8139_CMDf_BMEN 2 
+
+// bit shift 1 to the correct position in the command register to enable 
+#define RTL8139_CMDF_IOEN	(1 << RTL8139_CMDf_IOEN)
+#define RTL8139_CMDF_BMEN	(1 << RTL8139_CMDf_BMEN)
+
+/* Symbolic offsets to registers. (Copied from Linux Driver) */
+#define MAC0			0x00	/* Ethernet hardware address. */
+#define	MAR0			0x08	/* Multicast filter. */
+#define	TxStatus0		0x10	/* Transmit status (Four 32bit registers). */
+#define	TxAddr0			0x20	/* Tx descriptors (also four 32bit). */
+#define	RxBuf			0x30
+#define	ChipCmd			0x37
+#define	RxBufPtr		0x38
+#define	RxBufAddr		0x3A
+#define	IntrMask		0x3C
+#define	IntrStatus		0x3E
+#define	TxConfig		0x40
+#define	RxConfig		0x44
+#define	Timer			0x48	/* A general-purpose counter. */
+#define	RxMissed		0x4C  	/* 24 bits valid, write clears. */
+#define	Cfg9346			0x50
+#define	Config0			0x51
+#define	Config1			0x52
+#define	TimerInt		0x54
+#define	MediaStatus		0x58
+#define	Config3			0x59
+#define	Config4			0x5A	/* absent on RTL-8139A */
+#define	HltClk			0x5B
+#define	MultiIntr		0x5C
+#define	TxSummary		0x60
+#define	BasicModeCtrl	0x62
+#define	BasicModeStatus	0x64
+#define	NWayAdvert		0x66
+#define	NWayLPAR		0x68
+#define	NWayExpansion	0x6A
+/* Undocumented registers, but required for proper operation. */
+#define	FIFOTMS			0x70	/* FIFO Control and test. */
+#define	CSCR			0x74	/* Chip Status and Configuration Register. */
+#define	PARA78			0x78
+#define	FlashReg		0xD4	/* Communication with Flash ROM, four bytes. */
+#define	PARA7c			0x7c	/* Magic transceiver parameter register. */
+#define	Config5			0xD8	/* absent on RTL-8139A */
+
+/* Buffers */
+#define RX_BUF_IDX		0		/* 0==8k, 1==16k, 2==32k, 3==64k */
+#define RX_BUF_LEN		(8192 << RX_BUF_IDX)
+#define RX_BUF_PAD		16
+#define RX_BUF_WRAP_PAD 2048	/* spare padding to accomodate ring buffer overflow (Must be atleast 1500 bytes because MTU is 1500 per packet) */
+#define RX_BUF_SIZE		(RX_BUF_LEN + RX_BUF_PAD + RX_BUF_WRAP_PAD)
+/* Can be 8K, 16K, 32K, or 64K but wiki recommends 8K. Linux driver recommends 32K. 
+   Must add 16 bytes per datasheet and atleast 1500 bytes when ring buffer wrap around is enabled */
+
+#define ETH_ZLEN 		60		/* Necessary? */
+#define NUM_TX_DESC		4
+
+/* ISR Bits */
+#define RxOK       0x01
+#define RxErr      0x02
+#define TxOK       0x04
+#define TxErr      0x08
+#define RxOverFlow 0x10
+#define RxUnderrun 0x20
+#define RxFIFOOver 0x40
+#define CableLen   0x2000
+#define TimeOut    0x4000
+#define SystemErr  0x8000
+
+/* RX Status Bits  */
+#define RxMulticast	0x8000
+#define RxPhysical	0x4000
+#define RxBroadcast	0x2000
+#define RxBadSymbol	0x0020
+#define RxRunt		0x0010
+#define RxTooLong 	0x0008
+#define RxCRCErr 	0x0004
+#define RxBadAlign  0x0002
+#define RxStatusOK  0x0001
+
+/* Chip Cmd Bits */
+#define RxBufEmpty 0x01
+#define CmdRxEnb   0x04
+#define CmdTxEnb   0x08
+#define CmdReset   0x10
+
+#define RX_FIFO_THRESH  4
+#define RX_DMA_BURST   	4
+#define TX_DMA_BURST   	4
+#define TX_FIFO_THRESH  256
+
+class CRTL8139
+{
+	CPCIDev *pci;
+
+	I64 mode;
+
+	U8	mac_address[6];			// MAC address is first 6 bytes of PCNet EEPROM	(page # ? )
+
+	I64 current_tx_de_index;	// Current Transmit DE being processed. Gets incremented, wrapped to 0 at max of NUM_TX_DESC.
+	I64 current_rx;
+
+	U8 *tx_de_buffer;			// Uncached-alias of pointer to the buffer of TX Descriptor Entries.
+	U8 *tx_de_buffer_phys;		// Pointer to the buffer of TX Descriptor Entries. (Code Heap, lower 2Gb)	
+
+	U32 rx_buffer_addr_phys;	// Uncached physical address of actual receive buffers  (< 4 Gb)
+	U32 tx_buffer_addr_phys;	// Uncached physical address of actual transmit buffers (< 4 Gb)
+
+} rtl8139; // rtl8139 is the global variable we store all of this into.
+
+class CRTL8139DescriptorEntry
+{
+	U32	buffer_addr;
+	U32 tx_status; // bits 0-12 are length of packet, 13 is OWN, 16-21 are early Tx threshold
+};
+
+CPCIDev *RTL8139PCIDevFind()
+{// Find and return RTL8139 card as a CPCIDev pointer.
+
+	return PCIDevFind(,, PCIV_RTL8139, PCID_RTL8139);
+}
+
+// Why is this a function instead of just a property of the global var?
+U32 RTL8139IOBaseGet()
+{/* Return port IO base address
+	of RTL8139 card. Bits 0-7 are not
+	for the IO base, so an AND with
+	~0xFF ignores those bits. */
+
+	U32 io_base = rtl8139.pci->base[0] & ~0xFF;
+	return io_base;
+}
+
+U0 RTL8139DescriptorEntryInit(CRTL8139DescriptorEntry *entry, U32 buffer_address)
+{	
+	// Could be made inline and function removed
+	entry->buffer_addr = buffer_address;
+}
+
+U0 RTL8139MACGet()
+{
+	I64 i;
+	U64 eeprom_bytes = InU32(RTL8139IOBaseGet) | InU32(RTL8139IOBaseGet + 4) << 32;
+
+	NetLog("RTL8139 GET MAC: Getting MAC.");
+	for (i = 0; i < 6; i++)
+	{
+		rtl8139.mac_address[i] = eeprom_bytes.u8[i];
+		NetLog(" %02X", rtl8139.mac_address[i]);
+	}
+}
+
+U0 RTL8139Start()
+{
+	OutU8(RTL8139IOBaseGet + Config1, 0x0);
+	OutU8(RTL8139IOBaseGet + ChipCmd, CmdReset); // Software reset
+	while((InU8(RTL8139IOBaseGet + ChipCmd) & CmdReset) != 0) {}
+}
+
+U0 RTL8139EnableFullDuplex()
+{
+	// Also enables auto negotiation
+	OutU16(RTL8139IOBaseGet + BasicModeCtrl, 0x1100);
+}
+
+U0 RTL8139BuffersAllocate()
+{
+	I64 de_index; // Used in for loops for TX DE access.	
+	
+	// Recieve
+	rtl8139.rx_buffer_addr_phys = CAllocAligned(RX_BUF_SIZE, 16, Fs->code_heap);
+	
+	// Send
+	rtl8139.tx_de_buffer_phys = CAllocAligned(sizeof(CRTL8139DescriptorEntry) * NUM_TX_DESC,
+											16, 
+											Fs->code_heap);
+	rtl8139.tx_de_buffer = dev.uncached_alias + rtl8139.tx_de_buffer_phys;
+
+
+	rtl8139.tx_buffer_addr_phys = CAllocAligned(ETHERNET_FRAME_SIZE * NUM_TX_DESC, 16, Fs->code_heap);
+
+	CRTL8139DescriptorEntry *entry = rtl8139.tx_de_buffer;
+	
+	for (de_index = 0; de_index < NUM_TX_DESC; de_index++)
+	{		
+		RTL8139DescriptorEntryInit(&entry[de_index],
+								 rtl8139.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE);
+	}
+}
+
+U0 RTL8139InterruptMaskSet()
+{
+	// Enables TOK and ROK interrupts
+	OutU16(RTL8139IOBaseGet + IntrMask, 0x0005);
+}
+
+
+U0 RTL8139BufferConfigure()
+{
+	// Rx
+	OutU32(RTL8139IOBaseGet + RxConfig, 0xf | (1 << 7) | (1 << 12) | (7 << 8));
+	// Accept all packets which are not errors or "runts", enable ring buffer wrap.
+	OutU32(RTL8139IOBaseGet + RxBuf, rtl8139.rx_buffer_addr_phys);
+
+	// Tx
+	OutU32(RTL8139IOBaseGet + TxConfig, 0x00000600);
+}
+
+I64 RTL8139DriverOwns(I64 de_index)
+{
+	return (InU32(RTL8139IOBaseGet + TxStatus0 + (0x04 * de_index)) & 0x2000);
+}
+
+I64 RTL8139TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
+{
+	I64 de_index = rtl8139.current_tx_de_index;
+	
+	CRTL8139DescriptorEntry	*entry = &rtl8139.tx_de_buffer[de_index * sizeof(CRTL8139DescriptorEntry)];
+
+	if (!RTL8139DriverOwns(de_index))
+	{
+		NetErr("RTL8139 ALLOCATE TX PACKET: TX FIFO Full");
+		return -1; // Positive value expected. Functions calling this must factor this in.
+	}
+	else if (length > ETHERNET_FRAME_SIZE)
+	{
+		// Max packet length must fit into TX buffer.
+		NetErr("RTL8139 ALLOCATE TX PACKET: Invalid TX Packet Length");
+		throw('RTL8139');
+	}
+	else
+	{
+		NetLog("RTL8139 ALLOCATE TX PACKET: Driver owns TX DE at index %d.", de_index);
+	}
+	
+	OutU32(RTL8139IOBaseGet + TxAddr0 + (0x04 * de_index), entry->buffer_addr);
+
+	entry->tx_status = (TX_FIFO_THRESH << 11) & 0x003f0000 | length;
+	
+	rtl8139.current_tx_de_index = (rtl8139.current_tx_de_index + 1) & (NUM_TX_DESC - 1);
+
+	*packet_buffer_out = entry->buffer_addr;
+
+	NetLog("RTL8139 ALLOCATE TX PACKET: de_index: %X.", de_index);
+		
+	return de_index;	
+}
+
+U8 *EthernetMACGet()
+{
+	return rtl8139.mac_address;
+}
+
+U0 RTL8139TransmitPacketFinish(I64 de_index)
+{
+	CRTL8139DescriptorEntry *entry = &rtl8139.tx_de_buffer[de_index * sizeof(CRTL8139DescriptorEntry)];
+	OutU32(RTL8139IOBaseGet + TxStatus0 + (de_index*4), entry->tx_status);
+}
+
+U0 NetDriverTransmitPacketFinish(I64 de_index)
+{//Alias for driver-specific Finish TX function.
+	RTL8139TransmitPacketFinish(de_index);
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{
+	return rtl8139.tx_buffer_addr_phys + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{
+	CRTL8139DescriptorEntry *entry = &rtl8139.tx_de_buffer[de_index * sizeof(CRTL8139DescriptorEntry)];
+
+	return (entry->tx_status & 0x0FFF) + 1;
+}
+
+I64 OneRTL8139PacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
+{
+	U32 rx_status;
+	U16 rx_size;
+	
+	I64 ring_offs = rtl8139.current_rx % RX_BUF_LEN;
+
+	rx_status = *(rtl8139.rx_buffer_addr_phys + ring_offs);
+	rx_size = rx_status >> 16;
+	rx_status &= 0xffff; // Unnecessary?
+
+	if ((rx_status & (RxBadSymbol|RxRunt|RxTooLong|RxCRCErr|RxBadAlign)) || (rx_size < ETH_ZLEN) || (rx_size > ETHERNET_FRAME_SIZE + 4))
+	{
+		NetErr("Bad Packet, rx_status: %X", rx_status);
+		rtl8139.current_rx = 0;
+		rtl8139.current_rx = (rtl8139.current_rx + rx_size + 4 + 3) & ~3;
+		OutU32(RTL8139IOBaseGet + RxBufPtr, rtl8139.current_rx - 16);
+		return 0;
+	}
+
+	/* First two bytes are the receive status
+	   and next two bytes are frame length
+	*/
+	*packet_length_out = rx_size - 4;		
+	
+	if (ring_offs+4+rx_size-4 > RX_BUF_LEN)
+	{	
+		I64 semi_count = RX_BUF_LEN - ring_offs - 4;
+		U8	frame[ETHERNET_FRAME_SIZE];
+		
+		MemCopy(frame, rtl8139.rx_buffer_addr_phys + ring_offs + 4, semi_count);
+		MemCopy(&(frame[semi_count]), rtl8139.rx_buffer_addr_phys, rx_size - 4 - semi_count);
+
+		*packet_buffer_out = frame;
+	}
+	else
+	{	
+		*packet_buffer_out = rtl8139.rx_buffer_addr_phys + ring_offs + 4;
+	}
+
+	rtl8139.current_rx = (rtl8139.current_rx + rx_size + 4 + 3) & ~3;
+	OutU32(RTL8139IOBaseGet + RxBufPtr, rtl8139.current_rx - 16);
+	return 1;
+}
+
+I64 TwoRTL8139PacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
+{
+	U32 rx_status;
+	U16 rx_size;
+
+ 	if (rtl8139.current_rx > RX_BUF_LEN)
+	{
+		rtl8139.current_rx = rtl8139.current_rx % RX_BUF_LEN;
+	}
+
+	// rx_status is the dereferenced pointer to the RX buffer start adress and the current ring read offset
+	rx_status = *(rtl8139.rx_buffer_addr_phys + rtl8139.current_rx);
+	rx_size = rx_status >> 16;
+
+	/* First two bytes are the receive status
+	   and next two bytes are frame length
+	*/
+	*packet_length_out = rx_size - 4;
+	*packet_buffer_out = rtl8139.rx_buffer_addr_phys + rtl8139.current_rx + 4;
+
+	rtl8139.current_rx = (rtl8139.current_rx + rx_size + 4 + 3) & ~3;
+	OutU32(RTL8139IOBaseGet + RxBufPtr, rtl8139.current_rx - 16);
+	return 1;
+}
+
+interrupt U0 RTL8139IRQ()
+{
+	U8 *packet_buffer;
+	U16 packet_length, isr;
+
+	isr = InU16(RTL8139IOBaseGet + IntrStatus);
+
+	/* All sources say that the datasheet is wrong,
+	   reading ISR is not enough to clear it, need to write */
+	OutU16(RTL8139IOBaseGet + IntrStatus, 0xFFFF);
+
+	if (isr & TxOK)
+	{
+		NetLog("Sent Packet, DE: %X", rtl8139.current_tx_de_index);
+	}
+	if (isr & RxOK)
+	{
+		NetLog("Receiving Packet");
+		while((InU8(RTL8139IOBaseGet + ChipCmd) & RxBufEmpty) == 0)
+		{
+			if (TwoRTL8139PacketReceive(&packet_buffer, &packet_length))
+			{
+				NetLog("RTL8139 IRQ: Pushing copy into Net Queue");
+				// uncached read
+				NetQueuePush(packet_buffer + dev.uncached_alias, packet_length);						
+			}
+		}
+	}
+
+	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+}
+
+U0 PCIInterruptsReroute(I64 base)
+{ // todo: comments explaining process, maybe better var names
+	I64	 i;
+	U8	*da = dev.uncached_alias + IOAPIC_REG;
+	U32 *_d = dev.uncached_alias + IOAPIC_DATA;
+
+	for (i = 0; i < 4; i++)
+	{
+		*da = IOREDTAB + i * 2 + 1;
+		*_d = dev.mp_apic_ids[INT_DEST_CPU] << 24;
+		*da = IOREDTAB + i * 2;
+		*_d = 0x4000 + base + i;
+	}
+}
+
+U0 RTL8139InterruptsSetup()
+{ // todo: comments explaining process
+	I64 irq, i;
+			
+	for (i = 0; i < 4; i++)
+	{
+		IntEntrySet((irq = IntEntryAlloc), &RTL8139IRQ);
+	}
+
+	PCIInterruptsReroute(irq);
+}
+
+U0 RTL8139Init()
+{
+	MemSet(&rtl8139, 0, sizeof(CRTL8139)); // RTL8139 global var will hold member data the driver uses often.
+
+	rtl8139.pci = RTL8139PCIDevFind;
+	if (!rtl8139.pci)
+		return; // if we don't find the card, quit.
+
+	/*	Clear command register of RTL8139
+		PCI device, set IO Enable and Bus
+		Master Enable bits of the register. */	
+	PCIWriteU16(rtl8139.pci->bus,
+				rtl8139.pci->dev,
+				rtl8139.pci->fun,
+				PCIR_COMMAND,
+				RTL8139_CMDF_IOEN | RTL8139_CMDF_BMEN);
+
+	RTL8139Start;
+	RTL8139MACGet;
+	RTL8139BuffersAllocate;
+	// Enables RX and TX in cmd register,
+	// must do so before setting transfer thresholds
+	OutU8(RTL8139IOBaseGet + ChipCmd, CmdRxEnb + CmdTxEnb);
+	OutU32(RTL8139IOBaseGet + RxMissed, 0);
+
+	RTL8139BufferConfigure;
+	
+	RTL8139EnableFullDuplex;
+
+
+	NetLog("RTL8139 INIT END: Redirecting interrupts.");
+
+	RTL8139InterruptMaskSet;
+	RTL8139InterruptsSetup;
+}
+
+I64 EthernetFrameAllocate(U8 **packet_buffer_out,
+						  U8 *source_address,
+						  U8 *destination_address,
+						  U16 ethertype,
+						  I64 packet_length)
+{
+	U8 *ethernet_frame;
+	I64 de_index;
+
+	//need to see if 3 years later VirtualBox supports APAD_XMT!
+	if (packet_length < ETHERNET_MIN_FRAME_SIZE)
+	{
+		packet_length = ETHERNET_MIN_FRAME_SIZE;
+	}
+
+	de_index = RTL8139TransmitPacketAllocate(&ethernet_frame, ETHERNET_MAC_HEADER_LENGTH + packet_length);
+	ethernet_frame += dev.uncached_alias; // Make write uncached
+
+	if (de_index < 0)
+	{
+		NetErr("ETHERNET FRAME ALLOCATE: Failure");
+		return -1; // Positive value expected. Functions calling this must factor this in.
+	}
+
+	MemSet(ethernet_frame, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
+
+	MemCopy(ethernet_frame,						 destination_address, MAC_ADDRESS_LENGTH);
+	MemCopy(ethernet_frame + MAC_ADDRESS_LENGTH, source_address,	  MAC_ADDRESS_LENGTH);
+
+	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET]		= ethertype >> 8;
+	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET + 1]	= ethertype & 0xFF;
+
+	*packet_buffer_out = ethernet_frame + ETHERNET_MAC_HEADER_LENGTH;
+
+	return de_index;	
+}
+
+RTL8139Init;

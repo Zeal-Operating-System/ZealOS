@@ -7,6 +7,9 @@
 #define	PCIV_E1000		0x8086
 #define	PCID_82545EM	0x100F
 
+#define PCIV_RTL8139	0x10EC
+#define PCID_RTL8139	0x8139
+
 #define PCIV_VIRTIO		0x1AF4
 #define PCID_VIRTIO_NET 0x1000
 
@@ -54,6 +57,7 @@ U0 NetDriverInit()
 
 	// register NIC PCI details with driver (file)name
 	NetDriverRegister(PCIV_VIRTIO,	PCID_VIRTIO_NET,	"VirtIONet");
+	NetDriverRegister(PCIV_RTL8139, PCID_RTL8139,		"RTL8139");
 	NetDriverRegister(PCIV_E1000,	PCID_82545EM,		"E1000");
 	NetDriverRegister(PCIV_PCNET,	PCID_PCNET,			"PCNet");
 
