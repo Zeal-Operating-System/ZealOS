@@ -5,44 +5,44 @@
 #include <lib.h>
 
 __attribute__((used, section(".limine_requests_start")))
-static volatile LIMINE_REQUESTS_START_MARKER;
+static volatile uint64_t limine_requests_start_marker[] = LIMINE_REQUESTS_START_MARKER;
 
 __attribute__((used, section(".limine_requests_end")))
-static volatile LIMINE_REQUESTS_END_MARKER;
+static volatile uint64_t limine_requests_end_marker[] = LIMINE_REQUESTS_END_MARKER;
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_module_request module_request = {
-    .id = LIMINE_MODULE_REQUEST,
+    .id = LIMINE_MODULE_REQUEST_ID,
     .revision = 0
 };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_hhdm_request hhdm_request = {
-    .id = LIMINE_HHDM_REQUEST,
+    .id = LIMINE_HHDM_REQUEST_ID,
     .revision = 0
 };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_memmap_request memmap_request = {
-    .id = LIMINE_MEMMAP_REQUEST,
+    .id = LIMINE_MEMMAP_REQUEST_ID,
     .revision = 0
 };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_framebuffer_request framebuffer_request = {
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
+    .id = LIMINE_FRAMEBUFFER_REQUEST_ID,
     .revision = 0
 };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_smbios_request smbios_request = {
-    .id = LIMINE_SMBIOS_REQUEST,
+    .id = LIMINE_SMBIOS_REQUEST_ID,
     .revision = 0
 };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_efi_system_table_request efi_request = {
-    .id = LIMINE_EFI_SYSTEM_TABLE_REQUEST,
+    .id = LIMINE_EFI_SYSTEM_TABLE_REQUEST_ID,
     .revision = 0
 };
 

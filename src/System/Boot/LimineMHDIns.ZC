@@ -1,12 +1,4 @@
 
-class CLimineStage2Header
-{
-	U16 size_a;
-	U16 size_b;
-	U64 location_a;
-	U64 location_b;
-};
-
 #ifndef binary_limine_hdd_bin_data
 U8 binary_limine_hdd_bin_data[0];
 #endif
@@ -42,7 +34,7 @@ Bool LimineCFGMake(U8 drv_let)
 				st = MStrPrint("/ZealOS %C:/\n"
 					"protocol: limine\n"
 					"resolution: 1024x768\n"
-					"kernel_path: boot(%d):/Boot/ZealBooter.ELF\n"
+					"path: boot(%d):/Boot/ZealBooter.ELF\n"
 					"module_path: boot(%d):/Boot/Kernel.ZXE\n"
 					"\n", drv_let, drive->prt_num + 1, drive->prt_num + 1);
 
@@ -77,11 +69,9 @@ Bool LimineCFGMake(U8 drv_let)
 
 Bool LimineMHDIns(U8 drv_let)
 {
-	U8					*limine			= binary_limine_hdd_bin_data;
-	U16					 limine_size	= sizeof(binary_limine_hdd_bin_data);
-	CLimineStage2Header *limine_stage2	= limine + 0x1A4;
-	U16					 limine_stage2_size = limine_size - BLK_SIZE;
-	U16					 limine_stage2_size_aligned = limine_stage2_size + ((BLK_SIZE * 2) - limine_stage2_size % (BLK_SIZE * 2));
+	U8	*limine			= binary_limine_hdd_bin_data;
+	U16  limine_size	= sizeof(binary_limine_hdd_bin_data);
+	U64 *limine_stage2	= limine + 0x1A4;
 	CBlkDev				*bd = Letter2BlkDev(drv_let);
 	CMasterBoot			 old_mbr, *new_mbr = limine;
 
@@ -93,9 +83,7 @@ Bool LimineMHDIns(U8 drv_let)
 
 	'\n';
 
-	limine_stage2->size_a = limine_stage2->size_b = limine_stage2_size_aligned / 2;
-	limine_stage2->location_a = BLK_SIZE;
-	limine_stage2->location_b = BLK_SIZE + limine_stage2->size_a;
+	*limine_stage2 = 0x200;
 
 	BlkDevLock(bd);
 
@@ -103,9 +91,9 @@ Bool LimineMHDIns(U8 drv_let)
 	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
 
 	// read the whole MBR + post-MBR-gap that Limine wants to overwrite, save all of that as an OldMBR.BIN
-	BootMHDOldRead(drv_let, drv_let, 1 + (limine_stage2_size_aligned / BLK_SIZE));
+	BootMHDOldRead(drv_let, drv_let, 63);
 
-	AHCIAtaBlksWrite(bd, limine, 0, 1 + (limine_stage2_size_aligned / BLK_SIZE)); // write Limine to MBR and post-MBR gap
+	AHCIAtaBlksWrite(bd, limine, 0, 63); // write Limine to MBR and post-MBR gap
 
 	BlkDevUnlock(bd);
 
