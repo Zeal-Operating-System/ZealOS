@@ -79,7 +79,7 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 "$QEMU_BIN_PATH/qemu-system-x86_64" -machine q35 $KVM -drive format=raw,file="$TMPDISK" -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit $QEMU_HEADLESS || true
 
-LIMINE_BINARY_BRANCH="v9.x-binary"
+LIMINE_BINARY_BRANCH="v10.x-binary"
 
 if [ -d "limine" ]
 then
@@ -128,11 +128,17 @@ sudo mv "$TMPMOUNT/Tmp/DVDKernel.ZXE" "$TMPISODIR/Boot/Kernel.ZXE"
 sudo rm -f "$TMPISODIR/Tmp/DVDKernel.ZXE"
 umount_tempdisk
 
+truncate -s 32K bios_boot.img
+
 xorriso -as mkisofs -R -r -J -b Boot/Limine-BIOS-CD.BIN \
-        -no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
-        -apm-block-size 2048 --efi-boot Boot/Limine-UEFI-CD.BIN \
+        -no-emul-boot -boot-load-size 4 -boot-info-table \
+        --efi-boot Boot/Limine-UEFI-CD.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
+        -append_partition 4 21686148-6449-6E6F-744E-656564454649 bios_boot.img \
+        -appended_part_as_gpt \
         "$TMPISODIR" -o ZealOS-limine.iso
+
+rm bios_boot.img
 
 ./limine/limine bios-install ZealOS-limine.iso --no-gpt-to-mbr-isohybrid-conversion
 

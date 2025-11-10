@@ -44,6 +44,12 @@ SECTIONS
         *(.rodata .rodata.*)
     } :rodata
 
+    /* Add a .note.gnu.build-id output section in case a build ID flag is added to the */
+    /* linker command. */
+    .note.gnu.build-id : {
+        *(.note.gnu.build-id)
+    } :rodata
+
     /* Move to the next memory page for .data */
     . = ALIGN(CONSTANT(MAXPAGESIZE));
 
