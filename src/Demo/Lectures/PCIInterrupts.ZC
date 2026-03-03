@@ -11,25 +11,25 @@
 interrupt U0 IntMy40()
 {
 	lock {progress1++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy41()
 {
 	lock {progress2++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy42()
 {
 	lock {progress3++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy43()
 {
 	lock {progress4++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 I64 vect[4] = {&IntMy40, &IntMy41, &IntMy42, &IntMy43};

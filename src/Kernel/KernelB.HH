@@ -191,6 +191,7 @@ public _extern SYS_CPU_STRUCTS	CCPU *cpu_structs; //$LK,"Gs",A="MN:Gs"$ points t
 public _extern SYS_MP_COUNT		I64   mp_count; //Count of cores
 _extern SYS_MP_COUNT_INITIAL	I64   mp_count_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
 _extern SYS_MP_COUNT_LOCK		I64   mp_count_lock;
+public _extern SYS_X2APIC		I64   sys_x2apic;
 _extern SYS_SEMAS				CSema sys_semas[SEMA_SEMAS_NUM];
 
 #help_index "MultiCore;Processor"

@@ -149,10 +149,15 @@ U0 MPInt(U8 num, I64 cpu_num=1)
 
 	PUSHFD
 	CLI //Multitasking safe because each core has a local apic and IRQs are off
-	while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
-		PAUSE
-	*(dev.uncached_alias + LAPIC_ICR_HIGH)(U32 *) = dev.mp_apic_ids[cpu_num] << 24;
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *)  = 0x4000 + num;
+	if (sys_x2apic)
+		MSRWrite(IA32_X2APIC_ICR, dev.mp_apic_ids[cpu_num](I64) << 32 | 0x4000 | num);
+	else
+	{
+		while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
+			PAUSE
+		*(dev.uncached_alias + LAPIC_ICR_HIGH)(U32 *) = dev.mp_apic_ids[cpu_num] << 24;
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *)  = 0x4000 + num;
+	}
 	POPFD
 }
 
@@ -160,15 +165,23 @@ U0 MPIntAll(U8 num)
 {//Generate interrupt for all but own core.
 	PUSHFD
 	CLI //Multitasking safe because each core has a local apic and IRQs are off
-	while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
-		PAUSE
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4800 + num;
+	if (sys_x2apic)
+		MSRWrite(IA32_X2APIC_ICR, 0xC4800 + num);
+	else
+	{
+		while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
+			PAUSE
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4800 + num;
+	}
 	POPFD
 }
 
 U0 MPNMInt()
 {//Generate nonmaskable interrupt.
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4400;
+	if (sys_x2apic)
+		MSRWrite(IA32_X2APIC_ICR, 0xC4400);
+	else
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4400;
 }
 
 U0 MPHalt()
@@ -178,18 +191,56 @@ U0 MPHalt()
 	Busy(10000);
 }
 
+U0 X2APICDetect()
+{//Detect and enable x2APIC mode if supported.
+	CRAXRBXRCXRDX regs;
+	I64 apic_base;
+
+	CPUId(1, &regs);
+	apic_base = MSRRead(IA32_LAPIC_BASE);
+
+	if (apic_base & IA32_APIC_BASEF_X2APIC)
+	{	//Firmware already enabled x2APIC
+		sys_x2apic = TRUE;
+		return;
+	}
+
+	if (regs.rcx & CPUID_1_ECX_X2APIC)
+	{	//CPU supports x2APIC, enable it
+		apic_base |= IA32_APIC_BASEF_X2APIC | IA32_APIC_BASEF_ENABLED;
+		MSRWrite(IA32_LAPIC_BASE, apic_base);
+		sys_x2apic = TRUE;
+		return;
+	}
+
+	sys_x2apic = FALSE;
+}
+
 U0 MPAPICInit()
 {//Called by sys_task during start-up
 //and other cores during initialization
 	//after $LK,"Core0StartMP",A="MN:Core0StartMP"$().
-	*(dev.uncached_alias + LAPIC_SVR)(U32 *) |= LAPICF_APIC_ENABLED;
-	dev.mp_apic_ids[Gs->num] = *(dev.uncached_alias + LAPIC_APIC_ID)(U32 *) >> 24;
-	*(dev.uncached_alias + LAPIC_LDR)(U32 *) = dev.mp_apic_ids[Gs->num] << 24;
-	*(dev.uncached_alias + LAPIC_DFR)(U32 *) = 0xF0000000;
+	I64 apic_base;
 
-	//	MemSet(dev.uncached_alias + LAPIC_IRR, 0, 0x20);
-	//	MemSet(dev.uncached_alias + LAPIC_ISR, 0, 0x20);
-	//	MemSet(dev.uncached_alias + LAPIC_TMR, 0, 0x20);
+	if (sys_x2apic)
+	{	//Ensure x2APIC is enabled on this core
+		apic_base = MSRRead(IA32_LAPIC_BASE);
+		if (!(apic_base & IA32_APIC_BASEF_X2APIC))
+		{
+			apic_base |= IA32_APIC_BASEF_X2APIC | IA32_APIC_BASEF_ENABLED;
+			MSRWrite(IA32_LAPIC_BASE, apic_base);
+		}
+		MSRWrite(IA32_X2APIC_SVR, MSRRead(IA32_X2APIC_SVR) | LAPICF_APIC_ENABLED);
+		dev.mp_apic_ids[Gs->num] = MSRRead(IA32_X2APIC_APICID);
+		//DFR does not exist in x2APIC mode, LDR is read-only
+	}
+	else
+	{
+		*(dev.uncached_alias + LAPIC_SVR)(U32 *) |= LAPICF_APIC_ENABLED;
+		dev.mp_apic_ids[Gs->num] = *(dev.uncached_alias + LAPIC_APIC_ID)(U32 *) >> 24;
+		*(dev.uncached_alias + LAPIC_LDR)(U32 *) = dev.mp_apic_ids[Gs->num] << 24;
+		*(dev.uncached_alias + LAPIC_DFR)(U32 *) = 0xF0000000;
+	}
 
 	RAXSet(Gs->tss->tr);
 	LTR 	AX
@@ -331,15 +382,30 @@ U0 Core0StartMP()
 	mp_count_initial = mp_count = 1;
 	mp_count_lock = 0;
 
-	*(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) = *(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) & 0xFFFFFF00 + MPN_VECT;
-	WBINVD //Not sure why this is needed. Might just need delay. $LK,"MemCopy",A="MN:MemCopy"$ above?
+	if (sys_x2apic)
+	{
+		MSRWrite(IA32_X2APIC_LVT_ERR, MSRRead(IA32_X2APIC_LVT_ERR) & 0xFFFFFF00 + MPN_VECT);
+		WBINVD
 
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4500; //assert init IPI
-	Busy(10000);
+		MSRWrite(IA32_X2APIC_ICR, 0xC4500); //assert init IPI
+		Busy(10000);
 
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT; //start-up
-	Busy(200);
-	*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT;
+		MSRWrite(IA32_X2APIC_ICR, 0xC4600 + MPN_VECT); //start-up
+		Busy(200);
+		MSRWrite(IA32_X2APIC_ICR, 0xC4600 + MPN_VECT);
+	}
+	else
+	{
+		*(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) = *(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) & 0xFFFFFF00 + MPN_VECT;
+		WBINVD //Not sure why this is needed. Might just need delay. $LK,"MemCopy",A="MN:MemCopy"$ above?
+
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4500; //assert init IPI
+		Busy(10000);
+
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT; //start-up
+		Busy(200);
+		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT;
+	}
 
 	Busy(100000);
 	for (i = 0; i < 10000; i++)
@@ -381,14 +447,23 @@ U0 Core0Init()
 	//RAX has GS
 	IMPORT	SET_GS_BASE;
 	CALL	SET_GS_BASE
- 
+
+	X2APICDetect;
 	MPAPICInit;
+}
+
+public U0 LAPICEoi()
+{//Signal end of interrupt to the local APIC.
+	if (sys_x2apic)
+		MSRWrite(IA32_X2APIC_EOI, 0);
+	else
+		*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
 }
 
 interrupt U0 IntMPCrash()
 {//Entering the debugger from another core causes an interrupt on Core0
 //Which calls this routine.
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 	mp_count = 1;
 	Raw(ON);
 	text.raw_flags |= RAWF_SHOW_DOLLAR;
