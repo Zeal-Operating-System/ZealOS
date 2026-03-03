@@ -583,6 +583,21 @@ _MSR_WRITE::
 		RET1	16
 
 /***********************************/
+_X2APIC_WRITE::
+		PUSH	RBP
+		MOV 	RBP, RSP
+		MOV 	RAX, SF_ARG2[RBP]
+		MOV 	RDX, RAX
+		SHR 	RDX, 32
+		MOV 	RCX, SF_ARG1[RBP]
+//x2APIC WRMSR isn't serializing, Intel SDM 325462-092 Vol. 3A section 13.12.3, AMD APM 40332 rev 4.10 Vol. 2 section 16.11.2
+		MFENCE
+		LFENCE
+		WRMSR
+		POP 	RBP
+		RET1	16
+
+/***********************************/
 _SYS_HLT::
 		CLI
 @@05: 	HLT

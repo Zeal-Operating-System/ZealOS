@@ -638,6 +638,33 @@ class CKernel
 #define IA32_FS_BASE	0xC0000100
 #define IA32_GS_BASE	0xC0000101
 
+#define IA32_APIC_BASEF_X2APIC	(1 << 10)
+#define IA32_APIC_BASEF_ENABLED	(1 << 11)
+#define CPUID_1_ECX_X2APIC		(1 << 21)
+
+#define IA32_X2APIC_APICID		0x802
+#define IA32_X2APIC_VERSION		0x803
+#define IA32_X2APIC_TPR			0x808
+#define IA32_X2APIC_PPR			0x80A
+#define IA32_X2APIC_EOI			0x80B
+#define IA32_X2APIC_LDR			0x80D
+#define IA32_X2APIC_SVR			0x80F
+#define IA32_X2APIC_ISR0		0x810
+#define IA32_X2APIC_TMR0		0x818
+#define IA32_X2APIC_IRR0		0x820
+#define IA32_X2APIC_ESR			0x828
+#define IA32_X2APIC_ICR			0x830
+#define IA32_X2APIC_LVT_TIMER	0x832
+#define IA32_X2APIC_LVT_THERMAL	0x833
+#define IA32_X2APIC_LVT_PERF	0x834
+#define IA32_X2APIC_LVT_LINT0	0x835
+#define IA32_X2APIC_LVT_LINT1	0x836
+#define IA32_X2APIC_LVT_ERR		0x837
+
+//Physical destination broadcast IDs, Intel SDM 325462-092 Vol. 3A sections 13.6.2.1 and 13.12.9
+#define XAPIC_BROADCAST_ID	0xFF
+#define X2APIC_BROADCAST_ID	0xFFFFFFFF
+
 //Programmable Interrupt Controller
 #define PIC_1		0x20
 #define PIC_1_DATA 	0x21
@@ -2419,6 +2446,16 @@ class CACPISDTHeader
 		creator_revision;
 };
 
+class CACPIDMAR
+{//Intel VT-d specification 5.20 section 8.1
+	CACPISDTHeader	header;
+	U8				host_address_width,
+					flags,
+					reserved[10];
+};
+#define DMARF_INTR_REMAP		1
+#define DMARF_X2APIC_OPT_OUT	2 //only valid with DMARF_INTR_REMAP
+
 #help_index "Devices/SMBIOS"
 //SMBIOS parsing based on SMBIOS specification 3.3.0 (document "DSP0134")
 #define SMBIOSt_BIOS				0
@@ -3644,7 +3681,7 @@ public class CDevGlobals
 	CIDTEntry	*idt;
 	U8			*mem64_ptr;
 	U8			*uncached_alias; //Alias of lowest 4Gig.
-	U8			 mp_apic_ids[MP_PROCESSORS_NUM];
+	U32			 mp_apic_ids[MP_PROCESSORS_NUM];
 	CMemRange	 mem32_head;
 	CPCIDev		 pci_head;
 	U64			 user_int_bitmap;

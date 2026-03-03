@@ -1,6 +1,7 @@
 //See $LK,"PCI",A="HI:PCI"$.
 
-#if mp_count > 1
+//I/O APIC destinations are 8-bit and 0xFF is broadcast
+#if mp_count > 1 && dev.mp_apic_ids[1] < XAPIC_BROADCAST_ID
 #define DEST_CPU				1
 #else
 #define DEST_CPU				0
@@ -11,25 +12,25 @@
 interrupt U0 IntMy40()
 {
 	lock {progress1++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy41()
 {
 	lock {progress2++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy42()
 {
 	lock {progress3++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 interrupt U0 IntMy43()
 {
 	lock {progress4++;}
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	LAPICEoi;
 }
 
 I64 vect[4] = {&IntMy40, &IntMy41, &IntMy42, &IntMy43};

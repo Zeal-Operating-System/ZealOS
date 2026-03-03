@@ -97,7 +97,7 @@ interrupt U0 NetHandler()
 		   "==================="
 		   "$$BG$$$$FG$$");
 
-	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+	LAPICEoi;
 }
 
 U0 NetHandlerInit()
