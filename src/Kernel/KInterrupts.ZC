@@ -5,10 +5,21 @@ INT_MP_CRASH_ADDR:: //Forward reference to work around compiler
 INT_WAKE::
 		PUSH	RDX
 		PUSH	RAX
+		PUSH	RCX
+		CMP 	U64 [SYS_X2APIC], 0
+		JE		@@05
+		MOV 	ECX, IA32_X2APIC_EOI
+		XOR 	EAX, EAX
+		XOR 	EDX, EDX
+		WRMSR
+		JMP		@@10
+@@05:
 		MOV 	EAX, &dev
 		MOV 	EDX, U32 LAPIC_EOI
 		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
 		MOV 	U32 [RAX+RDX], 0
+@@10:
+		POP 	RCX
 		POP 	RAX
 		POP 	RDX
 		IRET
@@ -46,6 +57,14 @@ IRQ_TIMER::  //I_TIMER
 		TEST	RAX, RAX
 		JZ		@@20
 
+		CMP 	U64 [SYS_X2APIC], 0
+		JE		@@17
+		MOV 	ECX, IA32_X2APIC_EOI
+		XOR 	EAX, EAX
+		XOR 	EDX, EDX
+		WRMSR
+		JMP 	@@25
+@@17:
 		MOV 	EAX, &dev
 		MOV 	EDX, U32 LAPIC_EOI
 		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
@@ -165,7 +184,10 @@ interrupt U0 IntNop()
 {//Make unplanned IRQs stop by all means!
 	OutU8(PIC_2, PIC_EOI);
 	OutU8(PIC_1, PIC_EOI);
-	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+	if (sys_x2apic)
+		MSRWrite(IA32_X2APIC_EOI, 0);
+	else
+		*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
 }
 
 I64 IntEntryFree(I64 irq)
