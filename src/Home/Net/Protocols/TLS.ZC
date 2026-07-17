@@ -182,14 +182,15 @@ I64 TLSRecordSendEncrypted(CTLS *tls, U8 content_type, U8 *data, I64 len)
 	return 0;
 }
 
-I64 TLSRecordSendPlain(CTLS *tls, U8 type, U8 *data, I64 len)
-{
+I64 TLSRecordSendPlain(CTLS *tls, U8 type, U8 *data, I64 len, U8 legacy_minor=0x03)
+{ // legacy_record_version = 0x03<legacy_minor>. RFC 8446 5.1: MUST be 0x0303
+  // for every record except the initial ClientHello (which MAY use 0x0301).
 	U8	*record = MAlloc(len + 5);
 	I64	 error;
 
 	record[0] = type;
 	record[1] = 0x03;
-	record[2] = 0x01; // legacy_record_version
+	record[2] = legacy_minor;
 	record[3] = len >> 8 & 0xFF;
 	record[4] = len & 0xFF;
 	MemCopy(record + 5, data, len);
@@ -200,6 +201,42 @@ I64 TLSRecordSendPlain(CTLS *tls, U8 type, U8 *data, I64 len)
 	if (error < len + 5)
 		return -1;
 	return 0;
+}
+
+Bool tls_verbose = FALSE; // TRUE routes handshake diagnostics to the terminal
+
+U0 TLSDiag(U8 *format, ...)
+{ // handshake diagnostic line: to the terminal when verbose, else Network Log
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
+	if (tls_verbose)
+		"%s\n", buf;
+	else
+		NetLog("%s", buf);
+
+	Free(buf);
+}
+
+U0 TLSHexDump(U8 *label, U8 *buf, I64 len)
+{ // dump a buffer as hex, 32 bytes per line, for wire debugging
+	U8	 line[80];
+	I64	 i, n = 0;
+
+	TLSDiag("%s (%d bytes):", label, len);
+	line[0] = 0;
+	for (i = 0; i < len; i++)
+	{
+		CatPrint(line, "%02X", buf[i]);
+		n++;
+		if (n == 32)
+		{
+			TLSDiag("  %s", line);
+			line[0] = 0;
+			n = 0;
+		}
+	}
+	if (n)
+		TLSDiag("  %s", line);
 }
 
 U0 TLSTranscriptHash(CTLS *tls, U8 *out)
@@ -433,7 +470,11 @@ I64 TLSReadServerFlight(CTLS *tls, U8 *th_after_sfin_out)
 
 		if (wire_type == TLS_REC_ALERT)
 		{
-			NetErr("TLS: server alert during handshake.");
+			if (frag_len >= 2)
+				TLSDiag("TLS: server alert during handshake: level=%d desc=%d.",
+					   frag[0], frag[1]);
+			else
+				TLSDiag("TLS: server alert during handshake (short).");
 			result = -1; break;
 		}
 
@@ -477,9 +518,9 @@ I64 TLSReadServerFlight(CTLS *tls, U8 *th_after_sfin_out)
 
 				MemCopy(verify, hs + hs_pos + 4, 32);
 				if (!CryptoBytesEqual(verify, expected, 32))
-					NetWarn("TLS: server Finished verify MISMATCH (continuing; unauthenticated).");
+					TLSDiag("TLS: server Finished verify MISMATCH (transcript wrong!).");
 				else
-					NetLog("TLS: server Finished verified.");
+					TLSDiag("TLS: server Finished verified OK.");
 
 				// now fold Finished into transcript and snapshot
 				SHA256Update(&tls->transcript, hs + hs_pos, msg_total);
@@ -546,8 +587,10 @@ CTLS *TLSConnect(U8 *hostname, CTCPSocket *sock)
 
 	// ClientHello
 	ch_len = TLSBuildClientHello(ch, hostname, client_random, session_id, client_pub);
+	if (tls_verbose)
+		TLSHexDump("TLS CLIENTHELLO", ch, ch_len); // wire debug (TLSTest only)
 	SHA256Update(&tls->transcript, ch, ch_len);
-	if (TLSRecordSendPlain(tls, TLS_REC_HANDSHAKE, ch, ch_len) < 0)
+	if (TLSRecordSendPlain(tls, TLS_REC_HANDSHAKE, ch, ch_len, 0x01) < 0) // CH may be 0x0301
 	{
 		NetErr("TLS: failed to send ClientHello.");
 		goto tls_fail;
@@ -560,7 +603,11 @@ CTLS *TLSConnect(U8 *hostname, CTCPSocket *sock)
 			goto tls_fail;
 		if (wire_type == TLS_REC_ALERT)
 		{
-			NetErr("TLS: server alert instead of ServerHello.");
+			if (frag_len >= 2)
+				TLSDiag("TLS: server alert instead of ServerHello: level=%d desc=%d.",
+						frag[0], frag[1]);
+			else
+				TLSDiag("TLS: server alert instead of ServerHello (short).");
 			goto tls_fail;
 		}
 	}
@@ -571,24 +618,29 @@ CTLS *TLSConnect(U8 *hostname, CTCPSocket *sock)
 		NetErr("TLS: expected ServerHello, got record type 0x%02X.", wire_type);
 		goto tls_fail;
 	}
+	TLSDiag("TLS STAGE 1: ServerHello received (%d bytes).", frag_len);
 
 	SHA256Update(&tls->transcript, frag, frag_len);
 
 	if (TLSParseServerHello(frag + 4, frag_len - 4, server_pub) < 0)
 		goto tls_fail;
+	TLSDiag("TLS STAGE 2: ServerHello parsed, x25519 key_share found.");
 
 	// key exchange + handshake keys
 	X25519(shared, client_priv, server_pub);
 	TLSComputeHandshakeKeys(tls, shared);
+	TLSDiag("TLS STAGE 3: ECDH + handshake keys derived.");
 
 	// server encrypted flight
 	if (TLSReadServerFlight(tls, th_after_sfin) < 0)
 		goto tls_fail;
+	TLSDiag("TLS STAGE 4: server flight decrypted + verified.");
 
 	// client Change Cipher Spec (compat) then client Finished under handshake keys
 	TLSRecordSendPlain(tls, TLS_REC_CHANGE_CIPHER_SPEC, &ccs, 1);
 	if (TLSSendClientFinished(tls, th_after_sfin) < 0)
 		goto tls_fail;
+	TLSDiag("TLS STAGE 5: client Finished sent.");
 
 	// switch to application keys
 	TLSComputeAppKeys(tls, th_after_sfin);
@@ -596,7 +648,7 @@ CTLS *TLSConnect(U8 *hostname, CTCPSocket *sock)
 
 	Free(ch);
 	Free(frag);
-	NetLog("TLS: handshake complete with %s.", hostname);
+	TLSDiag("TLS STAGE 6: handshake complete with %s.", hostname);
 	return tls;
 
 tls_fail:
@@ -673,7 +725,12 @@ I64 TLSRead(CTLS *tls, U8 *out, I64 max)
 		tls->recv_seq++;
 
 		if (content_type == TLS_REC_ALERT)
-		{ // close_notify (0) is a normal end of stream
+		{ // close_notify (level 1, desc 0) is a normal end of stream; anything
+		  // else is the server rejecting us -- log the alert level+description
+			if (inner_len >= 2)
+				TLSDiag("TLS: server ALERT level=%d desc=%d.", inner[0], inner[1]);
+			else
+				TLSDiag("TLS: server ALERT (short).");
 			Free(frag); Free(inner);
 			return 0;
 		}
@@ -724,4 +781,44 @@ U0 TLSClose(CTLS *tls)
 
 	Free(tls->rbuf);
 	Free(tls);
+}
+
+public U0 TLSTest(U8 *hostname="cloudflare.com")
+{ /* Clean, self-contained TLS handshake test. Prints the ClientHello bytes,
+	every handshake stage, and any server alert DIRECTLY to this terminal --
+	no need to hunt through the Network Log. Use a host known to support
+	TLS 1.3 + ChaCha20 (cloudflare.com is a safe bet).
+	  TLSTest;                  (defaults to cloudflare.com)
+	  TLSTest("example.com"); */
+	CTCPSocket *sock;
+	CTLS	   *tls;
+
+	"$$LTBLUE$$--- TLS test: %s:443 ---$$FG$$\n", hostname;
+
+	sock = TCPConnectionCreate(hostname, 443);
+	if (sock <= 0)
+	{
+		"$$RED$$TCP/DNS failed: could not connect to %s:443.$$FG$$\n", hostname;
+		"(Check the host resolves and port 443 is reachable.)\n";
+		return;
+	}
+	"TCP connected. Running TLS 1.3 handshake...\n\n";
+
+	tls_verbose = TRUE;         // route the stage logs + ClientHello here
+	tls = TLSConnect(hostname, sock);
+	tls_verbose = FALSE;
+
+	"\n";
+	if (!tls)
+	{
+		"$$RED$$TLS handshake FAILED.$$FG$$ ";
+		"Read the stage lines + any 'server alert desc=' above.\n";
+		"desc: 40=no common cipher, 70=version, 47=illegal_param, "
+		"50=decode_error, 20/51=bad MAC/decrypt.\n";
+		TCPSocketClose(sock);
+		return;
+	}
+
+	"$$GREEN$$TLS handshake SUCCEEDED -- https should work now.$$FG$$\n";
+	TLSClose(tls);
 }

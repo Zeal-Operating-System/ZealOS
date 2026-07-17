@@ -356,3 +356,47 @@ CHttpResponse *HttpGet(U8 *url)
 	Free(current);
 	return response;
 }
+
+public U0 HttpTest(U8 *url="https://example.com")
+{ /* Full HTTP(S) GET test with terminal diagnostics. Prints the TLS handshake
+	stages (via tls_verbose), then the HTTP status, header/body sizes, and the
+	first slice of the body -- all to THIS terminal, no Network Log hunting.
+	  HttpTest;                          (https://example.com)
+	  HttpTest("https://cloudflare.com");
+	  HttpTest("http://frogfind.com/"); */
+	CHttpResponse *r;
+	I64	 i, show;
+
+	"$$LTBLUE$$--- HTTP test: %s ---$$FG$$\n", url;
+
+	tls_verbose = TRUE; // TLS handshake stages print to this terminal
+	r = HttpGet(url);
+	tls_verbose = FALSE;
+
+	if (!r)
+	{
+		"$$RED$$HttpGet returned NULL -- fetch failed.$$FG$$\n";
+		"(For https, read the TLS STAGE / alert lines above.)\n";
+		return;
+	}
+
+	"$$GREEN$$Got response:$$FG$$ status=%d, %d body bytes.\n",
+		r->status, r->body_length;
+
+	show = r->body_length;
+	if (show > 400)
+		show = 400;
+	"$$FG,LTGRAY$$--- first %d body bytes ---$$FG$$\n", show;
+	for (i = 0; i < show; i++)
+	{
+		if (r->body[i] == '$$')
+			"$$$$";
+		else if (r->body[i] >= ' ' || r->body[i] == '\n' || r->body[i] == '\t')
+			"%c", r->body[i];
+		else
+			".";
+	}
+	"\n$$FG,LTGRAY$$--- end ---$$FG$$\n";
+
+	HttpResponseFree(r);
+}
