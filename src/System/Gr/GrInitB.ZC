@@ -156,6 +156,8 @@ U0 GrInit2()
 	MemSetU32(gr.screen_cache, PIXF_TRANSPARENT, sys_framebuffer_width * sys_framebuffer_height);
 
 	gr.text_base			= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
+	gr.text_fg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
+	gr.text_bg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
 	gr.win_uncovered_bitmap	= CAlloc(65536 / 8);
 	gr.highest_uncovered	= 0;
 	gr.win_z_buf			= MAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U16));

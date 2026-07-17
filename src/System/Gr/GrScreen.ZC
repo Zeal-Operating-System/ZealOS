@@ -175,10 +175,10 @@ U0 GrZoomInScreen()
 	}
 }
 
-U0 GrGlyph32(I64 ch, U32 *dst, I64 width_internal)
-{//Blit fg pixs of one 8x8 glyph onto a 32-bit image body.
-//ch bits: char in low byte, fg color nibble in bits 8-11, ATTRF_UNDERLINE honored.
-	I64 i, j, b, bits = text.font[ch & 0xFF], pen = gr_palette[ch >> 8 & 0xF];
+U0 GrGlyph32(I64 ch, I64 pen, U32 *dst, I64 width_internal)
+{//Blit fg pixs of one 8x8 glyph onto a 32-bit image body in color pen.
+//ch bits: char in low byte, ATTRF_UNDERLINE honored. Color comes from pen.
+	I64 i, j, b, bits = text.font[ch & 0xFF];
 
 	for (i = 0; i < FONT_HEIGHT; i++)
 	{
@@ -197,9 +197,9 @@ U0 GrGlyph32(I64 ch, U32 *dst, I64 width_internal)
 
 U0 GrUpdateTextBG()
 {
-	U32			*src = gr.text_base, *dst_base = gr.dc2->body, *dst;
+	U32			*src = gr.text_base, *fg_src, *bg_src, *dst_base = gr.dc2->body, *dst;
 	U64			*d64;
-	I64			 bg, bg2, row, col, i, j, cur_ch, w1 = gr.dc2->width_internal,
+	I64			 bg, bg2, tc_fg, tc_bg, tmp, row, col, i, j, cur_ch, w1 = gr.dc2->width_internal,
 				 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, x0 = 0, y0 = 0, src_skip = 0;
 	Bool		 blink_flag = Blink;
 
@@ -233,21 +233,46 @@ U0 GrUpdateTextBG()
 	if (x0 || y0 || num_rows != TEXT_ROWS || num_cols != TEXT_COLS)
 		MemSetU32(dst_base, gr_palette[BLACK], w1 * gr.dc2->height);
 
+	fg_src = gr.text_fg + (src - gr.text_base);
+	bg_src = gr.text_bg + (src - gr.text_base);
+
 	for (row = 0; row < num_rows; row++)
 	{
 		for (col = 0; col < num_cols; col++)
 		{
 			cur_ch = *src++;
-			if (cur_ch & (ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
-			{
+			tc_fg  = *fg_src++;
+			tc_bg  = *bg_src++;
+			if (cur_ch & ATTRF_TRUE_COLOR)
+			{//RGB planes carry this cell's color.
 				if (cur_ch & ATTRF_SEL)
-					cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
+				{
+					tc_fg ^= PIX_RGB_MASK;
+					tc_bg ^= PIX_RGB_MASK;
+				}
 				if (cur_ch & ATTRF_INVERT)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				{
+					tmp = tc_fg; tc_fg = tc_bg; tc_bg = tmp;
+				}
 				if (cur_ch & ATTRF_BLINK && blink_flag)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				{
+					tmp = tc_fg; tc_fg = tc_bg; tc_bg = tmp;
+				}
+				bg = tc_bg;
 			}
-			bg = gr_palette[cur_ch.u8[1] >> 4];
+			else
+			{
+				if (cur_ch & (ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
+				{
+					if (cur_ch & ATTRF_SEL)
+						cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
+					if (cur_ch & ATTRF_INVERT)
+						cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+					if (cur_ch & ATTRF_BLINK && blink_flag)
+						cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				}
+				bg = gr_palette[cur_ch.u8[1] >> 4];
+			}
 			bg2 = bg | bg << 32;
 			dst = dst_base + (y0 + row * FONT_HEIGHT) * w1 + x0 + col * FONT_WIDTH;
 			for (i = FONT_HEIGHT; i--;)
@@ -260,15 +285,17 @@ U0 GrUpdateTextBG()
 				dst += w1;
 			}
 		}
-		src += src_skip;
+		src	   += src_skip;
+		fg_src += src_skip;
+		bg_src += src_skip;
 	}
 }
 
 U0 GrUpdateTextFG()
 {//See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
-	U32 *src = gr.text_base, *dst_base = gr.dc2->body, *dst,
+	U32 *src = gr.text_base, *fg_src, *bg_src, *dst_base = gr.dc2->body, *dst,
 		*dst_start = gr.dc2->body, *dst_end;
-	I64  i, j, cur_ch, w1 = gr.dc2->width_internal,
+	I64  i, j, cur_ch, pen, tc_fg, tc_bg, tmp, w1 = gr.dc2->width_internal,
 		 num_rows = TEXT_ROWS, num_cols = TEXT_COLS, row, col, x0 = 0, y0 = 0, src_skip = 0;
 	Bool blink_flag = Blink;
 
@@ -298,19 +325,45 @@ U0 GrUpdateTextFG()
 		}
 	}
 
+	fg_src = gr.text_fg + (src - gr.text_base);
+	bg_src = gr.text_bg + (src - gr.text_base);
+
 	for (row = 0; row < num_rows; row++)
 	{
 		for (col = 0; col < num_cols; col++)
 		{
 			cur_ch = *src++;
-			if (cur_ch & (ATTRF_UNDERLINE | ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
-			{
+			tc_fg  = *fg_src++;
+			tc_bg  = *bg_src++;
+			if (cur_ch & ATTRF_TRUE_COLOR)
+			{//RGB planes carry this cell's color.
 				if (cur_ch & ATTRF_SEL)
-					cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
+				{
+					tc_fg ^= PIX_RGB_MASK;
+					tc_bg ^= PIX_RGB_MASK;
+				}
 				if (cur_ch & ATTRF_INVERT)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				{
+					tmp = tc_fg; tc_fg = tc_bg; tc_bg = tmp;
+				}
 				if (cur_ch & ATTRF_BLINK && blink_flag)
-					cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				{
+					tmp = tc_fg; tc_fg = tc_bg; tc_bg = tmp;
+				}
+				pen = tc_fg;
+			}
+			else
+			{
+				if (cur_ch & (ATTRF_SEL | ATTRF_INVERT | ATTRF_BLINK))
+				{
+					if (cur_ch & ATTRF_SEL)
+						cur_ch.u8[1] = cur_ch.u8[1] ^ 0xFF;
+					if (cur_ch & ATTRF_INVERT)
+						cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+					if (cur_ch & ATTRF_BLINK && blink_flag)
+						cur_ch.u8[1] = cur_ch.u8[1] << 4 + cur_ch.u8[1] >> 4;
+				}
+				pen = gr_palette[cur_ch.u8[1] & 0xF];
 			}
 			dst = dst_base + (y0 + row * FONT_HEIGHT) * w1 + x0 + col * FONT_WIDTH;
 			if (i = cur_ch.u16[1] & 0x3FF + gr.pan_text_x + gr.pan_text_y << 5)
@@ -323,15 +376,61 @@ U0 GrUpdateTextFG()
 					i |= ~0x1F;
 				i = w1 * i + j;
 				if (dst_start <= dst + i < dst_end)
-					GrGlyph32(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst + i, w1);
+					GrGlyph32(cur_ch & (ATTRF_UNDERLINE + 0xFF), pen, dst + i, w1);
 			}
 			else
-				GrGlyph32(cur_ch & (ATTRF_UNDERLINE + 0xFFF), dst, w1);
+				GrGlyph32(cur_ch & (ATTRF_UNDERLINE + 0xFF), pen, dst, w1);
 		}
-		src += src_skip;
+		src	   += src_skip;
+		fg_src += src_skip;
+		bg_src += src_skip;
 	}
 }
 
+#help_index "TextBase Layer/Char;Char/TextBase Layer"
+
+public Bool TextColorChar(CTask *task=NULL, I64 x, I64 y, I64 d, CColorROPU32 fg, CColorROPU32 bg)
+{//Plot one char at text cell (x,y) in truecolor. Must be called 60fps in Fs->draw_it().
+//d = char in low byte + optional ATTRF_ flags. fg/bg accept ColorRGB() pens or 0-15 indices.
+//See $LK,"TextChar",A="MN:TextChar"$(). Only content cells (no border), NULL task means Fs.
+	I64 idx, col, row;
+
+	if (!task)
+		task = Fs;
+	if (TextChar(task, FALSE, x, y, d | ATTRF_TRUE_COLOR))
+	{
+		col = (task->scroll_x >> 3) + x + task->win_left;
+		row = (task->scroll_y >> 3) + y + task->win_top;
+		idx = row * TEXT_COLS + col;
+		gr.text_fg[idx] = GrColorResolve(fg);
+		gr.text_bg[idx] = GrColorResolve(bg);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+public U0 TextColorLenStr(CTask *task=NULL, I64 x, I64 y, I64 len, I64 attr, CColorROPU32 fg, CColorROPU32 bg, U8 *s)
+{//Plot len chars of s at (x,y), truecolor fg on bg. attr = extra ATTRF_ flags. 60fps in draw_it().
+	I64 i;
+
+	if (!task)
+		task = Fs;
+	for (i = 0; i < len; i++)
+		TextColorChar(task, x + i, y, s[i] | attr, fg, bg);
+}
+
+public U0 TextColorPrint(CTask *task=NULL, I64 x, I64 y, CColorROPU32 fg, CColorROPU32 bg, U8 *format, ...)
+{//Plot truecolor chars. 60fps in Fs->draw_it() callback. fg/bg accept ColorRGB() pens.
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
+	if (!task)
+		task = Fs;
+	TextColorLenStr(task, x, y, StrLen(buf), 0, fg, bg, buf);
+	Free(buf);
+}
+
+#help_index "Graphics/Misc"
 U0 DCBlotColor8(CDC *dc, CDC *img)
 {
 	U32	*src = img->body, *b0 = dc->body;

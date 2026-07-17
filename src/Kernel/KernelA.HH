@@ -1038,6 +1038,11 @@ public class CHashGlobalVar:CHashSrcSym
 
 #help_index "DolDoc"
 //See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
+//Bit 26 flags a truecolor text cell: its fg/bg come from the RGB planes
+//$LK,"gr.text_fg",A="FF:::/System/Gr/GrGlobals.ZC,text_fg"$/text_bg, not the palette nibbles. Bit 27 is reserved.
+#define ATTRF_TRUE_COLOR	0x04000000
+#define ATTRf_TRUE_COLOR	26
+
 #define ATTRF_BLINK 		0x10000000
 #define ATTRF_INVERT		0x20000000
 #define ATTRF_SEL 			0x40000000

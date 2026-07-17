@@ -8,6 +8,9 @@ public class CGrGlobals
 				*dc_cache,
 				*zoomed_dc;
 	U32			*text_base; 	//See $LK,"TextBase Layer",A="HI:TextBase Layer"$. (Similar to 0xB8000 but 32 bits)
+	//Parallel RGB planes, one U32 native pix per text cell. Only consulted for
+	//cells whose text_base entry has $LK,"ATTRF_TRUE_COLOR",A="MN:ATTRF_TRUE_COLOR"$ set. See $LK,"TextColorLenStr",A="MN:TextColorLenStr"$().
+	U32			*text_fg, *text_bg;
 	U16			*win_z_buf;
 
 	#define SPHT_ELEM_CODE		1
