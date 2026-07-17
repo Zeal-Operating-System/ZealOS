@@ -1,6 +1,5 @@
-Cd(__DIR__);
-#include "TelnetClass"
-#include "TelnetNegotiation"
+// Include order is managed by Telnet.ZC:
+// TelnetClass -> TelnetHelpers -> TelnetNegotiation -> TelnetANSI.
 
 U8 IsDigit(U8 ch) {
   return '0' <= ch <= '9';
@@ -26,10 +25,9 @@ I64 ANSIArtLoad(U8 *filename, U8 *buffer) {
     return -1;
   }
 
-  // Allocate memory for the buffer based on file size
-  *buffer = MAlloc(file->de.size);
-  if (!(*buffer)) {
-    PrintErr("Failed to allocate memory for the buffer");
+  // buffer is the caller's fixed BUF_SIZE array; refuse files that don't fit.
+  if (file->de.size > BUF_SIZE - 1) {
+    PrintErr("ANSI art file too big: %d bytes (max %d)", file->de.size, BUF_SIZE - 1);
     FClose(file);
     return -1;
   }

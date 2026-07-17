@@ -21,6 +21,9 @@ U0 HandleANSISequence(U8 *sequence)
         }
     }
 
+    if (ansi_param_count >= MAX_ANSI_PARAMS)
+        ansi_param_count = MAX_ANSI_PARAMS - 1; // loops below use m <= ansi_param_count
+
     // Now ptr should be at the final letter of the sequence
     U8 actionCode = *ptr;
 		// Handle specific ANSI escape sequences
@@ -450,12 +453,13 @@ U0 HandleANSISequence(U8 *sequence)
               
               break;
             case '?':
-              
+
               I64 code = 0;
 
+              ptr++; // move past '?'
               while (IsDigit(*ptr)) {
                 code = code * 10 + (*ptr - '0');
-                
+                ptr++;
               }
               switch (code) {
                 case 25:

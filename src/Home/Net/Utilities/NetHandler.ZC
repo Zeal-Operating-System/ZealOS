@@ -2,7 +2,11 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 {
 	CIPV4Packet packet;
 
-	IPV4PacketParse(&packet, ethernet_frame);
+	if (IPV4PacketParse(&packet, ethernet_frame) < 0)
+	{
+		NetErr("IPV4 HANDLER: Dropping malformed IPV4 packet.");
+		return;
+	}
 
 	ARPCachePut(packet.source_ip_address, ethernet_frame->source_address);
 

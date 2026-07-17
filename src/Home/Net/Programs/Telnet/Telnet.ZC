@@ -18,6 +18,7 @@ Cd(__DIR__);;
 
 #include "TelnetClass"
 #include "TelnetHelpers"
+#include "TelnetNegotiation"
 #include "TelnetANSI"
 
 // If you're using a custom palette, the colors might not seem right.
@@ -40,9 +41,7 @@ I64 TelnetOpen(U8 *host, U16 port) {
     return sock;
   }
 
-	// sock(CTCPSocket *)->timeout = 0;
-	// sock(CTCPSocket *)->timeout = TCP_TIMEOUT;
-  return sock;
+  return sock; // caller sets the socket timeout for poll-mode receive
 }
 
 U0 TermBottom()
@@ -132,9 +131,9 @@ U0 HandleControlCodes(U8 ch) {
         SysLog("case 127");
     }
     if (ch == 0x24) {
-      DocPrint(term.doc, "$$$$");
+      DocPrint(term.doc, "$$$$"); // escape DolDoc's '$', printing it raw would start a doc command
     }
-    if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
+    else if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
     {
       DocPrint(term.doc, "%c", ch);
     }
@@ -144,76 +143,147 @@ U0 HandleControlCodes(U8 ch) {
   }
 }
 
-U0 ANSIParse()
-{
-  // Basic Telnet protocol parser
-  U8 *ptr = term.buffer;
-  while (ptr < term.buffer + term.buffer_len) {
-    // disable all SAUCE00 art signature? dsnt work
-    // if (StrNCompare(ptr, "\033SAUCE", 6) == 0) 
-    // {
-    //   SysLog("SAUCE found\n");
-    //   term.buffer_len = ptr - term.buffer;
-    // }
-    // Telnet negotiation sequence
-    if (*ptr == NEGOTIATE) { 
-      /*telnet negotiation seems proper...however i don't really see any BBS systems relying on this too much...
-        for instance, the screen size tends to be reported using the Curser Report and not Telnet's NAWS */
-      if (term.sock_ready) TelnetNegotiate(term.sock, ptr);
-      ptr += 3;
-    }
-    else if (*ptr == ANSI_ESC) {
-      // ANSI escape sequence
-      ptr++;
-      if (*ptr == ANSI_CSI) {
+U0 TelnetByteProcess(U8 ch)
+{ // Stream state machine: one byte at a time, state persists in term across
+  // TCPSocketReceive calls, so telnet commands and ANSI escape sequences split
+  // over TCP segment boundaries are parsed correctly instead of printed as garbage.
+  switch (term.parse_state) {
+    case TELNET_STATE_NORMAL:
+      if (ch == NEGOTIATE)
+        term.parse_state = TELNET_STATE_IAC;
+      else if (ch == ANSI_ESC)
+        term.parse_state = TELNET_STATE_ESC;
+      else
+        HandleControlCodes(ch);
+      break;
 
-		ptr++; // Move past '['
-
-		U8 seqBuffer[64];
-		MemSet(seqBuffer, 0, sizeof(seqBuffer)); // Set all bytes in seqBuffer to 0
-
-		U8 *seqPtr = seqBuffer;
-
-		while (*ptr && !IsAlpha(*ptr) && (seqPtr - seqBuffer < sizeof(seqBuffer) - 1)) {
-			*seqPtr++ = *ptr++;
-		}
-		*seqPtr++ = *ptr++; // Append the final letter
-		*seqPtr = '\0'; // Null-terminate
-
-		HandleANSISequence(seqBuffer);
+    case TELNET_STATE_IAC:
+      switch (ch) {
+        case NEGOTIATE: // IAC IAC is an escaped literal 0xFF data byte
+          HandleControlCodes(NEGOTIATE);
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case WILL:
+        case WONT:
+        case DO:
+        case DONT:
+          term.iac_cmd = ch;
+          term.parse_state = TELNET_STATE_IAC_OPT;
+          break;
+        case SB:
+          term.sb_len = 0;
+          term.parse_state = TELNET_STATE_SB;
+          break;
+        default: // NOP, GA, AYT, ... : consume and ignore
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
       }
-    }
-    else {
-      // Print the received character
-      HandleControlCodes(*ptr);
-      ptr++;
-    }
+      break;
+
+    case TELNET_STATE_IAC_OPT:
+      if (term.sock_ready)
+        TelnetNegotiateOption(term.sock, term.iac_cmd, ch);
+      term.parse_state = TELNET_STATE_NORMAL;
+      break;
+
+    case TELNET_STATE_SB:
+      if (ch == NEGOTIATE)
+        term.parse_state = TELNET_STATE_SB_IAC;
+      else if (term.sb_len < TELNET_SB_BUF_SIZE)
+        term.sb_buf[term.sb_len++] = ch;
+      break;
+
+    case TELNET_STATE_SB_IAC:
+      if (ch == SE) { // IAC SE terminates the subnegotiation
+        if (term.sock_ready)
+          TelnetSubnegotiate(term.sock, term.sb_buf, term.sb_len);
+        term.parse_state = TELNET_STATE_NORMAL;
+      }
+      else if (ch == NEGOTIATE) { // IAC IAC inside SB: literal 0xFF payload byte
+        if (term.sb_len < TELNET_SB_BUF_SIZE)
+          term.sb_buf[term.sb_len++] = NEGOTIATE;
+        term.parse_state = TELNET_STATE_SB;
+      }
+      else // malformed subnegotiation, bail out
+        term.parse_state = TELNET_STATE_NORMAL;
+      break;
+
+    case TELNET_STATE_ESC:
+      if (ch == ANSI_CSI) {
+        term.seq_len = 0;
+        term.parse_state = TELNET_STATE_CSI;
+      }
+      else { // non-CSI escape: drop the ESC, handle the byte normally
+        term.parse_state = TELNET_STATE_NORMAL;
+        TelnetByteProcess(ch);
+      }
+      break;
+
+    case TELNET_STATE_CSI:
+      if (IsAlpha(ch) || term.seq_len >= TELNET_SEQ_BUF_SIZE - 2) {
+        term.seq_buf[term.seq_len++] = ch; // final byte (or overlong sequence force-cut)
+        term.seq_buf[term.seq_len] = '\0';
+        HandleANSISequence(term.seq_buf);
+        term.parse_state = TELNET_STATE_NORMAL;
+      }
+      else
+        term.seq_buf[term.seq_len++] = ch;
+      break;
   }
 }
 
+U0 ANSIParse()
+{
+  I64 i;
+  for (i = 0; i < term.buffer_len; i++)
+    TelnetByteProcess(term.buffer[i]);
+}
+
 U0 TerminalTask() {
-  while (!term.sock_ready)  {
-    Sleep(100); // Avoid busy waiting
+  I64 received;
+
+  while (!force_disconnect) {
+    // Claim busy BEFORE checking sock_ready: TelnetDisconnect clears sock_ready
+    // then waits on task_idle, so this order means it can never observe a stale
+    // idle flag while we are about to touch the socket.
+    term.task_idle = FALSE;
+
+    if (!term.sock_ready) {
+      term.task_idle = TRUE; // main task may now safely close/free the socket
+      Sleep(50);
+      continue;
+    }
+
+    received = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
+
+    if (received > 0) {
+      term.buffer_len = received;
+      ANSIParse;
+    }
+    else if (received == 0) { // orderly close or reset by remote
+      term.sock_ready = 0;
+      DocPrint(term.doc, "\n$$BG,RED$$$$WHITE$$Connection closed by remote host. Shift-Esc for splash.$$FG$$$$BG$$\n");
+    }
+    else
+      Sleep(20); // non-blocking receive: nothing pending yet
   }
 
-  while (term.sock_ready && !force_disconnect) {
-receive_data:
-    term.buffer_len = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
-    if (term.buffer_len > 0) {
-      term.buffer[term.buffer_len] = '\0';
-      // parse the buffer
-      ANSIParse;
-    } else {
-      //SysLog("BUF_SIZE: %d\n", BUF_SIZE);
-      if (!term.sock_ready || force_disconnect)
-        DocPrint(term.doc, "Error: Connection closed by the remote host.\n");
-      else {
-        //SysLog("goto received_data\n");
-        goto receive_data;
-      }
-      break;
-    }
-  }
+  term.task_idle = TRUE;
+}
+
+U0 TelnetDisconnect()
+{ // Close the current socket without racing TerminalTask's receive path.
+  if (term.sock == 0)
+    return;
+
+  term.sock_ready = 0;
+
+  while (!term.task_idle)
+    Sleep(10); // wait for TerminalTask to finish its in-flight receive
+
+  term.sock(CTCPSocket *)->timeout = 500; // bounded graceful FIN handshake
+  TCPSocketClose(term.sock);
+  term.sock = 0;
 }
 
 U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
@@ -222,11 +292,21 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   term.window_height = 25;
   term.doc = Fs->display_doc;
   term.waiting_for_input = TRUE;
+  term.sock = 0;
   term.sock_ready = 0;
+  term.task_idle = TRUE;
+  term.parse_state = TELNET_STATE_NORMAL;
+  term.buffer_len = 0;
+  force_disconnect = FALSE; // reset the global so a second run doesn't exit instantly
   I64 art_path = "::/Home/Net/Programs/Telnet/Art/TelnetSplash.ans";
   I64 message_code, arg1, arg2;
   GrPaletteGet(original_palette);
   AutoComplete(OFF);
+
+  // Single receive task for the whole session; it idles while sock_ready is 0.
+  // (Previously one was spawned per connection, leaking tasks that kept using
+  // freed sockets after reconnects.)
+  term.task = Spawn(&TerminalTask, NULL, "Telnet");
 
   DocMax;
   DocCursor(OFF);
@@ -281,10 +361,9 @@ show_splash:
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
   if (term.buffer_len > 0) {
     term.buffer[term.buffer_len] = '\0';
-    // parse the buffer
+    term.parse_state = TELNET_STATE_NORMAL; // don't inherit half-parsed state from a dropped connection
     ANSIParse;
     TermBottom;
-    // Free(term.buffer);
   }
   else {
     DocClear;
@@ -294,20 +373,21 @@ show_splash:
 init_connection:
   while (!term.waiting_for_input || host != NULL)
   {
-    // if(term.sock != NULL) TCPSocketClose(term.sock);
-    // TODO: should probably kill the task if it already exists too?
-
-    // Spawn a task to receive data from the socket
-    term.task = Spawn(&TerminalTask, NULL, "Telnet");
-
+    TelnetDisconnect; // safely drop any previous connection first
 
     term.sock = TelnetOpen(host, port);
     if (term.sock <= 0) {
-      // return;
+      term.sock = 0;
       term.waiting_for_input = TRUE;
       host = NULL;
       goto show_splash;
     }
+
+    // Poll-mode receives: TerminalTask paces itself, and close paths never
+    // have to wait out a long blocking receive on a soon-to-be-freed socket.
+    term.sock(CTCPSocket *)->timeout = 0;
+    term.parse_state = TELNET_STATE_NORMAL;
+
     Fs->border_attr = WHITE << 4 + GREEN;
     term.sock_ready = 1; // Signal that the socket is ready
     term.waiting_for_input = FALSE;
@@ -416,16 +496,16 @@ init_connection:
               default:
                 break;
             }
+            break; // was falling through and sending backspace codes on every TAB
           case CH_BACKSPACE:
             if (term.sock_ready) TCPSocketSendString(term.sock, "\x08\x7F");
             break;
           case CH_SHIFT_ESC:
-            if (term.sock_ready)
-            {
+            if (term.sock)
+            { // covers both live connections and remote-closed sockets not yet freed
               term.waiting_for_input = TRUE;
-              term.sock_ready = 0;
               host = NULL;
-              TCPSocketClose(term.sock);
+              TelnetDisconnect;
               DocClear;
               "Telnet connection closed.\n";
               Sleep(100);
@@ -461,10 +541,9 @@ init_connection:
   catch
     PutExcept;
 
-  // ideally go back to the splashscreen and wait for another input?
-  // term.sock_ready = 0;
-  // term.waiting_for_input = TRUE;
-  // goto show_splash;
+  // Tear down: stop the receive task, then free any remaining socket.
+  force_disconnect = TRUE;
+  TelnetDisconnect;
 
   MenuPop;
   SettingsPop;

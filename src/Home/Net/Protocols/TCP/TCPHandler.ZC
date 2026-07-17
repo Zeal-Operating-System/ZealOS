@@ -49,18 +49,22 @@ Bool TCPHandleValidSEQ(CTCPSocket *tcp_socket, CTCPHeader *header, U32 segment_s
 			if (Bt(&header->flags, TCPf_FIN))
 			{
 				must_ack = TRUE;
-				tcp_socket->next_recv_seq_num++;
 
 				switch (tcp_socket->state)
-				{
+				{ // only consume the FIN sequence octet once; a retransmitted FIN
+				  // (e.g. our ACK was lost) must not advance next_recv_seq_num again.
 					case TCP_STATE_ESTABLISHED:
+						tcp_socket->next_recv_seq_num++;
 						tcp_socket->state = TCP_STATE_CLOSE_WAIT;
 						break;
 					case TCP_STATE_FIN_WAIT1:
 					case TCP_STATE_FIN_WAIT2:
+						tcp_socket->next_recv_seq_num++;
 						tcp_socket->state = TCP_STATE_TIME_WAIT;
 						break;
-				} // review RFC, whether more state checks needed here.
+					default: // duplicate FIN: just re-ACK
+						break;
+				}
 			}
 
 
@@ -247,7 +251,16 @@ U0 TCPHandleSocket(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *head
 			}
 
 			if (!is_seq_valid)
+			{
 				NetWarn("TCP HANDLE SOCKET: Invalid SEQ.");
+
+				// RFC 793: an out-of-window segment (unless RST) is answered with an
+				// ACK re-asserting our current state, so the remote can resync.
+				// Without this, a retransmitted FIN is never re-ACKed and the remote
+				// retransmits it until it times out.
+				if (!Bt(&header->flags, TCPf_RST))
+					must_ack = TRUE;
+			}
 
 			must_ack |= TCPHandleACK(tcp_socket, packet, header, segment_seq_num, segment_ack_num, segment_length);
 
@@ -365,4 +378,5 @@ I64 TCPHandler(CIPV4Packet *packet)
 	NetDebug("TCP HANDLER: Running TCP HANDLE SOCKET");
 	TCPHandleSocket(tcp_socket, packet, header, data, length);
 
+	return 0;
 }
