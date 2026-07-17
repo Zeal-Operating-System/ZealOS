@@ -1100,6 +1100,11 @@ public class CHashGlobalVar:CHashSrcSym
 
 #define DOCT_TYPES_NUM			43
 
+//Marker OR'd into a doldoc.hash cmd's user_data0 for the $FG24/$BG24 truecolor
+//variants of $FG/$BG. Their doc entry stays DOCT_FOREGROUND/BACKGROUND but the
+//attr is flagged $LK,"ROPF_TRUE_COLOR",A="MN:ROPF_TRUE_COLOR"$ and holds a 0xRRGGBB. Above all DOCT_ values.
+#define DOC_TC_CMD_FLAG 		0x100
+
 //CDocEntry.type flags upper bits
 #define DOCET_BLINK 		ATTRF_BLINK
 #define DOCET_INVERT		ATTRF_INVERT
