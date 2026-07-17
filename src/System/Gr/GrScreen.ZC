@@ -25,8 +25,20 @@ U0 GrUpdateTaskWin(CTask *task)
 	try
 	{
 		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER))
-			TextBorder(Fs,	task->win_left, task->win_right, task->win_top, task->win_bottom,
-							task->border_attr, task == sys_focus_task);
+		{
+			if (gr.tc_chrome)
+			{
+				if (task == sys_focus_task)
+					TextBorderColor(Fs, task->win_left, task->win_right, task->win_top, task->win_bottom,
+									gr.tc_border_fg, gr.tc_border_bg, TRUE);
+				else
+					TextBorderColor(Fs, task->win_left, task->win_right, task->win_top, task->win_bottom,
+									gr.tc_border_unfocus_fg, gr.tc_border_bg, FALSE);
+			}
+			else
+				TextBorder(Fs,	task->win_left, task->win_right, task->win_top, task->win_bottom,
+								task->border_attr, task == sys_focus_task);
+		}
 
 		TextRect(task->win_left, task->win_right, task->win_top, task->win_bottom, task->text_attr << 8);
 		if (task == sys_winmgr_task)

@@ -1,0 +1,33 @@
+// Truecolor window CHROME demo. Every window's border frame animates through
+// 24-bit color, driven by the theme API GuiChromeTrueColor().
+//
+// This is global chrome: open other windows (e.g. a Dir; or Ed) alongside and
+// their borders cycle too. Press any key to stop and restore the palette border.
+
+U0 TrueColorChrome()
+{
+	I64 r, g, b;
+	F64 t = 0;
+
+	"\nTruecolor window chrome demo.\n";
+	"All window BORDERS now cycle through 24-bit colors.\n";
+	"Open another window (Dir; or Ed(\"foo\");) to see it too.\n";
+	"Press any key to stop and restore the 16-color border.\n\n";
+
+	while (!CharScan)
+	{
+		t += 0.04;
+		r = 128 + 127.0 * Sin(t);
+		g = 128 + 127.0 * Sin(t + 2.094);
+		b = 128 + 127.0 * Sin(t + 4.188);
+		//Bright focused border, dark matching background.
+		GuiChromeTrueColor(ColorRGB(r, g, b), ColorRGB(r / 5, g / 5, b / 5));
+		Refresh;
+		Sleep(20);
+	}
+
+	GuiChromePalette;
+	"\nRestored.\n";
+}
+
+TrueColorChrome;

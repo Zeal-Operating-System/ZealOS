@@ -70,6 +70,28 @@ public I64 GrRopBGet(CColorROPU32 cr)
 	return cr.c0.rop;
 }
 
+public U0 GuiChromeTrueColor(CColorROPU32 border_fg, CColorROPU32 border_bg=BLACK, CColorROPU32 border_unfocus_fg=0)
+{//Draw window borders in truecolor. Args accept $LK,"ColorRGB",A="MN:ColorRGB"$() pens or 0-15 indices.
+//border_unfocus_fg=0 dims unfocused borders toward the border bg.
+	gr.tc_border_fg = GrColorResolve(border_fg);
+	gr.tc_border_bg = GrColorResolve(border_bg);
+	if (border_unfocus_fg)
+		gr.tc_border_unfocus_fg = GrColorResolve(border_unfocus_fg);
+	else
+	{//Halfway between fg and bg.
+		gr.tc_border_unfocus_fg =
+			(gr.tc_border_fg >> 1 & 0x7F7F7F) + (gr.tc_border_bg >> 1 & 0x7F7F7F);
+	}
+	gr.tc_title_fg = gr.tc_border_fg;
+	gr.tc_title_bg = gr.tc_border_bg;
+	gr.tc_chrome = TRUE;
+}
+
+public U0 GuiChromePalette()
+{//Revert window chrome to the legacy 16-color border_attr path.
+	gr.tc_chrome = FALSE;
+}
+
 public U8 gr_rainbow_10[10] = {BLACK, BROWN, RED, LTRED, YELLOW, GREEN, BLUE, PURPLE, LTGRAY, WHITE};
 
 DefineListLoad("ST_RAINBOW_10", "BLACK\0BROWN\0RED\0LTRED\0YELLOW\0GREEN\0BLUE\0PURPLE\0LTGRAY\0WHITE\0");
