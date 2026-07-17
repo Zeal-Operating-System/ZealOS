@@ -1,0 +1,329 @@
+// Minimal HTTP client for ZealOS.
+// Speaks HTTP/1.0 with a Host header: 1.0 keeps responses un-chunked and
+// close-delimited, so "read until EOF" is the complete framing story.
+// HTTPS is recognized but refused: it needs a TLS stack we don't have yet.
+
+#define HTTP_PORT_DEFAULT	80
+#define HTTPS_PORT_DEFAULT	443
+#define HTTP_MAX_REDIRECTS	5
+#define HTTP_RECV_CHUNK		8192
+#define HTTP_TIMEOUT		10000 // ms of receive silence before giving up
+
+class CHttpUrl
+{
+	U8	 host[256];
+	U8	 path[1024];
+	U16	 port;
+	Bool is_https;
+};
+
+class CHttpResponse
+{
+	I64	 status;      // e.g. 200, 404; 0 if the status line didn't parse
+	U8	*headers;     // raw header block, NUL-terminated
+	U8	*body;        // NUL-terminated for convenience
+	I64	 body_length; // actual byte count (body may contain NULs)
+};
+
+U0 HttpResponseFree(CHttpResponse *response)
+{
+	if (!response)
+		return;
+
+	Free(response->headers);
+	Free(response->body);
+	Free(response);
+}
+
+I64 HttpUrlParse(U8 *url, CHttpUrl *out)
+{ // Split scheme://host:port/path. Missing scheme means http.
+	U8	*p = url;
+	U8	*host_start;
+	U8	*colon = NULL;
+	I64	 host_len;
+
+	out->port	  = HTTP_PORT_DEFAULT;
+	out->is_https = FALSE;
+	StrCopy(out->path, "/");
+
+	if (!StrNICompare(p, "http://", 7))
+		p += 7;
+	else if (!StrNICompare(p, "https://", 8))
+	{
+		p += 8;
+		out->is_https = TRUE;
+		out->port	  = HTTPS_PORT_DEFAULT;
+	}
+
+	host_start = p;
+	while (*p && *p != '/')
+	{
+		if (*p == ':')
+			colon = p;
+		p++;
+	}
+
+	if (colon)
+	{
+		host_len  = colon - host_start;
+		out->port = Str2I64(colon + 1);
+	}
+	else
+		host_len = p - host_start;
+
+	if (host_len < 1 || host_len > 255)
+	{
+		NetErr("HTTP URL PARSE: Bad host in URL: %s", url);
+		return -1;
+	}
+
+	MemCopy(out->host, host_start, host_len);
+	out->host[host_len] = 0;
+
+	if (*p)
+	{ // remainder starting at '/' is the path
+		if (StrLen(p) > 1023)
+		{
+			NetErr("HTTP URL PARSE: Path too long.");
+			return -1;
+		}
+		StrCopy(out->path, p);
+	}
+
+	return 0;
+}
+
+U8 *HttpHeaderGet(U8 *headers, U8 *name)
+{ // Case-insensitive header lookup. Returns MAlloc'ed value copy or NULL.
+	U8	*line = headers;
+	U8	*value, *end, *result;
+	I64	 name_len = StrLen(name);
+
+	while (line && *line)
+	{
+		if (!StrNICompare(line, name, name_len) && line[name_len] == ':')
+		{
+			value = line + name_len + 1;
+			while (*value == ' ' || *value == '\t')
+				value++;
+
+			end = value;
+			while (*end && *end != '\r' && *end != '\n')
+				end++;
+
+			result = MAlloc(end - value + 1);
+			MemCopy(result, value, end - value);
+			result[end - value] = 0;
+
+			return result;
+		}
+
+		line = StrFind("\n", line);
+		if (line)
+			line++;
+	}
+
+	return NULL;
+}
+
+U8 *HttpUrlResolve(CHttpUrl *base, U8 *href)
+{ // Make href absolute against base. Returns MAlloc'ed URL, NULL if the
+  // scheme is unsupported (mailto:, javascript:, ...).
+	U8	*result, *last_slash, *scan;
+	U8	 dir[1024];
+	I64	 dir_len;
+
+	if (!href || !*href || *href == '#')
+		return NULL;
+
+	if (!StrNICompare(href, "http://", 7) || !StrNICompare(href, "https://", 8))
+		return StrNew(href);
+
+	if (!StrNICompare(href, "mailto:", 7) || !StrNICompare(href, "javascript:", 11))
+		return NULL;
+
+	if (href[0] == '/' && href[1] == '/')
+		return MStrPrint("http:%s", href); // protocol-relative
+
+	if (*href == '/')
+	{
+		if (base->port == HTTP_PORT_DEFAULT)
+			return MStrPrint("http://%s%s", base->host, href);
+		return MStrPrint("http://%s:%d%s", base->host, base->port, href);
+	}
+
+	// relative to the directory of base->path
+	StrCopy(dir, base->path);
+	last_slash = NULL;
+	scan = dir;
+	while (*scan)
+	{
+		if (*scan == '/')
+			last_slash = scan;
+		scan++;
+	}
+	if (last_slash)
+		last_slash[1] = 0; // keep through the final '/'
+	dir_len = StrLen(dir);
+
+	if (dir_len + StrLen(href) > 1000)
+		return NULL;
+
+	if (base->port == HTTP_PORT_DEFAULT)
+		result = MStrPrint("http://%s%s%s", base->host, dir, href);
+	else
+		result = MStrPrint("http://%s:%d%s%s", base->host, base->port, dir, href);
+
+	return result;
+}
+
+CHttpResponse *HttpGetRaw(CHttpUrl *url)
+{ // One request/response round trip; no redirect handling here.
+	CTCPSocket	  *sock;
+	CHttpResponse *response;
+	U8			  *request, *buf, *new_buf, *header_end, *status_ptr;
+	I64			   buf_size, buf_used, received, header_block_len;
+
+	if (url->is_https)
+	{
+		NetErr("HTTP GET: HTTPS not supported yet (no TLS implementation).");
+		return NULL;
+	}
+
+	sock = TCPConnectionCreate(url->host, url->port);
+	if (sock <= 0)
+	{
+		NetErr("HTTP GET: Connection to %s:%d failed.", url->host, url->port);
+		return NULL;
+	}
+
+	sock->timeout = HTTP_TIMEOUT;
+
+	request = MStrPrint("GET %s HTTP/1.0\r\n"
+						"Host: %s\r\n"
+						"User-Agent: ZealOS-Zeb/0.1\r\n"
+						"Accept: text/html, text/plain, */*\r\n"
+						"Connection: close\r\n"
+						"\r\n",
+						url->path, url->host);
+	TCPSocketSendString(sock, request);
+	Free(request);
+
+	buf_size = HTTP_RECV_CHUNK * 4;
+	buf_used = 0;
+	buf = MAlloc(buf_size);
+
+	received = TCPSocketReceive(sock, buf, HTTP_RECV_CHUNK);
+	while (received > 0)
+	{
+		buf_used += received;
+
+		if (buf_used + HTTP_RECV_CHUNK + 1 > buf_size)
+		{
+			buf_size *= 2;
+			new_buf = MAlloc(buf_size);
+			MemCopy(new_buf, buf, buf_used);
+			Free(buf);
+			buf = new_buf;
+		}
+
+		received = TCPSocketReceive(sock, buf + buf_used, HTTP_RECV_CHUNK);
+	}
+
+	TCPSocketClose(sock);
+	buf[buf_used] = 0;
+
+	if (buf_used < 12)
+	{
+		NetErr("HTTP GET: Empty or truncated response (%d bytes).", buf_used);
+		Free(buf);
+		return NULL;
+	}
+
+	header_end = StrFind("\r\n\r\n", buf);
+	if (!header_end)
+	{
+		NetErr("HTTP GET: No header terminator in response.");
+		Free(buf);
+		return NULL;
+	}
+
+	response = CAlloc(sizeof(CHttpResponse));
+
+	header_block_len   = header_end - buf;
+	response->headers  = MAlloc(header_block_len + 1);
+	MemCopy(response->headers, buf, header_block_len);
+	response->headers[header_block_len] = 0;
+
+	response->body_length = buf_used - (header_block_len + 4);
+	response->body		  = MAlloc(response->body_length + 1);
+	MemCopy(response->body, header_end + 4, response->body_length);
+	response->body[response->body_length] = 0;
+
+	// "HTTP/1.x NNN ..." -> status is after the first space
+	status_ptr = StrFind(" ", response->headers);
+	if (status_ptr)
+		response->status = Str2I64(status_ptr + 1);
+
+	Free(buf);
+
+	NetLog("HTTP GET: %s:%d%s -> %d, %d body bytes.",
+		   url->host, url->port, url->path, response->status, response->body_length);
+
+	return response;
+}
+
+CHttpResponse *HttpGet(U8 *url)
+{ // GET with redirect following. Caller frees with HttpResponseFree.
+	CHttpUrl	   parsed;
+	CHttpResponse *response = NULL;
+	U8			  *current = StrNew(url);
+	U8			  *location, *resolved;
+	I64			   redirects = 0;
+	Bool		   done = FALSE;
+
+	while (!done && redirects <= HTTP_MAX_REDIRECTS)
+	{
+		if (HttpUrlParse(current, &parsed) < 0)
+			done = TRUE;
+		else
+		{
+			response = HttpGetRaw(&parsed);
+
+			if (response &&
+				(response->status == 301 || response->status == 302 ||
+				 response->status == 303 || response->status == 307 ||
+				 response->status == 308))
+			{
+				location = HttpHeaderGet(response->headers, "Location");
+				if (location)
+				{
+					resolved = HttpUrlResolve(&parsed, location);
+					Free(location);
+
+					if (resolved)
+					{
+						NetLog("HTTP GET: Redirect %d -> %s", response->status, resolved);
+						Free(current);
+						current = resolved;
+						HttpResponseFree(response);
+						response = NULL;
+						redirects++;
+					}
+					else
+					{
+						NetErr("HTTP GET: Unresolvable redirect target.");
+						done = TRUE;
+					}
+				}
+				else
+					done = TRUE; // redirect without Location: hand it to the caller
+			}
+			else
+				done = TRUE;
+		}
+	}
+
+	Free(current);
+	return response;
+}

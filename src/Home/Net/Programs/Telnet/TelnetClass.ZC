@@ -18,6 +18,8 @@
 #define TERM_MAX_COLS	132
 #define TERM_MAX_ROWS	60
 
+#define TERM_SCROLLBACK_ROWS	600 // history ring; rows evicted off the top land here
+
 #define TERM_DEFAULT_ATTR	0x07 // LTGRAY on BLACK, classic ANSI default
 
 class Terminal {
@@ -33,6 +35,12 @@ class Terminal {
 
   U8  screen_ch[TERM_MAX_ROWS * TERM_MAX_COLS];   // row-major, stride TERM_MAX_COLS
   U8  screen_attr[TERM_MAX_ROWS * TERM_MAX_COLS];
+
+  U8  back_ch[TERM_SCROLLBACK_ROWS * TERM_MAX_COLS];   // scrollback ring buffer
+  U8  back_attr[TERM_SCROLLBACK_ROWS * TERM_MAX_COLS];
+  I64 back_head;    // next ring row to write
+  I64 back_count;   // filled ring rows
+  I64 view_offset;  // rows scrolled back into history; 0 = live view
   I64 csr_row, csr_col;
   I64 saved_row, saved_col; // for CSI s/u and ESC 7/8
   U8  cur_attr;             // attribute applied to newly written cells

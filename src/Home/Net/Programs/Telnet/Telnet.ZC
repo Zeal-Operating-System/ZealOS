@@ -193,6 +193,9 @@ U0 TelnetByteProcess(U8 ch)
 U0 ANSIParse()
 {
   I64 i;
+
+  term.view_offset = 0; // new output snaps the view back to live
+
   for (i = 0; i < term.buffer_len; i++)
     TelnetByteProcess(term.buffer[i]);
 }
@@ -287,9 +290,11 @@ U8 TermPaletteColor(U8 c, Bool invert)
 }
 
 U0 TelnetDrawIt(CTask *task, CDC *dc)
-{ // Blit the cell grid: background rect per same-attribute run, then glyphs.
-  I64 r, c, i, run_start, csr_col;
+{ // Blit the visible rows (scrollback + live grid), one background rect per
+  // same-attribute run, then glyphs.
+  I64 r, c, i, run_start, csr_col, view_start, idx, ring;
   U8 attr, ch;
+  U8 *row_ch, *row_attr;
   Bool invert;
 
   no_warn task;
@@ -299,14 +304,31 @@ U0 TelnetDrawIt(CTask *task, CDC *dc)
   invert = gr_palette[BLACK].b + gr_palette[BLACK].g + gr_palette[BLACK].r >
            gr_palette[WHITE].b + gr_palette[WHITE].g + gr_palette[WHITE].r;
 
+  // Visible window starts view_offset rows back into the combined
+  // [history ring][live screen] row sequence.
+  view_start = term.back_count - term.view_offset;
+
   for (r = 0; r < term.window_height; r++)
   {
+    idx = view_start + r;
+    if (idx < term.back_count)
+    { // history row: translate combined index to ring slot
+      ring = (term.back_head - term.back_count + idx + TERM_SCROLLBACK_ROWS) % TERM_SCROLLBACK_ROWS;
+      row_ch   = term.back_ch   + ring * TERM_MAX_COLS;
+      row_attr = term.back_attr + ring * TERM_MAX_COLS;
+    }
+    else
+    { // live screen row
+      row_ch   = term.screen_ch   + (idx - term.back_count) * TERM_MAX_COLS;
+      row_attr = term.screen_attr + (idx - term.back_count) * TERM_MAX_COLS;
+    }
+
     c = 0;
     while (c < term.window_width)
     {
       run_start = c;
-      attr = term.screen_attr[r * TERM_MAX_COLS + c];
-      while (c < term.window_width && term.screen_attr[r * TERM_MAX_COLS + c] == attr)
+      attr = row_attr[c];
+      while (c < term.window_width && row_attr[c] == attr)
         c++;
 
       dc->color = TermPaletteColor(attr >> 4, invert); // background
@@ -316,15 +338,20 @@ U0 TelnetDrawIt(CTask *task, CDC *dc)
       dc->color = TermPaletteColor(attr & 0x0F, invert); // foreground glyphs
       for (i = run_start; i < c; i++)
       {
-        ch = term.screen_ch[r * TERM_MAX_COLS + i];
+        ch = row_ch[i];
         if (ch != ' ')
           GrPutChar(dc, i * FONT_WIDTH, r * FONT_HEIGHT, ch);
       }
     }
   }
 
-  if (term.csr_visible && term.sock_ready)
-  { // underline-style cursor
+  if (term.view_offset)
+  { // scrolled into history: yellow marker bar along the top edge
+    dc->color = TermPaletteColor(YELLOW, invert);
+    GrRect(dc, 0, 0, term.window_width * FONT_WIDTH, 2);
+  }
+  else if (term.csr_visible && term.sock_ready)
+  { // underline-style cursor, live view only
     csr_col = term.csr_col;
     if (csr_col >= term.window_width) // deferred-wrap position parks past the edge
       csr_col = term.window_width - 1;
@@ -408,6 +435,7 @@ show_splash:
   Fs->border_attr = WHITE << 4 + LTRED;
   term.cur_attr = TERM_DEFAULT_ATTR;
   term.bold = FALSE;
+  TermScrollbackClear;
   TermClear;
 
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
@@ -447,6 +475,7 @@ init_connection:
     Sleep(600);
     term.cur_attr = TERM_DEFAULT_ATTR;
     term.bold = FALSE;
+    TermScrollbackClear;
     TermClear;
     break;
   }
@@ -501,10 +530,22 @@ init_connection:
             {
               case SC_CURSOR_LEFT: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[D");  break;
               case SC_CURSOR_RIGHT: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[C"); break;
-              case SC_CURSOR_UP: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[A"); break;
-              case SC_CURSOR_DOWN: if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[B"); break;
-              case SC_PAGE_UP:  if (term.sock_ready) TCPSocketSendString(term.sock, "\033[V"); break;
-              case SC_PAGE_DOWN:if (term.sock_ready) TCPSocketSendString(term.sock, "\033[U"); break;
+              case SC_CURSOR_UP: // offline (art viewing): scroll history
+                if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[A");
+                else TermViewScroll(1);
+                break;
+              case SC_CURSOR_DOWN:
+                if (term.sock_ready) TCPSocketSendString(term.sock, "\x1B[B");
+                else TermViewScroll(-1);
+                break;
+              case SC_PAGE_UP: // Shift+PgUp scrolls history even while connected
+                if (term.sock_ready && !(sc & SCF_SHIFT)) TCPSocketSendString(term.sock, "\033[V");
+                else TermViewScroll(term.window_height - 1);
+                break;
+              case SC_PAGE_DOWN:
+                if (term.sock_ready && !(sc & SCF_SHIFT)) TCPSocketSendString(term.sock, "\033[U");
+                else TermViewScroll(-(term.window_height - 1));
+                break;
               case SC_HOME:     if (term.sock_ready) TCPSocketSendString(term.sock, "\033[H"); break;
               case SC_END:      if (term.sock_ready) TCPSocketSendString(term.sock, "\033[K"); break;
               case SC_DELETE:   if (term.sock_ready) TCPSocketSendString(term.sock, "\x7F"); break;

@@ -27,9 +27,37 @@ U0 TermClear()
   term.csr_col = 0;
 }
 
+U0 TermScrollbackPush()
+{ // top screen row is about to be evicted; save it into the history ring
+  MemCopy(term.back_ch   + term.back_head * TERM_MAX_COLS, term.screen_ch,   TERM_MAX_COLS);
+  MemCopy(term.back_attr + term.back_head * TERM_MAX_COLS, term.screen_attr, TERM_MAX_COLS);
+
+  term.back_head = (term.back_head + 1) % TERM_SCROLLBACK_ROWS;
+  if (term.back_count < TERM_SCROLLBACK_ROWS)
+    term.back_count++;
+}
+
+U0 TermScrollbackClear()
+{
+  term.back_head   = 0;
+  term.back_count  = 0;
+  term.view_offset = 0;
+}
+
+U0 TermViewScroll(I64 delta)
+{ // positive = further back into history; clamped to [0, back_count]
+  term.view_offset += delta;
+  if (term.view_offset < 0)
+    term.view_offset = 0;
+  if (term.view_offset > term.back_count)
+    term.view_offset = term.back_count;
+}
+
 U0 TermScrollUp()
 {
   I64 body = (term.window_height - 1) * TERM_MAX_COLS;
+
+  TermScrollbackPush;
 
   MemCopy(term.screen_ch,   term.screen_ch   + TERM_MAX_COLS, body);
   MemCopy(term.screen_attr, term.screen_attr + TERM_MAX_COLS, body);
