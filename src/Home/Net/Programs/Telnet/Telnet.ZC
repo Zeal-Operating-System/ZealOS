@@ -4,8 +4,7 @@
 Cd(__DIR__);;
 
 #define TELNET_PORT 23
-// #define BUF_SIZE 8192 // way too big?
-#define BUF_SIZE 819200 // way too big?
+#define BUF_SIZE 819200
 #define INPUT_BUF_SIZE 32
 #define TIMEOUT_DURATION 500000
 
@@ -23,123 +22,41 @@ Cd(__DIR__);;
 
 // If you're using a custom palette, the colors might not seem right.
 CBGR24 original_palette[COLORS_NUM];
-Bool dark_mode = TRUE; // since ZealOS is dark by default
 Bool original_colors = FALSE;
 Bool force_disconnect = FALSE;
 
-I64 TelnetOpen(U8 *host, U16 port) {
-  I64 sock;
-
-  if (host == NULL) {
-    return -1;
-  }
-  DocPrint(term.doc, "$$GREEN$$Connecting to %s:%d.$$FG$$$$BG$$\n", host, port);
-  sock = TCPConnectionCreate(host, port);
-  if (sock <= 0) {
-    // PrintErr("Failed to connect to %s:%d\n", host, port);
-    PopUpOk("\n\n\tFailed to connect\n\n");
-    return sock;
-  }
-
-  return sock; // caller sets the socket timeout for poll-mode receive
-}
-
-U0 TermBottom()
-{
-	Bool unlock;
-	CDoc *doc = term.doc;
-
-	unlock = DocLock(doc);
-	doc->cur_entry = doc;
-	doc->cur_col = 0;
-	if (unlock)
-		DocUnlock(doc);
-}
-
 U0 HandleControlCodes(U8 ch) {
-  if (ch < 32) { // ASCII code below 32 (control character)
-    switch (ch) {
-      case 0: // NUL (Null) - Typically ignored
-        break;
-      case 7: // BEL (Bell)
-        Beep;
-        break;
-      case 8: // BS (Backspace)
-        DocPrint(term.doc, "$$CM,-1,0$$");
-        break;
-      case 9: // HT (Horizontal Tab)
-        DocPrint(term.doc, "$$CM,8,0$$");
-        break;
-      case 10: // LF (Line Feed)
-        // DocPrint(term.doc, "\n");
-        break;
-      case 11: // VT (Vertical Tab)
-        SysLog("Vertical Tab\n");
-        break;
-      case 12: // FF (Form Feed)
-        // SysLog("form feed\n");
-        DocClear(term.doc);
-        // DocPrint(term.doc, "\f");
-        break;
-      case 13: // CR (Carriage Return)
-        // DocPrint(term.doc, "\r");
-        DocPrint(term.doc, "$$CM+LX+PRY,LE=0,RE=1$$");
-        break;
-      case 14: // SO (Shift Out) - Switch to an alternate character set
-      case 15: // SI (Shift In)  - Switch back to the default character set
-        SysLog("Shift In/Out\n");
-        break;
-      case 22:
-        SysLog("Synchronous Idle\n");
-        break;
-      case 23:
-        SysLog("End of Transmission Block\n");
-        break;
-      case 24:
-        SysLog("Cancel\n");
-        break;
-      case 25:
-        SysLog("End of Medium\n");
-        break;
-      case 26:
-        SysLog("Sub\n");
-        break;
-      case 27:
-        SysLog("Esc\n");
-        break;
-      case 28:
-        SysLog("Fs\n");
-        break;
-      case 29:
-        SysLog("Gs\n");
-        break;
-      case 30:
-        SysLog("Rs\n");
-        break;
-      case 31:
-        SysLog("Unit Separator\n");
-        break;
-      default:
-        // some ch make Zeal crash or behave weird because they're commands?
-        // SysLog("CC %c happened\n", ch);
-        SysLog("CC 0x%X happened\n", ch);
-        break;
-    }
-  } 
-  else {
-    if (ch == 127) {
-        SysLog("case 127");
-    }
-    if (ch == 0x24) {
-      DocPrint(term.doc, "$$$$"); // escape DolDoc's '$', printing it raw would start a doc command
-    }
-    else if (ch >= 32 && ch < 256) // ZealOS's ASCII is up to 255
-    {
-      DocPrint(term.doc, "%c", ch);
-    }
-    else {
-      DocPrint(term.doc, "?"); // unrecognized character
-    }
+  switch (ch)
+  {
+    case 0: // NUL - ignored
+      break;
+    case 7: // BEL
+      Beep;
+      break;
+    case 8: // BS
+      if (term.csr_col)
+        term.csr_col--;
+      break;
+    case 9: // HT: next 8-column tab stop
+      term.csr_col = (term.csr_col & ~7) + 8;
+      if (term.csr_col >= term.window_width)
+        term.csr_col = term.window_width - 1;
+      break;
+    case 10: // LF
+    case 11: // VT behaves like LF
+      TermLineFeed;
+      break;
+    case 12: // FF
+      TermClear;
+      break;
+    case 13: // CR
+      term.csr_col = 0;
+      break;
+    default:
+      if (ch >= 32) // printable + CP437 high glyphs
+        TermPutChar(ch);
+      // remaining C0 control codes: ignored
+      break;
   }
 }
 
@@ -209,14 +126,55 @@ U0 TelnetByteProcess(U8 ch)
       break;
 
     case TELNET_STATE_ESC:
-      if (ch == ANSI_CSI) {
-        term.seq_len = 0;
-        term.parse_state = TELNET_STATE_CSI;
+      switch (ch)
+      {
+        case ANSI_CSI:
+          term.seq_len = 0;
+          term.parse_state = TELNET_STATE_CSI;
+          break;
+        case '(': // charset designation: swallow the byte that follows
+        case ')':
+          term.parse_state = TELNET_STATE_ESC_CHARSET;
+          break;
+        case '7': // save cursor
+          term.saved_row = term.csr_row;
+          term.saved_col = term.csr_col;
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case '8': // restore cursor
+          TermCursorSet(term.saved_row, term.saved_col);
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case 'M': // reverse index: up, scroll down at top
+          if (term.csr_row)
+            term.csr_row--;
+          else
+            TermScrollDown;
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case 'D': // index: down
+          TermLineFeed;
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case 'E': // next line
+          term.csr_col = 0;
+          TermLineFeed;
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        case 'c': // full reset
+          term.cur_attr = TERM_DEFAULT_ATTR;
+          term.bold = FALSE;
+          TermClear;
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
+        default: // unknown ESC x: swallow
+          term.parse_state = TELNET_STATE_NORMAL;
+          break;
       }
-      else { // non-CSI escape: drop the ESC, handle the byte normally
-        term.parse_state = TELNET_STATE_NORMAL;
-        TelnetByteProcess(ch);
-      }
+      break;
+
+    case TELNET_STATE_ESC_CHARSET:
+      term.parse_state = TELNET_STATE_NORMAL; // designation byte consumed
       break;
 
     case TELNET_STATE_CSI:
@@ -239,6 +197,34 @@ U0 ANSIParse()
     TelnetByteProcess(term.buffer[i]);
 }
 
+U0 TermPutS(U8 *s)
+{ // Local status text, fed through the same parser so it can use ANSI colors.
+  term.parse_state = TELNET_STATE_NORMAL; // never inherit a half-parsed server sequence
+  while (*s)
+    TelnetByteProcess(*s++);
+}
+
+I64 TelnetOpen(U8 *host, U16 port) {
+  I64 sock;
+  U8 *msg;
+
+  if (host == NULL) {
+    return -1;
+  }
+
+  msg = MStrPrint("\x1B[32mConnecting to %s:%d.\x1B[0m\r\n", host, port);
+  TermPutS(msg);
+  Free(msg);
+
+  sock = TCPConnectionCreate(host, port);
+  if (sock <= 0) {
+    PopUpOk("\n\n\tFailed to connect\n\n");
+    return sock;
+  }
+
+  return sock; // caller sets the socket timeout for poll-mode receive
+}
+
 U0 TerminalTask() {
   I64 received;
 
@@ -251,21 +237,21 @@ U0 TerminalTask() {
     if (!term.sock_ready) {
       term.task_idle = TRUE; // main task may now safely close/free the socket
       Sleep(50);
-      continue;
     }
+    else {
+      received = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
 
-    received = TCPSocketReceive(term.sock, term.buffer, BUF_SIZE - 1);
-
-    if (received > 0) {
-      term.buffer_len = received;
-      ANSIParse;
+      if (received > 0) {
+        term.buffer_len = received;
+        ANSIParse;
+      }
+      else if (received == 0) { // orderly close or reset by remote
+        term.sock_ready = 0;
+        TermPutS("\r\n\x1B[1;37;41mConnection closed by remote host. Shift-Esc for splash.\x1B[0m\r\n");
+      }
+      else
+        Sleep(20); // non-blocking receive: nothing pending yet
     }
-    else if (received == 0) { // orderly close or reset by remote
-      term.sock_ready = 0;
-      DocPrint(term.doc, "\n$$BG,RED$$$$WHITE$$Connection closed by remote host. Shift-Esc for splash.$$FG$$$$BG$$\n");
-    }
-    else
-      Sleep(20); // non-blocking receive: nothing pending yet
   }
 
   term.task_idle = TRUE;
@@ -286,30 +272,101 @@ U0 TelnetDisconnect()
   term.sock = 0;
 }
 
+U8 TermPaletteColor(U8 c, Bool invert)
+{ // The grid stores canonical ANSI/VGA indices (0 = black, 15 = white).
+  // ZealOS dark themes swap palette entries 0 and 15, so translate at draw
+  // time; the middle colors are theme-tuned but keep their hue.
+  if (invert)
+  {
+    if (c == BLACK)
+      return WHITE;
+    if (c == WHITE)
+      return BLACK;
+  }
+  return c;
+}
+
+U0 TelnetDrawIt(CTask *task, CDC *dc)
+{ // Blit the cell grid: background rect per same-attribute run, then glyphs.
+  I64 r, c, i, run_start, csr_col;
+  U8 attr, ch;
+  Bool invert;
+
+  no_warn task;
+
+  // Detect swapped-endpoint palettes (ZealOS dark theme) each frame, so
+  // Alt+T standard-palette toggling and theme changes stay correct.
+  invert = gr_palette[BLACK].b + gr_palette[BLACK].g + gr_palette[BLACK].r >
+           gr_palette[WHITE].b + gr_palette[WHITE].g + gr_palette[WHITE].r;
+
+  for (r = 0; r < term.window_height; r++)
+  {
+    c = 0;
+    while (c < term.window_width)
+    {
+      run_start = c;
+      attr = term.screen_attr[r * TERM_MAX_COLS + c];
+      while (c < term.window_width && term.screen_attr[r * TERM_MAX_COLS + c] == attr)
+        c++;
+
+      dc->color = TermPaletteColor(attr >> 4, invert); // background
+      GrRect(dc, run_start * FONT_WIDTH, r * FONT_HEIGHT,
+             (c - run_start) * FONT_WIDTH, FONT_HEIGHT);
+
+      dc->color = TermPaletteColor(attr & 0x0F, invert); // foreground glyphs
+      for (i = run_start; i < c; i++)
+      {
+        ch = term.screen_ch[r * TERM_MAX_COLS + i];
+        if (ch != ' ')
+          GrPutChar(dc, i * FONT_WIDTH, r * FONT_HEIGHT, ch);
+      }
+    }
+  }
+
+  if (term.csr_visible && term.sock_ready)
+  { // underline-style cursor
+    csr_col = term.csr_col;
+    if (csr_col >= term.window_width) // deferred-wrap position parks past the edge
+      csr_col = term.window_width - 1;
+
+    dc->color = TermPaletteColor(term.cur_attr & 0x0F, invert);
+    GrRect(dc, csr_col * FONT_WIDTH,
+           term.csr_row * FONT_HEIGHT + FONT_HEIGHT - 2, FONT_WIDTH, 2);
+  }
+}
+
 U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
   CHostForm form;
   term.window_width = 80;
   term.window_height = 25;
   term.doc = Fs->display_doc;
+  term.win_task = Fs;
   term.waiting_for_input = TRUE;
   term.sock = 0;
   term.sock_ready = 0;
   term.task_idle = TRUE;
   term.parse_state = TELNET_STATE_NORMAL;
   term.buffer_len = 0;
+  term.cur_attr = TERM_DEFAULT_ATTR;
+  term.bold = FALSE;
+  term.csr_visible = TRUE;
+  term.csr_row = 0;
+  term.csr_col = 0;
+  term.saved_row = 0;
+  term.saved_col = 0;
   force_disconnect = FALSE; // reset the global so a second run doesn't exit instantly
   I64 art_path = "::/Home/Net/Programs/Telnet/Art/TelnetSplash.ans";
-  I64 message_code, arg1, arg2;
   GrPaletteGet(original_palette);
   AutoComplete(OFF);
 
+  TermClear;
+
   // Single receive task for the whole session; it idles while sock_ready is 0.
-  // (Previously one was spawned per connection, leaking tasks that kept using
-  // freed sockets after reconnects.)
   term.task = Spawn(&TerminalTask, NULL, "Telnet");
 
   DocMax;
   DocCursor(OFF);
+  DocClear;
 
   SettingsPush;
   MenuPush(
@@ -321,8 +378,7 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
     "  ANSIArt(,SCF_ALT);"
     "}"
     "Config {"
-    "  ToggleDarkMode(,SCF_ALT);"
-    "  SetDarkColors(,SCF_ALT);"
+    "  TogglePalette(,SCF_ALT);"
     "}"
 		"About {"
 		"	Info(,SCF_ALT);"
@@ -331,9 +387,6 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
 
   StrCopy(Fs->task_title, "TELNET");
   Fs->border_src  = BDS_CONST;
-  // Fs->border_attr = LTGREEN << 4 + DriveTextAttrGet(':') & 15;
-  if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
-  else Fs->text_attr = BLACK << 4 + WHITE;
   Fs->title_src = TTS_LOCKED_CONST;
   DocClear(Fs->border_doc, TRUE);
 
@@ -348,26 +401,24 @@ U0 Telnet(U8 *host=NULL, U16 port=TELNET_PORT) {
               (Fs->win_height - 1),
           Fs);
 
-  // this flag will make the term auto-size to the content (ish)
-  // term.doc->flags |= DOCEG_DONT_EDIT;
+  // From here the window content is the cell grid, not the doc.
+  Fs->draw_it = &TelnetDrawIt;
 
 show_splash:
-  // SplashScreen
   Fs->border_attr = WHITE << 4 + LTRED;
-  DocClear;
-  // probably should use word wrap? dunno if it actually changes anything in this context...
-  DocPrint(, "$$WW,1$$");
-  // Load the file into the buffer and get its size
+  term.cur_attr = TERM_DEFAULT_ATTR;
+  term.bold = FALSE;
+  TermClear;
+
   term.buffer_len = ANSIArtLoad(art_path, term.buffer);
   if (term.buffer_len > 0) {
     term.buffer[term.buffer_len] = '\0';
     term.parse_state = TELNET_STATE_NORMAL; // don't inherit half-parsed state from a dropped connection
     ANSIParse;
-    TermBottom;
   }
   else {
-    DocClear;
-    Print("Error: Could not load splash screen.\n");
+    TermClear;
+    TermPutS("Error: Could not load splash screen.\r\n");
   }
 
 init_connection:
@@ -392,9 +443,11 @@ init_connection:
     term.sock_ready = 1; // Signal that the socket is ready
     term.waiting_for_input = FALSE;
 
-    "$$BG,GREEN$$$$WHITE$$Connected$$FG$$$$BG$$\n";
-    Sleep(1000);
-    DocClear;
+    TermPutS("\x1B[1;32mConnected\x1B[0m\r\n");
+    Sleep(600);
+    term.cur_attr = TERM_DEFAULT_ATTR;
+    term.bold = FALSE;
+    TermClear;
     break;
   }
 
@@ -409,15 +462,10 @@ init_connection:
       {
         switch (key)
         {
-          // case 0:
-          //   switch (sc.u8[0])
-          //   {
-          //   }
           case 'n':
             TelnetPrompt(&form);
             host = form.host;
             port = form.port;
-            DocClear;
             term.waiting_for_input = FALSE;
             goto init_connection;
             break;
@@ -426,22 +474,11 @@ init_connection:
             if (art_path != NULL) {
               term.sock_ready = 0;
               term.waiting_for_input = TRUE;
-              // SysLog("%s\n", art_path);
               goto show_splash;
             }
             else {
-              "Error: Could not load art.\n";
+              TermPutS("Error: Could not load art.\r\n");
             }
-            break;
-          case 's':
-            // Save as DD image.
-            StrCopy(term.doc->filename.name, "::/Home/Wallpapers/1024/Default.DD");
-            DocWrite(term.doc, TRUE);
-            break;
-          case 'd':
-            dark_mode = !dark_mode;
-            if (dark_mode) Fs->text_attr = WHITE << 4 + BLACK;
-            else Fs->text_attr = BLACK << 4 + WHITE;
             break;
           case 't':
             original_colors = !original_colors;
@@ -452,7 +489,7 @@ init_connection:
             }
             break;
           case 'l':
-            PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Ctrl+O","\n\n\n\t\tMade by y4my4m\n\n");
+            PopUpOk("\n\n Not all BBS will work perfectly (yet). \n\n You can load ANSi artwork with Alt+O","\n\n\n\t\tMade by y4my4m\n\n");
             break;
         }
       }
@@ -506,8 +543,8 @@ init_connection:
               term.waiting_for_input = TRUE;
               host = NULL;
               TelnetDisconnect;
-              DocClear;
-              "Telnet connection closed.\n";
+              TermClear;
+              TermPutS("Telnet connection closed.\r\n");
               Sleep(100);
               goto show_splash;
             }
@@ -545,6 +582,7 @@ init_connection:
   force_disconnect = TRUE;
   TelnetDisconnect;
 
+  Fs->draw_it = NULL;
   MenuPop;
   SettingsPop;
   GrPaletteSet(original_palette);
@@ -563,8 +601,6 @@ Telnet;
 /*
 TODO:
 - make all keys send their respective signals (like Ctrl+Key, etc)
-- refactor ANSIParser's TCPSocketSends to send everything to a "TelnetSend" function
-- TelnetSend will handle whether there's a connection or not
-- This will make easier to transform this software into an ANSI viewer / Telnet client/ general purpose Term.
-- There's a lot more to fix, but this is a good start.
+- underline/blink SGR attributes (needs extra per-cell flags)
+- alternate screen buffer (CSI ?1049)
 */
