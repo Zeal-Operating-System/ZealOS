@@ -62,7 +62,7 @@ public U0 DCMat4x4Set(CDC *dc=NULL, I64 *r)
 public U0 DCLighting(CDC *dc, CD3I32 *p1, CD3I32 *p2, CD3I32 *p3, CColorROPU32 color)
 {//This is the default dc->lighting() callback.
 	CD3I32	v1, v2;
-	I64		i, vn_x, vn_y, vn_z;
+	I64		i, vn_x, vn_y, vn_z, r, g, b;
 	F64		d;
 
 	v1.x = p1->x - p2->x;
@@ -95,6 +95,30 @@ public U0 DCLighting(CDC *dc, CD3I32 *p1, CD3I32 *p2, CD3I32 *p3, CColorROPU32 c
 	//vect and the surface normal
 	//gives an illumination number.
 	//65536*65536>>16=65536
+
+	//True color pens get smooth shading instead of probability dithering.
+	if (color & ROPF_TRUE_COLOR)
+	{
+		r = color >> 16 & 0xFF;
+		g = color >> 8 & 0xFF;
+		b = color & 0xFF;
+		i += 65536;
+		i = ClampI64(i, 0, 0x20000);
+		if (i <= 65536)
+		{//Scale toward black.
+			r = r * i >> 16;
+			g = g * i >> 16;
+			b = b * i >> 16;
+		}
+		else
+		{//Scale toward white.
+			r += (255 - r) * (i - 65536) >> 16;
+			g += (255 - g) * (i - 65536) >> 16;
+			b += (255 - b) * (i - 65536) >> 16;
+		}
+		dc->color = ColorRGB(r, g, b);
+		return;
+	}
 
 	//ZealOS will generate a random U16
 	//and compare to dither_probability_u16 and
@@ -134,7 +158,7 @@ public U0 DCFill(CDC *dc=NULL, CColorROPU32 val=TRANSPARENT)
 {//Fill entire device context with color.
 	if (!dc)
 		dc = gr.dc;
-	MemSet(dc->body, val, dc->width_internal * dc->height);
+	MemSetU32(dc->body, GrColorResolve(val), dc->width_internal * dc->height);
 }
 
 public U0 DCClear(CDC *dc=NULL)
@@ -220,7 +244,7 @@ public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALS
 	if (null_bitmap)
 		res->flags |= DCF_DONT_DRAW;
 	else
-		res->body		= CAlloc(res->width_internal * res->height, task);
+		res->body		= CAlloc(res->width_internal * res->height * sizeof(U32), task);
 	res->r				= MAlloc(16 * sizeof(I64), task);
 	DCReset(res);
 	res->dc_signature	= DCS_SIGNATURE_VAL;
@@ -285,29 +309,40 @@ public CDC *DCCopy(CDC *dc, CTask *task=NULL)
 
 public U0 DCMono(CDC *dc, I64 quest=TRANSPARENT, I64 true_color=0, I64 false_color=COLOR_MONO)
 {//Set entire device context to one of two colors.
-	I64 i;
-	U8 *dst;
+	I64  i, q, t, f;
+	U32 *dst;
 
+	q = GrPixArg(quest);
+	if (true_color)
+		t = GrPixArg(true_color);
+	else
+		t = 0; //Literal zero pix: "off" for mono masks.
+	if (false_color)
+		f = GrPixArg(false_color);
+	else
+		f = 0;
 	dst = dc->body;
 	i = dc->width_internal * dc->height;
 	while (i--)
-		if (*dst == quest)
-			*dst++ = true_color;
+		if (*dst == q)
+			*dst++ = t;
 		else
-			*dst++ = false_color;
+			*dst++ = f;
 }
 
 public I64 DCColorChange(CDC *dc, I64 src_color, I64 dst_color=TRANSPARENT)
 {//Find and replace src color with dst in device context.
-	I64 i, res = 0;
-	U8 *dst;
+	I64  i, res = 0, s, d;
+	U32 *dst;
 
+	s = GrPixArg(src_color);
+	d = GrPixArg(dst_color);
 	dst = dc->body;
 	i = dc->width_internal * dc->height;
 	while (i--)
-		if (*dst == src_color)
+		if (*dst == s)
 		{
-			*dst++ = dst_color;
+			*dst++ = d;
 			res++;
 		}
 		else
@@ -319,13 +354,13 @@ public I64 DCColorChange(CDC *dc, I64 src_color, I64 dst_color=TRANSPARENT)
 public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 {//Stores device context to mem, perhaps, with compression.
 	U8		*res, *ptr, *body;
-	I64		 body_size = dc->width_internal * dc->height, total_size, flags;
+	I64		 body_size = dc->width_internal * dc->height * sizeof(U32), total_size, flags;
 	CBGR24	 palette[COLORS_NUM];
 
 	body = dc->body;
 
 	total_size = offset(CDC.end) - offset(CDC.start) + body_size;
-	flags = 0;
+	flags = DCF_TRUE_COLOR;
 
 	if (dcsf_flags & DCSF_PALETTE_GET)
 		GrPaletteGet(palette);
@@ -363,8 +398,9 @@ public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 {//Loads device context from mem.
 	CDC *res;
-	U8  *ptr = src;
-	I64  body_size;
+	U8  *ptr = src, *src2;
+	U32 *dst2;
+	I64  i, body_size;
 
 	if (!task)
 		task = Fs;
@@ -383,9 +419,29 @@ public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 		MemCopy(&res->palette, gr32_palette_std, COLORS_NUM * sizeof(CBGR24));
 
 	body_size = res->width_internal * res->height;
-	res->body			= MAlloc(body_size, task);
-	MemCopy(res->body, ptr, body_size);
-	ptr += body_size;
+	res->body = MAlloc(body_size * sizeof(U32), task);
+	if (res->flags & DCF_TRUE_COLOR)
+	{//Native 32-bit GR data.
+		MemCopy(res->body, ptr, body_size * sizeof(U32));
+		ptr += body_size * sizeof(U32);
+	}
+	else
+	{//Legacy 8-bit indexed GR data: convert using its palette.
+		src2 = ptr;
+		dst2 = res->body;
+		for (i = body_size; i--;)
+		{
+			if (*src2 < COLORS_NUM)
+				*dst2++ = res->palette[*src2];
+			else if (*src2 == COLOR_INVALID)
+				*dst2++ = PIXF_INVALID;
+			else
+				*dst2++ = PIXF_TRANSPARENT;
+			src2++;
+		}
+		ptr += body_size;
+		res->flags |= DCF_TRUE_COLOR;
+	}
 	res->thick			= 1;
 	res->r				= Mat4x4IdentNew(task);
 	res->r_norm.u32[1]	= 1;
@@ -400,7 +456,7 @@ public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 #help_file "::/Doc/GRFiles"
 #help_index "Graphics/Device Contexts;Graphics/GR Files"
 
-#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR24) + GR_WIDTH * GR_HEIGHT)
+#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR24) + GR_WIDTH * GR_HEIGHT * sizeof(U32))
 
 public I64 GRWrite(U8 *filename, CDC *dc, I64 dcsf_flags=NONE)
 {//ZealOS GR File.
@@ -440,19 +496,14 @@ public U0 DocGR(CDoc *doc=NULL, U8 *filename)
 public CDC *DCScreenCapture(Bool include_zoom=TRUE, CTask *task=NULL)
 {//Capture screen to a device context.
 	CDC *dc;
-	U8  *dst;
 
 	Refresh(0, FALSE);
 	if (include_zoom)
 		dc = DCCopy(gr.screen_image, task);
 	else
-		dc = DCCopy(gr.dc1, task);
+		dc = DCCopy(gr.dc2, task);
 	dc->flags &= ~DCF_SCREEN_BITMAP;
-	dst = MAlloc(dc->width_internal * dc->height, task);
-//Pick background color that never occurs. COLOR_INVALID
-	GrBitMap4ToBitMap8(dst, dc->body, (dc->width_internal * dc->height) >> 1, COLOR_INVALID);
-	Free(dc->body);
-	dc->body = dst;
+	dc->flags |= DCF_TRUE_COLOR;
 
 	return dc;
 }

@@ -78,9 +78,9 @@ U0 MandelFrame(I64 core)
       // into the body of the DC.
       // (is that ok?)
       if (iteration >= iterations)
-        image->body[py*width+px] = 15;
+        image->body[py*width+px] = GrPixResolve(15);
       else
-        image->body[py*width+px] = iteration % 15;
+        image->body[py*width+px] = GrPixResolve(iteration % 15);
 
 
     }

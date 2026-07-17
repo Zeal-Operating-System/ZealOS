@@ -2,10 +2,8 @@
 
 public class CGrGlobals
 {
-	I64			*to_8_bits, *to_8_colors;
-	CDC 		*screen_image,	//Read only.
+	CDC 		*screen_image,	//Read only. Last presented frame.
 				*dc,			//Persistent
-				*dc1,
 				*dc2, 			//Updated every refresh
 				*dc_cache,
 				*zoomed_dc;
@@ -33,7 +31,7 @@ public class CGrGlobals
 				 circle_hi[GR_PEN_BRUSHES_NUM][GR_PEN_BRUSHES_NUM];
 
 	#define GR_SCREEN_ZOOM_MAX	8
-	U8			*screen_zoom_tables[GR_SCREEN_ZOOM_MAX + 1], *screen_cache;
+	U32			*screen_cache; //Native 32-bit copy of last presented frame.
 	I64			 screen_zoom, sx, sy;
 
 	//When zoomed, this keeps the mouse centered.

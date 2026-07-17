@@ -1,4 +1,75 @@
 #help_index "Graphics/Color"
+
+public U32 GrPixResolve(I64 color)
+{//Resolve legacy 8-bit color index to a native 32-bit pix val.
+//0-15 look up the cur palette. COLOR_INVALID and TRANSPARENT map to flag pixs.
+	if (0 <= color < COLORS_NUM)
+		return gr_palette[color];
+	if (color == COLOR_INVALID)
+		return PIXF_INVALID;
+
+	return PIXF_TRANSPARENT; //TRANSPARENT / COLOR_MONO
+}
+
+public U32 GrColorResolve(CColorROPU32 cr)
+{//Resolve a $LK,"CColorROPU32",A="MN:CColorROPU32"$ pen to a native 32-bit pix val.
+	if (cr & ROPF_TRUE_COLOR)
+		return cr & PIX_RGB_MASK;
+
+	return GrPixResolve(cr.c0.color);
+}
+
+public U32 GrPixArg(I64 val)
+{//Resolve a color arg that may be a legacy index, true color pen or raw pix val.
+	if (val & ROPF_TRUE_COLOR)
+		return val & PIX_RGB_MASK;
+	if (0 <= val <= 0xFF)
+		return GrPixResolve(val);
+
+	return val;
+}
+
+public U8 GrPix2Color(U32 pix)
+{//Nearest legacy palette color index for a native pix val.
+	I64		i, d, best = I64_MAX, res = BLACK;
+	CBGR24	p;
+
+	if (pix == PIXF_TRANSPARENT)
+		return TRANSPARENT;
+	if (pix == PIXF_INVALID)
+		return COLOR_INVALID;
+	for (i = 0; i < COLORS_NUM; i++)
+	{
+		p = gr_palette[i];
+		d = SqrI64(p.r - pix.u8[2]) + SqrI64(p.g - pix.u8[1]) + SqrI64(p.b - pix.u8[0]);
+		if (d < best)
+		{
+			best = d;
+			res = i;
+		}
+	}
+
+	return res;
+}
+
+public CColorROPU32 ColorRGB(I64 r, I64 g, I64 b)
+{//Make a true color pen val for dc->color. Any of 16M colors.
+	return ROPF_TRUE_COLOR | (r & 0xFF) << 16 | (g & 0xFF) << 8 | b & 0xFF;
+}
+
+public CColorROPU32 ColorBGR(CBGR24 bgr24)
+{//Make a true color pen val for dc->color from a CBGR24.
+	return ROPF_TRUE_COLOR | bgr24 & PIX_RGB_MASK;
+}
+
+public I64 GrRopBGet(CColorROPU32 cr)
+{//Raster op of a pen, honoring true color encoding.
+	if (cr & ROPF_TRUE_COLOR)
+		return cr >> ROPf_TC_ROP & 3;
+
+	return cr.c0.rop;
+}
+
 public U8 gr_rainbow_10[10] = {BLACK, BROWN, RED, LTRED, YELLOW, GREEN, BLUE, PURPLE, LTGRAY, WHITE};
 
 DefineListLoad("ST_RAINBOW_10", "BLACK\0BROWN\0RED\0LTRED\0YELLOW\0GREEN\0BLUE\0PURPLE\0LTGRAY\0WHITE\0");

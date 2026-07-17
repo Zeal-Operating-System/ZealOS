@@ -3646,6 +3646,11 @@ public class CDevGlobals
 #define ROPF_DITHER 				0x40000000
 #define ROPF_PROBABILITY_DITHER 	0x80000000
 
+//True color pen: low 24 bits of the CColorROPU32 are 0xRRGGBB.
+//Bits 25-26 hold the ROPB_ raster op.  No dither with true color.
+#define ROPF_TRUE_COLOR 			0x01000000
+#define ROPf_TC_ROP 				25
+
 #help_index "Graphics/Color"
 #define TRANSPARENT		0xFF
 #define BLACK 			0
@@ -3668,6 +3673,13 @@ public class CDevGlobals
 #define COLORS_NUM		16
 #define COLOR_INVALID	16
 #define COLOR_MONO		0xFF
+
+//Native 32-bit pixel format of $LK,"CDC",A="MN:CDC"$ image bodies: 0xFFRRGGBB.
+//High byte zero is a normal opaque color; nonzero high byte is a flag.
+#define PIXF_TRANSPARENT	0xFF000000 //Also serves as COLOR_MONO "on" mask pix.
+#define PIXF_INVALID		0xFD000000 //Pix val that never occurs on screen.
+#define PIX_FLAGS_MASK		0xFF000000
+#define PIX_RGB_MASK		0x00FFFFFF
 
 public U16 class CColorROPU16 //Don't use this, use CColorROPU32
 {
@@ -4314,6 +4326,7 @@ public class CTextGlobals
 //Low 8 bits reserved for flags that go into saved bitmaps
 #define DCF_PALETTE 			1
 #define DCF_NO_TRANSPARENTS 	2 //Can be used to optimized $LK,"GrBlot",A="MN:GrBlot"$().
+#define DCF_TRUE_COLOR			4 //Saved image body is native 32-bit pixs.
 
 #define DCF_TRANSFORMATION		0x100
 
@@ -4397,7 +4410,7 @@ public class CDC
 	U32				 dc_signature, pad;
 	CTask			*mem_task, *win_task;
 	CDC				*alias;
-	U8				*body;
+	U32				*body; //One U32 pix per pixel: 0xFFRRGGBB. See $LK,"PIXF_TRANSPARENT",A="MN:PIXF_TRANSPARENT"$.
 
 	//Set by $LK,"DCDepthBufAlloc",A="MN:DCDepthBufAlloc"$()
 	I32				*depth_buf;

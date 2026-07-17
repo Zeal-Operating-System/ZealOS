@@ -340,7 +340,7 @@ CSprite *SMScreenBitMap(I64 eletype, CDC *dc, CDC *dc2, I64 x, I64 y, I64 arg1, 
 	if (eletype == SPT_INS_TRANSPARENT_SCREEN_BITMAP)
 		DCColorChange(img, bm_bkcolor);
 	GrScaleZoom(i);
-	MemCopy(&res->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
+	GrBitMap32ToBitMap8(&res->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
 	DCDel(img);
 	DCDel(dc3);
 	dc2->thick = old_width;
@@ -789,7 +789,7 @@ I64 SMBitMap(I64 eletype, CDoc *doc, CDocEntry *doc_ce, CSprite *head,
 		QueueRemove(tmpg1);
 		Free(tmpg1);
 	}
-	MemCopy(&tmpg->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
+	GrBitMap32ToBitMap8(&tmpg->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
 
 	switch (i = SpriteBitMapEd(doc, doc_ce, dc, &xx1, &yy1, &xx2, &yy2, &img, bm_bkcolor))
 	{
@@ -802,7 +802,7 @@ I64 SMBitMap(I64 eletype, CDoc *doc, CDocEntry *doc_ce, CSprite *head,
 			tmpg->pwhu.height	= yy2 - yy1;
 			tmpg->pwhu.x1		= xx1 - x;
 			tmpg->pwhu.y1		= yy1 - y;
-			MemCopy(&tmpg->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
+			GrBitMap32ToBitMap8(&tmpg->pwhu.u, img->body, ((xx2 - xx1 + 7) & ~7) * (yy2 - yy1));
 			break;
 	}
 	QueueInsert(tmpg, insert_pt->last);
