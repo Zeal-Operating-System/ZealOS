@@ -79,6 +79,7 @@
 
 #define PCNET_DESCRIPTORf_ENP	24
 #define PCNET_DESCRIPTORf_STP	25
+#define PCNET_DESCRIPTORf_ERR	30 // set when FRAM/OFLO/CRC/BUFF error occurred on this frame
 #define PCNET_DESCRIPTORf_OWN	31 // AMD PCNet datasheet p.1-992, 1-994
 
 class CPCNet
@@ -148,7 +149,7 @@ U0 PCNetReset()
 
 	InU32(PCNetIOBaseGet + PCNET_DW_RESET);
 	InU16(PCNetIOBaseGet + PCNET_WD_RESET);
-	Busy(5); // OSDev says minimum 1 µS
+	Busy(5); // OSDev says minimum 1 ┬╡S
 }
 
 U0 PCNet32BitModeEnable()
@@ -214,22 +215,22 @@ U32 PCNetCSRRead(U32 csr)
 }
 
 U0 PCNetAutoLinkSelect()
-{
-	U32 bcr = PCNetCSRRead(PCNET_BCR_FULL_DUPLEX_CTRL);
+{ // BCR2 ASEL: let the card auto-select the media interface.
+	U32 bcr = PCNetBCRRead(PCNET_BCR_MISC_CONFIG);
+
+	Bts(&bcr, PCNET_BCR_MISC_CONFIG_ASEL);
+
+	PCNetBCRWrite(PCNET_BCR_MISC_CONFIG, bcr);
+}
+
+U0 PCNetEnableFullDuplex()
+{ // BCR9 FDEN/AUIFD: enable full-duplex operation.
+	U32 bcr = PCNetBCRRead(PCNET_BCR_FULL_DUPLEX_CTRL);
 
 	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_FDEN);
 	Bts(&bcr, PCNET_BCR_FULL_DUPLEX_CTRL_AUIFD);
 
 	PCNetBCRWrite(PCNET_BCR_FULL_DUPLEX_CTRL, bcr);
-}
-
-U0 PCNetEnableFullDuplex()
-{
-	U32 bcr = PCNetCSRRead(PCNET_BCR_MISC_CONFIG);
-
-	Bts(&bcr, PCNET_BCR_MISC_CONFIG_ASEL);
-
-	PCNetBCRWrite(PCNET_BCR_MISC_CONFIG, bcr);
 }
 
 
@@ -676,14 +677,23 @@ interrupt U0 PCNetIRQ()
 		NetLog("$$BD,CYAN$$$$FD,WHITE$$"
 			   "PCNET IRQ: Saw owned RX DE index %d.", pcnet.current_rx_de_index);
 
-		de_index = PCNetPacketReceive(&packet_buffer, &packet_length);
-
-		if (de_index >= 0) // todo: necessary? check increment logic in PCNetPacketReceive.
-		{
-			NetLog("PCNET IRQ: Pushing copy into Net Queue, releasing receive packet.");
-			// uncached read
-			NetQueuePush(packet_buffer + dev.uncached_alias, packet_length);
+		if (PCIBt(&entry[pcnet.current_rx_de_index].status1, PCNET_DESCRIPTORf_ERR))
+		{ // drop frames the card flagged with FRAM/OFLO/CRC/BUFF errors
+			NetErr("PCNET IRQ: RX DE %d has error status, dropping frame.", pcnet.current_rx_de_index);
+			de_index = PCNetPacketReceive(&packet_buffer, &packet_length);
 			PCNetReceivePacketRelease(de_index);
+		}
+		else
+		{
+			de_index = PCNetPacketReceive(&packet_buffer, &packet_length);
+
+			if (de_index >= 0) // todo: necessary? check increment logic in PCNetPacketReceive.
+			{
+				NetLog("PCNET IRQ: Pushing copy into Net Queue, releasing receive packet.");
+				// uncached read
+				NetQueuePush(packet_buffer + dev.uncached_alias, packet_length);
+				PCNetReceivePacketRelease(de_index);
+			}
 		}
 
 		Bts(&csr, PCNET_CTRL_RINT);

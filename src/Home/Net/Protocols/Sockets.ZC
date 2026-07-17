@@ -143,7 +143,8 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 {
 	U8 *lexable_string = StrNew(string);
 
-	lexable_string = StrReplace(lexable_string, ".", ","); // swap dots with commas since Lex is easier with them.
+	// swap dots with commas since Lex is easier with them. free_str=TRUE frees the intermediate copy.
+	lexable_string = StrReplace(lexable_string, ".", ",",, TRUE);
 
 	CCompCtrl *cc = CompCtrlNew(lexable_string);
 	//Bts(&cc->opts, OPTf_DECIMAL_ONLY);
@@ -168,23 +169,26 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 						if (cc->cur_i64 > 255 || cc->cur_i64 < 0)
 						{
 							NetErr("IPV4 ADDRESS PARSE: Invalid value, must be 0 - 255.");
+							CompCtrlDel(cc);
 							return FALSE;
 						}
 						if (current_section > 3)
 						{
 							NetErr("IPV4 ADDRESS PARSE: IP Address can only have 4 sections.");
+							CompCtrlDel(cc);
 							return FALSE;
 						}
 
 						temp_destination |= cc->cur_i64 << (current_section * 8);
 						current_section++;
-						
+
 						state = IP_PARSE_STATE_DOT;
 
 						break;
 
 					default:
 						NetErr("IPV4 ADDRESS PARSE: Expected decimal. ");
+						CompCtrlDel(cc);
 						return FALSE;
 				}
 				break;
@@ -198,6 +202,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 
 					default:
 						NetErr("IPV4 ADDRESS PARSE: Expected dot. ");
+						CompCtrlDel(cc);
 						return FALSE;
 				}
 				break;
@@ -205,6 +210,12 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 	}
 
 	CompCtrlDel(cc);
+
+	if (current_section != 4)
+	{
+		NetErr("IPV4 ADDRESS PARSE: IP Address must have exactly 4 sections.");
+		return FALSE;
+	}
 
 	temp_destination = EndianU32(temp_destination); // store the address in Network Byte Order (Big-Endian)
 	*destination = temp_destination;
@@ -287,7 +298,7 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 			ipv6_source = source;
 
 			NetErr("Socket Address to IP failed: FIXME, IPV6 support not implemented yet.\n");
-			return -1;
+			return NULL;
 
 			break;
 		default:
