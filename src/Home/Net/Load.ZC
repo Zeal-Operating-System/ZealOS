@@ -22,7 +22,10 @@ Cd(__DIR__);;
 
 #include "Protocols/TCP/MakeTCP"
 
-#include "Protocols/HTTP" // needs DNS + TCP
+#include "Crypto/MakeCrypto" // SHA256/HMAC/HKDF/ChaCha20-Poly1305/X25519
+#include "Protocols/TLS"     // TLS 1.3 client, needs Crypto + TCP
+
+#include "Protocols/HTTP" // needs DNS + TCP + TLS
 
 #include "Protocols/DHCP"
 

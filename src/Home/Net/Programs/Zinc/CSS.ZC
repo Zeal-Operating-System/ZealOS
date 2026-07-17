@@ -1,0 +1,557 @@
+/*	Zinc CSS: a small CSS subset mapped onto DolDoc's abilities. Public Domain.
+
+	Supported properties: color, background(-color), font-weight, font-style,
+	text-decoration, display (none/block/inline), visibility, text-transform
+	(uppercase), white-space (pre). Colors (named, #hex, rgb()) map to the
+	nearest of the 16 VGA palette entries.
+
+	Selectors: tag, .class, #id and combos like div.note#x. Compound
+	selectors ("div p", "ul > li") approximate to their last simple selector.
+	Selectors with pseudo-classes or attribute brackets are dropped.
+	Specificity: id=100, class=10, tag=1; among equals, later wins.
+
+	Needs: HTML.ZC (CZNode, ZChLower). */
+
+#define ZCSS_DISP_NONE		0
+#define ZCSS_DISP_BLOCK		1
+#define ZCSS_DISP_INLINE	2
+
+#define ZCSS_MAX_RULES		256
+
+class CZStyle
+{
+	I8 fg, bg;			// -1 unset, else VGA palette index 0-15
+	I8 bold;			// -1 unset / 0 / 1
+	I8 underline;
+	I8 display;			// -1 unset, else ZCSS_DISP_*
+	I8 uppercase;
+	I8 pre;				// white-space: pre
+};
+
+class CZCssRule
+{
+	U8		sel_tag[16];	// "" = any
+	U8		sel_class[32];	// "" = none
+	U8		sel_id[32];		// "" = none
+	I64		spec;
+	CZStyle style;
+};
+
+CZCssRule	zcss_rules[ZCSS_MAX_RULES];
+I64			zcss_rule_count = 0;
+
+U0 ZStyleReset(CZStyle *s)
+{
+	s->fg = -1;
+	s->bg = -1;
+	s->bold = -1;
+	s->underline = -1;
+	s->display = -1;
+	s->uppercase = -1;
+	s->pre = -1;
+}
+
+U0 ZStyleMerge(CZStyle *dst, CZStyle *src)
+{ // set fields of src override dst
+	if (src->fg		   >= 0) dst->fg		= src->fg;
+	if (src->bg		   >= 0) dst->bg		= src->bg;
+	if (src->bold	   >= 0) dst->bold		= src->bold;
+	if (src->underline >= 0) dst->underline = src->underline;
+	if (src->display   >= 0) dst->display	= src->display;
+	if (src->uppercase >= 0) dst->uppercase = src->uppercase;
+	if (src->pre	   >= 0) dst->pre		= src->pre;
+}
+
+U0 ZCssReset()
+{
+	zcss_rule_count = 0;
+}
+
+/* ---- color parsing ---- */
+
+U32 zcss_vga_rgb[16] = {
+	0x000000, 0x0000AA, 0x00AA00, 0x00AAAA,
+	0xAA0000, 0xAA00AA, 0xAA5500, 0xAAAAAA,
+	0x555555, 0x5555FF, 0x55FF55, 0x55FFFF,
+	0xFF5555, 0xFF55FF, 0xFFFF55, 0xFFFFFF
+};
+
+#define ZCSS_NAME_COUNT 30
+
+U8 *zcss_color_names[ZCSS_NAME_COUNT] = {
+	"black", "silver",  "gray",   "grey",	"white",  "maroon", "red",
+	"purple","fuchsia", "magenta","green",	"lime",   "olive",  "yellow",
+	"navy",  "blue",	"teal",   "aqua",	"cyan",   "orange", "brown",
+	"pink",  "gold",	"darkgray","darkgrey","lightgray","lightgrey",
+	"darkred","darkblue","darkgreen"
+};
+U32 zcss_color_rgbs[ZCSS_NAME_COUNT] = {
+	0x000000, 0xC0C0C0, 0x808080, 0x808080, 0xFFFFFF, 0x800000, 0xFF0000,
+	0x800080, 0xFF00FF, 0xFF00FF, 0x008000, 0x00FF00, 0x808000, 0xFFFF00,
+	0x000080, 0x0000FF, 0x008080, 0x00FFFF, 0x00FFFF, 0xFFA500, 0xA52A2A,
+	0xFFC0CB, 0xFFD700, 0xA9A9A9, 0xA9A9A9, 0xD3D3D3, 0xD3D3D3,
+	0x8B0000, 0x00008B, 0x006400
+};
+
+I64 ZCssNearestVga(I64 r, I64 g, I64 b)
+{
+	I64 i, dr, dg, db, dist, best = 0, best_dist = I64_MAX;
+
+	for (i = 0; i < 16; i++)
+	{
+		dr = r - (zcss_vga_rgb[i] >> 16 & 0xFF);
+		dg = g - (zcss_vga_rgb[i] >> 8  & 0xFF);
+		db = b -  (zcss_vga_rgb[i] & 0xFF);
+		dist = (dr * dr) + (dg * dg) + (db * db);
+		if (dist < best_dist)
+		{
+			best_dist = dist;
+			best = i;
+		}
+	}
+
+	return best;
+}
+
+I64 ZHexNibble(I64 ch)
+{
+	if ('0' <= ch <= '9')
+		return ch - '0';
+	if ('a' <= ch <= 'f')
+		return ch - 'a' + 10;
+	if ('A' <= ch <= 'F')
+		return ch - 'A' + 10;
+	return -1;
+}
+
+I64 ZCssColor(U8 *val)
+{ // parse a CSS color to a VGA palette index; -1 if unparsable
+	I64 i, r, g, b, h[6], num[3], num_count, cur;
+	Bool in_num;
+	U8	*p;
+	U8	 name[24];
+
+	while (*val == ' ' || *val == '\t')
+		val++;
+
+	if (*val == '#')
+	{
+		for (i = 0; i < 6; i++)
+			h[i] = ZHexNibble(val[1 + i]);
+		if (h[0] >= 0 && h[1] >= 0 && h[2] >= 0)
+		{
+			if (h[3] >= 0 && h[4] >= 0 && h[5] >= 0)
+			{
+				r = (h[0] << 4) + h[1];
+				g = (h[2] << 4) + h[3];
+				b = (h[4] << 4) + h[5];
+			}
+			else
+			{
+				r = h[0] * 17;
+				g = h[1] * 17;
+				b = h[2] * 17;
+			}
+			return ZCssNearestVga(r, g, b);
+		}
+		return -1;
+	}
+
+	if (!StrNICompare(val, "rgb", 3))
+	{ // rgb(r,g,b) / rgba(...): first three integers
+		p = val;
+		num_count = 0;
+		cur = 0;
+		in_num = FALSE;
+		while (*p && num_count < 3)
+		{
+			if ('0' <= *p <= '9')
+			{
+				cur = cur * 10 + *p - '0';
+				in_num = TRUE;
+			}
+			else if (in_num)
+			{
+				num[num_count++] = cur;
+				cur = 0;
+				in_num = FALSE;
+			}
+			p++;
+		}
+		if (in_num && num_count < 3)
+			num[num_count++] = cur;
+		if (num_count == 3)
+			return ZCssNearestVga(num[0] & 0xFF, num[1] & 0xFF, num[2] & 0xFF);
+		return -1;
+	}
+
+	i = 0;
+	while (val[i] && val[i] != ' ' && val[i] != ';' && i < 23)
+	{
+		name[i] = ZChLower(val[i]);
+		i++;
+	}
+	name[i] = 0;
+	for (i = 0; i < ZCSS_NAME_COUNT; i++)
+	{
+		if (!StrCompare(name, zcss_color_names[i]))
+		{
+			r = zcss_color_rgbs[i] >> 16 & 0xFF;
+			g = zcss_color_rgbs[i] >> 8  & 0xFF;
+			b =  zcss_color_rgbs[i] & 0xFF;
+			return ZCssNearestVga(r, g, b);
+		}
+	}
+
+	return -1;
+}
+
+/* ---- declarations ---- */
+
+U0 ZCssDeclApply(U8 *name, U8 *val, CZStyle *out)
+{
+	I64 color;
+
+	if (!StrICompare(name, "color"))
+	{
+		color = ZCssColor(val);
+		if (color >= 0)
+			out->fg = color;
+	}
+	else if (!StrICompare(name, "background") ||
+			 !StrICompare(name, "background-color"))
+	{
+		color = ZCssColor(val);
+		if (color >= 0)
+			out->bg = color;
+	}
+	else if (!StrICompare(name, "font-weight"))
+	{
+		if (!StrNICompare(val, "bold", 4) || Str2I64(val) >= 600)
+			out->bold = 1;
+		else if (!StrICompare(val, "normal"))
+			out->bold = 0;
+	}
+	else if (!StrICompare(name, "font-style"))
+	{
+		if (!StrNICompare(val, "italic", 6) || !StrNICompare(val, "oblique", 7))
+			out->underline = 1;
+		else if (!StrICompare(val, "normal"))
+			out->underline = 0;
+	}
+	else if (!StrICompare(name, "text-decoration") ||
+			 !StrICompare(name, "text-decoration-line"))
+	{
+		if (StrIMatch("underline", val))
+			out->underline = 1;
+		else if (!StrNICompare(val, "none", 4))
+			out->underline = 0;
+	}
+	else if (!StrICompare(name, "display"))
+	{
+		if (!StrNICompare(val, "none", 4))
+			out->display = ZCSS_DISP_NONE;
+		else if (!StrNICompare(val, "inline", 6))
+			out->display = ZCSS_DISP_INLINE;
+		else
+			out->display = ZCSS_DISP_BLOCK;
+	}
+	else if (!StrICompare(name, "visibility"))
+	{
+		if (!StrNICompare(val, "hidden", 6))
+			out->display = ZCSS_DISP_NONE;
+	}
+	else if (!StrICompare(name, "text-transform"))
+	{
+		if (!StrNICompare(val, "uppercase", 9))
+			out->uppercase = 1;
+		else
+			out->uppercase = 0;
+	}
+	else if (!StrICompare(name, "white-space"))
+	{
+		if (!StrNICompare(val, "pre", 3))
+			out->pre = 1;
+		else
+			out->pre = 0;
+	}
+}
+
+U0 ZCssParseDecls(U8 *src, U8 *end, CZStyle *out)
+{ // "name: value; name: value" between src and end
+	U8	name[32], val[128];
+	I64	n;
+	U8 *p = src;
+
+	while (p < end)
+	{
+		while (p < end && (*p == ' ' || *p == '\t' || *p == '\r' ||
+						   *p == '\n' || *p == ';'))
+			p++;
+
+		n = 0;
+		while (p < end && *p != ':' && *p != ';' && *p != '}')
+		{
+			if (n < 31 && *p != ' ' && *p != '\t' && *p != '\r' && *p != '\n')
+				name[n++] = ZChLower(*p);
+			p++;
+		}
+		name[n] = 0;
+
+		if (p < end && *p == ':')
+		{
+			p++;
+			while (p < end && (*p == ' ' || *p == '\t'))
+				p++;
+			n = 0;
+			while (p < end && *p != ';' && *p != '}')
+			{
+				if (n < 127)
+					val[n++] = *p;
+				p++;
+			}
+			while (n > 0 && (val[n - 1] == ' ' || val[n - 1] == '\t' ||
+							 val[n - 1] == '\r' || val[n - 1] == '\n'))
+				n--;
+			val[n] = 0;
+			// strip trailing "!important"
+			if (n > 10 && !StrICompare(val + n - 10, "!important"))
+			{
+				n -= 10;
+				while (n > 0 && (val[n - 1] == ' ' || val[n - 1] == '\t'))
+					n--;
+				val[n] = 0;
+			}
+			if (*name)
+				ZCssDeclApply(name, val, out);
+		}
+		else if (p < end)
+			p++;
+	}
+}
+
+/* ---- selectors and rules ---- */
+
+U0 ZCssRuleAdd(U8 *sel, U8 *sel_end, CZStyle *style)
+{ // one comma-free selector; keeps only its last simple selector
+	CZCssRule	*rule;
+	U8			*p, *last;
+	U8			 token[32];
+	I64			 n;
+	Bool		 in_class, in_id;
+
+	if (zcss_rule_count >= ZCSS_MAX_RULES)
+		return;
+
+	// reject pseudo-classes and attribute selectors outright
+	p = sel;
+	while (p < sel_end)
+	{
+		if (*p == ':' || *p == '[')
+			return;
+		p++;
+	}
+
+	// find start of the last whitespace/combinator-separated token
+	last = sel;
+	p = sel;
+	while (p < sel_end)
+	{
+		if (*p == ' ' || *p == '\t' || *p == '>' || *p == '+' || *p == '~' ||
+			*p == '\r' || *p == '\n')
+		{
+			if (p + 1 < sel_end)
+				last = p + 1;
+		}
+		p++;
+	}
+	while (last < sel_end && (*last == ' ' || *last == '\t'))
+		last++;
+	if (last >= sel_end)
+		return;
+
+	rule = &zcss_rules[zcss_rule_count];
+	rule->sel_tag[0]   = 0;
+	rule->sel_class[0] = 0;
+	rule->sel_id[0]	   = 0;
+
+	p = last;
+	if (*p != '.' && *p != '#' && *p != '*')
+	{
+		n = 0;
+		while (p < sel_end && *p != '.' && *p != '#' && *p != ' ' && *p != '\t')
+		{
+			if (n < 15)
+				rule->sel_tag[n++] = ZChLower(*p);
+			p++;
+		}
+		rule->sel_tag[n] = 0;
+	}
+	else if (*p == '*')
+		p++;
+
+	while (p < sel_end && (*p == '.' || *p == '#'))
+	{
+		in_class = (*p == '.');
+		in_id	 = (*p == '#');
+		p++;
+		n = 0;
+		while (p < sel_end && *p != '.' && *p != '#' && *p != ' ' && *p != '\t')
+		{
+			if (n < 31)
+				token[n++] = *p;
+			p++;
+		}
+		token[n] = 0;
+		if (in_class && !rule->sel_class[0])
+			StrCopy(rule->sel_class, token);
+		if (in_id && !rule->sel_id[0])
+			StrCopy(rule->sel_id, token);
+	}
+
+	rule->spec = 0;
+	if (rule->sel_tag[0])	rule->spec += 1;
+	if (rule->sel_class[0]) rule->spec += 10;
+	if (rule->sel_id[0])	rule->spec += 100;
+	if (!rule->spec)
+		rule->spec = 1; // bare '*'
+
+	MemCopy(&rule->style, style, sizeof(CZStyle));
+	zcss_rule_count++;
+}
+
+U0 ZCssParseSheet(U8 *src)
+{ // parse a stylesheet, appending to the global rule list
+	U8	   *p = src, *sel_start, *scan, *comma, *body, *body_end;
+	I64		depth;
+	CZStyle style;
+
+	while (*p)
+	{
+		if (p[0] == '/' && p[1] == '*')
+		{
+			scan = StrFind("*/", p + 2);
+			if (scan)
+				p = scan + 2;
+			else
+				p = p + StrLen(p);
+		}
+		else if (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n')
+			p++;
+		else if (*p == '@')
+		{ // at-rule: skip to ';' or over the balanced block
+			while (*p && *p != '{' && *p != ';')
+				p++;
+			if (*p == ';')
+				p++;
+			else if (*p == '{')
+			{
+				depth = 0;
+				do
+				{
+					if (*p == '{')
+						depth++;
+					else if (*p == '}')
+						depth--;
+					p++;
+				}
+				while (*p && depth > 0);
+			}
+		}
+		else
+		{
+			sel_start = p;
+			while (*p && *p != '{')
+				p++;
+			if (!*p)
+				return;
+			body = p + 1;
+			body_end = body;
+			while (*body_end && *body_end != '}')
+				body_end++;
+
+			ZStyleReset(&style);
+			ZCssParseDecls(body, body_end, &style);
+
+			// split the selector list on commas
+			scan = sel_start;
+			while (scan < p)
+			{
+				comma = scan;
+				while (comma < p && *comma != ',')
+					comma++;
+				ZCssRuleAdd(scan, comma, &style);
+				scan = comma + 1;
+			}
+
+			p = body_end;
+			if (*p)
+				p++;
+		}
+	}
+}
+
+Bool ZCssClassListHas(U8 *class_attr, U8 *want)
+{ // class attr is a space-separated word list
+	U8	*p = class_attr;
+	I64	 want_len = StrLen(want);
+
+	while (*p)
+	{
+		while (*p == ' ' || *p == '\t')
+			p++;
+		if (!StrNCompare(p, want, want_len) &&
+			(p[want_len] == 0 || p[want_len] == ' ' || p[want_len] == '\t'))
+			return TRUE;
+		while (*p && *p != ' ' && *p != '\t')
+			p++;
+	}
+
+	return FALSE;
+}
+
+Bool ZCssRuleMatch(CZCssRule *rule, CZNode *node)
+{
+	U8 *attr;
+
+	if (rule->sel_tag[0] && StrCompare(rule->sel_tag, node->tag))
+		return FALSE;
+	if (rule->sel_class[0])
+	{
+		attr = ZNodeAttr(node, "class");
+		if (!attr || !ZCssClassListHas(attr, rule->sel_class))
+			return FALSE;
+	}
+	if (rule->sel_id[0])
+	{
+		attr = ZNodeAttr(node, "id");
+		if (!attr || StrCompare(attr, rule->sel_id))
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
+I64 zcss_spec_order[7] = {1, 10, 11, 100, 101, 110, 111};
+
+U0 ZCssApply(CZNode *node, CZStyle *out)
+{ // author rules by ascending specificity, then the inline style attribute
+	I64	 pass, i;
+	U8	*inline_style;
+
+	ZStyleReset(out);
+
+	for (pass = 0; pass < 7; pass++)
+	{
+		for (i = 0; i < zcss_rule_count; i++)
+		{
+			if (zcss_rules[i].spec == zcss_spec_order[pass] &&
+				ZCssRuleMatch(&zcss_rules[i], node))
+				ZStyleMerge(out, &zcss_rules[i].style);
+		}
+	}
+
+	inline_style = ZNodeAttr(node, "style");
+	if (inline_style)
+		ZCssParseDecls(inline_style, inline_style + StrLen(inline_style), out);
+}

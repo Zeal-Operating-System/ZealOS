@@ -1,0 +1,953 @@
+/*	Zinc: a GUI web browser for ZealOS. Public Domain.
+
+	A small browser engine in four parts (Zinc/ directory):
+	  HTML.ZC    tag-soup parser -> DOM tree
+	  CSS.ZC     CSS subset (colors/bold/underline/display) -> 16-color VGA
+	  JS.ZC      small JavaScript interpreter with DOM bindings
+	  Render.ZC  styled DOM -> DolDoc with clickable links/forms
+
+	Features: http + https (TLS 1.3, encrypted but NOT authenticated -- see
+	Protocols/TLS.ZC), <style> blocks, inline style=, up to two external
+	stylesheets, inline <script>, GET forms, back/forward history, titles.
+	Not done: images, external scripts, POST, cookies, frames.
+
+	Run:  Zinc;               (opens the built-in welcome page)
+	      Zinc("http://frogfind.com/");
+
+	Mouse: click the address bar, links, buttons, [input] fields.
+	Keyboard: type an address and press ENTER (scheme optional), or the
+	short commands b f r g h q, l<n> links, i<n> widgets.
+
+	Built-in pages: zinc:welcome, zinc:test (JS engine self-checks).
+
+	No literal dollar signs allowed in this file (DolDoc source rule). */
+
+Cd(__DIR__);;
+
+#include "Zinc/HTML"
+#include "Zinc/CSS"
+#include "Zinc/JS"
+#include "Zinc/Render"
+
+#define ZINC_HISTORY	64
+#define ZINC_BAR_WIDTH	60
+
+CZNode	  *zinc_dom = NULL;
+CJsInterp *zinc_js	= NULL;
+CHttpUrl   zinc_base;			// parsed current URL, for resolving links
+Bool	   zinc_base_ok = FALSE;
+U8		   zinc_note[144];		// one-line status shown in the chrome
+
+U8	*zinc_back[ZINC_HISTORY], *zinc_fwd[ZINC_HISTORY];
+I64	 zinc_back_count = 0, zinc_fwd_count = 0;
+
+U8 *zinc_welcome =
+	"<html><head><title>Zinc</title><style>"
+	"h1{color:red} .dim{color:gray} a{color:blue}"
+	"</style></head><body>"
+	"<h1>Zinc</h1>"
+	"<p class=dim><i>Like Chrome, but a cheaper element.</i></p>"
+	"<p>A small web browser for <b>ZealOS</b>: HTML, a CSS subset, a JS "
+	"subset, GET forms, http and https (TLS 1.3, unverified certs).</p>"
+	"<p class=dim>Tip: click the address bar or just type an address and "
+	"press ENTER, e.g. <b>frogfind.com</b>.</p>"
+	"<hr>"
+	"<ul>"
+	"<li><a href=\"http://frogfind.com/\">FrogFind</a> search engine</li>"
+	"<li><a href=\"http://textfiles.com/\">textfiles.com</a></li>"
+	"<li><a href=\"http://info.cern.ch/\">info.cern.ch</a> the first website</li>"
+	"<li><a href=\"https://example.com/\">example.com</a> https test</li>"
+	"</ul>"
+	"<form action=\"http://frogfind.com/\">"
+	"Search: <input type=text name=q> <input type=submit value=Go>"
+	"</form>"
+	"<hr>"
+	"<p class=dim>Diagnostics: <a href=\"zinc:test\">zinc:test</a> checks "
+	"the JS engine. Before first https use, run <b>CryptoSelfTest;</b> in "
+	"a terminal to verify the crypto.</p>"
+	"</body></html>";
+
+U8 *zinc_testpage =
+	"<html><head><title>Zinc self-test</title></head><body>"
+	"<h1>JS engine checks</h1>"
+	"<script>"
+	"document.write('<p>1. concat: A' + 'B' + '</p>');"
+	"document.write('<p>2. int: ' + 4 + '</p>');"
+	"document.write('<p>3. arith 2+2: ' + (2+2) + '</p>');"
+	"document.write('<p>4. float: ' + 1.5 + '</p>');"
+	"document.write('<p>5. typeof (2+2): ' + typeof (2+2) + '</p>');"
+	"document.write('<p>6. Date.now(): ' + Date.now() + '</p>');"
+	"document.write('<p>7. Math.floor(7.9): ' + Math.floor(7.9) + '</p>');"
+	"var x = 5; x++;"
+	"document.write('<p>8. var x=5; x++: ' + x + '</p>');"
+	"var arr = [1,2,3]; arr.push(4);"
+	"document.write('<p>9. arr.join: ' + arr.join('-') + '</p>');"
+	"var s = 'hello';"
+	"document.write('<p>10. string: ' + s.toUpperCase() + ' len ' + s.length + '</p>');"
+	"function add(a,b){ return a+b; }"
+	"document.write('<p>11. function: add(2,3)=' + add(2,3) + '</p>');"
+	"document.write('<p>12. cond: ' + (1 < 2 ? 'lt-ok' : 'lt-BAD') + '</p>');"
+	"</script>"
+	"<p>Expected: AB, 4, 4, 1.5, number, a big number, 7, 6, 1-2-3-4, "
+	"HELLO len 5, 5, lt-ok. Report any line that differs.</p>"
+	"<p><button type=button onclick=\"document.getElementById('o').innerHTML="
+	"'clicked at '+Date.now()\">Click event test</button> "
+	"<span id=o>(not clicked)</span></p>"
+	"<p><a href=\"zinc:welcome\">back to welcome</a></p>"
+	"</body></html>";
+
+U0 ZincPrintSafe(CDoc *doc, U8 *s)
+{ // print site-controlled text; dollar bytes become the doubled escape
+	U8	buf[256];
+	I64	n = 0;
+
+	while (*s)
+	{
+		if (*s == 0x24 || n >= 250)
+		{
+			buf[n] = 0;
+			DocPrint(doc, "%s", buf);
+			n = 0;
+			if (*s == 0x24)
+				DocPrint(doc, "$$$$");
+			else
+				buf[n++] = *s;
+		}
+		else
+			buf[n++] = *s;
+		s++;
+	}
+	buf[n] = 0;
+	DocPrint(doc, "%s", buf);
+}
+
+U0 ZincTitleGet(U8 *out, I64 max)
+{ // page title, cleaned for the chrome and the window title
+	CZNode *title;
+	U8	   *p;
+	I64		n = 0;
+
+	out[0] = 0;
+	if (!zinc_dom)
+		return;
+	title = ZDomFindTag(zinc_dom, "title");
+	if (!title || !title->text)
+		return;
+	p = title->text;
+	while (*p && n < max - 1)
+	{
+		if (32 <= *p < 127)
+			out[n++] = *p;
+		else if (n && out[n - 1] != ' ')
+			out[n++] = ' ';
+		p++;
+	}
+	out[n] = 0;
+}
+
+U0 ZincChrome(CDoc *doc, U8 *url)
+{
+	U8	page_title[64], safe_url[ZINC_BAR_WIDTH + 4];
+	I64	len;
+
+	DocPrint(doc, "$$WW,1$$");
+
+	// toolbar row
+	DocPrint(doc, "$$BT,\" < \",LM=\"b\n\"$$");
+	DocPrint(doc, "$$BT,\" > \",LM=\"f\n\"$$ ");
+	DocPrint(doc, "$$BT,\"Reload\",LM=\"r\n\"$$ ");
+	DocPrint(doc, "$$BT,\"Home\",LM=\"h\n\"$$ ");
+	DocPrint(doc, "$$BT,\"Quit\",LM=\"q\n\"$$");
+	DocPrint(doc, "   $$BG,BLUE$$$$FG,WHITE$$ ZINC $$FG$$$$BG$$\n");
+
+	// address bar: the whole field is clickable; typing an address works too
+	ZnMacroSafe(url, safe_url, ZINC_BAR_WIDTH);
+	len = StrLen(safe_url);
+	while (len < ZINC_BAR_WIDTH - 1)
+		safe_url[len++] = ' ';
+	safe_url[len] = 0;
+	DocPrint(doc, "$$FG,LTCYAN$$ URL:$$FG$$"
+				  "$$BG,DKGRAY$$$$FG,WHITE$$$$MA,T=\" %s\",LM=\"g\n\"$$$$FG$$$$BG$$"
+				  " $$BT,\"Go\",LM=\"g\n\"$$\n", safe_url);
+
+	// title + status
+	ZincTitleGet(page_title, 64);
+	if (*page_title)
+	{
+		DocPrint(doc, " $$FG,CYAN$$");
+		ZincPrintSafe(doc, page_title);
+		DocPrint(doc, "$$FG$$\n");
+	}
+	if (*zinc_note)
+	{
+		DocPrint(doc, " $$FG,YELLOW$$");
+		ZincPrintSafe(doc, zinc_note);
+		DocPrint(doc, "$$FG$$\n");
+	}
+
+	DocPrint(doc, "$$FG,DKGRAY$$============================================"
+				  "==============================$$FG$$\n");
+}
+
+U0 ZincShow(U8 *url)
+{ // draw chrome + rendered body into the window
+	CDoc *doc = Fs->display_doc;
+	U8	  page_title[64];
+
+	DocClear(doc);
+	ZincChrome(doc, url);
+	if (zinc_dom)
+	{
+		ZincRenderBody(doc, zinc_dom);
+		DocPrint(doc, "$$FG,DKGRAY$$===================================="
+					  "======================================\n");
+		DocPrint(doc, " %d links | type address + ENTER | b f r h q | "
+					  "l<n> link$$FG$$\n", zn_link_count);
+	}
+
+	ZincTitleGet(page_title, 40);
+	if (*page_title)
+		StrCopy(Fs->task_title, page_title);
+	else
+		StrCopy(Fs->task_title, "ZINC");
+
+	DocTop(doc);
+}
+
+U0 ZincJsNote()
+{ // surface the last JS error in the chrome status line
+	if (zinc_js && zinc_js->has_err && !zinc_note[0])
+		StrCopy(zinc_note, zinc_js->err);
+}
+
+U0 ZincCollectCss(CZNode *node, I64 *external_left)
+{ // gather <style> blocks and up to N external stylesheets, in order
+	CZNode *child;
+	U8	   *rel, *href, *abs;
+	CHttpResponse *sheet;
+
+	if (node->type == ZH_ELEM)
+	{
+		if (ZTagIs(node, "style") && node->text)
+			ZCssParseSheet(node->text);
+		else if (ZTagIs(node, "link") && *external_left > 0)
+		{
+			rel	 = ZNodeAttr(node, "rel");
+			href = ZNodeAttr(node, "href");
+			if (rel && href && !StrICompare(rel, "stylesheet") && zinc_base_ok)
+			{
+				abs = HttpUrlResolve(&zinc_base, href);
+				if (abs)
+				{
+					(*external_left)--;
+					sheet = HttpGet(abs);
+					if (sheet && sheet->status == 200 &&
+						sheet->body_length < 131072)
+						ZCssParseSheet(sheet->body);
+					HttpResponseFree(sheet);
+					Free(abs);
+				}
+			}
+		}
+	}
+	child = node->first_child;
+	while (child)
+	{
+		ZincCollectCss(child, external_left);
+		child = child->next;
+	}
+}
+
+U0 ZincRunScripts(CZNode *node)
+{ // run inline <script> blocks in document order
+	CZNode *child;
+	U8	   *type;
+
+	if (node->type == ZH_ELEM && ZTagIs(node, "script"))
+	{
+		if (ZNodeAttr(node, "src"))
+			NetLog("ZINC: external script skipped.");
+		else
+		{
+			type = ZNodeAttr(node, "type");
+			if (!type || StrIMatch("javascript", type) || StrIMatch("module", type))
+			{
+				if (node->text)
+				{
+					if (!JsRun(zinc_js, node->text))
+						ZincJsNote;
+				}
+			}
+		}
+	}
+	child = node->first_child;
+	while (child)
+	{
+		ZincRunScripts(child);
+		child = child->next;
+	}
+}
+
+U0 ZincPageFree()
+{
+	JsInterpFree(zinc_js);
+	zinc_js = NULL;
+	ZNodeFree(zinc_dom);
+	zinc_dom = NULL;
+	ZCssReset;
+	ZincRenderReset;
+}
+
+U0 ZincSetPage(U8 *url, U8 *html)
+{ // build DOM + CSS + forms + JS for fetched html
+	I64 external_css = 2;
+
+	ZincPageFree;
+	zinc_base_ok = (HttpUrlParse(url, &zinc_base) >= 0);
+	zinc_dom = ZHtmlParse(html);
+	ZincCollectCss(zinc_dom, &external_css);
+	ZincFormInit(zinc_dom);
+	zinc_js = JsInterpNew(zinc_dom, url);
+	ZincRunScripts(zinc_dom);
+}
+
+U0 ZincSetPlainPage(U8 *url, U8 *text)
+{ // non-HTML payload: show as preformatted text
+	CZNode *pre, *tnode;
+
+	ZincPageFree;
+	zinc_base_ok = (HttpUrlParse(url, &zinc_base) >= 0);
+	zinc_dom = ZHtmlParse("");
+	pre = ZNodeNew(ZH_ELEM, zinc_dom);
+	if (pre)
+	{
+		StrCopy(pre->tag, "pre");
+		tnode = ZNodeNew(ZH_TEXT, pre);
+		if (tnode)
+			tnode->text = StrNew(text);
+	}
+	zinc_js = JsInterpNew(zinc_dom, url);
+}
+
+U0 ZincLoad(U8 *url)
+{ // fetch url and set up the page (or an error page)
+	CHttpResponse *response;
+	U8			  *ctype;
+	Bool		   is_html;
+
+	zinc_note[0] = 0;
+	DocClear(Fs->display_doc);
+	DocPrint(Fs->display_doc, "$$FG,YELLOW$$Fetching ");
+	ZincPrintSafe(Fs->display_doc, url);
+	DocPrint(Fs->display_doc, " ...$$FG$$\n");
+	Refresh;
+
+	if (!StrNICompare(url, "zinc:", 5))
+	{ // built-in pages: no real base URL to resolve links against
+		if (!StrICompare(url, "zinc:test"))
+			ZincSetPage(url, zinc_testpage);
+		else
+			ZincSetPage(url, zinc_welcome);
+		zinc_base_ok = FALSE;
+		return;
+	}
+
+	response = HttpGet(url);
+	if (!response)
+	{
+		StrCopy(zinc_note, "Fetch failed. See the Network Log for details.");
+		if (!StrNICompare(url, "https://", 8))
+			ZincSetPage(url, "<p>Could not load the page.</p>"
+							 "<p>For https: run <b>CryptoSelfTest;</b> once in "
+							 "a terminal, then check the Network Log for where "
+							 "the TLS handshake stopped. DNS or TCP may also "
+							 "have failed.</p>");
+		else
+			ZincSetPage(url, "<p>Could not load the page.</p>"
+							 "<p>DNS, TCP or HTTP failed. "
+							 "The Network Log has the story.</p>");
+		return;
+	}
+
+	if (response->status != 200)
+		StrPrint(zinc_note, "HTTP status %d", response->status);
+
+	is_html = TRUE;
+	ctype = HttpHeaderGet(response->headers, "Content-Type");
+	if (ctype)
+	{
+		if (!StrIMatch("html", ctype) && !StrIMatch("xhtml", ctype))
+			is_html = FALSE;
+		Free(ctype);
+	}
+	if (!is_html && response->body[0] == '<')
+		is_html = TRUE; // servers lie
+
+	if (is_html)
+		ZincSetPage(url, response->body);
+	else
+		ZincSetPlainPage(url, response->body);
+
+	HttpResponseFree(response); // DOM keeps its own copies
+}
+
+/* ---- forms ---- */
+
+U0 ZincUrlEncode(U8 *src, U8 *dst, I64 max)
+{
+	I64 n = 0, c;
+	U8 *hex = "0123456789ABCDEF";
+
+	while (*src && n < max - 4)
+	{
+		c = *src++;
+		if (('a' <= c <= 'z') || ('A' <= c <= 'Z') || ('0' <= c <= '9') ||
+			c == '-' || c == '.' || c == '_' || c == '~')
+			dst[n++] = c;
+		else if (c == ' ')
+			dst[n++] = '+';
+		else
+		{
+			dst[n++] = '%';
+			dst[n++] = hex[c >> 4 & 0xF];
+			dst[n++] = hex[c & 0xF];
+		}
+	}
+	dst[n] = 0;
+}
+
+U0 ZincFormField(CZNode *node, U8 *query, I64 max, CZNode *clicked)
+{ // append one control's name=value pair to the query string, if it applies
+	U8	*name, *val, *type;
+	U8	 enc_name[128], enc_val[512];
+	U8	 collected[512];
+	I64	 len;
+	CZNode *opt;
+
+	name = ZNodeAttr(node, "name");
+	if (!name || !*name)
+		return;
+
+	val = NULL;
+	if (ZTagIs(node, "input"))
+	{
+		type = ZNodeAttr(node, "type");
+		if (type && (!StrICompare(type, "checkbox") || !StrICompare(type, "radio")))
+		{
+			if (!node->checked)
+				return;
+			val = ZNodeAttr(node, "value");
+			if (!val)
+				val = "on";
+		}
+		else if (type && (!StrICompare(type, "submit") || !StrICompare(type, "image") ||
+						  !StrICompare(type, "button") || !StrICompare(type, "reset")))
+		{
+			if (node != clicked)
+				return; // only the pressed submit button posts its value
+			val = ZNodeAttr(node, "value");
+			if (!val)
+				return;
+		}
+		else
+		{
+			val = node->value;
+			if (!val)
+				val = ZNodeAttr(node, "value");
+			if (!val)
+				val = "";
+		}
+	}
+	else if (ZTagIs(node, "textarea"))
+	{
+		val = node->value;
+		if (!val)
+			val = node->text;
+		if (!val)
+			val = "";
+	}
+	else if (ZTagIs(node, "select"))
+	{
+		opt = ZnSelectCurrent(node);
+		if (!opt)
+			return;
+		val = ZNodeAttr(opt, "value");
+		if (!val)
+		{
+			len = 0;
+			ZNodeTextCollect(opt, collected, 500, &len);
+			val = collected;
+		}
+	}
+	else
+		return;
+
+	ZincUrlEncode(name, enc_name, 128);
+	ZincUrlEncode(val, enc_val, 512);
+	if (StrLen(query) + StrLen(enc_name) + StrLen(enc_val) + 2 >= max)
+		return;
+	if (*query)
+		CatPrint(query, "&");
+	CatPrint(query, "%s=%s", enc_name, enc_val);
+}
+
+U0 ZincFormWalk(CZNode *node, U8 *query, I64 max, CZNode *clicked)
+{
+	CZNode *child;
+
+	ZincFormField(node, query, max, clicked);
+	child = node->first_child;
+	while (child)
+	{
+		ZincFormWalk(child, query, max, clicked);
+		child = child->next;
+	}
+}
+
+U8 *ZincFormSubmitUrl(CZNode *clicked)
+{ // build the GET url for the form containing the clicked control
+	CZNode *form = ZnFindForm(clicked);
+	CZNode *scope;
+	U8		query[2048];
+	U8	   *action, *method, *abs, *result;
+
+	query[0] = 0;
+	scope = form;
+	if (!scope)
+		scope = zinc_dom; // formless controls: scan the whole page
+	ZincFormWalk(scope, query, 2040, clicked);
+
+	action = NULL;
+	if (form)
+	{
+		action = ZNodeAttr(form, "action");
+		method = ZNodeAttr(form, "method");
+		if (method && !StrICompare(method, "post"))
+			StrCopy(zinc_note, "POST form sent as GET (unsupported).");
+	}
+	if (!action || !*action)
+	{
+		if (!zinc_base_ok)
+			return NULL;
+		action = zinc_base.path; // self-submit
+	}
+
+	if (!StrNICompare(action, "http://", 7) || !StrNICompare(action, "https://", 8))
+		abs = StrNew(action);
+	else if (zinc_base_ok)
+		abs = HttpUrlResolve(&zinc_base, action);
+	else
+		abs = NULL;
+	if (!abs)
+		return NULL;
+
+	if (*query)
+	{
+		if (StrFind("?", abs))
+			result = MStrPrint("%s&%s", abs, query);
+		else
+			result = MStrPrint("%s?%s", abs, query);
+		Free(abs);
+	}
+	else
+		result = abs;
+
+	return result;
+}
+
+/* ---- widget interaction ---- */
+
+U0 ZincRadioGroupClear(CZNode *radio)
+{
+	CZNode *scope = ZnFindForm(radio);
+	U8	   *name  = ZNodeAttr(radio, "name");
+	CZNode *stack[ZH_STACK_DEPTH];
+	I64		sp = 0;
+	CZNode *node, *child;
+	U8	   *type, *other;
+
+	if (!scope)
+		scope = zinc_dom;
+	if (!name)
+	{ // unnamed radio: just itself
+		radio->checked = FALSE;
+		return;
+	}
+
+	stack[sp++] = scope;
+	while (sp > 0)
+	{
+		node = stack[--sp];
+		if (node->type == ZH_ELEM && ZTagIs(node, "input"))
+		{
+			type = ZNodeAttr(node, "type");
+			other = ZNodeAttr(node, "name");
+			if (type && other && !StrICompare(type, "radio") &&
+				!StrCompare(other, name))
+				node->checked = FALSE;
+		}
+		child = node->first_child;
+		while (child && sp < ZH_STACK_DEPTH)
+		{
+			stack[sp++] = child;
+			child = child->next;
+		}
+	}
+}
+
+U0 ZincSelectCycle(CZNode *sel)
+{ // advance a <select> to its next option, wrapping
+	CZNode *cur = ZnSelectCurrent(sel);
+	CZNode *next, *child;
+
+	if (!cur)
+		return;
+	next = cur->next;
+	while (next && !ZTagIs(next, "option"))
+		next = next->next;
+	if (!next)
+	{ // wrap to first option
+		next = sel->first_child;
+		while (next && !ZTagIs(next, "option"))
+			next = next->next;
+	}
+	child = sel->first_child;
+	while (child)
+	{
+		if (ZTagIs(child, "option"))
+			child->checked = FALSE;
+		child = child->next;
+	}
+	if (next)
+		next->checked = TRUE;
+}
+
+Bool ZincWidgetAct(I64 idx, Bool *rerender)
+{ // returns TRUE if a JS onclick ran (caller re-checks dirty/navigate)
+	CZNode *node;
+	I64		kind;
+	U8	   *input, *code;
+	Bool	ran_js = FALSE;
+
+	if (idx < 1 || idx > zn_widget_count)
+		return FALSE;
+	node = zn_widgets[idx - 1];
+	kind = zn_widget_kind[idx - 1];
+
+	switch (kind)
+	{
+		case ZW_TEXT:
+			input = StrGet("New value: ");
+			if (input)
+			{
+				Free(node->value);
+				node->value = input; // takes ownership
+				*rerender = TRUE;
+			}
+			break;
+		case ZW_CHECKBOX:
+			node->checked = !node->checked;
+			*rerender = TRUE;
+			break;
+		case ZW_RADIO:
+			ZincRadioGroupClear(node);
+			node->checked = TRUE;
+			*rerender = TRUE;
+			break;
+		case ZW_SELECT:
+			ZincSelectCycle(node);
+			*rerender = TRUE;
+			break;
+		case ZW_BUTTON:
+			code = ZNodeAttr(node, "onclick");
+			if (code && zinc_js)
+			{
+				if (!JsRun(zinc_js, code))
+				{
+					ZincJsNote;
+					*rerender = TRUE; // show the error in the chrome
+				}
+				ran_js = TRUE;
+			}
+			break;
+	}
+
+	return ran_js;
+}
+
+/* ---- navigation helpers ---- */
+
+U8 *ZincNavPush(U8 *current, U8 *target)
+{ // returns the new current URL; takes ownership of both strings
+	while (zinc_fwd_count)
+		Free(zinc_fwd[--zinc_fwd_count]);
+	if (zinc_back_count < ZINC_HISTORY)
+		zinc_back[zinc_back_count++] = current;
+	else
+		Free(current);
+
+	return target;
+}
+
+Bool ZincAllDigits(U8 *s)
+{
+	if (!*s)
+		return FALSE;
+	while (*s)
+	{
+		if (!('0' <= *s <= '9'))
+			return FALSE;
+		s++;
+	}
+
+	return TRUE;
+}
+
+Bool ZincLooksLikeUrl(U8 *s)
+{ // typed into the command line: treat as an address?
+	if (!StrNICompare(s, "http://", 7) || !StrNICompare(s, "https://", 8) ||
+		!StrNICompare(s, "zinc:", 5))
+		return TRUE;
+
+	return StrFind(".", s) != NULL; // frogfind.com, example.com/page, ...
+}
+
+U8 *ZincResolveInput(U8 *s)
+{ // absolute URL from user-typed text; MAlloc'ed
+	if (!StrNICompare(s, "http://", 7) || !StrNICompare(s, "https://", 8) ||
+		!StrNICompare(s, "zinc:", 5))
+		return StrNew(s);
+
+	return MStrPrint("http://%s", s);
+}
+
+U8 *ZincResolveLink(U8 *href)
+{ // absolute URL from a page link; MAlloc'ed or NULL
+	if (!StrNICompare(href, "http://", 7) || !StrNICompare(href, "https://", 8) ||
+		!StrNICompare(href, "zinc:", 5))
+		return StrNew(href);
+	if (zinc_base_ok)
+		return HttpUrlResolve(&zinc_base, href);
+
+	return NULL;
+}
+
+/* ---- main ---- */
+
+public U0 Zinc(U8 *start_url=NULL)
+{
+	U8	*current, *input, *target, *code;
+	I64	 n, i, nav_chain = 0;
+	Bool running = TRUE, fetch = TRUE, rerender, ran_js;
+
+	AutoComplete(OFF);
+	DocCursor(OFF);
+	StrCopy(Fs->task_title, "ZINC");
+	zinc_note[0] = 0;
+	zinc_back_count = 0;
+	zinc_fwd_count	= 0;
+
+	if (start_url)
+		current = StrNew(start_url);
+	else
+		current = StrNew("zinc:welcome");
+
+	while (running)
+	{
+		if (fetch)
+		{
+			ZincLoad(current);
+			fetch = FALSE;
+			// scripts may have navigated during load; cap redirect chains
+			if (zinc_js && zinc_js->navigate && nav_chain < 5)
+			{
+				nav_chain++;
+				target = StrNew(zinc_js->navigate);
+				zinc_js->navigate = NULL;
+				current = ZincNavPush(current, target);
+				fetch = TRUE;
+			}
+			else
+			{
+				if (zinc_js)
+					zinc_js->navigate = NULL;
+				ZincShow(current);
+			}
+		}
+
+		if (fetch)
+			goto zinc_next; // navigation chain: no input this round
+
+		input = StrGet(""); // fed by clicks on macros, or typed
+		if (!input)
+		{
+			running = FALSE;
+			goto zinc_next;
+		}
+
+		nav_chain = 0;
+		rerender = FALSE;
+		ran_js	 = FALSE;
+
+		if (!StrCompare(input, "q"))
+			running = FALSE;
+		else if (!StrCompare(input, "r"))
+			fetch = TRUE;
+		else if (!StrCompare(input, "h"))
+		{
+			current = ZincNavPush(current, StrNew("zinc:welcome"));
+			fetch = TRUE;
+		}
+		else if (!StrCompare(input, "b"))
+		{
+			if (zinc_back_count)
+			{
+				if (zinc_fwd_count < ZINC_HISTORY)
+					zinc_fwd[zinc_fwd_count++] = current;
+				else
+					Free(current);
+				current = zinc_back[--zinc_back_count];
+				fetch = TRUE;
+			}
+		}
+		else if (!StrCompare(input, "f"))
+		{
+			if (zinc_fwd_count)
+			{
+				if (zinc_back_count < ZINC_HISTORY)
+					zinc_back[zinc_back_count++] = current;
+				else
+					Free(current);
+				current = zinc_fwd[--zinc_fwd_count];
+				fetch = TRUE;
+			}
+		}
+		else if (!StrCompare(input, "g"))
+		{
+			target = StrGet("Address: ");
+			if (target && *target)
+			{
+				current = ZincNavPush(current, ZincResolveInput(target));
+				Free(target);
+				fetch = TRUE;
+			}
+			else
+				Free(target);
+		}
+		else if (input[0] == 'l' && ZincAllDigits(input + 1))
+		{ // follow link n
+			n = Str2I64(input + 1);
+			if (1 <= n <= zn_link_count)
+			{
+				if (!StrNICompare(zn_links[n - 1], "javascript:", 11))
+				{
+					if (zinc_js)
+					{
+						if (!JsRun(zinc_js, zn_links[n - 1] + 11))
+						{
+							ZincJsNote;
+							rerender = TRUE;
+						}
+						ran_js = TRUE;
+					}
+				}
+				else
+				{
+					target = ZincResolveLink(zn_links[n - 1]);
+					if (target)
+					{
+						current = ZincNavPush(current, target);
+						fetch = TRUE;
+					}
+				}
+			}
+		}
+		else if (input[0] == 'i' && ZincAllDigits(input + 1))
+		{ // interact with widget n
+			n = Str2I64(input + 1);
+			ran_js = ZincWidgetAct(n, &rerender);
+		}
+		else if (input[0] == 's' && ZincAllDigits(input + 1))
+		{ // submit the form owning widget n
+			n = Str2I64(input + 1);
+			if (1 <= n <= zn_widget_count)
+			{
+				// a submit button may carry onclick too; run it first
+				code = ZNodeAttr(zn_widgets[n - 1], "onclick");
+				if (code && zinc_js)
+				{
+					if (!JsRun(zinc_js, code))
+						ZincJsNote;
+					ran_js = TRUE;
+				}
+				if (!zinc_js || !zinc_js->navigate)
+				{
+					target = ZincFormSubmitUrl(zn_widgets[n - 1]);
+					if (target)
+					{
+						current = ZincNavPush(current, target);
+						fetch = TRUE;
+					}
+				}
+			}
+		}
+		else if (input[0] == 'j' && ZincAllDigits(input + 1))
+		{ // JS button n
+			n = Str2I64(input + 1);
+			ran_js = ZincWidgetAct(n, &rerender);
+		}
+		else if (ZincLooksLikeUrl(input))
+		{ // typed an address straight into the window
+			current = ZincNavPush(current, ZincResolveInput(input));
+			fetch = TRUE;
+		}
+
+		Free(input);
+
+		if (ran_js && zinc_js)
+		{ // effects of event scripts
+			if (zinc_js->navigate)
+			{
+				target = StrNew(zinc_js->navigate);
+				zinc_js->navigate = NULL;
+				if (StrFind("://", target) == NULL &&
+					StrNICompare(target, "zinc:", 5) && zinc_base_ok)
+				{ // relative navigation
+					input = HttpUrlResolve(&zinc_base, target);
+					if (input)
+					{
+						Free(target);
+						target = input;
+					}
+				}
+				current = ZincNavPush(current, target);
+				fetch = TRUE;
+			}
+			else if (zinc_js->dom_dirty)
+			{
+				zinc_js->dom_dirty = FALSE;
+				rerender = TRUE;
+			}
+		}
+		if (rerender && !fetch)
+			ZincShow(current);
+
+zinc_next:;
+	}
+
+	ZincPageFree;
+	Free(current);
+	for (i = 0; i < zinc_back_count; i++)
+		Free(zinc_back[i]);
+	for (i = 0; i < zinc_fwd_count; i++)
+		Free(zinc_fwd[i]);
+	zinc_back_count = 0;
+	zinc_fwd_count	= 0;
+
+	DocCursor(ON);
+	AutoComplete(ON);
+	DocClear(Fs->display_doc);
+	DocPrint(Fs->display_doc, "Zinc closed.\n");
+}
+
+Zinc;

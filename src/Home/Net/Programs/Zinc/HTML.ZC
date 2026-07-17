@@ -1,0 +1,716 @@
+/*	Zinc HTML: tag-soup parser producing a DOM tree. Public Domain.
+
+	Entities and UTF-8 are decoded to ASCII approximations at parse time,
+	so the rest of the browser only ever sees 7-bit text. Implied closes
+	(p, li, tr, td, option) follow the usual tag-soup rules. Unknown tags
+	become plain elements, so styling still applies to them.
+
+	NOTE: no literal dollar signs may appear anywhere in this file (DolDoc
+	source rule); spell the word out in comments instead. */
+
+#define ZH_ELEM		1
+#define ZH_TEXT		2
+
+#define ZH_MAX_NODES	20000	// per-page parse budget
+#define ZH_STACK_DEPTH	64
+
+class CZAttr
+{
+	CZAttr	*next;
+	U8		*val;		// MAlloc'ed, entity-decoded
+	U8		 name[24];	// lowercased
+};
+
+class CZNode
+{
+	CZNode	*parent, *next, *first_child, *last_child;
+	CZAttr	*attrs;
+	U8		*text;		// ZH_TEXT: MAlloc'ed decoded text
+	U8		*value;		// form widgets: live value (MAlloc'ed or NULL)
+	I64		 type;
+	Bool	 checked;	// checkbox/radio live state
+	U8		 tag[16];	// lowercased; "#root" for the root
+};
+
+I64 zh_node_budget = ZH_MAX_NODES;
+
+I64 ZChLower(I64 ch)
+{
+	if ('A' <= ch <= 'Z')
+		return ch + 0x20;
+	return ch;
+}
+
+CZNode *ZNodeNew(I64 type, CZNode *parent)
+{
+	CZNode *node;
+
+	if (zh_node_budget <= 0)
+		return NULL;
+	zh_node_budget--;
+
+	node = CAlloc(sizeof(CZNode));
+	node->type	 = type;
+	node->parent = parent;
+	if (parent)
+	{
+		if (parent->last_child)
+			parent->last_child->next = node;
+		else
+			parent->first_child = node;
+		parent->last_child = node;
+	}
+
+	return node;
+}
+
+U0 ZNodeFree(CZNode *node)
+{ // frees node, its attrs and its whole subtree
+	CZNode *child, *next_child;
+	CZAttr *attr,  *next_attr;
+
+	if (!node)
+		return;
+
+	child = node->first_child;
+	while (child)
+	{
+		next_child = child->next;
+		ZNodeFree(child);
+		child = next_child;
+	}
+
+	attr = node->attrs;
+	while (attr)
+	{
+		next_attr = attr->next;
+		Free(attr->val);
+		Free(attr);
+		attr = next_attr;
+	}
+
+	Free(node->text);
+	Free(node->value);
+	Free(node);
+}
+
+U0 ZNodeFreeChildren(CZNode *node)
+{ // empty an element in place (innerHTML assignment)
+	CZNode *child, *next_child;
+
+	child = node->first_child;
+	while (child)
+	{
+		next_child = child->next;
+		ZNodeFree(child);
+		child = next_child;
+	}
+	node->first_child = NULL;
+	node->last_child  = NULL;
+}
+
+U8 *ZNodeAttr(CZNode *node, U8 *name)
+{ // NULL if absent
+	CZAttr *attr;
+
+	if (!node || node->type != ZH_ELEM)
+		return NULL;
+	attr = node->attrs;
+	while (attr)
+	{
+		if (!StrICompare(attr->name, name))
+			return attr->val;
+		attr = attr->next;
+	}
+
+	return NULL;
+}
+
+U0 ZNodeAttrSet(CZNode *node, U8 *name, U8 *val)
+{
+	CZAttr *attr = node->attrs;
+	I64		i;
+
+	while (attr)
+	{
+		if (!StrICompare(attr->name, name))
+		{
+			Free(attr->val);
+			attr->val = StrNew(val);
+			return;
+		}
+		attr = attr->next;
+	}
+
+	attr = CAlloc(sizeof(CZAttr));
+	i = 0;
+	while (name[i] && i < 23)
+	{
+		attr->name[i] = ZChLower(name[i]);
+		i++;
+	}
+	attr->name[i] = 0;
+	attr->val  = StrNew(val);
+	attr->next = node->attrs;
+	node->attrs = attr;
+}
+
+Bool ZTagIs(CZNode *node, U8 *tag)
+{
+	return node && node->type == ZH_ELEM && !StrCompare(node->tag, tag);
+}
+
+CZNode *ZDomFindId(CZNode *node, U8 *id)
+{
+	CZNode *child, *found;
+	U8	   *node_id;
+
+	if (!node)
+		return NULL;
+	if (node->type == ZH_ELEM)
+	{
+		node_id = ZNodeAttr(node, "id");
+		if (node_id && !StrCompare(node_id, id))
+			return node;
+	}
+	child = node->first_child;
+	while (child)
+	{
+		found = ZDomFindId(child, id);
+		if (found)
+			return found;
+		child = child->next;
+	}
+
+	return NULL;
+}
+
+CZNode *ZDomFindTag(CZNode *node, U8 *tag)
+{ // first element with this tag, depth-first
+	CZNode *child, *found;
+
+	if (!node)
+		return NULL;
+	if (node->type == ZH_ELEM && !StrCompare(node->tag, tag))
+		return node;
+	child = node->first_child;
+	while (child)
+	{
+		found = ZDomFindTag(child, tag);
+		if (found)
+			return found;
+		child = child->next;
+	}
+
+	return NULL;
+}
+
+U0 ZNodeTextCollect(CZNode *node, U8 *buf, I64 max, I64 *len)
+{ // subtree text content, whitespace collapsed to single spaces
+	CZNode *child;
+	U8	   *p;
+	I64		c;
+
+	if (!node)
+		return;
+	if (node->type == ZH_TEXT && node->text)
+	{
+		p = node->text;
+		while (*p && *len < max)
+		{
+			c = *p++;
+			if (c == '\n' || c == '\t' || c == '\r')
+				c = ' ';
+			if (c == ' ' && *len > 0 && buf[*len - 1] == ' ')
+			{
+				// collapse run
+			}
+			else if (c != ' ' || *len > 0)
+				buf[(*len)++] = c;
+		}
+	}
+	child = node->first_child;
+	while (child)
+	{
+		ZNodeTextCollect(child, buf, max, len);
+		child = child->next;
+	}
+	buf[*len] = 0;
+}
+
+/* ---- text decoding: UTF-8 + entities to ASCII approximations ---- */
+
+U0 ZDecPut(U8 *out, I64 *n, I64 max, U8 *s)
+{ // append string to decode buffer
+	while (*s && *n < max)
+		out[(*n)++] = *s++;
+}
+
+U0 ZDecPutCodePoint(U8 *out, I64 *n, I64 max, I64 cp)
+{ // ASCII approximation of a Unicode code point.
+  // if-else chain, not switch: sparse case values would inflate the jump table.
+	U8 one[2];
+
+	if (32 <= cp < 127 || cp == '\n' || cp == '\t')
+	{
+		one[0] = cp;
+		one[1] = 0;
+		ZDecPut(out, n, max, one);
+	}
+	else if (cp == 0xA0)						ZDecPut(out, n, max, " ");
+	else if (cp == 0xA9)						ZDecPut(out, n, max, "(c)");
+	else if (cp == 0xAE)						ZDecPut(out, n, max, "(R)");
+	else if (cp == 0xB7 || cp == 0x2022)		ZDecPut(out, n, max, "*");
+	else if (cp == 0xD7)						ZDecPut(out, n, max, "x");
+	else if (0x2013 <= cp <= 0x2015 || cp == 0x2212)
+												ZDecPut(out, n, max, "-");
+	else if (0x2018 <= cp <= 0x201B)			ZDecPut(out, n, max, "'");
+	else if (0x201C <= cp <= 0x201F)			ZDecPut(out, n, max, "\"");
+	else if (cp == 0x2026)						ZDecPut(out, n, max, "...");
+	else if (cp == 0x2122)						ZDecPut(out, n, max, "(tm)");
+	else if (cp == 0x2190)						ZDecPut(out, n, max, "<-");
+	else if (cp == 0x2192)						ZDecPut(out, n, max, "->");
+	else if (cp == 0x20AC)						ZDecPut(out, n, max, "EUR");
+	else if (0xC0 <= cp <= 0xC5)				ZDecPut(out, n, max, "A");
+	else if (cp == 0xC7)						ZDecPut(out, n, max, "C");
+	else if (0xC8 <= cp <= 0xCB)				ZDecPut(out, n, max, "E");
+	else if (0xCC <= cp <= 0xCF)				ZDecPut(out, n, max, "I");
+	else if (cp == 0xD1)						ZDecPut(out, n, max, "N");
+	else if (0xD2 <= cp <= 0xD6)				ZDecPut(out, n, max, "O");
+	else if (0xD9 <= cp <= 0xDC)				ZDecPut(out, n, max, "U");
+	else if (0xE0 <= cp <= 0xE5)				ZDecPut(out, n, max, "a");
+	else if (cp == 0xE7)						ZDecPut(out, n, max, "c");
+	else if (0xE8 <= cp <= 0xEB)				ZDecPut(out, n, max, "e");
+	else if (0xEC <= cp <= 0xEF)				ZDecPut(out, n, max, "i");
+	else if (cp == 0xF1)						ZDecPut(out, n, max, "n");
+	else if (0xF2 <= cp <= 0xF6)				ZDecPut(out, n, max, "o");
+	else if (0xF9 <= cp <= 0xFC)				ZDecPut(out, n, max, "u");
+	else										ZDecPut(out, n, max, "?");
+}
+
+#define ZH_ENTITY_COUNT 24
+
+U8 *zh_entity_names[ZH_ENTITY_COUNT] = {
+	"amp",   "lt",	  "gt",    "quot",  "apos",  "nbsp",  "copy",  "reg",
+	"trade", "hellip","mdash", "ndash", "lsquo", "rsquo", "ldquo", "rdquo",
+	"bull",  "middot","times", "laquo", "raquo", "deg",   "shy",   "zwnj"
+};
+I64 zh_entity_cps[ZH_ENTITY_COUNT] = {
+	'&',	'<',	 '>',	  '"',	   '\'',	0xA0,	 0xA9,	  0xAE,
+	0x2122, 0x2026,  0x2014,  0x2013,  0x2018,	0x2019,  0x201C,  0x201D,
+	0x2022, 0xB7,	 0xD7,	  '<',	   '>',		'*',	 0,		  0
+};
+
+U8 *ZHtmlEntity(U8 *p, U8 *out, I64 *n, I64 max)
+{ // p points at '&'; returns pointer past the entity (or past '&' if bogus)
+	U8	name[12];
+	I64	i, cp, len;
+
+	if (p[1] == '#')
+	{
+		if (p[2] == 'x' || p[2] == 'X')
+			cp = Str2I64(p + 3, 16);
+		else
+			cp = Str2I64(p + 2);
+		i = 2;
+		while (p[i] && p[i] != ';' && i < 12)
+			i++;
+		if (p[i] == ';')
+		{
+			if (cp > 0)
+				ZDecPutCodePoint(out, n, max, cp);
+			return p + i + 1;
+		}
+		ZDecPut(out, n, max, "&");
+		return p + 1;
+	}
+
+	len = 0;
+	while (p[1 + len] && len < 10 &&
+		   (('a' <= p[1 + len] <= 'z') || ('A' <= p[1 + len] <= 'Z') ||
+			('0' <= p[1 + len] <= '9')))
+	{
+		name[len] = p[1 + len];
+		len++;
+	}
+	name[len] = 0;
+
+	if (len && p[1 + len] == ';')
+	{
+		for (i = 0; i < ZH_ENTITY_COUNT; i++)
+		{
+			if (!StrICompare(name, zh_entity_names[i]))
+			{
+				if (zh_entity_cps[i])
+					ZDecPutCodePoint(out, n, max, zh_entity_cps[i]);
+				return p + len + 2;
+			}
+		}
+	}
+
+	ZDecPut(out, n, max, "&");
+	return p + 1;
+}
+
+U8 *ZHtmlDecodeRun(U8 *p, U8 *stop_at, U8 *out, I64 *n, I64 max, Bool entities)
+{ // decode text from p up to (not incl) stop_at into out; handles UTF-8
+	I64 cp, extra, c;
+
+	while (p < stop_at && *n < max)
+	{
+		c = *p;
+		if (c == '&' && entities)
+			p = ZHtmlEntity(p, out, n, max);
+		else if (c < 0x80)
+		{
+			if (c != '\r')
+				out[(*n)++] = c;
+			p++;
+		}
+		else
+		{ // UTF-8 sequence
+			if ((c & 0xE0) == 0xC0)
+			{
+				cp = c & 0x1F;
+				extra = 1;
+			}
+			else if ((c & 0xF0) == 0xE0)
+			{
+				cp = c & 0x0F;
+				extra = 2;
+			}
+			else if ((c & 0xF8) == 0xF0)
+			{
+				cp = c & 0x07;
+				extra = 3;
+			}
+			else
+			{ // stray continuation byte
+				cp = -1;
+				extra = 0;
+			}
+			p++;
+			while (extra > 0 && p < stop_at && ((*p & 0xC0) == 0x80))
+			{
+				cp = cp << 6 | (*p & 0x3F);
+				p++;
+				extra--;
+			}
+			if (cp >= 0 && !extra)
+				ZDecPutCodePoint(out, n, max, cp);
+		}
+	}
+	out[*n] = 0;
+
+	return p;
+}
+
+/* ---- the parser ---- */
+
+Bool ZHtmlTagVoid(U8 *tag)
+{
+	return !StrCompare(tag, "br")	 || !StrCompare(tag, "hr")	  ||
+		   !StrCompare(tag, "img")	 || !StrCompare(tag, "input")  ||
+		   !StrCompare(tag, "meta")	 || !StrCompare(tag, "link")   ||
+		   !StrCompare(tag, "base")	 || !StrCompare(tag, "area")   ||
+		   !StrCompare(tag, "col")	 || !StrCompare(tag, "source") ||
+		   !StrCompare(tag, "track")  || !StrCompare(tag, "wbr")	   ||
+		   !StrCompare(tag, "embed")  || !StrCompare(tag, "param");
+}
+
+Bool ZHtmlTagBlock(U8 *tag)
+{ // block-level: opening one implicitly closes an open <p>
+	return !StrCompare(tag, "p")		  || !StrCompare(tag, "div")	 ||
+		   !StrCompare(tag, "ul")	  || !StrCompare(tag, "ol")		 ||
+		   !StrCompare(tag, "li")	  || !StrCompare(tag, "table")	 ||
+		   !StrCompare(tag, "h1")	  || !StrCompare(tag, "h2")		 ||
+		   !StrCompare(tag, "h3")	  || !StrCompare(tag, "h4")		 ||
+		   !StrCompare(tag, "h5")	  || !StrCompare(tag, "h6")		 ||
+		   !StrCompare(tag, "pre")	  || !StrCompare(tag, "form")	 ||
+		   !StrCompare(tag, "blockquote") || !StrCompare(tag, "hr")	 ||
+		   !StrCompare(tag, "dl")	  || !StrCompare(tag, "section") ||
+		   !StrCompare(tag, "article")|| !StrCompare(tag, "header")	 ||
+		   !StrCompare(tag, "footer") || !StrCompare(tag, "nav")	 ||
+		   !StrCompare(tag, "aside")  || !StrCompare(tag, "main")	 ||
+		   !StrCompare(tag, "tr");
+}
+
+Bool ZHtmlTagRaw(U8 *tag)
+{ // content is raw text until the matching close tag
+	return !StrCompare(tag, "script") || !StrCompare(tag, "style") ||
+		   !StrCompare(tag, "textarea") || !StrCompare(tag, "title");
+}
+
+U0 ZHtmlFlushText(CZNode *parent, U8 *buf, I64 *n)
+{
+	CZNode *node;
+
+	if (!*n)
+		return;
+	buf[*n] = 0;
+	node = ZNodeNew(ZH_TEXT, parent);
+	if (node)
+		node->text = StrNew(buf);
+	*n = 0;
+}
+
+U8 *ZHtmlParseAttrs(U8 *p, CZNode *node)
+{ // parse attributes up to '>' (not consumed); entity-decodes values
+	U8	name[24], raw[1024], val[1024];
+	I64	name_len, raw_len, val_len, quote;
+
+	while (*p && *p != '>')
+	{
+		if (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n' || *p == '/')
+			p++;
+		else
+		{
+			name_len = 0;
+			while (*p && *p != '=' && *p != '>' && *p != ' ' && *p != '\t' &&
+				   *p != '\r' && *p != '\n' && *p != '/')
+			{
+				if (name_len < 23)
+					name[name_len++] = ZChLower(*p);
+				p++;
+			}
+			name[name_len] = 0;
+
+			while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n')
+				p++;
+
+			raw_len = 0;
+			if (*p == '=')
+			{
+				p++;
+				while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n')
+					p++;
+				if (*p == '"' || *p == '\'')
+				{
+					quote = *p++;
+					while (*p && *p != quote)
+					{
+						if (raw_len < 1023)
+							raw[raw_len++] = *p;
+						p++;
+					}
+					if (*p)
+						p++;
+				}
+				else
+				{
+					while (*p && *p != '>' && *p != ' ' && *p != '\t' &&
+						   *p != '\r' && *p != '\n')
+					{
+						if (raw_len < 1023)
+							raw[raw_len++] = *p;
+						p++;
+					}
+				}
+			}
+
+			if (name_len)
+			{
+				val_len = 0;
+				ZHtmlDecodeRun(raw, raw + raw_len, val, &val_len, 1020, TRUE);
+				ZNodeAttrSet(node, name, val);
+			}
+		}
+	}
+
+	return p;
+}
+
+U0 ZHtmlParseInto(CZNode *parent_node, U8 *html)
+{ // parse an HTML fragment, appending nodes under parent_node
+	CZNode	*stack[ZH_STACK_DEPTH];
+	I64		 sp = 0;
+	U8		*p = html, *scan;
+	U8		 text[2048];
+	I64		 text_len = 0;
+	U8		 tag[16];
+	I64		 tag_len, i, match;
+	CZNode	*node;
+	Bool	 closing;
+	U8		 raw_close[20];
+
+	stack[0] = parent_node;
+
+	while (*p && zh_node_budget > 0)
+	{
+		if (*p == '<')
+		{
+			if (!StrNCompare(p, "<!--", 4))
+			{ // comment
+				scan = StrFind("-->", p + 4);
+				ZHtmlFlushText(stack[sp], text, &text_len);
+				if (scan)
+					p = scan + 3;
+				else
+					p = p + StrLen(p);
+			}
+			else if (p[1] == '!' || p[1] == '?')
+			{ // doctype, processing instruction
+				ZHtmlFlushText(stack[sp], text, &text_len);
+				while (*p && *p != '>')
+					p++;
+				if (*p)
+					p++;
+			}
+			else if (p[1] == '/' || ('a' <= ZChLower(p[1]) <= 'z'))
+			{
+				ZHtmlFlushText(stack[sp], text, &text_len);
+
+				p++;
+				closing = (*p == '/');
+				if (closing)
+					p++;
+
+				tag_len = 0;
+				while (*p && *p != '>' && *p != ' ' && *p != '\t' &&
+					   *p != '\r' && *p != '\n' && *p != '/')
+				{
+					if (tag_len < 15)
+						tag[tag_len++] = ZChLower(*p);
+					p++;
+				}
+				tag[tag_len] = 0;
+
+				if (closing)
+				{ // pop to the matching open tag, if it is on our stack
+					while (*p && *p != '>')
+						p++;
+					if (*p)
+						p++;
+					match = -1;
+					i = sp;
+					while (i > 0 && match < 0)
+					{
+						if (!StrCompare(stack[i]->tag, tag))
+							match = i;
+						i--;
+					}
+					if (match > 0)
+						sp = match - 1;
+				}
+				else
+				{
+					// implied closes
+					if (ZHtmlTagBlock(tag))
+					{
+						while (sp > 0 && ZTagIs(stack[sp], "p"))
+							sp--;
+					}
+					if (!StrCompare(tag, "li"))
+					{
+						while (sp > 0 && ZTagIs(stack[sp], "li"))
+							sp--;
+					}
+					if (!StrCompare(tag, "option"))
+					{
+						while (sp > 0 && ZTagIs(stack[sp], "option"))
+							sp--;
+					}
+					if (!StrCompare(tag, "td") || !StrCompare(tag, "th") ||
+						!StrCompare(tag, "tr"))
+					{
+						while (sp > 0 && (ZTagIs(stack[sp], "td") ||
+										  ZTagIs(stack[sp], "th")))
+							sp--;
+						if (!StrCompare(tag, "tr"))
+						{
+							while (sp > 0 && ZTagIs(stack[sp], "tr"))
+								sp--;
+						}
+					}
+
+					node = ZNodeNew(ZH_ELEM, stack[sp]);
+					if (!node)
+						return;
+					StrCopy(node->tag, tag);
+
+					p = ZHtmlParseAttrs(p, node);
+					closing = FALSE; // reuse as self-close flag
+					scan = p;
+					if (scan > html && scan[-1] == '/')
+						closing = TRUE;
+					if (*p)
+						p++; // consume '>'
+
+					if (ZHtmlTagRaw(tag) && !closing)
+					{ // swallow raw content up to the matching close tag
+						StrPrint(raw_close, "</%s", tag);
+						scan = p;
+						match = 0;
+						while (*scan && !match)
+						{
+							if (!StrNICompare(scan, raw_close, tag_len + 2))
+								match = 1;
+							else
+								scan++;
+						}
+						text_len = 0;
+						if (!StrCompare(tag, "script") || !StrCompare(tag, "style"))
+						{ // raw copy, no entity decode
+							i = scan - p;
+							if (i > 0)
+							{
+								node->text = MAlloc(i + 1);
+								MemCopy(node->text, p, i);
+								node->text[i] = 0;
+							}
+						}
+						else
+						{ // title, textarea: decode
+							ZHtmlDecodeRun(p, scan, text, &text_len, 2040, TRUE);
+							if (text_len)
+								node->text = StrNew(text);
+							text_len = 0;
+						}
+						p = scan;
+						while (*p && *p != '>')
+							p++;
+						if (*p)
+							p++;
+					}
+					else if (!ZHtmlTagVoid(tag) && !closing)
+					{
+						if (sp < ZH_STACK_DEPTH - 1)
+							stack[++sp] = node;
+					}
+				}
+			}
+			else
+			{ // stray '<' as text
+				if (text_len < 2040)
+					text[text_len++] = '<';
+				p++;
+			}
+		}
+		else
+		{ // text run: up to next '<'; flush in chunks so nothing is dropped
+			scan = p;
+			while (*scan && *scan != '<')
+				scan++;
+			while (p < scan)
+			{
+				p = ZHtmlDecodeRun(p, scan, text, &text_len, 1024, TRUE);
+				if (text_len >= 1024)
+					ZHtmlFlushText(stack[sp], text, &text_len);
+			}
+		}
+	}
+
+	ZHtmlFlushText(stack[sp], text, &text_len);
+}
+
+CZNode *ZHtmlParse(U8 *html)
+{ // parse a whole document; caller frees with ZNodeFree
+	CZNode *root;
+
+	zh_node_budget = ZH_MAX_NODES;
+	root = ZNodeNew(ZH_ELEM, NULL);
+	StrCopy(root->tag, "#root");
+	ZHtmlParseInto(root, html);
+
+	return root;
+}
