@@ -1,0 +1,181 @@
+// HMAC-SHA256 (RFC 2104) + HKDF (RFC 5869) + the TLS 1.3 key-schedule
+// helpers HKDF-Expand-Label and Derive-Secret (RFC 8446 section 7.1).
+// Verify on-target with HMACTest; and HKDFTest;.
+
+U0 HMACSHA256(U8 *key, I64 key_len, U8 *msg, I64 msg_len, U8 *out)
+{
+	U8		k[SHA256_BLOCK_LEN];
+	U8		ipad[SHA256_BLOCK_LEN];
+	U8		opad[SHA256_BLOCK_LEN];
+	U8		inner[SHA256_DIGEST_LEN];
+	CSHA256 ctx;
+	I64		i;
+
+	MemSet(k, 0, SHA256_BLOCK_LEN);
+
+	if (key_len > SHA256_BLOCK_LEN)
+		SHA256(key, key_len, k); // keys longer than the block get hashed down
+	else
+		MemCopy(k, key, key_len);
+
+	for (i = 0; i < SHA256_BLOCK_LEN; i++)
+	{
+		ipad[i] = k[i] ^ 0x36;
+		opad[i] = k[i] ^ 0x5C;
+	}
+
+	// inner = H(ipad || msg)
+	SHA256Init(&ctx);
+	SHA256Update(&ctx, ipad, SHA256_BLOCK_LEN);
+	SHA256Update(&ctx, msg, msg_len);
+	SHA256Final(&ctx, inner);
+
+	// out = H(opad || inner)
+	SHA256Init(&ctx);
+	SHA256Update(&ctx, opad, SHA256_BLOCK_LEN);
+	SHA256Update(&ctx, inner, SHA256_DIGEST_LEN);
+	SHA256Final(&ctx, out);
+}
+
+U0 HKDFExtract(U8 *salt, I64 salt_len, U8 *ikm, I64 ikm_len, U8 *prk_out)
+{ // PRK = HMAC(salt, IKM). A zero-length salt must be treated as all-zero.
+	U8 zero_salt[SHA256_DIGEST_LEN];
+
+	if (!salt_len)
+	{
+		MemSet(zero_salt, 0, SHA256_DIGEST_LEN);
+		salt	 = zero_salt;
+		salt_len = SHA256_DIGEST_LEN;
+	}
+
+	HMACSHA256(salt, salt_len, ikm, ikm_len, prk_out);
+}
+
+U0 HKDFExpand(U8 *prk, I64 prk_len, U8 *info, I64 info_len, U8 *out, I64 out_len)
+{ // RFC 5869 Expand. T(n) = HMAC(PRK, T(n-1) || info || n).
+	U8	t[SHA256_DIGEST_LEN];
+	U8	buf[SHA256_DIGEST_LEN + 512 + 1]; // T(n-1) || info || counter
+	I64 t_len = 0;
+	I64 done = 0;
+	I64 n = 0;
+	I64 chunk, off;
+
+	while (done < out_len)
+	{
+		n++;
+		off = 0;
+
+		MemCopy(buf, t, t_len);       // T(n-1) (empty on first round)
+		off += t_len;
+		MemCopy(buf + off, info, info_len);
+		off += info_len;
+		buf[off++] = n & 0xFF;        // single-byte counter (out_len <= 255*32 here)
+
+		HMACSHA256(prk, prk_len, buf, off, t);
+		t_len = SHA256_DIGEST_LEN;
+
+		chunk = out_len - done;
+		if (chunk > SHA256_DIGEST_LEN)
+			chunk = SHA256_DIGEST_LEN;
+
+		MemCopy(out + done, t, chunk);
+		done += chunk;
+	}
+}
+
+U0 TLSHKDFExpandLabel(U8 *secret, U8 *label, U8 *context, I64 context_len,
+					  U8 *out, I64 out_len)
+{ // RFC 8446: HkdfLabel = len16 || "tls13 "+label (u8 len prefix) || context (u8 len prefix)
+	U8	 info[512];
+	I64	 i = 0;
+	U8	*full_label = MStrPrint("tls13 %s", label);
+	I64	 label_len  = StrLen(full_label);
+
+	info[i++] = out_len >> 8 & 0xFF;
+	info[i++] = out_len & 0xFF;
+
+	info[i++] = label_len & 0xFF;
+	MemCopy(info + i, full_label, label_len);
+	i += label_len;
+
+	info[i++] = context_len & 0xFF;
+	MemCopy(info + i, context, context_len);
+	i += context_len;
+
+	Free(full_label);
+
+	HKDFExpand(secret, SHA256_DIGEST_LEN, info, i, out, out_len);
+}
+
+U0 TLSDeriveSecret(U8 *secret, U8 *label, U8 *transcript_hash, U8 *out)
+{ // Derive-Secret(Secret, Label, Messages) = Expand-Label(Secret, Label, Hash(Messages), 32)
+	TLSHKDFExpandLabel(secret, label, transcript_hash, SHA256_DIGEST_LEN, out, SHA256_DIGEST_LEN);
+}
+
+// KAT vectors live at global scope: HolyC only allows brace initializers
+// on globals. RFC 4231 test case 2 / RFC 5869 test case 1.
+U8 hmac_kat_want[32] = {
+	0x5B, 0xDC, 0xC1, 0x46, 0xBF, 0x60, 0x75, 0x4E, 0x6A, 0x04, 0x24, 0x26, 0x08, 0x95, 0x75, 0xC7,
+	0x5A, 0x00, 0x3F, 0x08, 0x9D, 0x27, 0x39, 0x83, 0x9D, 0xEC, 0x58, 0xB9, 0x64, 0xEC, 0x38, 0x43 };
+
+U8 hkdf_kat_prk[32] = {
+	0x07, 0x77, 0x09, 0x36, 0x2C, 0x2E, 0x32, 0xDF, 0x0D, 0xDC, 0x3F, 0x0D, 0xC4, 0x7B, 0xBA, 0x63,
+	0x90, 0xB6, 0xC7, 0x3B, 0xB5, 0x0F, 0x9C, 0x31, 0x22, 0xEC, 0x84, 0x4A, 0xD7, 0xC2, 0xB3, 0xE5 };
+
+U8 hkdf_kat_okm[42] = {
+	0x3C, 0xB2, 0x5F, 0x25, 0xFA, 0xAC, 0xD5, 0x7A, 0x90, 0x43, 0x4F, 0x64, 0xD0, 0x36, 0x2F, 0x2A,
+	0x2D, 0x2D, 0x0A, 0x90, 0xCF, 0x1A, 0x5A, 0x4C, 0x5D, 0xB0, 0x2D, 0x56, 0xEC, 0xC4, 0xC5, 0xBF,
+	0x34, 0x00, 0x72, 0x08, 0xD5, 0xB8, 0x87, 0x18, 0x58, 0x65 };
+
+Bool HMACTest()
+{
+	U8 out[32];
+	U8 *want = hmac_kat_want;
+
+	HMACSHA256("Jefe", 4, "what do ya want for nothing?", 28, out);
+
+	if (!CryptoBytesEqual(out, want, 32))
+	{
+		"$$RED$$HMACTest: FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", out, 32);
+		return FALSE;
+	}
+
+	"$$GREEN$$HMACTest: PASS$$FG$$\n";
+	return TRUE;
+}
+
+Bool HKDFTest()
+{ // RFC 5869 Test Case 1 (SHA-256).
+	U8	ikm[22], salt[13], info[10];
+	U8	prk[32], okm[42];
+	U8 *want_prk = hkdf_kat_prk;
+	U8 *want_okm = hkdf_kat_okm;
+	I64	i;
+	Bool ok = TRUE;
+
+	for (i = 0; i < 22; i++) ikm[i]  = 0x0B;
+	for (i = 0; i < 13; i++) salt[i] = i;
+	for (i = 0; i < 10; i++) info[i] = 0xF0 + i;
+
+	HKDFExtract(salt, 13, ikm, 22, prk);
+	if (!CryptoBytesEqual(prk, want_prk, 32))
+	{
+		"$$RED$$HKDF Extract FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", prk, 32);
+		ok = FALSE;
+	}
+
+	HKDFExpand(prk, 32, info, 10, okm, 42);
+	if (!CryptoBytesEqual(okm, want_okm, 42))
+	{
+		"$$RED$$HKDF Expand FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", okm, 42);
+		ok = FALSE;
+	}
+
+	if (ok)
+		"$$GREEN$$HKDFTest: PASS$$FG$$\n";
+
+	return ok;
+}

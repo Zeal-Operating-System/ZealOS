@@ -1,0 +1,220 @@
+// Poly1305 one-time authenticator (RFC 8439), the poly1305-donna 32-bit
+// variant: five 26-bit limbs so every product stays inside 64 bits (ZealOS
+// has no 128-bit integer). Verify with Poly1305Test;.
+
+class CPoly1305
+{
+	I64 r[5];		// clamped key, 26-bit limbs
+	I64 h[5];		// accumulator, 26-bit limbs
+	U32 pad[4];		// final add
+	U8	buffer[16];	// partial block
+	I64 leftover;
+	I64 final;
+};
+
+U32 Poly1305Load32(U8 *p)
+{
+	return p[0] | p[1] << 8 | p[2] << 16 | p[3] << 24;
+}
+
+U0 Poly1305Init(CPoly1305 *st, U8 *key)
+{
+	I64 i;
+
+	// r &= 0xffffffc0ffffffc0ffffffc0fffffff, split into 26-bit limbs
+	st->r[0] =  Poly1305Load32(key + 0)       & 0x3FFFFFF;
+	st->r[1] = (Poly1305Load32(key + 3) >> 2) & 0x3FFFF03;
+	st->r[2] = (Poly1305Load32(key + 6) >> 4) & 0x3FFC0FF;
+	st->r[3] = (Poly1305Load32(key + 9) >> 6) & 0x3F03FFF;
+	st->r[4] = (Poly1305Load32(key + 12) >> 8) & 0x00FFFFF;
+
+	for (i = 0; i < 5; i++)
+		st->h[i] = 0;
+
+	for (i = 0; i < 4; i++)
+		st->pad[i] = Poly1305Load32(key + 16 + i * 4);
+
+	st->leftover = 0;
+	st->final = 0;
+}
+
+U0 Poly1305Blocks(CPoly1305 *st, U8 *m, I64 bytes)
+{
+	I64 hibit = 0;
+	I64 r0, r1, r2, r3, r4, s1, s2, s3, s4;
+	I64 h0, h1, h2, h3, h4;
+	U64 d0, d1, d2, d3, d4;
+	I64 c;
+
+	if (!st->final)
+		hibit = 1 << 24; // bit 2^128 across the limbs, absent on the last block
+
+	r0 = st->r[0]; r1 = st->r[1]; r2 = st->r[2]; r3 = st->r[3]; r4 = st->r[4];
+	s1 = r1 * 5; s2 = r2 * 5; s3 = r3 * 5; s4 = r4 * 5;
+	h0 = st->h[0]; h1 = st->h[1]; h2 = st->h[2]; h3 = st->h[3]; h4 = st->h[4];
+
+	while (bytes >= 16)
+	{
+		// h += m
+		h0 +=  Poly1305Load32(m + 0)       & 0x3FFFFFF;
+		h1 += (Poly1305Load32(m + 3) >> 2) & 0x3FFFFFF;
+		h2 += (Poly1305Load32(m + 6) >> 4) & 0x3FFFFFF;
+		h3 += (Poly1305Load32(m + 9) >> 6) & 0x3FFFFFF;
+		h4 += (Poly1305Load32(m + 12) >> 8) | hibit;
+
+		// h *= r  (mod 2^130 - 5)
+		d0 = h0 * r0 + h1 * s4 + h2 * s3 + h3 * s2 + h4 * s1;
+		d1 = h0 * r1 + h1 * r0 + h2 * s4 + h3 * s3 + h4 * s2;
+		d2 = h0 * r2 + h1 * r1 + h2 * r0 + h3 * s4 + h4 * s3;
+		d3 = h0 * r3 + h1 * r2 + h2 * r1 + h3 * r0 + h4 * s4;
+		d4 = h0 * r4 + h1 * r3 + h2 * r2 + h3 * r1 + h4 * r0;
+
+		// partial reduction
+		c = d0 >> 26; h0 = d0 & 0x3FFFFFF;
+		d1 += c; c = d1 >> 26; h1 = d1 & 0x3FFFFFF;
+		d2 += c; c = d2 >> 26; h2 = d2 & 0x3FFFFFF;
+		d3 += c; c = d3 >> 26; h3 = d3 & 0x3FFFFFF;
+		d4 += c; c = d4 >> 26; h4 = d4 & 0x3FFFFFF;
+		h0 += c * 5; c = h0 >> 26; h0 = h0 & 0x3FFFFFF;
+		h1 += c;
+
+		m += 16;
+		bytes -= 16;
+	}
+
+	st->h[0] = h0; st->h[1] = h1; st->h[2] = h2; st->h[3] = h3; st->h[4] = h4;
+}
+
+U0 Poly1305Update(CPoly1305 *st, U8 *m, I64 bytes)
+{
+	I64 i, want;
+
+	if (st->leftover)
+	{ // top off a buffered partial block first
+		want = 16 - st->leftover;
+		if (want > bytes)
+			want = bytes;
+
+		for (i = 0; i < want; i++)
+			st->buffer[st->leftover + i] = m[i];
+
+		bytes -= want;
+		m += want;
+		st->leftover += want;
+
+		if (st->leftover < 16)
+			return;
+
+		Poly1305Blocks(st, st->buffer, 16);
+		st->leftover = 0;
+	}
+
+	if (bytes >= 16)
+	{
+		want = bytes & ~15;
+		Poly1305Blocks(st, m, want);
+		m += want;
+		bytes -= want;
+	}
+
+	for (i = 0; i < bytes; i++)
+		st->buffer[st->leftover + i] = m[i];
+	st->leftover += bytes;
+}
+
+U0 Poly1305Finish(CPoly1305 *st, U8 *mac)
+{
+	I64 h0, h1, h2, h3, h4, c;
+	I64 g0, g1, g2, g3, g4;
+	U64 f;
+	I64 i;
+
+	if (st->leftover)
+	{ // pad the last partial block with 0x01 then zeros
+		i = st->leftover;
+		st->buffer[i++] = 1;
+		while (i < 16)
+			st->buffer[i++] = 0;
+		st->final = 1;
+		Poly1305Blocks(st, st->buffer, 16);
+	}
+
+	h0 = st->h[0]; h1 = st->h[1]; h2 = st->h[2]; h3 = st->h[3]; h4 = st->h[4];
+
+	// fully carry h
+	c = h1 >> 26; h1 &= 0x3FFFFFF;
+	h2 += c; c = h2 >> 26; h2 &= 0x3FFFFFF;
+	h3 += c; c = h3 >> 26; h3 &= 0x3FFFFFF;
+	h4 += c; c = h4 >> 26; h4 &= 0x3FFFFFF;
+	h0 += c * 5; c = h0 >> 26; h0 &= 0x3FFFFFF;
+	h1 += c;
+
+	// g = h + 5 - 2^130  (i.e. h - p); if g >= 0 then h >= p, use g
+	g0 = h0 + 5; c = g0 >> 26; g0 &= 0x3FFFFFF;
+	g1 = h1 + c; c = g1 >> 26; g1 &= 0x3FFFFFF;
+	g2 = h2 + c; c = g2 >> 26; g2 &= 0x3FFFFFF;
+	g3 = h3 + c; c = g3 >> 26; g3 &= 0x3FFFFFF;
+	g4 = h4 + c - (1 << 26);
+
+	if (g4 >= 0)
+	{ // h was >= p, take the reduced value
+		h0 = g0; h1 = g1; h2 = g2; h3 = g3; h4 = g4;
+	}
+
+	// serialize h to 128 bits across four 32-bit words
+	h0 = (h0        | h1 << 26) & 0xFFFFFFFF;
+	h1 = (h1 >> 6   | h2 << 20) & 0xFFFFFFFF;
+	h2 = (h2 >> 12  | h3 << 14) & 0xFFFFFFFF;
+	h3 = (h3 >> 18  | h4 << 8)  & 0xFFFFFFFF;
+
+	// mac = (h + pad) mod 2^128
+	f = h0(U64) + st->pad[0];            h0 = f & 0xFFFFFFFF;
+	f = h1(U64) + st->pad[1] + (f >> 32); h1 = f & 0xFFFFFFFF;
+	f = h2(U64) + st->pad[2] + (f >> 32); h2 = f & 0xFFFFFFFF;
+	f = h3(U64) + st->pad[3] + (f >> 32); h3 = f & 0xFFFFFFFF;
+
+	mac[0]  = h0 & 0xFF; mac[1]  = h0 >> 8 & 0xFF; mac[2]  = h0 >> 16 & 0xFF; mac[3]  = h0 >> 24 & 0xFF;
+	mac[4]  = h1 & 0xFF; mac[5]  = h1 >> 8 & 0xFF; mac[6]  = h1 >> 16 & 0xFF; mac[7]  = h1 >> 24 & 0xFF;
+	mac[8]  = h2 & 0xFF; mac[9]  = h2 >> 8 & 0xFF; mac[10] = h2 >> 16 & 0xFF; mac[11] = h2 >> 24 & 0xFF;
+	mac[12] = h3 & 0xFF; mac[13] = h3 >> 8 & 0xFF; mac[14] = h3 >> 16 & 0xFF; mac[15] = h3 >> 24 & 0xFF;
+}
+
+U0 Poly1305Mac(U8 *key, U8 *msg, I64 len, U8 *mac)
+{
+	CPoly1305 st;
+	Poly1305Init(&st, key);
+	Poly1305Update(&st, msg, len);
+	Poly1305Finish(&st, mac);
+}
+
+// RFC 8439 section 2.5.2 vector. HolyC only allows brace initializers at
+// global scope, so the vectors live here.
+U8 poly1305_kat_key[32] = {
+	0x85, 0xD6, 0xBE, 0x78, 0x57, 0x55, 0x6D, 0x33, 0x7F, 0x44, 0x52, 0xFE, 0x42, 0xD5, 0x06, 0xA8,
+	0x01, 0x03, 0x80, 0x8A, 0xFB, 0x0D, 0xB2, 0xFD, 0x4A, 0xBF, 0xF6, 0xAF, 0x41, 0x49, 0xF5, 0x1B };
+U8 poly1305_kat_msg[34] = {
+	0x43, 0x72, 0x79, 0x70, 0x74, 0x6F, 0x67, 0x72, 0x61, 0x70, 0x68, 0x69, 0x63, 0x20, 0x46, 0x6F,
+	0x72, 0x75, 0x6D, 0x20, 0x52, 0x65, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x20, 0x47, 0x72, 0x6F,
+	0x75, 0x70 };
+U8 poly1305_kat_want[16] = {
+	0xA8, 0x06, 0x1D, 0xC1, 0x30, 0x51, 0x36, 0xC6, 0xC2, 0x2B, 0x8B, 0xAF, 0x0C, 0x01, 0x27, 0xA9 };
+
+Bool Poly1305Test()
+{
+	U8 *key	 = poly1305_kat_key;
+	U8 *msg	 = poly1305_kat_msg;
+	U8 *want = poly1305_kat_want;
+	U8 mac[16];
+
+	Poly1305Mac(key, msg, 34, mac);
+
+	if (!CryptoBytesEqual(mac, want, 16))
+	{
+		"$$RED$$Poly1305Test: FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", mac, 16);
+		return FALSE;
+	}
+
+	"$$GREEN$$Poly1305Test: PASS$$FG$$\n";
+	return TRUE;
+}

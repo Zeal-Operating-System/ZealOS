@@ -1,0 +1,255 @@
+// X25519 (Curve25519 ECDH, RFC 7748). Field arithmetic is the TweetNaCl
+// reference: 16 signed limbs of ~16 bits in an I64[16] ("gf"), which keeps
+// every product inside 64 bits. Verify with X25519Test;.
+
+I64 x25519_121665[16] = { 0xDB41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+U0 X25519Car(I64 *o)
+{ // carry/reduce mod 2^255-19, TweetNaCl car25519.
+  // Explicit-branch form of the reference's branchless
+  // o[(i+1)*(i<15)] += c-1 + 37*(c-1)*(i==15): using a comparison as an
+  // array index / multiplicand miscompiled here, so spell it out.
+	I64 i, c;
+
+	for (i = 0; i < 16; i++)
+	{
+		o[i] += 1 << 16;
+		c = o[i] >> 16;
+		if (i < 15)
+			o[i + 1] += c - 1;
+		else
+			o[0] += 38 * (c - 1);
+		o[i] -= c << 16;
+	}
+}
+
+U0 X25519Sel(I64 *p, I64 *q, I64 b)
+{ // constant-time conditional swap of p and q when b == 1
+	I64 t, i, c = ~(b - 1);
+
+	for (i = 0; i < 16; i++)
+	{
+		t = c & (p[i] ^ q[i]);
+		p[i] ^= t;
+		q[i] ^= t;
+	}
+}
+
+U0 X25519Pack(U8 *o, I64 *n)
+{
+	I64 i, j, b;
+	I64 m[16], t[16];
+
+	for (i = 0; i < 16; i++)
+		t[i] = n[i];
+
+	X25519Car(t);
+	X25519Car(t);
+	X25519Car(t);
+
+	for (j = 0; j < 2; j++)
+	{
+		m[0] = t[0] - 0xFFED;
+		for (i = 1; i < 15; i++)
+		{
+			m[i] = t[i] - 0xFFFF - ((m[i - 1] >> 16) & 1);
+			m[i - 1] &= 0xFFFF;
+		}
+		m[15] = t[15] - 0x7FFF - ((m[14] >> 16) & 1);
+		b = (m[15] >> 16) & 1;
+		m[14] &= 0xFFFF;
+		X25519Sel(t, m, 1 - b);
+	}
+
+	for (i = 0; i < 16; i++)
+	{
+		o[2 * i]	 = t[i] & 0xFF;
+		o[2 * i + 1] = (t[i] >> 8) & 0xFF;
+	}
+}
+
+U0 X25519Unpack(I64 *o, U8 *n)
+{
+	I64 i, lo, hi;
+
+	for (i = 0; i < 16; i++)
+	{
+		lo = n[2 * i];
+		hi = n[2 * i + 1];
+		o[i] = lo + (hi << 8);
+	}
+
+	o[15] &= 0x7FFF; // clear the top bit
+}
+
+U0 X25519Add(I64 *o, I64 *a, I64 *b)
+{
+	I64 i;
+	for (i = 0; i < 16; i++)
+		o[i] = a[i] + b[i];
+}
+
+U0 X25519Sub(I64 *o, I64 *a, I64 *b)
+{
+	I64 i;
+	for (i = 0; i < 16; i++)
+		o[i] = a[i] - b[i];
+}
+
+U0 X25519Mul(I64 *o, I64 *a, I64 *b)
+{
+	I64 i, j, t[31];
+
+	for (i = 0; i < 31; i++)
+		t[i] = 0;
+	for (i = 0; i < 16; i++)
+	{
+		for (j = 0; j < 16; j++)
+			t[i + j] += a[i] * b[j];
+	}
+	for (i = 0; i < 15; i++)
+		t[i] += 38 * t[i + 16]; // fold high limbs: 2^256 == 38 mod 2^255-19
+	for (i = 0; i < 16; i++)
+		o[i] = t[i];
+
+	X25519Car(o);
+	X25519Car(o);
+}
+
+U0 X25519Sq(I64 *o, I64 *a)
+{
+	X25519Mul(o, a, a);
+}
+
+U0 X25519Inv(I64 *o, I64 *i)
+{ // o = i^(2^255-21) = i^-1, TweetNaCl inv25519 (Fermat)
+	I64 c[16], a;
+
+	for (a = 0; a < 16; a++)
+		c[a] = i[a];
+
+	for (a = 253; a >= 0; a--)
+	{
+		X25519Sq(c, c);
+		if (a != 2 && a != 4)
+			X25519Mul(c, c, i);
+	}
+
+	for (a = 0; a < 16; a++)
+		o[a] = c[a];
+}
+
+U0 X25519(U8 *q, U8 *n, U8 *p)
+{ // q = scalar n * point p, Montgomery ladder (TweetNaCl crypto_scalarmult)
+	U8	z[32];
+	I64 x[80], r, i;
+	I64 a[16], b[16], c[16], d[16], e[16], f[16];
+
+	for (i = 0; i < 31; i++)
+		z[i] = n[i];
+	z[31] = (n[31] & 127) | 64; // clamp
+	z[0] &= 248;
+
+	X25519Unpack(x, p);
+
+	for (i = 0; i < 16; i++)
+	{
+		b[i] = x[i];
+		d[i] = 0;
+		a[i] = 0;
+		c[i] = 0;
+	}
+	a[0] = 1;
+	d[0] = 1;
+
+	for (i = 254; i >= 0; i--)
+	{
+		r = (z[i >> 3] >> (i & 7)) & 1;
+		X25519Sel(a, b, r);
+		X25519Sel(c, d, r);
+		X25519Add(e, a, c);
+		X25519Sub(a, a, c);
+		X25519Add(c, b, d);
+		X25519Sub(b, b, d);
+		X25519Sq(d, e);
+		X25519Sq(f, a);
+		X25519Mul(a, c, a);
+		X25519Mul(c, b, e);
+		X25519Add(e, a, c);
+		X25519Sub(a, a, c);
+		X25519Sq(b, a);
+		X25519Sub(c, d, f);
+		X25519Mul(a, c, x25519_121665);
+		X25519Add(a, a, d);
+		X25519Mul(c, c, a);
+		X25519Mul(a, d, f);
+		X25519Mul(d, b, x);
+		X25519Sq(b, e);
+		X25519Sel(a, b, r);
+		X25519Sel(c, d, r);
+	}
+
+	for (i = 0; i < 16; i++)
+	{
+		x[i + 16] = a[i];
+		x[i + 32] = c[i];
+		x[i + 48] = b[i];
+		x[i + 64] = d[i];
+	}
+
+	X25519Inv(x + 32, x + 32);
+	X25519Mul(x + 16, x + 16, x + 32);
+	X25519Pack(q, x + 16);
+}
+
+U0 X25519Base(U8 *q, U8 *n)
+{ // public key = n * basepoint (u=9)
+	U8 base[32];
+	MemSet(base, 0, 32);
+	base[0] = 9;
+	X25519(q, n, base);
+}
+
+// RFC 7748 section 6.1 Diffie-Hellman example. HolyC only allows brace
+// initializers at global scope, so the vectors live here. Two checks:
+//   alice_priv * basepoint == alice_pub   (key generation)
+//   alice_priv * bob_pub    == shared      (ECDH agreement)
+U8 x25519_kat_alice_priv[32] = {
+	0x77, 0x07, 0x6D, 0x0A, 0x73, 0x18, 0xA5, 0x7D, 0x3C, 0x16, 0xC1, 0x72, 0x51, 0xB2, 0x66, 0x45,
+	0xDF, 0x4C, 0x2F, 0x87, 0xEB, 0xC0, 0x99, 0x2A, 0xB1, 0x77, 0xFB, 0xA5, 0x1D, 0xB9, 0x2C, 0x2A };
+U8 x25519_kat_alice_pub[32] = {
+	0x85, 0x20, 0xF0, 0x09, 0x89, 0x30, 0xA7, 0x54, 0x74, 0x8B, 0x7D, 0xDC, 0xB4, 0x3E, 0xF7, 0x5A,
+	0x0D, 0xBF, 0x3A, 0x0D, 0x26, 0x38, 0x1A, 0xF4, 0xEB, 0xA4, 0xA9, 0x8E, 0xAA, 0x9B, 0x4E, 0x6A };
+U8 x25519_kat_bob_pub[32] = {
+	0xDE, 0x9E, 0xDB, 0x7D, 0x7B, 0x7D, 0xC1, 0xB4, 0xD3, 0x5B, 0x61, 0xC2, 0xEC, 0xE4, 0x35, 0x37,
+	0x3F, 0x83, 0x43, 0xC8, 0x5B, 0x78, 0x67, 0x4D, 0xAD, 0xFC, 0x7E, 0x14, 0x6F, 0x88, 0x2B, 0x4F };
+U8 x25519_kat_shared[32] = {
+	0x4A, 0x5D, 0x9D, 0x5B, 0xA4, 0xCE, 0x2D, 0xE1, 0x72, 0x8E, 0x3B, 0xF4, 0x80, 0x35, 0x0F, 0x25,
+	0xE0, 0x7E, 0x21, 0xC9, 0x47, 0xD1, 0x9E, 0x33, 0x76, 0xF0, 0x9B, 0x3C, 0x1E, 0x16, 0x17, 0x42 };
+
+Bool X25519Test()
+{
+	U8	 out[32];
+	Bool ok = TRUE;
+
+	X25519Base(out, x25519_kat_alice_priv);
+	if (!CryptoBytesEqual(out, x25519_kat_alice_pub, 32))
+	{
+		"$$RED$$X25519 base point FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", out, 32);
+		ok = FALSE;
+	}
+
+	X25519(out, x25519_kat_alice_priv, x25519_kat_bob_pub);
+	if (!CryptoBytesEqual(out, x25519_kat_shared, 32))
+	{
+		"$$RED$$X25519 ECDH FAIL$$FG$$\n";
+		CryptoHexDump("  got: ", out, 32);
+		ok = FALSE;
+	}
+
+	if (ok)
+		"$$GREEN$$X25519Test: PASS$$FG$$\n";
+
+	return ok;
+}

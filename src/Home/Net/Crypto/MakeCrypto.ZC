@@ -1,0 +1,43 @@
+// Crypto module bundle. Include this before TLS.
+// Run CryptoSelfTest; on-target to check every primitive against its RFC
+// known-answer vectors before trusting the TLS stack.
+
+// Paths are relative to the Net root (Load.ZC already Cd'ed there), same
+// convention as Protocols/TCP/MakeTCP. No Cd here: it would leak the
+// directory change into the rest of the Load include chain.
+#include "Crypto/SHA256"
+#include "Crypto/HMAC"
+#include "Crypto/ChaCha20"
+#include "Crypto/Poly1305"
+#include "Crypto/AEAD"
+#include "Crypto/X25519"
+
+U0 CryptoRandBytes(U8 *out, I64 len)
+{ // Fill out with random bytes. RandU32 is ZealOS's PRNG; adequate for
+  // ephemeral TLS key material but not a hardened CSPRNG. Documented limit.
+	I64 i;
+	for (i = 0; i < len; i++)
+		out[i] = RandU32 & 0xFF;
+}
+
+Bool CryptoSelfTest()
+{
+	Bool ok = TRUE;
+
+	"$$LTBLUE$$--- Crypto self-test (RFC known-answer vectors) ---$$FG$$\n";
+
+	if (!SHA256Test)	ok = FALSE;
+	if (!HMACTest)		ok = FALSE;
+	if (!HKDFTest)		ok = FALSE;
+	if (!ChaCha20Test)	ok = FALSE;
+	if (!Poly1305Test)	ok = FALSE;
+	if (!AEADTest)		ok = FALSE;
+	if (!X25519Test)	ok = FALSE;
+
+	if (ok)
+		"$$GREEN$$--- ALL CRYPTO TESTS PASSED ---$$FG$$\n";
+	else
+		"$$RED$$--- CRYPTO TESTS FAILED (do not trust TLS) ---$$FG$$\n";
+
+	return ok;
+}

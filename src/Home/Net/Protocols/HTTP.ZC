@@ -1,7 +1,8 @@
 // Minimal HTTP client for ZealOS.
 // Speaks HTTP/1.0 with a Host header: 1.0 keeps responses un-chunked and
 // close-delimited, so "read until EOF" is the complete framing story.
-// HTTPS is recognized but refused: it needs a TLS stack we don't have yet.
+// HTTPS uses the TLS 1.3 client in Protocols/TLS.ZC (encrypted, but the
+// server certificate is NOT verified).
 
 #define HTTP_PORT_DEFAULT	80
 #define HTTPS_PORT_DEFAULT	443
@@ -130,8 +131,16 @@ U8 *HttpUrlResolve(CHttpUrl *base, U8 *href)
 { // Make href absolute against base. Returns MAlloc'ed URL, NULL if the
   // scheme is unsupported (mailto:, javascript:, ...).
 	U8	*result, *last_slash, *scan;
+	U8	*scheme = "http";
 	U8	 dir[1024];
+	I64	 default_port = HTTP_PORT_DEFAULT;
 	I64	 dir_len;
+
+	if (base->is_https)
+	{ // keep relative links on the same scheme as the current page
+		scheme = "https";
+		default_port = HTTPS_PORT_DEFAULT;
+	}
 
 	if (!href || !*href || *href == '#')
 		return NULL;
@@ -143,13 +152,13 @@ U8 *HttpUrlResolve(CHttpUrl *base, U8 *href)
 		return NULL;
 
 	if (href[0] == '/' && href[1] == '/')
-		return MStrPrint("http:%s", href); // protocol-relative
+		return MStrPrint("%s:%s", scheme, href); // protocol-relative
 
 	if (*href == '/')
 	{
-		if (base->port == HTTP_PORT_DEFAULT)
-			return MStrPrint("http://%s%s", base->host, href);
-		return MStrPrint("http://%s:%d%s", base->host, base->port, href);
+		if (base->port == default_port)
+			return MStrPrint("%s://%s%s", scheme, base->host, href);
+		return MStrPrint("%s://%s:%d%s", scheme, base->host, base->port, href);
 	}
 
 	// relative to the directory of base->path
@@ -169,10 +178,10 @@ U8 *HttpUrlResolve(CHttpUrl *base, U8 *href)
 	if (dir_len + StrLen(href) > 1000)
 		return NULL;
 
-	if (base->port == HTTP_PORT_DEFAULT)
-		result = MStrPrint("http://%s%s%s", base->host, dir, href);
+	if (base->port == default_port)
+		result = MStrPrint("%s://%s%s%s", scheme, base->host, dir, href);
 	else
-		result = MStrPrint("http://%s:%d%s%s", base->host, base->port, dir, href);
+		result = MStrPrint("%s://%s:%d%s%s", scheme, base->host, base->port, dir, href);
 
 	return result;
 }
@@ -180,15 +189,10 @@ U8 *HttpUrlResolve(CHttpUrl *base, U8 *href)
 CHttpResponse *HttpGetRaw(CHttpUrl *url)
 { // One request/response round trip; no redirect handling here.
 	CTCPSocket	  *sock;
+	CTLS		  *tls = NULL;
 	CHttpResponse *response;
 	U8			  *request, *buf, *new_buf, *header_end, *status_ptr;
 	I64			   buf_size, buf_used, received, header_block_len;
-
-	if (url->is_https)
-	{
-		NetErr("HTTP GET: HTTPS not supported yet (no TLS implementation).");
-		return NULL;
-	}
 
 	sock = TCPConnectionCreate(url->host, url->port);
 	if (sock <= 0)
@@ -199,21 +203,39 @@ CHttpResponse *HttpGetRaw(CHttpUrl *url)
 
 	sock->timeout = HTTP_TIMEOUT;
 
+	if (url->is_https)
+	{ // TLS 1.3 owns the socket from here on (TLSClose closes it)
+		tls = TLSConnect(url->host, sock);
+		if (!tls)
+		{
+			NetErr("HTTP GET: TLS handshake to %s failed.", url->host);
+			TCPSocketClose(sock);
+			return NULL;
+		}
+	}
+
 	request = MStrPrint("GET %s HTTP/1.0\r\n"
 						"Host: %s\r\n"
-						"User-Agent: ZealOS-Zeb/0.1\r\n"
+						"User-Agent: ZealOS-Zinc/1.0\r\n"
 						"Accept: text/html, text/plain, */*\r\n"
 						"Connection: close\r\n"
 						"\r\n",
 						url->path, url->host);
-	TCPSocketSendString(sock, request);
+	if (tls)
+		TLSWrite(tls, request, StrLen(request));
+	else
+		TCPSocketSendString(sock, request);
 	Free(request);
 
 	buf_size = HTTP_RECV_CHUNK * 4;
 	buf_used = 0;
 	buf = MAlloc(buf_size);
 
-	received = TCPSocketReceive(sock, buf, HTTP_RECV_CHUNK);
+	if (tls)
+		received = TLSRead(tls, buf, HTTP_RECV_CHUNK);
+	else
+		received = TCPSocketReceive(sock, buf, HTTP_RECV_CHUNK);
+
 	while (received > 0)
 	{
 		buf_used += received;
@@ -227,10 +249,17 @@ CHttpResponse *HttpGetRaw(CHttpUrl *url)
 			buf = new_buf;
 		}
 
-		received = TCPSocketReceive(sock, buf + buf_used, HTTP_RECV_CHUNK);
+		if (tls)
+			received = TLSRead(tls, buf + buf_used, HTTP_RECV_CHUNK);
+		else
+			received = TCPSocketReceive(sock, buf + buf_used, HTTP_RECV_CHUNK);
 	}
 
-	TCPSocketClose(sock);
+	if (tls)
+		TLSClose(tls);      // closes the socket too
+	else
+		TCPSocketClose(sock);
+
 	buf[buf_used] = 0;
 
 	if (buf_used < 12)
@@ -326,4 +355,48 @@ CHttpResponse *HttpGet(U8 *url)
 
 	Free(current);
 	return response;
+}
+
+public U0 HttpTest(U8 *url="https://example.com")
+{ /* Full HTTP(S) GET test with terminal diagnostics. Prints the TLS handshake
+	stages (via tls_verbose), then the HTTP status, header/body sizes, and the
+	first slice of the body -- all to THIS terminal, no Network Log hunting.
+	  HttpTest;                          (https://example.com)
+	  HttpTest("https://cloudflare.com");
+	  HttpTest("http://frogfind.com/"); */
+	CHttpResponse *r;
+	I64	 i, show;
+
+	"$$LTBLUE$$--- HTTP test: %s ---$$FG$$\n", url;
+
+	tls_verbose = TRUE; // TLS handshake stages print to this terminal
+	r = HttpGet(url);
+	tls_verbose = FALSE;
+
+	if (!r)
+	{
+		"$$RED$$HttpGet returned NULL -- fetch failed.$$FG$$\n";
+		"(For https, read the TLS STAGE / alert lines above.)\n";
+		return;
+	}
+
+	"$$GREEN$$Got response:$$FG$$ status=%d, %d body bytes.\n",
+		r->status, r->body_length;
+
+	show = r->body_length;
+	if (show > 400)
+		show = 400;
+	"$$FG,LTGRAY$$--- first %d body bytes ---$$FG$$\n", show;
+	for (i = 0; i < show; i++)
+	{
+		if (r->body[i] == '$$')
+			"$$$$";
+		else if (r->body[i] >= ' ' || r->body[i] == '\n' || r->body[i] == '\t')
+			"%c", r->body[i];
+		else
+			".";
+	}
+	"\n$$FG,LTGRAY$$--- end ---$$FG$$\n";
+
+	HttpResponseFree(r);
 }

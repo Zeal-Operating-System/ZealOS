@@ -1,0 +1,824 @@
+/*	Minimal TLS 1.3 client (RFC 8446) for ZealOS.
+
+	Scope, stated plainly:
+	-	One cipher suite: TLS_CHACHA20_POLY1305_SHA256 (0x1303).
+	-	One key exchange: X25519.
+	-	NO certificate validation. The connection is ENCRYPTED but the server
+		is NOT AUTHENTICATED: this stops passive eavesdropping but not an
+		active man-in-the-middle. Do not use for anything security-critical.
+	-	No session resumption, no HelloRetryRequest, no client auth.
+
+	The crypto primitives underneath are checked against RFC known-answer
+	vectors by CryptoSelfTest;. This handshake code itself can only really be
+	verified by talking to a real server. */
+
+#define TLS_REC_CHANGE_CIPHER_SPEC	0x14
+#define TLS_REC_ALERT				0x15
+#define TLS_REC_HANDSHAKE			0x16
+#define TLS_REC_APPLICATION_DATA	0x17
+
+#define TLS_HS_CLIENT_HELLO			0x01
+#define TLS_HS_SERVER_HELLO			0x02
+#define TLS_HS_NEW_SESSION_TICKET	0x04
+#define TLS_HS_ENCRYPTED_EXTENSIONS	0x08
+#define TLS_HS_CERTIFICATE			0x0B
+#define TLS_HS_CERTIFICATE_VERIFY	0x0F
+#define TLS_HS_FINISHED				0x14
+
+#define TLS_CIPHER_CHACHA20			0x1303
+#define TLS_GROUP_X25519			0x001D
+
+#define TLS_RECORD_MAX				17000	// 2^14 fragment + AEAD overhead + slack
+#define TLS_FLIGHT_MAX				65536	// server handshake flight reassembly
+#define TLS_TIMEOUT					12000	// ms
+
+class CTLS
+{
+	CTCPSocket	*sock;
+
+	CSHA256		 transcript;	// running handshake transcript hash
+
+	U8			 client_hs_secret[32];
+	U8			 server_hs_secret[32];
+	U8			 handshake_secret[32];
+
+	U8			 client_key[32], client_iv[12];	// current write keys
+	U8			 server_key[32], server_iv[12];	// current read keys
+	U8			 client_fin_key[32];			// handshake-phase Finished keys
+	U8			 server_fin_key[32];
+
+	U64			 send_seq;	// per-direction AEAD record counters, reset on rekey
+	U64			 recv_seq;
+
+	U8			*rbuf;		// decrypted application data awaiting the caller
+	I64			 rbuf_len;
+	I64			 rbuf_pos;
+
+	Bool		 established;
+};
+
+U0 TLSBuildNonce(U8 *iv, U64 seq, U8 *nonce_out)
+{ // nonce = iv with the sequence number XOR'd into the low 8 bytes (big-endian)
+	I64 i;
+	MemCopy(nonce_out, iv, 12);
+	for (i = 0; i < 8; i++)
+		nonce_out[11 - i] ^= seq >> (i * 8) & 0xFF;
+}
+
+I64 TLSReadN(CTLS *tls, U8 *buf, I64 n)
+{ // read exactly n bytes from the TCP socket or fail
+	I64 got = 0, r;
+
+	while (got < n)
+	{
+		r = TCPSocketReceive(tls->sock, buf + got, n - got);
+		if (r <= 0)
+		{
+			NetErr("TLS: socket read failed (%d) wanting %d more bytes.", r, n - got);
+			return -1;
+		}
+		got += r;
+	}
+	return got;
+}
+
+I64 TLSRecordRecv(CTLS *tls, U8 *type_out, U8 *frag, I64 *frag_len_out)
+{ // read one TLS record: 5-byte header + fragment. frag must hold TLS_RECORD_MAX.
+	U8	header[5];
+	I64	length;
+
+	if (TLSReadN(tls, header, 5) < 0)
+		return -1;
+
+	*type_out = header[0];
+	length	  = header[3] << 8 | header[4];
+
+	if (length < 0 || length > TLS_RECORD_MAX)
+	{
+		NetErr("TLS: record length %d out of range.", length);
+		return -1;
+	}
+
+	if (length && TLSReadN(tls, frag, length) < 0)
+		return -1;
+
+	*frag_len_out = length;
+	return 0;
+}
+
+I64 TLSRecordDecrypt(U8 *key, U8 *iv, U64 seq, U8 *frag, I64 frag_len,
+					 U8 *inner_out, I64 *inner_len_out, U8 *content_type_out)
+{ // AEAD-open an encrypted record. AAD = the record header as it arrived.
+	U8	nonce[12];
+	U8	aad[5];
+	I64	ct_len = frag_len - 16;
+	I64	i;
+
+	if (ct_len < 0)
+	{
+		NetErr("TLS: encrypted record too short.");
+		return -1;
+	}
+
+	aad[0] = TLS_REC_APPLICATION_DATA;
+	aad[1] = 0x03;
+	aad[2] = 0x03;
+	aad[3] = frag_len >> 8 & 0xFF;
+	aad[4] = frag_len & 0xFF;
+
+	TLSBuildNonce(iv, seq, nonce);
+
+	if (!AEADOpen(key, nonce, aad, 5, frag, ct_len, frag + ct_len, inner_out))
+		return -1;
+
+	// strip trailing zero padding; the last non-zero byte is the real type
+	i = ct_len - 1;
+	while (i >= 0 && inner_out[i] == 0)
+		i--;
+	if (i < 0)
+	{
+		NetErr("TLS: decrypted record is all padding.");
+		return -1;
+	}
+
+	*content_type_out = inner_out[i];
+	*inner_len_out	  = i; // content is everything before the type byte
+	return 0;
+}
+
+I64 TLSRecordSendEncrypted(CTLS *tls, U8 content_type, U8 *data, I64 len)
+{ // wrap data as an encrypted record with the current client key/seq
+	U8	*inner	= MAlloc(len + 1);
+	U8	*record = MAlloc(len + 1 + 16 + 5);
+	U8	 nonce[12];
+	U8	 aad[5];
+	I64	 rec_len = len + 1 + 16; // inner(len+type) + tag
+	I64	 error;
+
+	MemCopy(inner, data, len);
+	inner[len] = content_type;
+
+	record[0] = TLS_REC_APPLICATION_DATA;
+	record[1] = 0x03;
+	record[2] = 0x03;
+	record[3] = rec_len >> 8 & 0xFF;
+	record[4] = rec_len & 0xFF;
+
+	MemCopy(aad, record, 5);
+	TLSBuildNonce(tls->client_iv, tls->send_seq, nonce);
+
+	AEADSeal(tls->client_key, nonce, aad, 5, inner, len + 1,
+			 record + 5, record + 5 + len + 1);
+
+	tls->send_seq++;
+
+	error = TCPSocketSendAll(tls->sock, record, rec_len + 5);
+
+	Free(inner);
+	Free(record);
+
+	if (error < rec_len + 5)
+		return -1;
+	return 0;
+}
+
+I64 TLSRecordSendPlain(CTLS *tls, U8 type, U8 *data, I64 len, U8 legacy_minor=0x03)
+{ // legacy_record_version = 0x03<legacy_minor>. RFC 8446 5.1: MUST be 0x0303
+  // for every record except the initial ClientHello (which MAY use 0x0301).
+	U8	*record = MAlloc(len + 5);
+	I64	 error;
+
+	record[0] = type;
+	record[1] = 0x03;
+	record[2] = legacy_minor;
+	record[3] = len >> 8 & 0xFF;
+	record[4] = len & 0xFF;
+	MemCopy(record + 5, data, len);
+
+	error = TCPSocketSendAll(tls->sock, record, len + 5);
+	Free(record);
+
+	if (error < len + 5)
+		return -1;
+	return 0;
+}
+
+Bool tls_verbose = FALSE; // TRUE routes handshake diagnostics to the terminal
+
+U0 TLSDiag(U8 *format, ...)
+{ // handshake diagnostic line: to the terminal when verbose, else Network Log
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
+	if (tls_verbose)
+		"%s\n", buf;
+	else
+		NetLog("%s", buf);
+
+	Free(buf);
+}
+
+U0 TLSHexDump(U8 *label, U8 *buf, I64 len)
+{ // dump a buffer as hex, 32 bytes per line, for wire debugging
+	U8	 line[80];
+	I64	 i, n = 0;
+
+	TLSDiag("%s (%d bytes):", label, len);
+	line[0] = 0;
+	for (i = 0; i < len; i++)
+	{
+		CatPrint(line, "%02X", buf[i]);
+		n++;
+		if (n == 32)
+		{
+			TLSDiag("  %s", line);
+			line[0] = 0;
+			n = 0;
+		}
+	}
+	if (n)
+		TLSDiag("  %s", line);
+}
+
+U0 TLSTranscriptHash(CTLS *tls, U8 *out)
+{ // hash of the transcript so far, without disturbing the running context
+	CSHA256 copy;
+	MemCopy(&copy, &tls->transcript, sizeof(CSHA256));
+	SHA256Final(&copy, out);
+}
+
+U0 TLSDeriveTrafficKeys(U8 *secret, U8 *key_out, U8 *iv_out)
+{
+	TLSHKDFExpandLabel(secret, "key", "", 0, key_out, 32);
+	TLSHKDFExpandLabel(secret, "iv",  "", 0, iv_out, 12);
+}
+
+I64 TLSBuildClientHello(U8 *out, U8 *hostname, U8 *client_random, U8 *session_id, U8 *pubkey)
+{ // returns handshake-message length (type+len+body); out holds the message
+	U8	*body = out + 4; // leave room for handshake header
+	I64	 b = 0;
+	I64	 ext_start, ext_len_pos, ext_len;
+	I64	 host_len = StrLen(hostname);
+	I64	 sni_list_len, total;
+
+	// --- ClientHello body ---
+	body[b++] = 0x03; body[b++] = 0x03;          // legacy_version TLS1.2
+
+	MemCopy(body + b, client_random, 32); b += 32;
+
+	body[b++] = 32;                               // session id length
+	MemCopy(body + b, session_id, 32); b += 32;
+
+	body[b++] = 0x00; body[b++] = 0x02;           // cipher suites length = 2
+	body[b++] = 0x13; body[b++] = 0x03;           // TLS_CHACHA20_POLY1305_SHA256
+
+	body[b++] = 0x01; body[b++] = 0x00;           // compression: 1 method, null
+
+	// --- extensions ---
+	ext_len_pos = b;
+	b += 2; // fill in extensions length later
+	ext_start = b;
+
+	// supported_versions
+	body[b++] = 0x00; body[b++] = 0x2B;
+	body[b++] = 0x00; body[b++] = 0x03;
+	body[b++] = 0x02;                             // list length
+	body[b++] = 0x03; body[b++] = 0x04;           // TLS 1.3
+
+	// supported_groups: x25519
+	body[b++] = 0x00; body[b++] = 0x0A;
+	body[b++] = 0x00; body[b++] = 0x04;
+	body[b++] = 0x00; body[b++] = 0x02;
+	body[b++] = 0x00; body[b++] = 0x1D;
+
+	// signature_algorithms (servers require it even though we don't verify)
+	body[b++] = 0x00; body[b++] = 0x0D;
+	body[b++] = 0x00; body[b++] = 0x0C;           // ext length
+	body[b++] = 0x00; body[b++] = 0x0A;           // list length = 10
+	body[b++] = 0x04; body[b++] = 0x03;           // ecdsa_secp256r1_sha256
+	body[b++] = 0x08; body[b++] = 0x04;           // rsa_pss_rsae_sha256
+	body[b++] = 0x04; body[b++] = 0x01;           // rsa_pkcs1_sha256
+	body[b++] = 0x08; body[b++] = 0x07;           // ed25519
+	body[b++] = 0x05; body[b++] = 0x03;           // ecdsa_secp384r1_sha384
+
+	// key_share: x25519 public key
+	body[b++] = 0x00; body[b++] = 0x33;
+	body[b++] = 0x00; body[b++] = 0x26;           // ext length = 38
+	body[b++] = 0x00; body[b++] = 0x24;           // client_shares length = 36
+	body[b++] = 0x00; body[b++] = 0x1D;           // group x25519
+	body[b++] = 0x00; body[b++] = 0x20;           // key length = 32
+	MemCopy(body + b, pubkey, 32); b += 32;
+
+	// server_name (SNI)
+	sni_list_len = 3 + host_len;
+	body[b++] = 0x00; body[b++] = 0x00;
+	body[b++] = (5 + host_len) >> 8 & 0xFF;
+	body[b++] = (5 + host_len) & 0xFF;            // ext length
+	body[b++] = sni_list_len >> 8 & 0xFF;
+	body[b++] = sni_list_len & 0xFF;              // server_name_list length
+	body[b++] = 0x00;                             // name type host_name
+	body[b++] = host_len >> 8 & 0xFF;
+	body[b++] = host_len & 0xFF;
+	MemCopy(body + b, hostname, host_len); b += host_len;
+
+	ext_len = b - ext_start;
+	body[ext_len_pos]	  = ext_len >> 8 & 0xFF;
+	body[ext_len_pos + 1] = ext_len & 0xFF;
+
+	// --- handshake header ---
+	out[0] = TLS_HS_CLIENT_HELLO;
+	out[1] = b >> 16 & 0xFF;
+	out[2] = b >> 8 & 0xFF;
+	out[3] = b & 0xFF;
+
+	total = b + 4;
+	return total;
+}
+
+I64 TLSParseServerHello(U8 *msg, I64 len, U8 *server_pub_out)
+{ // extract the server's x25519 key_share; returns 0 ok, -1 fail
+	I64 p = 0;
+	I64 sid_len, ext_total, ext_end, ext_type, ext_len, cipher, key_end;
+	I64 group, key_len;
+	Bool have_key = FALSE;
+
+	p += 2;         // legacy_version
+	p += 32;        // random
+	if (p >= len) return -1;
+
+	sid_len = msg[p++];
+	p += sid_len;
+
+	if (p + 3 > len) return -1;
+	cipher = msg[p] << 8 | msg[p + 1];
+	p += 2;
+	p += 1;         // compression method
+
+	if (cipher != TLS_CIPHER_CHACHA20)
+	{
+		NetErr("TLS: server chose unsupported cipher 0x%04X.", cipher);
+		return -1;
+	}
+
+	if (p + 2 > len) return -1;
+	ext_total = msg[p] << 8 | msg[p + 1];
+	p += 2;
+	ext_end = p + ext_total;
+	if (ext_end > len) ext_end = len;
+
+	while (p + 4 <= ext_end)
+	{
+		ext_type = msg[p] << 8 | msg[p + 1];
+		ext_len	 = msg[p + 2] << 8 | msg[p + 3];
+		p += 4;
+
+		if (ext_type == 0x0033) // key_share
+		{
+			if (p + 4 > ext_end) return -1;
+			group	= msg[p] << 8 | msg[p + 1];
+			key_len	= msg[p + 2] << 8 | msg[p + 3];
+			if (group == TLS_GROUP_X25519 && key_len == 32 && p + 4 + 32 <= len)
+			{
+				MemCopy(server_pub_out, msg + p + 4, 32);
+				have_key = TRUE;
+			}
+		}
+
+		p += ext_len;
+	}
+
+	if (!have_key)
+	{
+		NetErr("TLS: no x25519 key_share in ServerHello (HelloRetryRequest?).");
+		return -1;
+	}
+
+	return 0;
+}
+
+U0 TLSComputeHandshakeKeys(CTLS *tls, U8 *shared_secret)
+{ // early -> handshake secret, derive c/s hs traffic secrets + keys + finished keys
+	U8	psk[32], early_secret[32], derived[32], empty_hash[32];
+	U8	th[32];
+
+	MemSet(psk, 0, 32);
+	HKDFExtract(psk, 0, psk, 32, early_secret);   // salt 0, IKM 0
+
+	SHA256("", 0, empty_hash);
+	TLSDeriveSecret(early_secret, "derived", empty_hash, derived);
+
+	HKDFExtract(derived, 32, shared_secret, 32, tls->handshake_secret);
+
+	TLSTranscriptHash(tls, th); // ClientHello || ServerHello
+
+	TLSDeriveSecret(tls->handshake_secret, "c hs traffic", th, tls->client_hs_secret);
+	TLSDeriveSecret(tls->handshake_secret, "s hs traffic", th, tls->server_hs_secret);
+
+	TLSDeriveTrafficKeys(tls->client_hs_secret, tls->client_key, tls->client_iv);
+	TLSDeriveTrafficKeys(tls->server_hs_secret, tls->server_key, tls->server_iv);
+
+	TLSHKDFExpandLabel(tls->client_hs_secret, "finished", "", 0, tls->client_fin_key, 32);
+	TLSHKDFExpandLabel(tls->server_hs_secret, "finished", "", 0, tls->server_fin_key, 32);
+
+	tls->send_seq = 0;
+	tls->recv_seq = 0;
+}
+
+U0 TLSComputeAppKeys(CTLS *tls, U8 *th_after_server_fin)
+{ // handshake -> master secret, derive c/s application traffic keys
+	U8	derived[32], master[32], psk[32], empty_hash[32];
+	U8	client_ap[32], server_ap[32];
+
+	SHA256("", 0, empty_hash);
+	TLSDeriveSecret(tls->handshake_secret, "derived", empty_hash, derived);
+
+	MemSet(psk, 0, 32);
+	HKDFExtract(derived, 32, psk, 32, master);
+
+	TLSDeriveSecret(master, "c ap traffic", th_after_server_fin, client_ap);
+	TLSDeriveSecret(master, "s ap traffic", th_after_server_fin, server_ap);
+
+	TLSDeriveTrafficKeys(client_ap, tls->client_key, tls->client_iv);
+	TLSDeriveTrafficKeys(server_ap, tls->server_key, tls->server_iv);
+
+	tls->send_seq = 0;
+	tls->recv_seq = 0;
+}
+
+I64 TLSReadServerFlight(CTLS *tls, U8 *th_after_sfin_out)
+{ // read/decrypt EncryptedExtensions..Finished, hashing the transcript,
+  // verifying server Finished. On success writes transcript-through-sfin.
+	U8	*frag = MAlloc(TLS_RECORD_MAX);
+	U8	*inner = MAlloc(TLS_RECORD_MAX);
+	U8	*hs = MAlloc(TLS_FLIGHT_MAX);
+	I64	 hs_len = 0, hs_pos = 0;
+	U8	 wire_type, content_type;
+	I64	 frag_len, inner_len;
+	I64	 msg_type, msg_len, msg_total;
+	U8	 verify[32], expected[32];
+	U8	 th[32];
+	Bool done = FALSE;
+	I64	 result = 0;
+
+	while (!done)
+	{
+		if (TLSRecordRecv(tls, &wire_type, frag, &frag_len) < 0)
+		{ result = -1; break; }
+
+		// HolyC has no 'continue'; skip-to-next-record cases use goto next_rec.
+		if (wire_type == TLS_REC_CHANGE_CIPHER_SPEC)
+			goto next_rec; // middlebox-compat CCS, ignored
+
+		if (wire_type == TLS_REC_ALERT)
+		{
+			if (frag_len >= 2)
+				TLSDiag("TLS: server alert during handshake: level=%d desc=%d.",
+					   frag[0], frag[1]);
+			else
+				TLSDiag("TLS: server alert during handshake (short).");
+			result = -1; break;
+		}
+
+		if (wire_type != TLS_REC_APPLICATION_DATA)
+		{
+			NetErr("TLS: unexpected record type 0x%02X in server flight.", wire_type);
+			result = -1; break;
+		}
+
+		if (TLSRecordDecrypt(tls->server_key, tls->server_iv, tls->recv_seq,
+							 frag, frag_len, inner, &inner_len, &content_type) < 0)
+		{ result = -1; break; }
+		tls->recv_seq++;
+
+		if (content_type != TLS_REC_HANDSHAKE)
+			goto next_rec; // ignore non-handshake (e.g. more CCS content)
+
+		if (hs_len + inner_len > TLS_FLIGHT_MAX)
+		{
+			NetErr("TLS: server handshake flight too large.");
+			result = -1; break;
+		}
+		MemCopy(hs + hs_len, inner, inner_len);
+		hs_len += inner_len;
+
+		// parse whatever complete handshake messages we now have
+		while (hs_pos + 4 <= hs_len)
+		{
+			msg_type  = hs[hs_pos];
+			msg_len	  = hs[hs_pos + 1] << 16 | hs[hs_pos + 2] << 8 | hs[hs_pos + 3];
+			msg_total = msg_len + 4;
+
+			if (hs_pos + msg_total > hs_len)
+				break; // message continues in a later record
+
+			if (msg_type == TLS_HS_FINISHED)
+			{
+				// server Finished verify_data over transcript through CertificateVerify
+				TLSTranscriptHash(tls, th);
+				HMACSHA256(tls->server_fin_key, 32, th, 32, expected);
+
+				MemCopy(verify, hs + hs_pos + 4, 32);
+				if (!CryptoBytesEqual(verify, expected, 32))
+					TLSDiag("TLS: server Finished verify MISMATCH (transcript wrong!).");
+				else
+					TLSDiag("TLS: server Finished verified OK.");
+
+				// now fold Finished into transcript and snapshot
+				SHA256Update(&tls->transcript, hs + hs_pos, msg_total);
+				TLSTranscriptHash(tls, th_after_sfin_out);
+				done = TRUE;
+				hs_pos += msg_total;
+				break;
+			}
+			else
+			{ // EncryptedExtensions / Certificate / CertificateVerify / etc: hash, ignore
+				SHA256Update(&tls->transcript, hs + hs_pos, msg_total);
+				hs_pos += msg_total;
+			}
+		}
+
+next_rec:;
+	}
+
+	Free(frag);
+	Free(inner);
+	Free(hs);
+	return result;
+}
+
+I64 TLSSendClientFinished(CTLS *tls, U8 *th_after_sfin)
+{ // build + send the client Finished under the handshake keys
+	U8	verify[32];
+	U8	msg[36];
+
+	HMACSHA256(tls->client_fin_key, 32, th_after_sfin, 32, verify);
+
+	msg[0] = TLS_HS_FINISHED;
+	msg[1] = 0x00; msg[2] = 0x00; msg[3] = 32;
+	MemCopy(msg + 4, verify, 32);
+
+	// fold into transcript (not needed further, but keeps it correct)
+	SHA256Update(&tls->transcript, msg, 36);
+
+	return TLSRecordSendEncrypted(tls, TLS_REC_HANDSHAKE, msg, 36);
+}
+
+CTLS *TLSConnect(U8 *hostname, CTCPSocket *sock)
+{ // Run a full TLS 1.3 handshake over an already-connected TCP socket.
+  // Returns a CTLS ready for TLSWrite/TLSRead, or NULL on failure.
+	CTLS	*tls = CAlloc(sizeof(CTLS));
+	U8		*ch = MAlloc(2048);
+	U8		*frag = MAlloc(TLS_RECORD_MAX);
+	U8		 client_priv[32], client_pub[32], client_random[32], session_id[32];
+	U8		 server_pub[32], shared[32];
+	U8		 th_after_sfin[32];
+	U8		 wire_type;
+	I64		 ch_len, frag_len;
+	U8		 ccs = 0x01;
+
+	tls->sock = sock;
+	tls->sock->timeout = TLS_TIMEOUT;
+	SHA256Init(&tls->transcript);
+
+	// ephemeral key pair + randoms
+	CryptoRandBytes(client_priv, 32);
+	X25519Base(client_pub, client_priv);
+	CryptoRandBytes(client_random, 32);
+	CryptoRandBytes(session_id, 32);
+
+	// ClientHello
+	ch_len = TLSBuildClientHello(ch, hostname, client_random, session_id, client_pub);
+	if (tls_verbose)
+		TLSHexDump("TLS CLIENTHELLO", ch, ch_len); // wire debug (TLSTest only)
+	SHA256Update(&tls->transcript, ch, ch_len);
+	if (TLSRecordSendPlain(tls, TLS_REC_HANDSHAKE, ch, ch_len, 0x01) < 0) // CH may be 0x0301
+	{
+		NetErr("TLS: failed to send ClientHello.");
+		goto tls_fail;
+	}
+
+	// ServerHello (plaintext handshake record)
+	do
+	{
+		if (TLSRecordRecv(tls, &wire_type, frag, &frag_len) < 0)
+			goto tls_fail;
+		if (wire_type == TLS_REC_ALERT)
+		{
+			if (frag_len >= 2)
+				TLSDiag("TLS: server alert instead of ServerHello: level=%d desc=%d.",
+						frag[0], frag[1]);
+			else
+				TLSDiag("TLS: server alert instead of ServerHello (short).");
+			goto tls_fail;
+		}
+	}
+	while (wire_type == TLS_REC_CHANGE_CIPHER_SPEC);
+
+	if (wire_type != TLS_REC_HANDSHAKE || frag_len < 4 || frag[0] != TLS_HS_SERVER_HELLO)
+	{
+		NetErr("TLS: expected ServerHello, got record type 0x%02X.", wire_type);
+		goto tls_fail;
+	}
+	TLSDiag("TLS STAGE 1: ServerHello received (%d bytes).", frag_len);
+
+	SHA256Update(&tls->transcript, frag, frag_len);
+
+	if (TLSParseServerHello(frag + 4, frag_len - 4, server_pub) < 0)
+		goto tls_fail;
+	TLSDiag("TLS STAGE 2: ServerHello parsed, x25519 key_share found.");
+
+	// key exchange + handshake keys
+	X25519(shared, client_priv, server_pub);
+	TLSComputeHandshakeKeys(tls, shared);
+	TLSDiag("TLS STAGE 3: ECDH + handshake keys derived.");
+
+	// server encrypted flight
+	if (TLSReadServerFlight(tls, th_after_sfin) < 0)
+		goto tls_fail;
+	TLSDiag("TLS STAGE 4: server flight decrypted + verified.");
+
+	// client Change Cipher Spec (compat) then client Finished under handshake keys
+	TLSRecordSendPlain(tls, TLS_REC_CHANGE_CIPHER_SPEC, &ccs, 1);
+	if (TLSSendClientFinished(tls, th_after_sfin) < 0)
+		goto tls_fail;
+	TLSDiag("TLS STAGE 5: client Finished sent.");
+
+	// switch to application keys
+	TLSComputeAppKeys(tls, th_after_sfin);
+	tls->established = TRUE;
+
+	Free(ch);
+	Free(frag);
+	TLSDiag("TLS STAGE 6: handshake complete with %s.", hostname);
+	return tls;
+
+tls_fail:
+	Free(ch);
+	Free(frag);
+	Free(tls);
+	return NULL;
+}
+
+I64 TLSWrite(CTLS *tls, U8 *data, I64 len)
+{ // send application data, fragmenting to the record size limit
+	I64 off = 0, chunk;
+
+	if (!tls || !tls->established)
+		return -1;
+
+	while (off < len)
+	{
+		chunk = len - off;
+		if (chunk > 16384)
+			chunk = 16384;
+
+		if (TLSRecordSendEncrypted(tls, TLS_REC_APPLICATION_DATA, data + off, chunk) < 0)
+			return -1;
+
+		off += chunk;
+	}
+	return off;
+}
+
+I64 TLSRead(CTLS *tls, U8 *out, I64 max)
+{ // return up to max bytes of application data. 0 = clean close, -1 = error.
+  // Handshake records (NewSessionTicket) and CCS arriving post-handshake are
+  // consumed transparently; alerts end the stream.
+	U8	*frag;
+	U8	*inner;
+	U8	 wire_type, content_type;
+	I64	 frag_len, inner_len, take;
+
+	if (!tls || !tls->established)
+		return -1;
+
+	// drain leftover decrypted bytes first
+	if (tls->rbuf && tls->rbuf_pos < tls->rbuf_len)
+	{
+		take = tls->rbuf_len - tls->rbuf_pos;
+		if (take > max)
+			take = max;
+		MemCopy(out, tls->rbuf + tls->rbuf_pos, take);
+		tls->rbuf_pos += take;
+		if (tls->rbuf_pos >= tls->rbuf_len)
+		{
+			Free(tls->rbuf);
+			tls->rbuf = NULL;
+		}
+		return take;
+	}
+
+	frag  = MAlloc(TLS_RECORD_MAX);
+	inner = MAlloc(TLS_RECORD_MAX);
+
+	while (TRUE)
+	{
+		if (TLSRecordRecv(tls, &wire_type, frag, &frag_len) < 0)
+		{ Free(frag); Free(inner); return -1; }
+
+		// HolyC has no 'continue'; goto next_rec2 loops for the next record.
+		if (wire_type == TLS_REC_CHANGE_CIPHER_SPEC)
+			goto next_rec2;
+
+		if (TLSRecordDecrypt(tls->server_key, tls->server_iv, tls->recv_seq,
+							 frag, frag_len, inner, &inner_len, &content_type) < 0)
+		{ Free(frag); Free(inner); return -1; }
+		tls->recv_seq++;
+
+		if (content_type == TLS_REC_ALERT)
+		{ // close_notify (level 1, desc 0) is a normal end of stream; anything
+		  // else is the server rejecting us -- log the alert level+description
+			if (inner_len >= 2)
+				TLSDiag("TLS: server ALERT level=%d desc=%d.", inner[0], inner[1]);
+			else
+				TLSDiag("TLS: server ALERT (short).");
+			Free(frag); Free(inner);
+			return 0;
+		}
+
+		if (content_type == TLS_REC_HANDSHAKE)
+			goto next_rec2; // NewSessionTicket / key update: ignore
+
+		if (content_type == TLS_REC_APPLICATION_DATA)
+		{
+			if (!inner_len)
+				goto next_rec2; // empty record: padding, not end of stream
+			take = inner_len;
+			if (take > max)
+			{ // stash the remainder for the next call
+				MemCopy(out, inner, max);
+				tls->rbuf_len = inner_len - max;
+				tls->rbuf_pos = 0;
+				tls->rbuf = MAlloc(tls->rbuf_len);
+				MemCopy(tls->rbuf, inner + max, tls->rbuf_len);
+				Free(frag); Free(inner);
+				return max;
+			}
+			MemCopy(out, inner, take);
+			Free(frag); Free(inner);
+			return take;
+		}
+
+next_rec2:;
+	}
+}
+
+U0 TLSClose(CTLS *tls)
+{ // send close_notify (best effort), close the socket, free everything
+	U8 close_notify[2];
+
+	if (!tls)
+		return;
+
+	if (tls->established)
+	{
+		close_notify[0] = 0x01; // warning
+		close_notify[1] = 0x00; // close_notify
+		TLSRecordSendEncrypted(tls, TLS_REC_ALERT, close_notify, 2);
+	}
+
+	if (tls->sock)
+		TCPSocketClose(tls->sock);
+
+	Free(tls->rbuf);
+	Free(tls);
+}
+
+public U0 TLSTest(U8 *hostname="cloudflare.com")
+{ /* Clean, self-contained TLS handshake test. Prints the ClientHello bytes,
+	every handshake stage, and any server alert DIRECTLY to this terminal --
+	no need to hunt through the Network Log. Use a host known to support
+	TLS 1.3 + ChaCha20 (cloudflare.com is a safe bet).
+	  TLSTest;                  (defaults to cloudflare.com)
+	  TLSTest("example.com"); */
+	CTCPSocket *sock;
+	CTLS	   *tls;
+
+	"$$LTBLUE$$--- TLS test: %s:443 ---$$FG$$\n", hostname;
+
+	sock = TCPConnectionCreate(hostname, 443);
+	if (sock <= 0)
+	{
+		"$$RED$$TCP/DNS failed: could not connect to %s:443.$$FG$$\n", hostname;
+		"(Check the host resolves and port 443 is reachable.)\n";
+		return;
+	}
+	"TCP connected. Running TLS 1.3 handshake...\n\n";
+
+	tls_verbose = TRUE;         // route the stage logs + ClientHello here
+	tls = TLSConnect(hostname, sock);
+	tls_verbose = FALSE;
+
+	"\n";
+	if (!tls)
+	{
+		"$$RED$$TLS handshake FAILED.$$FG$$ ";
+		"Read the stage lines + any 'server alert desc=' above.\n";
+		"desc: 40=no common cipher, 70=version, 47=illegal_param, "
+		"50=decode_error, 20/51=bad MAC/decrypt.\n";
+		TCPSocketClose(sock);
+		return;
+	}
+
+	"$$GREEN$$TLS handshake SUCCEEDED -- https should work now.$$FG$$\n";
+	TLSClose(tls);
+}

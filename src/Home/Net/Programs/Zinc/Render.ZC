@@ -1,0 +1,814 @@
+/*	Zinc renderer: styled DOM -> DolDoc window. Public Domain.
+
+	Layout model: text browser with word wrap. Block elements separate with
+	newlines, inline elements flow. CSS colors map to the 16 VGA palette
+	entries; bold shows as the bright color half (or RED when uncolored);
+	italic/underline show as underline. Links are clickable MA macros that
+	type "l<n>\n" into the task; form widgets type "i<n>", "s<n>", "j<n>".
+	The browser main loop (WebBrowser.ZC) reads those with StrGet.
+
+	Every byte of page text goes through ZnChar, which doubles 0x24 bytes so
+	page content can never inject DolDoc commands. Text placed inside macro
+	quotes goes through ZnMacroSafe (strict whitelist) first.
+
+	Needs: HTML.ZC, CSS.ZC. No literal dollar signs allowed in this file. */
+
+#define ZN_MAX_LINKS	512
+#define ZN_MAX_WIDGETS	160
+#define ZN_BATCH		240
+#define ZN_MAX_OUT		300000
+#define ZN_LIST_DEPTH	8
+
+/* widget kinds */
+#define ZW_TEXT		1
+#define ZW_CHECKBOX	2
+#define ZW_RADIO	3
+#define ZW_SUBMIT	4
+#define ZW_BUTTON	5	// runs its onclick attr
+#define ZW_SELECT	6
+
+U8	   *zn_links[ZN_MAX_LINKS];		// MAlloc'ed href copies
+I64		zn_link_count = 0;
+CZNode *zn_widgets[ZN_MAX_WIDGETS];	// DOM nodes, not owned
+I64		zn_widget_kind[ZN_MAX_WIDGETS];
+I64		zn_widget_count = 0;
+
+U8 *zn_color_names[16] = {
+	"BLACK", "BLUE",   "GREEN",	  "CYAN",
+	"RED",	 "PURPLE", "BROWN",	  "LTGRAY",
+	"DKGRAY","LTBLUE", "LTGREEN", "LTCYAN",
+	"LTRED", "LTPURPLE","YELLOW", "WHITE"
+};
+
+class CZnRender
+{
+	CDoc *doc;
+	U8	  batch[ZN_BATCH + 8];
+	I64	  n;			// bytes in batch
+	U8	  last;			// last visible char emitted
+	I64	  pending_nl;	// newlines owed before next visible char
+	I64	  cur_fg, cur_bg;
+	Bool  cur_ul;
+	I64	  list_depth;
+	I64	  ol_counter[ZN_LIST_DEPTH];
+	Bool  list_ordered[ZN_LIST_DEPTH];
+	I64	  emitted;
+	Bool  anything;		// something visible was emitted already
+};
+
+CZnRender zn;
+
+U0 ZincRenderReset()
+{
+	I64 i;
+
+	for (i = 0; i < zn_link_count; i++)
+		Free(zn_links[i]);
+	zn_link_count = 0;
+	zn_widget_count = 0;
+}
+
+U0 ZnFlush()
+{
+	if (zn.n)
+	{
+		zn.batch[zn.n] = 0;
+		DocPrint(zn.doc, "%s", zn.batch);
+		zn.n = 0;
+	}
+}
+
+U0 ZnRawChar(U8 c)
+{ // put one byte into the doc, escaping dollar bytes
+	if (zn.emitted > ZN_MAX_OUT)
+		return;
+	zn.emitted++;
+	if (c == 0x24)
+	{
+		ZnFlush;
+		DocPrint(zn.doc, "$$$$"); // one literal dollar on screen
+	}
+	else
+	{
+		zn.batch[zn.n++] = c;
+		if (zn.n >= ZN_BATCH)
+			ZnFlush;
+	}
+	zn.last = c;
+	zn.anything = TRUE;
+}
+
+U0 ZnNewlines()
+{ // pay the owed block separation
+	if (zn.pending_nl > 2)
+		zn.pending_nl = 2;
+	while (zn.pending_nl > 0)
+	{
+		zn.pending_nl--;
+		if (zn.anything)
+			ZnRawChar('\n');
+	}
+	zn.pending_nl = 0;
+}
+
+U0 ZnSep(I64 nl)
+{ // request nl newlines before the next visible character
+	if (zn.pending_nl < nl)
+		zn.pending_nl = nl;
+}
+
+I64 ZnEffFg(CZStyle *style)
+{ // -1 = document default
+	I64 fg = style->fg;
+
+	if (style->bold > 0)
+	{
+		if (fg < 0)
+			return RED;
+		if (fg < 8)
+			return fg + 8;
+		return fg;
+	}
+
+	return fg;
+}
+
+U0 ZnStyle(CZStyle *style)
+{ // switch DolDoc state to match the computed style
+	I64	 fg = ZnEffFg(style), bg = style->bg;
+	Bool ul = style->underline > 0;
+
+	if (fg != zn.cur_fg)
+	{
+		ZnFlush;
+		if (fg < 0)
+			DocPrint(zn.doc, "$$FG$$");
+		else
+			DocPrint(zn.doc, "$$FG,%s$$", zn_color_names[fg]);
+		zn.cur_fg = fg;
+	}
+	if (bg != zn.cur_bg)
+	{
+		ZnFlush;
+		if (bg < 0)
+			DocPrint(zn.doc, "$$BG$$");
+		else
+			DocPrint(zn.doc, "$$BG,%s$$", zn_color_names[bg]);
+		zn.cur_bg = bg;
+	}
+	if (ul != zn.cur_ul)
+	{
+		ZnFlush;
+		if (ul)
+			DocPrint(zn.doc, "$$UL,1$$");
+		else
+			DocPrint(zn.doc, "$$UL,0$$");
+		zn.cur_ul = ul;
+	}
+}
+
+U0 ZnText(U8 *text, CZStyle *style)
+{ // emit page text: collapse whitespace unless white-space:pre
+	I64	 c;
+	Bool pre = style->pre > 0;
+
+	if (!text)
+		return;
+	ZnStyle(style);
+
+	while (*text)
+	{
+		c = *text++;
+		if (pre)
+		{
+			if (c == '\t')
+			{
+				ZnNewlines;
+				ZnRawChar(' ');
+				ZnRawChar(' ');
+				ZnRawChar(' ');
+				ZnRawChar(' ');
+			}
+			else if (c == '\n')
+			{
+				ZnNewlines;
+				ZnRawChar('\n');
+			}
+			else
+			{
+				ZnNewlines;
+				if (style->uppercase > 0)
+					c = ToUpper(c);
+				ZnRawChar(c);
+			}
+		}
+		else
+		{
+			if (c == '\n' || c == '\t' || c == '\r')
+				c = ' ';
+			if (c == ' ')
+			{
+				if (zn.pending_nl == 0 && zn.last != ' ' && zn.last != '\n' &&
+					zn.anything)
+					ZnRawChar(' ');
+			}
+			else
+			{
+				ZnNewlines;
+				if (style->uppercase > 0)
+					c = ToUpper(c);
+				ZnRawChar(c);
+			}
+		}
+	}
+}
+
+U0 ZnMacroSafe(U8 *src, U8 *dst, I64 max)
+{ // whitelist text bound for the inside of a DolDoc macro string
+	I64 n = 0, c;
+
+	while (*src && n < max - 1)
+	{
+		c = *src++;
+		if (c == ' ' || ('0' <= c <= '9') || ('a' <= c <= 'z') ||
+			('A' <= c <= 'Z') || c == '.' || c == ',' || c == ':' ||
+			c == '!' || c == '?' || c == '(' || c == ')' || c == '[' ||
+			c == ']' || c == '/' || c == '+' || c == '-' || c == '_' ||
+			c == '=' || c == '@' || c == '#' || c == '%' || c == '&' ||
+			c == '\'' || c == '~' || c == '*' || c == '<' || c == '>' ||
+			c == '|')
+		{
+			if (c == ' ' && (n == 0 || dst[n - 1] == ' '))
+			{
+				// skip repeats and leading blanks
+			}
+			else
+				dst[n++] = c;
+		}
+	}
+	while (n > 0 && dst[n - 1] == ' ')
+		n--;
+	dst[n] = 0;
+}
+
+I64 ZnLinkAdd(U8 *href)
+{ // returns 1-based link number, 0 if full
+	if (zn_link_count >= ZN_MAX_LINKS)
+		return 0;
+	zn_links[zn_link_count++] = StrNew(href);
+
+	return zn_link_count;
+}
+
+I64 ZnWidgetAdd(CZNode *node, I64 kind)
+{ // returns 1-based widget number, 0 if full
+	if (zn_widget_count >= ZN_MAX_WIDGETS)
+		return 0;
+	zn_widgets[zn_widget_count] = node;
+	zn_widget_kind[zn_widget_count] = kind;
+	zn_widget_count++;
+
+	return zn_widget_count;
+}
+
+CZNode *ZnFindForm(CZNode *node)
+{
+	while (node)
+	{
+		if (ZTagIs(node, "form"))
+			return node;
+		node = node->parent;
+	}
+
+	return NULL;
+}
+
+CZNode *ZnSelectCurrent(CZNode *sel)
+{ // chosen <option> of a <select>: checked flag, else the first option
+	CZNode *child = sel->first_child, *first = NULL;
+
+	while (child)
+	{
+		if (ZTagIs(child, "option"))
+		{
+			if (!first)
+				first = child;
+			if (child->checked)
+				return child;
+		}
+		child = child->next;
+	}
+
+	return first;
+}
+
+U0 ZnLink(CZNode *node, CZStyle *style, U8 *href)
+{ // clickable link: whole text is the click target, plus a [n] tag
+	U8	text[512], safe[96];
+	I64	len = 0, idx;
+
+	idx = ZnLinkAdd(href);
+	if (!idx)
+		return;
+
+	ZNodeTextCollect(node, text, 500, &len);
+	ZnMacroSafe(text, safe, 80);
+	if (!*safe)
+	{
+		if (!StrNICompare(href, "javascript:", 11))
+			StrCopy(safe, "[script]");
+		else
+			ZnMacroSafe(href, safe, 60);
+	}
+	if (!*safe)
+		StrCopy(safe, "[link]");
+
+	ZnNewlines;
+	ZnStyle(style); // pending styles settle before the macro
+	ZnFlush;
+	DocPrint(zn.doc, "$$FG,LTBLUE$$$$UL,1$$$$MA,T=\"%s\",LM=\"l%d\n\"$$"
+					 "$$UL,0$$$$FG,DKGRAY$$[%d]$$FG$$",
+			 safe, idx, idx);
+	zn.cur_fg = -1;
+	zn.cur_ul = FALSE;
+	zn.last	  = ']';
+	zn.anything = TRUE;
+	zn.emitted += StrLen(safe) + 8;
+}
+
+U0 ZnWidgetInput(CZNode *node, CZStyle *style)
+{
+	U8	 type[24], safe[64], shown[40];
+	U8	*attr, *val;
+	I64	 idx, i, len;
+	Bool masked;
+
+	attr = ZNodeAttr(node, "type");
+	i = 0;
+	if (attr)
+	{
+		while (attr[i] && i < 23)
+		{
+			type[i] = ZChLower(attr[i]);
+			i++;
+		}
+	}
+	type[i] = 0;
+	if (!*type)
+		StrCopy(type, "text");
+
+	if (!StrCompare(type, "hidden") || !StrCompare(type, "reset"))
+		return;
+
+	ZnNewlines;
+	ZnStyle(style);
+	ZnFlush;
+
+	if (!StrCompare(type, "checkbox") || !StrCompare(type, "radio"))
+	{
+		idx = ZnWidgetAdd(node, ZW_CHECKBOX);
+		if (!idx)
+			return;
+		if (!StrCompare(type, "radio"))
+			zn_widget_kind[idx - 1] = ZW_RADIO;
+		if (node->checked)
+		{
+			if (!StrCompare(type, "radio"))
+				StrCopy(shown, "(o)");
+			else
+				StrCopy(shown, "[x]");
+		}
+		else
+		{
+			if (!StrCompare(type, "radio"))
+				StrCopy(shown, "( )");
+			else
+				StrCopy(shown, "[ ]");
+		}
+		DocPrint(zn.doc, "$$FG,LTGREEN$$$$MA,T=\"%s\",LM=\"i%d\n\"$$$$FG$$",
+				 shown, idx);
+	}
+	else if (!StrCompare(type, "submit") ||
+			 (!StrCompare(type, "button") && !ZNodeAttr(node, "onclick")) ||
+			 !StrCompare(type, "image"))
+	{
+		idx = ZnWidgetAdd(node, ZW_SUBMIT);
+		if (!idx)
+			return;
+		val = ZNodeAttr(node, "value");
+		if (!val || !*val)
+			val = "Submit";
+		ZnMacroSafe(val, safe, 40);
+		if (!*safe)
+			StrCopy(safe, "Submit");
+		DocPrint(zn.doc, "$$BT,\"%s\",LM=\"s%d\n\"$$", safe, idx);
+	}
+	else if (!StrCompare(type, "button"))
+	{ // button with onclick: runs script
+		idx = ZnWidgetAdd(node, ZW_BUTTON);
+		if (!idx)
+			return;
+		val = ZNodeAttr(node, "value");
+		if (!val || !*val)
+			val = "Button";
+		ZnMacroSafe(val, safe, 40);
+		if (!*safe)
+			StrCopy(safe, "Button");
+		DocPrint(zn.doc, "$$BT,\"%s\",LM=\"j%d\n\"$$", safe, idx);
+	}
+	else
+	{ // text-like input
+		idx = ZnWidgetAdd(node, ZW_TEXT);
+		if (!idx)
+			return;
+		val = node->value;
+		if (!val)
+			val = ZNodeAttr(node, "value");
+		if (!val)
+			val = "";
+		masked = !StrCompare(type, "password");
+		len = 0;
+		ZnMacroSafe(val, safe, 24);
+		i = 0;
+		while (safe[i] && len < 20)
+		{
+			if (masked)
+				shown[len++] = '*';
+			else
+				shown[len++] = safe[i];
+			i++;
+		}
+		while (len < 12)
+			shown[len++] = '_';
+		shown[len] = 0;
+		DocPrint(zn.doc, "$$FG,LTGREEN$$$$MA,T=\"[%s]\",LM=\"i%d\n\"$$$$FG$$",
+				 shown, idx);
+	}
+
+	zn.cur_fg = -1;
+	zn.last = ']';
+	zn.anything = TRUE;
+	zn.emitted += 20;
+}
+
+U0 ZnWidgetTextArea(CZNode *node, CZStyle *style)
+{
+	U8	 safe[64], shown[40];
+	U8	*val;
+	I64	 idx, i = 0, len = 0;
+
+	idx = ZnWidgetAdd(node, ZW_TEXT);
+	if (!idx)
+		return;
+	val = node->value;
+	if (!val)
+		val = node->text; // raw textarea content from the parser
+	if (!val)
+		val = "";
+
+	ZnNewlines;
+	ZnStyle(style);
+	ZnFlush;
+	ZnMacroSafe(val, safe, 30);
+	while (safe[i] && len < 26)
+		shown[len++] = safe[i++];
+	while (len < 16)
+		shown[len++] = '_';
+	shown[len] = 0;
+	DocPrint(zn.doc, "$$FG,LTGREEN$$$$MA,T=\"[%s]\",LM=\"i%d\n\"$$$$FG$$",
+			 shown, idx);
+	zn.cur_fg = -1;
+	zn.last = ']';
+	zn.anything = TRUE;
+	zn.emitted += 20;
+}
+
+U0 ZnWidgetSelect(CZNode *node, CZStyle *style)
+{
+	U8		 text[256], safe[40];
+	I64		 idx, len = 0;
+	CZNode	*opt;
+
+	idx = ZnWidgetAdd(node, ZW_SELECT);
+	if (!idx)
+		return;
+	opt = ZnSelectCurrent(node);
+	if (opt)
+		ZNodeTextCollect(opt, text, 250, &len);
+	else
+		StrCopy(text, "-");
+	ZnMacroSafe(text, safe, 30);
+	if (!*safe)
+		StrCopy(safe, "-");
+
+	ZnNewlines;
+	ZnStyle(style);
+	ZnFlush;
+	DocPrint(zn.doc, "$$FG,LTGREEN$$$$MA,T=\"[%s v]\",LM=\"i%d\n\"$$$$FG$$",
+			 safe, idx);
+	zn.cur_fg = -1;
+	zn.last = ']';
+	zn.anything = TRUE;
+	zn.emitted += 20;
+}
+
+U0 ZnWidgetButton(CZNode *node, CZStyle *style)
+{ // <button> element
+	U8	text[256], safe[40];
+	I64	idx, len = 0, kind;
+	U8 *type = ZNodeAttr(node, "type");
+
+	if (ZNodeAttr(node, "onclick"))
+		kind = ZW_BUTTON;
+	else if (type && !StrICompare(type, "button"))
+		kind = ZW_BUTTON; // no onclick either: harmless no-op
+	else
+		kind = ZW_SUBMIT;
+
+	idx = ZnWidgetAdd(node, kind);
+	if (!idx)
+		return;
+	ZNodeTextCollect(node, text, 250, &len);
+	ZnMacroSafe(text, safe, 40);
+	if (!*safe)
+		StrCopy(safe, "Button");
+
+	ZnNewlines;
+	ZnStyle(style);
+	ZnFlush;
+	if (kind == ZW_BUTTON)
+		DocPrint(zn.doc, "$$BT,\"%s\",LM=\"j%d\n\"$$", safe, idx);
+	else
+		DocPrint(zn.doc, "$$BT,\"%s\",LM=\"s%d\n\"$$", safe, idx);
+	zn.last = ']';
+	zn.anything = TRUE;
+	zn.emitted += 20;
+}
+
+Bool ZnTagSkipped(U8 *tag)
+{
+	return !StrCompare(tag, "script") || !StrCompare(tag, "style")	  ||
+		   !StrCompare(tag, "title")  || !StrCompare(tag, "head")	  ||
+		   !StrCompare(tag, "meta")	  || !StrCompare(tag, "link")	  ||
+		   !StrCompare(tag, "base")	  || !StrCompare(tag, "template") ||
+		   !StrCompare(tag, "noscript") || !StrCompare(tag, "option") ||
+		   !StrCompare(tag, "iframe") || !StrCompare(tag, "svg")	  ||
+		   !StrCompare(tag, "canvas") || !StrCompare(tag, "object");
+}
+
+U0 ZnUaStyle(U8 *tag, CZStyle *out)
+{ // browser default styling per tag; author CSS overrides it
+	if (tag[0] == 'h' && '1' <= tag[1] <= '6' && !tag[2])
+	{
+		out->bold = 1;
+		if (tag[1] == '1' || tag[1] == '2')
+			out->uppercase = 1;
+	}
+	else if (!StrCompare(tag, "b") || !StrCompare(tag, "strong"))
+		out->bold = 1;
+	else if (!StrCompare(tag, "i") || !StrCompare(tag, "em") ||
+			 !StrCompare(tag, "u") || !StrCompare(tag, "ins") ||
+			 !StrCompare(tag, "cite") || !StrCompare(tag, "var"))
+		out->underline = 1;
+	else if (!StrCompare(tag, "code") || !StrCompare(tag, "tt") ||
+			 !StrCompare(tag, "kbd")  || !StrCompare(tag, "samp"))
+		out->fg = PURPLE;
+	else if (!StrCompare(tag, "pre"))
+	{
+		out->fg	 = PURPLE;
+		out->pre = 1;
+	}
+	else if (!StrCompare(tag, "mark"))
+	{
+		out->bg = YELLOW;
+		out->fg = BLACK;
+	}
+	else if (!StrCompare(tag, "th"))
+		out->bold = 1;
+	else if (!StrCompare(tag, "small") || !StrCompare(tag, "del") ||
+			 !StrCompare(tag, "s") || !StrCompare(tag, "strike") ||
+			 !StrCompare(tag, "sub") || !StrCompare(tag, "sup"))
+		out->fg = DKGRAY;
+}
+
+U0 ZnNode(CZNode *node, CZStyle *inherited)
+{
+	CZStyle	 style, author;
+	CZNode	*child;
+	I64		 disp, i;
+	U8		*attr;
+
+	if (!node || zn.emitted > ZN_MAX_OUT)
+		return;
+
+	if (node->type == ZH_TEXT)
+	{
+		ZnText(node->text, inherited);
+		return;
+	}
+
+	if (ZnTagSkipped(node->tag))
+		return;
+
+	// effective style: inherit, then UA defaults, then author CSS
+	MemCopy(&style, inherited, sizeof(CZStyle));
+	ZnUaStyle(node->tag, &style);
+	ZCssApply(node, &author);
+	if (author.display == ZCSS_DISP_NONE)
+		return;
+	ZStyleMerge(&style, &author);
+	style.display = -1; // display is not inherited
+
+	disp = ZCSS_DISP_INLINE;
+	if (ZHtmlTagBlock(node->tag) || !StrCompare(node->tag, "td") ||
+		!StrCompare(node->tag, "th") || !StrCompare(node->tag, "body") ||
+		!StrCompare(node->tag, "html") || !StrCompare(node->tag, "#root"))
+		disp = ZCSS_DISP_BLOCK;
+	if (author.display >= 0)
+		disp = author.display;
+
+	// element-specific rendering
+	if (!StrCompare(node->tag, "br"))
+	{
+		ZnNewlines;
+		ZnRawChar('\n');
+		return;
+	}
+	if (!StrCompare(node->tag, "hr"))
+	{
+		ZnSep(1);
+		ZnNewlines;
+		ZnStyle(&style);
+		for (i = 0; i < 40; i++)
+			ZnRawChar('-');
+		ZnSep(1);
+		return;
+	}
+	if (!StrCompare(node->tag, "img"))
+	{
+		attr = ZNodeAttr(node, "alt");
+		if (attr && *attr)
+		{
+			ZnText("[", &style);
+			ZnText(attr, &style);
+			ZnText("]", &style);
+		}
+		return; // images without alt render as nothing
+	}
+	if (!StrCompare(node->tag, "a"))
+	{
+		attr = ZNodeAttr(node, "href");
+		if (attr && *attr)
+		{
+			ZnLink(node, &style, attr);
+			return; // children were consumed as the link label
+		}
+	}
+	if (!StrCompare(node->tag, "input"))
+	{
+		ZnWidgetInput(node, &style);
+		return;
+	}
+	if (!StrCompare(node->tag, "textarea"))
+	{
+		ZnWidgetTextArea(node, &style);
+		return;
+	}
+	if (!StrCompare(node->tag, "select"))
+	{
+		ZnWidgetSelect(node, &style);
+		return;
+	}
+	if (!StrCompare(node->tag, "button"))
+	{
+		ZnWidgetButton(node, &style);
+		return;
+	}
+
+	if (disp == ZCSS_DISP_BLOCK)
+	{
+		if (!StrCompare(node->tag, "p") || node->tag[0] == 'h' ||
+			!StrCompare(node->tag, "blockquote") ||
+			!StrCompare(node->tag, "table") || !StrCompare(node->tag, "pre"))
+			ZnSep(2);
+		else
+			ZnSep(1);
+	}
+
+	if (!StrCompare(node->tag, "ul") || !StrCompare(node->tag, "ol"))
+	{
+		if (zn.list_depth < ZN_LIST_DEPTH - 1)
+			zn.list_depth++;
+		zn.list_ordered[zn.list_depth] = !StrCompare(node->tag, "ol");
+		zn.ol_counter[zn.list_depth]   = 0;
+	}
+	else if (!StrCompare(node->tag, "li"))
+	{
+		ZnSep(1);
+		ZnNewlines;
+		ZnStyle(&style);
+		for (i = 1; i < zn.list_depth; i++)
+		{
+			ZnRawChar(' ');
+			ZnRawChar(' ');
+		}
+		if (zn.list_ordered[zn.list_depth])
+		{
+			zn.ol_counter[zn.list_depth]++;
+			ZnFlush;
+			DocPrint(zn.doc, "%d. ", zn.ol_counter[zn.list_depth]);
+			zn.last = ' ';
+			zn.anything = TRUE;
+		}
+		else
+		{
+			ZnRawChar('-');
+			ZnRawChar(' ');
+		}
+	}
+	else if (!StrCompare(node->tag, "td") || !StrCompare(node->tag, "th"))
+	{
+		if (zn.last != '\n' && zn.pending_nl == 0 && zn.anything)
+		{
+			ZnStyle(&style);
+			ZnRawChar(' ');
+			ZnRawChar('|');
+			ZnRawChar(' ');
+		}
+	}
+
+	child = node->first_child;
+	while (child)
+	{
+		ZnNode(child, &style);
+		child = child->next;
+	}
+
+	if (!StrCompare(node->tag, "ul") || !StrCompare(node->tag, "ol"))
+	{
+		if (zn.list_depth > 0)
+			zn.list_depth--;
+	}
+
+	if (disp == ZCSS_DISP_BLOCK)
+	{
+		if (!StrCompare(node->tag, "p") || node->tag[0] == 'h' ||
+			!StrCompare(node->tag, "blockquote") ||
+			!StrCompare(node->tag, "table") || !StrCompare(node->tag, "pre"))
+			ZnSep(2);
+		else
+			ZnSep(1);
+	}
+}
+
+U0 ZincFormInit(CZNode *node)
+{ // seed live form state from parsed attributes, once per page
+	CZNode *child;
+
+	if (node->type == ZH_ELEM)
+	{
+		if (ZTagIs(node, "input") || ZTagIs(node, "option"))
+		{
+			if (ZNodeAttr(node, "checked") || ZNodeAttr(node, "selected"))
+				node->checked = TRUE;
+		}
+	}
+	child = node->first_child;
+	while (child)
+	{
+		ZincFormInit(child);
+		child = child->next;
+	}
+}
+
+U0 ZincRenderBody(CDoc *doc, CZNode *root)
+{ // render the page body; links/widgets registries are rebuilt
+	CZStyle base;
+	CZNode *body;
+
+	ZincRenderReset;
+
+	zn.doc = doc;
+	zn.n = 0;
+	zn.last = '\n';
+	zn.pending_nl = 0;
+	zn.cur_fg = -1;
+	zn.cur_bg = -1;
+	zn.cur_ul = FALSE;
+	zn.list_depth = 0;
+	zn.emitted = 0;
+	zn.anything = FALSE;
+
+	body = ZDomFindTag(root, "body");
+	if (!body)
+		body = root;
+
+	ZStyleReset(&base);
+	ZnNode(body, &base);
+
+	ZnFlush;
+	// restore doc state for whatever prints after the page
+	DocPrint(doc, "$$FG$$$$BG$$$$UL,0$$\n");
+	if (zn.emitted > ZN_MAX_OUT)
+		DocPrint(doc, "$$FG,YELLOW$$[page truncated]$$FG$$\n");
+}
