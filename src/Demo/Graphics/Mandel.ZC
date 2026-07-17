@@ -37,11 +37,11 @@ U0 MandelFrame(I64 core)
   F64 ymin = yCenter - (xExtent / aspect / 2.0);
   F64 ymax = ymin + (xExtent / aspect);
 
-  F64 x, y, x0, y0, x2, y2;
+  F64 x, y, x0, y0, x2, y2, t;
   F64 xscale = (xmax - xmin) / ToF64(width);
   F64 yscale = (ymax - ymin) / ToF64(height);
   I64 iteration;
-  I64 px, py;
+  I64 px, py, r, g, b;
 
   for (py = startY; py < maxY; py++) {
     y0 = ymin + ToF64(py) * yscale;
@@ -76,11 +76,16 @@ U0 MandelFrame(I64 core)
       // Instead of getting a DC handle
       // every time, we can just poke
       // into the body of the DC.
-      // (is that ok?)
+      // Native 32-bit pixs: smooth sine-based coloring, 16M colors.
       if (iteration >= iterations)
-        image->body[py*width+px] = GrPixResolve(15);
-      else
-        image->body[py*width+px] = GrPixResolve(iteration % 15);
+        image->body[py*width+px] = 0; //Inside the set: black.
+      else {
+        t = iteration * 0.35;
+        r = 128 + 127.0 * Sin(t);
+        g = 128 + 127.0 * Sin(t + 2.094);
+        b = 128 + 127.0 * Sin(t + 4.188);
+        image->body[py*width+px] = r << 16 | g << 8 | b;
+      }
 
 
     }
