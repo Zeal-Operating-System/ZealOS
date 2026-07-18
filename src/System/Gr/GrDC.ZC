@@ -228,7 +228,9 @@ public CDC *DCAlias(CDC *dc=NULL, CTask *task=NULL)
 
 public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALSE)
 {//Create new width x height device context.
-//Internally only allows widths which are divisible by 8.
+//width_internal (row stride) is width rounded UP to a multiple of 8, so the
+	//body always has room for all width columns. (Rounding DOWN made every
+	//non-multiple-of-8 DC overflow its body on the right edge: heap corruption.)
 	//Don't forget these $MA-X+PU,"sizeof(CDC)",LM="Find(\"sizeof(CDC)\",\"/*\");View;"$.
 	CDC *res;
 
@@ -238,8 +240,7 @@ public CDC *DCNew(I64 width, I64 height, CTask *task=NULL, Bool null_bitmap=FALS
 	res->win_task		= task;
 	res->mem_task		= task;
 	res->width			= width;
-//	res->width_internal	= (width + 7) & ~7;
-	res->width_internal	= width & ~7;
+	res->width_internal	= (width + 7) & ~7;
 	res->height			= height;
 	if (null_bitmap)
 		res->flags |= DCF_DONT_DRAW;

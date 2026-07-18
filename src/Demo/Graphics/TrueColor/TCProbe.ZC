@@ -1,0 +1,88 @@
+// Truecolor crash probe. Exercises each Varoom-style code path with ColorRGB
+// pens, one step at a time. The LAST number printed before a hang/crash names
+// the faulting API. All steps together take a few seconds.
+
+CDC *probe_map;
+
+I64 probe_flags;
+
+U0 ProbeMPJob(CDC *dc2)
+{//Minimal multicore job like Varoom's MPUpdateWin: TC draw from another core.
+	CDC *dc = DCAlias(gr.dc2, dc2->win_task);
+
+	dc->color = ColorRGB(0x20, 0xC0, 0x80);
+	GrRect(dc, 300 + 20 * Gs->num, 60, 16, 16);
+	DCDel(dc);
+	LBtr(&probe_flags, Gs->num);
+}
+
+U0 TCProbe()
+{
+	I64		 i;
+	CD3I32	 poly[4];
+	CDC		*dc = DCAlias(gr.dc2, Fs);
+
+	"1 plain-DC TC GrRect...\n";
+	probe_map = DCNew(128, 128);
+	probe_map->color = ColorRGB(0x26, 0x2A, 0x36);
+	GrRect(probe_map, 0, 0, 128, 128);
+
+	"2 plain-DC TC GrPlot3 thick=3...\n";
+	probe_map->color = ColorRGB(0xFF, 0xD0, 0x40);
+	probe_map->thick = 3;
+	for (i = 0; i < 64; i++)
+		GrPlot3(probe_map, i * 2, 64, 0);
+	probe_map->thick = 1;
+
+	"3 screen TC GrRect...\n";
+	dc->color = ColorRGB(0x3C, 0x78, 0xC8);
+	GrRect(dc, 8, 8, 200, 60);
+
+	"4a screen TC GrCircle...\n";
+	dc->color = ColorRGB(0xFF, 0x9A, 0x30);
+	GrCircle(dc, 60, 40, 15);
+
+	"4b screen TC GrFloodFill inside rim...\n";
+	dc->color = ColorRGB(0xFF, 0xE6, 0x66);
+	GrFloodFill(dc, 60, 40);
+
+	"5 depth-buf TC GrFillPoly3...\n";
+	DCDepthBufAlloc(dc);
+	poly[0].x = 240; poly[0].y = 20;  poly[0].z = GR_Z_ALL;
+	poly[1].x = 290; poly[1].y = 24;  poly[1].z = GR_Z_ALL;
+	poly[2].x = 286; poly[2].y = 70;  poly[2].z = GR_Z_ALL;
+	poly[3].x = 244; poly[3].y = 66;  poly[3].z = GR_Z_ALL;
+	dc->color = ColorRGB(0xE0, 0x30, 0x30);
+	GrFillPoly3(dc, 4, poly);
+	Free(dc->depth_buf);
+	dc->depth_buf = NULL;
+
+	"6 TC GrBlot of plain DC...\n";
+	GrBlot(dc, 8, 90, probe_map);
+
+	"7 TC GrPrint...\n";
+	dc->color = ColorRGB(0xF0, 0xF8, 0xFF);
+	GrPrint(dc, 8, 240, "probe print ok");
+
+	"8 multicore TC jobs...\n";
+	probe_flags = 1 << mp_count - 1;
+	for (i = 1; i < mp_count; i++)
+		JobQueue(&ProbeMPJob, dc, i);
+	LBtr(&probe_flags, 0);
+	while (probe_flags)
+		Yield;
+
+	"9 TC GrLine3 + GrPlot w/ thick...\n";
+	dc->color = ColorRGB(0x80, 0xFF, 0x40);
+	dc->thick = 2;
+	GrLine3(dc, 8, 300, 0, 200, 330, 0);
+	dc->thick = 1;
+
+	DCDel(dc);
+	DCDel(probe_map);
+	"\nALL STEPS PASSED. Press a key.\n";
+	PressAKey;
+	DCFill;
+}
+
+TCProbe;
