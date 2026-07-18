@@ -666,10 +666,18 @@ public Bool DocRecalc(CDoc *doc, I64 recalc_flags=RECALCt_NORMAL)
 			{
 				if (doc_e->de_flags & DOCEF_BORDER_PLOT && !Bt(&win_task->display_flags, DISPLAYf_NO_BORDER))
 				{
+					//Truecolor the window title (the only DOCT_DATA border entry);
+					//[X]/MENU are DOCT_TEXT and keep their palette colors.
 					while (ch = *ptr++)
 					{
 						if (recalc_flags & RECALCG_MASK == RECALCt_TO_SCREEN && !(doc_e->de_flags & DOCEF_DONT_DRAW))
-							TextChar(win_task, TRUE, x - x0, y - y0, tmp_u32_attr + ch);
+						{
+							if (gr.tc_chrome && doc_e->type_u8 == DOCT_DATA)
+								TextColorChar(win_task, x - x0, y - y0,
+											  ch | tmp_u32_attr & 0xFFFF0000, gr.tc_title_fg, gr.tc_title_bg, TRUE);
+							else
+								TextChar(win_task, TRUE, x - x0, y - y0, tmp_u32_attr + ch);
+						}
 						else
 							if (find_cursor)
 							{

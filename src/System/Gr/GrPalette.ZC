@@ -184,3 +184,24 @@ public U0 PaletteSetCommander(Bool persistent=TRUE)
 	if (persistent)
 		fp_set_std_palette = &PaletteSetCommander;
 }
+//********************************************************************************
+//Combined palette + truecolor-chrome themes. Defined here, after the
+//PaletteSet* functions they call (HolyC is single-pass, no forward calls).
+
+public U0 GuiThemeMidnight()
+{//Modern dark theme: slate palette + truecolor cyan window chrome.
+	PaletteSetSlate(FALSE);
+	GuiChromeTrueColor(ColorRGB(0x33, 0xC8, 0xFF), ColorRGB(0x0A, 0x16, 0x26), ColorRGB(0x2C, 0x44, 0x5A));
+}
+
+public U0 GuiThemeAmber()
+{//Warm dark theme: dark palette + truecolor amber window chrome.
+	PaletteSetDark(FALSE);
+	GuiChromeTrueColor(ColorRGB(0xFF, 0xB0, 0x3A), ColorRGB(0x1C, 0x12, 0x06), ColorRGB(0x5A, 0x44, 0x1E));
+}
+
+public U0 GuiThemeViolet()
+{//Cool theme: commander palette + truecolor violet window chrome.
+	PaletteSetCommander(FALSE);
+	GuiChromeTrueColor(ColorRGB(0xB0, 0x7A, 0xFF), ColorRGB(0x12, 0x0C, 0x22), ColorRGB(0x44, 0x36, 0x66));
+}

@@ -401,15 +401,15 @@ U0 GrUpdateTextFG()
 
 #help_index "TextBase Layer/Char;Char/TextBase Layer"
 
-public Bool TextColorChar(CTask *task=NULL, I64 x, I64 y, I64 d, CColorROPU32 fg, CColorROPU32 bg)
+public Bool TextColorChar(CTask *task=NULL, I64 x, I64 y, I64 d, CColorROPU32 fg, CColorROPU32 bg, Bool allow_border=FALSE)
 {//Plot one char at text cell (x,y) in truecolor. Must be called 60fps in Fs->draw_it().
 //d = char in low byte + optional ATTRF_ flags. fg/bg accept ColorRGB() pens or 0-15 indices.
-//See $LK,"TextChar",A="MN:TextChar"$(). Only content cells (no border), NULL task means Fs.
+//See $LK,"TextChar",A="MN:TextChar"$(). allow_border lets it draw on the border row. NULL task means Fs.
 	I64 idx, col, row;
 
 	if (!task)
 		task = Fs;
-	if (TextChar(task, FALSE, x, y, d | ATTRF_TRUE_COLOR))
+	if (TextChar(task, allow_border, x, y, d | ATTRF_TRUE_COLOR))
 	{
 		col = (task->scroll_x >> 3) + x + task->win_left;
 		row = (task->scroll_y >> 3) + y + task->win_top;
