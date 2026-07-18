@@ -23,6 +23,14 @@ public class CGrGlobals
 	CDC			*overlay_dc[GR_OVERLAY_MAX];
 	I64			 overlay_x[GR_OVERLAY_MAX], overlay_y[GR_OVERLAY_MAX], overlay_alpha[GR_OVERLAY_MAX];
 
+	//Per-window translucency. When translucent_task is set, that window's text
+	//renders to the private layer_* planes instead of the shared text_base, so
+	//the shared layer shows what's BEHIND it; the private layer is then alpha-
+	//composited on top. Default NULL = no change. See $LK,"WinTranslucent",A="MN:WinTranslucent"$().
+	CTask		*translucent_task;
+	I64			 translucent_alpha;
+	U32			*layer_base, *layer_fg, *layer_bg;
+
 	U16			*win_z_buf;
 
 	#define SPHT_ELEM_CODE		1

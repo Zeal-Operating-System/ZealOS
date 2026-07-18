@@ -96,22 +96,22 @@ public U0 GuiChromePalette()
 //slot the highlighter picks (see $LK,"highlight_hash_type_colors",A="MN:highlight_hash_type_colors"$). Independent of the
 //theme's 16 slots, so code can use colors the theme palette doesn't have.
 public U32 gr_syntax_scheme[COLORS_NUM] = {
-	0xD4D4D4, //0  BLACK slot  -> default light (rarely hit)
-	0x569CD6, //1  BLUE        keyword
-	0x6A9955, //2  GREEN       comment
-	0x4EC9B0, //3  CYAN        teal
-	0xD16969, //4  RED         char const
-	0xC586C0, //5  PURPLE      function
-	0xCE9178, //6  BROWN       string
-	0xC8C8C8, //7  LTGRAY      alt text / matched parens
-	0x808080, //8  DKGRAY      dim
-	0x9CDCFE, //9  LTBLUE      define
-	0xB5CEA8, //10 LTGREEN     pale green
-	0x4EC9B0, //11 LTCYAN      global var
-	0xF44747, //12 LTRED       register
-	0xC586C0, //13 LTPURPLE    export sym
-	0xDCDCAA, //14 YELLOW      number
-	0xE8E8E8  //15 WHITE       normal text
+	0xF8F8F2, //0  BLACK slot  -> default light (rarely hit)
+	0xFF79C6, //1  BLUE        keyword       -> hot pink
+	0x6272A4, //2  GREEN       comment       -> muted slate
+	0x8BE9FD, //3  CYAN        define        -> bright cyan
+	0xFF5555, //4  RED         link          -> red
+	0x50FA7B, //5  PURPLE      function      -> green
+	0xF1FA8C, //6  BROWN       string/char   -> yellow
+	0xF8F8F2, //7  LTGRAY      alt/parens    -> white
+	0x6272A4, //8  DKGRAY      dim
+	0xBD93F9, //9  LTBLUE      class/macro   -> purple
+	0x50FA7B, //10 LTGREEN     green
+	0x8BE9FD, //11 LTCYAN      global var    -> cyan
+	0xFF5370, //12 LTRED       register      -> red-pink
+	0xBD93F9, //13 LTPURPLE    export sym    -> purple
+	0xFFB86C, //14 YELLOW      number        -> orange
+	0xF8F8F2  //15 WHITE       normal text   -> near white
 };
 
 public U0 GuiSyntaxTrueColor()

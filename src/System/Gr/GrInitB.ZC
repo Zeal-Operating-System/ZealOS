@@ -158,6 +158,9 @@ U0 GrInit2()
 	gr.text_base			= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
 	gr.text_fg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
 	gr.text_bg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
+	gr.layer_base			= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
+	gr.layer_fg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
+	gr.layer_bg				= CAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U32));
 	gr.win_uncovered_bitmap	= CAlloc(65536 / 8);
 	gr.highest_uncovered	= 0;
 	gr.win_z_buf			= MAlloc(TEXT_ROWS * TEXT_COLS * sizeof(U16));

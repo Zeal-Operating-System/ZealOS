@@ -1,0 +1,22 @@
+// Real per-window translucency. WinTranslucent() makes an actual OS window
+// see-through: its text renders to a private layer while the shared screen keeps
+// showing what's BEHIND it, then the window is alpha-composited on top.
+//
+// Best with something behind this window: run Colorize; first (gradient desktop),
+// or open/move another window behind the terminal. Press any key to restore.
+
+U0 TransWin()
+{
+	"\nMaking THIS window translucent (alpha 185).\n";
+	"The desktop and any windows behind it show through the background;\n";
+	"the text stays solid so it's still readable.\n\n";
+	"Press any key to make it opaque again.\n";
+
+	WinTranslucent(Fs, 185);
+	PressAKey;
+	WinOpaque;
+
+	"\nOpaque again.\n";
+}
+
+TransWin;

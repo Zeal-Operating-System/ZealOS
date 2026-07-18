@@ -20,8 +20,21 @@ U0 GrUpdateTaskWin(CTask *task)
 { //Draw a win. Only Core0 tasks have a win.
 	CDC		*dc;
 	CD3I64	 saved_scroll;
+	U32		*save_base, *save_fg, *save_bg;
+	Bool	 redirect = task == gr.translucent_task;
 
 	sys_task_being_screen_updated = task;
+	if (redirect)
+	{//Draw this window's text into the private layer, not the shared text_base,
+	//so the shared layer keeps showing what's behind it.
+		save_base = gr.text_base;
+		save_fg   = gr.text_fg;
+		save_bg   = gr.text_bg;
+		gr.text_base = gr.layer_base;
+		gr.text_fg   = gr.layer_fg;
+		gr.text_bg   = gr.layer_bg;
+		MemSetU32(gr.layer_base, 0, TEXT_ROWS * TEXT_COLS);
+	}
 	try
 	{
 		if (!Bt(&task->display_flags, DISPLAYf_NO_BORDER))
@@ -74,6 +87,12 @@ U0 GrUpdateTaskWin(CTask *task)
 			Sleep(3000);
 			LFBFlush;
 		}
+	}
+	if (redirect)
+	{
+		gr.text_base = save_base;
+		gr.text_fg   = save_fg;
+		gr.text_bg   = save_bg;
 	}
 	sys_task_being_screen_updated = NULL;
 }
@@ -616,6 +635,96 @@ U0 GrOverlayComposite()
 	}
 }
 
+#help_index "Graphics/Screen;Windows"
+
+U0 GrWinLayerComposite()
+{//Blend the translucent window's private layer over the finished dc2. The cell
+//background blends at translucent_alpha; glyph text stays opaque for readability.
+	CTask *t = gr.translucent_task;
+	I64  cl, cr, ct, cb, cx, cy, idx, cell, ch, fg, bg, a, ia,
+		 px, py, brow, sy, d, br, bgc, bl, w1 = gr.dc2->width_internal;
+	U64  bits;
+	U32 *dst_base = gr.dc2->body, *dstp;
+
+	if (!t || !TaskValidate(t) || !Bt(&t->display_flags, DISPLAYf_SHOW))
+		return;
+	a = gr.translucent_alpha;
+	if (a <= 0)
+		return;
+	if (a > 255)
+		a = 255;
+	ia = 255 - a;
+
+	cl = t->win_left   - 1;
+	cr = t->win_right  + 1;
+	ct = t->win_top    - 1;
+	cb = t->win_bottom + 1;
+	if (cl < 0)
+		cl = 0;
+	if (ct < 0)
+		ct = 0;
+	if (cr > TEXT_COLS - 1)
+		cr = TEXT_COLS - 1;
+	if (cb > TEXT_ROWS - 1)
+		cb = TEXT_ROWS - 1;
+
+	for (cy = ct; cy <= cb; cy++)
+	{
+		for (cx = cl; cx <= cr; cx++)
+		{
+			idx  = cy * TEXT_COLS + cx;
+			cell = gr.layer_base[idx];
+			if (cell & ATTRF_TRUE_COLOR)
+			{
+				fg = gr.layer_fg[idx];
+				bg = gr.layer_bg[idx];
+			}
+			else
+			{
+				fg = gr_palette[cell >> 8  & 0xF];
+				bg = gr_palette[cell >> 12 & 0xF];
+			}
+			ch	 = cell & 0xFF;
+			bits = text.font[ch];
+			if (cell & ATTRF_UNDERLINE)
+				bits |= 0xFF << 56;
+			for (py = 0; py < FONT_HEIGHT; py++)
+			{
+				brow = bits >> (py * 8) & 0xFF;
+				sy	 = cy * FONT_HEIGHT + py;
+				dstp = dst_base + sy * w1 + cx * FONT_WIDTH;
+				for (px = 0; px < FONT_WIDTH; px++)
+				{
+					if (brow & 1 << px)
+						dstp[px] = fg;
+					else
+					{
+						d	= dstp[px];
+						br	= ((bg >> 16 & 0xFF) * a + (d >> 16 & 0xFF) * ia) / 255;
+						bgc	= ((bg >> 8  & 0xFF) * a + (d >> 8  & 0xFF) * ia) / 255;
+						bl	= ((bg       & 0xFF) * a + (d       & 0xFF) * ia) / 255;
+						dstp[px] = br << 16 | bgc << 8 | bl;
+					}
+				}
+			}
+		}
+	}
+}
+
+public U0 WinTranslucent(CTask *task=NULL, I64 alpha=190)
+{//Make one window translucent - its background blends with whatever is behind
+//it (desktop AND other windows). alpha 0..255. NULL task means Fs.
+	if (!task)
+		task = Fs;
+	gr.translucent_alpha = alpha;
+	gr.translucent_task	 = task; //Set last.
+}
+
+public U0 WinOpaque()
+{//Turn off window translucency.
+	gr.translucent_task = NULL;
+}
+
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/System/WinMgr.ZC,GrUpdateScreen"$, 30 times a second.
 	CDC *dc;
@@ -628,7 +737,8 @@ U0 GrUpdateScreen()
 	GrUpdateTasks;
 	DCBlotColor8(gr.dc2, gr.dc);
 
-	GrOverlayComposite; //Alpha overlays blend over everything below them.
+	GrWinLayerComposite; //Translucent window blends over what's behind it.
+	GrOverlayComposite;  //Alpha overlays blend over everything below them.
 
 	dc = DCAlias(gr.dc2, Fs);
 	dc->flags |= DCF_ON_TOP;
