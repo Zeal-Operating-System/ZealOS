@@ -16,16 +16,6 @@ I64 PenBrushesSize()
 	return res;
 }
 
-I64 ScreenZoomTablesSize()
-{
-	I64 res = 0, i;
-
-	for (i = 1; i <= GR_SCREEN_ZOOM_MAX;i++)
-		res += MSize2(gr.screen_zoom_tables[i]);
-
-	return res;
-}
-
 I64 TaskStackSize(CTask *task)
 {
 	CTaskStack	*tmps = task->stack;
@@ -152,7 +142,6 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 	if (task == sys_winmgr_task)
 	{
 		"gr.pen_brushes\t:%010X\n",			PenBrushesSize;
-		"gr.screen_zoom_tbles\t:%010X\n",	ScreenZoomTablesSize;
 		"screencast.dc\t:%010X\n",			DCSize(screencast.dc);
 		"screencast.dc2_alias\t:%010X\n",	DCSize(screencast.dc2_alias);
 	}
@@ -199,13 +188,10 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 		"AutoComplete:%010X\n",			CallExtStr("AutoCompleteSize");
 		"text.font\t\t:%010X\n",		MSize2(text.font);
 		"text.raw_screen\t:%010X\n",	MSize2(text.raw_screen);
-		"gr.to_8_bits\t:%010X\n",		MSize2(gr.to_8_bits);
-		"gr.to_8_colors\t:%010X\n",		MSize2(gr.to_8_colors);
 		"gr.text_base\t:%010X\n",		MSize2(gr.text_base);
 		"gr.screen_cache\t:%010X\n",	MSize2(gr.screen_cache);
 		"gr.win_z_buf\t:%010X\n",		MSize2(gr.win_z_buf)+ MSize2(gr.win_uncovered_bitmap);
 		"gr.dc\t\t\t:%010X\n",			DCSize(gr.dc);
-		"gr.dc1\t\t\t:%010X\n",			DCSize(gr.dc1);
 		"gr.dc2\t\t\t:%010X\n",			DCSize(gr.dc2);
 		"gr.dc_cache\t\t:%010X\n",		DCSize(gr.dc_cache);
 		"gr.screen_image\t:%010X\n",	DCSize(gr.screen_image);

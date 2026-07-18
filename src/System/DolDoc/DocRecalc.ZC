@@ -304,10 +304,11 @@ I64 DocTmpAttr(CDoc *doc, CDocEntry *doc_e, I64 cur_u8_attr)
 
 public Bool DocRecalc(CDoc *doc, I64 recalc_flags=RECALCt_NORMAL)
 {//Recalc and format.  Also used by WinMgr to draw on screen.
-	I64				 i, ii, j, k, x, x0, y, y0, D, d2, col, col2, best_col = 0, best_d = I64_MAX, xx, yy, zz, 
-					 num_entries = 0, i_jif, cur_u8_attr, tmp_u32_attr, 
-					 cursor_y = I64_MIN, left_margin, right_margin, y_plot_top, y_plot_bottom, 
-					 top, left, bottom, right, width, height, scroll_x, scroll_y, pix_top, pix_left;
+	I64				 i, ii, j, k, x, x0, y, y0, D, d2, col, col2, best_col = 0, best_d = I64_MAX, xx, yy, zz,
+					 num_entries = 0, i_jif, cur_u8_attr, tmp_u32_attr,
+					 cursor_y = I64_MIN, left_margin, right_margin, y_plot_top, y_plot_bottom,
+					 top, left, bottom, right, width, height, scroll_x, scroll_y, pix_top, pix_left,
+					 tc_fg_on = FALSE, tc_bg_on = FALSE, tc_fg_pen = 0, tc_bg_pen = 0, tc_fg_arg, tc_bg_arg;
 	CDocEntry	reg *doc_e, reg *doc_e2, *best_doc_e, *next_clear_found = NULL, *added_cursor = NULL;
 	CDocBin			*tmpb;
 	CDocSettings	*s;
@@ -665,10 +666,18 @@ public Bool DocRecalc(CDoc *doc, I64 recalc_flags=RECALCt_NORMAL)
 			{
 				if (doc_e->de_flags & DOCEF_BORDER_PLOT && !Bt(&win_task->display_flags, DISPLAYf_NO_BORDER))
 				{
+					//Truecolor the window title (the only DOCT_DATA border entry);
+					//[X]/MENU are DOCT_TEXT and keep their palette colors.
 					while (ch = *ptr++)
 					{
 						if (recalc_flags & RECALCG_MASK == RECALCt_TO_SCREEN && !(doc_e->de_flags & DOCEF_DONT_DRAW))
-							TextChar(win_task, TRUE, x - x0, y - y0, tmp_u32_attr + ch);
+						{
+							if (gr.tc_chrome && doc_e->type_u8 == DOCT_DATA)
+								TextColorChar(win_task, x - x0, y - y0,
+											  ch | tmp_u32_attr & 0xFFFF0000, gr.tc_title_fg, gr.tc_title_bg, TRUE);
+							else
+								TextChar(win_task, TRUE, x - x0, y - y0, tmp_u32_attr + ch);
+						}
 						else
 							if (find_cursor)
 							{
@@ -697,7 +706,25 @@ public Bool DocRecalc(CDoc *doc, I64 recalc_flags=RECALCt_NORMAL)
 						else if (y >= y_plot_top)
 						{
 							if (hl)
-								TextLenAttrStr(win_task, x - x0, y - y0, k, hl);
+							{
+								if (gr.tc_syntax)
+									TextColorAttrStr(win_task, x - x0, y - y0, k, hl);
+								else
+									TextLenAttrStr(win_task, x - x0, y - y0, k, hl);
+							}
+							else if (tc_fg_on || tc_bg_on)
+							{
+								if (tc_fg_on)
+									tc_fg_arg = tc_fg_pen;
+								else
+									tc_fg_arg = cur_u8_attr & 0x0F;
+								if (tc_bg_on)
+									tc_bg_arg = tc_bg_pen;
+								else
+									tc_bg_arg = cur_u8_attr >> 4 & 0x0F;
+								TextColorLenStr(win_task, x - x0, y - y0, k, tmp_u32_attr & 0xFFFF0000,
+												tc_fg_arg, tc_bg_arg, ptr);
+							}
 							else
 								TextLenStr(win_task, x - x0, y - y0, k, tmp_u32_attr, ptr);
 						}
@@ -1017,24 +1044,43 @@ rc_adjust_xy:
 				goto rc_start_of_line;
 
 			case DOCT_FOREGROUND:
-				cur_u8_attr &= 0xF0;
-				if (doc_e->attr == DOC_DEFAULT)
-					cur_u8_attr |= s->default_text_attr & 0x0F;
+				if (doc_e->attr != DOC_DEFAULT && doc_e->attr & ROPF_TRUE_COLOR)
+				{//$FG24 truecolor: fg comes from the RGB plane, not the nibble.
+					tc_fg_on  = TRUE;
+					tc_fg_pen = doc_e->attr;
+				}
 				else
-					cur_u8_attr |= doc_e->attr;
-				s->cur_text_attr = cur_u8_attr;
+				{
+					tc_fg_on = FALSE;
+					cur_u8_attr &= 0xF0;
+					if (doc_e->attr == DOC_DEFAULT)
+						cur_u8_attr |= s->default_text_attr & 0x0F;
+					else
+						cur_u8_attr |= doc_e->attr;
+					s->cur_text_attr = cur_u8_attr;
+				}
 				break;
 
 			case DOCT_BACKGROUND:
-				cur_u8_attr &= 0x0F;
-				if (doc_e->attr == DOC_DEFAULT)
-					cur_u8_attr |= s->default_text_attr & 0xF0;
+				if (doc_e->attr != DOC_DEFAULT && doc_e->attr & ROPF_TRUE_COLOR)
+				{//$BG24 truecolor.
+					tc_bg_on  = TRUE;
+					tc_bg_pen = doc_e->attr;
+				}
 				else
-					cur_u8_attr |= doc_e->attr << 4;
-				s->cur_text_attr = cur_u8_attr;
+				{
+					tc_bg_on = FALSE;
+					cur_u8_attr &= 0x0F;
+					if (doc_e->attr == DOC_DEFAULT)
+						cur_u8_attr |= s->default_text_attr & 0xF0;
+					else
+						cur_u8_attr |= doc_e->attr << 4;
+					s->cur_text_attr = cur_u8_attr;
+				}
 				break;
 
 			case DOCT_DEFAULT_FOREGROUND:
+				tc_fg_on = FALSE;
 				cur_u8_attr &= 0xF0;
 				if (doc_e->attr == DOC_DEFAULT)
 					cur_u8_attr |= s->default_text_attr & 0xF;
@@ -1045,6 +1091,7 @@ rc_adjust_xy:
 				break;
 
 			case DOCT_DEFAULT_BACKGROUND:
+				tc_bg_on = FALSE;
 				cur_u8_attr &= 0x0F;
 				if (doc_e->attr == DOC_DEFAULT)
 					cur_u8_attr |= s->default_text_attr & 0xF0;

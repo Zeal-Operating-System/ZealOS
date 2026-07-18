@@ -33,10 +33,14 @@ public U0 Sprite3(CDC *dc=gr.dc, I64 x, I64 y, I64 z, U8 *elems, Bool just_one_e
 		switch (tmpg->type & SPG_TYPE_MASK)
 		{
 			case SPT_COLOR:
+				if (dc->color & ROPF_TRUE_COLOR)
+					dc->color = 0; //Sprite elems use legacy pens.
 				dc->color = dc->color & ~(COLORROP_COLORS_MASK | ROPF_DITHER) | tmpg->c.color;
 				break;
 
 			case SPT_DITHER_COLOR:
+				if (dc->color & ROPF_TRUE_COLOR)
+					dc->color = 0; //Sprite elems use legacy pens.
 				dc->color = dc->color & ~COLORROP_COLORS_MASK |
 							tmpg->d.dither_color.u8[0] | tmpg->d.dither_color.u8[1] << COLORROP_BITS | ROPF_DITHER;
 				break;
@@ -120,9 +124,12 @@ public U0 Sprite3(CDC *dc=gr.dc, I64 x, I64 y, I64 z, U8 *elems, Bool just_one_e
 				img->width			= tmpg->pwhu.width;
 				img->width_internal	= (tmpg->pwhu.width + 7) & ~7;
 				img->height			= tmpg->pwhu.height;
-				img->body			= &tmpg->pwhu.u;
+				//Sprite bitmap data is legacy 8-bit indexed: convert to native pixs.
+				img->body			= MAlloc(img->width_internal * img->height * sizeof(U32));
+				GrBitMap8ToBitMap32(img->body, &tmpg->pwhu.u, img->width_internal * img->height);
 				img->dc_signature	= DCS_SIGNATURE_VAL;
 				GrBlot3(dc, tmpg->pwhu.x1 + x, tmpg->pwhu.y1 + y, z, img);
+				Free(img->body);
 				Free(img);
 				break;
 
