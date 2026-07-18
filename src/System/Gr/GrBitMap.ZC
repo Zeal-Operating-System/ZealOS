@@ -1666,3 +1666,92 @@ gr_done:
 
 	return res;
 }
+
+#help_index "Graphics/Color"
+U32 GrBlendPix(U32 dst, I64 sr, I64 sg, I64 sb, I64 a, I64 ia)
+{//Alpha-blend src (sr,sg,sb, alpha a) over dst pix. ia = 255 - a. Returns 0xRRGGBB.
+	I64 r = (sr * a + (dst >> 16 & 0xFF) * ia) / 255;
+	I64 g = (sg * a + (dst >> 8  & 0xFF) * ia) / 255;
+	I64 b = (sb * a + (dst       & 0xFF) * ia) / 255;
+
+	return r << 16 | g << 8 | b;
+}
+
+public I64 GrRectAlpha(CDC *dc=gr.dc, I64 x, I64 y, I64 w, I64 h, I64 rgb, I64 a)
+{//2D alpha-blended rect. rgb=0xRRGGBB, a=0..255 (0 clear, 255 opaque). Clipping, no transform.
+//Real transparency: whatever is already in the dc shows through. Returns pixs changed.
+	I64		 i, j, k1, w1, h1, w2, h2, res = 0, win_z_num, xx, yy, ia,
+			 sr = rgb >> 16 & 0xFF, sg = rgb >> 8 & 0xFF, sb = rgb & 0xFF;
+	U32		*dst;
+	U16		*zb = NULL;
+	CTask	*win_task;
+
+	if (a <= 0)
+		return 0;
+	if (a > 255)
+		a = 255;
+	ia = 255 - a;
+
+	if (dc->flags & DCF_SCREEN_BITMAP)
+	{
+		win_task = dc->win_task;
+		x += win_task->scroll_x;
+		y += win_task->scroll_y;
+	}
+	if (x < 0)
+		w1 = -x;
+	else
+		w1 = 0;
+	if (y < 0)
+		h1 = -y;
+	else
+		h1 = 0;
+	w2 = w;
+	h2 = h;
+	if (dc->flags & DCF_SCREEN_BITMAP)
+	{
+		x += win_task->pix_left;
+		y += win_task->pix_top;
+		if (x + w1 < 0)
+			w1 = -x;
+		if (x + w2 > win_task->pix_right + 1)
+			w2 = win_task->pix_right + 1 - x;
+		if (y + h1 < 0)
+			h1 = -y;
+		if (y + h2 > win_task->pix_bottom + 1)
+			h2 = win_task->pix_bottom + 1 - y;
+	}
+	if (x + w2 > dc->width)
+		w2 = dc->width - x;
+	if (y + h2 > dc->height)
+		h2 = dc->height - y;
+
+	if (w1 < w2 <= w && h1 < h2 <= h)
+	{
+		if (dc->flags & DCF_DONT_DRAW)
+			return 0;
+		if (dc->flags & DCF_SCREEN_BITMAP && !(dc->flags & DCF_ON_TOP))
+		{
+			win_z_num = win_task->win_z_num;
+			zb = gr.win_z_buf;
+		}
+		k1 = (h1 + y) * dc->width_internal;
+		for (j = h1; j < h2; j++)
+		{
+			yy = y + j;
+			dst = dc->body + k1;
+			for (i = w1; i < w2; i++)
+			{
+				xx = x + i;
+				if (!zb || win_z_num >= zb[yy >> 3 * TEXT_COLS + (xx >> 3)])
+				{
+					dst[xx] = GrBlendPix(dst[xx], sr, sg, sb, a, ia);
+					res++;
+				}
+			}
+			k1 += dc->width_internal;
+		}
+	}
+
+	return res;
+}

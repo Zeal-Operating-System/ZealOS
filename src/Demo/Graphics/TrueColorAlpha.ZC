@@ -1,0 +1,40 @@
+// Transparency demo. GrRectAlpha() alpha-blends over whatever is already drawn,
+// so the backdrop shows through. Real per-pixel blending, not a color trick.
+//
+// Runs in a normal window. Press any key to exit.
+
+U0 AlphaDraw(CTask *task, CDC *dc)
+{
+	I64 x, w = task->pix_width, h = task->pix_height, r, g, b;
+	F64 t;
+
+	//Backdrop: full hue sweep so the transparency is obvious.
+	for (x = 0; x < w; x++)
+	{
+		t = 6.283 * x / w;
+		r = 128 + 127.0 * Sin(t);
+		g = 128 + 127.0 * Sin(t + 2.094);
+		b = 128 + 127.0 * Sin(t + 4.188);
+		dc->color = ColorRGB(r, g, b);
+		GrVLine(dc, x, 0, h - 1);
+	}
+
+	//Translucent panes over the gradient - the backdrop shows through each.
+	GrRectAlpha(dc, w / 12, h / 6, w / 3, h * 2 / 3, 0x000000, 128); // 50% black glass
+	GrRectAlpha(dc, w / 2,  h / 6, w / 3, h * 2 / 3, 0xFFFFFF, 128); // 50% white frost
+	GrRectAlpha(dc, w / 4,  h / 2, w / 2, h / 3,     0xFF3040, 110); // red tint
+	GrRectAlpha(dc, w / 3,  h / 8, w / 3, h / 4,     0x30A0FF, 90);  // blue tint
+
+	dc->color = ColorRGB(255, 255, 255);
+	GrPrint(dc, 8, 8, "GrRectAlpha transparency - press any key");
+}
+
+U0 TrueColorAlpha()
+{
+	SettingsPush;
+	Fs->draw_it = &AlphaDraw;
+	PressAKey;
+	SettingsPop;
+}
+
+TrueColorAlpha;
