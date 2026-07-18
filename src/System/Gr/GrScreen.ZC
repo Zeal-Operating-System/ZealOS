@@ -442,6 +442,28 @@ public U0 TextColorPrint(CTask *task=NULL, I64 x, I64 y, CColorROPU32 fg, CColor
 	Free(buf);
 }
 
+public U0 TextColorAttrStr(CTask *task=NULL, I64 x, I64 y, I64 len, U32 *attr_arr)
+{//Truecolor syntax-highlight render. attr_arr entries = char + fg/bg color nibbles
+//+ flags (from $LK,"DocHighlight",A="MN:DocHighlight"$). fg is mapped through gr_syntax_scheme, bg through the palette.
+	I64 i, d, idx, col, row;
+
+	if (!task)
+		task = Fs;
+	for (i = 0; i < len; i++)
+	{
+		d = attr_arr[i];
+		//Keep char + shift + BL/IV/UL flags; drop the 8-bit color nibbles.
+		if (TextChar(task, FALSE, x + i, y, d & 0xFFFF00FF | ATTRF_TRUE_COLOR))
+		{
+			col = (task->scroll_x >> 3) + x + i + task->win_left;
+			row = (task->scroll_y >> 3) + y + task->win_top;
+			idx = row * TEXT_COLS + col;
+			gr.text_fg[idx] = gr_syntax_scheme[d >> 8 & 0xF];
+			gr.text_bg[idx] = gr_palette[d >> 12 & 0xF];
+		}
+	}
+}
+
 #help_index "Graphics/Misc"
 U0 DCBlotColor8(CDC *dc, CDC *img)
 {
@@ -496,6 +518,104 @@ U0 GrUpdateScreen32()
 		MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
 }
 
+#help_index "Graphics/Screen;Graphics/Color"
+
+public CDC *GrOverlayNew(I64 w, I64 h, I64 x=0, I64 y=0, I64 alpha=255)
+{//Create a truecolor overlay DC composited over the FINISHED screen at (x,y),
+//blended at alpha (0..255). Draw into it with any Gr* call; fill parts with
+//TRANSPARENT for see-through holes. Returns the DC, or NULL if all slots used.
+	I64  n;
+	CDC *dc;
+
+	for (n = 0; n < GR_OVERLAY_MAX; n++)
+		if (!gr.overlay_dc[n])
+		{
+			dc = DCNew(w, h);
+			DCFill(dc, TRANSPARENT);
+			gr.overlay_x[n]		= x;
+			gr.overlay_y[n]		= y;
+			gr.overlay_alpha[n]	= alpha;
+			gr.overlay_dc[n]	= dc; //Set last: the compositor runs on another core.
+			return dc;
+		}
+
+	return NULL;
+}
+
+public U0 GrOverlaySet(CDC *dc, I64 x, I64 y, I64 alpha=255)
+{//Reposition / re-alpha a registered overlay.
+	I64 n;
+
+	for (n = 0; n < GR_OVERLAY_MAX; n++)
+		if (gr.overlay_dc[n] == dc)
+		{
+			gr.overlay_x[n]		= x;
+			gr.overlay_y[n]		= y;
+			gr.overlay_alpha[n]	= alpha;
+		}
+}
+
+public U0 GrOverlayDel(CDC *dc)
+{//Unregister and free an overlay DC.
+	I64 n;
+
+	for (n = 0; n < GR_OVERLAY_MAX; n++)
+		if (gr.overlay_dc[n] == dc)
+		{
+			gr.overlay_dc[n] = NULL;
+			DCDel(dc);
+		}
+}
+
+U0 GrOverlayComposite()
+{//Alpha-blend every active overlay over the finished gr.dc2. Runs each frame.
+	I64  n, ox, oy, sx, sy, a, ia, w, h, wi, sr, sg, sb, rr, gg, bb, d,
+		 scr_w = GR_WIDTH, scr_h = GR_HEIGHT, scr_wi = gr.dc2->width_internal;
+	U32 *dst_base = gr.dc2->body, *ob, src;
+	CDC *odc;
+
+	for (n = 0; n < GR_OVERLAY_MAX; n++)
+	{
+		odc = gr.overlay_dc[n];
+		if (odc && (a = gr.overlay_alpha[n]) > 0)
+		{
+			if (a > 255)
+				a = 255;
+			ia = 255 - a;
+			w  = odc->width;
+			h  = odc->height;
+			wi = odc->width_internal;
+			for (oy = 0; oy < h; oy++)
+			{
+				sy = gr.overlay_y[n] + oy;
+				if (0 <= sy < scr_h)
+				{
+					ob = odc->body + oy * wi;
+					for (ox = 0; ox < w; ox++)
+					{
+						sx = gr.overlay_x[n] + ox;
+						if (0 <= sx < scr_w)
+						{
+							src = ob[ox];
+							if (src != PIXF_TRANSPARENT)
+							{
+								d  = dst_base[sy * scr_wi + sx];
+								sr = src >> 16 & 0xFF;
+								sg = src >> 8  & 0xFF;
+								sb = src	   & 0xFF;
+								rr = (sr * a + (d >> 16 & 0xFF) * ia) / 255;
+								gg = (sg * a + (d >> 8  & 0xFF) * ia) / 255;
+								bb = (sb * a + (d	    & 0xFF) * ia) / 255;
+								dst_base[sy * scr_wi + sx] = rr << 16 | gg << 8 | bb;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/System/WinMgr.ZC,GrUpdateScreen"$, 30 times a second.
 	CDC *dc;
@@ -507,6 +627,8 @@ U0 GrUpdateScreen()
 	GrUpdateTextFG;
 	GrUpdateTasks;
 	DCBlotColor8(gr.dc2, gr.dc);
+
+	GrOverlayComposite; //Alpha overlays blend over everything below them.
 
 	dc = DCAlias(gr.dc2, Fs);
 	dc->flags |= DCF_ON_TOP;

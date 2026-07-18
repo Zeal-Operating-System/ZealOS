@@ -14,8 +14,14 @@ public class CGrGlobals
 
 	//Truecolor window chrome. When tc_chrome, borders draw in these pre-resolved
 	//pixs instead of the palette border_attr. Set via $LK,"GuiChromeTrueColor",A="MN:GuiChromeTrueColor"$().
-	Bool		 tc_chrome, pad_tc[7];
+	Bool		 tc_chrome, tc_syntax, pad_tc[6];
 	U32			 tc_border_fg, tc_border_unfocus_fg, tc_border_bg, tc_title_fg, tc_title_bg, pad_tc2;
+
+	//Alpha overlays: truecolor DCs composited over the FINISHED screen each frame,
+	//so everything below shows through. See $LK,"GrOverlayNew",A="MN:GrOverlayNew"$(). NULL slots are skipped.
+	#define GR_OVERLAY_MAX	8
+	CDC			*overlay_dc[GR_OVERLAY_MAX];
+	I64			 overlay_x[GR_OVERLAY_MAX], overlay_y[GR_OVERLAY_MAX], overlay_alpha[GR_OVERLAY_MAX];
 
 	U16			*win_z_buf;
 

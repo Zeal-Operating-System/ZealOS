@@ -92,6 +92,38 @@ public U0 GuiChromePalette()
 	gr.tc_chrome = FALSE;
 }
 
+//Vibrant truecolor syntax-highlight scheme, indexed by the DOC_COLOR_* palette
+//slot the highlighter picks (see $LK,"highlight_hash_type_colors",A="MN:highlight_hash_type_colors"$). Independent of the
+//theme's 16 slots, so code can use colors the theme palette doesn't have.
+public U32 gr_syntax_scheme[COLORS_NUM] = {
+	0xD4D4D4, //0  BLACK slot  -> default light (rarely hit)
+	0x569CD6, //1  BLUE        keyword
+	0x6A9955, //2  GREEN       comment
+	0x4EC9B0, //3  CYAN        teal
+	0xD16969, //4  RED         char const
+	0xC586C0, //5  PURPLE      function
+	0xCE9178, //6  BROWN       string
+	0xC8C8C8, //7  LTGRAY      alt text / matched parens
+	0x808080, //8  DKGRAY      dim
+	0x9CDCFE, //9  LTBLUE      define
+	0xB5CEA8, //10 LTGREEN     pale green
+	0x4EC9B0, //11 LTCYAN      global var
+	0xF44747, //12 LTRED       register
+	0xC586C0, //13 LTPURPLE    export sym
+	0xDCDCAA, //14 YELLOW      number
+	0xE8E8E8  //15 WHITE       normal text
+};
+
+public U0 GuiSyntaxTrueColor()
+{//Render source-code syntax highlighting in the vibrant truecolor scheme above.
+	gr.tc_syntax = TRUE;
+}
+
+public U0 GuiSyntaxPalette()
+{//Revert syntax highlighting to the 16-color theme palette.
+	gr.tc_syntax = FALSE;
+}
+
 public U8 gr_rainbow_10[10] = {BLACK, BROWN, RED, LTRED, YELLOW, GREEN, BLUE, PURPLE, LTGRAY, WHITE};
 
 DefineListLoad("ST_RAINBOW_10", "BLACK\0BROWN\0RED\0LTRED\0YELLOW\0GREEN\0BLUE\0PURPLE\0LTGRAY\0WHITE\0");
@@ -189,19 +221,22 @@ public U0 PaletteSetCommander(Bool persistent=TRUE)
 //PaletteSet* functions they call (HolyC is single-pass, no forward calls).
 
 public U0 GuiThemeMidnight()
-{//Modern dark theme: slate palette + truecolor cyan window chrome.
+{//Modern dark theme: slate palette + truecolor cyan window chrome + vibrant code.
 	PaletteSetSlate(FALSE);
 	GuiChromeTrueColor(ColorRGB(0x33, 0xC8, 0xFF), ColorRGB(0x0A, 0x16, 0x26), ColorRGB(0x2C, 0x44, 0x5A));
+	GuiSyntaxTrueColor;
 }
 
 public U0 GuiThemeAmber()
-{//Warm dark theme: dark palette + truecolor amber window chrome.
+{//Warm dark theme: dark palette + truecolor amber window chrome + vibrant code.
 	PaletteSetDark(FALSE);
 	GuiChromeTrueColor(ColorRGB(0xFF, 0xB0, 0x3A), ColorRGB(0x1C, 0x12, 0x06), ColorRGB(0x5A, 0x44, 0x1E));
+	GuiSyntaxTrueColor;
 }
 
 public U0 GuiThemeViolet()
-{//Cool theme: commander palette + truecolor violet window chrome.
+{//Cool theme: commander palette + truecolor violet window chrome + vibrant code.
 	PaletteSetCommander(FALSE);
 	GuiChromeTrueColor(ColorRGB(0xB0, 0x7A, 0xFF), ColorRGB(0x12, 0x0C, 0x22), ColorRGB(0x44, 0x36, 0x66));
+	GuiSyntaxTrueColor;
 }

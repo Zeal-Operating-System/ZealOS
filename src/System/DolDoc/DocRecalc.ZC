@@ -706,7 +706,12 @@ public Bool DocRecalc(CDoc *doc, I64 recalc_flags=RECALCt_NORMAL)
 						else if (y >= y_plot_top)
 						{
 							if (hl)
-								TextLenAttrStr(win_task, x - x0, y - y0, k, hl);
+							{
+								if (gr.tc_syntax)
+									TextColorAttrStr(win_task, x - x0, y - y0, k, hl);
+								else
+									TextLenAttrStr(win_task, x - x0, y - y0, k, hl);
+							}
 							else if (tc_fg_on || tc_bg_on)
 							{
 								if (tc_fg_on)

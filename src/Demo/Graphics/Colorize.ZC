@@ -10,10 +10,10 @@
 U0 (*colorize_prev_wp)(CTask *task) = NULL;
 
 U0 ColorizeWallPaper(CTask *task)
-{//Fill the desktop (winmgr) cells with a slow diagonal gradient, then chain to
+{//Fill the desktop (winmgr) cells with a dark Zeal-blue gradient, then chain to
 //the previous wallpaper (the stats readout). Windows draw over, so only the
-//uncovered desktop shows the gradient.
-	I64 x, y, idx, r, g, b, fx, fy, ph = ToI64(tS * 12) & 0x1FF;
+//uncovered desktop shows the gradient. Kept DARK so overlaid text stays readable.
+	I64 x, y, idx, r, g, b, fx, fy;
 
 	for (y = 0; y < TEXT_ROWS; y++)
 	{
@@ -21,14 +21,13 @@ U0 ColorizeWallPaper(CTask *task)
 		for (x = 0; x < TEXT_COLS; x++)
 		{
 			fx = 255 * x / TEXT_COLS;
-			r = 22 + ((fx * 70) >> 8) + ((fy * 26) >> 8);
-			g = 12 + ((fy * 52) >> 8);
-			b = 46 + (((fx + 511 - fy + ph) * 120) >> 9);
-			if (b > 255)
-				b = 255;
+			//Deep navy at top-left, dark blue-cyan toward bottom-right. Zeal blue.
+			r = 5  + ((fx * 10) >> 8);					//5..15
+			g = 9  + ((fy * 18) >> 8);					//9..27
+			b = 20 + ((fy * 26) >> 8) + ((fx * 14) >> 8); //20..60
 			idx = y * TEXT_COLS + x;
 			gr.text_base[idx] = gr.text_base[idx] & 0xFF | ATTRF_TRUE_COLOR;
-			gr.text_fg[idx] = 0x3A3A55;
+			gr.text_fg[idx] = 0x1A2438;
 			gr.text_bg[idx] = r << 16 | g << 8 | b;
 		}
 	}
@@ -47,10 +46,11 @@ U0 Colorize()
 }
 
 U0 Decolorize()
-{//Restore the plain desktop + 16-color chrome.
+{//Restore the plain desktop + 16-color chrome + palette syntax.
 	if (colorize_prev_wp)
 		gr.fp_wall_paper = colorize_prev_wp;
 	GuiChromePalette;
+	GuiSyntaxPalette;
 	PaletteSetSlate;
 	"Restored.\n";
 }
