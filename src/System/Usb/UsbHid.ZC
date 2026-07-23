@@ -190,7 +190,7 @@ U0 UsbHidAttach(CUsbDev *dev, CUsbIf *uif)
 
 	for (i = 0; i < uif->ep_count; i++)
 	{
-		tmp = &dev->eps[uif->ep_idxs[i]];
+		tmp = &dev->ep_list[uif->ep_idxs[i]];
 		if ((tmp->addr & 0x80) && (tmp->attr & 3) == USB_EP_TYPE_INT)
 		{
 			ep = tmp;

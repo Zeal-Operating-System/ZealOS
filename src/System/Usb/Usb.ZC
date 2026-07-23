@@ -105,7 +105,7 @@ U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
 				ttype = epd->attr & 3;
 				if (ttype == USB_EP_TYPE_BULK || ttype == USB_EP_TYPE_INT)
 				{
-					ep = &dev->eps[dev->ep_count];
+					ep = &dev->ep_list[dev->ep_count];
 //Clear all fields but keep any prior ring allocation (ring is first member).
 					MemSet(&ep->dci, 0, sizeof(CUsbEP) - offset(CUsbEP.dci));
 					ep->addr		= epd->addr;
@@ -142,8 +142,8 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 	dev->ep0.valid = FALSE;
 	for (i = 0; i < USB_EPS_MAX; i++)
 	{
-		dev->eps[i].valid = FALSE;
-		dev->eps[i].auto_kind = USB_AUTO_NONE;
+		dev->ep_list[i].valid = FALSE;
+		dev->ep_list[i].auto_kind = USB_AUTO_NONE;
 	}
 	dev->drv_data = NULL;
 }

@@ -280,7 +280,7 @@ class CUsbDev
 	U8		*dev_ctx,
 			*in_ctx;
 	CUsbEP	 ep0;
-	CUsbEP	 eps[USB_EPS_MAX];
+	CUsbEP	 ep_list[USB_EPS_MAX];
 	I64		 ep_count;
 	CUsbIf	 ifs[USB_IFS_MAX];
 	I64		 if_count;

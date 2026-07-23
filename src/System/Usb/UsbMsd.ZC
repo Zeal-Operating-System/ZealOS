@@ -291,7 +291,7 @@ U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
 	msd->if_num	= uif->if_num;
 	for (i = 0; i < uif->ep_count; i++)
 	{
-		ep = &dev->eps[uif->ep_idxs[i]];
+		ep = &dev->ep_list[uif->ep_idxs[i]];
 		if ((ep->attr & 3) == USB_EP_TYPE_BULK)
 		{
 			if (ep->addr & 0x80)

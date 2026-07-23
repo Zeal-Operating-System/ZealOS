@@ -145,8 +145,8 @@ CUsbEP *UsbDevEPByDCI(CUsbDev *dev, I64 dci)
 	if (dci == 1)
 		return &dev->ep0;
 	for (i = 0; i < dev->ep_count; i++)
-		if (dev->eps[i].valid && dev->eps[i].dci == dci)
-			return &dev->eps[i];
+		if (dev->ep_list[i].valid && dev->ep_list[i].dci == dci)
+			return &dev->ep_list[i];
 
 	return NULL;
 }
@@ -500,7 +500,7 @@ I64 XhciConfigureEPs(CUsbDev *dev)
 	icc[1] = 1;	//A0 = slot
 	for (i = 0; i < dev->ep_count; i++)
 	{
-		ep = &dev->eps[i];
+		ep = &dev->ep_list[i];
 		if (!ep->valid)
 			goto next_ep;
 		XhciEPRingInit(ep);
