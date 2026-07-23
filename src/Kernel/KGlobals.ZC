@@ -33,6 +33,9 @@ CMouseHardStateGlobals	 mouse_hard, mouse_hard_last;
 CScreenCastGlobals		 screencast;
 CTextGlobals			 text;
 
+Bool	 (*fp_usb_msd_blks_read )(CBlkDev *bd, U8 *buf, I64 blk, I64 count); //Set by USB mass storage driver.
+Bool	 (*fp_usb_msd_blks_write)(CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+
 U8		*(*fp_getstr2)(I64 flags=0);
 U0		 (*fp_update_ctrls)(CTask *task);
 CDoc	*(*fp_doc_put)(CTask *task=NULL);
