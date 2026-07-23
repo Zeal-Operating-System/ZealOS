@@ -1,0 +1,716 @@
+//xHCI (USB3) host controller driver. Polled, no MSI.
+//All USB commands are issued from the USB task only.
+//Sync transfers may be awaited from any task (event poll runs in USB task).
+
+U32 XhciCapR32(I64 off)
+{
+	U32 *p = usb_xhci.mmio + off;
+
+	return *p;
+}
+
+U32 XhciOpR32(I64 off)
+{
+	U32 *p = usb_xhci.op + off;
+
+	return *p;
+}
+
+U0 XhciOpW32(I64 off, I64 val)
+{
+	U32 *p = usb_xhci.op + off;
+
+	*p = val;
+}
+
+U0 XhciOpW64(I64 off, I64 val)
+{
+	U64 *p = usb_xhci.op + off;
+
+	*p = val;
+}
+
+U32 XhciRtR32(I64 off)
+{
+	U32 *p = usb_xhci.rt + off;
+
+	return *p;
+}
+
+U0 XhciRtW32(I64 off, I64 val)
+{
+	U32 *p = usb_xhci.rt + off;
+
+	*p = val;
+}
+
+U0 XhciRtW64(I64 off, I64 val)
+{
+	U64 *p = usb_xhci.rt + off;
+
+	*p = val;
+}
+
+U32 XhciPortSC(I64 port)
+{
+	return XhciOpR32(XHCI_OP_PORTSC_BASE + 0x10 * port);
+}
+
+U0 XhciPortSCWrite(I64 port, I64 val)
+{
+	XhciOpW32(XHCI_OP_PORTSC_BASE + 0x10 * port, val);
+}
+
+U0 XhciLock()
+{
+	while (LBts(&usb_xhci.lock, 0))
+		Yield;
+}
+
+U0 XhciUnlock()
+{
+	LBtr(&usb_xhci.lock, 0);
+}
+
+U0 XhciRingInit(CXhciRing *ring)
+{
+	if (!ring->trbs)
+		ring->trbs = CAllocAligned(XHCI_RING_TRBS * sizeof(CXhciTRB), 0x1000, sys_task->code_heap);
+	else
+		MemSet(ring->trbs, 0, XHCI_RING_TRBS * sizeof(CXhciTRB));
+	ring->enq = 0;
+	ring->cycle = 1;
+}
+
+CXhciRing *XhciEPRingInit(CUsbEP *ep)
+{//Alloc ep's ring struct (pointer member) on first use, then (re)init it.
+	if (!ep->ring)
+		ep->ring = CAlloc(sizeof(CXhciRing), sys_task->code_heap);
+	XhciRingInit(ep->ring);
+
+	return ep->ring;
+}
+
+CXhciTRB *XhciRingEnq(CXhciRing *ring, I64 lo, I64 hi, I64 status, I64 control)
+{//control passed without cycle bit; caller holds lock.
+	CXhciTRB *trb = &ring->trbs[ring->enq], *link;
+	I64		  addr;
+
+	trb->lo		 = lo;
+	trb->hi		 = hi;
+	trb->status	 = status;
+	trb->control = (control & ~1) | ring->cycle;
+	ring->enq++;
+	if (ring->enq == XHCI_RING_TRBS - 1)
+	{//Place link TRB back to start, toggle cycle.
+		link = &ring->trbs[XHCI_RING_TRBS - 1];
+		addr = ring->trbs;
+		link->lo	  = addr & 0xFFFFFFFF;
+		link->hi	  = addr >> 32;
+		link->status  = 0;
+		link->control = (XHCI_TRB_LINK << 10) | XHCI_TRBF_TC | ring->cycle;
+		ring->enq	  = 0;
+		ring->cycle	 ^= 1;
+	}
+
+	return trb;
+}
+
+CUsbDev *UsbDevBySlot(I64 slot)
+{
+	I64 i;
+
+	for (i = 0; i < USB_DEVS_MAX; i++)
+		if (usb_devs[i].present && usb_devs[i].slot == slot)
+			return &usb_devs[i];
+
+	return NULL;
+}
+
+CUsbDev *UsbDevByPort(I64 port)
+{
+	I64 i;
+
+	for (i = 0; i < USB_DEVS_MAX; i++)
+		if (usb_devs[i].present && usb_devs[i].port == port)
+			return &usb_devs[i];
+
+	return NULL;
+}
+
+CUsbEP *UsbDevEPByDCI(CUsbDev *dev, I64 dci)
+{
+	I64 i;
+
+	if (dci == 1)
+		return &dev->ep0;
+	for (i = 0; i < dev->ep_count; i++)
+		if (dev->ep_list[i].valid && dev->ep_list[i].dci == dci)
+			return &dev->ep_list[i];
+
+	return NULL;
+}
+
+U0 XhciIntQueue(CUsbDev *dev, CUsbEP *ep)
+{//Queue one interrupt IN TRB on ep, report dispatched via ep->auto_kind.
+	XhciLock;
+	ep->pending_trb = XhciRingEnq(ep->ring, ep->auto_buf, 0, ep->auto_len,
+								  (XHCI_TRB_NORMAL << 10) | XHCI_TRBF_IOC | XHCI_TRBF_ISP);
+	usb_xhci.db[dev->slot] = ep->dci;
+	XhciUnlock;
+}
+
+U0 XhciEventPoll()
+{//Drain event ring. Called ONLY in USB task context.
+	CXhciTRB	*e;
+	CUsbDev		*dev;
+	CUsbEP		*ep;
+	I64			 type, code, slot, dci, addr, work = FALSE;
+	U64			*erdp;
+
+	if (!usb_xhci.running)
+		return;
+	while (TRUE)
+	{
+		e = &usb_xhci.evt_ring[usb_xhci.evt_deq];
+		if ((e->control & 1) != usb_xhci.evt_cycle)
+			break;
+		work = TRUE;
+		type = (e->control >> 10) & 0x3F;
+		switch (type)
+		{
+			case XHCI_TRB_EVT_CMD_DONE:
+				usb_xhci.cmd_code = (e->status >> 24) & 0xFF;
+				usb_xhci.cmd_slot = (e->control >> 24) & 0xFF;
+				addr = usb_xhci.cmd_trb;
+				if (usb_xhci.cmd_trb && e->lo == addr & 0xFFFFFFFF)
+					usb_xhci.cmd_done = TRUE;
+				break;
+
+			case XHCI_TRB_EVT_TRANSFER:
+				slot = (e->control >> 24) & 0xFF;
+				dci  = (e->control >> 16) & 0x1F;
+				code = (e->status >> 24) & 0xFF;
+				dev  = UsbDevBySlot(slot);
+				if (dev)
+				{
+					ep = UsbDevEPByDCI(dev, dci);
+					if (ep)
+					{
+						if (ep->auto_kind)
+						{//HID interrupt IN: deliver + requeue
+							if (code == XHCI_CC_SUCCESS || code == XHCI_CC_SHORT_PKT)
+							{
+								switch (ep->auto_kind)
+								{
+									case USB_AUTO_KBD:
+										UsbKbdCB(dev, ep);
+										break;
+									case USB_AUTO_MOUSE:
+										UsbMouseCB(dev, ep);
+										break;
+								}
+							}
+							XhciIntQueue(dev, ep);
+						}
+						else
+						{
+							ep->xfer_code	 = code;
+							ep->xfer_residue = e->status & 0xFFFFFF;
+							ep->xfer_done	 = TRUE;
+						}
+					}
+				}
+				break;
+
+			case XHCI_TRB_EVT_PORT_SC:
+				usb_xhci.port_change = TRUE;
+				break;
+		}
+		usb_xhci.evt_deq++;
+		if (usb_xhci.evt_deq == XHCI_EVT_RING_TRBS)
+		{
+			usb_xhci.evt_deq = 0;
+			usb_xhci.evt_cycle ^= 1;
+		}
+	}
+	if (work)
+	{
+		addr = usb_xhci.evt_ring + usb_xhci.evt_deq;
+		erdp = usb_xhci.rt + XHCI_RT_ERDP0;
+		*erdp = addr | 8;	//8 = clear Event Handler Busy
+	}
+}
+
+I64 XhciCmd(I64 lo, I64 hi, I64 status, I64 control, I64 *_slot=NULL)
+{//Issue one command TRB, wait completion. USB task only.
+	F64 timeout;
+
+	XhciLock;
+	usb_xhci.cmd_done = FALSE;
+	usb_xhci.cmd_code = XHCI_CC_TIMEOUT;
+	usb_xhci.cmd_trb  = XhciRingEnq(&usb_xhci.cmd_ring, lo, hi, status, control);
+	usb_xhci.db[0] = 0;
+	XhciUnlock;
+	timeout = tS + 1.0;
+	while (!usb_xhci.cmd_done && tS < timeout)
+	{
+		XhciEventPoll;
+		Yield;
+	}
+	if (_slot)
+		*_slot = usb_xhci.cmd_slot;
+	if (!usb_xhci.cmd_done)
+		return XHCI_CC_TIMEOUT;
+
+	return usb_xhci.cmd_code;
+}
+
+I64 XhciXferWait(CUsbEP *ep, F64 timeout_s)
+{
+	F64 timeout = tS + timeout_s;
+
+	while (!ep->xfer_done && tS < timeout)
+	{
+		if (Fs == usb_task)
+			XhciEventPoll;
+		Yield;
+	}
+	if (!ep->xfer_done)
+		return XHCI_CC_TIMEOUT;
+
+	return ep->xfer_code;
+}
+
+I64 XhciCtrlXfer(CUsbDev *dev, I64 rt, I64 rq, I64 val, I64 idx, U8 *buf, I64 len)
+{//Control transfer on EP0. Returns completion code.
+	CUsbEP	*ep = &dev->ep0;
+	I64		 trt, ctl, addr;
+
+	if (len)
+	{
+		if (rt & USB_RT_DEV_TO_HOST)
+			trt = XHCI_TRT_IN;
+		else
+			trt = XHCI_TRT_OUT;
+	}
+	else
+		trt = XHCI_TRT_NO_DATA;
+	XhciLock;
+	ep->xfer_done	 = FALSE;
+	ep->xfer_code	 = XHCI_CC_TIMEOUT;
+	ep->xfer_residue = 0;
+	XhciRingEnq(ep->ring, rt | (rq << 8) | (val << 16), idx | (len << 16), 8,
+				(XHCI_TRB_SETUP << 10) | XHCI_TRBF_IDT | trt);
+	if (len)
+	{
+		ctl = XHCI_TRB_DATA << 10;
+		if (rt & USB_RT_DEV_TO_HOST)
+			ctl |= XHCI_TRBF_DIR_IN;
+		addr = buf;
+		XhciRingEnq(ep->ring, addr & 0xFFFFFFFF, addr >> 32, len, ctl);
+	}
+	ctl = (XHCI_TRB_STATUS << 10) | XHCI_TRBF_IOC;
+	if (!len || !(rt & USB_RT_DEV_TO_HOST))
+		ctl |= XHCI_TRBF_DIR_IN;	//status stage opposite dir; IN if no data
+	XhciRingEnq(ep->ring, 0, 0, 0, ctl);
+	usb_xhci.db[dev->slot] = 1;
+	XhciUnlock;
+
+	return XhciXferWait(ep, 1.0);
+}
+
+I64 XhciBulkXfer(CUsbDev *dev, CUsbEP *ep, U8 *buf, I64 len, F64 timeout_s, I64 *_residue=NULL)
+{//Single-TRB bulk transfer (max 64KB). Returns completion code.
+	I64 addr = buf, code;
+
+	XhciLock;
+	ep->xfer_done	 = FALSE;
+	ep->xfer_code	 = XHCI_CC_TIMEOUT;
+	ep->xfer_residue = 0;
+	XhciRingEnq(ep->ring, addr & 0xFFFFFFFF, addr >> 32, len,
+				(XHCI_TRB_NORMAL << 10) | XHCI_TRBF_IOC | XHCI_TRBF_ISP);
+	usb_xhci.db[dev->slot] = ep->dci;
+	XhciUnlock;
+	code = XhciXferWait(ep, timeout_s);
+	if (_residue)
+		*_residue = ep->xfer_residue;
+
+	return code;
+}
+
+U32 *XhciInputCtx(CUsbDev *dev, I64 idx)
+{//idx: 0=input control ctx, 1=slot ctx, 1+dci=EP ctx
+	U32 *p = dev->in_ctx + idx * usb_xhci.ctx_size;
+
+	return p;
+}
+
+U32 *XhciDevCtxGet(CUsbDev *dev, I64 idx)
+{//idx: 0=slot ctx, dci=EP ctx
+	U32 *p = dev->dev_ctx + idx * usb_xhci.ctx_size;
+
+	return p;
+}
+
+I64 XhciEPInterval(CUsbDev *dev, CUsbEP *ep)
+{//EP context Interval field, units of 125us * 2^n.
+	I64 v = ep->interval, n;
+
+	if (dev->speed == USB_SPEED_HIGH || dev->speed == USB_SPEED_SUPER)
+	{
+		if (v < 1)
+			v = 1;
+		if (v > 16)
+			v = 16;
+		return v - 1;
+	}
+//FS/LS: bInterval is in ms; pick n with 2^(n-3) ms >= v.
+	n = 3;
+	while ((1 << (n - 3)) < v && n < 10)
+		n++;
+
+	return n;
+}
+
+I64 XhciEPCtxType(CUsbEP *ep)
+{
+	I64 t = ep->attr & 3, in = FALSE;
+
+	if (ep->addr & 0x80)
+		in = TRUE;
+	if (t == USB_EP_TYPE_BULK)
+	{
+		if (in)
+			return XHCI_EP_TYPE_BULK_IN;
+		return XHCI_EP_TYPE_BULK_OUT;
+	}
+	if (t == USB_EP_TYPE_INT)
+	{
+		if (in)
+			return XHCI_EP_TYPE_INT_IN;
+		return XHCI_EP_TYPE_INT_OUT;
+	}
+	if (t == USB_EP_TYPE_ISOCH)
+	{
+		if (in)
+			return XHCI_EP_TYPE_ISOCH_IN;
+		return XHCI_EP_TYPE_ISOCH_OUT;
+	}
+
+	return XHCI_EP_TYPE_CTRL;
+}
+
+I64 XhciEnableSlot()
+{//Returns slot id, or 0 on failure.
+	I64 slot = 0, code;
+
+	code = XhciCmd(0, 0, 0, XHCI_TRB_ENABLE_SLOT << 10, &slot);
+	if (code != XHCI_CC_SUCCESS)
+		return 0;
+
+	return slot;
+}
+
+U0 XhciDisableSlot(I64 slot)
+{
+	XhciCmd(0, 0, 0, (XHCI_TRB_DISABLE_SLOT << 10) | (slot << 24));
+}
+
+I64 XhciAddressDev(CUsbDev *dev)
+{//Alloc contexts + EP0 ring, issue Address Device. Returns completion code.
+	U32	*icc, *slot_ctx, *ep0_ctx;
+	I64	 mps, addr;
+
+	if (!dev->dev_ctx)
+		dev->dev_ctx = CAllocAligned(usb_xhci.ctx_size * 32, 0x1000, sys_task->code_heap);
+	else
+		MemSet(dev->dev_ctx, 0, usb_xhci.ctx_size * 32);
+	if (!dev->in_ctx)
+		dev->in_ctx = CAllocAligned(usb_xhci.ctx_size * 33, 0x1000, sys_task->code_heap);
+	else
+		MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+	XhciEPRingInit(&dev->ep0);
+	dev->ep0.dci = 1;
+	dev->ep0.valid = TRUE;
+	dev->ep0.auto_kind = USB_AUTO_NONE;
+
+	switch (dev->speed)
+	{
+		case USB_SPEED_LOW:
+		case USB_SPEED_FULL:
+			mps = 8;
+			break;
+		case USB_SPEED_HIGH:
+			mps = 64;
+			break;
+		default:
+			mps = 512;
+	}
+	dev->ep0.max_packet = mps;
+
+	icc = XhciInputCtx(dev, 0);
+	icc[0] = 0;
+	icc[1] = 3;	//add slot + EP0
+	slot_ctx = XhciInputCtx(dev, 1);
+	slot_ctx[0] = (1 << 27) | (dev->speed << 20);
+	slot_ctx[1] = (dev->port + 1) << 16;
+	ep0_ctx = XhciInputCtx(dev, 2);
+	ep0_ctx[1] = (3 << 1) | (XHCI_EP_TYPE_CTRL << 3) | (mps << 16);
+	addr = dev->ep0.ring->trbs;
+	ep0_ctx[2] = (addr & 0xFFFFFFFF) | 1;	//DCS=1
+	ep0_ctx[3] = addr >> 32;
+	ep0_ctx[4] = 8;
+
+	usb_xhci.dcbaa[dev->slot] = dev->dev_ctx;
+	addr = dev->in_ctx;
+
+	return XhciCmd(addr & 0xFFFFFFFF, addr >> 32, 0,
+				   (XHCI_TRB_ADDRESS_DEV << 10) | (dev->slot << 24));
+}
+
+I64 XhciEvalCtxMPS0(CUsbDev *dev, I64 mps)
+{//Update EP0 max packet size after reading device descriptor.
+	U32	*icc, *ep0_ctx;
+	I64	 addr;
+
+	MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+	icc = XhciInputCtx(dev, 0);
+	icc[0] = 0;
+	icc[1] = 2;	//A1 = EP0
+	ep0_ctx = XhciInputCtx(dev, 2);
+	MemCopy(ep0_ctx, XhciDevCtxGet(dev, 1), usb_xhci.ctx_size);
+	ep0_ctx[1] = (ep0_ctx[1] & 0xFFFF) | (mps << 16);
+	dev->ep0.max_packet = mps;
+	addr = dev->in_ctx;
+
+	return XhciCmd(addr & 0xFFFFFFFF, addr >> 32, 0,
+				   (XHCI_TRB_EVAL_CTX << 10) | (dev->slot << 24));
+}
+
+I64 XhciConfigureEPs(CUsbDev *dev)
+{//Build input context with all parsed EPs, issue Configure Endpoint.
+	U32		*icc, *slot_ctx, *ep_ctx;
+	CUsbEP	*ep;
+	I64		 i, addr, max_dci = 1, type, ival;
+
+	MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+	icc = XhciInputCtx(dev, 0);
+	icc[0] = 0;
+	icc[1] = 1;	//A0 = slot
+	for (i = 0; i < dev->ep_count; i++)
+	{
+		ep = &dev->ep_list[i];
+		if (!ep->valid)
+			goto next_ep;
+		XhciEPRingInit(ep);
+		icc[1] |= 1 << ep->dci;
+		if (ep->dci > max_dci)
+			max_dci = ep->dci;
+		ep_ctx = XhciInputCtx(dev, 1 + ep->dci);
+		type = XhciEPCtxType(ep);
+		ival = XhciEPInterval(dev, ep);
+		ep_ctx[0] = ival << 16;
+		ep_ctx[1] = (3 << 1) | (type << 3) | (ep->max_packet << 16);
+		addr = ep->ring->trbs;
+		ep_ctx[2] = (addr & 0xFFFFFFFF) | 1;
+		ep_ctx[3] = addr >> 32;
+		if ((ep->attr & 3) == USB_EP_TYPE_INT)
+			ep_ctx[4] = ep->max_packet | (ep->max_packet << 16);
+		else
+			ep_ctx[4] = 1024;
+next_ep:;
+	}
+	slot_ctx = XhciInputCtx(dev, 1);
+	MemCopy(slot_ctx, XhciDevCtxGet(dev, 0), usb_xhci.ctx_size);
+	slot_ctx[0] = (slot_ctx[0] & 0x07FFFFFF) | (max_dci << 27);
+	addr = dev->in_ctx;
+
+	return XhciCmd(addr & 0xFFFFFFFF, addr >> 32, 0,
+				   (XHCI_TRB_CONFIG_EP << 10) | (dev->slot << 24));
+}
+
+I64 XhciResetEP(CUsbDev *dev, CUsbEP *ep)
+{//Recover a halted endpoint: Reset EP + Set TR Dequeue to fresh ring.
+	I64 code, addr;
+
+	code = XhciCmd(0, 0, 0, (XHCI_TRB_RESET_EP << 10) | (ep->dci << 16) | (dev->slot << 24));
+	XhciEPRingInit(ep);
+	addr = ep->ring->trbs;
+	code = XhciCmd((addr & 0xFFFFFFFF) | 1, addr >> 32, 0,
+				   (XHCI_TRB_SET_TR_DEQ << 10) | (ep->dci << 16) | (dev->slot << 24));
+
+	return code;
+}
+
+U0 XhciBiosHandoff()
+{
+	I64	 hcc = XhciCapR32(XHCI_CAP_HCCPARAMS1), xecp, id, next;
+	U32	*cap;
+	F64	 timeout;
+
+	xecp = ((hcc >> 16) & 0xFFFF) * 4;
+	while (xecp)
+	{
+		cap = usb_xhci.mmio + xecp;
+		id = *cap & 0xFF;
+		if (id == 1)
+		{//USB Legacy Support: claim OS ownership
+			*cap = *cap | (1 << 24);
+			timeout = tS + 1.0;
+			while ((*cap & (1 << 16)) && tS < timeout)
+				Sleep(10);
+			break;
+		}
+		next = (*cap >> 8) & 0xFF;
+		if (!next)
+			break;
+		xecp += next * 4;
+	}
+}
+
+Bool XhciPortReset(I64 port)
+{//Reset root port, wait for enabled. Returns TRUE if port enabled.
+	I64	sc;
+	F64	timeout;
+
+	XhciPortSCWrite(port, XHCI_PORTSC_PP | XHCI_PORTSC_PR);
+	timeout = tS + 0.5;
+	while (tS < timeout)
+	{
+		sc = XhciPortSC(port);
+		if (sc & XHCI_PORTSC_PED)
+			break;
+		Sleep(10);
+	}
+//Clear change bits
+	XhciPortSCWrite(port, XHCI_PORTSC_PP | XHCI_PORTSC_CHANGE_BITS);
+	sc = XhciPortSC(port);
+
+	return ToBool(sc & XHCI_PORTSC_PED);
+}
+
+Bool XhciInit()
+{//Find + init first xHCI controller. Returns TRUE on success.
+	I64	 bdf, bar_lo, bar_hi, addr, i;
+	I64	 hcs1, hcs2, hcc, cmd;
+	F64	 timeout;
+	U8	*page;
+
+	bdf = PCIClassFind(XHCI_PCI_CLASS, 0);
+	if (bdf == -1)
+	{
+		"xHCI: no controller found.\n";
+		return FALSE;
+	}
+	usb_xhci.pci_bus = bdf.u8[2];
+	usb_xhci.pci_dev = bdf.u8[1];
+	usb_xhci.pci_fun = bdf.u8[0];
+
+	bar_lo = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x10);
+	bar_hi = 0;
+	if ((bar_lo & 6) == 4)	//64-bit BAR
+		bar_hi = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x14);
+	if (bar_hi)
+	{
+		"xHCI: MMIO above 4GB not supported.\n";
+		return FALSE;
+	}
+	addr = bar_lo & ~0xF;
+	if (!addr)
+	{
+		"xHCI: BAR not assigned.\n";
+		return FALSE;
+	}
+//Enable memory space + bus master
+	cmd = PCIReadU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4);
+	PCIWriteU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4, cmd | 6);
+
+	usb_xhci.mmio = dev.uncached_alias + addr;
+	usb_xhci.op	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_CAPLENGTH) & 0xFF);
+	usb_xhci.rt	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_RTSOFF) & ~0x1F);
+	usb_xhci.db	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_DBOFF) & ~3);
+
+	hcs1 = XhciCapR32(XHCI_CAP_HCSPARAMS1);
+	hcs2 = XhciCapR32(XHCI_CAP_HCSPARAMS2);
+	hcc  = XhciCapR32(XHCI_CAP_HCCPARAMS1);
+	usb_xhci.max_slots = hcs1 & 0xFF;
+	usb_xhci.max_ports = (hcs1 >> 24) & 0xFF;
+	if (hcc & 4)
+		usb_xhci.ctx_size = 64;
+	else
+		usb_xhci.ctx_size = 32;
+
+	XhciBiosHandoff;
+
+//Stop + reset controller
+	XhciOpW32(XHCI_OP_USBCMD, XhciOpR32(XHCI_OP_USBCMD) & ~XHCI_CMD_RS);
+	timeout = tS + 1.0;
+	while (!(XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH) && tS < timeout)
+		Sleep(1);
+	XhciOpW32(XHCI_OP_USBCMD, XHCI_CMD_HCRST);
+	timeout = tS + 1.0;
+	while ((XhciOpR32(XHCI_OP_USBCMD) & XHCI_CMD_HCRST) && tS < timeout)
+		Sleep(1);
+	timeout = tS + 1.0;
+	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_CNR) && tS < timeout)
+		Sleep(1);
+
+	XhciOpW32(XHCI_OP_CONFIG, usb_xhci.max_slots);
+
+//Device context base address array
+	if (!usb_xhci.dcbaa)
+		usb_xhci.dcbaa = CAllocAligned((usb_xhci.max_slots + 1) * 8, 0x1000, sys_task->code_heap);
+	else
+		MemSet(usb_xhci.dcbaa, 0, (usb_xhci.max_slots + 1) * 8);
+
+//Scratchpad buffers
+	usb_xhci.scratch_count = (((hcs2 >> 21) & 0x1F) << 5) | ((hcs2 >> 27) & 0x1F);
+	if (usb_xhci.scratch_count)
+	{
+		usb_xhci.scratch_arr = CAllocAligned(usb_xhci.scratch_count * 8, 0x1000, sys_task->code_heap);
+		for (i = 0; i < usb_xhci.scratch_count; i++)
+		{
+			page = CAllocAligned(0x1000, 0x1000, sys_task->code_heap);
+			usb_xhci.scratch_arr[i] = page;
+		}
+		usb_xhci.dcbaa[0] = usb_xhci.scratch_arr;
+	}
+	XhciOpW64(XHCI_OP_DCBAAP, usb_xhci.dcbaa);
+
+//Command ring
+	XhciRingInit(&usb_xhci.cmd_ring);
+	addr = usb_xhci.cmd_ring.trbs;
+	XhciOpW64(XHCI_OP_CRCR, addr | 1);
+
+//Event ring, single segment, interrupter 0
+	if (!usb_xhci.evt_ring)
+		usb_xhci.evt_ring = CAllocAligned(XHCI_EVT_RING_TRBS * sizeof(CXhciTRB), 0x1000, sys_task->code_heap);
+	else
+		MemSet(usb_xhci.evt_ring, 0, XHCI_EVT_RING_TRBS * sizeof(CXhciTRB));
+	usb_xhci.evt_deq = 0;
+	usb_xhci.evt_cycle = 1;
+	if (!usb_xhci.erst)
+		usb_xhci.erst = CAllocAligned(64, 64, sys_task->code_heap);
+	addr = usb_xhci.evt_ring;
+	usb_xhci.erst[0] = addr;
+	usb_xhci.erst[1] = XHCI_EVT_RING_TRBS;
+	XhciRtW32(XHCI_RT_ERSTSZ0, 1);
+	XhciRtW64(XHCI_RT_ERDP0, addr);
+	addr = usb_xhci.erst;
+	XhciRtW64(XHCI_RT_ERSTBA0, addr);
+//Interrupts stay disabled; we poll.
+
+//Run
+	XhciOpW32(XHCI_OP_USBCMD, XhciOpR32(XHCI_OP_USBCMD) | XHCI_CMD_RS);
+	timeout = tS + 1.0;
+	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH) && tS < timeout)
+		Sleep(1);
+
+	usb_xhci.present = TRUE;
+	usb_xhci.running = TRUE;
+	"xHCI: %d ports, %d slots, ctx size %d, MMIO 0x%X.\n",
+			usb_xhci.max_ports, usb_xhci.max_slots, usb_xhci.ctx_size, bar_lo & ~0xF;
+
+	return TRUE;
+}

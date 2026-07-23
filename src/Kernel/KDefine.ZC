@@ -215,7 +215,8 @@ U0 SysDefinesLoad()
 						"ATA\0"
 						"FILE_READ\0"
 						"FILE_WRITE\0"
-						"ATAPI\0");
+						"ATAPI\0"
+						"USB\0");
 
 	DefineListLoad("ST_DRIVE_TYPES",
 						"NULL\0"

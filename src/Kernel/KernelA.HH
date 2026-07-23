@@ -3319,7 +3319,8 @@ public class CDirEntry
 #define BDT_ISO_FILE_READ 		3
 #define BDT_ISO_FILE_WRITE		4
 #define BDT_ATAPI 				5
-#define BDT_TYPES_NUM 			6
+#define BDT_USB 				6
+#define BDT_TYPES_NUM 			7
 
 #define BDf_REMOVABLE 			0
 #define BDf_INITIALIZED 		1

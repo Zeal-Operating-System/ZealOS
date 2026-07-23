@@ -1,0 +1,270 @@
+//USB core: device enumeration over xHCI.
+
+I64 UsbCtrl(CUsbDev *dev, I64 rt, I64 rq, I64 val, I64 idx, U8 *buf, I64 len)
+{//Control request with one retry on failure.
+	I64 code = XhciCtrlXfer(dev, rt, rq, val, idx, buf, len);
+
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		Sleep(10);
+		code = XhciCtrlXfer(dev, rt, rq, val, idx, buf, len);
+	}
+
+	return code;
+}
+
+I64 UsbGetDesc(CUsbDev *dev, I64 type, I64 idx, U8 *buf, I64 len, I64 lang=0)
+{
+	return UsbCtrl(dev, USB_RT_DEV_TO_HOST, USB_RQ_GET_DESCRIPTOR,
+				   (type << 8) | idx, lang, buf, len);
+}
+
+I64 UsbClearHalt(CUsbDev *dev, CUsbEP *ep)
+{//Recover halted endpoint: xHCI reset + USB CLEAR_FEATURE(HALT).
+	XhciResetEP(dev, ep);
+
+	return UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_RECIP_EP, USB_RQ_CLEAR_FEATURE,
+				   USB_FEAT_EP_HALT, ep->addr, NULL, 0);
+}
+
+U0 UsbStrGet(CUsbDev *dev, I64 idx, U8 *dst, I64 dst_len)
+{//Fetch string descriptor as ASCII.
+	U8	*buf;
+	I64	 i, n, code;
+
+	*dst = 0;
+	if (!idx)
+		return;
+	buf = CAlloc(256, sys_task->code_heap);
+	code = UsbGetDesc(dev, USB_DESC_STR, idx, buf, 255, 0x0409);
+	if (code == XHCI_CC_SUCCESS || code == XHCI_CC_SHORT_PKT)
+	{
+		n = buf[0];
+		if (n > 2)
+		{
+			n = (n - 2) / 2;
+			if (n > dst_len - 1)
+				n = dst_len - 1;
+			for (i = 0; i < n; i++)
+				dst[i] = buf[2 + i * 2];
+			dst[n] = 0;
+		}
+	}
+	Free(buf);
+}
+
+CUsbDev *UsbDevAlloc()
+{
+	I64 i;
+
+	for (i = 0; i < USB_DEVS_MAX; i++)
+		if (!usb_devs[i].present)
+			return &usb_devs[i];
+
+	return NULL;
+}
+
+U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
+{//Walk config descriptor, record interfaces + INT/BULK endpoints.
+	CUsbIfDesc	*ifd;
+	CUsbEPDesc	*epd;
+	CUsbIf		*cur_if = NULL;
+	CUsbEP		*ep;
+	I64			 off = 0, dlen, dtype, ttype;
+
+	dev->if_count = 0;
+	dev->ep_count = 0;
+	while (off + 2 <= len)
+	{
+		dlen  = buf[off];
+		dtype = buf[off + 1];
+		if (!dlen)
+			break;
+		if (dtype == USB_DESC_IF)
+		{
+			ifd = &buf[off];
+			if (ifd->alt == 0 && dev->if_count < USB_IFS_MAX)
+			{
+				cur_if = &dev->ifs[dev->if_count];
+				MemSet(cur_if, 0, sizeof(CUsbIf));
+				cur_if->valid		= TRUE;
+				cur_if->if_num		= ifd->if_num;
+				cur_if->if_class	= ifd->if_class;
+				cur_if->if_subclass	= ifd->if_subclass;
+				cur_if->if_proto	= ifd->if_proto;
+				dev->if_count++;
+			}
+			else
+				cur_if = NULL;	//alternate setting; skip its endpoints
+		}
+		else if (dtype == USB_DESC_EP)
+		{
+			if (cur_if && dev->ep_count < USB_EPS_MAX && cur_if->ep_count < 4)
+			{
+				epd = &buf[off];
+				ttype = epd->attr & 3;
+				if (ttype == USB_EP_TYPE_BULK || ttype == USB_EP_TYPE_INT)
+				{
+					ep = &dev->ep_list[dev->ep_count];
+//Clear all fields but keep any prior ring allocation (ring is first member).
+					MemSet(&ep->dci, 0, sizeof(CUsbEP) - offset(CUsbEP.dci));
+					ep->addr		= epd->addr;
+					ep->attr		= epd->attr;
+					ep->max_packet	= epd->max_packet & 0x7FF;
+					ep->interval	= epd->interval;
+					ep->dci			= (epd->addr & 0xF) << 1;
+					if (epd->addr & 0x80)
+						ep->dci |= 1;
+					ep->valid	= TRUE;
+					ep->auto_kind = USB_AUTO_NONE;
+					cur_if->ep_idxs[cur_if->ep_count] = dev->ep_count;
+					cur_if->ep_count++;
+					dev->ep_count++;
+				}
+			}
+		}
+		off += dlen;
+	}
+}
+
+U0 UsbDevDetachCore(CUsbDev *dev)
+{//Release xHCI slot; class driver cleanup handled by caller.
+	I64 i;
+
+	dev->present = FALSE;
+	dev->configured = FALSE;
+	if (dev->slot)
+	{
+		XhciDisableSlot(dev->slot);
+		usb_xhci.dcbaa[dev->slot] = 0;
+	}
+	dev->slot = 0;
+	dev->ep0.valid = FALSE;
+	for (i = 0; i < USB_EPS_MAX; i++)
+	{
+		dev->ep_list[i].valid = FALSE;
+		dev->ep_list[i].auto_kind = USB_AUTO_NONE;
+	}
+	dev->drv_data = NULL;
+}
+
+CUsbDev *UsbDevEnum(I64 port)
+{//Enumerate device on root port (already reset + enabled). USB task only.
+	CUsbDev			*dev;
+	CUsbDevDesc		*dd;
+	CUsbConfigDesc	*cd;
+	U8				*buf;
+	I64				 slot, code, sc, total, mps0;
+
+	sc = XhciPortSC(port);
+	slot = XhciEnableSlot;
+	if (!slot)
+	{
+		"USB: port %d: Enable Slot failed.\n", port;
+		return NULL;
+	}
+	dev = UsbDevAlloc;
+	if (!dev)
+	{
+		XhciDisableSlot(slot);
+		return NULL;
+	}
+	dev->slot  = slot;
+	dev->port  = port;
+	dev->speed = (sc >> 10) & 0xF;
+	dev->present = TRUE;
+	dev->configured = FALSE;
+	dev->drv_data = NULL;
+	dev->desc_name[0] = 0;
+
+	code = XhciAddressDev(dev);
+	if (code != XHCI_CC_SUCCESS)
+	{
+		"USB: port %d: Address Device failed (%d).\n", port, code;
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	Sleep(5);
+
+	buf = CAlloc(512, sys_task->code_heap);
+	dd = buf;
+
+//First 8 bytes to learn EP0 max packet size.
+	code = UsbGetDesc(dev, USB_DESC_DEV, 0, buf, 8);
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		"USB: port %d: GET_DESCRIPTOR(8) failed (%d).\n", port, code;
+		Free(buf);
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	mps0 = dd->max_packet0;
+	if (dev->speed == USB_SPEED_SUPER)
+		mps0 = 1 << mps0;	//SS stores exponent
+	if (mps0 && mps0 != dev->ep0.max_packet)
+		XhciEvalCtxMPS0(dev, mps0);
+
+	code = UsbGetDesc(dev, USB_DESC_DEV, 0, buf, 18);
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		"USB: port %d: GET_DESCRIPTOR failed (%d).\n", port, code;
+		Free(buf);
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	dev->vendor_id	  = dd->vendor_id;
+	dev->product_id	  = dd->product_id;
+	dev->dev_class	  = dd->dev_class;
+	dev->dev_subclass = dd->dev_subclass;
+	dev->dev_proto	  = dd->dev_proto;
+	UsbStrGet(dev, dd->i_product, dev->desc_name, 64);
+
+//Config descriptor: header first for total length, then full.
+	code = UsbGetDesc(dev, USB_DESC_CONFIG, 0, buf, 9);
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		"USB: port %d: GET_CONFIG failed (%d).\n", port, code;
+		Free(buf);
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	cd = buf;
+	total = cd->total_len;
+	if (total > 512)
+		total = 512;
+	code = UsbGetDesc(dev, USB_DESC_CONFIG, 0, buf, total);
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		Free(buf);
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	dev->config_val = cd->config_val;
+	UsbParseConfig(dev, buf, total);
+	Free(buf);
+
+	if (dev->ep_count)
+	{
+		code = XhciConfigureEPs(dev);
+		if (code != XHCI_CC_SUCCESS)
+		{
+			"USB: port %d: Configure Endpoint failed (%d).\n", port, code;
+			UsbDevDetachCore(dev);
+			return NULL;
+		}
+	}
+	code = UsbCtrl(dev, USB_RT_HOST_TO_DEV, USB_RQ_SET_CONFIG, dev->config_val, 0, NULL, 0);
+	if (code != XHCI_CC_SUCCESS)
+	{
+		"USB: port %d: SET_CONFIGURATION failed (%d).\n", port, code;
+		UsbDevDetachCore(dev);
+		return NULL;
+	}
+	dev->configured = TRUE;
+
+	SysLog("USB: port %d: %04X:%04X class %d \"%s\" (%d ifs, %d eps)\n",
+		   port, dev->vendor_id, dev->product_id, dev->dev_class,
+		   dev->desc_name, dev->if_count, dev->ep_count);
+
+	return dev;
+}

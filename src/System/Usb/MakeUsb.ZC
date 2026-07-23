@@ -1,0 +1,155 @@
+//USB stack build + boot task.
+Cd(__DIR__);;
+#include "UsbDefs"
+#include "Xhci"
+#include "Usb"
+#include "UsbHid"
+#include "UsbMsd"
+Cd("..");;
+
+U0 UsbDrvBind(CUsbDev *dev)
+{//Attach class drivers to a freshly configured device.
+	CUsbIf	*uif;
+	I64		 i;
+
+	for (i = 0; i < dev->if_count; i++)
+	{
+		uif = &dev->ifs[i];
+		if (!uif->valid)
+			goto next_if;
+		if (uif->if_class == USB_CLASS_HID)
+		{
+			if (uif->if_subclass == USB_HID_SUBCLASS_BOOT &&
+				(uif->if_proto == USB_HID_PROTO_KBD || uif->if_proto == USB_HID_PROTO_MOUSE))
+				UsbHidAttach(dev, uif);
+			else
+				SysLog("USB: port %d: non-boot HID interface ignored.\n", dev->port);
+		}
+		else if (uif->if_class == USB_CLASS_MSD)
+		{
+			if (uif->if_subclass == USB_MSD_SUBCLASS_SCSI)
+				UsbMsdAttach(dev, uif);
+			else
+				SysLog("USB: port %d: MSD subclass 0x%02X unsupported.\n",
+					   dev->port, uif->if_subclass);
+		}
+		else if (uif->if_class == USB_CLASS_HUB)
+			SysLog("USB: port %d: hubs not yet supported.\n", dev->port);
+next_if:;
+	}
+}
+
+U0 UsbDrvUnbind(CUsbDev *dev)
+{
+	UsbHidDetach(dev);
+	UsbMsdDetach(dev);
+}
+
+U0 UsbPortScan()
+{//Check all root ports for connects/disconnects. USB task only.
+	CUsbDev	*dev, *ndev;
+	I64		 port, sc;
+
+	for (port = 0; port < usb_xhci.max_ports; port++)
+	{
+		sc = XhciPortSC(port);
+		if (sc & XHCI_PORTSC_CHANGE_BITS)
+			XhciPortSCWrite(port, XHCI_PORTSC_PP | (sc & XHCI_PORTSC_CHANGE_BITS));
+		dev = UsbDevByPort(port);
+		if (sc & XHCI_PORTSC_CCS)
+		{
+			if (!dev)
+			{
+				if (XhciPortReset(port))
+				{
+					ndev = UsbDevEnum(port);
+					if (ndev)
+						UsbDrvBind(ndev);
+				}
+			}
+		}
+		else if (dev)
+		{
+			UsbDrvUnbind(dev);
+			UsbDevDetachCore(dev);
+			SysLog("USB: port %d: device removed.\n", port);
+		}
+	}
+}
+
+public U0 UsbRep()
+{//Report attached USB devices.
+	CUsbDev	*dev;
+	CUsbIf	*uif;
+	I64		 i, j;
+
+	if (!usb_xhci.present)
+	{
+		"No xHCI controller.\n";
+		return;
+	}
+	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
+	for (i = 0; i < USB_DEVS_MAX; i++)
+	{
+		dev = &usb_devs[i];
+		if (dev->present)
+		{
+			"Port %2d: %04X:%04X \"%s\"", dev->port, dev->vendor_id,
+					dev->product_id, dev->desc_name;
+			for (j = 0; j < dev->if_count; j++)
+			{
+				uif = &dev->ifs[j];
+				if (uif->if_class == USB_CLASS_HID && uif->if_proto == USB_HID_PROTO_KBD)
+					" [keyboard]";
+				else if (uif->if_class == USB_CLASS_HID && uif->if_proto == USB_HID_PROTO_MOUSE)
+					" [mouse]";
+				else if (uif->if_class == USB_CLASS_MSD)
+					" [storage]";
+				else if (uif->if_class == USB_CLASS_HUB)
+					" [hub]";
+				else
+					" [class %d]", uif->if_class;
+			}
+			"\n";
+		}
+	}
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+			"Storage %d: %d MB, drives from %C:.\n", i,
+					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
+					usb_msds[i].first_drive_let;
+}
+
+U0 UsbTaskMain(I64 dummy=0)
+{
+	I64 tick = 0;
+
+	no_warn dummy;
+	if (!XhciInit)
+		return;
+	Sleep(100);	//let port connect status settle after reset
+	UsbPortScan;
+	while (TRUE)
+	{
+		XhciEventPoll;
+		UsbHidTick;
+		tick++;
+		if (usb_xhci.port_change || tick & 0x7F == 0)
+		{
+			usb_xhci.port_change = FALSE;
+			UsbPortScan;
+		}
+		Sleep(2);
+	}
+}
+
+U0 UsbInit()
+{
+	MemSet(&usb_xhci, 0, sizeof(CXhciGlobals));
+	MemSet(usb_devs, 0, sizeof(CUsbDev) * USB_DEVS_MAX);
+	MemSet(usb_hids, 0, sizeof(CUsbHid) * USB_HIDS_MAX);
+	MemSet(usb_msds, 0, sizeof(CUsbMsd) * USB_MSDS_MAX);
+	usb_task = Spawn(&UsbTaskMain, NULL, "USB");
+}
+
+UsbInit;
