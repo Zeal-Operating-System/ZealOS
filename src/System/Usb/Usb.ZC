@@ -116,7 +116,7 @@ U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
 					if (epd->addr & 0x80)
 						ep->dci |= 1;
 					ep->valid	= TRUE;
-					ep->auto_cb	= NULL;
+					ep->auto_kind = USB_AUTO_NONE;
 					cur_if->ep_idxs[cur_if->ep_count] = dev->ep_count;
 					cur_if->ep_count++;
 					dev->ep_count++;
@@ -143,7 +143,7 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 	for (i = 0; i < USB_EPS_MAX; i++)
 	{
 		dev->eps[i].valid = FALSE;
-		dev->eps[i].auto_cb = NULL;
+		dev->eps[i].auto_kind = USB_AUTO_NONE;
 	}
 	dev->drv_data = NULL;
 }

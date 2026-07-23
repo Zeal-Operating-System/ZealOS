@@ -143,7 +143,7 @@ CUsbEP *UsbDevEPByDCI(CUsbDev *dev, I64 dci)
 }
 
 U0 XhciIntQueue(CUsbDev *dev, CUsbEP *ep)
-{//Queue one interrupt IN TRB on ep, report delivered via ep->auto_cb.
+{//Queue one interrupt IN TRB on ep, report dispatched via ep->auto_kind.
 	XhciLock;
 	ep->pending_trb = XhciRingEnq(&ep->ring, ep->auto_buf, 0, ep->auto_len,
 								  (XHCI_TRB_NORMAL << 10) | XHCI_TRBF_IOC | XHCI_TRBF_ISP);
@@ -188,10 +188,20 @@ U0 XhciEventPoll()
 					ep = UsbDevEPByDCI(dev, dci);
 					if (ep)
 					{
-						if (ep->auto_cb)
+						if (ep->auto_kind)
 						{//HID interrupt IN: deliver + requeue
 							if (code == XHCI_CC_SUCCESS || code == XHCI_CC_SHORT_PKT)
-								(*ep->auto_cb)(dev, ep);
+							{
+								switch (ep->auto_kind)
+								{
+									case USB_AUTO_KBD:
+										UsbKbdCB(dev, ep);
+										break;
+									case USB_AUTO_MOUSE:
+										UsbMouseCB(dev, ep);
+										break;
+								}
+							}
 							XhciIntQueue(dev, ep);
 						}
 						else
@@ -414,7 +424,7 @@ I64 XhciAddressDev(CUsbDev *dev)
 	XhciRingInit(&dev->ep0.ring);
 	dev->ep0.dci = 1;
 	dev->ep0.valid = TRUE;
-	dev->ep0.auto_cb = NULL;
+	dev->ep0.auto_kind = USB_AUTO_NONE;
 
 	switch (dev->speed)
 	{

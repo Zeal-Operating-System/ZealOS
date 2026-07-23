@@ -216,6 +216,16 @@ class CUsbEPDesc
 #define XHCI_RING_TRBS			256	//4096 / 16
 #define XHCI_EVT_RING_TRBS		256
 
+//Interrupt-IN auto-requeue report handler kinds (see CUsbEP.auto_kind).
+#define USB_AUTO_NONE			0
+#define USB_AUTO_KBD			1
+#define USB_AUTO_MOUSE			2
+
+//Forward decls: report handlers live in UsbHid.ZC (compiled after Xhci.ZC),
+//but XhciEventPoll dispatches to them. Single-pass compiler needs these.
+extern U0 UsbKbdCB(U8 *dev, U8 *ep);
+extern U0 UsbMouseCB(U8 *dev, U8 *ep);
+
 class CXhciTRB
 {//16 bytes
 	U32	lo, hi, status, control;
@@ -241,10 +251,12 @@ class CUsbEP
 	Bool		 xfer_done;
 	I64			 xfer_code,		//xHCI completion code
 				 xfer_residue;	//untransferred bytes
-//Async auto-requeue (HID interrupt IN)
+//Async auto-requeue (HID interrupt IN). auto_kind selects the report handler
+//(USB_AUTO_*); dispatched in XhciEventPoll. Avoids a function-pointer struct
+//member (which the ZealC JIT class parser rejects) and keeps late binding.
 	U8			*auto_buf;
-	I64			 auto_len;
-	U0			(*auto_cb)(U8 *dev, U8 *ep);	//really (CUsbDev*,CUsbEP*); report in auto_buf
+	I64			 auto_len,
+				 auto_kind;
 	CXhciTRB	*pending_trb;
 };
 

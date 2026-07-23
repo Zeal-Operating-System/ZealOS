@@ -229,12 +229,12 @@ U0 UsbHidAttach(CUsbDev *dev, CUsbIf *uif)
 	if (uif->if_proto == USB_HID_PROTO_KBD)
 	{
 		ep->auto_len = 8;
-		ep->auto_cb	 = &UsbKbdCB;
+		ep->auto_kind = USB_AUTO_KBD;
 		SysLog("USB: HID keyboard on port %d.\n", dev->port);
 	}
 	else
 	{
-		ep->auto_cb = &UsbMouseCB;
+		ep->auto_kind = USB_AUTO_MOUSE;
 		mouse_hard.installed = TRUE;	//menu bar + cursor paths check this
 		SysLog("USB: HID mouse on port %d.\n", dev->port);
 	}
