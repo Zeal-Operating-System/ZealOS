@@ -171,7 +171,10 @@ U0 UsbBootDriveFallback()
 		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
 		{
 			drive = Letter2Drive(usb_msds[i].first_drive_let, FALSE);
-			if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL)
+//Only a drive with a real, mountable filesystem can be a boot drive;
+//skip raw/unformatted sticks (FSt_UNKNOWN) exposed just for DiskPart.
+			if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL &&
+				(drive->fs_type == FSt_REDSEA || drive->fs_type == FSt_FAT32))
 			{
 				blkdev.boot_drive_let = usb_msds[i].first_drive_let;
 				"USB: boot drive falling back to %C:.\n", blkdev.boot_drive_let;

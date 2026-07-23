@@ -30,7 +30,7 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 	}
 }
 
-Bool BlkDevRawBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+public Bool BlkDevRawBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {//Whole-device read, bypassing partition bounds. Dispatches on BlkDev type.
 //Used by $LK,"BlkDevAdd",A="MN:BlkDevAdd"$() partition scans and boot-loader installers.
 	if (bd->type == BDT_USB)
@@ -42,7 +42,7 @@ Bool BlkDevRawBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	return AHCIAtaBlksRead(bd, buf, blk, count);
 }
 
-Bool BlkDevRawBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+public Bool BlkDevRawBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {//Whole-device write, bypassing partition bounds. Dispatches on BlkDev type.
 	if (bd->type == BDT_USB)
 	{

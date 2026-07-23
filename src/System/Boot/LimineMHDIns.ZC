@@ -3,6 +3,24 @@
 U8 binary_limine_hdd_bin_data[0];
 #endif
 
+Bool LimineRawRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Runtime-dispatched raw read (parses on pre-USB bootstrap kernels).
+	CHashFun *f = HashFind("BlkDevRawBlksRead", Fs->hash_table, HTT_FUN);
+
+	if (f)
+		return CallInd(f->exe_addr, bd, buf, blk, count);
+	return AHCIAtaBlksRead(bd, buf, blk, count);
+}
+
+Bool LimineRawWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Runtime-dispatched raw write (parses on pre-USB bootstrap kernels).
+	CHashFun *f = HashFind("BlkDevRawBlksWrite", Fs->hash_table, HTT_FUN);
+
+	if (f)
+		return CallInd(f->exe_addr, bd, buf, blk, count);
+	return AHCIAtaBlksWrite(bd, buf, blk, count);
+}
+
 Bool LimineCFGMake(U8 drv_let)
 {
 	U8		*filename_cfg = MStrPrint("%C:/Boot/Limine.CONF", drv_let);
@@ -87,13 +105,13 @@ Bool LimineMHDIns(U8 drv_let)
 
 	BlkDevLock(bd);
 
-	BlkDevRawBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
+	LimineRawRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
 	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
 
 	// read the whole MBR + post-MBR-gap that Limine wants to overwrite, save all of that as an OldMBR.BIN
 	BootMHDOldRead(drv_let, drv_let, 63);
 
-	BlkDevRawBlksWrite(bd, limine, 0, 63); // write Limine to MBR and post-MBR gap
+	LimineRawWrite(bd, limine, 0, 63); // write Limine to MBR and post-MBR gap
 
 	BlkDevUnlock(bd);
 

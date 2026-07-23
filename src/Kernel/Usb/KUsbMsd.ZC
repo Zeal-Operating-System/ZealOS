@@ -251,9 +251,9 @@ U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
 	CUsbEP		*ep;
 	CBlkDev		*bd;
 	CDrive		*drive;
-	CRedSeaBoot	*rsb;
+	CMasterBoot	*mbr;
 	U8			 inq[40];
-	I64			 i, tries, res, msd_idx = 0, iso_off, is_iso = FALSE;
+	I64			 i, tries, res, msd_idx = 0, is_iso = FALSE, partitioned = FALSE;
 
 	if (uif->if_proto != USB_MSD_PROTO_BOT)
 	{
@@ -333,39 +333,81 @@ U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
 	bd->port_num = msd_idx;
 	msd->bd = bd;
 
-//Install-media probe: a ZealOS distro ISO written raw to a stick carries a
-//RedSea filesystem at the fixed DVD-image offset (same one MountFile uses).
-//If found, mount whole-drive read-only so the OS can boot/install from USB.
-	iso_off = 19 << 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;
-	rsb = msd->bounce;
-	if (msd->max_lba > iso_off && UsbMsdBlksRead(bd, rsb, iso_off, 1))
-		if (rsb->signature == MBR_PT_REDSEA && rsb->signature2 == 0xAA55)
+//Install-media probe: a distro ISO written raw to a stick has an ISO9660
+//volume descriptor "CD001" at logical block 16 (2048-byte sectors = block 64
+//of 512). If present, mount it via the kernel's ISO path, which also detects a
+//"ZealOS RedSea" ISO and mounts the embedded RedSea filesystem. So a raw-dd'd
+//ZealOS ISO (limine ISO9660 OR native RedSea) becomes a bootable USB drive.
+	if (msd->max_lba >= 68 && UsbMsdBlksRead(bd, msd->bounce, 64, 4))
+		if (!MemCompare(msd->bounce + 1, "CD001", 5))
 			is_iso = TRUE;
 	if (is_iso)
 	{
-		bd->drv_offset	 = iso_off;
-		bd->flags		|= BDF_READ_ONLY;
-		res = BlkDevAdd(bd, , TRUE, FALSE);
-		if (res)
+//ISO9660 uses 2048-byte logical sectors: make ISOInit compute spc = 4.
+//Reads still go through BlkRead in 512-byte units (blk_size only sets spc).
+		bd->bd_signature	 = BD_SIGNATURE_VAL;
+		bd->blk_size		 = DVD_BLK_SIZE;
+		bd->flags			|= BDF_READ_ONLY;
+		bd->flags			&= ~BDF_READ_CACHE;
+		drive = DriveMakeFreeSlot(msd->first_drive_let);
+		drive->bd				= bd;
+		drive->drive_signature	= DRIVE_SIGNATURE_VAL;
+		drive->drv_offset		= 0;
+		drive->size				= msd->max_lba + 1;
+		if (ISOInit(drive, (32767 / bd->blk_size + 1) * bd->blk_size >> BLK_SIZE_BITS))
 		{
-			drive = Letter2Drive(msd->first_drive_let, FALSE);
-			if (drive && RedSeaValidate(msd->first_drive_let))
-				RedSeaInit(drive);
+			res = 1;
 			usb_boot_iso_drv_let = msd->first_drive_let;
-			SysLog("USB: MSD port %d: ZealOS install media, RedSea drive %C:.\n",
-				   dev->port, msd->first_drive_let);
+			BlkDevLockFwdingSet(bd);
+			SysLog("USB: MSD port %d: ZealOS install media (%Z) drive %C:.\n",
+				   dev->port, drive->fs_type, "ST_DRIVE_TYPES", msd->first_drive_let);
+		}
+		else
+		{
+			drive->drive_signature = 0;
+			bd->blk_size = BLK_SIZE;
+			BlkDevDel(bd);
+			msd->bd = NULL;
 		}
 	}
 	else
-		res = BlkDevAdd(bd, , FALSE, FALSE);
-	if (res)
-		SysLog("USB: MSD port %d: \"%s\" %d MB mounted, %d partition(s), first drive %C:.\n",
-			   dev->port, &inq[8], ((msd->max_lba + 1) * BLK_SIZE) / 0x100000, res,
-			   msd->first_drive_let);
-	else
 	{
-		SysLog("USB: MSD port %d: no mountable partitions.\n", dev->port);
-		msd->bd = NULL;
+//Check for a partition table ourselves. BlkDevAdd() calls BlkDevDel() (which
+//zeroes the bd) when it finds no partitions, so only call it when there IS one.
+		if (UsbMsdBlksRead(bd, msd->bounce, 0, 1))
+		{
+			mbr = msd->bounce;
+			if (mbr->signature == 0xAA55)
+				for (i = 0; i < 4; i++)
+					if (mbr->p[i].type)
+						partitioned = TRUE;
+		}
+		if (partitioned)
+			res = BlkDevAdd(bd, , FALSE, FALSE);
+		if (res)
+			SysLog("USB: MSD port %d: \"%s\" %d MB mounted, first drive %C:.\n",
+				   dev->port, &inq[8], ((msd->max_lba + 1) * BLK_SIZE) / 0x100000,
+				   msd->first_drive_let);
+		else
+		{
+//Blank/unformatted (or BlkDevAdd deleted bd): expose a fresh whole-device raw
+//drive so DiskPart/Format can target it (DriveCheck requires a drive_signature).
+//Marked FSt_UNKNOWN so UsbBootDriveFallback won't pick it as a boot drive.
+			bd = BlkDevNextFreeSlot(msd->first_drive_let, BDT_USB);
+			bd->max_blk			= msd->max_lba;
+			bd->port_num		= msd_idx;
+			bd->bd_signature	= BD_SIGNATURE_VAL;
+			msd->bd = bd;
+			drive = DriveMakeFreeSlot(msd->first_drive_let);
+			drive->bd				= bd;
+			drive->drv_offset		= 0;
+			drive->size				= msd->max_lba + 1;
+			drive->fs_type			= FSt_UNKNOWN;
+			drive->drive_signature	= DRIVE_SIGNATURE_VAL;
+			BlkDevLockFwdingSet(bd);
+			SysLog("USB: MSD port %d: unformatted %d MB, raw drive %C: (DiskPart/Format to use).\n",
+				   dev->port, ((msd->max_lba + 1) * BLK_SIZE) / 0x100000, msd->first_drive_let);
+		}
 	}
 }
 
