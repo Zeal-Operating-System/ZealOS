@@ -20,6 +20,9 @@ class CUsbHid
 
 CUsbHid usb_hids[USB_HIDS_MAX];
 
+//Absolute cursor position maintained by the USB mouse (pixels).
+I64 usb_mouse_x = 0, usb_mouse_y = 0;
+
 //HID usage (page 7) -> set-1 scancode. 0x100 flag = 0xE0-prefixed.
 I64 usb_hid_to_sc[0x66] = {
 	0,     0,     0,     0,     0x1E,  0x30,  0x2E,  0x20,	//00-07: ---- a b c d
@@ -151,16 +154,22 @@ U0 UsbMouseCB(U8 *d, U8 *e)
 			dz -= 256;
 	}
 
-	mouse_hard.timestamp = TSCGet;
-	MouseHardSetPre;
-	mouse_hard.bttns[0] =  rep[0] & 1;
-	mouse_hard.bttns[1] = (rep[0] & 2) >> 1;
-	mouse_hard.bttns[2] = (rep[0] & 4) >> 2;
-	mouse_hard.prescale.x += dx;
-	mouse_hard.prescale.y += dy;
-	mouse_hard.prescale.z += dz;
-	mouse.show = TRUE;
-	MouseHardSetPost;
+//Drive the cursor directly. The kernel prescale/MouseHardSetPost path is meant
+//for the PS/2 handler and gets clobbered by WinMgr's per-frame PS/2 polling;
+//we own an absolute position and write mouse_hard.pos ourselves.
+	usb_mouse_x = ClampI64(usb_mouse_x + dx, 0, sys_framebuffer_width  - 1);
+	usb_mouse_y = ClampI64(usb_mouse_y + dy, 0, sys_framebuffer_height - 1);
+
+	mouse_hard.timestamp	 = TSCGet;
+	MemCopy(&mouse_hard_last, &mouse_hard, sizeof(CMouseHardStateGlobals));
+	mouse_hard.pos.x		 = usb_mouse_x;
+	mouse_hard.pos.y		 = usb_mouse_y;
+	mouse_hard.pos.z		+= dz;
+	mouse_hard.bttns[0]		 =  rep[0] & 1;
+	mouse_hard.bttns[1]		 = (rep[0] & 2) >> 1;
+	mouse_hard.bttns[2]		 = (rep[0] & 4) >> 2;
+	mouse_hard.event		 = TRUE;
+	mouse.show				 = TRUE;
 }
 
 U0 UsbHidTick()
@@ -235,7 +244,12 @@ U0 UsbHidAttach(CUsbDev *dev, CUsbIf *uif)
 	else
 	{
 		ep->auto_kind = USB_AUTO_MOUSE;
-		mouse_hard.installed = TRUE;	//menu bar + cursor paths check this
+//Own the cursor: mark installed so WinMouseUpdate consumes our events, and
+//irqs_working so WinMgr does NOT poll (and clobber) the PS/2 mouse state.
+		mouse_hard.installed	= TRUE;
+		mouse_hard.irqs_working	= TRUE;
+		usb_mouse_x = sys_framebuffer_width  >> 1;
+		usb_mouse_y = sys_framebuffer_height >> 1;
 		SysLog("USB: HID mouse on port %d.\n", dev->port);
 	}
 	XhciIntQueue(dev, ep);
