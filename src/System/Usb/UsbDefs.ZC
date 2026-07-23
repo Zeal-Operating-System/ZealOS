@@ -240,7 +240,10 @@ class CXhciRing
 
 class CUsbEP
 {
-	CXhciRing	 ring;
+//ring is a POINTER, not embedded: CUsbEP is itself embedded by value in CUsbDev,
+//and the ZealC JIT class parser rejects two-level by-value class nesting
+//(CUsbDev -> CUsbEP -> CXhciRing). Keeping ring a pointer flattens CUsbEP.
+	CXhciRing	*ring;
 	I64			 dci,			//xHCI device context index
 				 addr,			//USB endpoint address (with 0x80 dir bit)
 				 attr,			//descriptor attributes
