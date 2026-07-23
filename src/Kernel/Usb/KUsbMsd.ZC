@@ -245,31 +245,15 @@ Bool UsbMsdBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	return UsbMsdBlksRW(bd, buf, blk, count, TRUE);
 }
 
-Bool UsbMsdKernelHooksSet()
-{//Resolve kernel USB hooks at runtime so an old Kernel.ZXE degrades gracefully
-//(HID still works, storage disabled) instead of hard-failing the System compile.
-	CHashGlobalVar	*r, *w;
-	U64				*p;
-
-	r = HashFind("fp_usb_msd_blks_read",  Fs->hash_table, HTT_GLOBAL_VAR);
-	w = HashFind("fp_usb_msd_blks_write", Fs->hash_table, HTT_GLOBAL_VAR);
-	if (!r || !w || !r->data_addr || !w->data_addr)
-		return FALSE;
-	p = r->data_addr;
-	*p = &UsbMsdBlksRead;
-	p = w->data_addr;
-	*p = &UsbMsdBlksWrite;
-
-	return TRUE;
-}
-
 U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
 {//Bind a Bulk-Only SCSI mass storage interface, mount partitions.
-	CUsbMsd	*msd = NULL;
-	CUsbEP	*ep;
-	CBlkDev	*bd;
-	U8		 inq[40];
-	I64		 i, tries, res, msd_idx = 0;
+	CUsbMsd		*msd = NULL;
+	CUsbEP		*ep;
+	CBlkDev		*bd;
+	CDrive		*drive;
+	CRedSeaBoot	*rsb;
+	U8			 inq[40];
+	I64			 i, tries, res, msd_idx = 0, iso_off, is_iso = FALSE;
 
 	if (uif->if_proto != USB_MSD_PROTO_BOT)
 	{
@@ -340,19 +324,40 @@ U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
 	}
 	msd->ready = TRUE;
 
-	if (!UsbMsdKernelHooksSet)
-	{
-		SysLog("USB: MSD port %d: kernel lacks USB block hooks (rebuild kernel); storage not mounted.\n",
-			   dev->port);
-		return;
-	}
+	fp_usb_msd_blks_read  = &UsbMsdBlksRead;
+	fp_usb_msd_blks_write = &UsbMsdBlksWrite;
 
 	msd->first_drive_let = DriveNextFreeLet('V');
 	bd = BlkDevNextFreeSlot(msd->first_drive_let, BDT_USB);
 	bd->max_blk	 = msd->max_lba;
 	bd->port_num = msd_idx;
 	msd->bd = bd;
-	res = BlkDevAdd(bd, , FALSE, FALSE);
+
+//Install-media probe: a ZealOS distro ISO written raw to a stick carries a
+//RedSea filesystem at the fixed DVD-image offset (same one MountFile uses).
+//If found, mount whole-drive read-only so the OS can boot/install from USB.
+	iso_off = 19 << 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;
+	rsb = msd->bounce;
+	if (msd->max_lba > iso_off && UsbMsdBlksRead(bd, rsb, iso_off, 1))
+		if (rsb->signature == MBR_PT_REDSEA && rsb->signature2 == 0xAA55)
+			is_iso = TRUE;
+	if (is_iso)
+	{
+		bd->drv_offset	 = iso_off;
+		bd->flags		|= BDF_READ_ONLY;
+		res = BlkDevAdd(bd, , TRUE, FALSE);
+		if (res)
+		{
+			drive = Letter2Drive(msd->first_drive_let, FALSE);
+			if (drive && RedSeaValidate(msd->first_drive_let))
+				RedSeaInit(drive);
+			usb_boot_iso_drv_let = msd->first_drive_let;
+			SysLog("USB: MSD port %d: ZealOS install media, RedSea drive %C:.\n",
+				   dev->port, msd->first_drive_let);
+		}
+	}
+	else
+		res = BlkDevAdd(bd, , FALSE, FALSE);
 	if (res)
 		SysLog("USB: MSD port %d: \"%s\" %d MB mounted, %d partition(s), first drive %C:.\n",
 			   dev->port, &inq[8], ((msd->max_lba + 1) * BLK_SIZE) / 0x100000, res,

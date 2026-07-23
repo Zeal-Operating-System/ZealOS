@@ -217,6 +217,8 @@ U0 KMain()
 	Spawn(&MouseHardDriverInstall);
 	"Spawn(&MouseRawWatcher,, \"MouseRawWatcher\");\n";
 	Spawn(&MouseRawWatcher,, "MouseRawWatcher");
+	"Spawn(&UsbTaskMain,, \"USB\");\n";
+	Spawn(&UsbTaskMain,, "USB");
 
 	"Load(\"Compiler\");\n";
 	Cd("/Compiler");

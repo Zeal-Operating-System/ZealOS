@@ -1,6 +1,13 @@
 //xHCI (USB3) host controller driver. Polled, no MSI.
-//All USB commands are issued from the USB task only.
-//Sync transfers may be awaited from any task (event poll runs in USB task).
+//Commands are issued from the USB task, or from the boot task before it exists.
+//Sync transfers may be awaited from any task; XhciEventPoll is the single
+//event ring consumer, guarded by usb_xhci.poll_lock so the boot task and the
+//USB task can never drain it concurrently.
+
+CXhciGlobals	 usb_xhci;
+CUsbDev			 usb_devs[USB_DEVS_MAX];
+CTask			*usb_task = NULL;
+U8				 usb_boot_iso_drv_let = 0;
 
 U32 XhciCapR32(I64 off)
 {
@@ -170,6 +177,8 @@ U0 XhciEventPoll()
 
 	if (!usb_xhci.running)
 		return;
+	while (LBts(&usb_xhci.poll_lock, 0))
+		Yield;
 	while (TRUE)
 	{
 		e = &usb_xhci.evt_ring[usb_xhci.evt_deq];
@@ -240,6 +249,7 @@ U0 XhciEventPoll()
 		erdp = usb_xhci.rt + XHCI_RT_ERDP0;
 		*erdp = addr | 8;	//8 = clear Event Handler Busy
 	}
+	LBtr(&usb_xhci.poll_lock, 0);
 }
 
 I64 XhciCmd(I64 lo, I64 hi, I64 status, I64 control, I64 *_slot=NULL)
@@ -272,7 +282,7 @@ I64 XhciXferWait(CUsbEP *ep, F64 timeout_s)
 
 	while (!ep->xfer_done && tS < timeout)
 	{
-		if (Fs == usb_task)
+		if (Fs == usb_task || !usb_task)
 			XhciEventPoll;
 		Yield;
 	}

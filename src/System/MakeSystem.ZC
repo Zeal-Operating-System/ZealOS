@@ -25,5 +25,4 @@ LBts(&sys_run_level, RLf_DOC);
 #include "Define"
 #include "WallPaper"
 #include "Mouse"
-#include "Usb/MakeUsb"
 Cd("..");;

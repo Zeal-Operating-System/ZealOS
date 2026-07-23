@@ -1,11 +1,5 @@
-//USB stack build + boot task.
-Cd(__DIR__);;
-#include "UsbDefs"
-#include "Xhci"
-#include "Usb"
-#include "UsbHid"
-#include "UsbMsd"
-Cd("..");;
+//USB boot integration: driver binding, hotplug scan, boot-time init,
+//boot-drive fallback, USB task.
 
 U0 UsbDrvBind(CUsbDev *dev)
 {//Attach class drivers to a freshly configured device.
@@ -121,14 +115,13 @@ public U0 UsbRep()
 }
 
 U0 UsbTaskMain(I64 dummy=0)
-{
+{//Hotplug + HID poll loop. Spawned from $LK,"KMain",A="FF:::/Kernel/KMain.ZC,UsbTaskMain"$.
 	I64 tick = 0;
 
 	no_warn dummy;
-	if (!XhciInit)
+	usb_task = Fs;
+	if (!usb_xhci.running)
 		return;
-	Sleep(100);	//let port connect status settle after reset
-	UsbPortScan;
 	while (TRUE)
 	{
 		XhciEventPoll;
@@ -143,13 +136,46 @@ U0 UsbTaskMain(I64 dummy=0)
 	}
 }
 
-U0 UsbInit()
-{
-	MemSet(&usb_xhci, 0, sizeof(CXhciGlobals));
-	MemSet(usb_devs, 0, sizeof(CUsbDev) * USB_DEVS_MAX);
-	MemSet(usb_hids, 0, sizeof(CUsbHid) * USB_HIDS_MAX);
-	MemSet(usb_msds, 0, sizeof(CUsbMsd) * USB_MSDS_MAX);
-	usb_task = Spawn(&UsbTaskMain, NULL, "USB");
+I64 UsbBootInit()
+{//Init xHCI + enumerate + auto-mount USB storage. Called from
+//$LK,"BlkDevsInitAll",A="FF:::/Kernel/BlkDev/DiskAddDev.ZC,UsbBootInit"$ before
+//the kernel config's mount code runs, so USB drives exist at boot.
+	I64 i, count = 0;
+
+	if (!XhciInit)
+		return 0;
+	Sleep(100);	//let root port connect status settle
+	UsbPortScan;
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+			count++;
+
+	return count;
 }
 
-UsbInit;
+U0 UsbBootDriveFallback()
+{//If the configured boot drive did not mount, fall back to USB media.
+//Called at the end of $LK,"BlkDevsInitAll",A="FF:::/Kernel/BlkDev/DiskAddDev.ZC,UsbBootDriveFallback"$.
+	CDrive	*drive = Letter2Drive(blkdev.boot_drive_let, FALSE);
+	I64		 i;
+
+	if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL)
+		return;
+	if (usb_boot_iso_drv_let)
+	{
+		blkdev.boot_drive_let = usb_boot_iso_drv_let;
+		"USB: boot drive falling back to install media %C:.\n", usb_boot_iso_drv_let;
+		return;
+	}
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+		{
+			drive = Letter2Drive(usb_msds[i].first_drive_let, FALSE);
+			if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL)
+			{
+				blkdev.boot_drive_let = usb_msds[i].first_drive_let;
+				"USB: boot drive falling back to %C:.\n", blkdev.boot_drive_let;
+				return;
+			}
+		}
+}
