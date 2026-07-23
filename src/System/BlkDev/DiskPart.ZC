@@ -3,10 +3,16 @@
 Bool DiskPartRawWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {//Whole-device raw write. USB-capable kernels export BlkDevRawBlksWrite;
 //resolve at runtime so this file still parses on pre-USB bootstrap kernels.
-	CHashFun *f = HashFind("BlkDevRawBlksWrite", Fs->hash_table, HTT_FUN);
+	CHash	*h = HashFind("BlkDevRawBlksWrite", Fs->hash_table, HTT_FUN | HTT_EXPORT_SYS_SYM);
+	I64		 fp = 0;
 
-	if (f)
-		return CallInd(f->exe_addr, bd, buf, blk, count);
+	if (h)
+		if (h->type & HTT_FUN)
+			fp = h(CHashFun *)->exe_addr;
+		else
+			fp = h(CHashExport *)->val;
+	if (fp)
+		return CallInd(fp, bd, buf, blk, count);
 	return AHCIAtaBlksWrite(bd, buf, blk, count);
 }
 
