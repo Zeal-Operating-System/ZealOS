@@ -259,6 +259,22 @@ U0 BlkDevsInitAll()
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 
+//Self-contained (RAM-distro) boot: ZealBooter loaded the OS image as a limine
+//module and passed its physical address. Mount it as RAM drive B: (already a
+//RedSea filesystem) and boot from it -- no disk controller needed, so this
+//boots from any loader (Limine ISO/CD/USB, Ventoy, PXE).
+	if (sys_ram_distro_base)
+	{
+		bd = BlkDevNextFreeSlot('B', BDT_RAM);
+		bd->RAM_disk = sys_ram_distro_base;
+		bd->max_blk  = (sys_ram_distro_size >> BLK_SIZE_BITS) - 1;
+		if (BlkDevAdd(bd, , TRUE, TRUE))
+		{
+			blkdev.boot_drive_let = 'B';
+			"\nRAM-distro: booting from embedded image, drive B:.\n";
+		}
+	}
+
 	"\nAHCIInit;\n";
 	AHCIInit;
 

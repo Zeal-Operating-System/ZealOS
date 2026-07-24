@@ -137,6 +137,8 @@ struct CKernel {
 	uint8_t sys_is_uefi_booted;
     uint8_t sys_bootloader_id;
 	struct CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
+	uint64_t sys_ram_distro_base;
+	uint64_t sys_ram_distro_size;
 } __attribute__((packed));
 
 #define BL_ZEAL    0
@@ -235,6 +237,17 @@ void kmain(void) {
     kernel->sys_framebuffer_bpp = fb->bpp;
     kernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
 
+    // A second limine module is the self-contained OS image (RAM-distro). Pass
+    // its physical address + size to the kernel, which mounts it as RAM drive B:.
+    // The kernel is loaded low, so a large image module is fine up in high mem.
+    kernel->sys_ram_distro_base = 0;
+    kernel->sys_ram_distro_size = 0;
+    if (module_request.response->module_count >= 2) {
+        struct limine_file *img = module_request.response->modules[1];
+        kernel->sys_ram_distro_base = (uintptr_t)img->address - hhdm_request.response->offset;
+        kernel->sys_ram_distro_size = img->size;
+    }
+
     struct limine_video_mode *mode;
     for (size_t i = 0, j = 0; i < fb->mode_count && i < VBE_MODES_NUM; i++)
     {
@@ -309,8 +322,14 @@ void kmain(void) {
 
         printf("    ");
         switch (entry->type) {
-            case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
+                // Modules (incl. the RAM-distro image) must NOT be handed to the
+                // kernel heap or it would clobber them. The kernel was copied
+                // low, so the high kernel-module copy is dead here too.
+                zeal_mem_type = MEM_E820T_RESERVED;
+                printf("MODULES : ");
+                break;
+            case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_USABLE:
                 zeal_mem_type = MEM_E820T_USABLE;
                 printf("  USABLE: ");

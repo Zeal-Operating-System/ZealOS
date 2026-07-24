@@ -1,33 +1,20 @@
-//Build a SELF-CONTAINED kernel: the whole OS embedded as a RedSea distro image
-//inside Kernel.ZXE (Terry's DebugDistro mechanism), mounted at boot as RAM
-//drive B:. The result needs no disk driver after load, so any loader that
-//places the kernel in memory boots a full ZealOS: ZealBooter/Limine ISO
-//(BIOS+UEFI), Ventoy, PXE.
+//Build the RAM-distro OS image: a RedSea filesystem holding the whole OS,
+//snapshotted from a RAM drive. It ships as a separate Limine module alongside
+//the normal Kernel.ZXE (see build/build-ram-iso.sh). ZealBooter passes the
+//module address to the kernel, which mounts it as RAM drive B: and boots from
+//it -- no disk controller needed, so it boots from any loader (Limine ISO/CD/
+//USB, Ventoy, PXE).
 //
 //Run from an installed, writable system:  #include "::/Misc/DoDistroRAM"
-//Output: ::/Tmp/RAMKernel.ZXE  (kernel + embedded OS image)
-//Package on the host with build/build-ram-iso.sh.
+//Output: ::/Tmp/RAMDistro.BIN  (copy to the host, feed to build-ram-iso.sh)
 //
-//Too big for the native 16-bit boot loaders (they load below 640K);
-//ZealBooter/Limine load anywhere, any size.
+//Destroys the contents of RAM drive A: while building.
 
-#define RAMDISTRO_IMAGE			"::/Tmp/RAMDistro.ISO.C"
-#define RAMDISTRO_KERNEL		"::/Tmp/RAMKernel.ZXE"
-//File offset of the embedded image within Kernel.ZXE. Must exceed the kernel
-//code size (~0x60000). Embedded image runtime addr = mem_boot_base - sizeof(CZXE)
-//+ RAMDISTRO_OFFSET; the matching DebugDistro start value = RAMDISTRO_OFFSET +
-//BOOT_RAM_BASE (KMain's BINLOAD pad formula subtracts BOOT_RAM_BASE + sizeof(CZXE)).
-#define RAMDISTRO_OFFSET		0x100000
-#define RAMDISTRO_BOOT_DIR		"/Boot"
-#define RAMDISTRO_KERNEL_ZXE	RAMDISTRO_BOOT_DIR "/Kernel.ZXE"
-#define RAMDISTRO_DVD_KERNEL	RAMDISTRO_BOOT_DIR "/DVDKernel.ZXE"
-//Standard DVD-distro build config (boot drive T, mount RAM B + booted DVD T).
-#define RAMDISTRO_DVD_CONFIG	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
+#define RAMDISTRO_IMAGE		"::/Tmp/RAMDistro.BIN"
 
-U0 MakeRAMKernel()
-{//Two kernel compiles: a stock DVD kernel that goes INTO the image, then the
-//outer DebugDistro kernel that carries the image. Takes several minutes.
-	U8			*cfg;
+U0 MakeRAMDistro(I64 blks=0x18000)
+{//blks: image size in 512-byte blocks (default 48MB). Must exceed the OS tree.
+	CBlkDev		*bd;
 	CDirEntry	 de;
 
 	if (!DriveIsWritable)
@@ -36,75 +23,46 @@ U0 MakeRAMKernel()
 		return;
 	}
 
-//--- Build the distro tree + a bootable RedSea/ISO image (same as MakeMyISO) ---
-	DelTree("/Distro");
+//--- Fresh RedSea RAM drive A: to assemble the image in ---
+	"Building %d MB RedSea image in RAM drive A:...\n", (blks * BLK_SIZE) / 0x100000;
+	bd = Letter2BlkDev('A', FALSE);
+	if (bd)
+		BlkDevDel(bd);
+	bd = BlkDevNextFreeSlot('A', BDT_RAM);
+	bd->max_blk = blks - 1;
+	if (!BlkDevAdd(bd,, TRUE, TRUE))
+	{
+		"Could not create RAM drive A:.\n";
+		return;
+	}
+
+//--- Copy the whole OS tree in (same set as the DVD distro) ---
+	CopyTree("::/Home",		"A:/Home");
+	Del("A:/Home/Registry.ZC");		//fresh registry on first boot
+	CopyTree("::/System",	"A:/System");
+	CopyTree("::/Apps",		"A:/Apps");
+	CopyTree("::/Compiler",	"A:/Compiler");
+	CopyTree("::/Demo",		"A:/Demo");
+	CopyTree("::/Doc",		"A:/Doc");
+	CopyTree("::/Kernel",	"A:/Kernel");
+	CopyTree("::/Misc",		"A:/Misc");
+	Copy("::/*", "A:/");				//root files (StartOS.ZC, MakeHome.ZC, ...)
+	DirMake("A:/Tmp");
+	DirMake("A:/Tmp/ScreenShots");
+
+//--- Snapshot the RAM drive memory as the image file ---
+	"Writing %s...\n", RAMDISTRO_IMAGE;
 	Del(RAMDISTRO_IMAGE);
-	DirMake("/Distro");
-	In(RAMDISTRO_DVD_CONFIG);
-	BootDVDIns;						//compiles DVD kernel -> /Boot/DVDKernel.ZXE
-	Copy("/*", "/Distro");			//root files (StartOS.ZC, MakeHome.ZC, ...)
-	DirMake("/Distro" RAMDISTRO_BOOT_DIR);
-	Move(RAMDISTRO_DVD_KERNEL, "/Distro" RAMDISTRO_KERNEL_ZXE);
-	CopyTree("/Home",		"/Distro/Home");
-	Del("/Distro/Home/Registry.ZC");
-	CopyTree("/System",		"/Distro/System");
-	CopyTree("/Apps",		"/Distro/Apps");
-	CopyTree("/Compiler",	"/Distro/Compiler");
-	CopyTree("/Demo",		"/Distro/Demo");
-	CopyTree("/Doc",		"/Distro/Doc");
-	CopyTree("/Kernel",		"/Distro/Kernel");
-	CopyTree("/Misc",		"/Distro/Misc");
-	DirMake("/Distro/Tmp");
-	DirMake("/Distro/Tmp/ScreenShots");
-	RedSeaISO(RAMDISTRO_IMAGE, "/Distro", "/Distro" RAMDISTRO_KERNEL_ZXE);
-	DelTree("/Distro");
+	FileWrite(RAMDISTRO_IMAGE, bd->RAM_disk, blks * BLK_SIZE);
 
-	if (!FileFind(RAMDISTRO_IMAGE, &de, FUF_JUST_FILES))
+	if (FileFind(RAMDISTRO_IMAGE, &de, FUF_JUST_FILES))
 	{
-		"FAILED: distro image not built.\n";
-		return;
-	}
-	"Distro image: %s (%d MB).\n", RAMDISTRO_IMAGE, de.size / 0x100000;
-	Free(de.full_name);
-
-//--- Compile the outer kernel: boot drive B = RAM disk at the embedded image
-//    (drv_offset auto-set to the DVD offset by the Mount RAM path), and
-//    DebugDistro = append the image inside Kernel.ZXE at RAMDISTRO_OFFSET.
-//    Addr expression evaluates at BOOT, so it is correct wherever the loader
-//    placed the kernel (native low-mem or Limine high-mem). ---
-	"Compiling self-contained kernel...\n";
-	cfg = MStrPrint(
-		"BB"										//boot drive B, then Mount: select B
-		"mem_boot_base - sizeof(CZXE) + 0x%X\n"		//RAM disk addr = embedded image
-		"0x%X\n"									//blocks (image size, rounded up)
-		"\n"										//exit Mount menu
-		"\n"										//Disk Cache default
-		"DebugDistro\n"								//toggle DebugDistro option on
-		"%s\n"										//Debug Distro File
-		"0x%X\n"									//Debug Distro Start
-		"\n",										//done with options
-		RAMDISTRO_OFFSET,
-		(de.size + BLK_SIZE - 1) / BLK_SIZE,
-		RAMDISTRO_IMAGE,
-		RAMDISTRO_OFFSET + BOOT_RAM_BASE);
-	In(cfg);
-	Free(cfg);
-	if (Comp("/Kernel/Kernel", "Kernel",, ':'))
-	{
-		"Kernel compile failed.\n";
-		return;
-	}
-	Del(RAMDISTRO_KERNEL);
-	Move("/Kernel/Kernel.ZXE", RAMDISTRO_KERNEL);
-
-	if (FileFind(RAMDISTRO_KERNEL, &de, FUF_JUST_FILES))
-	{
-		"\nDone: %s (%d MB).\n", RAMDISTRO_KERNEL, de.size / 0x100000;
+		"\nDone: %s (%d MB).\n", RAMDISTRO_IMAGE, de.size / 0x100000;
 		"Copy it to the host and run build/build-ram-iso.sh.\n";
 		Free(de.full_name);
 	}
 	else
-		"FAILED: no output kernel.\n";
+		"FAILED: image not written.\n";
 }
 
-MakeRAMKernel;
+MakeRAMDistro;

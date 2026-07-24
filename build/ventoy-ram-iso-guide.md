@@ -79,7 +79,7 @@ BootHDIns('C');
 
 Enter `C` at the boot-drive prompt, ENTER through the rest. Reboot the VM after.
 
-## 6. Build the RAM kernel in the VM
+## 6. Build the OS image in the VM
 
 In ZealOS:
 
@@ -87,10 +87,13 @@ In ZealOS:
 #include "::/Misc/DoDistroRAM"
 ```
 
-Runs two kernel compiles (several minutes). Output: `::/Tmp/RAMKernel.ZXE`.
-Shut down.
+Copies the OS into a RAM drive and snapshots it. Output: `::/Tmp/RAMDistro.BIN`
+(~48MB). Shut down.
 
-## 7. Extract the kernel to the host
+## 7. Extract image + kernel to the host
+
+`RAMDistro.BIN` is the OS image; `/Boot/Kernel.ZXE` is the normal kernel that
+step 5 recompiled (it carries the RAM-distro mount code).
 
 ```
 sudo modprobe nbd
@@ -98,7 +101,8 @@ sudo qemu-nbd -c /dev/nbd0 ZealOS.qcow2
 sudo partprobe /dev/nbd0
 sudo mkdir -p /tmp/zealtmp
 sudo mount /dev/nbd0p1 /tmp/zealtmp
-sudo cp /tmp/zealtmp/Tmp/RAMKernel.ZXE ./RAMKernel.ZXE
+sudo cp /tmp/zealtmp/Tmp/RAMDistro.BIN ./RAMDistro.BIN
+sudo cp /tmp/zealtmp/Boot/Kernel.ZXE   ./Kernel.ZXE
 sudo umount /tmp/zealtmp
 sudo qemu-nbd -d /dev/nbd0
 ```
@@ -106,10 +110,12 @@ sudo qemu-nbd -d /dev/nbd0
 ## 8. Package the RAM ISO
 
 ```
-./build-ram-iso.sh RAMKernel.ZXE
+./build-ram-iso.sh RAMDistro.BIN Kernel.ZXE
 ```
 
-Output: `build/ZealOS-RAM.iso`.
+Output: `build/ZealOS-RAM.iso`. The kernel is Limine module 0, the OS image is
+module 1; ZealBooter passes the image address to the kernel, which mounts it as
+RAM drive B: and boots.
 
 ## 9. Test in QEMU
 

@@ -576,6 +576,8 @@ class CKernel
 	Bool			sys_is_uefi_booted;
 	U8				sys_bootloader_id;
 	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
+	U64				sys_ram_distro_base,
+					sys_ram_distro_size;
 };
 
 // Bootloader IDs
