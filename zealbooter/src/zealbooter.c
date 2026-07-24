@@ -373,11 +373,9 @@ void kmain(void) {
 
     kernel->mem_E820[mem_count].type = 0;
 
-    // The kernel identity-maps 0..mem_physical_space and draws to the framebuffer
-    // through that map. Limine's memmap does NOT list the GOP framebuffer, and on
-    // UEFI (resizable BAR / high MMIO window) it can sit above 4GB, past the RAM
-    // top. Extend mem_physical_space to cover it so the framebuffer stays mapped;
-    // otherwise every draw lands in unmapped space -> black screen on real HW.
+    // The kernel identity-maps 0..mem_physical_space and draws through it. The
+    // memmap omits the GOP framebuffer, which on UEFI can sit above RAM top, so
+    // stretch mem_physical_space to cover it or every draw lands unmapped (black).
     {
         uint64_t fb_top = kernel->sys_framebuffer_addr +
                           (uint64_t)fb->pitch * fb->height;

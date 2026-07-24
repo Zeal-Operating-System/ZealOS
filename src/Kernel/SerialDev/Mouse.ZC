@@ -499,11 +499,9 @@ U0 KbdMouseHandler(Bool poll_kbd, Bool poll_mouse)
 		KbdMouseReset;
 	else
 	{
-//A status of 0xFF means no 8042 controller (floating bus -- machines with no
-//PS/2, e.g. modern laptops, return 0xFF for absent ports). A real 8042 never
-//reports 0xFF. Without this check the drain loops below spin forever ("output
-//buffer full" bit permanently set) -- and the mouse one runs under CLI, hanging
-//the whole machine the first time the window manager polls.
+//status 0xFF = no 8042 (absent port floats high); a real one never reads 0xFF.
+//Guard the drains or they spin forever on PS/2-less machines - and the mouse
+//one runs under CLI, wedging the box the first time the window manager polls.
 		if (poll_mouse && mouse_hard.installed && !mouse_hard.irqs_working)
 		{
 			PUSHFD
