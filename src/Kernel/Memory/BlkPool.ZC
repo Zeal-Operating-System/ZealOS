@@ -43,60 +43,71 @@ U0 BlkPoolsInit()
 	else
 		code_heap_limit = 0x80000000;
 
-	mem_heap_limit = code_heap_limit - 1; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
+	i = code_heap_limit - SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
+	mem_heap_limit = i + SYS_16MEG_AREA_LIMIT - 1;
 
-//The code heap is normally one contiguous 16MB..code_heap_limit block, but it
-//does NOT consult E820. When ZealBooter placed the RAM-distro image module in
-//that range (Limine picks the address, often low), add the code heap as two
-//chunks straddling the module so the allocator never hands out -- and clobbers
-//-- the image. The hole is still mapped RAM (RAM drive B: reads it directly),
-//it just isn't a free block. Both chunks together = full heap minus the image.
-	if (sys_ram_distro_base &&
-		SYS_16MEG_AREA_LIMIT < sys_ram_distro_base + sys_ram_distro_size &&
-		sys_ram_distro_base < code_heap_limit)
+	if (sys_bootloader_id == BL_LIMINE)
 	{
-		lo = sys_ram_distro_base & ~(MEM_PAG_SIZE - 1);
-		hi = (sys_ram_distro_base + sys_ram_distro_size + MEM_PAG_SIZE - 1) & ~(MEM_PAG_SIZE - 1);
-		if (lo > SYS_16MEG_AREA_LIMIT)
-			BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, (lo - SYS_16MEG_AREA_LIMIT) >> MEM_PAG_BITS);
-		if (hi < code_heap_limit)
-			BlkPoolAdd(sys_code_bp, hi, (code_heap_limit - hi) >> MEM_PAG_BITS);
-	}
-	else
-	{
-		i = code_heap_limit - SYS_16MEG_AREA_LIMIT;
-		BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
-	}
-
-	if (code_heap_limit<total)
-	{
+//Limine boot (ZealBooter: UEFI ISO, Ventoy RAM-distro): real firmware fragments
+//the memory map heavily, so the stock contiguous 16MB..code_heap_limit block
+//would hand out reserved holes, MMIO, and the RAM-distro image module (marked
+//reserved by ZealBooter) -- corrupting them and hanging the allocator. Add the
+//code heap per USABLE E820 region instead, clipped to [16MB,code_heap_limit).
+//No data pool on this path: MemBIOSTotal is a SUM of usable bytes, not a top
+//address, so comparing region addresses against it mis-sizes the pool -- a
+//sliver pool OOMs the moment Fs->data_heap switches to it. The code heap cap
+//(<=2GB) is plenty for the RAM-distro.
 		while (m20->type)
 		{
 			if (m20->type == MEM_E820t_USABLE)
 			{
-				lo = m20->base;
-				hi = m20->base + m20->len;
-				if (lo<code_heap_limit)
-				{
-					if (hi > code_heap_limit)
-						lo = code_heap_limit;
-					else
-						hi = lo; //cancel
-				}
-				if (code_heap_limit <= lo < hi)
-				{
-					if (first)
-					{
-						BlkPoolInit(lo, (hi - lo) >> MEM_PAG_BITS);
-						sys_data_bp = lo;
-						Fs->data_heap = HeapCtrlInit(, Fs, sys_data_bp);
-						first = FALSE;
-					}
-					else
-						BlkPoolAdd(sys_data_bp, lo, (hi - lo) >> MEM_PAG_BITS);
-				}
+				lo = (m20->base(I64) + MEM_PAG_SIZE - 1) & ~(MEM_PAG_SIZE - 1);
+				hi = (m20->base(I64) + m20->len)         & ~(MEM_PAG_SIZE - 1);
+				if (lo < SYS_16MEG_AREA_LIMIT)
+					lo = SYS_16MEG_AREA_LIMIT; //1..16MB added by $LK,"SYS_INIT_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,SYS_INIT_16MEG_SYS_CODE_BP"$
+				if (hi > code_heap_limit)
+					hi = code_heap_limit;
+				if (lo < hi)
+					BlkPoolAdd(sys_code_bp, lo, (hi - lo) >> MEM_PAG_BITS);
 			}
 			m20++;
+		}
+	}
+	else
+	{
+//Native boot: stock behavior.
+		BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
+
+		if (code_heap_limit<total)
+		{
+			while (m20->type)
+			{
+				if (m20->type == MEM_E820t_USABLE)
+				{
+					lo = m20->base;
+					hi = m20->base + m20->len;
+					if (lo<code_heap_limit)
+					{
+						if (hi > code_heap_limit)
+							lo = code_heap_limit;
+						else
+							hi = lo; //cancel
+					}
+					if (code_heap_limit <= lo < hi)
+					{
+						if (first)
+						{
+							BlkPoolInit(lo, (hi - lo) >> MEM_PAG_BITS);
+							sys_data_bp = lo;
+							Fs->data_heap = HeapCtrlInit(, Fs, sys_data_bp);
+							first = FALSE;
+						}
+						else
+							BlkPoolAdd(sys_data_bp, lo, (hi - lo) >> MEM_PAG_BITS);
+					}
+				}
+				m20++;
+			}
 		}
 	}
 	LBts(&sys_run_level, RLf_FULL_HEAPS);

@@ -157,8 +157,68 @@ U0 IntPICInit()
 	OutU8(PIC_2_DATA, 0x02); //IW3 Telling PIC_2 its cascade identity.
 	OutU8(PIC_1_DATA, 0x0D); //IW4 8086 Mode, Buffered Mode (Master PIC)
 	OutU8(PIC_2_DATA, 0x09); //IW4 8086 Mode, Buffered Mode (Slave PIC)
-	OutU8(PIC_1_DATA, 0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
-	OutU8(PIC_2_DATA, 0xFF);
+	OutU8(PIC_1_DATA, 0xFB); //Mask all but IRQ2 Cascade. IRQ0 (8254 PIT) is
+	OutU8(PIC_2_DATA, 0xFF);  //masked -- the heartbeat is the LAPIC timer now
+	                          //($LK,"LapicTimerInit",A="MN:LapicTimerInit"$), because modern UEFI
+	                          //firmware clock-gates the legacy PIT (IRQ0 never fires).
+
+//Soft-enable the local APIC and set the virtual-wire LVTs (LINT0=ExtINT so any
+//still-live 8259 line can reach this CPU, LINT1=NMI, TPR=0 = accept all).
+	*(dev.uncached_alias + LAPIC_SVR)(U32 *) |= LAPICF_APIC_ENABLED;
+	*(dev.uncached_alias + LAPIC_LVT_LINT0)(U32 *) = 0x700;
+	*(dev.uncached_alias + LAPIC_LVT_LINT1)(U32 *) = 0x400;
+	*(dev.uncached_alias + LAPIC_TASK_PRIORITY)(U32 *) = 0;
+}
+
+U0 LapicTimerInit()
+{//System heartbeat. Drives $LK,"I_TIMER",A="MN:I_TIMER"$ (jiffies + preemption + the AP
+//timer IPIs in $LK,"IntCore0TimerHandler",A="MN:IntCore0TimerHandler"$) from the local APIC timer
+//instead of the 8254 PIT. The PIT is dead on modern UEFI hardware (Raptor Lake
+//et al clock-gate it) -> IRQ0 never fires -> counts.jiffies freezes -> every
+//Sleep() hangs -> desktop comes up white and dead. The LAPIC timer is per-core
+//and always present. Runs on the boot CPU; APs are still ticked via IPI.
+//Calibrated against the TSC (via CPUID) because the PIT can't be used as a ref.
+	CRAXRBXRCXRDX	regs;
+	I64				tsc_hz, max_leaf, t0, t1, cur, lapic_ticks, init_count;
+
+//TSC frequency: CPUID.16H base MHz (Skylake+), else CPUID.15H crystal*ratio,
+//else 1GHz. Only the tick RATE depends on this being right, not whether it ticks.
+	tsc_hz = 0;
+	CPUId(0, &regs);
+	max_leaf = regs.rax.u32[0];
+	if (max_leaf >= 0x16)
+	{
+		CPUId(0x16, &regs);
+		tsc_hz = (regs.rax.u32[0] & 0xFFFF) * 1000000;
+	}
+	if (!tsc_hz && max_leaf >= 0x15)
+	{
+		CPUId(0x15, &regs);
+		if (regs.rcx.u32[0] && regs.rax.u32[0])
+			tsc_hz = regs.rcx.u32[0] * regs.rbx.u32[0] / regs.rax.u32[0];
+	}
+	if (tsc_hz < 100000000 || tsc_hz > 10000000000)
+		tsc_hz = 1000000000; //sane clamp / fallback
+
+//Measure the LAPIC timer: count down from max (divide-by-1, one-shot, masked)
+//over a TSC-timed ~10ms window, then scale to JIFFY_FREQ.
+	*(dev.uncached_alias + LAPIC_TIMER_DIVIDE)(U32 *)   = 0x0B;      //divide by 1
+	*(dev.uncached_alias + LAPIC_LVT_TIMER)(U32 *)      = 0x10000;   //masked, one-shot
+	*(dev.uncached_alias + LAPIC_TIMER_INIT_CNT)(U32 *) = 0xFFFFFFFF;
+	t0 = TSCGet;
+	t1 = t0;
+	while (t1 - t0 < tsc_hz / 100)
+		t1 = TSCGet;
+	cur = *(dev.uncached_alias + LAPIC_TIMER_CUR_CNT)(U32 *);
+	lapic_ticks = 0xFFFFFFFF - cur;
+
+	init_count = lapic_ticks * 100 / JIFFY_FREQ; //(ticks/sec) / JIFFY_FREQ
+	if (init_count < 16)
+		init_count = 16;
+
+//Arm periodic on the heartbeat vector.
+	*(dev.uncached_alias + LAPIC_LVT_TIMER)(U32 *)      = I_TIMER + 0x20000; //periodic
+	*(dev.uncached_alias + LAPIC_TIMER_INIT_CNT)(U32 *) = init_count;
 }
 
 interrupt U0 IntNop()

@@ -488,6 +488,8 @@ Bool MouseHardDriverInstall(I64 dummy=0) //can be spawned
 
 U0 KbdMouseHandler(Bool poll_kbd, Bool poll_mouse)
 {
+	I64 status;
+
 	if (mouse_hard.install_in_progress)
 	{
 		Yield;
@@ -497,17 +499,22 @@ U0 KbdMouseHandler(Bool poll_kbd, Bool poll_mouse)
 		KbdMouseReset;
 	else
 	{
+//A status of 0xFF means no 8042 controller (floating bus -- machines with no
+//PS/2, e.g. modern laptops, return 0xFF for absent ports). A real 8042 never
+//reports 0xFF. Without this check the drain loops below spin forever ("output
+//buffer full" bit permanently set) -- and the mouse one runs under CLI, hanging
+//the whole machine the first time the window manager polls.
 		if (poll_mouse && mouse_hard.installed && !mouse_hard.irqs_working)
 		{
 			PUSHFD
 			CLI
-			while (InU8(KBD_CTRL) & 1)
+			while ((status = InU8(KBD_CTRL)) & 1 && status != 0xFF)
 				MouseHardPacketRead;
 			POPFD
 		}
 
 		if (poll_kbd)
-			while (InU8(KBD_CTRL) & 1)
+			while ((status = InU8(KBD_CTRL)) & 1 && status != 0xFF)
 				KbdPacketRead;
 
 		if (kbd.reset)

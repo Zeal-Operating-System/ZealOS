@@ -130,6 +130,7 @@ U0 Reboot(Bool format_ramdisks=FALSE)
 U0 KMain()
 {//Continued from $LK,"KStart64.ZC",A="FF:::/Kernel/KStart64.ZC,I32 &KMain"$
 	CBlkDev *bd;
+	I64 jiffies0;
 
 	OutU8(0xE9, 'G'); //boot progress marker -> QEMU debugcon
 	OutU8(PCSPKR, InU8(PCSPKR) & ~3); //Sound;
@@ -174,8 +175,26 @@ U0 KMain()
 	IntInit2;
 	LBts(&sys_run_level, RLf_INTERRUPTS);
 
+	"LapicTimerInit;\n";
+	LapicTimerInit;
+
 	"TimeCal;\n";
 	TimeCal;
+
+//DIAGNOSTIC (harmless to keep): verify the PIT tick actually reaches the CPU.
+//0 in 250ms means the timer is dead (clock-gated 8254 or interrupt routing) --
+//the machine will boot but freeze at the desktop, since Sleep() never wakes.
+	jiffies0 = counts.jiffies;
+	Busy(250000);
+	if (counts.jiffies == jiffies0)
+	{//Timer never ticked -> jiffies frozen -> every Sleep() hangs -> white desktop.
+	//Halt here (Busy() uses the TSC, not jiffies) so the diagnosis is readable on
+	//real HW instead of scrolling away into a frozen white screen.
+		"\n\n$$RED$$PIT check: TIMER DEAD$$FG$$ -- jiffies frozen (0 ticks in 250ms).\n"
+		"PIT IRQ0 is not reaching the CPU. Desktop would hang white. Halting.\n";
+		while (TRUE)
+			Busy(1000000);
+	}
 
 	"BlkDevsInitAll;\n";
 	BlkDevsInitAll;
