@@ -601,18 +601,19 @@ Bool XhciPortReset(I64 port)
 }
 
 Bool XhciInit()
-{//Find + init first xHCI controller. Returns TRUE on success.
-	I64	 bdf, bar_lo, bar_hi, addr, i;
+{//Find + init the first usable xHCI controller. A machine often has several (a
+//Thunderbolt/USB4 one plus the PCH one that owns the real ports), so walk them
+//all and keep the first that resets and runs. Returns TRUE on success.
+	I64	 n, bdf, bar_lo, bar_hi, addr, i;
 	I64	 hcs1, hcs2, hcc, cmd;
 	F64	 timeout;
 	U8	*page;
 
-	bdf = PCIClassFind(XHCI_PCI_CLASS, 0);
-	if (bdf == -1)
+	for (n = 0; TRUE; n++)
 	{
-		"xHCI: no controller found.\n";
-		return FALSE;
-	}
+	bdf = PCIClassFind(XHCI_PCI_CLASS, n);
+	if (bdf == -1)
+		break;
 	usb_xhci.pci_bus = bdf.u8[2];
 	usb_xhci.pci_dev = bdf.u8[1];
 	usb_xhci.pci_fun = bdf.u8[0];
@@ -621,16 +622,13 @@ Bool XhciInit()
 	bar_hi = 0;
 	if ((bar_lo & 6) == 4)	//64-bit BAR
 		bar_hi = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x14);
-	if (bar_hi)
-	{
-		"xHCI: MMIO above 4GB not supported.\n";
-		return FALSE;
-	}
 	addr = bar_lo & ~0xF;
-	if (!addr)
+	"xHCI #%d at %02X:%02X:%01X  bar_lo=0x%08X bar_hi=0x%08X\n",
+			n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, bar_lo, bar_hi;
+	if (bar_hi || !addr)	//MMIO above 4GB or unassigned -- skip
 	{
-		"xHCI: BAR not assigned.\n";
-		return FALSE;
+		"  skip: unassigned or 64-bit MMIO above 4GB\n";
+		goto xi_next;
 	}
 //Enable memory space + bus master
 	cmd = PCIReadU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4);
@@ -716,6 +714,11 @@ Bool XhciInit()
 	timeout = tS + 1.0;
 	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH) && tS < timeout)
 		Sleep(1);
+	if (XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH)
+	{
+		"  skip: controller stayed halted after reset/run\n";
+		goto xi_next;	//never came out of halt -- try the next controller
+	}
 
 	usb_xhci.present = TRUE;
 	usb_xhci.running = TRUE;
@@ -723,4 +726,8 @@ Bool XhciInit()
 			usb_xhci.max_ports, usb_xhci.max_slots, usb_xhci.ctx_size, bar_lo & ~0xF;
 
 	return TRUE;
+xi_next:;
+	}
+	"xHCI: no usable controller found.\n";
+	return FALSE;
 }
