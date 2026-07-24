@@ -47,12 +47,13 @@ Produces `ZealOS-PublicDomain-BIOS-*.iso` (native) and `ZealOS-BSD2-UEFI-*.iso`
 qemu-img create -f qcow2 ZealOS.qcow2 2G
 qemu-system-x86_64 -machine q35,accel=kvm -m 2G -boot d \
   -cdrom ZealOS-PublicDomain-BIOS-*.iso \
-  -drive file=ZealOS.qcow2,format=qcow2,if=none,id=hd \
-  -device ich9-ahci,id=ahci -device ide-hd,drive=hd,bus=ahci.0
+  -drive file=ZealOS.qcow2,format=qcow2,if=ide
 ```
 
-At the ZealOS prompt `Install onto hard drive (y or n)?` answer `y` and follow
-the installer (target drive `C`). Shut down when done.
+The CD and the disk must be on the same AHCI controller or ZealOS won't see the
+CD (do NOT put them on separate `-device ich9-ahci` controllers). At the ZealOS
+prompt `Install onto hard drive (y or n)?` answer `y` and follow the installer
+(target drive `C`). Shut down when done.
 
 ## 4. Sync branch source into the VM
 
@@ -67,8 +68,7 @@ shut down.
 
 ```
 qemu-system-x86_64 -machine q35,accel=kvm -m 2G \
-  -drive file=ZealOS.qcow2,format=qcow2,if=none,id=hd \
-  -device ich9-ahci,id=ahci -device ide-hd,drive=hd,bus=ahci.0
+  -drive file=ZealOS.qcow2,format=qcow2,if=ide
 ```
 
 In ZealOS:
