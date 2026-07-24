@@ -743,6 +743,13 @@ public Bool XhciInit(I64 start_n=0)
 
 	usb_xhci.present = TRUE;
 	usb_xhci.running = TRUE;
+
+//Power the root ports. They come up unpowered, so a device never reports
+//"connected" (CCS) until PP is set -- QEMU powers them for us, real HW does not.
+	for (i = 0; i < usb_xhci.max_ports; i++)
+		XhciPortSCWrite(i, XHCI_PORTSC_PP);
+	Sleep(20); //let power + connect status settle
+
 	"xHCI: %d ports, %d slots, ctx size %d, MMIO 0x%X.\n",
 			usb_xhci.max_ports, usb_xhci.max_slots, usb_xhci.ctx_size, bar_lo & ~0xF;
 

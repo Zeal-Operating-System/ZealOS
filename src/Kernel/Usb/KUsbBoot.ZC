@@ -77,7 +77,7 @@ public U0 UsbRep()
 	CUsbIf	*uif;
 	I64		 i, j;
 
-	"UsbRep BUILD MARKER: xhci-scan-L\n"; //bump each build to prove a fresh kernel
+	"UsbRep BUILD MARKER: xhci-scan-P\n"; //bump each build to prove a fresh kernel
 
 	if (!usb_xhci.present)
 	{
@@ -86,7 +86,11 @@ public U0 UsbRep()
 	}
 	if (!usb_xhci.present)
 		return;
+	UsbPortScan; //rescan so a just-plugged device shows up
 	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
+	for (i = 0; i < usb_xhci.max_ports; i++)
+		"  port %d: PORTSC=0x%08X  CCS=%d PED=%d PP=%d\n", i, XhciPortSC(i),
+				XhciPortSC(i) & 1, XhciPortSC(i) >> 1 & 1, XhciPortSC(i) >> 9 & 1;
 	for (i = 0; i < USB_DEVS_MAX; i++)
 	{
 		dev = &usb_devs[i];
@@ -116,6 +120,24 @@ public U0 UsbRep()
 			"Storage %d: %d MB, drives from %C:.\n", i,
 					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
 					usb_msds[i].first_drive_let;
+}
+
+public U0 XhciSwitch()
+{//Re-init the NEXT xHCI controller and rescan its ports. On a machine with more
+//than one (Thunderbolt + PCH), call this repeatedly from the prompt to cycle
+//until the one owning your physical port comes up, then plug a device in.
+	static I64 idx = 0;
+
+	idx++;
+	if (!XhciInit(idx))
+	{
+		idx = 0;
+		XhciInit(idx);
+	}
+	"XhciSwitch: now on controller #%d.\n", idx;
+	Sleep(200);
+	UsbPortScan;
+	UsbRep;
 }
 
 U0 UsbTaskMain(I64 dummy=0)
