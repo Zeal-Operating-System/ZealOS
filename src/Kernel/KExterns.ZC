@@ -10,6 +10,8 @@ import Bool	 Ed(U8 *link_st=NULL, I64 edf_dof_flags=0);
 
 extern U0 SysErr(U8 *format, ...);
 extern U0 SysLog(U8 *format, ...);
+extern I64 UsbBootInit();
+extern U0 UsbBootDriveFallback();
 
 extern I64 MemBIOSTotal();
 
