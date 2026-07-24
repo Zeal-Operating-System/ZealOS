@@ -43,9 +43,30 @@ U0 BlkPoolsInit()
 	else
 		code_heap_limit = 0x80000000;
 
-	i = code_heap_limit - SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
-	BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
-	mem_heap_limit = i + SYS_16MEG_AREA_LIMIT - 1;
+	mem_heap_limit = code_heap_limit - 1; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
+
+//The code heap is normally one contiguous 16MB..code_heap_limit block, but it
+//does NOT consult E820. When ZealBooter placed the RAM-distro image module in
+//that range (Limine picks the address, often low), add the code heap as two
+//chunks straddling the module so the allocator never hands out -- and clobbers
+//-- the image. The hole is still mapped RAM (RAM drive B: reads it directly),
+//it just isn't a free block. Both chunks together = full heap minus the image.
+	if (sys_ram_distro_base &&
+		SYS_16MEG_AREA_LIMIT < sys_ram_distro_base + sys_ram_distro_size &&
+		sys_ram_distro_base < code_heap_limit)
+	{
+		lo = sys_ram_distro_base & ~(MEM_PAG_SIZE - 1);
+		hi = (sys_ram_distro_base + sys_ram_distro_size + MEM_PAG_SIZE - 1) & ~(MEM_PAG_SIZE - 1);
+		if (lo > SYS_16MEG_AREA_LIMIT)
+			BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, (lo - SYS_16MEG_AREA_LIMIT) >> MEM_PAG_BITS);
+		if (hi < code_heap_limit)
+			BlkPoolAdd(sys_code_bp, hi, (code_heap_limit - hi) >> MEM_PAG_BITS);
+	}
+	else
+	{
+		i = code_heap_limit - SYS_16MEG_AREA_LIMIT;
+		BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
+	}
 
 	if (code_heap_limit<total)
 	{
