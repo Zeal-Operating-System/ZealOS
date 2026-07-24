@@ -4,6 +4,15 @@
 #include <limine.h>
 #include <lib.h>
 
+static inline void outl(uint16_t port, uint32_t val) {
+    __asm__ volatile ("outl %0, %1" : : "a"(val), "Nd"(port));
+}
+static inline uint32_t inl(uint16_t port) {
+    uint32_t val;
+    __asm__ volatile ("inl %1, %0" : "=a"(val) : "Nd"(port));
+    return val;
+}
+
 __attribute__((used, section(".limine_requests_start")))
 static volatile uint64_t limine_requests_start_marker[] = LIMINE_REQUESTS_START_MARKER;
 
@@ -382,6 +391,32 @@ void kmain(void) {
         if (kernel->mem_physical_space < fb_top)
             kernel->mem_physical_space = fb_top;
     }
+
+    // Same problem for xHCI MMIO: UEFI parks its 64-bit BARs far above RAM, so
+    // stretch mem_physical_space to cover them (+2GB headroom so the kernel's
+    // top-of-space uncached alias doesn't overlap the BAR). The kernel then just
+    // flips the BAR's identity page to uncached (see XhciMmioMap). Legacy 0xCF8
+    // config access works on UEFI here, so a plain brute scan finds them.
+    for (uint32_t bus = 0; bus < 256; bus++)
+        for (uint32_t dev = 0; dev < 32; dev++)
+            for (uint32_t fun = 0; fun < 8; fun++) {
+                uint32_t sel = 0x80000000u | (bus << 16) | (dev << 11) | (fun << 8);
+                outl(0xCF8, sel | 0x00);
+                if (inl(0xCFC) == 0xFFFFFFFFu)
+                    continue;
+                outl(0xCF8, sel | 0x08);
+                if ((inl(0xCFC) >> 8) != 0x0C0330u) //class/subclass/prog-if != xHCI
+                    continue;
+                outl(0xCF8, sel | 0x10);
+                uint32_t bar_lo = inl(0xCFC);
+                if ((bar_lo & 0x6u) != 0x4u) //not a 64-bit BAR
+                    continue;
+                outl(0xCF8, sel | 0x14);
+                uint64_t bar = ((uint64_t)inl(0xCFC) << 32) | (bar_lo & ~0xFu);
+                uint64_t top = bar + 0x80000000ull; //BAR + 2GB headroom
+                if (kernel->mem_physical_space < top)
+                    kernel->mem_physical_space = top;
+            }
 
     kernel->mem_physical_space = align_up_u64(kernel->mem_physical_space, 0x200000);
 

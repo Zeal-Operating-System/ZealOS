@@ -77,11 +77,15 @@ public U0 UsbRep()
 	CUsbIf	*uif;
 	I64		 i, j;
 
+	"UsbRep BUILD MARKER: xhci-scan-K\n"; //bump each build to prove a fresh kernel
+
 	if (!usb_xhci.present)
 	{
-		"No xHCI controller.\n";
-		return;
+		"No xHCI controller. Re-probing:\n";
+		XhciInit;
 	}
+	if (!usb_xhci.present)
+		return;
 	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
 	for (i = 0; i < USB_DEVS_MAX; i++)
 	{

@@ -600,7 +600,21 @@ Bool XhciPortReset(I64 port)
 	return ToBool(sc & XHCI_PORTSC_PED);
 }
 
-Bool XhciInit()
+U8 *XhciMmioMap(I64 phys)
+{//UEFI parks xHCI BARs above 4GB. ZealBooter stretches mem_physical_space to
+//cover them, so the BAR is already in the identity map -- just flip that page to
+//uncached (PCD) and return the identity pointer. (Can't use the dev-alias region
+//here: it lives in high memory and collides with the framebuffer's mapping.)
+//No TLB flush needed -- nothing has touched this address yet, so there is no
+//stale entry; the first access walks the table fresh and sees PCD.
+	I64 *pte, base = phys & ~(mem_page_size - 1);
+
+	pte  = MemPageTable(base);
+	*pte = *pte | 0x10; //PCD: uncached
+	return phys;
+}
+
+public Bool XhciInit()
 {//Find + init the first usable xHCI controller. A machine often has several (a
 //Thunderbolt/USB4 one plus the PCH one that owns the real ports), so walk them
 //all and keep the first that resets and runs. Returns TRUE on success.
@@ -608,6 +622,8 @@ Bool XhciInit()
 	I64	 hcs1, hcs2, hcc, cmd;
 	F64	 timeout;
 	U8	*page;
+
+	"XhciInit: scanning xHCI controllers...\n"; //build TEST02
 
 	for (n = 0; TRUE; n++)
 	{
@@ -622,19 +638,20 @@ Bool XhciInit()
 	bar_hi = 0;
 	if ((bar_lo & 6) == 4)	//64-bit BAR
 		bar_hi = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x14);
-	addr = bar_lo & ~0xF;
-	"xHCI #%d at %02X:%02X:%01X  bar_lo=0x%08X bar_hi=0x%08X\n",
-			n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, bar_lo, bar_hi;
-	if (bar_hi || !addr)	//MMIO above 4GB or unassigned -- skip
-	{
-		"  skip: unassigned or 64-bit MMIO above 4GB\n";
-		goto xi_next;
-	}
+	addr = bar_hi << 32 | bar_lo & ~0xF;
+	"xHCI #%d at %02X:%02X:%01X  MMIO phys 0x%X\n",
+			n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, addr;
+	if (!addr)
+		goto xi_next;	//BAR not assigned
 //Enable memory space + bus master
 	cmd = PCIReadU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4);
 	PCIWriteU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4, cmd | 6);
 
-	usb_xhci.mmio = dev.uncached_alias + addr;
+	if (bar_hi)
+		usb_xhci.mmio = XhciMmioMap(addr);	//BAR above 4GB -- own mapping
+	else
+		usb_xhci.mmio = dev.uncached_alias + addr;
+	"  mapped, mmio virt=0x%X. reading CAPLENGTH...\n", usb_xhci.mmio;
 	usb_xhci.op	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_CAPLENGTH) & 0xFF);
 	usb_xhci.rt	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_RTSOFF) & ~0x1F);
 	usb_xhci.db	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_DBOFF) & ~3);
@@ -648,8 +665,11 @@ Bool XhciInit()
 		usb_xhci.ctx_size = 64;
 	else
 		usb_xhci.ctx_size = 32;
+	"  caps: hcs1=0x%08X %d ports %d slots. handoff...\n",
+			hcs1, usb_xhci.max_ports, usb_xhci.max_slots;
 
 	XhciBiosHandoff;
+	"  handoff done. resetting...\n";
 
 //Stop + reset controller
 	XhciOpW32(XHCI_OP_USBCMD, XhciOpR32(XHCI_OP_USBCMD) & ~XHCI_CMD_RS);
@@ -663,6 +683,7 @@ Bool XhciInit()
 	timeout = tS + 1.0;
 	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_CNR) && tS < timeout)
 		Sleep(1);
+	"  reset done, usbsts=0x%08X. setting up rings...\n", XhciOpR32(XHCI_OP_USBSTS);
 
 	XhciOpW32(XHCI_OP_CONFIG, usb_xhci.max_slots);
 
