@@ -94,6 +94,7 @@ Copies the OS into a RAM drive and snapshots it. Output: `::/Tmp/RAMDistro.BIN`
 
 `RAMDistro.BIN` is the OS image; `/Boot/Kernel.ZXE` is the normal kernel that
 step 5 recompiled (it carries the RAM-distro mount code).
+(or use the kernel extraction script `./extract-kernel.sh`)
 
 ```
 sudo modprobe nbd

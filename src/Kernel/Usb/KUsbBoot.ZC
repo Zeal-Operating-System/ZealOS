@@ -77,8 +77,6 @@ public U0 UsbRep()
 	CUsbIf	*uif;
 	I64		 i, j;
 
-	"UsbRep BUILD MARKER: xhci-scan-P\n"; //bump each build to prove a fresh kernel
-
 	if (!usb_xhci.present)
 	{
 		"No xHCI controller. Re-probing:\n";
@@ -123,16 +121,15 @@ public U0 UsbRep()
 }
 
 public U0 XhciSwitch()
-{//Re-init the NEXT xHCI controller and rescan its ports. On a machine with more
-//than one (Thunderbolt + PCH), call this repeatedly from the prompt to cycle
-//until the one owning your physical port comes up, then plug a device in.
+{//Force the NEXT xHCI controller and rescan (cycles through them). The boot init
+//auto-picks the one with a device plugged in, so this is only for overriding.
 	static I64 idx = 0;
 
 	idx++;
-	if (!XhciInit(idx))
+	if (!XhciInit(idx, TRUE))
 	{
 		idx = 0;
-		XhciInit(idx);
+		XhciInit(idx, TRUE);
 	}
 	"XhciSwitch: now on controller #%d.\n", idx;
 	Sleep(200);

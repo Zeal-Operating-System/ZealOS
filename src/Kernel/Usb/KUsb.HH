@@ -328,5 +328,5 @@ public extern U0  UsbRep();
 public extern I64 UsbBootInit();
 public extern U0  UsbBootDriveFallback();
 public extern U0  UsbTaskMain(I64 dummy=0);
-public extern Bool XhciInit(I64 start_n=0);
+public extern Bool XhciInit(I64 start_n=0, Bool any=FALSE);
 public extern U0   XhciSwitch();

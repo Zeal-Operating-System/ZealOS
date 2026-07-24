@@ -601,12 +601,10 @@ Bool XhciPortReset(I64 port)
 }
 
 U8 *XhciMmioMap(I64 phys)
-{//UEFI parks xHCI BARs above 4GB. ZealBooter stretches mem_physical_space to
-//cover them, so the BAR is already in the identity map -- just flip that page to
-//uncached (PCD) and return the identity pointer. (Can't use the dev-alias region
-//here: it lives in high memory and collides with the framebuffer's mapping.)
-//No TLB flush needed -- nothing has touched this address yet, so there is no
-//stale entry; the first access walks the table fresh and sees PCD.
+{//UEFI parks xHCI BARs above 4GB, past the low-4GB uncached alias. ZealBooter
+//stretches mem_physical_space to cover them, so the BAR is in the identity map --
+//just flip its page to uncached (PCD) and return the identity pointer. No flush:
+//nothing has touched this address, so there's no stale TLB entry.
 	I64 *pte, base = phys & ~(mem_page_size - 1);
 
 	pte  = MemPageTable(base);
@@ -614,16 +612,16 @@ U8 *XhciMmioMap(I64 phys)
 	return phys;
 }
 
-public Bool XhciInit(I64 start_n=0)
-{//Find + init the first usable xHCI controller at/after index start_n. A machine
-//often has several (a Thunderbolt/USB4 one plus the PCH one that owns the real
-//ports); pass start_n=1,2,... to skip to the next one. Returns TRUE on success.
-	I64	 n, bdf, bar_lo, bar_hi, addr, i;
-	I64	 hcs1, hcs2, hcc, cmd;
-	F64	 timeout;
-	U8	*page;
-
-	"XhciInit: scanning xHCI controllers from #%d...\n", start_n;
+public Bool XhciInit(I64 start_n=0, Bool any=FALSE)
+{//Init a usable xHCI controller at/after index start_n. A machine has several (a
+//Thunderbolt/USB4 one and the PCH one wired to the real ports), so prefer one
+//with a device already connected, else fall back to the first that runs. Pass a
+//start_n to force a specific controller (e.g. XhciInit(1)). TRUE on success.
+	I64		n, bdf, bar_lo, bar_hi, addr, i, fallback = -1;
+	I64		hcs1, hcs2, hcc, cmd;
+	F64		timeout;
+	U8		*page;
+	Bool	connected;
 
 	for (n = start_n; TRUE; n++)
 	{
@@ -639,8 +637,6 @@ public Bool XhciInit(I64 start_n=0)
 	if ((bar_lo & 6) == 4)	//64-bit BAR
 		bar_hi = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x14);
 	addr = bar_hi << 32 | bar_lo & ~0xF;
-	"xHCI #%d at %02X:%02X:%01X  MMIO phys 0x%X\n",
-			n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, addr;
 	if (!addr)
 		goto xi_next;	//BAR not assigned
 //Enable memory space + bus master
@@ -648,10 +644,9 @@ public Bool XhciInit(I64 start_n=0)
 	PCIWriteU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4, cmd | 6);
 
 	if (bar_hi)
-		usb_xhci.mmio = XhciMmioMap(addr);	//BAR above 4GB -- own mapping
+		usb_xhci.mmio = XhciMmioMap(addr);	//BAR above 4GB gets its own mapping
 	else
 		usb_xhci.mmio = dev.uncached_alias + addr;
-	"  mapped, mmio virt=0x%X. reading CAPLENGTH...\n", usb_xhci.mmio;
 	usb_xhci.op	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_CAPLENGTH) & 0xFF);
 	usb_xhci.rt	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_RTSOFF) & ~0x1F);
 	usb_xhci.db	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_DBOFF) & ~3);
@@ -665,11 +660,8 @@ public Bool XhciInit(I64 start_n=0)
 		usb_xhci.ctx_size = 64;
 	else
 		usb_xhci.ctx_size = 32;
-	"  caps: hcs1=0x%08X %d ports %d slots. handoff...\n",
-			hcs1, usb_xhci.max_ports, usb_xhci.max_slots;
 
 	XhciBiosHandoff;
-	"  handoff done. resetting...\n";
 
 //Stop + reset controller
 	XhciOpW32(XHCI_OP_USBCMD, XhciOpR32(XHCI_OP_USBCMD) & ~XHCI_CMD_RS);
@@ -683,7 +675,6 @@ public Bool XhciInit(I64 start_n=0)
 	timeout = tS + 1.0;
 	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_CNR) && tS < timeout)
 		Sleep(1);
-	"  reset done, usbsts=0x%08X. setting up rings...\n", XhciOpR32(XHCI_OP_USBSTS);
 
 	XhciOpW32(XHCI_OP_CONFIG, usb_xhci.max_slots);
 
@@ -736,26 +727,37 @@ public Bool XhciInit(I64 start_n=0)
 	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH) && tS < timeout)
 		Sleep(1);
 	if (XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH)
-	{
-		"  skip: controller stayed halted after reset/run\n";
-		goto xi_next;	//never came out of halt -- try the next controller
-	}
+		goto xi_next;	//never left halt -- try the next controller
 
 	usb_xhci.present = TRUE;
 	usb_xhci.running = TRUE;
 
-//Power the root ports. They come up unpowered, so a device never reports
-//"connected" (CCS) until PP is set -- QEMU powers them for us, real HW does not.
+//Power the root ports. They come up off, so a device never reports connected
+//(CCS) until PP is set -- QEMU powers them for us, real hardware does not.
 	for (i = 0; i < usb_xhci.max_ports; i++)
 		XhciPortSCWrite(i, XHCI_PORTSC_PP);
-	Sleep(20); //let power + connect status settle
+	Sleep(20);
 
-	"xHCI: %d ports, %d slots, ctx size %d, MMIO 0x%X.\n",
-			usb_xhci.max_ports, usb_xhci.max_slots, usb_xhci.ctx_size, bar_lo & ~0xF;
-
-	return TRUE;
+//Prefer a controller with something already plugged in. If nothing is connected
+//and we weren't told to take any, remember it and keep looking.
+	connected = FALSE;
+	for (i = 0; i < usb_xhci.max_ports; i++)
+		if (XhciPortSC(i) & XHCI_PORTSC_CCS)
+			connected = TRUE;
+	if (connected || any)
+	{
+		"xHCI #%d at %02X:%02X:%01X: %d ports, %d slots.\n",
+				n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun,
+				usb_xhci.max_ports, usb_xhci.max_slots;
+		return TRUE;
+	}
+	if (fallback == -1)
+		fallback = n;
 xi_next:;
 	}
+//Nothing had a device connected; use the first controller that ran.
+	if (!any && fallback >= 0)
+		return XhciInit(fallback, TRUE);
 	"xHCI: no usable controller found.\n";
 	return FALSE;
 }
