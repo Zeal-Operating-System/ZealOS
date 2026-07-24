@@ -1,6 +1,8 @@
 asm {
 USE64
 		BTS		U32 [SYS_RUN_LEVEL], RLf_64BIT
+		MOV 	AL, 0x45	//boot progress marker 'E' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 
 //Set required bits for SSE instruction execution
 		MOV_RAX_CR4
@@ -46,6 +48,8 @@ USE64
 		CALL	&TaskInit
 		CALL	SET_FS_BASE
 		MOV 	RSP, U64 CTask.rsp[RAX]
+		MOV 	AL, 0x46	//boot progress marker 'F' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 
 		JMP 	I32 &KMain
 

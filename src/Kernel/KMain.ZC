@@ -131,6 +131,7 @@ U0 KMain()
 {//Continued from $LK,"KStart64.ZC",A="FF:::/Kernel/KStart64.ZC,I32 &KMain"$
 	CBlkDev *bd;
 
+	OutU8(0xE9, 'G'); //boot progress marker -> QEMU debugcon
 	OutU8(PCSPKR, InU8(PCSPKR) & ~3); //Sound;
 	sys_task = Fs;
 	BlkPoolsInit;

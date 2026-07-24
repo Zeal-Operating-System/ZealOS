@@ -145,6 +145,17 @@ struct CKernel {
 #define BOOT_SRC_RAM 2
 #define BOOT_SRC_HDD 3
 #define BOOT_SRC_DVD 4
+
+// The kernel runs with a fixed low-memory layout: kernel code below
+// SYS_FIXED_AREA (0x100000), and page tables + system heap growing up from
+// 0x100000. So the kernel MUST load below 0x100000, exactly like the native
+// boot loaders (which use BOOT_RAM_BASE). If loaded at 0x100000, the very
+// first thing KStart32's SYS_INIT_PAGE_TABLES does is write page tables over
+// the running kernel -> crash. Match native: place small kernels at
+// BOOT_RAM_BASE. Kernels too big for low memory fall back to the usable-region
+// search (they can't boot this way -- ship the OS image as a separate module).
+#define BOOT_RAM_BASE 0x7C00
+#define LOW_MEM_LIMIT 0x9F000
 #define RLF_16BIT 0b001
 #define RLF_VESA  0b010
 #define RLF_32BIT 0b100
@@ -191,16 +202,23 @@ void kmain(void) {
     const size_t final_size = align_up_u64(module_kernel->size + trampoline_size, 16) + boot_stack_size;
 
     uintptr_t final_address = (uintptr_t)-1;
-    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
-        struct limine_memmap_entry *entry = memmap_request.response->entries[i];
+    if (BOOT_RAM_BASE + final_size <= LOW_MEM_LIMIT) {
+        // Small kernel: place it low, below SYS_FIXED_AREA, like the native
+        // loaders. This low memory is limine's own (bootloader-reclaimable) but
+        // free to use now that limine has handed off.
+        final_address = BOOT_RAM_BASE;
+    } else {
+        for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
+            struct limine_memmap_entry *entry = memmap_request.response->entries[i];
 
-        if (entry->type != LIMINE_MEMMAP_USABLE) {
-            continue;
-        }
+            if (entry->type != LIMINE_MEMMAP_USABLE) {
+                continue;
+            }
 
-        if (entry->length >= final_size) {
-            final_address = entry->base;
-            break;
+            if (entry->length >= final_size) {
+                final_address = entry->base;
+                break;
+            }
         }
     }
     if (final_address == (uintptr_t)-1) {

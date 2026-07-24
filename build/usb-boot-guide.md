@@ -13,7 +13,7 @@ qemu-system-x86_64 -machine q35,accel=kvm -m 2G \
   -device usb-storage,bus=xhci.0,drive=ub
 
 
-CopyTree("::/", "V:/");   # copies the whole CD to the stick — wait for it, takes a bit
+CopyTree("::/", "V:/");   # copies the whole CD to the stick
 Dir("V:/");               # should now list Boot, Kernel, System, Compiler, Home, etc.
 BootHDIns('V');           # recompiles kernel on V: (few min), writes FAT32 boot record
 BootMHDIns('V');          # MBR chain-loader

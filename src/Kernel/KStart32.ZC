@@ -105,6 +105,8 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
         DU64 ZEALBOOTER_LIMINE_SIGNATURE_2;
 
 @@02:
+		MOV 	AL, 0x30	//boot progress marker '0' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 //Patch abs addresses
 		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
 		LEA		ESI, U32 CPatchTableAbsAddr.abs_address[ESI]
@@ -118,11 +120,19 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		DU16	CGDT.cs32;
 
 @@10: 	BTS		U32 [SYS_RUN_LEVEL], RLf_PATCHED
+		MOV 	AL, 0x41	//boot progress marker 'A' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 
 		CALL	SYS_FIND_PCIBIOS_SERVICE_DIR
 		CALL	SYS_FIND_PCI_SERVICES
+		MOV 	AL, 0x42	//boot progress marker 'B' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 		CALL	SYS_INIT_PAGE_TABLES
+		MOV 	AL, 0x43	//boot progress marker 'C' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 		CALL	SYS_INIT_16MEG_SYS_CODE_BP
+		MOV 	AL, 0x44	//boot progress marker 'D' -> QEMU debugcon (-debugcon stdio)
+		OUT 	0xE9, AL
 		PUSH	U32 0 	//Return from next call will be 64-bit
 		CALL	SYS_ENTER_LONG_MODE
 

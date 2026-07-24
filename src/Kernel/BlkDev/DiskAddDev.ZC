@@ -265,16 +265,6 @@ U0 BlkDevsInitAll()
 	"\nUsbBootInit;\n";
 	i = UsbBootInit;
 
-	if (!blkdev.ahci_hba && !i)
-	{
-		"\nZealOS requires AHCI or a USB boot drive.\n\n"
-		"If in IDE compatibility mode, switch to SATA mode.\n"
-		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
-		"Rebooting in 10 seconds...\n";
-		Sleep(10*1000);
-		Reboot;
-	}
-
 //Config mount code may reference missing hardware (e.g. DVD-configured kernel
 //booted from a USB stick); failures fall through to UsbBootDriveFallback().
 	#exe {
@@ -288,4 +278,16 @@ U0 BlkDevsInitAll()
 	};
 
 	UsbBootDriveFallback;
+
+//A RAM-distro kernel boots with no disk controller at all, so only give up
+//if the boot drive is actually missing after all mount attempts.
+	if (!DriveCheck(Letter2Drive(blkdev.boot_drive_let, FALSE), FALSE))
+	{
+		"\nBoot drive %C: did not mount (no AHCI/USB/RAM boot device).\n\n"
+		"If in IDE compatibility mode, switch to SATA mode.\n"
+		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
+		"Rebooting in 10 seconds...\n", blkdev.boot_drive_let;
+		Sleep(10*1000);
+		Reboot;
+	}
 }
