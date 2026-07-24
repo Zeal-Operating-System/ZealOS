@@ -614,18 +614,18 @@ U8 *XhciMmioMap(I64 phys)
 	return phys;
 }
 
-public Bool XhciInit()
-{//Find + init the first usable xHCI controller. A machine often has several (a
-//Thunderbolt/USB4 one plus the PCH one that owns the real ports), so walk them
-//all and keep the first that resets and runs. Returns TRUE on success.
+public Bool XhciInit(I64 start_n=0)
+{//Find + init the first usable xHCI controller at/after index start_n. A machine
+//often has several (a Thunderbolt/USB4 one plus the PCH one that owns the real
+//ports); pass start_n=1,2,... to skip to the next one. Returns TRUE on success.
 	I64	 n, bdf, bar_lo, bar_hi, addr, i;
 	I64	 hcs1, hcs2, hcc, cmd;
 	F64	 timeout;
 	U8	*page;
 
-	"XhciInit: scanning xHCI controllers...\n"; //build TEST02
+	"XhciInit: scanning xHCI controllers from #%d...\n", start_n;
 
-	for (n = 0; TRUE; n++)
+	for (n = start_n; TRUE; n++)
 	{
 	bdf = PCIClassFind(XHCI_PCI_CLASS, n);
 	if (bdf == -1)

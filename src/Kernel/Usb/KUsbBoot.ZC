@@ -77,7 +77,7 @@ public U0 UsbRep()
 	CUsbIf	*uif;
 	I64		 i, j;
 
-	"UsbRep BUILD MARKER: xhci-scan-K\n"; //bump each build to prove a fresh kernel
+	"UsbRep BUILD MARKER: xhci-scan-L\n"; //bump each build to prove a fresh kernel
 
 	if (!usb_xhci.present)
 	{
