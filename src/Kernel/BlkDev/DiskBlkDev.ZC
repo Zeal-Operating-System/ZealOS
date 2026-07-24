@@ -125,6 +125,13 @@ Bool BlkDevInit(CBlkDev *bd)
 				if (res = AHCIAtaInit(bd))
 					drive->size = bd->max_blk + 1;
 				break;
+
+			case BDT_USB:
+//USB mass storage driver fills in max_blk before BlkDevAdd().
+				bd->max_reads = 64;
+				bd->max_writes = 64;
+				res = TRUE;
+				break;
 		}
 		if (res && bd->flags & BDF_READ_CACHE)
 			DiskCacheInvalidate(drive);

@@ -576,6 +576,8 @@ class CKernel
 	Bool			sys_is_uefi_booted;
 	U8				sys_bootloader_id;
 	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
+	U64				sys_ram_distro_base,
+					sys_ram_distro_size;
 };
 
 // Bootloader IDs
@@ -667,6 +669,9 @@ class CKernel
 #define LAPIC_ICR_HIGH				(LAPIC_BASE + 0x310)
 
 #define LAPIC_LVT_TIMER 			(LAPIC_BASE + 0x320)
+#define LAPIC_TIMER_INIT_CNT		(LAPIC_BASE + 0x380)
+#define LAPIC_TIMER_CUR_CNT			(LAPIC_BASE + 0x390)
+#define LAPIC_TIMER_DIVIDE			(LAPIC_BASE + 0x3E0)
 #define LAPIC_LVT_THERMAL 			(LAPIC_BASE + 0x330)
 #define LAPIC_LVT_PERF				(LAPIC_BASE + 0x340)
 #define LAPIC_LVT_LINT0 			(LAPIC_BASE + 0x350)
@@ -3319,7 +3324,8 @@ public class CDirEntry
 #define BDT_ISO_FILE_READ 		3
 #define BDT_ISO_FILE_WRITE		4
 #define BDT_ATAPI 				5
-#define BDT_TYPES_NUM 			6
+#define BDT_USB 				6
+#define BDT_TYPES_NUM 			7
 
 #define BDf_REMOVABLE 			0
 #define BDf_INITIALIZED 		1

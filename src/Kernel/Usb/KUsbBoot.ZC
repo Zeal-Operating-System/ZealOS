@@ -1,0 +1,207 @@
+//USB boot integration: driver binding, hotplug scan, boot-time init,
+//boot-drive fallback, USB task.
+
+U0 UsbDrvBind(CUsbDev *dev)
+{//Attach class drivers to a freshly configured device.
+	CUsbIf	*uif;
+	I64		 i;
+
+	for (i = 0; i < dev->if_count; i++)
+	{
+		uif = &dev->ifs[i];
+		if (!uif->valid)
+			goto next_if;
+		if (uif->if_class == USB_CLASS_HID)
+		{
+			if (uif->if_subclass == USB_HID_SUBCLASS_BOOT &&
+				(uif->if_proto == USB_HID_PROTO_KBD || uif->if_proto == USB_HID_PROTO_MOUSE))
+				UsbHidAttach(dev, uif);
+			else
+				SysLog("USB: port %d: non-boot HID interface ignored.\n", dev->port);
+		}
+		else if (uif->if_class == USB_CLASS_MSD)
+		{
+			if (uif->if_subclass == USB_MSD_SUBCLASS_SCSI)
+				UsbMsdAttach(dev, uif);
+			else
+				SysLog("USB: port %d: MSD subclass 0x%02X unsupported.\n",
+					   dev->port, uif->if_subclass);
+		}
+		else if (uif->if_class == USB_CLASS_HUB)
+			SysLog("USB: port %d: hubs not yet supported.\n", dev->port);
+next_if:;
+	}
+}
+
+U0 UsbDrvUnbind(CUsbDev *dev)
+{
+	UsbHidDetach(dev);
+	UsbMsdDetach(dev);
+}
+
+U0 UsbPortScan()
+{//Check all root ports for connects/disconnects. USB task only.
+	CUsbDev	*dev, *ndev;
+	I64		 port, sc;
+
+	for (port = 0; port < usb_xhci.max_ports; port++)
+	{
+		sc = XhciPortSC(port);
+		if (sc & XHCI_PORTSC_CHANGE_BITS)
+			XhciPortSCWrite(port, XHCI_PORTSC_PP | (sc & XHCI_PORTSC_CHANGE_BITS));
+		dev = UsbDevByPort(port);
+		if (sc & XHCI_PORTSC_CCS)
+		{
+			if (!dev)
+			{
+				if (XhciPortReset(port))
+				{
+					ndev = UsbDevEnum(port);
+					if (ndev)
+						UsbDrvBind(ndev);
+				}
+			}
+		}
+		else if (dev)
+		{
+			UsbDrvUnbind(dev);
+			UsbDevDetachCore(dev);
+			SysLog("USB: port %d: device removed.\n", port);
+		}
+	}
+}
+
+public U0 UsbRep()
+{//Report attached USB devices.
+	CUsbDev	*dev;
+	CUsbIf	*uif;
+	I64		 i, j;
+
+	if (!usb_xhci.present)
+	{
+		"No xHCI controller. Re-probing:\n";
+		XhciInit;
+	}
+	if (!usb_xhci.present)
+		return;
+	UsbPortScan; //rescan so a just-plugged device shows up
+	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
+	for (i = 0; i < usb_xhci.max_ports; i++)
+		"  port %d: PORTSC=0x%08X  CCS=%d PED=%d PP=%d\n", i, XhciPortSC(i),
+				XhciPortSC(i) & 1, XhciPortSC(i) >> 1 & 1, XhciPortSC(i) >> 9 & 1;
+	for (i = 0; i < USB_DEVS_MAX; i++)
+	{
+		dev = &usb_devs[i];
+		if (dev->present)
+		{
+			"Port %2d: %04X:%04X \"%s\"", dev->port, dev->vendor_id,
+					dev->product_id, dev->desc_name;
+			for (j = 0; j < dev->if_count; j++)
+			{
+				uif = &dev->ifs[j];
+				if (uif->if_class == USB_CLASS_HID && uif->if_proto == USB_HID_PROTO_KBD)
+					" [keyboard]";
+				else if (uif->if_class == USB_CLASS_HID && uif->if_proto == USB_HID_PROTO_MOUSE)
+					" [mouse]";
+				else if (uif->if_class == USB_CLASS_MSD)
+					" [storage]";
+				else if (uif->if_class == USB_CLASS_HUB)
+					" [hub]";
+				else
+					" [class %d]", uif->if_class;
+			}
+			"\n";
+		}
+	}
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+			"Storage %d: %d MB, drives from %C:.\n", i,
+					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
+					usb_msds[i].first_drive_let;
+}
+
+public U0 XhciSwitch()
+{//Force the NEXT xHCI controller and rescan (cycles through them). The boot init
+//auto-picks the one with a device plugged in, so this is only for overriding.
+	static I64 idx = 0;
+
+	idx++;
+	if (!XhciInit(idx, TRUE))
+	{
+		idx = 0;
+		XhciInit(idx, TRUE);
+	}
+	"XhciSwitch: now on controller #%d.\n", idx;
+	Sleep(200);
+	UsbPortScan;
+	UsbRep;
+}
+
+U0 UsbTaskMain(I64 dummy=0)
+{//Hotplug + HID poll loop. Spawned from $LK,"KMain",A="FF:::/Kernel/KMain.ZC,UsbTaskMain"$.
+	I64 tick = 0;
+
+	no_warn dummy;
+	usb_task = Fs;
+	if (!usb_xhci.running)
+		return;
+	while (TRUE)
+	{
+		XhciEventPoll;
+		UsbHidTick;
+		tick++;
+		if (usb_xhci.port_change || tick & 0x7F == 0)
+		{
+			usb_xhci.port_change = FALSE;
+			UsbPortScan;
+		}
+		Sleep(2);
+	}
+}
+
+I64 UsbBootInit()
+{//Init xHCI + enumerate + auto-mount USB storage. Called from
+//$LK,"BlkDevsInitAll",A="FF:::/Kernel/BlkDev/DiskAddDev.ZC,UsbBootInit"$ before
+//the kernel config's mount code runs, so USB drives exist at boot.
+	I64 i, count = 0;
+
+	if (!XhciInit)
+		return 0;
+	Sleep(100);	//let root port connect status settle
+	UsbPortScan;
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+			count++;
+
+	return count;
+}
+
+U0 UsbBootDriveFallback()
+{//If the configured boot drive did not mount, fall back to USB media.
+//Called at the end of $LK,"BlkDevsInitAll",A="FF:::/Kernel/BlkDev/DiskAddDev.ZC,UsbBootDriveFallback"$.
+	CDrive	*drive = Letter2Drive(blkdev.boot_drive_let, FALSE);
+	I64		 i;
+
+	if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL)
+		return;
+	if (usb_boot_iso_drv_let)
+	{
+		blkdev.boot_drive_let = usb_boot_iso_drv_let;
+		"USB: boot drive falling back to install media %C:.\n", usb_boot_iso_drv_let;
+		return;
+	}
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
+		{
+			drive = Letter2Drive(usb_msds[i].first_drive_let, FALSE);
+//Only a drive with a real, mountable filesystem can be a boot drive;
+//skip raw/unformatted sticks (FSt_UNKNOWN) exposed just for DiskPart.
+			if (drive && drive->drive_signature == DRIVE_SIGNATURE_VAL &&
+				(drive->fs_type == FSt_REDSEA || drive->fs_type == FSt_FAT32))
+			{
+				blkdev.boot_drive_let = usb_msds[i].first_drive_let;
+				"USB: boot drive falling back to %C:.\n", blkdev.boot_drive_let;
+				return;
+			}
+		}
+}

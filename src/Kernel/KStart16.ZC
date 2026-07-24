@@ -68,6 +68,9 @@ SYS_BOOTLOADER_ID::		DU8	BL_ZEAL;
 
 SYS_FRAMEBUFFER_LIST::	DU8	sizeof(CVideoInfo) * VBE_MODES_NUM	DUP(0);
 
+SYS_RAM_DISTRO_BASE::	DU64	0; //Set by ZealBooter to the RAM-distro limine module (else 0)
+SYS_RAM_DISTRO_SIZE::	DU64	0;
+
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CZXE)
 
 REQUESTED_SCREEN_WIDTH:		DU16	1024;

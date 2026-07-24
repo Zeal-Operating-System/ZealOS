@@ -44,38 +44,66 @@ U0 BlkPoolsInit()
 		code_heap_limit = 0x80000000;
 
 	i = code_heap_limit - SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
-	BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
 	mem_heap_limit = i + SYS_16MEG_AREA_LIMIT - 1;
 
-	if (code_heap_limit<total)
+	if (sys_bootloader_id == BL_LIMINE)
 	{
+//UEFI firmware fragments RAM, so build the code heap only from USABLE E820
+//regions (clipped to 16MB..code_heap_limit) instead of one blind block.  Skips
+//reserved holes, MMIO and the RAM-distro image.  No separate data pool here:
+//MemBIOSTotal is a sum of usable bytes, not a top address, so the stock loop
+//mis-sizes it.  code_heap_limit caps at 2GB, plenty for the live system.
 		while (m20->type)
 		{
 			if (m20->type == MEM_E820t_USABLE)
 			{
-				lo = m20->base;
-				hi = m20->base + m20->len;
-				if (lo<code_heap_limit)
-				{
-					if (hi > code_heap_limit)
-						lo = code_heap_limit;
-					else
-						hi = lo; //cancel
-				}
-				if (code_heap_limit <= lo < hi)
-				{
-					if (first)
-					{
-						BlkPoolInit(lo, (hi - lo) >> MEM_PAG_BITS);
-						sys_data_bp = lo;
-						Fs->data_heap = HeapCtrlInit(, Fs, sys_data_bp);
-						first = FALSE;
-					}
-					else
-						BlkPoolAdd(sys_data_bp, lo, (hi - lo) >> MEM_PAG_BITS);
-				}
+				lo = (m20->base(I64) + MEM_PAG_SIZE - 1) & ~(MEM_PAG_SIZE - 1);
+				hi = (m20->base(I64) + m20->len)         & ~(MEM_PAG_SIZE - 1);
+				if (lo < SYS_16MEG_AREA_LIMIT)
+					lo = SYS_16MEG_AREA_LIMIT; //1..16MB added by $LK,"SYS_INIT_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,SYS_INIT_16MEG_SYS_CODE_BP"$
+				if (hi > code_heap_limit)
+					hi = code_heap_limit;
+				if (lo < hi)
+					BlkPoolAdd(sys_code_bp, lo, (hi - lo) >> MEM_PAG_BITS);
 			}
 			m20++;
+		}
+	}
+	else
+	{
+//Native boot: stock behavior.
+		BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
+
+		if (code_heap_limit<total)
+		{
+			while (m20->type)
+			{
+				if (m20->type == MEM_E820t_USABLE)
+				{
+					lo = m20->base;
+					hi = m20->base + m20->len;
+					if (lo<code_heap_limit)
+					{
+						if (hi > code_heap_limit)
+							lo = code_heap_limit;
+						else
+							hi = lo; //cancel
+					}
+					if (code_heap_limit <= lo < hi)
+					{
+						if (first)
+						{
+							BlkPoolInit(lo, (hi - lo) >> MEM_PAG_BITS);
+							sys_data_bp = lo;
+							Fs->data_heap = HeapCtrlInit(, Fs, sys_data_bp);
+							first = FALSE;
+						}
+						else
+							BlkPoolAdd(sys_data_bp, lo, (hi - lo) >> MEM_PAG_BITS);
+					}
+				}
+				m20++;
+			}
 		}
 	}
 	LBts(&sys_run_level, RLf_FULL_HEAPS);

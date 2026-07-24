@@ -16,7 +16,7 @@ U0 IntCore0TimerHandler(CTask *)
 	LBtr(&sys_semas[SEMA_SYS_TIMER], 0);
 	for (i = 1; i < mp_count; i++)
 		MPInt(I_TIMER, i);
-	OutU8(PIC_1, PIC_EOI); //Acknowledge PIC Interrupt
+	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0; //Acknowledge LAPIC timer interrupt
 }
 
 I64 SysTimerRead()

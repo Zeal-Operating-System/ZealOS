@@ -41,6 +41,7 @@ public U0 BootHDIns(U8 drv_let=0)
 		{
 			case BDT_RAM:
 			case BDT_ATA:
+			case BDT_USB:	//BIOS INT13 USB emulation boots the stick's partition record
 				Move("/Kernel/Kernel.ZXE", BOOT_DIR_KERNEL_ZXE);
 
 				if (!FileFind(BOOT_DIR_KERNEL_ZXE, &de, FUF_JUST_FILES))
