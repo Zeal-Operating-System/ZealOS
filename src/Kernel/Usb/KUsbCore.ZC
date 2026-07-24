@@ -64,6 +64,73 @@ CUsbDev *UsbDevAlloc()
 	return NULL;
 }
 
+CUsbIf *UsbIfByNum(CUsbDev *dev, I64 if_num)
+{//Return the recorded (alt-0) interface with this bInterfaceNumber, else NULL.
+	I64 i;
+
+	for (i = 0; i < dev->if_count; i++)
+		if (dev->ifs[i].valid && dev->ifs[i].if_num == if_num)
+			return &dev->ifs[i];
+
+	return NULL;
+}
+
+I64 UsbSetInterface(CUsbDev *dev, I64 if_num, I64 alt)
+{//SET_INTERFACE: select an alternate setting to activate its endpoints.
+	return UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_RECIP_IF, USB_RQ_SET_INTERFACE,
+				   alt, if_num, NULL, 0);
+}
+
+I64 UsbPickEcmConfig(CUsbDev *dev, I64 num_configs)
+{//Scan each configuration for a CDC-ECM control interface; return its config
+//descriptor index (for GET/SET_CONFIGURATION), else 0. RTL8153 and QEMU usb-net
+//are multi-config and their ECM configuration is not index 0.
+	CUsbConfigDesc	*cd;
+	CUsbIfDesc		*ifd;
+	U8				*buf;
+	I64				 i, off, dlen, dtype, total, code, pick = 0;
+	Bool			 found = FALSE;
+
+	buf = CAlloc(512, sys_task->code_heap);
+	for (i = 0; i < num_configs && !found; i++)
+	{
+		code = UsbGetDesc(dev, USB_DESC_CONFIG, i, buf, 9);
+		if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+			goto next_cfg;
+		cd = buf;
+		total = cd->total_len;
+		if (total > 512)
+			total = 512;
+		code = UsbGetDesc(dev, USB_DESC_CONFIG, i, buf, total);
+		if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+			goto next_cfg;
+		off = 0;
+		while (off + 2 <= total)
+		{
+			dlen  = buf[off];
+			dtype = buf[off + 1];
+			if (!dlen)
+				break;
+			if (dtype == USB_DESC_IF)
+			{
+				ifd = &buf[off];
+				if (ifd->if_class == USB_CLASS_COMM &&
+					ifd->if_subclass == USB_CDC_SUBCLASS_ECM)
+				{
+					pick  = i;
+					found = TRUE;
+					break;
+				}
+			}
+			off += dlen;
+		}
+next_cfg:;
+	}
+	Free(buf);
+
+	return pick;
+}
+
 U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
 {//Walk config descriptor, record interfaces + INT/BULK endpoints.
 	CUsbIfDesc	*ifd;
@@ -83,19 +150,35 @@ U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
 		if (dtype == USB_DESC_IF)
 		{
 			ifd = &buf[off];
-			if (ifd->alt == 0 && dev->if_count < USB_IFS_MAX)
+			if (ifd->alt == 0)
 			{
-				cur_if = &dev->ifs[dev->if_count];
-				MemSet(cur_if, 0, sizeof(CUsbIf));
-				cur_if->valid		= TRUE;
-				cur_if->if_num		= ifd->if_num;
-				cur_if->if_class	= ifd->if_class;
-				cur_if->if_subclass	= ifd->if_subclass;
-				cur_if->if_proto	= ifd->if_proto;
-				dev->if_count++;
+				if (dev->if_count < USB_IFS_MAX)
+				{
+					cur_if = &dev->ifs[dev->if_count];
+					MemSet(cur_if, 0, sizeof(CUsbIf));
+					cur_if->valid		= TRUE;
+					cur_if->if_num		= ifd->if_num;
+					cur_if->if_class	= ifd->if_class;
+					cur_if->if_subclass	= ifd->if_subclass;
+					cur_if->if_proto	= ifd->if_proto;
+					dev->if_count++;
+				}
+				else
+					cur_if = NULL;
 			}
 			else
-				cur_if = NULL;	//alternate setting; skip its endpoints
+			{//Alternate setting: attach its endpoints to the matching alt-0 interface
+			//and remember the alt number (CDC-ECM data endpoints live under alt 1).
+				cur_if = UsbIfByNum(dev, ifd->if_num);
+				if (cur_if)
+					cur_if->alt = ifd->alt;
+			}
+		}
+		else if (dtype == USB_DESC_CS_IF)
+		{//Class-specific interface descriptor. Grab the CDC-ECM Ethernet functional
+		//descriptor's iMACAddress string index (it follows the comm interface).
+			if (cur_if && dlen >= 4 && buf[off + 2] == USB_CDC_ST_ETHERNET)
+				cur_if->ecm_mac_str_idx = buf[off + 3];
 		}
 		else if (dtype == USB_DESC_EP)
 		{
@@ -148,15 +231,17 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 	dev->drv_data = NULL;
 }
 
-CUsbDev *UsbDevEnum(I64 port)
-{//Enumerate device on root port (already reset + enabled). USB task only.
+CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
+					  I64 parent_slot, I64 parent_port)
+{//Enumerate an already-reset+enabled device. Root-port devices pass route 0 /
+//depth 0 / no parent; hub children pass the xHCI route string + parent hub
+//slot/port (see KUsbHub.ZC). USB task only.
 	CUsbDev			*dev;
 	CUsbDevDesc		*dd;
 	CUsbConfigDesc	*cd;
 	U8				*buf;
-	I64				 slot, code, sc, total, mps0;
+	I64				 slot, code, total, mps0, cfg_idx, port = root_port;
 
-	sc = XhciPortSC(port);
 	slot = XhciEnableSlot;
 	if (!slot)
 	{
@@ -170,8 +255,16 @@ CUsbDev *UsbDevEnum(I64 port)
 		return NULL;
 	}
 	dev->slot  = slot;
-	dev->port  = port;
-	dev->speed = (sc >> 10) & 0xF;
+	dev->port  = root_port;
+	dev->speed = speed;
+	dev->route = route;
+	dev->depth = depth;
+	dev->parent_slot = parent_slot;
+	dev->parent_port = parent_port;
+	dev->is_hub = FALSE;
+	dev->hub_ports = 0;
+	dev->hub_tt_think = 0;
+	dev->hub_mtt = 0;
 	dev->present = TRUE;
 	dev->configured = FALSE;
 	dev->drv_data = NULL;
@@ -219,8 +312,17 @@ CUsbDev *UsbDevEnum(I64 port)
 	dev->dev_proto	  = dd->dev_proto;
 	UsbStrGet(dev, dd->i_product, dev->desc_name, 64);
 
+//Pick a configuration. Most devices are single-config (index 0); multi-config
+//USB NICs (RTL8153, QEMU usb-net) hide their CDC-ECM config behind a later index,
+//so prefer that one when present.
+	cfg_idx = 0;
+	if (dd->num_configs > 1)
+		cfg_idx = UsbPickEcmConfig(dev, dd->num_configs);
+	SysLog("USB: port %d: %04X:%04X num_configs=%d picked cfg_idx=%d\n",
+		   port, dd->vendor_id, dd->product_id, dd->num_configs, cfg_idx);
+
 //Config descriptor: header first for total length, then full.
-	code = UsbGetDesc(dev, USB_DESC_CONFIG, 0, buf, 9);
+	code = UsbGetDesc(dev, USB_DESC_CONFIG, cfg_idx, buf, 9);
 	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
 	{
 		"USB: port %d: GET_CONFIG failed (%d).\n", port, code;
@@ -232,7 +334,7 @@ CUsbDev *UsbDevEnum(I64 port)
 	total = cd->total_len;
 	if (total > 512)
 		total = 512;
-	code = UsbGetDesc(dev, USB_DESC_CONFIG, 0, buf, total);
+	code = UsbGetDesc(dev, USB_DESC_CONFIG, cfg_idx, buf, total);
 	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
 	{
 		Free(buf);
@@ -267,4 +369,9 @@ CUsbDev *UsbDevEnum(I64 port)
 		   dev->desc_name, dev->if_count, dev->ep_count);
 
 	return dev;
+}
+
+CUsbDev *UsbDevEnum(I64 port)
+{//Enumerate a device on a root port (already reset + enabled). USB task only.
+	return UsbDevEnumEx(port, (XhciPortSC(port) >> 10) & 0xF, 0, 0, 0, 0);
 }

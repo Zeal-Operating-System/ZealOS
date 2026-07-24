@@ -207,7 +207,10 @@ U0 XhciEventPoll()
 					if (ep)
 					{
 						if (ep->auto_kind)
-						{//HID interrupt IN: deliver + requeue
+						{//HID interrupt IN / ECM bulk IN: deliver + requeue.
+						//Stash residue so byte-count-sensitive handlers (ECM) can
+						//compute the received length (auto_len - residue).
+							ep->xfer_residue = e->status & 0xFFFFFF;
 							if (code == XHCI_CC_SUCCESS || code == XHCI_CC_SHORT_PKT)
 							{
 								switch (ep->auto_kind)
@@ -217,6 +220,9 @@ U0 XhciEventPoll()
 										break;
 									case USB_AUTO_MOUSE:
 										UsbMouseCB(dev, ep);
+										break;
+									case USB_AUTO_ECM:
+										UsbEcmRxCB(dev, ep);
 										break;
 								}
 							}
@@ -463,8 +469,13 @@ I64 XhciAddressDev(CUsbDev *dev)
 	icc[0] = 0;
 	icc[1] = 3;	//add slot + EP0
 	slot_ctx = XhciInputCtx(dev, 1);
-	slot_ctx[0] = (1 << 27) | (dev->speed << 20);
-	slot_ctx[1] = (dev->port + 1) << 16;
+	slot_ctx[0] = (1 << 27) | (dev->speed << 20) | (dev->route & 0xFFFFF);
+	slot_ctx[1] = (dev->port + 1) << 16;	//root hub port (top of the tree)
+//TT: a LS/FS device behind a HS hub gets its transactions translated by that
+//hub. Point the slot at the parent hub's slot + port so the HC targets its TT.
+	if (dev->parent_slot &&
+		(dev->speed == USB_SPEED_LOW || dev->speed == USB_SPEED_FULL))
+		slot_ctx[2] = (dev->parent_slot & 0xFF) | ((dev->parent_port & 0xFF) << 8);
 	ep0_ctx = XhciInputCtx(dev, 2);
 	ep0_ctx[1] = (3 << 1) | (XHCI_EP_TYPE_CTRL << 3) | (mps << 16);
 	addr = dev->ep0.ring->trbs;
@@ -534,6 +545,15 @@ next_ep:;
 	slot_ctx = XhciInputCtx(dev, 1);
 	MemCopy(slot_ctx, XhciDevCtxGet(dev, 0), usb_xhci.ctx_size);
 	slot_ctx[0] = (slot_ctx[0] & 0x07FFFFFF) | (max_dci << 27);
+//Hub: advertise it to the HC so it routes traffic to downstream ports.
+	if (dev->is_hub)
+	{
+		slot_ctx[0] = slot_ctx[0] | (1 << 26);			//Hub
+		if (dev->hub_mtt)
+			slot_ctx[0] = slot_ctx[0] | (1 << 25);		//Multi-TT
+		slot_ctx[1] = (slot_ctx[1] & 0x00FFFFFF) | ((dev->hub_ports & 0xFF) << 24);
+		slot_ctx[2] = (slot_ctx[2] & ~(3 << 16)) | ((dev->hub_tt_think & 3) << 16);
+	}
 	addr = dev->in_ctx;
 
 	return XhciCmd(addr & 0xFFFFFFFF, addr >> 32, 0,

@@ -27,8 +27,11 @@ U0 UsbDrvBind(CUsbDev *dev)
 				SysLog("USB: port %d: MSD subclass 0x%02X unsupported.\n",
 					   dev->port, uif->if_subclass);
 		}
+		else if (uif->if_class == USB_CLASS_COMM &&
+				 uif->if_subclass == USB_CDC_SUBCLASS_ECM)
+			UsbEcmAttach(dev, uif);
 		else if (uif->if_class == USB_CLASS_HUB)
-			SysLog("USB: port %d: hubs not yet supported.\n", dev->port);
+			UsbHubAttach(dev, uif);
 next_if:;
 	}
 }
@@ -37,6 +40,7 @@ U0 UsbDrvUnbind(CUsbDev *dev)
 {
 	UsbHidDetach(dev);
 	UsbMsdDetach(dev);
+	UsbEcmDetach(dev);
 }
 
 U0 UsbPortScan()
@@ -94,8 +98,8 @@ public U0 UsbRep()
 		dev = &usb_devs[i];
 		if (dev->present)
 		{
-			"Port %2d: %04X:%04X \"%s\"", dev->port, dev->vendor_id,
-					dev->product_id, dev->desc_name;
+			"Port %2d: %04X:%04X devcls=%d \"%s\"", dev->port, dev->vendor_id,
+					dev->product_id, dev->dev_class, dev->desc_name;
 			for (j = 0; j < dev->if_count; j++)
 			{
 				uif = &dev->ifs[j];
@@ -105,12 +109,22 @@ public U0 UsbRep()
 					" [mouse]";
 				else if (uif->if_class == USB_CLASS_MSD)
 					" [storage]";
+				else if (uif->if_class == USB_CLASS_COMM &&
+						 uif->if_subclass == USB_CDC_SUBCLASS_ECM)
+					" [net]";
 				else if (uif->if_class == USB_CLASS_HUB)
 					" [hub]";
 				else
 					" [class %d]", uif->if_class;
 			}
 			"\n";
+			for (j = 0; j < dev->if_count; j++)
+			{
+				uif = &dev->ifs[j];
+				"    if%d: cls=%d sub=%d proto=%d alt=%d eps=%d mac_str=%d\n",
+						uif->if_num, uif->if_class, uif->if_subclass, uif->if_proto,
+						uif->alt, uif->ep_count, uif->ecm_mac_str_idx;
+			}
 		}
 	}
 	for (i = 0; i < USB_MSDS_MAX; i++)
