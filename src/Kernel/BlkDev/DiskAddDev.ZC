@@ -281,20 +281,24 @@ U0 BlkDevsInitAll()
 	"\nUsbBootInit;\n";
 	i = UsbBootInit;
 
-//Config mount code may reference missing hardware (e.g. a DVD-configured kernel
-//booted from USB or as a RAM-distro); wrap it so a failed mount doesn't panic
-//boot -- it falls through to UsbBootDriveFallback() / the boot-drive check.
-//The #exe compiler directives stay OUTSIDE the runtime try so the try/catch
-//lexical scope is clean.
-	#exe {
-		StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
-		StreamPrint("try {");
-		if (kernel_config->opts[CONFIG_MOUNT_AHCI_AUTO])
-			StreamPrint("MountAHCIAuto;");
-		StreamDoc(kernel_config->add_dev);
-		StreamPrint("} catch { \"\\nBoot mount code failed (missing hardware?).\\n\"; Fs->catch_except = TRUE; }");
-		StreamPrint("#exe {Option(OPTf_WARN_PAREN, ON);}");
-	};
+//A RAM-distro already has its boot drive (B: above); the kernel_config mount
+//code targets install hardware (a specific AHCI/DVD drive that isn't here), so
+//skip it entirely. Otherwise run it, wrapped so a failed mount (e.g. missing
+//hardware when booting a DVD-configured kernel from USB) doesn't panic boot --
+//it falls through to UsbBootDriveFallback() / the boot-drive check. The #exe
+//compiler directives stay OUTSIDE the runtime try so its lexical scope is clean.
+	if (!sys_ram_distro_base)
+	{
+		#exe {
+			StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
+			StreamPrint("try {");
+			if (kernel_config->opts[CONFIG_MOUNT_AHCI_AUTO])
+				StreamPrint("MountAHCIAuto;");
+			StreamDoc(kernel_config->add_dev);
+			StreamPrint("} catch { \"\\nBoot mount code failed (missing hardware?).\\n\"; Fs->catch_except = TRUE; }");
+			StreamPrint("#exe {Option(OPTf_WARN_PAREN, ON);}");
+		};
+	}
 
 	UsbBootDriveFallback;
 

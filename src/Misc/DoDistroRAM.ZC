@@ -51,9 +51,14 @@ U0 MakeRAMDistro(I64 blks=0x18000)
 	DirMake("A:/Tmp/ScreenShots");
 
 //--- Snapshot the RAM drive memory as the image file ---
+//Use the drive's ACTUAL block count: BlkDevInit resets max_blk from MSize() of
+//the allocation (rounds up), so the RedSea filesystem spans (max_blk+1) blocks,
+//which is >= blks. Capturing only blks*BLK_SIZE would truncate the tail and
+//corrupt files copied late. The kernel mounts B: with max_blk = imagesize/512-1,
+//so the image size must equal the full filesystem.
 	"Writing %s...\n", RAMDISTRO_IMAGE;
 	Del(RAMDISTRO_IMAGE);
-	FileWrite(RAMDISTRO_IMAGE, bd->RAM_disk, blks * BLK_SIZE);
+	FileWrite(RAMDISTRO_IMAGE, bd->RAM_disk, (bd->max_blk + 1) * BLK_SIZE);
 
 	if (FileFind(RAMDISTRO_IMAGE, &de, FUF_JUST_FILES))
 	{

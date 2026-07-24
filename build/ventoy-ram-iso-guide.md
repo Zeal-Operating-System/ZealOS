@@ -84,7 +84,7 @@ Enter `C` at the boot-drive prompt, ENTER through the rest. Reboot the VM after.
 In ZealOS:
 
 ```
-#include "::/Misc/DoDistroRAM"
+#include "::/Misc/DoDistroRAM";
 ```
 
 Copies the OS into a RAM drive and snapshots it. Output: `::/Tmp/RAMDistro.BIN`
