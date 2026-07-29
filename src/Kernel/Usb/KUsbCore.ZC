@@ -270,7 +270,16 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	dev->drv_data = NULL;
 	dev->desc_name[0] = 0;
 
+//Direct print (not SysLog): visible from any task, incl. UsbRep's re-enum.
+	"USB: enum port %d speed %d route 0x%05X depth %d slot %d\n",
+			root_port, speed, route, depth, slot;
+
 	code = XhciAddressDev(dev);
+	if (code != XHCI_CC_SUCCESS)
+	{//One retry: a SuperSpeed device behind a hub can be slow to settle after reset.
+		Sleep(100);
+		code = XhciAddressDev(dev);
+	}
 	if (code != XHCI_CC_SUCCESS)
 	{
 		"USB: port %d: Address Device failed (%d).\n", port, code;

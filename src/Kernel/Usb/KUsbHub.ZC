@@ -100,13 +100,21 @@ U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
 	dev->hub_mtt	  = 0;	//v1: single-TT (default hub alt setting)
 
 //Re-issue Configure Endpoint so the HC learns this slot is a hub (Hub bit +
-//port count + TT think time now set in XhciConfigureEPs).
+//port count + TT think time now set in XhciConfigureEPs). Direct-print the
+//result: if this fails, downstream Address Device gets a Transaction Error.
 	code = XhciConfigureEPs(dev);
-	if (code != XHCI_CC_SUCCESS)
-		SysLog("USB: hub port %d: configure-as-hub failed (%d).\n", dev->port, code);
+	"USB: hub port %d: cfg-as-hub code=%d, ports=%d, TTT=%d, depth=%d, speed=%d\n",
+			dev->port, code, num_ports, dev->hub_tt_think, dev->depth, dev->speed;
 
-	SysLog("USB: hub port %d: %d ports, TTT=%d, depth=%d.\n",
-		   dev->port, num_ports, dev->hub_tt_think, dev->depth);
+//SuperSpeed hubs route by route string only after being told their tier
+//(USB 3.x 10.14.2.7 SetHubDepth). Skipping this makes every downstream
+//Address Device fail with a Transaction Error. USB2 hubs don't use it.
+	if (dev->speed == USB_SPEED_SUPER)
+	{
+		code = UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_DEV,
+					   USB_HUB_RQ_SET_DEPTH, dev->depth, 0, NULL, 0);
+		"USB: hub port %d: SET_HUB_DEPTH(%d) code=%d\n", dev->port, dev->depth, code;
+	}
 
 	for (i = 1; i <= num_ports; i++)
 		UsbHubSetPortFeature(dev, i, USB_HUB_F_PORT_POWER);
@@ -123,10 +131,10 @@ U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
 		Sleep(100);	//connect debounce
 		if (!UsbHubPortReset(dev, i, &child_speed))
 		{
-			SysLog("USB: hub port %d.%d: reset failed.\n", dev->port, i);
+			"USB: hub port %d.%d: reset failed.\n", dev->port, i;
 			goto next_port;
 		}
-		Sleep(10);
+		Sleep(50);	//post-reset recovery (SS link training needs more than 10ms)
 //Child route: append this port number at the hub's tier nibble.
 		child_route = dev->route | (i << (4 * dev->depth));
 		ndev = UsbDevEnumEx(dev->port, child_speed, child_route, dev->depth + 1,

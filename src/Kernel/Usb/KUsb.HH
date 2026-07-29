@@ -78,6 +78,9 @@
 //Hub class
 #define USB_DESC_HUB			0x29	//hub descriptor (USB2)
 #define USB_DESC_SSHUB			0x2A	//SuperSpeed hub descriptor
+//SuperSpeed hubs must be told their tier before they can route packets
+//(USB 3.x 10.14.2.7). Without it, downstream Address Device fails.
+#define USB_HUB_RQ_SET_DEPTH	12
 //Hub class feature selectors (port)
 #define USB_HUB_F_PORT_CONNECTION	0
 #define USB_HUB_F_PORT_ENABLE		1
@@ -382,6 +385,7 @@ public extern U0  UsbBootDriveFallback();
 public extern U0  UsbTaskMain(I64 dummy=0);
 public extern Bool XhciInit(I64 start_n=0, Bool any=FALSE);
 public extern U0   XhciSwitch();
+public extern U0   XhciFindNic(I64 max_tries=8);
 
 //CDC-ECM USB NIC interface, consumed by the /System net driver
 //$LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$. Operates on the first NIC.

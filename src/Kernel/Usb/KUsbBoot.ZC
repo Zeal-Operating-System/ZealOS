@@ -77,9 +77,11 @@ U0 UsbPortScan()
 
 public U0 UsbRep()
 {//Report attached USB devices.
-	CUsbDev	*dev;
+	CUsbDev	*dev, *ndev;
 	CUsbIf	*uif;
 	I64		 i, j;
+
+	"$$FG,GREEN$$UsbRep BUILD MARKER: ss-hubdepth-5$$FG$$\n";	//bump each rebuild to catch stale kernels
 
 	if (!usb_xhci.present)
 	{
@@ -132,6 +134,29 @@ public U0 UsbRep()
 			"Storage %d: %d MB, drives from %C:.\n", i,
 					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
 					usb_msds[i].first_drive_let;
+
+//Diagnose root ports that are connected but have no bound device (enumeration
+//gaps, e.g. SuperSpeed). Re-attempt enumeration HERE so the enum trace + direct
+//failure prints land in this terminal (usb_task SysLogs are hidden single-user).
+	for (i = 0; i < usb_xhci.max_ports; i++)
+	{
+		if ((XhciPortSC(i) & XHCI_PORTSC_CCS) && !UsbDevByPort(i))
+		{
+			"UNBOUND port %d: PORTSC=0x%08X speed=%d - retrying enum:\n",
+					i, XhciPortSC(i), (XhciPortSC(i) >> 10) & 0xF;
+			if (XhciPortReset(i))
+			{
+				ndev = UsbDevEnum(i);
+				if (ndev)
+				{
+					UsbDrvBind(ndev);
+					"  port %d: enumerated OK.\n", i;
+				}
+			}
+			else
+				"  port %d: XhciPortReset did not enable the port.\n", i;
+		}
+	}
 }
 
 public U0 XhciSwitch()
@@ -149,6 +174,25 @@ public U0 XhciSwitch()
 	Sleep(200);
 	UsbPortScan;
 	UsbRep;
+}
+
+public U0 XhciFindNic(I64 max_tries=8)
+{//Cycle controllers until one has a USB ethernet NIC bound. A USB-C dock puts
+//the SuperSpeed NIC on the Thunderbolt controller while HID sits on the PCH one,
+//and this stack drives a single controller at a time - this hunts for the NIC.
+	I64 i;
+
+	for (i = 0; i < max_tries; i++)
+	{
+		if (UsbEcmPresent)
+		{
+			"XhciFindNic: NIC found.\n";
+			UsbEcmRep;
+			return;
+		}
+		XhciSwitch;
+	}
+	"XhciFindNic: no USB NIC found after %d controller switches.\n", max_tries;
 }
 
 U0 UsbTaskMain(I64 dummy=0)
