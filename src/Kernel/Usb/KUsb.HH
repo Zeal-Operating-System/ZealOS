@@ -63,7 +63,7 @@
 #define USB_MSD_RQ_RESET		0xFF
 #define USB_MSD_RQ_GET_MAX_LUN	0xFE
 
-//CDC / Ethernet Networking Control Model (ECM)
+//CDC / Ethernet Networking Control Model
 #define USB_CLASS_COMM			0x02	//CDC communications (control interface)
 #define USB_CLASS_CDC_DATA		0x0A	//CDC data interface (bulk endpoints)
 #define USB_CDC_SUBCLASS_ECM	0x06	//Ethernet Networking Control Model
@@ -79,8 +79,7 @@
 //Hub class
 #define USB_DESC_HUB			0x29	//hub descriptor (USB2)
 #define USB_DESC_SSHUB			0x2A	//SuperSpeed hub descriptor
-//SuperSpeed hubs must be told their tier before they can route packets
-//(USB 3.x 10.14.2.7). Without it, downstream Address Device fails.
+//SuperSpeed hubs must be told their tier before they can route (USB 3.x 10.14.2.7).
 #define USB_HUB_RQ_SET_DEPTH	12
 //Hub class feature selectors (port)
 #define USB_HUB_F_PORT_CONNECTION	0
@@ -254,14 +253,13 @@ class CUsbEPDesc
 #define XHCI_RING_TRBS			256	//4096 / 16
 #define XHCI_EVT_RING_TRBS		256
 
-//Interrupt/bulk-IN auto-requeue report handler kinds (see CUsbEP.auto_kind).
+//Auto-requeue handler kinds (CUsbEP.auto_kind).
 #define USB_AUTO_NONE			0
 #define USB_AUTO_KBD			1
 #define USB_AUTO_MOUSE			2
 #define USB_AUTO_ECM			3	//CDC-ECM bulk-IN: receive ethernet frame
 
-//Forward decls: report handlers live in UsbHid.ZC / KUsbEcm.ZC (compiled after
-//KXhci.ZC), but XhciEventPoll dispatches to them. Single-pass compiler needs these.
+//XhciEventPoll dispatches to handlers compiled after it.
 extern U0 UsbKbdCB(U8 *dev, U8 *ep);
 extern U0 UsbMouseCB(U8 *dev, U8 *ep);
 extern U0 UsbEcmRxCB(U8 *dev, U8 *ep);
@@ -313,36 +311,6 @@ class CUsbIf
 			 ep_count;
 };
 
-class CUsbDev
-{
-	Bool	 present, configured;
-	I64		 slot,			//xHCI slot id
-			 port,			//root port index (0-based)
-			 speed;			//USB_SPEED_*
-	U8		*dev_ctx,
-			*in_ctx;
-	CUsbEP	 ep0;
-	CUsbEP	 ep_list[USB_EPS_MAX];
-	I64		 ep_count;
-	CUsbIf	 ifs[USB_IFS_MAX];
-	I64		 if_count;
-	I64		 vendor_id, product_id,
-			 dev_class, dev_subclass, dev_proto,
-			 config_val;
-//Topology: root devices have route 0, depth 0, no parent. Devices behind hubs
-//carry an xHCI route string + the parent hub's slot/port (for TT of LS/FS).
-	I64		 route,			//xHCI route string (20 bits)
-			 depth,			//hub tier (0 = attached to a root port)
-			 parent_slot,	//parent hub xHCI slot id (0 = root)
-			 parent_port;	//1-based port number on the parent hub
-	Bool	 is_hub;
-	I64		 hub_ports,		//downstream port count (hubs only)
-			 hub_tt_think,	//TT think time field (0..3)
-			 hub_mtt;		//multi-TT enabled
-	U8		*drv_data;		//class driver private (CUsbMsd / CUsbHid / CUsbEcm)
-	U8		 desc_name[64];	//product string, ASCII
-};
-
 class CXhciGlobals
 {
 	Bool		 present, running;
@@ -368,9 +336,38 @@ class CXhciGlobals
 	I64			 pci_bus, pci_dev, pci_fun;
 };
 
-//Hub driver (KUsbHub.ZC) enumerates downstream devices then binds them via
-//UsbDrvBind (KUsbBoot.ZC, compiled later): forward decls for the single-pass
-//compiler. Declared here (after CUsbDev/CUsbIf) so the struct types are known.
+class CUsbDev
+{
+	Bool	 present, configured;
+	CXhciGlobals *hc;		//owning controller; slot/port are unique only within it
+	I64		 slot,			//xHCI slot id
+			 port,			//root port index (0-based)
+			 speed;			//USB_SPEED_*
+	U8		*dev_ctx,
+			*in_ctx;
+	CUsbEP	 ep0;
+	CUsbEP	 ep_list[USB_EPS_MAX];
+	I64		 ep_count;
+	CUsbIf	 ifs[USB_IFS_MAX];
+	I64		 if_count;
+	I64		 vendor_id, product_id,
+			 dev_class, dev_subclass, dev_proto,
+			 config_val;
+//Topology. Root devices: route 0, depth 0, no parent.
+	I64		 route,			//xHCI route string (20 bits)
+			 depth,			//hub tier (0 = attached to a root port)
+			 parent_slot,	//parent hub xHCI slot id (0 = root)
+			 parent_port;	//1-based port number on the parent hub
+	Bool	 is_hub;
+	I64		 hub_ports,		//downstream port count (hubs only)
+			 hub_tt_think,	//TT think time field (0..3)
+			 hub_mtt;		//multi-TT enabled
+	U8		*drv_data;		//class driver private (CUsbMsd / CUsbHid / CUsbEcm)
+	U8		 desc_name[64];	//product string, ASCII
+};
+
+//KUsbHub.ZC calls UsbDrvBind from KUsbBoot.ZC, compiled later. Declared after
+//CUsbDev/CUsbIf so the types are known.
 extern U0 UsbDrvBind(CUsbDev *dev);
 extern U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif);
 
@@ -386,12 +383,10 @@ public extern U0  UsbRep();
 public extern I64 UsbBootInit();
 public extern U0  UsbBootDriveFallback();
 public extern U0  UsbTaskMain(I64 dummy=0);
-public extern Bool XhciInit(I64 start_n=0, Bool any=FALSE);
-public extern U0   XhciSwitch();
-public extern U0   XhciFindNic(I64 max_tries=8);
+public extern I64  XhciInitAll();
 
-//CDC-ECM USB NIC interface, consumed by the /System net driver
-//$LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$. Operates on the first NIC.
+//CDC-ECM NIC interface for $LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$.
+//Operates on the first bound NIC.
 public extern U0   UsbEcmRep();
 public extern Bool UsbEcmPresent();
 public extern U0   UsbEcmMacAddr(U8 *out6);

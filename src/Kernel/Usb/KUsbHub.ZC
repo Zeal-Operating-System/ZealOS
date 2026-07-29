@@ -1,11 +1,5 @@
-//USB hub class driver: enumerate devices attached to downstream hub ports.
-//Needed because USB NICs (and many devices) sit behind hubs - both QEMU's
-//usb-net and the RTL8153 USB-C adapter enumerate through a hub tier.
-//
-//v1: at attach time we power every downstream port, then reset + enumerate
-//whatever is already connected. No status-change-endpoint hotplug polling yet.
-//Downstream devices are addressed with an xHCI route string + the parent hub's
-//slot/port for TT (see UsbDevEnumEx / XhciAddressDev).
+//USB hub class driver. Enumerates devices on downstream ports at attach time;
+//no status-change-endpoint hotplug polling.
 
 I64 UsbHubGetPortStatus(CUsbDev *hub, I64 port, U32 *_status)
 {//wPortStatus (low 16) + wPortChange (high 16).
@@ -67,14 +61,14 @@ keep_waiting:;
 }
 
 U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
-{//Configure the hub, power its ports, enumerate connected downstream devices.
+{//Configure the hub, power its ports, enumerate what's connected.
 	CUsbDev	*ndev;
 	U8		 buf[16];
 	U32		 st;
 	I64		 i, code, num_ports, hub_char, desc_type, child_speed, child_route;
 
 	no_warn uif;
-//xHCI route strings are 5 nibbles: a hub deeper than tier 5 can't route children.
+//Route strings are 5 nibbles.
 	if (dev->depth >= 5)
 	{
 		SysLog("USB: hub port %d: max hub depth reached, ignoring.\n", dev->port);
@@ -97,17 +91,16 @@ U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
 	dev->is_hub		  = TRUE;
 	dev->hub_ports	  = num_ports;
 	dev->hub_tt_think = (hub_char >> 5) & 3;
-	dev->hub_mtt	  = 0;	//v1: single-TT (default hub alt setting)
+	dev->hub_mtt	  = 0;	//single-TT
 
-//Re-issue Configure Endpoint so the HC learns this slot is a hub (Hub bit +
-//port count + TT think time now set in XhciConfigureEPs).
+//Re-Configure so the HC sees the Hub bit, port count and TT think time.
 	code = XhciConfigureEPs(dev);
 	if (code != XHCI_CC_SUCCESS)
 		SysLog("USB: hub port %d: configure-as-hub failed (%d).\n", dev->port, code);
 
-//SuperSpeed hubs route by route string only after being told their tier
-//(USB 3.x 10.14.2.7 SetHubDepth). Skipping this makes every downstream
-//Address Device fail with a Transaction Error. USB2 hubs don't use it.
+//A SuperSpeed hub won't route by route string until told its tier (USB 3.x
+//10.14.2.7). Without this every downstream Address Device fails with a
+//Transaction Error. USB2 hubs don't use it.
 	if (dev->speed == USB_SPEED_SUPER)
 	{
 		code = UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_DEV,
@@ -137,11 +130,11 @@ U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
 			SysLog("USB: hub port %d.%d: reset failed.\n", dev->port, i);
 			goto next_port;
 		}
-		Sleep(50);	//post-reset recovery (SS link training needs more than 10ms)
-//Child route: append this port number at the hub's tier nibble.
+		Sleep(50);	//post-reset recovery; SS link training needs >10ms
+//Append this port number at the hub's tier nibble.
 		child_route = dev->route | (i << (4 * dev->depth));
 		ndev = UsbDevEnumEx(dev->port, child_speed, child_route, dev->depth + 1,
-							dev->slot, i);
+							dev->slot, i, dev->hc);
 		if (ndev)
 			UsbDrvBind(ndev);
 next_port:;

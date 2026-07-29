@@ -65,7 +65,7 @@ CUsbDev *UsbDevAlloc()
 }
 
 CUsbIf *UsbIfByNum(CUsbDev *dev, I64 if_num)
-{//Return the recorded (alt-0) interface with this bInterfaceNumber, else NULL.
+{//Recorded (alt-0) interface with this bInterfaceNumber, else NULL.
 	I64 i;
 
 	for (i = 0; i < dev->if_count; i++)
@@ -76,15 +76,14 @@ CUsbIf *UsbIfByNum(CUsbDev *dev, I64 if_num)
 }
 
 I64 UsbSetInterface(CUsbDev *dev, I64 if_num, I64 alt)
-{//SET_INTERFACE: select an alternate setting to activate its endpoints.
+{//Select an alternate setting to activate its endpoints.
 	return UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_RECIP_IF, USB_RQ_SET_INTERFACE,
 				   alt, if_num, NULL, 0);
 }
 
 I64 UsbPickEcmConfig(CUsbDev *dev, I64 num_configs)
-{//Scan each configuration for a CDC-ECM control interface; return its config
-//descriptor index (for GET/SET_CONFIGURATION), else 0. RTL8153 and QEMU usb-net
-//are multi-config and their ECM configuration is not index 0.
+{//Config descriptor index holding a CDC-ECM control interface, else 0.
+//RTL8153 and QEMU usb-net are multi-config; ECM is not index 0.
 	CUsbConfigDesc	*cd;
 	CUsbIfDesc		*ifd;
 	U8				*buf;
@@ -167,16 +166,15 @@ U0 UsbParseConfig(CUsbDev *dev, U8 *buf, I64 len)
 					cur_if = NULL;
 			}
 			else
-			{//Alternate setting: attach its endpoints to the matching alt-0 interface
-			//and remember the alt number (CDC-ECM data endpoints live under alt 1).
+			{//Alternate setting: its endpoints belong to the matching alt-0
+			//interface. CDC-ECM data endpoints live under alt 1.
 				cur_if = UsbIfByNum(dev, ifd->if_num);
 				if (cur_if)
 					cur_if->alt = ifd->alt;
 			}
 		}
 		else if (dtype == USB_DESC_CS_IF)
-		{//Class-specific interface descriptor. Grab the CDC-ECM Ethernet functional
-		//descriptor's iMACAddress string index (it follows the comm interface).
+		{//CDC-ECM Ethernet functional descriptor: iMACAddress string index.
 			if (cur_if && dlen >= 4 && buf[off + 2] == USB_CDC_ST_ETHERNET)
 				cur_if->ecm_mac_str_idx = buf[off + 3];
 		}
@@ -218,8 +216,8 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 	dev->configured = FALSE;
 	if (dev->slot)
 	{
-		XhciDisableSlot(dev->slot);
-		usb_xhci->dcbaa[dev->slot] = 0;
+		XhciDisableSlot(dev->slot, dev->hc);
+		dev->hc->dcbaa[dev->slot] = 0;
 	}
 	dev->slot = 0;
 	dev->ep0.valid = FALSE;
@@ -232,17 +230,18 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 }
 
 CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
-					  I64 parent_slot, I64 parent_port)
-{//Enumerate an already-reset+enabled device. Root-port devices pass route 0 /
-//depth 0 / no parent; hub children pass the xHCI route string + parent hub
-//slot/port (see KUsbHub.ZC). USB task only.
+					  I64 parent_slot, I64 parent_port, CXhciGlobals *hc=NULL)
+{//Enumerate an already-reset+enabled device. Root-port devices pass route 0,
+//depth 0, no parent; hub children pass a route string + parent slot/port.
+//USB task only.
 	CUsbDev			*dev;
 	CUsbDevDesc		*dd;
 	CUsbConfigDesc	*cd;
 	U8				*buf;
 	I64				 slot, code, total, mps0, cfg_idx, port = root_port;
 
-	slot = XhciEnableSlot;
+	if (!hc) hc = usb_xhci;
+	slot = XhciEnableSlot(hc);
 	if (!slot)
 	{
 		"USB: port %d: Enable Slot failed.\n", port;
@@ -251,9 +250,10 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	dev = UsbDevAlloc;
 	if (!dev)
 	{
-		XhciDisableSlot(slot);
+		XhciDisableSlot(slot, hc);
 		return NULL;
 	}
+	dev->hc	   = hc;
 	dev->slot  = slot;
 	dev->port  = root_port;
 	dev->speed = speed;
@@ -272,7 +272,7 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 
 	code = XhciAddressDev(dev);
 	if (code != XHCI_CC_SUCCESS)
-	{//One retry: a SuperSpeed device behind a hub can be slow to settle after reset.
+	{//A SuperSpeed device behind a hub can be slow to settle after reset.
 		Sleep(100);
 		code = XhciAddressDev(dev);
 	}
@@ -317,9 +317,7 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	dev->dev_proto	  = dd->dev_proto;
 	UsbStrGet(dev, dd->i_product, dev->desc_name, 64);
 
-//Pick a configuration. Most devices are single-config (index 0); multi-config
-//USB NICs (RTL8153, QEMU usb-net) hide their CDC-ECM config behind a later index,
-//so prefer that one when present.
+//Multi-config USB NICs hide CDC-ECM behind a later index; prefer it.
 	cfg_idx = 0;
 	if (dd->num_configs > 1)
 		cfg_idx = UsbPickEcmConfig(dev, dd->num_configs);
@@ -374,7 +372,7 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	return dev;
 }
 
-CUsbDev *UsbDevEnum(I64 port)
+CUsbDev *UsbDevEnum(I64 port, CXhciGlobals *hc=NULL)
 {//Enumerate a device on a root port (already reset + enabled). USB task only.
-	return UsbDevEnumEx(port, (XhciPortSC(port) >> 10) & 0xF, 0, 0, 0, 0);
+	return UsbDevEnumEx(port, (XhciPortSC(port, hc) >> 10) & 0xF, 0, 0, 0, 0, hc);
 }

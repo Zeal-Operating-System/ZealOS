@@ -1,15 +1,10 @@
-//USB CDC-ECM (Ethernet Networking Control Model) class driver.
-//Binds a USB Ethernet NIC (RTL8153 in its ECM config, QEMU usb-net CDC config),
-//exposes raw Ethernet frame RX/TX over the data interface's bulk endpoints.
-//The /System net driver $LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$
-//drives it via the public UsbEcm* interface (declared in KUsb.HH).
-//
-//RX is event-driven like HID: a bulk-IN TRB auto-requeues in XhciEventPoll
-//(auto_kind == USB_AUTO_ECM), and UsbEcmRxCB pushes each received frame into a
-//single-producer/single-consumer ring the net task drains via UsbEcmRecv.
+//USB CDC-ECM class driver. Raw ethernet frames over the data interface's bulk
+//endpoints. TX is synchronous; RX auto-requeues a bulk-IN TRB in XhciEventPoll
+//(USB_AUTO_ECM) into an SPSC ring. Consumed by the net driver
+//$LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$ via the public UsbEcm*.
 
 #define USB_ECMS_MAX		2
-#define USB_ECM_FRAME_MAX	1600	//>= max ethernet frame (1514) + slack
+#define USB_ECM_FRAME_MAX	1600	//>= 1514 max ethernet frame
 #define USB_ECM_RXQ			16		//RX ring depth (power of two)
 
 class CUsbEcmFrame
@@ -27,7 +22,7 @@ class CUsbEcm
 					 lock;
 	U8				 mac[6];
 	U8				*tx_buf;		//bulk OUT DMA staging
-//RX ring: producer = UsbEcmRxCB (USB task), consumer = UsbEcmRecv (net task).
+//RX ring: UsbEcmRxCB produces (USB task), UsbEcmRecv consumes (net task).
 	CUsbEcmFrame	*rxq;
 	I64				 rxq_head,		//consumer index
 					 rxq_tail,		//producer index
@@ -48,7 +43,7 @@ U0 UsbEcmUnlock(CUsbEcm *ecm)
 }
 
 CUsbEcm *UsbEcmFirst()
-{//First bound NIC, else NULL. v1 supports a single active NIC.
+{//First bound NIC, else NULL.
 	I64 i;
 
 	for (i = 0; i < USB_ECMS_MAX; i++)
@@ -91,8 +86,7 @@ Bool UsbEcmMacParse(CUsbDev *dev, I64 str_idx, U8 *mac)
 }
 
 U0 UsbEcmRxCB(U8 *_dev, U8 *_ep)
-{//Bulk-IN completion (USB task). Copy the frame into the RX ring and requeue
-//happens back in XhciEventPoll. Received length = auto_len - residue.
+{//Bulk-IN completion. Length = auto_len - residue; XhciEventPoll requeues.
 	CUsbDev			*dev = _dev;
 	CUsbEP			*ep  = _ep;
 	CUsbEcm			*ecm = dev->drv_data;
@@ -168,7 +162,7 @@ public Bool UsbEcmPresent()
 }
 
 public U0 UsbEcmRep()
-{//Report USB NIC state: presence, MAC, ring stats. On-demand (boot log scrolls).
+{//Report NIC state: link, MAC, endpoints, ring stats.
 	CUsbEcm	*ecm = UsbEcmFirst;
 	I64		 pending;
 
@@ -198,8 +192,8 @@ public U0 UsbEcmMacAddr(U8 *out6)
 }
 
 U0 UsbEcmDetach(CUsbDev *dev)
-{//Release NIC state on disconnect. Keep DMA/ring allocations for reuse.
-//Scan our own array by dev (UsbDrvUnbind calls every class detacher).
+{//Release NIC state on disconnect; keep allocations. Matched by dev, since
+//UsbDrvUnbind calls every class detacher.
 	I64 i;
 
 	for (i = 0; i < USB_ECMS_MAX; i++)
@@ -212,8 +206,8 @@ U0 UsbEcmDetach(CUsbDev *dev)
 }
 
 U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
-{//uif = the CDC-ECM control (comm) interface. Pair it with the CDC-Data
-//interface, activate its bulk endpoints, read the MAC, start RX.
+{//uif = CDC-ECM control interface. Pairs it with the CDC-Data interface,
+//activates its bulk endpoints, reads the MAC, starts RX.
 	CUsbEcm	*ecm = NULL;
 	CUsbIf	*data_if = NULL;
 	CUsbEP	*ep;
@@ -231,7 +225,7 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 		return;
 	}
 
-//Locate the CDC-Data interface (class 0x0A) that carries the bulk endpoints.
+//CDC-Data interface carries the bulk endpoints.
 	for (i = 0; i < dev->if_count; i++)
 		if (dev->ifs[i].valid && dev->ifs[i].if_class == USB_CLASS_CDC_DATA &&
 			dev->ifs[i].ep_count)
@@ -245,7 +239,7 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 		return;
 	}
 
-//Clear state but keep persistent DMA + ring allocations.
+//Clear state, keep allocations.
 	MemSet(ecm, 0, offset(CUsbEcm.tx_buf));
 	ecm->dev		 = dev;
 	ecm->comm_if_num = uif->if_num;
@@ -263,7 +257,7 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 				ecm->bulk_out = ep;
 		}
 	}
-//Notification endpoint (INT IN) on the comm interface; optional for v1.
+//Notification endpoint; unused.
 	for (i = 0; i < uif->ep_count; i++)
 	{
 		ep = &dev->ep_list[uif->ep_idxs[i]];
@@ -276,7 +270,7 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 		return;
 	}
 
-//Activate the data interface's alt setting that exposes the bulk endpoints.
+//Bulk endpoints live on a non-zero alt setting.
 	if (ecm->data_alt)
 	{
 		code = UsbSetInterface(dev, ecm->data_if_num, ecm->data_alt);
@@ -285,11 +279,11 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 				   dev->port, ecm->data_alt, code);
 	}
 
-//MAC from the ECM functional descriptor's iMACAddress string.
+//MAC from the ECM functional descriptor.
 	if (!uif->ecm_mac_str_idx || !UsbEcmMacParse(dev, uif->ecm_mac_str_idx, ecm->mac))
 		MemSet(ecm->mac, 0, 6);
 
-//Tell the device which frames to deliver: directed + broadcast + multicast.
+//Frames to deliver: directed + broadcast + multicast.
 	UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_IF,
 			USB_CDC_RQ_SET_ETH_PACKET_FILTER,
 			USB_CDC_PACKET_TYPE_DIRECTED | USB_CDC_PACKET_TYPE_BROADCAST |
@@ -302,17 +296,17 @@ U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
 	ecm->rxq_head = 0;
 	ecm->rxq_tail = 0;
 
-//Arm the bulk-IN endpoint for auto-requeued receive (like HID interrupt IN).
+//Arm bulk-IN for auto-requeued receive.
 	if (!ecm->bulk_in->auto_buf)
 		ecm->bulk_in->auto_buf = CAlloc(USB_ECM_FRAME_MAX, sys_task->code_heap);
 	ecm->bulk_in->auto_len	= USB_ECM_FRAME_MAX;
 	ecm->bulk_in->auto_kind	= USB_AUTO_ECM;
 
 	ecm->valid	 = TRUE;
-	ecm->link_up = TRUE;	//assume up; notification EP can refine later
+	ecm->link_up = TRUE;	//no notification-endpoint link tracking
 	dev->drv_data = ecm;
 
-	XhciIntQueue(dev, ecm->bulk_in);	//kick off first receive
+	XhciIntQueue(dev, ecm->bulk_in);	//first receive
 
 	SysLog("USB: ECM port %d: NIC ready, MAC %02X:%02X:%02X:%02X:%02X:%02X\n",
 		   dev->port, ecm->mac[0], ecm->mac[1], ecm->mac[2],
