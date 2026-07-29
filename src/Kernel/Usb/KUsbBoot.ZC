@@ -165,6 +165,7 @@ U0 UsbTaskMain(I64 dummy=0)
 		for (n = 0; n < usb_hc_count; n++)
 			XhciEventPoll(&usb_hcs[n]);
 		UsbHidTick;
+		UsbEcmTick;
 		tick++;
 		for (n = 0; n < usb_hc_count; n++)
 			if (usb_hcs[n].port_change || tick & 0x7F == 0)
