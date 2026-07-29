@@ -219,7 +219,7 @@ U0 UsbDevDetachCore(CUsbDev *dev)
 	if (dev->slot)
 	{
 		XhciDisableSlot(dev->slot);
-		usb_xhci.dcbaa[dev->slot] = 0;
+		usb_xhci->dcbaa[dev->slot] = 0;
 	}
 	dev->slot = 0;
 	dev->ep0.valid = FALSE;
@@ -269,10 +269,6 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	dev->configured = FALSE;
 	dev->drv_data = NULL;
 	dev->desc_name[0] = 0;
-
-//Direct print (not SysLog): visible from any task, incl. UsbRep's re-enum.
-	"USB: enum port %d speed %d route 0x%05X depth %d slot %d\n",
-			root_port, speed, route, depth, slot;
 
 	code = XhciAddressDev(dev);
 	if (code != XHCI_CC_SUCCESS)
@@ -327,8 +323,6 @@ CUsbDev *UsbDevEnumEx(I64 root_port, I64 speed, I64 route, I64 depth,
 	cfg_idx = 0;
 	if (dd->num_configs > 1)
 		cfg_idx = UsbPickEcmConfig(dev, dd->num_configs);
-	SysLog("USB: port %d: %04X:%04X num_configs=%d picked cfg_idx=%d\n",
-		   port, dd->vendor_id, dd->product_id, dd->num_configs, cfg_idx);
 
 //Config descriptor: header first for total length, then full.
 	code = UsbGetDesc(dev, USB_DESC_CONFIG, cfg_idx, buf, 9);

@@ -48,7 +48,7 @@ U0 UsbPortScan()
 	CUsbDev	*dev, *ndev;
 	I64		 port, sc;
 
-	for (port = 0; port < usb_xhci.max_ports; port++)
+	for (port = 0; port < usb_xhci->max_ports; port++)
 	{
 		sc = XhciPortSC(port);
 		if (sc & XHCI_PORTSC_CHANGE_BITS)
@@ -77,22 +77,20 @@ U0 UsbPortScan()
 
 public U0 UsbRep()
 {//Report attached USB devices.
-	CUsbDev	*dev, *ndev;
+	CUsbDev	*dev;
 	CUsbIf	*uif;
 	I64		 i, j;
 
-	"$$FG,GREEN$$UsbRep BUILD MARKER: ss-hubdepth-5$$FG$$\n";	//bump each rebuild to catch stale kernels
-
-	if (!usb_xhci.present)
+	if (!usb_xhci->present)
 	{
 		"No xHCI controller. Re-probing:\n";
 		XhciInit;
 	}
-	if (!usb_xhci.present)
+	if (!usb_xhci->present)
 		return;
 	UsbPortScan; //rescan so a just-plugged device shows up
-	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
-	for (i = 0; i < usb_xhci.max_ports; i++)
+	"xHCI: %d ports, %d slots.\n", usb_xhci->max_ports, usb_xhci->max_slots;
+	for (i = 0; i < usb_xhci->max_ports; i++)
 		"  port %d: PORTSC=0x%08X  CCS=%d PED=%d PP=%d\n", i, XhciPortSC(i),
 				XhciPortSC(i) & 1, XhciPortSC(i) >> 1 & 1, XhciPortSC(i) >> 9 & 1;
 	for (i = 0; i < USB_DEVS_MAX; i++)
@@ -120,13 +118,6 @@ public U0 UsbRep()
 					" [class %d]", uif->if_class;
 			}
 			"\n";
-			for (j = 0; j < dev->if_count; j++)
-			{
-				uif = &dev->ifs[j];
-				"    if%d: cls=%d sub=%d proto=%d alt=%d eps=%d mac_str=%d\n",
-						uif->if_num, uif->if_class, uif->if_subclass, uif->if_proto,
-						uif->alt, uif->ep_count, uif->ecm_mac_str_idx;
-			}
 		}
 	}
 	for (i = 0; i < USB_MSDS_MAX; i++)
@@ -135,28 +126,6 @@ public U0 UsbRep()
 					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
 					usb_msds[i].first_drive_let;
 
-//Diagnose root ports that are connected but have no bound device (enumeration
-//gaps, e.g. SuperSpeed). Re-attempt enumeration HERE so the enum trace + direct
-//failure prints land in this terminal (usb_task SysLogs are hidden single-user).
-	for (i = 0; i < usb_xhci.max_ports; i++)
-	{
-		if ((XhciPortSC(i) & XHCI_PORTSC_CCS) && !UsbDevByPort(i))
-		{
-			"UNBOUND port %d: PORTSC=0x%08X speed=%d - retrying enum:\n",
-					i, XhciPortSC(i), (XhciPortSC(i) >> 10) & 0xF;
-			if (XhciPortReset(i))
-			{
-				ndev = UsbDevEnum(i);
-				if (ndev)
-				{
-					UsbDrvBind(ndev);
-					"  port %d: enumerated OK.\n", i;
-				}
-			}
-			else
-				"  port %d: XhciPortReset did not enable the port.\n", i;
-		}
-	}
 }
 
 public U0 XhciSwitch()
@@ -201,16 +170,16 @@ U0 UsbTaskMain(I64 dummy=0)
 
 	no_warn dummy;
 	usb_task = Fs;
-	if (!usb_xhci.running)
+	if (!usb_xhci->running)
 		return;
 	while (TRUE)
 	{
 		XhciEventPoll;
 		UsbHidTick;
 		tick++;
-		if (usb_xhci.port_change || tick & 0x7F == 0)
+		if (usb_xhci->port_change || tick & 0x7F == 0)
 		{
-			usb_xhci.port_change = FALSE;
+			usb_xhci->port_change = FALSE;
 			UsbPortScan;
 		}
 		Sleep(2);

@@ -8,6 +8,7 @@
 #define USB_DEVS_MAX			16
 #define USB_EPS_MAX				8
 #define USB_IFS_MAX				6
+#define USB_HCS_MAX				4	//xHCI controllers driven at once
 
 //USB descriptor types
 #define USB_DESC_DEV			1
@@ -374,7 +375,9 @@ extern U0 UsbDrvBind(CUsbDev *dev);
 extern U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif);
 
 //Globals defined in $LK,"KXhci.ZC",A="FF:::/Kernel/Usb/KXhci.ZC,usb_xhci"$.
-extern CXhciGlobals	 usb_xhci;
+extern CXhciGlobals	 usb_hcs[USB_HCS_MAX];
+extern I64			 usb_hc_count;
+extern CXhciGlobals	*usb_xhci;	//active controller
 extern CUsbDev		 usb_devs[USB_DEVS_MAX];
 extern CTask		*usb_task;
 extern U8			 usb_boot_iso_drv_let; //Drive letter of mounted USB install media, else 0

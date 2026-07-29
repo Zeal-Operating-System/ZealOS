@@ -1,59 +1,66 @@
 //xHCI (USB3) host controller driver. Polled, no MSI.
 //Commands are issued from the USB task, or from the boot task before it exists.
 //Sync transfers may be awaited from any task; XhciEventPoll is the single
-//event ring consumer, guarded by usb_xhci.poll_lock so the boot task and the
+//event ring consumer, guarded by usb_xhci->poll_lock so the boot task and the
 //USB task can never drain it concurrently.
 
-CXhciGlobals	 usb_xhci;
+//All discovered controllers. A machine has several (Thunderbolt/USB4 plus the
+//PCH one), and devices are spread across them: a USB-C dock can put an ethernet
+//NIC on one while HID sits on another. usb_xhci points at the "active" one --
+//the default target for controller-scoped calls that aren't given an explicit
+//host controller.
+CXhciGlobals	 usb_hcs[USB_HCS_MAX];
+I64				 usb_hc_count = 0;
+CXhciGlobals	*usb_xhci = &usb_hcs[0];
 CUsbDev			 usb_devs[USB_DEVS_MAX];
 CTask			*usb_task = NULL;
 U8				 usb_boot_iso_drv_let = 0;
 
 U32 XhciCapR32(I64 off)
 {
-	U32 *p = usb_xhci.mmio + off;
+	U32 *p = usb_xhci->mmio + off;
 
 	return *p;
 }
 
 U32 XhciOpR32(I64 off)
 {
-	U32 *p = usb_xhci.op + off;
+	U32 *p = usb_xhci->op + off;
 
 	return *p;
 }
 
 U0 XhciOpW32(I64 off, I64 val)
 {
-	U32 *p = usb_xhci.op + off;
+	U32 *p = usb_xhci->op + off;
 
 	*p = val;
 }
 
 U0 XhciOpW64(I64 off, I64 val)
 {
-	U64 *p = usb_xhci.op + off;
+	U64 *p = usb_xhci->op + off;
 
 	*p = val;
 }
 
 U32 XhciRtR32(I64 off)
 {
-	U32 *p = usb_xhci.rt + off;
+	U32 *p = usb_xhci->rt + off;
 
 	return *p;
 }
 
 U0 XhciRtW32(I64 off, I64 val)
 {
-	U32 *p = usb_xhci.rt + off;
+	U32 *p = usb_xhci->rt + off;
 
 	*p = val;
 }
 
 U0 XhciRtW64(I64 off, I64 val)
 {
-	U64 *p = usb_xhci.rt + off;
+	U64 *p = usb_xhci->rt + off;
 
 	*p = val;
 }
@@ -70,13 +77,13 @@ U0 XhciPortSCWrite(I64 port, I64 val)
 
 U0 XhciLock()
 {
-	while (LBts(&usb_xhci.lock, 0))
+	while (LBts(&usb_xhci->lock, 0))
 		Yield;
 }
 
 U0 XhciUnlock()
 {
-	LBtr(&usb_xhci.lock, 0);
+	LBtr(&usb_xhci->lock, 0);
 }
 
 U0 XhciRingInit(CXhciRing *ring)
@@ -163,7 +170,7 @@ U0 XhciIntQueue(CUsbDev *dev, CUsbEP *ep)
 	XhciLock;
 	ep->pending_trb = XhciRingEnq(ep->ring, ep->auto_buf, 0, ep->auto_len,
 								  (XHCI_TRB_NORMAL << 10) | XHCI_TRBF_IOC | XHCI_TRBF_ISP);
-	usb_xhci.db[dev->slot] = ep->dci;
+	usb_xhci->db[dev->slot] = ep->dci;
 	XhciUnlock;
 }
 
@@ -175,25 +182,25 @@ U0 XhciEventPoll()
 	I64			 type, code, slot, dci, addr, work = FALSE;
 	U64			*erdp;
 
-	if (!usb_xhci.running)
+	if (!usb_xhci->running)
 		return;
-	while (LBts(&usb_xhci.poll_lock, 0))
+	while (LBts(&usb_xhci->poll_lock, 0))
 		Yield;
 	while (TRUE)
 	{
-		e = &usb_xhci.evt_ring[usb_xhci.evt_deq];
-		if ((e->control & 1) != usb_xhci.evt_cycle)
+		e = &usb_xhci->evt_ring[usb_xhci->evt_deq];
+		if ((e->control & 1) != usb_xhci->evt_cycle)
 			break;
 		work = TRUE;
 		type = (e->control >> 10) & 0x3F;
 		switch (type)
 		{
 			case XHCI_TRB_EVT_CMD_DONE:
-				usb_xhci.cmd_code = (e->status >> 24) & 0xFF;
-				usb_xhci.cmd_slot = (e->control >> 24) & 0xFF;
-				addr = usb_xhci.cmd_trb;
-				if (usb_xhci.cmd_trb && e->lo == addr & 0xFFFFFFFF)
-					usb_xhci.cmd_done = TRUE;
+				usb_xhci->cmd_code = (e->status >> 24) & 0xFF;
+				usb_xhci->cmd_slot = (e->control >> 24) & 0xFF;
+				addr = usb_xhci->cmd_trb;
+				if (usb_xhci->cmd_trb && e->lo == addr & 0xFFFFFFFF)
+					usb_xhci->cmd_done = TRUE;
 				break;
 
 			case XHCI_TRB_EVT_TRANSFER:
@@ -239,23 +246,23 @@ U0 XhciEventPoll()
 				break;
 
 			case XHCI_TRB_EVT_PORT_SC:
-				usb_xhci.port_change = TRUE;
+				usb_xhci->port_change = TRUE;
 				break;
 		}
-		usb_xhci.evt_deq++;
-		if (usb_xhci.evt_deq == XHCI_EVT_RING_TRBS)
+		usb_xhci->evt_deq++;
+		if (usb_xhci->evt_deq == XHCI_EVT_RING_TRBS)
 		{
-			usb_xhci.evt_deq = 0;
-			usb_xhci.evt_cycle ^= 1;
+			usb_xhci->evt_deq = 0;
+			usb_xhci->evt_cycle ^= 1;
 		}
 	}
 	if (work)
 	{
-		addr = usb_xhci.evt_ring + usb_xhci.evt_deq;
-		erdp = usb_xhci.rt + XHCI_RT_ERDP0;
+		addr = usb_xhci->evt_ring + usb_xhci->evt_deq;
+		erdp = usb_xhci->rt + XHCI_RT_ERDP0;
 		*erdp = addr | 8;	//8 = clear Event Handler Busy
 	}
-	LBtr(&usb_xhci.poll_lock, 0);
+	LBtr(&usb_xhci->poll_lock, 0);
 }
 
 I64 XhciCmd(I64 lo, I64 hi, I64 status, I64 control, I64 *_slot=NULL)
@@ -263,23 +270,23 @@ I64 XhciCmd(I64 lo, I64 hi, I64 status, I64 control, I64 *_slot=NULL)
 	F64 timeout;
 
 	XhciLock;
-	usb_xhci.cmd_done = FALSE;
-	usb_xhci.cmd_code = XHCI_CC_TIMEOUT;
-	usb_xhci.cmd_trb  = XhciRingEnq(&usb_xhci.cmd_ring, lo, hi, status, control);
-	usb_xhci.db[0] = 0;
+	usb_xhci->cmd_done = FALSE;
+	usb_xhci->cmd_code = XHCI_CC_TIMEOUT;
+	usb_xhci->cmd_trb  = XhciRingEnq(&usb_xhci->cmd_ring, lo, hi, status, control);
+	usb_xhci->db[0] = 0;
 	XhciUnlock;
 	timeout = tS + 1.0;
-	while (!usb_xhci.cmd_done && tS < timeout)
+	while (!usb_xhci->cmd_done && tS < timeout)
 	{
 		XhciEventPoll;
 		Yield;
 	}
 	if (_slot)
-		*_slot = usb_xhci.cmd_slot;
-	if (!usb_xhci.cmd_done)
+		*_slot = usb_xhci->cmd_slot;
+	if (!usb_xhci->cmd_done)
 		return XHCI_CC_TIMEOUT;
 
-	return usb_xhci.cmd_code;
+	return usb_xhci->cmd_code;
 }
 
 I64 XhciXferWait(CUsbEP *ep, F64 timeout_s)
@@ -330,7 +337,7 @@ I64 XhciCtrlXfer(CUsbDev *dev, I64 rt, I64 rq, I64 val, I64 idx, U8 *buf, I64 le
 	if (!len || !(rt & USB_RT_DEV_TO_HOST))
 		ctl |= XHCI_TRBF_DIR_IN;	//status stage opposite dir; IN if no data
 	XhciRingEnq(ep->ring, 0, 0, 0, ctl);
-	usb_xhci.db[dev->slot] = 1;
+	usb_xhci->db[dev->slot] = 1;
 	XhciUnlock;
 
 	return XhciXferWait(ep, 1.0);
@@ -346,7 +353,7 @@ I64 XhciBulkXfer(CUsbDev *dev, CUsbEP *ep, U8 *buf, I64 len, F64 timeout_s, I64 
 	ep->xfer_residue = 0;
 	XhciRingEnq(ep->ring, addr & 0xFFFFFFFF, addr >> 32, len,
 				(XHCI_TRB_NORMAL << 10) | XHCI_TRBF_IOC | XHCI_TRBF_ISP);
-	usb_xhci.db[dev->slot] = ep->dci;
+	usb_xhci->db[dev->slot] = ep->dci;
 	XhciUnlock;
 	code = XhciXferWait(ep, timeout_s);
 	if (_residue)
@@ -357,14 +364,14 @@ I64 XhciBulkXfer(CUsbDev *dev, CUsbEP *ep, U8 *buf, I64 len, F64 timeout_s, I64 
 
 U32 *XhciInputCtx(CUsbDev *dev, I64 idx)
 {//idx: 0=input control ctx, 1=slot ctx, 1+dci=EP ctx
-	U32 *p = dev->in_ctx + idx * usb_xhci.ctx_size;
+	U32 *p = dev->in_ctx + idx * usb_xhci->ctx_size;
 
 	return p;
 }
 
 U32 *XhciDevCtxGet(CUsbDev *dev, I64 idx)
 {//idx: 0=slot ctx, dci=EP ctx
-	U32 *p = dev->dev_ctx + idx * usb_xhci.ctx_size;
+	U32 *p = dev->dev_ctx + idx * usb_xhci->ctx_size;
 
 	return p;
 }
@@ -439,13 +446,13 @@ I64 XhciAddressDev(CUsbDev *dev)
 	I64	 mps, addr;
 
 	if (!dev->dev_ctx)
-		dev->dev_ctx = CAllocAligned(usb_xhci.ctx_size * 32, 0x1000, sys_task->code_heap);
+		dev->dev_ctx = CAllocAligned(usb_xhci->ctx_size * 32, 0x1000, sys_task->code_heap);
 	else
-		MemSet(dev->dev_ctx, 0, usb_xhci.ctx_size * 32);
+		MemSet(dev->dev_ctx, 0, usb_xhci->ctx_size * 32);
 	if (!dev->in_ctx)
-		dev->in_ctx = CAllocAligned(usb_xhci.ctx_size * 33, 0x1000, sys_task->code_heap);
+		dev->in_ctx = CAllocAligned(usb_xhci->ctx_size * 33, 0x1000, sys_task->code_heap);
 	else
-		MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+		MemSet(dev->in_ctx, 0, usb_xhci->ctx_size * 33);
 	XhciEPRingInit(&dev->ep0);
 	dev->ep0.dci = 1;
 	dev->ep0.valid = TRUE;
@@ -483,7 +490,7 @@ I64 XhciAddressDev(CUsbDev *dev)
 	ep0_ctx[3] = addr >> 32;
 	ep0_ctx[4] = 8;
 
-	usb_xhci.dcbaa[dev->slot] = dev->dev_ctx;
+	usb_xhci->dcbaa[dev->slot] = dev->dev_ctx;
 	addr = dev->in_ctx;
 
 	return XhciCmd(addr & 0xFFFFFFFF, addr >> 32, 0,
@@ -495,12 +502,12 @@ I64 XhciEvalCtxMPS0(CUsbDev *dev, I64 mps)
 	U32	*icc, *ep0_ctx;
 	I64	 addr;
 
-	MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+	MemSet(dev->in_ctx, 0, usb_xhci->ctx_size * 33);
 	icc = XhciInputCtx(dev, 0);
 	icc[0] = 0;
 	icc[1] = 2;	//A1 = EP0
 	ep0_ctx = XhciInputCtx(dev, 2);
-	MemCopy(ep0_ctx, XhciDevCtxGet(dev, 1), usb_xhci.ctx_size);
+	MemCopy(ep0_ctx, XhciDevCtxGet(dev, 1), usb_xhci->ctx_size);
 	ep0_ctx[1] = (ep0_ctx[1] & 0xFFFF) | (mps << 16);
 	dev->ep0.max_packet = mps;
 	addr = dev->in_ctx;
@@ -515,7 +522,7 @@ I64 XhciConfigureEPs(CUsbDev *dev)
 	CUsbEP	*ep;
 	I64		 i, addr, max_dci = 1, type, ival;
 
-	MemSet(dev->in_ctx, 0, usb_xhci.ctx_size * 33);
+	MemSet(dev->in_ctx, 0, usb_xhci->ctx_size * 33);
 	icc = XhciInputCtx(dev, 0);
 	icc[0] = 0;
 	icc[1] = 1;	//A0 = slot
@@ -543,7 +550,7 @@ I64 XhciConfigureEPs(CUsbDev *dev)
 next_ep:;
 	}
 	slot_ctx = XhciInputCtx(dev, 1);
-	MemCopy(slot_ctx, XhciDevCtxGet(dev, 0), usb_xhci.ctx_size);
+	MemCopy(slot_ctx, XhciDevCtxGet(dev, 0), usb_xhci->ctx_size);
 	slot_ctx[0] = (slot_ctx[0] & 0x07FFFFFF) | (max_dci << 27);
 //Hub: advertise it to the HC so it routes traffic to downstream ports.
 	if (dev->is_hub)
@@ -582,7 +589,7 @@ U0 XhciBiosHandoff()
 	xecp = ((hcc >> 16) & 0xFFFF) * 4;
 	while (xecp)
 	{
-		cap = usb_xhci.mmio + xecp;
+		cap = usb_xhci->mmio + xecp;
 		id = *cap & 0xFF;
 		if (id == 1)
 		{//USB Legacy Support: claim OS ownership
@@ -648,38 +655,38 @@ public Bool XhciInit(I64 start_n=0, Bool any=FALSE)
 	bdf = PCIClassFind(XHCI_PCI_CLASS, n);
 	if (bdf == -1)
 		break;
-	usb_xhci.pci_bus = bdf.u8[2];
-	usb_xhci.pci_dev = bdf.u8[1];
-	usb_xhci.pci_fun = bdf.u8[0];
+	usb_xhci->pci_bus = bdf.u8[2];
+	usb_xhci->pci_dev = bdf.u8[1];
+	usb_xhci->pci_fun = bdf.u8[0];
 
-	bar_lo = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x10);
+	bar_lo = PCIReadU32(usb_xhci->pci_bus, usb_xhci->pci_dev, usb_xhci->pci_fun, 0x10);
 	bar_hi = 0;
 	if ((bar_lo & 6) == 4)	//64-bit BAR
-		bar_hi = PCIReadU32(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 0x14);
+		bar_hi = PCIReadU32(usb_xhci->pci_bus, usb_xhci->pci_dev, usb_xhci->pci_fun, 0x14);
 	addr = bar_hi << 32 | bar_lo & ~0xF;
 	if (!addr)
 		goto xi_next;	//BAR not assigned
 //Enable memory space + bus master
-	cmd = PCIReadU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4);
-	PCIWriteU16(usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun, 4, cmd | 6);
+	cmd = PCIReadU16(usb_xhci->pci_bus, usb_xhci->pci_dev, usb_xhci->pci_fun, 4);
+	PCIWriteU16(usb_xhci->pci_bus, usb_xhci->pci_dev, usb_xhci->pci_fun, 4, cmd | 6);
 
 	if (bar_hi)
-		usb_xhci.mmio = XhciMmioMap(addr);	//BAR above 4GB gets its own mapping
+		usb_xhci->mmio = XhciMmioMap(addr);	//BAR above 4GB gets its own mapping
 	else
-		usb_xhci.mmio = dev.uncached_alias + addr;
-	usb_xhci.op	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_CAPLENGTH) & 0xFF);
-	usb_xhci.rt	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_RTSOFF) & ~0x1F);
-	usb_xhci.db	  = usb_xhci.mmio + (XhciCapR32(XHCI_CAP_DBOFF) & ~3);
+		usb_xhci->mmio = dev.uncached_alias + addr;
+	usb_xhci->op	  = usb_xhci->mmio + (XhciCapR32(XHCI_CAP_CAPLENGTH) & 0xFF);
+	usb_xhci->rt	  = usb_xhci->mmio + (XhciCapR32(XHCI_CAP_RTSOFF) & ~0x1F);
+	usb_xhci->db	  = usb_xhci->mmio + (XhciCapR32(XHCI_CAP_DBOFF) & ~3);
 
 	hcs1 = XhciCapR32(XHCI_CAP_HCSPARAMS1);
 	hcs2 = XhciCapR32(XHCI_CAP_HCSPARAMS2);
 	hcc  = XhciCapR32(XHCI_CAP_HCCPARAMS1);
-	usb_xhci.max_slots = hcs1 & 0xFF;
-	usb_xhci.max_ports = (hcs1 >> 24) & 0xFF;
+	usb_xhci->max_slots = hcs1 & 0xFF;
+	usb_xhci->max_ports = (hcs1 >> 24) & 0xFF;
 	if (hcc & 4)
-		usb_xhci.ctx_size = 64;
+		usb_xhci->ctx_size = 64;
 	else
-		usb_xhci.ctx_size = 32;
+		usb_xhci->ctx_size = 32;
 
 	XhciBiosHandoff;
 
@@ -696,48 +703,48 @@ public Bool XhciInit(I64 start_n=0, Bool any=FALSE)
 	while ((XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_CNR) && tS < timeout)
 		Sleep(1);
 
-	XhciOpW32(XHCI_OP_CONFIG, usb_xhci.max_slots);
+	XhciOpW32(XHCI_OP_CONFIG, usb_xhci->max_slots);
 
 //Device context base address array
-	if (!usb_xhci.dcbaa)
-		usb_xhci.dcbaa = CAllocAligned((usb_xhci.max_slots + 1) * 8, 0x1000, sys_task->code_heap);
+	if (!usb_xhci->dcbaa)
+		usb_xhci->dcbaa = CAllocAligned((usb_xhci->max_slots + 1) * 8, 0x1000, sys_task->code_heap);
 	else
-		MemSet(usb_xhci.dcbaa, 0, (usb_xhci.max_slots + 1) * 8);
+		MemSet(usb_xhci->dcbaa, 0, (usb_xhci->max_slots + 1) * 8);
 
 //Scratchpad buffers
-	usb_xhci.scratch_count = (((hcs2 >> 21) & 0x1F) << 5) | ((hcs2 >> 27) & 0x1F);
-	if (usb_xhci.scratch_count)
+	usb_xhci->scratch_count = (((hcs2 >> 21) & 0x1F) << 5) | ((hcs2 >> 27) & 0x1F);
+	if (usb_xhci->scratch_count)
 	{
-		usb_xhci.scratch_arr = CAllocAligned(usb_xhci.scratch_count * 8, 0x1000, sys_task->code_heap);
-		for (i = 0; i < usb_xhci.scratch_count; i++)
+		usb_xhci->scratch_arr = CAllocAligned(usb_xhci->scratch_count * 8, 0x1000, sys_task->code_heap);
+		for (i = 0; i < usb_xhci->scratch_count; i++)
 		{
 			page = CAllocAligned(0x1000, 0x1000, sys_task->code_heap);
-			usb_xhci.scratch_arr[i] = page;
+			usb_xhci->scratch_arr[i] = page;
 		}
-		usb_xhci.dcbaa[0] = usb_xhci.scratch_arr;
+		usb_xhci->dcbaa[0] = usb_xhci->scratch_arr;
 	}
-	XhciOpW64(XHCI_OP_DCBAAP, usb_xhci.dcbaa);
+	XhciOpW64(XHCI_OP_DCBAAP, usb_xhci->dcbaa);
 
 //Command ring
-	XhciRingInit(&usb_xhci.cmd_ring);
-	addr = usb_xhci.cmd_ring.trbs;
+	XhciRingInit(&usb_xhci->cmd_ring);
+	addr = usb_xhci->cmd_ring.trbs;
 	XhciOpW64(XHCI_OP_CRCR, addr | 1);
 
 //Event ring, single segment, interrupter 0
-	if (!usb_xhci.evt_ring)
-		usb_xhci.evt_ring = CAllocAligned(XHCI_EVT_RING_TRBS * sizeof(CXhciTRB), 0x1000, sys_task->code_heap);
+	if (!usb_xhci->evt_ring)
+		usb_xhci->evt_ring = CAllocAligned(XHCI_EVT_RING_TRBS * sizeof(CXhciTRB), 0x1000, sys_task->code_heap);
 	else
-		MemSet(usb_xhci.evt_ring, 0, XHCI_EVT_RING_TRBS * sizeof(CXhciTRB));
-	usb_xhci.evt_deq = 0;
-	usb_xhci.evt_cycle = 1;
-	if (!usb_xhci.erst)
-		usb_xhci.erst = CAllocAligned(64, 64, sys_task->code_heap);
-	addr = usb_xhci.evt_ring;
-	usb_xhci.erst[0] = addr;
-	usb_xhci.erst[1] = XHCI_EVT_RING_TRBS;
+		MemSet(usb_xhci->evt_ring, 0, XHCI_EVT_RING_TRBS * sizeof(CXhciTRB));
+	usb_xhci->evt_deq = 0;
+	usb_xhci->evt_cycle = 1;
+	if (!usb_xhci->erst)
+		usb_xhci->erst = CAllocAligned(64, 64, sys_task->code_heap);
+	addr = usb_xhci->evt_ring;
+	usb_xhci->erst[0] = addr;
+	usb_xhci->erst[1] = XHCI_EVT_RING_TRBS;
 	XhciRtW32(XHCI_RT_ERSTSZ0, 1);
 	XhciRtW64(XHCI_RT_ERDP0, addr);
-	addr = usb_xhci.erst;
+	addr = usb_xhci->erst;
 	XhciRtW64(XHCI_RT_ERSTBA0, addr);
 //Interrupts stay disabled; we poll.
 
@@ -749,26 +756,26 @@ public Bool XhciInit(I64 start_n=0, Bool any=FALSE)
 	if (XhciOpR32(XHCI_OP_USBSTS) & XHCI_STS_HCH)
 		goto xi_next;	//never left halt -- try the next controller
 
-	usb_xhci.present = TRUE;
-	usb_xhci.running = TRUE;
+	usb_xhci->present = TRUE;
+	usb_xhci->running = TRUE;
 
 //Power the root ports. They come up off, so a device never reports connected
 //(CCS) until PP is set -- QEMU powers them for us, real hardware does not.
-	for (i = 0; i < usb_xhci.max_ports; i++)
+	for (i = 0; i < usb_xhci->max_ports; i++)
 		XhciPortSCWrite(i, XHCI_PORTSC_PP);
 	Sleep(20);
 
 //Prefer a controller with something already plugged in. If nothing is connected
 //and we weren't told to take any, remember it and keep looking.
 	connected = FALSE;
-	for (i = 0; i < usb_xhci.max_ports; i++)
+	for (i = 0; i < usb_xhci->max_ports; i++)
 		if (XhciPortSC(i) & XHCI_PORTSC_CCS)
 			connected = TRUE;
 	if (connected || any)
 	{
 		"xHCI #%d at %02X:%02X:%01X: %d ports, %d slots.\n",
-				n, usb_xhci.pci_bus, usb_xhci.pci_dev, usb_xhci.pci_fun,
-				usb_xhci.max_ports, usb_xhci.max_slots;
+				n, usb_xhci->pci_bus, usb_xhci->pci_dev, usb_xhci->pci_fun,
+				usb_xhci->max_ports, usb_xhci->max_slots;
 		return TRUE;
 	}
 	if (fallback == -1)
