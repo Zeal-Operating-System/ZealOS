@@ -1,0 +1,358 @@
+//USB CDC-ECM class driver. Raw ethernet frames over the data interface's bulk
+//endpoints. Consumed by the net driver
+//$LK,"UsbEcm.ZC",A="FF:::/Home/Net/Drivers/UsbEcm.ZC"$ via the public UsbEcm*.
+//
+//Both directions are queues drained by the USB task, because the net stack
+//transmits from the NetHandler interrupt (TCP ACKs) where blocking on a USB
+//transfer is not possible. RX auto-requeues a bulk-IN TRB in XhciEventPoll
+//(USB_AUTO_ECM); TX is enqueued by UsbEcmSend and sent from UsbEcmTick.
+
+#define USB_ECMS_MAX		2
+#define USB_ECM_FRAME_MAX	2048	//>= ETHERNET_FRAME_SIZE, the net stack's buffer
+#define USB_ECM_RXQ			16		//RX ring depth (power of two)
+#define USB_ECM_TXQ			16		//TX ring depth (power of two)
+
+class CUsbEcmFrame
+{
+	I64	len;
+	U8	data[USB_ECM_FRAME_MAX];
+};
+
+class CUsbEcm
+{
+	Bool			 valid, link_up;
+	CUsbDev			*dev;
+	CUsbEP			*bulk_in, *bulk_out, *int_ep;
+	I64				 data_if_num, comm_if_num, data_alt;
+	U8				 mac[6];
+//RX ring: UsbEcmRxCB produces (USB task), UsbEcmRecv consumes (net task).
+	CUsbEcmFrame	*rxq;
+	I64				 rxq_head,		//consumer index
+					 rxq_tail,		//producer index
+					 rx_drops;
+//TX ring: any caller produces (incl. interrupt context), UsbEcmTick consumes.
+//A slot's len is written last and cleared when sent, so it doubles as "ready".
+	CUsbEcmFrame	*txq;
+	I64				 txq_head,		//consumer index
+					 txq_tail,		//producer index
+					 tx_drops;
+};
+
+CUsbEcm usb_ecms[USB_ECMS_MAX];
+
+CUsbEcm *UsbEcmFirst()
+{//First bound NIC, else NULL.
+	I64 i;
+
+	for (i = 0; i < USB_ECMS_MAX; i++)
+		if (usb_ecms[i].valid)
+			return &usb_ecms[i];
+
+	return NULL;
+}
+
+I64 UsbEcmHexNib(U8 c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
+
+	return -1;
+}
+
+Bool UsbEcmMacParse(CUsbDev *dev, I64 str_idx, U8 *mac)
+{//iMACAddress is a 12-char hex ASCII string descriptor, e.g. "001122334455".
+	U8	s[32];
+	I64	i, hi, lo;
+
+	UsbStrGet(dev, str_idx, s, sizeof(s));
+	if (StrLen(s) < 12)
+		return FALSE;
+	for (i = 0; i < 6; i++)
+	{
+		hi = UsbEcmHexNib(s[i * 2]);
+		lo = UsbEcmHexNib(s[i * 2 + 1]);
+		if (hi < 0 || lo < 0)
+			return FALSE;
+		mac[i] = hi << 4 | lo;
+	}
+
+	return TRUE;
+}
+
+U0 UsbEcmRxCB(U8 *_dev, U8 *_ep)
+{//Bulk-IN completion. Length = auto_len - residue; XhciEventPoll requeues.
+	CUsbDev			*dev = _dev;
+	CUsbEP			*ep  = _ep;
+	CUsbEcm			*ecm = dev->drv_data;
+	CUsbEcmFrame	*slot;
+	I64				 len, next;
+
+	if (!ecm || !ecm->valid)
+		return;
+	len = ep->auto_len - ep->xfer_residue;
+	if (len <= 0)
+		return;
+	if (len > USB_ECM_FRAME_MAX)
+		len = USB_ECM_FRAME_MAX;
+	next = (ecm->rxq_tail + 1) & (USB_ECM_RXQ - 1);
+	if (next == ecm->rxq_head)
+	{//ring full: drop
+		ecm->rx_drops++;
+		return;
+	}
+	slot = &ecm->rxq[ecm->rxq_tail];
+	MemCopy(slot->data, ep->auto_buf, len);
+	slot->len = len;
+	ecm->rxq_tail = next;
+}
+
+public I64 UsbEcmSend(U8 *frame, I64 len)
+{//Queue one ethernet frame for transmit. Returns 0 if queued, <0 if not.
+//Callable from interrupt context (the net stack ACKs from NetHandler), so this
+//never blocks: UsbEcmTick performs the transfer.
+	CUsbEcm			*ecm = UsbEcmFirst;
+	CUsbEcmFrame	*slot;
+	I64				 idx, next;
+
+	if (!ecm || !ecm->valid || len <= 0 || len > USB_ECM_FRAME_MAX)
+		return -1;
+	PUSHFD
+	CLI
+	idx  = ecm->txq_tail;
+	next = (idx + 1) & (USB_ECM_TXQ - 1);
+	if (next == ecm->txq_head)
+	{
+		POPFD
+		ecm->tx_drops++;
+		return -1;
+	}
+	ecm->txq_tail = next;
+	POPFD
+	slot = &ecm->txq[idx];
+	MemCopy(slot->data, frame, len);
+	slot->len = len;	//publish last: the consumer waits on a non-zero len
+
+	return 0;
+}
+
+U0 UsbEcmTick()
+{//Drain the TX ring onto bulk OUT. USB task only.
+	CUsbEcm			*ecm;
+	CUsbEcmFrame	*slot;
+	I64				 i, len, code;
+
+	for (i = 0; i < USB_ECMS_MAX; i++)
+	{
+		ecm = &usb_ecms[i];
+		if (!ecm->valid)
+			goto next_ecm;
+		while (ecm->txq_head != ecm->txq_tail)
+		{
+			slot = &ecm->txq[ecm->txq_head];
+			len  = slot->len;
+			if (!len)
+				break;	//producer still copying
+			code = XhciBulkXfer(ecm->dev, ecm->bulk_out, slot->data, len, 1.0);
+			if (code == XHCI_CC_STALL)
+			{
+				UsbClearHalt(ecm->dev, ecm->bulk_out);
+				code = XhciBulkXfer(ecm->dev, ecm->bulk_out, slot->data, len, 1.0);
+			}
+//A frame that exactly fills the last packet needs a zero-length packet to mark
+//the end of the transfer, or the device keeps waiting for more.
+			if ((code == XHCI_CC_SUCCESS || code == XHCI_CC_SHORT_PKT) &&
+				!(len % ecm->bulk_out->max_packet))
+				XhciBulkXfer(ecm->dev, ecm->bulk_out, slot->data, 0, 1.0);
+			slot->len = 0;
+			ecm->txq_head = (ecm->txq_head + 1) & (USB_ECM_TXQ - 1);
+		}
+next_ecm:;
+	}
+}
+
+public I64 UsbEcmRecv(U8 *dst, I64 max)
+{//Pull one received ethernet frame. Returns bytes, 0 = none, <0 = error.
+	CUsbEcm			*ecm = UsbEcmFirst;
+	CUsbEcmFrame	*slot;
+	I64				 len;
+
+	if (!ecm || !ecm->valid)
+		return -1;
+	if (ecm->rxq_head == ecm->rxq_tail)
+		return 0;
+	slot = &ecm->rxq[ecm->rxq_head];
+	len = slot->len;
+	if (len > max)
+		len = max;
+	MemCopy(dst, slot->data, len);
+	ecm->rxq_head = (ecm->rxq_head + 1) & (USB_ECM_RXQ - 1);
+
+	return len;
+}
+
+public Bool UsbEcmPresent()
+{
+	CUsbEcm *ecm = UsbEcmFirst;
+
+	return ecm && ecm->link_up;
+}
+
+public U0 UsbEcmRep()
+{//Report NIC state: link, MAC, endpoints, ring stats.
+	CUsbEcm	*ecm = UsbEcmFirst;
+	I64		 pending;
+
+	if (!ecm)
+	{
+		"USB ECM: no NIC bound.\n";
+		return;
+	}
+	pending = (ecm->rxq_tail - ecm->rxq_head) & (USB_ECM_RXQ - 1);
+	"USB ECM: port %d  link=%d  MAC %02X:%02X:%02X:%02X:%02X:%02X\n",
+			ecm->dev->port, ecm->link_up,
+			ecm->mac[0], ecm->mac[1], ecm->mac[2],
+			ecm->mac[3], ecm->mac[4], ecm->mac[5];
+	"  data_if=%d alt=%d  bulk_in=0x%02X bulk_out=0x%02X\n",
+			ecm->data_if_num, ecm->data_alt,
+			ecm->bulk_in->addr, ecm->bulk_out->addr;
+	"  rxq=%d rx_drops=%d  txq=%d tx_drops=%d\n", pending, ecm->rx_drops,
+			(ecm->txq_tail - ecm->txq_head) & (USB_ECM_TXQ - 1), ecm->tx_drops;
+}
+
+public U0 UsbEcmMacAddr(U8 *out6)
+{
+	CUsbEcm *ecm = UsbEcmFirst;
+
+	if (ecm)
+		MemCopy(out6, ecm->mac, 6);
+	else
+		MemSet(out6, 0, 6);
+}
+
+U0 UsbEcmDetach(CUsbDev *dev)
+{//Release NIC state on disconnect; keep allocations. Matched by dev, since
+//UsbDrvUnbind calls every class detacher.
+	I64 i;
+
+	for (i = 0; i < USB_ECMS_MAX; i++)
+		if (usb_ecms[i].valid && usb_ecms[i].dev == dev)
+		{
+			usb_ecms[i].valid	= FALSE;
+			usb_ecms[i].link_up	= FALSE;
+			usb_ecms[i].dev		= NULL;
+		}
+}
+
+U0 UsbEcmAttach(CUsbDev *dev, CUsbIf *uif)
+{//uif = CDC-ECM control interface. Pairs it with the CDC-Data interface,
+//activates its bulk endpoints, reads the MAC, starts RX.
+	CUsbEcm	*ecm = NULL;
+	CUsbIf	*data_if = NULL;
+	CUsbEP	*ep;
+	I64		 i, code;
+
+	for (i = 0; i < USB_ECMS_MAX; i++)
+		if (!usb_ecms[i].valid)
+		{
+			ecm = &usb_ecms[i];
+			break;
+		}
+	if (!ecm)
+	{
+		SysLog("USB: ECM port %d: no free NIC slot.\n", dev->port);
+		return;
+	}
+
+//CDC-Data interface carries the bulk endpoints.
+	for (i = 0; i < dev->if_count; i++)
+		if (dev->ifs[i].valid && dev->ifs[i].if_class == USB_CLASS_CDC_DATA &&
+			dev->ifs[i].ep_count)
+		{
+			data_if = &dev->ifs[i];
+			break;
+		}
+	if (!data_if)
+	{
+		SysLog("USB: ECM port %d: no data interface with endpoints.\n", dev->port);
+		return;
+	}
+
+//Clear state, keep allocations.
+	MemSet(ecm, 0, offset(CUsbEcm.rxq));
+	ecm->dev		 = dev;
+	ecm->comm_if_num = uif->if_num;
+	ecm->data_if_num = data_if->if_num;
+	ecm->data_alt	 = data_if->alt;
+
+	for (i = 0; i < data_if->ep_count; i++)
+	{
+		ep = &dev->ep_list[data_if->ep_idxs[i]];
+		if ((ep->attr & 3) == USB_EP_TYPE_BULK)
+		{
+			if (ep->addr & 0x80)
+				ecm->bulk_in = ep;
+			else
+				ecm->bulk_out = ep;
+		}
+	}
+//Notification endpoint; unused.
+	for (i = 0; i < uif->ep_count; i++)
+	{
+		ep = &dev->ep_list[uif->ep_idxs[i]];
+		if ((ep->attr & 3) == USB_EP_TYPE_INT && ep->addr & 0x80)
+			ecm->int_ep = ep;
+	}
+	if (!ecm->bulk_in || !ecm->bulk_out)
+	{
+		SysLog("USB: ECM port %d: missing bulk endpoints.\n", dev->port);
+		return;
+	}
+
+//Bulk endpoints live on a non-zero alt setting.
+	if (ecm->data_alt)
+	{
+		code = UsbSetInterface(dev, ecm->data_if_num, ecm->data_alt);
+		if (code != XHCI_CC_SUCCESS)
+			SysLog("USB: ECM port %d: SET_INTERFACE alt %d failed (%d).\n",
+				   dev->port, ecm->data_alt, code);
+	}
+
+//MAC from the ECM functional descriptor.
+	if (!uif->ecm_mac_str_idx || !UsbEcmMacParse(dev, uif->ecm_mac_str_idx, ecm->mac))
+		MemSet(ecm->mac, 0, 6);
+
+//Frames to deliver: directed + broadcast + multicast.
+	UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_IF,
+			USB_CDC_RQ_SET_ETH_PACKET_FILTER,
+			USB_CDC_PACKET_TYPE_DIRECTED | USB_CDC_PACKET_TYPE_BROADCAST |
+			USB_CDC_PACKET_TYPE_ALL_MULTICAST, ecm->comm_if_num, NULL, 0);
+
+	if (!ecm->rxq)
+		ecm->rxq = CAlloc(sizeof(CUsbEcmFrame) * USB_ECM_RXQ, sys_task->code_heap);
+	if (!ecm->txq)
+		ecm->txq = CAlloc(sizeof(CUsbEcmFrame) * USB_ECM_TXQ, sys_task->code_heap);
+	ecm->rxq_head = 0;
+	ecm->rxq_tail = 0;
+	ecm->txq_head = 0;
+	ecm->txq_tail = 0;
+
+//Arm bulk-IN for auto-requeued receive.
+	if (!ecm->bulk_in->auto_buf)
+		ecm->bulk_in->auto_buf = CAlloc(USB_ECM_FRAME_MAX, sys_task->code_heap);
+	ecm->bulk_in->auto_len	= USB_ECM_FRAME_MAX;
+	ecm->bulk_in->auto_kind	= USB_AUTO_ECM;
+
+	ecm->valid	 = TRUE;
+	ecm->link_up = TRUE;	//no notification-endpoint link tracking
+	dev->drv_data = ecm;
+
+	XhciIntQueue(dev, ecm->bulk_in);	//first receive
+
+	SysLog("USB: ECM port %d: NIC ready, MAC %02X:%02X:%02X:%02X:%02X:%02X\n",
+		   dev->port, ecm->mac[0], ecm->mac[1], ecm->mac[2],
+		   ecm->mac[3], ecm->mac[4], ecm->mac[5]);
+}

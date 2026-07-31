@@ -12,6 +12,41 @@
 //Old master boot record
 #define BOOT_DIR_OLDMBR_BIN 	BOOT_DIR "/OldMBR.BIN"
 
+
+Bool BootMHDRawRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Whole-device raw read for boot-loader installs. USB-capable kernels export
+//BlkDevRawBlksRead; resolve it at RUNTIME so this file still parses on older
+//kernels during distro bootstrap. Fall back to direct AHCI.
+	CHash	*h = HashFind("BlkDevRawBlksRead", Fs->hash_table, HTT_FUN | HTT_EXPORT_SYS_SYM);
+	I64		 fp = 0;
+
+//Public kernel funcs are hashed as sys exports (CHashExport.val), JIT-local as
+//CHashFun.exe_addr; handle both so this resolves on the running (new) kernel.
+	if (h)
+		if (h->type & HTT_FUN)
+			fp = h(CHashFun *)->exe_addr;
+		else
+			fp = h(CHashExport *)->val;
+	if (fp)
+		return CallInd(fp, bd, buf, blk, count);
+	return AHCIAtaBlksRead(bd, buf, blk, count);
+}
+
+Bool BootMHDRawWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Whole-device raw write; see $LK,"BootMHDRawRead",A="MN:BootMHDRawRead"$().
+	CHash	*h = HashFind("BlkDevRawBlksWrite", Fs->hash_table, HTT_FUN | HTT_EXPORT_SYS_SYM);
+	I64		 fp = 0;
+
+	if (h)
+		if (h->type & HTT_FUN)
+			fp = h(CHashFun *)->exe_addr;
+		else
+			fp = h(CHashExport *)->val;
+	if (fp)
+		return CallInd(fp, bd, buf, blk, count);
+	return AHCIAtaBlksWrite(bd, buf, blk, count);
+}
+
 public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive, I64 size=1)
 {//Reads MBR from disk drive containing src partition.
 //Writes MBR file to dst BOOT_DIR.
@@ -29,7 +64,7 @@ public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive, I64 size=1)
 	{
 //Bypass partition bounds-checking
 		BlkDevLock(bd);
-		AHCIAtaBlksRead(bd, mbr, 0, size);
+		BootMHDRawRead(bd, mbr, 0, size);
 		BlkDevUnlock(bd);
 
 		Drive(dst_drive);
@@ -52,7 +87,7 @@ public U0 BootMHDOldWrite(U8 src_drive, U8 dst_drive)
 	{
 //Bypass partition bounds-checking
 		BlkDevLock(bd);
-		AHCIAtaBlksWrite(bd, mbr, 0, size / BLK_SIZE);
+		BootMHDRawWrite(bd, mbr, 0, size / BLK_SIZE);
 		BlkDevUnlock(bd);
 	}
 	Free(mbr);
@@ -72,7 +107,7 @@ public U0 BootMHDZero(U8 dst_drive)
 	MemSet(&mbr, 0, BLK_SIZE);
 //Bypass partition bounds-checking
 	BlkDevLock(bd);
-	AHCIAtaBlksWrite(bd, &mbr, 0, 1);
+	BootMHDRawWrite(bd, &mbr, 0, 1);
 	BlkDevUnlock(bd);
 }
 
@@ -157,7 +192,7 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 				*BMHD_DAP_BLK(I64 *) = Clus2Blk(drive, de.clus);
 //Bypass partition bounds-checking
 				BlkDevLock(bd);
-				AHCIAtaBlksRead(bd, &mbr, 0, 1);
+				BootMHDRawRead(bd, &mbr, 0, 1);
 
 				for (i = 0; i < BMHD_END - BMHD_CODE; i++)
 					mbr.code[i] = BMHD_CODE(U8 *)[i];
@@ -173,7 +208,7 @@ public Bool BootMHDIns(U8 drv_let, U8 *drv_list=NULL)
 				mbr.zero = 0;
 				mbr.signature = 0xAA55;
 
-				AHCIAtaBlksWrite(bd, &mbr, 0, 1);
+				BootMHDRawWrite(bd, &mbr, 0, 1);
 
 				BlkDevUnlock(bd);
 				res = TRUE;

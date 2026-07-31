@@ -4,6 +4,15 @@
 #include <limine.h>
 #include <lib.h>
 
+static inline void outl(uint16_t port, uint32_t val) {
+    __asm__ volatile ("outl %0, %1" : : "a"(val), "Nd"(port));
+}
+static inline uint32_t inl(uint16_t port) {
+    uint32_t val;
+    __asm__ volatile ("inl %1, %0" : "=a"(val) : "Nd"(port));
+    return val;
+}
+
 __attribute__((used, section(".limine_requests_start")))
 static volatile uint64_t limine_requests_start_marker[] = LIMINE_REQUESTS_START_MARKER;
 
@@ -137,6 +146,8 @@ struct CKernel {
 	uint8_t sys_is_uefi_booted;
     uint8_t sys_bootloader_id;
 	struct CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
+	uint64_t sys_ram_distro_base;
+	uint64_t sys_ram_distro_size;
 } __attribute__((packed));
 
 #define BL_ZEAL    0
@@ -145,6 +156,17 @@ struct CKernel {
 #define BOOT_SRC_RAM 2
 #define BOOT_SRC_HDD 3
 #define BOOT_SRC_DVD 4
+
+// The kernel runs with a fixed low-memory layout: kernel code below
+// SYS_FIXED_AREA (0x100000), and page tables + system heap growing up from
+// 0x100000. So the kernel MUST load below 0x100000, exactly like the native
+// boot loaders (which use BOOT_RAM_BASE). If loaded at 0x100000, the very
+// first thing KStart32's SYS_INIT_PAGE_TABLES does is write page tables over
+// the running kernel -> crash. Match native: place small kernels at
+// BOOT_RAM_BASE. Kernels too big for low memory fall back to the usable-region
+// search (they can't boot this way -- ship the OS image as a separate module).
+#define BOOT_RAM_BASE 0x7C00
+#define LOW_MEM_LIMIT 0x9F000
 #define RLF_16BIT 0b001
 #define RLF_VESA  0b010
 #define RLF_32BIT 0b100
@@ -191,16 +213,23 @@ void kmain(void) {
     const size_t final_size = align_up_u64(module_kernel->size + trampoline_size, 16) + boot_stack_size;
 
     uintptr_t final_address = (uintptr_t)-1;
-    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
-        struct limine_memmap_entry *entry = memmap_request.response->entries[i];
+    if (BOOT_RAM_BASE + final_size <= LOW_MEM_LIMIT) {
+        // Small kernel: place it low, below SYS_FIXED_AREA, like the native
+        // loaders. This low memory is limine's own (bootloader-reclaimable) but
+        // free to use now that limine has handed off.
+        final_address = BOOT_RAM_BASE;
+    } else {
+        for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
+            struct limine_memmap_entry *entry = memmap_request.response->entries[i];
 
-        if (entry->type != LIMINE_MEMMAP_USABLE) {
-            continue;
-        }
+            if (entry->type != LIMINE_MEMMAP_USABLE) {
+                continue;
+            }
 
-        if (entry->length >= final_size) {
-            final_address = entry->base;
-            break;
+            if (entry->length >= final_size) {
+                final_address = entry->base;
+                break;
+            }
         }
     }
     if (final_address == (uintptr_t)-1) {
@@ -216,6 +245,17 @@ void kmain(void) {
     kernel->sys_framebuffer_height = fb->height;
     kernel->sys_framebuffer_bpp = fb->bpp;
     kernel->sys_framebuffer_addr = (uintptr_t)fb->address - hhdm_request.response->offset;
+
+    // A second limine module is the self-contained OS image (RAM-distro). Pass
+    // its physical address + size to the kernel, which mounts it as RAM drive B:.
+    // The kernel is loaded low, so a large image module is fine up in high mem.
+    kernel->sys_ram_distro_base = 0;
+    kernel->sys_ram_distro_size = 0;
+    if (module_request.response->module_count >= 2) {
+        struct limine_file *img = module_request.response->modules[1];
+        kernel->sys_ram_distro_base = (uintptr_t)img->address - hhdm_request.response->offset;
+        kernel->sys_ram_distro_size = img->size;
+    }
 
     struct limine_video_mode *mode;
     for (size_t i = 0, j = 0; i < fb->mode_count && i < VBE_MODES_NUM; i++)
@@ -291,8 +331,14 @@ void kmain(void) {
 
         printf("    ");
         switch (entry->type) {
-            case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
+                // Modules (incl. the RAM-distro image) must NOT be handed to the
+                // kernel heap or it would clobber them. The kernel was copied
+                // low, so the high kernel-module copy is dead here too.
+                zeal_mem_type = MEM_E820T_RESERVED;
+                printf("MODULES : ");
+                break;
+            case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             case LIMINE_MEMMAP_USABLE:
                 zeal_mem_type = MEM_E820T_USABLE;
                 printf("  USABLE: ");
@@ -335,6 +381,42 @@ void kmain(void) {
     printf("\n");
 
     kernel->mem_E820[mem_count].type = 0;
+
+    // The kernel identity-maps 0..mem_physical_space and draws through it. The
+    // memmap omits the GOP framebuffer, which on UEFI can sit above RAM top, so
+    // stretch mem_physical_space to cover it or every draw lands unmapped (black).
+    {
+        uint64_t fb_top = kernel->sys_framebuffer_addr +
+                          (uint64_t)fb->pitch * fb->height;
+        if (kernel->mem_physical_space < fb_top)
+            kernel->mem_physical_space = fb_top;
+    }
+
+    // Same problem for xHCI MMIO: UEFI parks its 64-bit BARs far above RAM, so
+    // stretch mem_physical_space to cover them (+2GB headroom so the kernel's
+    // top-of-space uncached alias doesn't overlap the BAR). The kernel then just
+    // flips the BAR's identity page to uncached (see XhciMmioMap). Legacy 0xCF8
+    // config access works on UEFI here, so a plain brute scan finds them.
+    for (uint32_t bus = 0; bus < 256; bus++)
+        for (uint32_t dev = 0; dev < 32; dev++)
+            for (uint32_t fun = 0; fun < 8; fun++) {
+                uint32_t sel = 0x80000000u | (bus << 16) | (dev << 11) | (fun << 8);
+                outl(0xCF8, sel | 0x00);
+                if (inl(0xCFC) == 0xFFFFFFFFu)
+                    continue;
+                outl(0xCF8, sel | 0x08);
+                if ((inl(0xCFC) >> 8) != 0x0C0330u) //class/subclass/prog-if != xHCI
+                    continue;
+                outl(0xCF8, sel | 0x10);
+                uint32_t bar_lo = inl(0xCFC);
+                if ((bar_lo & 0x6u) != 0x4u) //not a 64-bit BAR
+                    continue;
+                outl(0xCF8, sel | 0x14);
+                uint64_t bar = ((uint64_t)inl(0xCFC) << 32) | (bar_lo & ~0xFu);
+                uint64_t top = bar + 0x80000000ull; //BAR + 2GB headroom
+                if (kernel->mem_physical_space < top)
+                    kernel->mem_physical_space = top;
+            }
 
     kernel->mem_physical_space = align_up_u64(kernel->mem_physical_space, 0x200000);
 

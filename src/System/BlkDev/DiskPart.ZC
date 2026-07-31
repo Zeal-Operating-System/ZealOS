@@ -1,5 +1,21 @@
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically)"
 
+Bool DiskPartRawWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Whole-device raw write. USB-capable kernels export BlkDevRawBlksWrite;
+//resolve at runtime so this file still parses on pre-USB bootstrap kernels.
+	CHash	*h = HashFind("BlkDevRawBlksWrite", Fs->hash_table, HTT_FUN | HTT_EXPORT_SYS_SYM);
+	I64		 fp = 0;
+
+	if (h)
+		if (h->type & HTT_FUN)
+			fp = h(CHashFun *)->exe_addr;
+		else
+			fp = h(CHashExport *)->val;
+	if (fp)
+		return CallInd(fp, bd, buf, blk, count);
+	return AHCIAtaBlksWrite(bd, buf, blk, count);
+}
+
 #define ROUND_DRIVE_TO	(63 * 255)
 #define DRIVE_HEADER	63
 
@@ -40,7 +56,7 @@ drv_let=0 means add new drive that is not already mounted.
 
 	if (drv_let && !Letter2BlkDev(drv_let, FALSE))
 		drv_let = 0;
-	if (!drv_let && !(drv_let = Mount(TRUE)) || !(bd = Letter2BlkDev(drv_let, FALSE)) || bd->type != BDT_ATA)
+	if (!drv_let && !(drv_let = Mount(TRUE)) || !(bd = Letter2BlkDev(drv_let, FALSE)) || (bd->type != BDT_ATA && bd->type != BDT_USB))
 		return 0;
 
 	total = bd->max_blk + 1;
@@ -130,7 +146,7 @@ drv_let=0 means add new drive that is not already mounted.
 		mbr.p[i].size		= remaining;
 		ext_base = offset;
 	}
-	AHCIAtaBlksWrite(bd, &mbr, 0, 1);
+	DiskPartRawWrite(bd, &mbr, 0, 1);
 
 	while (tmppp != &head)
 	{
@@ -159,7 +175,7 @@ drv_let=0 means add new drive that is not already mounted.
 			mbr.p[1].offset		= offset - ext_base;
 			mbr.p[1].size		= tmppp->size;
 		}
-		AHCIAtaBlksWrite(bd, &mbr, start_offset, 1);
+		DiskPartRawWrite(bd, &mbr, start_offset, 1);
 	}
 
 	bd->flags &= ~(BDF_INITIALIZED | BDF_INIT_IN_PROGRESS);
