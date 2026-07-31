@@ -1,0 +1,92 @@
+//Build the RAM-distro OS image: a RedSea filesystem holding the whole OS,
+//snapshotted from a RAM drive. It ships as a separate Limine module alongside
+//the normal Kernel.ZXE (see build/build-ram-iso.sh). ZealBooter passes the
+//module address to the kernel, which mounts it as RAM drive B: and boots from
+//it -- no disk controller needed, so it boots from any loader (Limine ISO/CD/
+//USB, Ventoy, PXE).
+//
+//Run from an installed, writable system:  #include "::/Misc/DoDistroRAM"
+//Output: ::/Tmp/RAMDistro.BIN  (copy to the host, feed to build-ram-iso.sh)
+//
+//Destroys the contents of RAM drive A: while building.
+
+#define RAMDISTRO_IMAGE		"::/Tmp/RAMDistro.BIN"
+
+U0 MakeRAMDistro(I64 blks=0x30000)
+{//blks: image size in 512-byte blocks (default 96MB). MUST exceed the whole OS
+//tree or the copy silently runs out of space and skips files (scattered),
+//producing an image that boots but crashes reading a missing file. Pass a
+//larger value if the sanity check below fails.
+	CBlkDev		*bd;
+	CDirEntry	 de;
+
+	if (!DriveIsWritable)
+	{
+		"Drive must be writable. Install on hard drive or USB first.\n";
+		return;
+	}
+
+//--- Fresh RedSea RAM drive A: to assemble the image in ---
+	"Building %d MB RedSea image in RAM drive A:...\n", (blks * BLK_SIZE) / 0x100000;
+	bd = Letter2BlkDev('A', FALSE);
+	if (bd)
+		BlkDevDel(bd);
+	bd = BlkDevNextFreeSlot('A', BDT_RAM);
+	bd->max_blk = blks - 1;
+	if (!BlkDevAdd(bd,, TRUE, TRUE))
+	{
+		"Could not create RAM drive A:.\n";
+		return;
+	}
+
+//--- Copy the whole OS tree in (same set as the DVD distro) ---
+///Boot is included, unlike the DVD distro where build-iso.sh supplies it: the
+//RAM image is the running root, and installing from it to another disk needs
+///Boot/Limine-BIOS-HDD.HH (OSInstall.ZC includes it at compile time),
+//Limine-BIOS.SYS and ZealBooter.ELF.
+	CopyTree("::/Boot",		"A:/Boot");
+	CopyTree("::/Home",		"A:/Home");
+	Del("A:/Home/Registry.ZC");		//fresh registry on first boot
+	CopyTree("::/System",	"A:/System");
+	CopyTree("::/Apps",		"A:/Apps");
+	CopyTree("::/Compiler",	"A:/Compiler");
+	CopyTree("::/Demo",		"A:/Demo");
+	CopyTree("::/Doc",		"A:/Doc");
+	CopyTree("::/Kernel",	"A:/Kernel");
+	CopyTree("::/Misc",		"A:/Misc");
+	Copy("::/*", "A:/");				//root files (StartOS.ZC, MakeHome.ZC, ...)
+	DirMake("A:/Tmp");
+	DirMake("A:/Tmp/ScreenShots");
+
+//--- Sanity check: if a file present on the source is missing on A:, the copy
+//    ran out of space. Bail rather than ship a broken image. ---
+	if (FileFind("::/Doc/Start.DD")				&& !FileFind("A:/Doc/Start.DD")				||
+		FileFind("::/StartOS.ZC")				&& !FileFind("A:/StartOS.ZC")				||
+		FileFind("::/Boot/Limine-BIOS-HDD.HH")	&& !FileFind("A:/Boot/Limine-BIOS-HDD.HH"))
+	{
+		"\n$$RED$$RAM drive too small: files were skipped during copy.$$FG$$\n"
+		"Re-run with more blocks, e.g. MakeRAMDistro(0x40000); (128MB).\n";
+		return;
+	}
+
+//--- Snapshot the RAM drive memory as the image file ---
+//Use the drive's ACTUAL block count: BlkDevInit resets max_blk from MSize() of
+//the allocation (rounds up), so the RedSea filesystem spans (max_blk+1) blocks,
+//which is >= blks. Capturing only blks*BLK_SIZE would truncate the tail and
+//corrupt files copied late. The kernel mounts B: with max_blk = imagesize/512-1,
+//so the image size must equal the full filesystem.
+	"Writing %s...\n", RAMDISTRO_IMAGE;
+	Del(RAMDISTRO_IMAGE);
+	FileWrite(RAMDISTRO_IMAGE, bd->RAM_disk, (bd->max_blk + 1) * BLK_SIZE);
+
+	if (FileFind(RAMDISTRO_IMAGE, &de, FUF_JUST_FILES))
+	{
+		"\nDone: %s (%d MB).\n", RAMDISTRO_IMAGE, de.size / 0x100000;
+		"Copy it to the host and run build/build-ram-iso.sh.\n";
+		Free(de.full_name);
+	}
+	else
+		"FAILED: image not written.\n";
+}
+
+MakeRAMDistro;

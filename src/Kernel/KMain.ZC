@@ -173,9 +173,11 @@ U0 KMain()
 	IntInit2;
 	LBts(&sys_run_level, RLf_INTERRUPTS);
 
+	"LapicTimerInit;\n";
+	LapicTimerInit;
+
 	"TimeCal;\n";
 	TimeCal;
-
 	"BlkDevsInitAll;\n";
 	BlkDevsInitAll;
 	"\nDiskChange(':');\n";
@@ -217,6 +219,8 @@ U0 KMain()
 	Spawn(&MouseHardDriverInstall);
 	"Spawn(&MouseRawWatcher,, \"MouseRawWatcher\");\n";
 	Spawn(&MouseRawWatcher,, "MouseRawWatcher");
+	"Spawn(&UsbTaskMain,, \"USB\");\n";
+	Spawn(&UsbTaskMain,, "USB");
 
 	"Load(\"Compiler\");\n";
 	Cd("/Compiler");

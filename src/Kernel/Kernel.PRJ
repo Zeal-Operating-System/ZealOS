@@ -55,6 +55,7 @@
 #include "MultiProc"
 #include "EdLite"
 #include "BlkDev/MakeBlkDev"
+#include "Usb/MakeKUsb"
 #include "FunSeg"
 #include "SMBIOS"
 #include "KMain"

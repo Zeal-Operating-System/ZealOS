@@ -10,11 +10,12 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 	switch (bd->type)
 	{
 		case BDT_ATA:
+		case BDT_USB:
 			offset = 0;
 			ext_base = INVALID_CLUS;
 			while (TRUE)
 			{
-				AHCIAtaBlksRead(bd, &mbr, offset, 1);
+				BlkDevRawBlksRead(bd, &mbr, offset, 1);
 				j =- 1;
 				for (i = 0; i < 4; i++)
 				{
@@ -45,7 +46,7 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 										throw('Drive');
 								}
 								mbr.p[i].active = 0x80;
-								AHCIAtaBlksWrite(bd, &mbr, offset, 1);
+								BlkDevRawBlksWrite(bd, &mbr, offset, 1);
 								return TRUE;
 							}
 							drv_num++;
@@ -87,7 +88,10 @@ U0 Format(I64 drv_let, Bool quick=TRUE, Bool confirm=TRUE, I64 type=FSt_FAT32)
 	switch (type)
 	{
 		case FSt_FAT32:
-			if (drive->bd->type == BDT_ATA)
+//FAT32Format reaches the disk only through BlkWrite/BlkWriteZero/ClusAlloc on
+//the CDrive, and DriveTypeSet handles BDT_USB, so USB takes the same path.
+//Other types (RAM, ISO) fall through to RedSea.
+			if (drive->bd->type == BDT_ATA || drive->bd->type == BDT_USB)
 			{
 				Silent;
 				Drive(drv_let);

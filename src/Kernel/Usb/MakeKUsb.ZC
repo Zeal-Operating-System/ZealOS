@@ -1,0 +1,10 @@
+#exe {Cd(__DIR__);};
+#include "KUsb.HH"
+#include "KXhci"
+#include "KUsbCore"
+#include "KUsbHid"
+#include "KUsbMsd"
+#include "KUsbEcm"
+#include "KUsbHub"
+#include "KUsbBoot"
+#exe {Cd("..");};

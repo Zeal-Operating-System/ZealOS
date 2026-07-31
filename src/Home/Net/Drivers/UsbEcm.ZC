@@ -1,0 +1,123 @@
+/*	USB CDC-ECM network driver.
+
+	Net stack side of the kernel CDC-ECM class driver (Kernel/Usb/KUsbEcm.ZC),
+	which owns the bulk transfers and the receive ring. Selected by
+	NetDriverInit when no PCI NIC matched. RX is drained by a task; the USB
+	stack is polled, so there is no NIC interrupt.
+*/
+
+#define USB_ECM_TX_BUFFERS	8	//power of two
+
+//UsbEcm* are public kernel AOT funcs, already in the global symbol table.
+//Do not extern them: that makes an unresolved JIT import instead of binding.
+
+class CUsbEcmNet
+{
+	U8		 mac[MAC_ADDRESS_LENGTH];
+	U8		*tx_buffers;					//USB_ECM_TX_BUFFERS * ETHERNET_FRAME_SIZE
+	I64		 tx_lengths[USB_ECM_TX_BUFFERS];
+	I64		 tx_index;
+	Bool	 running;
+	CTask	*rx_task;
+} usb_ecm_net;
+
+U8 *EthernetMACGet()
+{
+	return usb_ecm_net.mac;
+}
+
+I64 NetDriverPacketBufferGet(I64 de_index)
+{//Built TX frame for this descriptor.
+	return usb_ecm_net.tx_buffers + de_index * ETHERNET_FRAME_SIZE;
+}
+
+I64 NetDriverPacketLengthGet(I64 de_index)
+{//Frame length recorded at allocate time.
+	return usb_ecm_net.tx_lengths[de_index];
+}
+
+U0 NetDriverTransmitPacketFinish(I64 de_index)
+{//Hand the frame to the kernel for a bulk-OUT transfer.
+	U8	*frame = usb_ecm_net.tx_buffers + de_index * ETHERNET_FRAME_SIZE;
+	I64	 len   = usb_ecm_net.tx_lengths[de_index];
+
+	UsbEcmSend(frame, len);
+}
+
+I64 EthernetFrameAllocate(U8 **packet_buffer_out, U8 *source_address,
+						  U8 *destination_address, U16 ethertype, I64 packet_length)
+{/*	Build a frame header in the next TX buffer, return the payload pointer
+	and descriptor index. Pads the payload to the minimum, caps to buffer. */
+
+	U8	*frame;
+	I64	 de_index, total;
+
+	if (packet_length < ETHERNET_MIN_FRAME_SIZE)
+		packet_length = ETHERNET_MIN_FRAME_SIZE;
+	total = ETHERNET_MAC_HEADER_LENGTH + packet_length;
+	if (total > ETHERNET_FRAME_SIZE)
+		total = ETHERNET_FRAME_SIZE;
+
+	de_index = usb_ecm_net.tx_index;
+	usb_ecm_net.tx_index = (usb_ecm_net.tx_index + 1) & (USB_ECM_TX_BUFFERS - 1);
+
+	frame = usb_ecm_net.tx_buffers + de_index * ETHERNET_FRAME_SIZE;
+	MemSet(frame, 0, ETHERNET_FRAME_SIZE);
+	MemCopy(frame,						 destination_address, MAC_ADDRESS_LENGTH);
+	MemCopy(frame + MAC_ADDRESS_LENGTH,	 source_address,	  MAC_ADDRESS_LENGTH);
+	frame[ETHERNET_ETHERTYPE_OFFSET]	 = ethertype >> 8;
+	frame[ETHERNET_ETHERTYPE_OFFSET + 1] = ethertype & 0xFF;
+
+	usb_ecm_net.tx_lengths[de_index] = total;
+	*packet_buffer_out = frame + ETHERNET_MAC_HEADER_LENGTH;
+
+	return de_index;
+}
+
+U0 NetStop()
+{//Pause RX delivery; the kernel keeps filling its ring.
+	usb_ecm_net.running = FALSE;
+}
+
+U0 NetStart()
+{
+	usb_ecm_net.running = TRUE;
+}
+
+U0 UsbEcmNetRxTask(I64 dummy=0)
+{//Drain the kernel ECM ring into the NetQueue.
+	U8	*buf;
+	I64	 len;
+
+	no_warn dummy;
+	usb_ecm_net.rx_task = Fs;
+	buf = MAlloc(ETHERNET_FRAME_SIZE);
+	while (TRUE)
+	{
+		len = UsbEcmRecv(buf, ETHERNET_FRAME_SIZE);
+		if (len > 0)
+		{
+			if (usb_ecm_net.running)
+				NetQueuePush(buf, len);		//copies + fires I_NETHANDLER
+		}
+		else
+			Sleep(1);
+	}
+}
+
+U0 UsbEcmNetInit()
+{
+	MemSet(&usb_ecm_net, 0, sizeof(CUsbEcmNet));
+	UsbEcmMacAddr(usb_ecm_net.mac);
+	usb_ecm_net.tx_buffers = CAlloc(ETHERNET_FRAME_SIZE * USB_ECM_TX_BUFFERS);
+	usb_ecm_net.tx_index   = 0;
+	usb_ecm_net.running	   = TRUE;
+
+	NetLog("USB ECM NET: driver up, MAC %02X:%02X:%02X:%02X:%02X:%02X",
+		   usb_ecm_net.mac[0], usb_ecm_net.mac[1], usb_ecm_net.mac[2],
+		   usb_ecm_net.mac[3], usb_ecm_net.mac[4], usb_ecm_net.mac[5]);
+
+	Spawn(&UsbEcmNetRxTask,, "UsbEcmRx");
+}
+
+UsbEcmNetInit;

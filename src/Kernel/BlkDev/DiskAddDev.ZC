@@ -30,6 +30,29 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 	}
 }
 
+public Bool BlkDevRawBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Whole-device read, bypassing partition bounds. Dispatches on BlkDev type.
+//Used by $LK,"BlkDevAdd",A="MN:BlkDevAdd"$() partition scans and boot-loader installers.
+	if (bd->type == BDT_USB)
+	{
+		if (fp_usb_msd_blks_read)
+			return (*fp_usb_msd_blks_read)(bd, buf, blk, count);
+		return FALSE;
+	}
+	return AHCIAtaBlksRead(bd, buf, blk, count);
+}
+
+public Bool BlkDevRawBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Whole-device write, bypassing partition bounds. Dispatches on BlkDev type.
+	if (bd->type == BDT_USB)
+	{
+		if (fp_usb_msd_blks_write)
+			return (*fp_usb_msd_blks_write)(bd, buf, blk, count);
+		return FALSE;
+	}
+	return AHCIAtaBlksWrite(bd, buf, blk, count);
+}
+
 I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free)
 {//It will mount just one partition of prt_num>=0.
 //When repartitioing whole drive, whole_drive=TRUE.
@@ -68,6 +91,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 			break;
 
 		case BDT_ATA:
+		case BDT_USB:
 			drive->drive_signature = DRIVE_SIGNATURE_VAL; //Temporarily validate
 			if (!BlkDevInit(bd))
 				drive->drive_signature = 0; //Revoke validation
@@ -83,14 +107,14 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 					drive->size = bd->max_blk + 1 - bd->drv_offset;
 //The following read is a test read.
 					//if it hangs, the drive is not supported.
-					AHCIAtaBlksRead(bd, &mbr, 0, 1);
+					BlkDevRawBlksRead(bd, &mbr, 0, 1);
 					break;
 				}
 				offset = 0;
 				ext_base = INVALID_CLUS;
 				while (prt_num < 0 || num <= prt_num)
 				{
-					AHCIAtaBlksRead(bd, &mbr, offset, 1);
+					BlkDevRawBlksRead(bd, &mbr, offset, 1);
 					if (mbr.signature != 0xAA55)
 						break;
 					j = -1;
@@ -121,7 +145,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 								case MBR_PT_FAT32d:
 								case MBR_PT_FAT32e:
 								case MBR_PT_FAT32f:
-									AHCIAtaBlksRead(bd, &br, drive->drv_offset, 1);
+									BlkDevRawBlksRead(bd, &br, drive->drv_offset, 1);
 
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
@@ -235,24 +259,58 @@ U0 BlkDevsInitAll()
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 
+//Self-contained (RAM-distro) boot: ZealBooter loaded the OS image as a limine
+//module and passed its physical address. Mount it as RAM drive B: (already a
+//RedSea filesystem) and boot from it -- no disk controller needed, so this
+//boots from any loader (Limine ISO/CD/USB, Ventoy, PXE).
+	if (sys_ram_distro_base)
+	{
+		bd = BlkDevNextFreeSlot('B', BDT_RAM);
+		bd->RAM_disk = sys_ram_distro_base;
+		bd->max_blk  = (sys_ram_distro_size >> BLK_SIZE_BITS) - 1;
+		if (BlkDevAdd(bd, , TRUE, TRUE))
+		{
+			blkdev.boot_drive_let = 'B';
+			"\nRAM-distro: booting from embedded image, drive B:.\n";
+		}
+	}
+
 	"\nAHCIInit;\n";
 	AHCIInit;
 
-	if (!blkdev.ahci_hba)
+	"\nUsbBootInit;\n";
+	i = UsbBootInit;
+
+//A RAM-distro already has its boot drive (B: above); the kernel_config mount
+//code targets install hardware (a specific AHCI/DVD drive that isn't here), so
+//skip it entirely. Otherwise run it, wrapped so a failed mount (e.g. missing
+//hardware when booting a DVD-configured kernel from USB) doesn't panic boot --
+//it falls through to UsbBootDriveFallback() / the boot-drive check. The #exe
+//compiler directives stay OUTSIDE the runtime try so its lexical scope is clean.
+	if (!sys_ram_distro_base)
 	{
-		"\nZealOS requires AHCI.\n\n"
+		#exe {
+			StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
+			StreamPrint("try {");
+			if (kernel_config->opts[CONFIG_MOUNT_AHCI_AUTO])
+				StreamPrint("MountAHCIAuto;");
+			StreamDoc(kernel_config->add_dev);
+			StreamPrint("} catch { \"\\nBoot mount code failed (missing hardware?).\\n\"; Fs->catch_except = TRUE; }");
+			StreamPrint("#exe {Option(OPTf_WARN_PAREN, ON);}");
+		};
+	}
+
+	UsbBootDriveFallback;
+
+//A RAM-distro kernel boots with no disk controller at all, so only give up
+//if the boot drive is actually missing after all mount attempts.
+	if (!DriveCheck(Letter2Drive(blkdev.boot_drive_let, FALSE), FALSE))
+	{
+		"\nBoot drive %C: did not mount (no AHCI/USB/RAM boot device).\n\n"
 		"If in IDE compatibility mode, switch to SATA mode.\n"
 		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
-		"Rebooting in 10 seconds...\n";
+		"Rebooting in 10 seconds...\n", blkdev.boot_drive_let;
 		Sleep(10*1000);
 		Reboot;
 	}
-
-	#exe {
-		if (kernel_config->opts[CONFIG_MOUNT_AHCI_AUTO])
-			StreamPrint("MountAHCIAuto;");
-		StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
-		StreamDoc(kernel_config->add_dev);
-		StreamPrint("#exe {Option(OPTf_WARN_PAREN, ON);}");
-	};
 }

@@ -1,0 +1,142 @@
+//USB hub class driver. Enumerates devices on downstream ports at attach time;
+//no status-change-endpoint hotplug polling.
+
+I64 UsbHubGetPortStatus(CUsbDev *hub, I64 port, U32 *_status)
+{//wPortStatus (low 16) + wPortChange (high 16).
+	U8	buf[4];
+	I64	code;
+
+	buf[0] = buf[1] = buf[2] = buf[3] = 0;
+	code = UsbCtrl(hub, USB_RT_DEV_TO_HOST | USB_RT_CLASS | USB_RT_RECIP_OTHER,
+				   USB_RQ_GET_STATUS, 0, port, buf, 4);
+	*_status = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+
+	return code;
+}
+
+I64 UsbHubSetPortFeature(CUsbDev *hub, I64 port, I64 feat)
+{
+	return UsbCtrl(hub, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_OTHER,
+				   USB_RQ_SET_FEATURE, feat, port, NULL, 0);
+}
+
+I64 UsbHubClearPortFeature(CUsbDev *hub, I64 port, I64 feat)
+{
+	return UsbCtrl(hub, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_OTHER,
+				   USB_RQ_CLEAR_FEATURE, feat, port, NULL, 0);
+}
+
+Bool UsbHubPortReset(CUsbDev *hub, I64 port, I64 *_speed)
+{//Reset a downstream port, wait for enable, derive the device speed.
+	U32	st = 0;
+	I64	code;
+	F64	timeout;
+
+	UsbHubSetPortFeature(hub, port, USB_HUB_F_PORT_RESET);
+	timeout = tS + 1.0;
+	while (tS < timeout)
+	{
+		Sleep(10);
+		code = UsbHubGetPortStatus(hub, port, &st);
+		if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+			goto keep_waiting;
+		if (!(st & USB_HUB_PORT_RESET) && (st & USB_HUB_PORT_ENABLE))
+			break;
+keep_waiting:;
+	}
+	UsbHubClearPortFeature(hub, port, USB_HUB_F_C_PORT_RESET);
+	if (!(st & USB_HUB_PORT_ENABLE))
+		return FALSE;
+
+	if (hub->speed == USB_SPEED_SUPER)
+		*_speed = USB_SPEED_SUPER;
+	else if (st & USB_HUB_PORT_LOW_SPEED)
+		*_speed = USB_SPEED_LOW;
+	else if (st & USB_HUB_PORT_HIGH_SPEED)
+		*_speed = USB_SPEED_HIGH;
+	else
+		*_speed = USB_SPEED_FULL;
+
+	return TRUE;
+}
+
+U0 UsbHubAttach(CUsbDev *dev, CUsbIf *uif)
+{//Configure the hub, power its ports, enumerate what's connected.
+	CUsbDev	*ndev;
+	U8		 buf[16];
+	U32		 st;
+	I64		 i, code, num_ports, hub_char, desc_type, child_speed, child_route;
+
+	no_warn uif;
+//Route strings are 5 nibbles.
+	if (dev->depth >= 5)
+	{
+		SysLog("USB: hub port %d: max hub depth reached, ignoring.\n", dev->port);
+		return;
+	}
+
+	if (dev->speed == USB_SPEED_SUPER)
+		desc_type = USB_DESC_SSHUB;
+	else
+		desc_type = USB_DESC_HUB;
+	code = UsbCtrl(dev, USB_RT_DEV_TO_HOST | USB_RT_CLASS | USB_RT_RECIP_DEV,
+				   USB_RQ_GET_DESCRIPTOR, desc_type << 8, 0, buf, 8);
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+	{
+		SysLog("USB: hub port %d: GET hub descriptor failed (%d).\n", dev->port, code);
+		return;
+	}
+	num_ports = buf[2];
+	hub_char  = buf[3] | (buf[4] << 8);
+	dev->is_hub		  = TRUE;
+	dev->hub_ports	  = num_ports;
+	dev->hub_tt_think = (hub_char >> 5) & 3;
+	dev->hub_mtt	  = 0;	//single-TT
+
+//Re-Configure so the HC sees the Hub bit, port count and TT think time.
+	code = XhciConfigureEPs(dev);
+	if (code != XHCI_CC_SUCCESS)
+		SysLog("USB: hub port %d: configure-as-hub failed (%d).\n", dev->port, code);
+
+//A SuperSpeed hub won't route by route string until told its tier (USB 3.x
+//10.14.2.7). Without this every downstream Address Device fails with a
+//Transaction Error. USB2 hubs don't use it.
+	if (dev->speed == USB_SPEED_SUPER)
+	{
+		code = UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_DEV,
+					   USB_HUB_RQ_SET_DEPTH, dev->depth, 0, NULL, 0);
+		if (code != XHCI_CC_SUCCESS)
+			SysLog("USB: hub port %d: SET_HUB_DEPTH failed (%d).\n", dev->port, code);
+	}
+
+	SysLog("USB: hub port %d: %d ports, TTT=%d, depth=%d.\n",
+		   dev->port, num_ports, dev->hub_tt_think, dev->depth);
+
+	for (i = 1; i <= num_ports; i++)
+		UsbHubSetPortFeature(dev, i, USB_HUB_F_PORT_POWER);
+	Sleep(100);	//power-good settle
+
+	for (i = 1; i <= num_ports; i++)
+	{
+		code = UsbHubGetPortStatus(dev, i, &st);
+		if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+			goto next_port;
+		if (!(st & USB_HUB_PORT_CONNECTION))
+			goto next_port;
+		UsbHubClearPortFeature(dev, i, USB_HUB_F_C_PORT_CONNECTION);
+		Sleep(100);	//connect debounce
+		if (!UsbHubPortReset(dev, i, &child_speed))
+		{
+			SysLog("USB: hub port %d.%d: reset failed.\n", dev->port, i);
+			goto next_port;
+		}
+		Sleep(50);	//post-reset recovery; SS link training needs >10ms
+//Append this port number at the hub's tier nibble.
+		child_route = dev->route | (i << (4 * dev->depth));
+		ndev = UsbDevEnumEx(dev->port, child_speed, child_route, dev->depth + 1,
+							dev->slot, i, dev->hc);
+		if (ndev)
+			UsbDrvBind(ndev);
+next_port:;
+	}
+}

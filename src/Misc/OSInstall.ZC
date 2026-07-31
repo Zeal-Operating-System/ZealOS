@@ -134,10 +134,136 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 
 }
 
+//Target selection. ATA needs its AHCI port mounted first; USB drives are
+//auto-mounted by the kernel USB driver, so only a partition letter is needed.
+//Returns TRUE for USB. *_port_st is the ATA port string, NULL for USB.
+Bool InstallTargetSelect(CTask *task, I64 *_drv_let, U8 **_port_st)
+{
+	I64		 ch, drv_let, cand;
+	U8		*st, *port_st = NULL;
+	CBlkDev	*bd;
+	CDrive	*drive;
+
+	"\n$$PURPLE$$A$$FG$$) ATA/AHCI hard drive\n"
+	"$$PURPLE$$U$$FG$$) USB drive\n"
+	"\nTarget Device Type (A/U): ";
+	do
+		ch = ToUpper(CharGet(, FALSE));
+	while (ch != 'A' && ch != 'U');
+
+	"%c\n", ch;
+
+	if (ch == 'A')
+	{
+		XTalk(task, "Mount;\nC\n");
+
+		"\nSelect the port of the ATA drive to install on.\n"
+		"Hard Drive Port: ";
+		while (TRUE)
+		{
+			port_st = StrGet;
+			if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
+				((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
+			{
+				break;
+			}
+			Free(port_st);
+		}
+
+		XTalkWait(task, "%s\n\n", port_st);
+	}
+	else
+		"\nUSB drives (V-Z) are auto-mounted by the kernel. No port needed.\n";
+
+	DriveRep;
+	drv_let = 0;
+	while (!drv_let)
+	{
+		st = StrGet("\nDestination Partition Letter: ");
+//Letter2Letter(0) resolves to the current drive, so an empty entry must not
+//reach it.
+		if (*st)
+			cand = Letter2Letter(*st);
+		else
+			cand = 0;
+		Free(st);
+
+		if ('A' <= cand <= 'Z')
+		{
+			bd = Letter2BlkDev(cand, FALSE);
+			if (!bd)
+				PrintErr("Drive %C: is not mounted.\n", cand);
+			else if (ch == 'U' && bd->type != BDT_USB)
+				PrintErr("Drive %C: is not a USB drive.\n", cand);
+			else if (bd->flags & BDF_READ_ONLY)
+				PrintErr("Drive %C: is read-only.\n", cand);
+			else
+			{
+//A blank USB stick is exposed as one raw whole-device drive with FSt_UNKNOWN.
+//Partitioning yields new drive letters, so re-select afterwards. An unformatted
+//partition also reads FSt_UNKNOWN, so this is an offer, not a requirement.
+				drive = Letter2Drive(cand, FALSE);
+				if (drive && drive->fs_type == FSt_UNKNOWN)
+				{
+					"$$RED$$Drive %C: has no recognized file system. "
+					"Partition the whole device?$$FG$$", cand;
+					if (YorN)
+					{
+						'\n';
+						DiskPart(cand);
+						DriveRep;
+					}
+					else
+					{
+						'\n';
+						drv_let = cand;
+					}
+				}
+				else
+					drv_let = cand;
+			}
+		}
+	}
+
+	*_drv_let = drv_let;
+	*_port_st = port_st;
+
+	return ch == 'U';
+}
+
+//A UEFI-booted installer leaves the boot device's MBR alone. A target on some
+//other device still needs a boot loader written, or nothing boots it.
+Bool InstallNeedsMBR(I64 drv_let)
+{
+	CDrive *target, *boot;
+
+	if (!sys_is_uefi_booted)
+		return TRUE;
+
+	target	= Letter2Drive(drv_let, FALSE);
+	boot	= Letter2Drive(':', FALSE);
+
+	return target && boot && target->bd != boot->bd;
+}
+
+//Drives the KConfig dialogs raised by the kernel compile inside BootHDIns:
+//boot drive letter (ENTER = the drive BootHDIns just made current), Mount2
+//entries, blank line to leave Mount2, then disk cache size and options.
+//Mount2 exits on the first iteration that mounts nothing.
+U0 InstallBootHDIns(CTask *task, I64 drv_let, U8 *port_st)
+{
+	if (port_st)
+		XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
+	else //USB target: kernel auto-mounts it, so only the RAM drive is configured.
+		XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n\n", drv_let);
+
+	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
+}
+
 U0 OSUpgrade()
 {
 	I64		 drv_let, ch;
-	U8		*st, *port_st;
+	U8		*port_st;
 	CTask	*task;
 
 	task = User;
@@ -151,44 +277,17 @@ U0 OSUpgrade()
 	WinVert(task->win_bottom + 3, Fs->win_bottom);
 	WinToTop(Fs);
 
-	XTalk(task, "Mount;\nC\n");
+	"\n\nSelect the device with an existing installation.\n";
 
-	"\n\nSelect the port of the ATA drive with an existing installation.\n\n";
-
-	"Hard Drive Port: ";
-	while (TRUE)
-	{
-		port_st = StrGet;
-		if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
-			((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
-		{
-			break;
-		}
-		Free(port_st);
-	}
-
-	XTalkWait(task, "%s\n\n", port_st);
-
-	DriveRep;
-	do
-	{
-		st = StrGet("\nInstallation Partition Letter: ");
-		if (*st)
-			drv_let = Letter2Letter(*st);
-		else
-			drv_let = 0;
-		Free(st);
-	}
-	while (!('A' <= drv_let <= 'Z'));
+	InstallTargetSelect(task, &drv_let, &port_st);
 
 	'\n';
 
 	OSMerge(drv_let); // src_drv needed?
 
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
-	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
+	InstallBootHDIns(task, drv_let, port_st);
 
-	if (!sys_is_uefi_booted)
+	if (InstallNeedsMBR(drv_let))
 	{
 		"$$RED$$Install Master Boot Loader?$$FG$$";
 		if (YorN)
@@ -253,6 +352,9 @@ U0 InstallDrive(U8 drv_let)
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
 	ExePrint("DirMake(\"%C:/Home\");",				drv_let);
+//BootHDIns moves Kernel.ZXE into /Boot; the dir is absent if the source tree
+//carries no /Boot.
+	ExePrint("DirMake(\"%C:/Boot\");",				drv_let);
 
 	st = MStrPrint("%C:/Home/DoDistro.ZC", drv_let);
 	if (!FileFind(st))
@@ -375,7 +477,7 @@ U0 VMInstallWiz()
 U0 RegularInstallWiz()
 {
 	I64		 drv_let;
-	U8		*st, *port_st;
+	U8		*port_st;
 	I64		 ch;
 	CTask	*task;
 
@@ -390,35 +492,7 @@ U0 RegularInstallWiz()
 	WinVert(task->win_bottom + 3, Fs->win_bottom);
 	WinToTop(Fs);
 
-	XTalk(task, "Mount;\nC\n");
-
-	"\nSelect the port of the ATA drive to install on.\n";
-
-	"Hard Drive Port: ";
-	while (TRUE)
-	{
-		port_st = StrGet;
-		if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
-			((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
-		{
-			break;
-		}
-		Free(port_st);
-	}
-
-	XTalkWait(task, "%s\n\n", port_st);
-
-	DriveRep;
-	do
-	{
-		st = StrGet("\nDestination Partition Letter: ");
-		if (*st)
-			drv_let = Letter2Letter(*st);
-		else
-			drv_let = 0;
-		Free(st);
-	}
-	while (!('A' <= drv_let <= 'Z'));
+	InstallTargetSelect(task, &drv_let, &port_st);
 
 	'\n';
 
@@ -443,10 +517,9 @@ U0 RegularInstallWiz()
 	}
 	InstallDrive(drv_let);
 
+	InstallBootHDIns(task, drv_let, port_st);
 
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
-	XTalkWait(task, "\n\n"); //skip through Disk Cache, Options
-	if (!sys_is_uefi_booted)
+	if (InstallNeedsMBR(drv_let))
 	{
 		"$$RED$$Install Master Boot loader?$$FG$$";
 		if (YorN)
@@ -522,7 +595,21 @@ Bool DoInstall(Bool prompt_reboot)
 		if (ch == 'U')
 			OSUpgrade;
 		else
-			VMInstallWiz();
+		{
+//VMInstallWiz auto-picks the first AHCI ATA port. Manual wizard is the only
+//path to a USB target.
+			"\n\nAutomatic (first ATA drive) or manual target select? (A/M): ";
+			do
+				ch = ToUpper(CharGet(, FALSE));
+			while (ch != 'A' && ch != 'M');
+
+			"%c\n", ch;
+
+			if (ch == 'A')
+				VMInstallWiz();
+			else
+				RegularInstallWiz();
+		}
 
 		res = TRUE;
 	}
@@ -560,7 +647,8 @@ Bool DoInstall(Bool prompt_reboot)
 		"Reboot Now ";
 		if (YorN)
 		{
-			DiscEject(':');
+			if (Letter2BlkDevType(':') == BDT_ATAPI)
+				DiscEject(':');
 			Reboot;
 		};
 	}

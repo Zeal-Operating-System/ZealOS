@@ -157,8 +157,87 @@ U0 IntPICInit()
 	OutU8(PIC_2_DATA, 0x02); //IW3 Telling PIC_2 its cascade identity.
 	OutU8(PIC_1_DATA, 0x0D); //IW4 8086 Mode, Buffered Mode (Master PIC)
 	OutU8(PIC_2_DATA, 0x09); //IW4 8086 Mode, Buffered Mode (Slave PIC)
-	OutU8(PIC_1_DATA, 0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
-	OutU8(PIC_2_DATA, 0xFF);
+	OutU8(PIC_1_DATA, 0xFB); //Mask all but IRQ2 Cascade. IRQ0 (PIT) masked -
+	OutU8(PIC_2_DATA, 0xFF);  //the heartbeat is the $LK,"LapicTimerInit",A="MN:LapicTimerInit"$ timer.
+
+//Soft-enable the local APIC, virtual-wire LVTs (LINT0=ExtINT, LINT1=NMI, TPR=0).
+	*(dev.uncached_alias + LAPIC_SVR)(U32 *) |= LAPICF_APIC_ENABLED;
+	*(dev.uncached_alias + LAPIC_LVT_LINT0)(U32 *) = 0x700;
+	*(dev.uncached_alias + LAPIC_LVT_LINT1)(U32 *) = 0x400;
+	*(dev.uncached_alias + LAPIC_TASK_PRIORITY)(U32 *) = 0;
+}
+
+U16 PitCh2Read()
+{//Latch and read the 8254 channel-2 counter (used only for LAPIC-timer cal).
+	OutU8(PIT_CMD, PIT_CMDF_CHANNEL2); //latch ch2
+	return InU8(PIT_2) + InU8(PIT_2) << 8;
+}
+
+U0 LapicTimerInit()
+{//Run the system heartbeat ($LK,"I_TIMER",A="MN:I_TIMER"$: jiffies, preemption, AP timer IPIs)
+//off the local APIC timer, not the 8254 PIT.  Modern UEFI firmware clock-gates
+//the PIT, so IRQ0 never fires and jiffies freeze - every Sleep() then hangs.
+//Boot CPU only; APs are ticked via IPI.
+	CRAXRBXRCXRDX	regs;
+	I64				lapic0, lapic1, pit0, pit1, guard;
+	I64				tsc_hz, max_leaf, lapic_freq, init_count;
+
+	lapic_freq = 0;
+	*(dev.uncached_alias + LAPIC_TIMER_DIVIDE)(U32 *)   = 0x0B;    //divide by 1
+	*(dev.uncached_alias + LAPIC_LVT_TIMER)(U32 *)      = 0x10000; //masked, one-shot
+	*(dev.uncached_alias + LAPIC_TIMER_INIT_CNT)(U32 *) = 0xFFFFFFFF;
+
+//Prefer CPUID.16H base MHz + a TSC-timed window -- accurate on real Intel.
+	tsc_hz = 0;
+	CPUId(0, &regs);
+	max_leaf = regs.rax.u32[0];
+	if (max_leaf >= 0x16)
+	{
+		CPUId(0x16, &regs);
+		tsc_hz = (regs.rax.u32[0] & 0xFFFF) * 1000000;
+	}
+	if (tsc_hz >= 100000000 && tsc_hz <= 10000000000)
+	{
+		pit0 = TSCGet;
+		pit1 = pit0;
+		while (pit1 - pit0 < tsc_hz / 100)
+			pit1 = TSCGet;
+		lapic1     = *(dev.uncached_alias + LAPIC_TIMER_CUR_CNT)(U32 *);
+		lapic_freq = (0xFFFFFFFF - lapic1) * 100;
+	}
+
+//No usable CPUID freq (e.g. QEMU): fall back to PIT channel 2, whose counter
+//runs even with IRQ0 masked, timed over ~10ms.
+	if (!lapic_freq)
+	{
+		OutU8(0x61, InU8(0x61) & ~0x02 | 0x01);                  //gate on, speaker off
+		OutU8(PIT_CMD, PIT_CMDF_CHANNEL2 | PIT_CMDF_ACCESS_WORD);//mode 0, load 0xFFFF
+		OutU8(PIT_2, 0xFF);
+		OutU8(PIT_2, 0xFF);
+		pit0   = PitCh2Read;
+		lapic0 = *(dev.uncached_alias + LAPIC_TIMER_CUR_CNT)(U32 *);
+		guard  = 0;
+		do
+		{
+			pit1 = PitCh2Read;
+			guard++;
+		}
+		while (pit0 - pit1 < SYS_TIMER_FREQ / 100 && guard < 2000000);
+		if (pit0 - pit1 >= SYS_TIMER_FREQ / 100)
+		{
+			lapic1     = *(dev.uncached_alias + LAPIC_TIMER_CUR_CNT)(U32 *);
+			lapic_freq = (lapic0 - lapic1) * SYS_TIMER_FREQ / (pit0 - pit1);
+		}
+		OutU8(0x61, InU8(0x61) & ~0x03);                         //gate off
+	}
+
+//Clamp to a sane LAPIC rate so a bad measurement can never storm the CPU.
+	if (lapic_freq < 1000000 || lapic_freq > 10000000000)
+		lapic_freq = 100000000; //100MHz safe default
+	init_count = lapic_freq / JIFFY_FREQ;
+
+	*(dev.uncached_alias + LAPIC_LVT_TIMER)(U32 *)      = I_TIMER + 0x20000; //periodic
+	*(dev.uncached_alias + LAPIC_TIMER_INIT_CNT)(U32 *) = init_count;
 }
 
 interrupt U0 IntNop()
