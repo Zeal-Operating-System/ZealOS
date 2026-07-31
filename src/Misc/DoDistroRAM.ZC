@@ -40,6 +40,11 @@ U0 MakeRAMDistro(I64 blks=0x30000)
 	}
 
 //--- Copy the whole OS tree in (same set as the DVD distro) ---
+///Boot is included, unlike the DVD distro where build-iso.sh supplies it: the
+//RAM image is the running root, and installing from it to another disk needs
+///Boot/Limine-BIOS-HDD.HH (OSInstall.ZC includes it at compile time),
+//Limine-BIOS.SYS and ZealBooter.ELF.
+	CopyTree("::/Boot",		"A:/Boot");
 	CopyTree("::/Home",		"A:/Home");
 	Del("A:/Home/Registry.ZC");		//fresh registry on first boot
 	CopyTree("::/System",	"A:/System");
@@ -55,8 +60,9 @@ U0 MakeRAMDistro(I64 blks=0x30000)
 
 //--- Sanity check: if a file present on the source is missing on A:, the copy
 //    ran out of space. Bail rather than ship a broken image. ---
-	if (FileFind("::/Doc/Start.DD") && !FileFind("A:/Doc/Start.DD") ||
-		FileFind("::/StartOS.ZC")   && !FileFind("A:/StartOS.ZC"))
+	if (FileFind("::/Doc/Start.DD")				&& !FileFind("A:/Doc/Start.DD")				||
+		FileFind("::/StartOS.ZC")				&& !FileFind("A:/StartOS.ZC")				||
+		FileFind("::/Boot/Limine-BIOS-HDD.HH")	&& !FileFind("A:/Boot/Limine-BIOS-HDD.HH"))
 	{
 		"\n$$RED$$RAM drive too small: files were skipped during copy.$$FG$$\n"
 		"Re-run with more blocks, e.g. MakeRAMDistro(0x40000); (128MB).\n";

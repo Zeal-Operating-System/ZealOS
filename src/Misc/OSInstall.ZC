@@ -231,6 +231,21 @@ Bool InstallTargetSelect(CTask *task, I64 *_drv_let, U8 **_port_st)
 	return ch == 'U';
 }
 
+//A UEFI-booted installer leaves the boot device's MBR alone. A target on some
+//other device still needs a boot loader written, or nothing boots it.
+Bool InstallNeedsMBR(I64 drv_let)
+{
+	CDrive *target, *boot;
+
+	if (!sys_is_uefi_booted)
+		return TRUE;
+
+	target	= Letter2Drive(drv_let, FALSE);
+	boot	= Letter2Drive(':', FALSE);
+
+	return target && boot && target->bd != boot->bd;
+}
+
 //Drives the KConfig dialogs raised by the kernel compile inside BootHDIns:
 //boot drive letter (ENTER = the drive BootHDIns just made current), Mount2
 //entries, blank line to leave Mount2, then disk cache size and options.
@@ -272,7 +287,7 @@ U0 OSUpgrade()
 
 	InstallBootHDIns(task, drv_let, port_st);
 
-	if (!sys_is_uefi_booted)
+	if (InstallNeedsMBR(drv_let))
 	{
 		"$$RED$$Install Master Boot Loader?$$FG$$";
 		if (YorN)
@@ -337,6 +352,9 @@ U0 InstallDrive(U8 drv_let)
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
 	ExePrint("DirMake(\"%C:/Home\");",				drv_let);
+//BootHDIns moves Kernel.ZXE into /Boot; the dir is absent if the source tree
+//carries no /Boot.
+	ExePrint("DirMake(\"%C:/Boot\");",				drv_let);
 
 	st = MStrPrint("%C:/Home/DoDistro.ZC", drv_let);
 	if (!FileFind(st))
@@ -501,7 +519,7 @@ U0 RegularInstallWiz()
 
 	InstallBootHDIns(task, drv_let, port_st);
 
-	if (!sys_is_uefi_booted)
+	if (InstallNeedsMBR(drv_let))
 	{
 		"$$RED$$Install Master Boot loader?$$FG$$";
 		if (YorN)
