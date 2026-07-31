@@ -76,7 +76,7 @@ U0 NetDriverInit()
 		net_driver = net_driver->next;
 	}
 
-//No supported PCI NIC: fall back to a USB CDC-ECM adapter if one is bound.
+//No PCI NIC: fall back to a bound USB CDC-ECM adapter.
 	if (!found && UsbEcmPresent)
 	{
 		found = TRUE;

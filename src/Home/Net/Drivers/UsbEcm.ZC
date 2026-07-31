@@ -1,23 +1,15 @@
-/*	USB CDC-ECM network driver (Zeal net stack side).
+/*	USB CDC-ECM network driver.
 
-	Bridges the kernel USB CDC-ECM class driver (src/Kernel/Usb/KUsbEcm.ZC)
-	into the net stack's driver contract. The kernel side owns the xHCI bulk
-	transfers and a receive frame ring; this file just implements the
-	Ethernet + NetDriver entry points the stack calls, and runs a task that
-	drains received frames into the NetQueue (the USB stack is polled - there
-	is no NIC interrupt to hook).
-
-	Selected by NetDriverInit (Run.ZC) when a USB NIC is bound and no PCI NIC
-	matched. Works for QEMU `-device usb-net` (its CDC-ECM config) and the
-	RTL8153 USB-C adapter.
+	Net stack side of the kernel CDC-ECM class driver (Kernel/Usb/KUsbEcm.ZC),
+	which owns the bulk transfers and the receive ring. Selected by
+	NetDriverInit when no PCI NIC matched. RX is drained by a task; the USB
+	stack is polled, so there is no NIC interrupt.
 */
 
-#define USB_ECM_TX_BUFFERS	8	//power of two; TX frames in flight
+#define USB_ECM_TX_BUFFERS	8	//power of two
 
-//The kernel USB ECM interface (UsbEcmPresent/MacAddr/Send/Recv) is provided by
-//public AOT funcs in $LK,"KUsbEcm.ZC",A="FF:::/Kernel/Usb/KUsbEcm.ZC"$; they are
-//already in the global symbol table, so call them directly (no extern - an
-//extern decl creates an unresolved JIT import instead of binding the public).
+//UsbEcm* are public kernel AOT funcs, already in the global symbol table.
+//Do not extern them: that makes an unresolved JIT import instead of binding.
 
 class CUsbEcmNet
 {
@@ -35,17 +27,17 @@ U8 *EthernetMACGet()
 }
 
 I64 NetDriverPacketBufferGet(I64 de_index)
-{//Start of the built TX frame for this descriptor.
+{//Built TX frame for this descriptor.
 	return usb_ecm_net.tx_buffers + de_index * ETHERNET_FRAME_SIZE;
 }
 
 I64 NetDriverPacketLengthGet(I64 de_index)
-{//Total frame length (header + payload) stored at allocate time.
+{//Frame length recorded at allocate time.
 	return usb_ecm_net.tx_lengths[de_index];
 }
 
 U0 NetDriverTransmitPacketFinish(I64 de_index)
-{//Hand the finished frame to the kernel for a bulk-OUT transfer.
+{//Hand the frame to the kernel for a bulk-OUT transfer.
 	U8	*frame = usb_ecm_net.tx_buffers + de_index * ETHERNET_FRAME_SIZE;
 	I64	 len   = usb_ecm_net.tx_lengths[de_index];
 
@@ -54,9 +46,8 @@ U0 NetDriverTransmitPacketFinish(I64 de_index)
 
 I64 EthernetFrameAllocate(U8 **packet_buffer_out, U8 *source_address,
 						  U8 *destination_address, U16 ethertype, I64 packet_length)
-{/*	Build an Ethernet frame header into the next TX buffer and hand back the
-	payload pointer + descriptor index. Mirrors the PCNet driver: pad the
-	payload up to the minimum, cap the whole frame to the buffer size. */
+{/*	Build a frame header in the next TX buffer, return the payload pointer
+	and descriptor index. Pads the payload to the minimum, caps to buffer. */
 
 	U8	*frame;
 	I64	 de_index, total;
@@ -84,7 +75,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out, U8 *source_address,
 }
 
 U0 NetStop()
-{//Pause RX delivery (the kernel keeps draining USB into its ring regardless).
+{//Pause RX delivery; the kernel keeps filling its ring.
 	usb_ecm_net.running = FALSE;
 }
 
@@ -94,7 +85,7 @@ U0 NetStart()
 }
 
 U0 UsbEcmNetRxTask(I64 dummy=0)
-{//Drain received frames from the kernel ECM ring into the NetQueue.
+{//Drain the kernel ECM ring into the NetQueue.
 	U8	*buf;
 	I64	 len;
 

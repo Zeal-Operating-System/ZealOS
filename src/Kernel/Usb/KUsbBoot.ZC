@@ -43,31 +43,41 @@ U0 UsbDrvUnbind(CUsbDev *dev)
 	UsbEcmDetach(dev);
 }
 
-U0 UsbPortScan()
-{//Check all root ports for connects/disconnects. USB task only.
+U0 UsbPortScan(CXhciGlobals *hc=NULL)
+{//Check one controller's root ports for connects/disconnects. USB task only.
 	CUsbDev	*dev, *ndev;
-	I64		 port, sc;
+	I64		 port, sc, i;
 
-	for (port = 0; port < usb_xhci.max_ports; port++)
+	if (!hc) hc = usb_xhci;
+	for (port = 0; port < hc->max_ports; port++)
 	{
-		sc = XhciPortSC(port);
+		sc = XhciPortSC(port, hc);
 		if (sc & XHCI_PORTSC_CHANGE_BITS)
-			XhciPortSCWrite(port, XHCI_PORTSC_PP | (sc & XHCI_PORTSC_CHANGE_BITS));
-		dev = UsbDevByPort(port);
+			XhciPortSCWrite(port, XHCI_PORTSC_PP | (sc & XHCI_PORTSC_CHANGE_BITS), hc);
+		dev = UsbDevByPort(port, hc);
 		if (sc & XHCI_PORTSC_CCS)
 		{
 			if (!dev)
 			{
-				if (XhciPortReset(port))
+				if (XhciPortReset(port, hc))
 				{
-					ndev = UsbDevEnum(port);
+					ndev = UsbDevEnum(port, hc);
 					if (ndev)
 						UsbDrvBind(ndev);
 				}
 			}
 		}
 		else if (dev)
-		{
+		{//Drop the device and anything a hub on this port was carrying; hub
+		//children share the root port number and have no connect status of
+		//their own, so nothing else would ever reap them.
+			for (i = 0; i < USB_DEVS_MAX; i++)
+				if (usb_devs[i].present && usb_devs[i].hc == hc &&
+					usb_devs[i].port == port && usb_devs[i].depth)
+				{
+					UsbDrvUnbind(&usb_devs[i]);
+					UsbDevDetachCore(&usb_devs[i]);
+				}
 			UsbDrvUnbind(dev);
 			UsbDevDetachCore(dev);
 			SysLog("USB: port %d: device removed.\n", port);
@@ -75,33 +85,45 @@ U0 UsbPortScan()
 	}
 }
 
+U0 UsbPortScanAll()
+{//Scan every running controller.
+	I64 n;
+
+	for (n = 0; n < usb_hc_count; n++)
+		UsbPortScan(&usb_hcs[n]);
+}
+
 public U0 UsbRep()
 {//Report attached USB devices.
-	CUsbDev	*dev, *ndev;
-	CUsbIf	*uif;
-	I64		 i, j;
+	CUsbDev			*dev;
+	CUsbIf			*uif;
+	CXhciGlobals	*hc;
+	I64				 i, j, n;
 
-	"$$FG,GREEN$$UsbRep BUILD MARKER: ss-hubdepth-5$$FG$$\n";	//bump each rebuild to catch stale kernels
-
-	if (!usb_xhci.present)
+	if (!usb_hc_count)
 	{
 		"No xHCI controller. Re-probing:\n";
-		XhciInit;
+		XhciInitAll;
 	}
-	if (!usb_xhci.present)
+	if (!usb_hc_count)
 		return;
-	UsbPortScan; //rescan so a just-plugged device shows up
-	"xHCI: %d ports, %d slots.\n", usb_xhci.max_ports, usb_xhci.max_slots;
-	for (i = 0; i < usb_xhci.max_ports; i++)
-		"  port %d: PORTSC=0x%08X  CCS=%d PED=%d PP=%d\n", i, XhciPortSC(i),
-				XhciPortSC(i) & 1, XhciPortSC(i) >> 1 & 1, XhciPortSC(i) >> 9 & 1;
+	UsbPortScanAll; //rescan so a just-plugged device shows up
+	for (n = 0; n < usb_hc_count; n++)
+	{
+		hc = &usb_hcs[n];
+		"xHCI #%d: %d ports, %d slots.\n", n, hc->max_ports, hc->max_slots;
+		for (i = 0; i < hc->max_ports; i++)
+			"  port %d: PORTSC=0x%08X  CCS=%d PED=%d PP=%d\n", i, XhciPortSC(i, hc),
+					XhciPortSC(i, hc) & 1, XhciPortSC(i, hc) >> 1 & 1,
+					XhciPortSC(i, hc) >> 9 & 1;
+	}
 	for (i = 0; i < USB_DEVS_MAX; i++)
 	{
 		dev = &usb_devs[i];
 		if (dev->present)
 		{
-			"Port %2d: %04X:%04X devcls=%d \"%s\"", dev->port, dev->vendor_id,
-					dev->product_id, dev->dev_class, dev->desc_name;
+			"hc%d port %2d: %04X:%04X \"%s\"", XhciHcIdx(dev->hc), dev->port,
+					dev->vendor_id, dev->product_id, dev->desc_name;
 			for (j = 0; j < dev->if_count; j++)
 			{
 				uif = &dev->ifs[j];
@@ -120,13 +142,6 @@ public U0 UsbRep()
 					" [class %d]", uif->if_class;
 			}
 			"\n";
-			for (j = 0; j < dev->if_count; j++)
-			{
-				uif = &dev->ifs[j];
-				"    if%d: cls=%d sub=%d proto=%d alt=%d eps=%d mac_str=%d\n",
-						uif->if_num, uif->if_class, uif->if_subclass, uif->if_proto,
-						uif->alt, uif->ep_count, uif->ecm_mac_str_idx;
-			}
 		}
 	}
 	for (i = 0; i < USB_MSDS_MAX; i++)
@@ -135,84 +150,29 @@ public U0 UsbRep()
 					((usb_msds[i].max_lba + 1) * BLK_SIZE) / 0x100000,
 					usb_msds[i].first_drive_let;
 
-//Diagnose root ports that are connected but have no bound device (enumeration
-//gaps, e.g. SuperSpeed). Re-attempt enumeration HERE so the enum trace + direct
-//failure prints land in this terminal (usb_task SysLogs are hidden single-user).
-	for (i = 0; i < usb_xhci.max_ports; i++)
-	{
-		if ((XhciPortSC(i) & XHCI_PORTSC_CCS) && !UsbDevByPort(i))
-		{
-			"UNBOUND port %d: PORTSC=0x%08X speed=%d - retrying enum:\n",
-					i, XhciPortSC(i), (XhciPortSC(i) >> 10) & 0xF;
-			if (XhciPortReset(i))
-			{
-				ndev = UsbDevEnum(i);
-				if (ndev)
-				{
-					UsbDrvBind(ndev);
-					"  port %d: enumerated OK.\n", i;
-				}
-			}
-			else
-				"  port %d: XhciPortReset did not enable the port.\n", i;
-		}
-	}
-}
-
-public U0 XhciSwitch()
-{//Force the NEXT xHCI controller and rescan (cycles through them). The boot init
-//auto-picks the one with a device plugged in, so this is only for overriding.
-	static I64 idx = 0;
-
-	idx++;
-	if (!XhciInit(idx, TRUE))
-	{
-		idx = 0;
-		XhciInit(idx, TRUE);
-	}
-	"XhciSwitch: now on controller #%d.\n", idx;
-	Sleep(200);
-	UsbPortScan;
-	UsbRep;
-}
-
-public U0 XhciFindNic(I64 max_tries=8)
-{//Cycle controllers until one has a USB ethernet NIC bound. A USB-C dock puts
-//the SuperSpeed NIC on the Thunderbolt controller while HID sits on the PCH one,
-//and this stack drives a single controller at a time - this hunts for the NIC.
-	I64 i;
-
-	for (i = 0; i < max_tries; i++)
-	{
-		if (UsbEcmPresent)
-		{
-			"XhciFindNic: NIC found.\n";
-			UsbEcmRep;
-			return;
-		}
-		XhciSwitch;
-	}
-	"XhciFindNic: no USB NIC found after %d controller switches.\n", max_tries;
 }
 
 U0 UsbTaskMain(I64 dummy=0)
 {//Hotplug + HID poll loop. Spawned from $LK,"KMain",A="FF:::/Kernel/KMain.ZC,UsbTaskMain"$.
-	I64 tick = 0;
+	I64 tick = 0, n;
 
 	no_warn dummy;
 	usb_task = Fs;
-	if (!usb_xhci.running)
+	if (!usb_hc_count)
 		return;
 	while (TRUE)
 	{
-		XhciEventPoll;
+		for (n = 0; n < usb_hc_count; n++)
+			XhciEventPoll(&usb_hcs[n]);
 		UsbHidTick;
+		UsbEcmTick;
 		tick++;
-		if (usb_xhci.port_change || tick & 0x7F == 0)
-		{
-			usb_xhci.port_change = FALSE;
-			UsbPortScan;
-		}
+		for (n = 0; n < usb_hc_count; n++)
+			if (usb_hcs[n].port_change || tick & 0x7F == 0)
+			{
+				usb_hcs[n].port_change = FALSE;
+				UsbPortScan(&usb_hcs[n]);
+			}
 		Sleep(2);
 	}
 }
@@ -223,10 +183,10 @@ I64 UsbBootInit()
 //the kernel config's mount code runs, so USB drives exist at boot.
 	I64 i, count = 0;
 
-	if (!XhciInit)
+	if (!XhciInitAll)
 		return 0;
 	Sleep(100);	//let root port connect status settle
-	UsbPortScan;
+	UsbPortScanAll;
 	for (i = 0; i < USB_MSDS_MAX; i++)
 		if (usb_msds[i].valid && usb_msds[i].ready && usb_msds[i].bd)
 			count++;
