@@ -88,7 +88,10 @@ U0 Format(I64 drv_let, Bool quick=TRUE, Bool confirm=TRUE, I64 type=FSt_FAT32)
 	switch (type)
 	{
 		case FSt_FAT32:
-			if (drive->bd->type == BDT_ATA)
+//FAT32Format reaches the disk only through BlkWrite/BlkWriteZero/ClusAlloc on
+//the CDrive, and DriveTypeSet handles BDT_USB, so USB takes the same path.
+//Other types (RAM, ISO) fall through to RedSea.
+			if (drive->bd->type == BDT_ATA || drive->bd->type == BDT_USB)
 			{
 				Silent;
 				Drive(drv_let);
