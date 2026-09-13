@@ -137,6 +137,18 @@ CCPU *CPUStructInit(I64 num, CCPU *c, CTask *executive_task)
 	return c;
 }
 
+U0 XAPICICRWait()
+{//Wait for ICR delivery status to go idle, with a timeout. Call with IRQs off.
+	I64 i;
+
+	for (i = 0; i < 1000000; i++)
+	{
+		if (!(*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & LAPICF_ICR_SEND_PENDING))
+			return;
+		PAUSE
+	}
+}
+
 U0 MPInt(U8 num, I64 cpu_num=1)
 {//Generate interrupt for specified core.
 	if (cpu_num >= mp_count)
@@ -153,8 +165,7 @@ U0 MPInt(U8 num, I64 cpu_num=1)
 		X2APICWrite(IA32_X2APIC_ICR, dev.mp_apic_ids[cpu_num] << 32 | 0x4000 | num);
 	else
 	{
-		while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
-			PAUSE
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_HIGH)(U32 *) = dev.mp_apic_ids[cpu_num] << 24;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *)  = 0x4000 + num;
 	}
@@ -169,8 +180,7 @@ U0 MPIntAll(U8 num)
 		X2APICWrite(IA32_X2APIC_ICR, 0xC4800 + num);
 	else
 	{
-		while (*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) & 0x1000)
-			PAUSE
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4800 + num;
 	}
 	POPFD
@@ -178,10 +188,16 @@ U0 MPIntAll(U8 num)
 
 U0 MPNMInt()
 {//Generate nonmaskable interrupt.
+	PUSHFD
+	CLI //Multitasking safe because each core has a local apic and IRQs are off
 	if (sys_x2apic)
 		X2APICWrite(IA32_X2APIC_ICR, 0xC4400);
 	else
+	{
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4400;
+	}
+	POPFD
 }
 
 U0 MPHalt()
@@ -409,12 +425,16 @@ U0 Core0StartMP()
 		*(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) = *(dev.uncached_alias + LAPIC_LVT_ERR)(U32 *) & 0xFFFFFF00 + MPN_VECT;
 		WBINVD //Not sure why this is needed. Might just need delay. $LK,"MemCopy",A="MN:MemCopy"$ above?
 
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4500; //assert init IPI
 		Busy(10000);
 
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT; //start-up
 		Busy(200);
+		XAPICICRWait;
 		*(dev.uncached_alias + LAPIC_ICR_LOW)(U32 *) = 0xC4600 + MPN_VECT;
+		XAPICICRWait;
 	}
 
 	Busy(100000);

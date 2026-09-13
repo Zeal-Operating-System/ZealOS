@@ -693,6 +693,7 @@ class CKernel
 #define LAPIC_IRR 					(LAPIC_BASE + 0x200)
 #define LAPIC_ICR_LOW 				(LAPIC_BASE + 0x300)
 #define LAPIC_ICR_HIGH				(LAPIC_BASE + 0x310)
+#define LAPICF_ICR_SEND_PENDING		0x1000
 
 #define LAPIC_LVT_TIMER 			(LAPIC_BASE + 0x320)
 #define LAPIC_LVT_THERMAL 			(LAPIC_BASE + 0x330)
