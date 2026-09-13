@@ -171,13 +171,9 @@ U0 UncachedAliasAlloc() //Make uncached alias for 4 lowest Gig.
 }
 
 I64 MemBIOSTotal()
-{//Returns max of either E801 or E820 mem map.
-	I64			 total01 = 0x100000, total20 = 0;
-	U16			*mem01 = MEM_E801;
+{//Returns total usable memory in the E820 mem map.
+	I64			 total20 = 0;
 	CMemE820	*mem20 = MEM_E820;
-
-	total01 += mem01[0] * 1024;		//First U16 is mem between 1MiB and 16 MiB in KiB.
-	total01 += mem01[1] * 64 * 1024;//Second U16 is mem above 16MiB (until it encounters a hole) in 64KiB blocks.
 
 	if (mem20->type)
 	{
@@ -188,7 +184,7 @@ I64 MemBIOSTotal()
 			mem20++;
 		}
 	}
-	return MaxI64(total01, total20);  
+	return total20;
 }
 
 I64 Scale2Mem(I64 min, I64 max, I64 limit=2*1024*1024*1024)

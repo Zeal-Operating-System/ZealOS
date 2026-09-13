@@ -110,7 +110,6 @@ public U0 PCIRep()
 #help_index "Info;Memory/Info"
 public U0 MemBIOSRep()
 {//Report the memory ranges reported by the BIOS at boot.
-	U16 		*m01 = MEM_E801;
 	CMemE820	*m20 = MEM_E820;
 	CMemRange	*tmpmr;
 
@@ -142,14 +141,6 @@ public U0 MemBIOSRep()
 		tmpmr = tmpmr->next;
 	}
 	LBtr(&sys_semas[SEMA_DEV_MEM], 0);
-
-	if (!IsRaw)
-		"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n";
-	else
-		"\nBIOS Memory Report 15:E801\n";
-
-	"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
-	"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] * 64 * 1024  - 1;
 
 	if (m20->type)
 	{

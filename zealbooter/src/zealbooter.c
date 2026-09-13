@@ -120,7 +120,6 @@ struct CKernel {
     struct CDate compile_time;
     // U0 start
     uint32_t boot_base;
-    uint16_t mem_E801[2];
     struct CMemE820 mem_E820[MEM_E820_ENTRIES_NUM];
     uint64_t mem_physical_space;
     struct CSysLimitBase sys_gdt_ptr;
@@ -150,34 +149,6 @@ struct CKernel {
 #define RLF_32BIT 0b100
 
 extern symbol trampoline, trampoline_end;
-
-struct E801 {
-    size_t lowermem;
-    size_t uppermem;
-};
-
-static struct E801 get_E801(void) {
-    struct E801 E801 = {0};
-
-    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
-        struct limine_memmap_entry *entry = memmap_request.response->entries[i];
-
-        if (entry->type == LIMINE_MEMMAP_USABLE) {
-            if (entry->base == 0x100000) {
-                if (entry->length > 0xf00000) {
-                    E801.lowermem = 0x3c00;
-                } else {
-                    E801.lowermem = entry->length / 1024;
-                }
-            }
-            if (entry->base <= 0x1000000 && entry->base + entry->length > 0x1000000) {
-                E801.uppermem = ((entry->length - (0x1000000 - entry->base)) / 1024) / 64;
-            }
-        }
-    }
-
-    return E801;
-}
 
 void kmain(void) {
     printf("ZealBooter prekernel\n");
@@ -276,10 +247,6 @@ void kmain(void) {
     printf("kernel->sys_gdt_ptr.base: 0x%X\n", kernel->sys_gdt_ptr.base);
 
     kernel->sys_pci_buses = 256;
-
-    struct E801 E801 = get_E801();
-    kernel->mem_E801[0] = E801.lowermem;
-    kernel->mem_E801[1] = E801.uppermem;
 
     kernel->mem_physical_space = 0;
 
