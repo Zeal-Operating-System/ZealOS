@@ -5,9 +5,8 @@ INT_MP_CRASH_ADDR:: //Forward reference to work around compiler
 INT_WAKE::
 		PUSH	RDX
 		PUSH	RAX
-		MOV 	EAX, &dev
+		MOV 	RAX, U64 [&dev.uncached_alias]
 		MOV 	EDX, U32 LAPIC_EOI
-		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
 		MOV 	U32 [RAX+RDX], 0
 		POP 	RAX
 		POP 	RDX
@@ -46,9 +45,8 @@ IRQ_TIMER::  //I_TIMER
 		TEST	RAX, RAX
 		JZ		@@20
 
-		MOV 	EAX, &dev
+		MOV 	RAX, U64 [&dev.uncached_alias]
 		MOV 	EDX, U32 LAPIC_EOI
-		MOV 	RAX, U64 CDevGlobals.uncached_alias[RAX]
 		MOV 	U32 [RAX + RDX], 0
 		JMP 	@@25
 
