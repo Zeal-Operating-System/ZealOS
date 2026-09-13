@@ -416,7 +416,7 @@ void kmain(void) {
 
     printf("sys_gdt_ptr: 0x%X\n", sys_gdt_ptr);
 
-    void *sys_smbios_entry = smbios_request.response != NULL ? (void *)smbios_request.response->entry_32 : NULL;
+    void *sys_smbios_entry = smbios_request.response != NULL ? smbios_request.response->entry_32 : NULL;
     if (sys_smbios_entry != NULL) {
         kernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
     }

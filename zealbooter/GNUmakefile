@@ -1,6 +1,9 @@
 # Nuke built-in rules.
 .SUFFIXES:
 
+# Delete the target of a failed recipe.
+.DELETE_ON_ERROR:
+
 # This is the name that our final executable will have.
 # Change as needed.
 override OUTPUT := kernel
@@ -82,9 +85,10 @@ override CPPFLAGS := \
     -MP
 
 # Internal nasm flags that should not be changed by the user.
-override NASMFLAGS += \
+override NASMFLAGS := \
     -f elf64 \
     $(patsubst -g,-g -F dwarf,$(NASMFLAGS)) \
+    -i src/ \
     -Wall
 
 # Internal linker flags that should not be changed by the user.
@@ -93,8 +97,17 @@ override LDFLAGS += \
     -nostdlib \
     -static \
     -z max-page-size=0x1000 \
+    -z noexecstack \
     --gc-sections \
     -T linker.ld
+
+# Check if the linker supports -no-pie and enable it if it does.
+override LD_HAS_NO_PIE := $(shell ! $(LD) --help 2>/dev/null | grep -qE '(^|[[:space:]])--?no-pie([[:space:]]|$$)'; echo $$?)
+
+ifeq ($(LD_HAS_NO_PIE),1)
+    override LDFLAGS += \
+        -no-pie
+endif
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
@@ -103,7 +116,7 @@ override CFILES := $(filter %.c,$(SRCFILES))
 override ASFILES := $(filter %.S,$(SRCFILES))
 override NASMFILES := $(filter %.asm,$(SRCFILES))
 override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
-override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
+override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d) $(NASMFILES:.asm=.asm.d))
 
 # Default target. This must come first, before header dependencies.
 .PHONY: all
@@ -113,7 +126,7 @@ all: bin/$(OUTPUT)
 -include $(HEADER_DEPS)
 
 src/limine.h:
-	curl -Lo $@ https://github.com/limine-bootloader/limine-protocol/raw/c4616df2572d77c60020bdefa617dd9bdcc6566a/include/limine.h || cp ../build/limine/limine.h src/limine.h || echo "ERROR"
+	curl -fL -o $@ https://github.com/Limine-Bootloader/limine-protocol/raw/da65184e91f80fcb397270121b1e2515a11e01ee/include/limine.h
 
 # Link rules for the final executable.
 bin/$(OUTPUT): GNUmakefile linker.ld $(OBJ)
@@ -133,7 +146,7 @@ obj/%.S.o: %.S GNUmakefile src/limine.h
 # Compilation rules for *.asm (nasm) files.
 obj/%.asm.o: %.asm GNUmakefile
 	mkdir -p "$(dir $@)"
-	nasm $(NASMFLAGS) $< -o $@
+	nasm $(NASMFLAGS) -MD $(@:.o=.d) -MP $< -o $@
 
 # Remove object files and the final executable.
 .PHONY: clean
@@ -143,4 +156,4 @@ clean:
 # Remove everything built and generated including downloaded dependencies.
 .PHONY: distclean
 distclean: clean
-	rm -f src/limine.h
+	rm -rf .cache compile_commands.json src/limine.h
