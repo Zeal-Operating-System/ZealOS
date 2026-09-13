@@ -576,6 +576,7 @@ class CKernel
 	Bool			sys_is_uefi_booted;
 	U8				sys_bootloader_id;
 	CVideoInfo		sys_framebuffer_list[VBE_MODES_NUM];
+	U64				sys_acpi_rsdp;
 };
 
 // Bootloader IDs
@@ -2388,6 +2389,34 @@ class CUAsmGlobals
 			ins64_arg_mask,
 			signed_arg_mask,
 			mem_arg_mask;
+};
+
+#help_index "Devices/ACPI"
+//ACPI table parsing based on ACPI specification 6.6
+class CACPIRSDP
+{//ACPI 6.6 section 5.2.5.3
+	U8	signature[8], // 'RSD PTR '
+		checksum,
+		oem_id[6],
+		revision;
+	U32	rsdt_address,
+		length;
+	U64	xsdt_address;
+	U8	extended_checksum,
+		reserved[3];
+};
+
+class CACPISDTHeader
+{//ACPI 6.6 section 5.2.6
+	U8	signature[4];
+	U32	length;
+	U8	revision,
+		checksum,
+		oem_id[6],
+		oem_table_id[8];
+	U32	oem_revision,
+		creator_id,
+		creator_revision;
 };
 
 #help_index "Devices/SMBIOS"

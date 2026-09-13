@@ -41,6 +41,12 @@ static volatile struct limine_smbios_request smbios_request = {
 };
 
 __attribute__((used, section(".limine_requests")))
+static volatile struct limine_rsdp_request rsdp_request = {
+    .id = LIMINE_RSDP_REQUEST_ID,
+    .revision = 0
+};
+
+__attribute__((used, section(".limine_requests")))
 static volatile struct limine_efi_system_table_request efi_request = {
     .id = LIMINE_EFI_SYSTEM_TABLE_REQUEST_ID,
     .revision = 0
@@ -137,6 +143,7 @@ struct CKernel {
 	uint8_t sys_is_uefi_booted;
     uint8_t sys_bootloader_id;
 	struct CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
+    uint64_t sys_acpi_rsdp;
 } __attribute__((packed));
 
 #define BL_ZEAL    0
@@ -346,6 +353,10 @@ void kmain(void) {
     void *sys_smbios_entry = (void *)smbios_request.response->entry_32;
     if (sys_smbios_entry != NULL) {
         kernel->sys_smbios_entry = (uintptr_t)sys_smbios_entry - hhdm_request.response->offset;
+    }
+
+    if (rsdp_request.response != NULL) {
+        kernel->sys_acpi_rsdp = (uintptr_t)rsdp_request.response->address - hhdm_request.response->offset;
     }
 
     memcpy(kernel->sys_disk_uuid, &module_kernel->gpt_disk_uuid, sizeof(kernel->sys_disk_uuid));

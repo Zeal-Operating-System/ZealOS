@@ -252,6 +252,9 @@ public _extern SYS_FRAMEBUFFER_BPP		U8	sys_framebuffer_bpp;
 public									U64	sys_framebuffer_pidth;
 _extern SYS_FRAMEBUFFER_LIST CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
 
+#help_index "Devices/ACPI"
+public _extern SYS_ACPI_RSDP CACPIRSDP	*sys_acpi_rsdp;
+
 #help_index "Processor/SMBIOS"
 public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;
 

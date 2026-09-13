@@ -1,3 +1,7 @@
+#help_index "ACPI"
+extern CACPIRSDP *ACPIRSDPFind();
+extern CACPISDTHeader *ACPITableFind(U8 *signature, I64 index=0);
+
 #help_index "AutoComplete"
 #help_file "::/Doc/AutoComplete"
 public extern CAutoCompleteGlobals ac;
