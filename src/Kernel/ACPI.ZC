@@ -1,0 +1,70 @@
+//ACPI table lookup.
+//Based on ACPI specification 6.6
+
+CACPIRSDP *ACPIRSDPFind()
+{//Find Root System Description Pointer. Return NULL if not found.
+	I64		 i, ebda;
+	U8 noreg checksum, *mem;
+
+	if (sys_acpi_rsdp) //passed by bootloader on UEFI systems, ACPI 6.6 section 5.2.5.2
+		return sys_acpi_rsdp;
+
+	//Search first KB of EBDA, then 0xE0000 - 0x100000, ACPI 6.6 section 5.2.5.1
+	ebda = *0x40E(U16 *) << 4;
+	if (ebda < 0x80000 || ebda >= 0xA0000)
+		ebda = 0x80000;
+
+	for (mem = ebda; mem < 0x100000; mem += 16) //anchor sits on 16-byte boundary
+	{
+		if (mem == ebda + 1024)
+			mem = 0xE0000;
+		if (!MemCompare(mem, "RSD PTR ", 8))
+		{
+			checksum = 0;
+			for (i = 0; i < 20; i++)
+				checksum += mem[i];
+
+			if (checksum == 0) //valid checksums sum to zero
+				return mem;
+		}
+	}
+
+	return NULL;
+}
+
+CACPISDTHeader *ACPITableFind(U8 *signature, I64 index=0)
+{//Find index'th table with signature. Return NULL if not found.
+//Only RSDP checksum is checked, firmware often gets table checksums wrong.
+	CACPIRSDP		*rsdp = ACPIRSDPFind;
+	CACPISDTHeader	*root, *table;
+	I64				 i, entry_size;
+
+	if (!rsdp)
+		return NULL;
+
+	if (rsdp->revision >= 2 && rsdp->xsdt_address) //XSDT must be used if present, ACPI 6.6 section 5.2.8
+	{
+		root = rsdp->xsdt_address;
+		entry_size = sizeof(U64);
+	}
+	else
+	{
+		root = rsdp->rsdt_address;
+		entry_size = sizeof(U32);
+	}
+	if (!root || root->length < sizeof(CACPISDTHeader))
+		return NULL;
+
+	for (i = sizeof(CACPISDTHeader); i + entry_size <= root->length; i += entry_size)
+	{
+		if (entry_size == sizeof(U64))
+			table = *(root(U8 *) + i)(U64 *);
+		else
+			table = *(root(U8 *) + i)(U32 *);
+
+		if (table && !MemCompare(table->signature, signature, 4) && !index--)
+			return table;
+	}
+
+	return NULL;
+}

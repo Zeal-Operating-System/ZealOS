@@ -421,7 +421,7 @@ interrupt U0 E1000IRQ()
 
 	E1000MMIORead(E1000_REG_ICR); // clear pending interrupts?
 
-	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+	LAPICEoi;
 }
 
 U0 PCIInterruptsReroute(I64 base)

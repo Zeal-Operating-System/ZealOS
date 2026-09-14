@@ -697,7 +697,7 @@ interrupt U0 PCNetIRQ()
 			   "$$BG$$$$FG$$");
 	}
 
-	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+	LAPICEoi;
 }
 
 U0 PCIInterruptsReroute(I64 base)

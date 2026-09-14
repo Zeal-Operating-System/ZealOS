@@ -191,6 +191,7 @@ public _extern SYS_CPU_STRUCTS	CCPU *cpu_structs; //$LK,"Gs",A="MN:Gs"$ points t
 public _extern SYS_MP_COUNT		I64   mp_count; //Count of cores
 _extern SYS_MP_COUNT_INITIAL	I64   mp_count_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
 _extern SYS_MP_COUNT_LOCK		I64   mp_count_lock;
+public _extern SYS_X2APIC		I64   sys_x2apic;
 _extern SYS_SEMAS				CSema sys_semas[SEMA_SEMAS_NUM];
 
 #help_index "MultiCore;Processor"
@@ -222,6 +223,7 @@ public _extern _LXCHG_U8		U8		LXchgU8(  U8 *dst,  U8 d); //Locked eXchange U8s.
 public _extern _MSR_READ		I64		MSRRead(I64 model_specific_reg); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
 public _extern _MSR_WRITE		U0		MSRWrite(I64 model_specific_reg, I64 val); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
 public _extern _SYS_HLT			U0		SysHlt(); //Loops doing HLT instruction.
+public _extern _X2APIC_WRITE	U0		X2APICWrite(I64 x2apic_reg, I64 val); //MSRWrite() for x2APIC regs, serializes first.
 public _extern _XCHG_I64		I64		XchgI64(I64 *dst, I64 d); //eXchange I64s.
 public _extern _XCHG_U16		U16		XchgU16(U16 *dst, U16 d); //eXchange U16s.
 public _extern _XCHG_U32		U32		XchgU32(U32 *dst, U32 d); //eXchange U32s.
@@ -251,6 +253,9 @@ public _extern SYS_FRAMEBUFFER_PITCH	U64	sys_framebuffer_pitch;
 public _extern SYS_FRAMEBUFFER_BPP		U8	sys_framebuffer_bpp;
 public									U64	sys_framebuffer_pidth;
 _extern SYS_FRAMEBUFFER_LIST CVideoInfo sys_framebuffer_list[VBE_MODES_NUM];
+
+#help_index "Devices/ACPI"
+public _extern SYS_ACPI_RSDP CACPIRSDP	*sys_acpi_rsdp;
 
 #help_index "Processor/SMBIOS"
 public _extern SYS_SMBIOS_ENTRY U8	*sys_smbios_entry;

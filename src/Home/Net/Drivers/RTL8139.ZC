@@ -388,7 +388,7 @@ interrupt U0 RTL8139IRQ()
 		}
 	}
 
-	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+	LAPICEoi;
 }
 
 U0 PCIInterruptsReroute(I64 base)

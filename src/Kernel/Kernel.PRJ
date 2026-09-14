@@ -52,6 +52,7 @@
 #include "Job"
 #include "PCIBIOS"
 #include "PCI"
+#include "ACPI"
 #include "MultiProc"
 #include "EdLite"
 #include "BlkDev/MakeBlkDev"
