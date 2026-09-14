@@ -44,7 +44,20 @@ U0 BlkPoolsInit()
 		code_heap_limit = 0x80000000;
 
 	i = code_heap_limit - SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.ZC,RLf_16MEG_SYS_CODE_BP"$
-	BlkPoolAdd(sys_code_bp, SYS_16MEG_AREA_LIMIT, i >> MEM_PAG_BITS);
+	while (m20->type)
+	{//The memory below the limit can have holes, so only add the usable E820 ranges.
+		if (m20->type == MEM_E820t_USABLE)
+		{
+			lo = m20->base;
+			hi = m20->base + m20->len;
+			lo = CeilI64(MaxI64(lo, SYS_16MEG_AREA_LIMIT), MEM_PAG_SIZE);
+			hi = FloorI64(MinI64(hi, code_heap_limit), MEM_PAG_SIZE);
+			if (lo < hi)
+				BlkPoolAdd(sys_code_bp, lo, (hi - lo) >> MEM_PAG_BITS);
+		}
+		m20++;
+	}
+	m20 = MEM_E820;
 	mem_heap_limit = i + SYS_16MEG_AREA_LIMIT - 1;
 
 	if (code_heap_limit<total)

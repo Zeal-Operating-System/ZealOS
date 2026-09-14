@@ -28,7 +28,6 @@ SYS_RUN_LEVEL::				DU32	0;
 #assert SYS_COMPILE_TIME + sizeof(CDate) + sizeof(CZXE) < DVD_BLK_SIZE
 
 MEM_BOOT_BASE::			DU32	0;	//Offset from start used by reboot
-MEM_E801::				DU16	0, 0;
 MEM_E820::				DU8 	MEM_E820_ENTRIES_NUM * sizeof(CMemE820) DUP (0);
 MEM_PHYSICAL_SPACE::	DU64	0;
 SYS_GDT_PTR::			DU16	sizeof(CGDT) - 1;
@@ -244,19 +243,6 @@ GET_IP: POP 	BX
 		BTS 	U32 [SYS_RUN_LEVEL], RLf_VESA
 @@35:
 
-//Get E801 memory map.
-//Output: AX = Memory between 1MiB and 16MiB in KiB (max 0x3C00 == 15 MiB)
-//		  BX = Memory after 16MiB until first memory hole in 64KiB blocks.
-		XOR		CX, CX
-		XOR		DX, DX
-		MOV		AX, 0xE801
-		INT 	0x15
-		JCXZ	@@40 //if CX and DX are zero, use AX and BX instead.
-		MOV		AX, CX
-		MOV		BX, DX
-@@40:	MOV 	U16 [MEM_E801],   AX
-		MOV 	U16 [MEM_E801+2], BX
-
 //Get E820 memory map.
 		MOV 	CX,  MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
 		XOR 	EBX, EBX
@@ -279,14 +265,9 @@ GET_IP: POP 	BX
 		SUB 	SP,  2
 @@50: 	ADD		SP,  2 //if called failed we want to nullify the PUSHed CX value.
 
-//Find how much space to map, start with E801 limit.
-		XOR 	EAX, EAX
-		MOV 	AX,  [MEM_E801+2]
-		SHL 	EAX, 16
-		ADD 	EAX, SYS_16MEG_AREA_LIMIT
-		XOR 	EDX, EDX
-
 //Find max of E820 to set mapped space.
+		XOR 	EAX, EAX
+		XOR 	EDX, EDX
 		MOV 	SI,  MEM_E820
 @@55: 	MOV 	CL,  CMemE820.type[SI]
 		TEST	CL,  CL
