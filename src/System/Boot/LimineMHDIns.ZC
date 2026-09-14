@@ -67,13 +67,51 @@ Bool LimineCFGMake(U8 drv_let)
 	return TRUE;
 }
 
+#define LIMINE_MBR_GAP_BLKS	63		// MBR + post-MBR gap, limine bios-install refuses partitions starting inside it
+#define LIMINE_STAGE2_LOC	0x1000	// byte offset limine bios-install puts stage 2 at, a multiple of any sector size
+
+Bool LimineMBRCheck(CMasterBoot *mbr)
+{
+	I64  i;
+	Bool any_active = FALSE;
+
+	for (i = 0; i < 4; i++)
+		if (mbr->p[i].type && mbr->p[i].offset < LIMINE_MBR_GAP_BLKS)
+		{
+			"\n" ST_ERR_ST "A partition's start sector is less than %d.\n", LIMINE_MBR_GAP_BLKS;
+			return FALSE;
+		}
+
+	for (i = 0; i < 4; i++)
+	{
+		if (mbr->p[i].active != 0x00 && mbr->p[i].active != 0x80)
+			break;
+		if (mbr->p[i].active)
+			any_active = TRUE;
+	}
+
+	if (i < 4 || mbr->signature != 0xAA55)
+	{
+		"\n" ST_ERR_ST "Could not determine if the disk has a valid partition table.\n";
+		return FALSE;
+	}
+
+	if (!any_active)
+	{
+		"No active partition found, setting partition 1 as active.\n";
+		mbr->p[0].active = 0x80;
+	}
+
+	return TRUE;
+}
+
 Bool LimineMHDIns(U8 drv_let)
 {
-	U8	*limine			= binary_limine_hdd_bin_data;
-	U16  limine_size	= sizeof(binary_limine_hdd_bin_data);
-	U64 *limine_stage2	= limine + 0x1A4;
-	CBlkDev				*bd = Letter2BlkDev(drv_let);
-	CMasterBoot			 old_mbr, *new_mbr = limine;
+	U8			*limine			= binary_limine_hdd_bin_data, *blks;
+	U16			 limine_size	= sizeof(binary_limine_hdd_bin_data);
+	U64			*limine_stage2;
+	CBlkDev		*bd = Letter2BlkDev(drv_let);
+	CMasterBoot	 old_mbr, *new_mbr;
 
 	if (limine_size == 0)
 	{
@@ -81,21 +119,48 @@ Bool LimineMHDIns(U8 drv_let)
 		return FALSE;
 	}
 
+	if (limine_size - BLK_SIZE > LIMINE_MBR_GAP_BLKS * BLK_SIZE - LIMINE_STAGE2_LOC)
+	{
+		"\n" ST_ERR_ST "Limine HDD stage 2 does not fit in the post-MBR gap.\n";
+		return FALSE;
+	}
+
 	'\n';
 
-	*limine_stage2 = 0x200;
+	blks = MAlloc(LIMINE_MBR_GAP_BLKS * BLK_SIZE);
+	new_mbr = blks;
+	limine_stage2 = blks + 0x1A4; // where the Limine MBR code looks for stage 2
 
 	BlkDevLock(bd);
+	AHCIAtaBlksRead(bd, blks, 0, LIMINE_MBR_GAP_BLKS); // read old MBR and post-MBR gap currently on disk
+	BlkDevUnlock(bd);
 
-	AHCIAtaBlksRead(bd, &old_mbr, 0, 1); // read old MBR currently on disk
-	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
+	if (!LimineMBRCheck(new_mbr))
+	{
+		Free(blks);
+		return FALSE;
+	}
 
 	// read the whole MBR + post-MBR-gap that Limine wants to overwrite, save all of that as an OldMBR.BIN
-	BootMHDOldRead(drv_let, drv_let, 63);
+	BootMHDOldRead(drv_let, drv_let, LIMINE_MBR_GAP_BLKS);
 
-	AHCIAtaBlksWrite(bd, limine, 0, 63); // write Limine to MBR and post-MBR gap
+	MemCopy(&old_mbr, blks, BLK_SIZE);
+	MemCopy(new_mbr, limine, BLK_SIZE);
+	MemCopy(blks + LIMINE_STAGE2_LOC, limine + BLK_SIZE, limine_size - BLK_SIZE);
+	*limine_stage2 = LIMINE_STAGE2_LOC;
 
+	MemCopy(new_mbr->code + 218, old_mbr.code + 218, 6); // keep the disk timestamp
+	new_mbr->media_id = old_mbr.media_id;
+	new_mbr->zero = old_mbr.zero;
+	MemCopy(new_mbr->p, old_mbr.p, sizeof(CMasterBoot.p)); // copy old MBR partition table to new Limine MBR
+
+	BlkDevLock(bd);
+	AHCIAtaBlksWrite(bd, blks, 0, 1); // write Limine to MBR
+	AHCIAtaBlksWrite(bd, blks + LIMINE_STAGE2_LOC, LIMINE_STAGE2_LOC / BLK_SIZE,
+		CeilU64(limine_size - BLK_SIZE, BLK_SIZE) / BLK_SIZE); // write stage 2 to post-MBR gap
 	BlkDevUnlock(bd);
+
+	Free(blks);
 
 	LimineCFGMake(drv_let);
 
