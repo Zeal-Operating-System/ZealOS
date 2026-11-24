@@ -26,6 +26,20 @@ U0 DocInit()
 	HashDefineListAdd("ST_DOC_FLAGS",	DHT_DOC_FLAG,	doldoc.hash);
 	HashDefineListAdd("ST_COLORS",		DHT_COLOR,		doldoc.hash);
 
+	//Truecolor variants of $FG/$BG: $FG24,0xRRGGBB$ and $BG24,0xRRGGBB$.
+	//Map to the same doc entry types but flag the attr as truecolor.
+	tmph = CAlloc(sizeof(CHashGeneric));
+	tmph->user_data0	= DOCT_FOREGROUND | DOC_TC_CMD_FLAG;
+	tmph->str			= StrNew("FG24");
+	tmph->type			= DHT_DOC_CMD;
+	HashAdd(tmph, doldoc.hash);
+
+	tmph = CAlloc(sizeof(CHashGeneric));
+	tmph->user_data0	= DOCT_BACKGROUND | DOC_TC_CMD_FLAG;
+	tmph->str			= StrNew("BG24");
+	tmph->type			= DHT_DOC_CMD;
+	HashAdd(tmph, doldoc.hash);
+
 	MemSet(doldoc.default_de_flags, 	0, sizeof(doldoc.default_de_flags));
 	MemSet(doldoc.default_type_flags, 	0, sizeof(doldoc.default_type_flags));
 

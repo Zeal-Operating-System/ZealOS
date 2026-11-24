@@ -1,0 +1,35 @@
+// Truecolor DolDoc text demo. Proves $FG24 / $BG24 control codes drive the
+// TextBase RGB planes through the normal document rasterizer.
+//
+// $FG24,0xRRGGBB$ sets a 24-bit foreground; $BG24,0xRRGGBB$ a background.
+// $FD / $BD restore the default (legacy palette) fg/bg. All existing $FG,$BG$
+// codes are unchanged. (Doubled $$ below = one runtime $ control code.)
+
+U0 TrueColorDoc()
+{
+	I64 i, r, g, b;
+	F64 t;
+
+	DocClear;
+
+	"\n$$FG24,0xFF8800$$  Truecolor document text, orange fg  $$FD$$\n\n";
+
+	for (i = 0; i < 24; i++)
+	{
+		t = 6.283 * i / 24;
+		r = 128 + 127.0 * Sin(t);
+		g = 128 + 127.0 * Sin(t + 2.094);
+		b = 128 + 127.0 * Sin(t + 4.188);
+		"$$FG24,%d$$  Row %02d   smooth 24-bit spectrum in a normal document  $$FD$$\n",
+			r << 16 | g << 8 | b, i;
+	}
+
+	"\n$$BG24,0x102040$$$$FG24,0xFFEEAA$$  Truecolor background works too  $$FD$$$$BD$$\n";
+	"\n$$LTGREEN$$Legacy 16-color text still renders exactly as before.$$FG$$\n\n";
+
+	"Press any key.\n";
+	PressAKey;
+	DocClear;
+}
+
+TrueColorDoc;

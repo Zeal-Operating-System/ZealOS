@@ -1,0 +1,49 @@
+// Windowed truecolor TEXT demo. Proves the TextBase layer carries per-cell
+// 24-bit fg/bg via the RGB planes, opt-in through TextColorPrint().
+//
+// Runs in a normal window. Legacy 16-color text (this comment, the border,
+// the shell) is untouched; only the cells drawn below opt into truecolor.
+// Press any key to exit.
+
+F64 tct_phase;
+
+U0 TrueColorTextDraw(CTask *task, CDC *dc)
+{
+	I64 i, r, g, b, br, bg_, bb;
+	F64 t;
+
+	for (i = 0; i < 24; i++)
+	{
+		t = 6.283 * i / 24 + tct_phase;
+		r  = 128 + 127.0 * Sin(t);
+		g  = 128 + 127.0 * Sin(t + 2.094);
+		b  = 128 + 127.0 * Sin(t + 4.188);
+		//Dark complementary background per row.
+		br = 30 + 30.0 * Sin(t + 3.1);
+		bg_ = 30 + 30.0 * Sin(t + 5.2);
+		bb = 30 + 30.0 * Sin(t + 1.0);
+		TextColorPrint(task, 2, 2 + i, ColorRGB(r, g, b), ColorRGB(br, bg_, bb),
+					   "  Truecolor cell row %02d   RGB(%03d,%03d,%03d)  ", i, r, g, b);
+	}
+	//A smooth per-character horizontal gradient bar.
+	for (i = 0; i < 64; i++)
+	{
+		r = 255 * i / 64;
+		b = 255 - r;
+		TextColorChar(task, 2 + i, 28, '#', ColorRGB(r, 200, b), ColorRGB(0, 0, 0));
+	}
+}
+
+U0 TrueColorText()
+{
+	SettingsPush;
+	Fs->draw_it = &TrueColorTextDraw;
+	while (!CharScan)
+	{
+		tct_phase += 0.04;
+		Refresh;
+	}
+	SettingsPop;
+}
+
+TrueColorText;

@@ -356,6 +356,43 @@ public U0 TextBorder(CTask *task=NULL, I64 l, I64 r, I64 t, I64 b, I64 attr, Boo
 	}
 }
 
+U0 TextBorderColorPlot(CTask *task, I64 x, I64 y, I64 ch, I64 fg_pix, I64 bg_pix)
+{//Plot one truecolor border char + stamp the RGB planes. fg/bg are native pixs.
+	I64 col, row, idx;
+
+	if (TextChar(task, TRUE, x, y, ch | ATTRF_TRUE_COLOR))
+	{
+		col = (task->scroll_x >> 3) + x + task->win_left;
+		row = (task->scroll_y >> 3) + y + task->win_top;
+		idx = row * TEXT_COLS + col;
+		gr.text_fg[idx] = fg_pix;
+		gr.text_bg[idx] = bg_pix;
+	}
+}
+
+public U0 TextBorderColor(CTask *task=NULL, I64 l, I64 r, I64 t, I64 b, I64 fg_pix, I64 bg_pix, Bool solid)
+{//Truecolor window border. Like $LK,"TextBorder",A="MN:TextBorder"$() but fg/bg are native 32-bit pixs.
+	I64 i;
+
+	if (!task)
+		task = Fs;
+
+	TextBorderColorPlot(task, l - 1, t - 1, text.border_chars[6  + solid], fg_pix, bg_pix);
+	TextBorderColorPlot(task, r + 1, t - 1, text.border_chars[8  + solid], fg_pix, bg_pix);
+	TextBorderColorPlot(task, l - 1, b + 1, text.border_chars[10 + solid], fg_pix, bg_pix);
+	TextBorderColorPlot(task, r + 1, b + 1, text.border_chars[12 + solid], fg_pix, bg_pix);
+	for (i = l; i <= r; i++)
+	{
+		TextBorderColorPlot(task, i, t - 1, text.border_chars[2 + solid], fg_pix, bg_pix);
+		TextBorderColorPlot(task, i, b + 1, text.border_chars[2 + solid], fg_pix, bg_pix);
+	}
+	for (i = t; i <= b; i++)
+	{
+		TextBorderColorPlot(task, l - 1, i, text.border_chars[4 + solid], fg_pix, bg_pix);
+		TextBorderColorPlot(task, r + 1, i, text.border_chars[4 + solid], fg_pix, bg_pix);
+	}
+}
+
 public U0 TextRect(I64 l, I64 r, I64 t, I64 b, I64 d)
 {//Fill text rect. 60fps in Fs->draw_it() callback.
 	I64 y, w;

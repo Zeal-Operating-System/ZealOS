@@ -1,4 +1,129 @@
 #help_index "Graphics/Color"
+
+public U32 GrPixResolve(I64 color)
+{//Resolve legacy 8-bit color index to a native 32-bit pix val.
+//0-15 look up the cur palette. COLOR_INVALID and TRANSPARENT map to flag pixs.
+	if (0 <= color < COLORS_NUM)
+		return gr_palette[color];
+	if (color == COLOR_INVALID)
+		return PIXF_INVALID;
+
+	return PIXF_TRANSPARENT; //TRANSPARENT / COLOR_MONO
+}
+
+public U32 GrColorResolve(CColorROPU32 cr)
+{//Resolve a $LK,"CColorROPU32",A="MN:CColorROPU32"$ pen to a native 32-bit pix val.
+	if (cr & ROPF_TRUE_COLOR)
+		return cr & PIX_RGB_MASK;
+
+	return GrPixResolve(cr.c0.color);
+}
+
+public U32 GrPixArg(I64 val)
+{//Resolve a color arg that may be a legacy index, true color pen or raw pix val.
+	if (val & ROPF_TRUE_COLOR)
+		return val & PIX_RGB_MASK;
+	if (0 <= val <= 0xFF)
+		return GrPixResolve(val);
+
+	return val;
+}
+
+public U8 GrPix2Color(U32 pix)
+{//Nearest legacy palette color index for a native pix val.
+	I64		i, d, best = I64_MAX, res = BLACK;
+	CBGR24	p;
+
+	if (pix == PIXF_TRANSPARENT)
+		return TRANSPARENT;
+	if (pix == PIXF_INVALID)
+		return COLOR_INVALID;
+	for (i = 0; i < COLORS_NUM; i++)
+	{
+		p = gr_palette[i];
+		d = SqrI64(p.r - pix.u8[2]) + SqrI64(p.g - pix.u8[1]) + SqrI64(p.b - pix.u8[0]);
+		if (d < best)
+		{
+			best = d;
+			res = i;
+		}
+	}
+
+	return res;
+}
+
+public CColorROPU32 ColorRGB(I64 r, I64 g, I64 b)
+{//Make a true color pen val for dc->color. Any of 16M colors.
+	return ROPF_TRUE_COLOR | (r & 0xFF) << 16 | (g & 0xFF) << 8 | b & 0xFF;
+}
+
+public CColorROPU32 ColorBGR(CBGR24 bgr24)
+{//Make a true color pen val for dc->color from a CBGR24.
+	return ROPF_TRUE_COLOR | bgr24 & PIX_RGB_MASK;
+}
+
+public I64 GrRopBGet(CColorROPU32 cr)
+{//Raster op of a pen, honoring true color encoding.
+	if (cr & ROPF_TRUE_COLOR)
+		return cr >> ROPf_TC_ROP & 3;
+
+	return cr.c0.rop;
+}
+
+public U0 GuiChromeTrueColor(CColorROPU32 border_fg, CColorROPU32 border_bg=BLACK, CColorROPU32 border_unfocus_fg=0)
+{//Draw window borders in truecolor. Args accept $LK,"ColorRGB",A="MN:ColorRGB"$() pens or 0-15 indices.
+//border_unfocus_fg=0 dims unfocused borders toward the border bg.
+	gr.tc_border_fg = GrColorResolve(border_fg);
+	gr.tc_border_bg = GrColorResolve(border_bg);
+	if (border_unfocus_fg)
+		gr.tc_border_unfocus_fg = GrColorResolve(border_unfocus_fg);
+	else
+	{//Halfway between fg and bg.
+		gr.tc_border_unfocus_fg =
+			(gr.tc_border_fg >> 1 & 0x7F7F7F) + (gr.tc_border_bg >> 1 & 0x7F7F7F);
+	}
+	gr.tc_title_fg = gr.tc_border_fg;
+	gr.tc_title_bg = gr.tc_border_bg;
+	gr.tc_chrome = TRUE;
+}
+
+public U0 GuiChromePalette()
+{//Revert window chrome to the legacy 16-color border_attr path.
+	gr.tc_chrome = FALSE;
+}
+
+//Vibrant truecolor syntax-highlight scheme, indexed by the DOC_COLOR_* palette
+//slot the highlighter picks (see $LK,"highlight_hash_type_colors",A="MN:highlight_hash_type_colors"$). Independent of the
+//theme's 16 slots, so code can use colors the theme palette doesn't have.
+public U32 gr_syntax_scheme[COLORS_NUM] = {
+	0xF8F8F2, //0  BLACK slot  -> default light (rarely hit)
+	0xFF79C6, //1  BLUE        keyword       -> hot pink
+	0x6272A4, //2  GREEN       comment       -> muted slate
+	0x8BE9FD, //3  CYAN        define        -> bright cyan
+	0xFF5555, //4  RED         link          -> red
+	0x50FA7B, //5  PURPLE      function      -> green
+	0xF1FA8C, //6  BROWN       string/char   -> yellow
+	0xF8F8F2, //7  LTGRAY      alt/parens    -> white
+	0x6272A4, //8  DKGRAY      dim
+	0xBD93F9, //9  LTBLUE      class/macro   -> purple
+	0x50FA7B, //10 LTGREEN     green
+	0x8BE9FD, //11 LTCYAN      global var    -> cyan
+	0xFF5370, //12 LTRED       register      -> red-pink
+	0xBD93F9, //13 LTPURPLE    export sym    -> purple
+	0xFFB86C, //14 YELLOW      number        -> orange
+	0xF8F8F2  //15 WHITE       normal text   -> near white
+};
+
+public U0 GuiSyntaxTrueColor()
+{//Render source-code syntax highlighting in the vibrant truecolor scheme above.
+	gr.tc_syntax = TRUE;
+}
+
+public U0 GuiSyntaxPalette()
+{//Revert syntax highlighting to the 16-color theme palette.
+	gr.tc_syntax = FALSE;
+}
+
 public U8 gr_rainbow_10[10] = {BLACK, BROWN, RED, LTRED, YELLOW, GREEN, BLUE, PURPLE, LTGRAY, WHITE};
 
 DefineListLoad("ST_RAINBOW_10", "BLACK\0BROWN\0RED\0LTRED\0YELLOW\0GREEN\0BLUE\0PURPLE\0LTGRAY\0WHITE\0");
@@ -90,4 +215,28 @@ public U0 PaletteSetCommander(Bool persistent=TRUE)
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetCommander;
+}
+//********************************************************************************
+//Combined palette + truecolor-chrome themes. Defined here, after the
+//PaletteSet* functions they call (HolyC is single-pass, no forward calls).
+
+public U0 GuiThemeMidnight()
+{//Modern dark theme: slate palette + truecolor cyan window chrome + vibrant code.
+	PaletteSetSlate(FALSE);
+	GuiChromeTrueColor(ColorRGB(0x33, 0xC8, 0xFF), ColorRGB(0x0A, 0x16, 0x26), ColorRGB(0x2C, 0x44, 0x5A));
+	GuiSyntaxTrueColor;
+}
+
+public U0 GuiThemeAmber()
+{//Warm dark theme: dark palette + truecolor amber window chrome + vibrant code.
+	PaletteSetDark(FALSE);
+	GuiChromeTrueColor(ColorRGB(0xFF, 0xB0, 0x3A), ColorRGB(0x1C, 0x12, 0x06), ColorRGB(0x5A, 0x44, 0x1E));
+	GuiSyntaxTrueColor;
+}
+
+public U0 GuiThemeViolet()
+{//Cool theme: commander palette + truecolor violet window chrome + vibrant code.
+	PaletteSetCommander(FALSE);
+	GuiChromeTrueColor(ColorRGB(0xB0, 0x7A, 0xFF), ColorRGB(0x12, 0x0C, 0x22), ColorRGB(0x44, 0x36, 0x66));
+	GuiSyntaxTrueColor;
 }

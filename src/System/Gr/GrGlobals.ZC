@@ -2,14 +2,35 @@
 
 public class CGrGlobals
 {
-	I64			*to_8_bits, *to_8_colors;
-	CDC 		*screen_image,	//Read only.
+	CDC 		*screen_image,	//Read only. Last presented frame.
 				*dc,			//Persistent
-				*dc1,
 				*dc2, 			//Updated every refresh
 				*dc_cache,
 				*zoomed_dc;
 	U32			*text_base; 	//See $LK,"TextBase Layer",A="HI:TextBase Layer"$. (Similar to 0xB8000 but 32 bits)
+	//Parallel RGB planes, one U32 native pix per text cell. Only consulted for
+	//cells whose text_base entry has $LK,"ATTRF_TRUE_COLOR",A="MN:ATTRF_TRUE_COLOR"$ set. See $LK,"TextColorLenStr",A="MN:TextColorLenStr"$().
+	U32			*text_fg, *text_bg;
+
+	//Truecolor window chrome. When tc_chrome, borders draw in these pre-resolved
+	//pixs instead of the palette border_attr. Set via $LK,"GuiChromeTrueColor",A="MN:GuiChromeTrueColor"$().
+	Bool		 tc_chrome, tc_syntax, pad_tc[6];
+	U32			 tc_border_fg, tc_border_unfocus_fg, tc_border_bg, tc_title_fg, tc_title_bg, pad_tc2;
+
+	//Alpha overlays: truecolor DCs composited over the FINISHED screen each frame,
+	//so everything below shows through. See $LK,"GrOverlayNew",A="MN:GrOverlayNew"$(). NULL slots are skipped.
+	#define GR_OVERLAY_MAX	8
+	CDC			*overlay_dc[GR_OVERLAY_MAX];
+	I64			 overlay_x[GR_OVERLAY_MAX], overlay_y[GR_OVERLAY_MAX], overlay_alpha[GR_OVERLAY_MAX];
+
+	//Per-window translucency. When translucent_task is set, that window's text
+	//renders to the private layer_* planes instead of the shared text_base, so
+	//the shared layer shows what's BEHIND it; the private layer is then alpha-
+	//composited on top. Default NULL = no change. See $LK,"WinTranslucent",A="MN:WinTranslucent"$().
+	CTask		*translucent_task;
+	I64			 translucent_alpha;
+	U32			*layer_base, *layer_fg, *layer_bg;
+
 	U16			*win_z_buf;
 
 	#define SPHT_ELEM_CODE		1
@@ -33,7 +54,7 @@ public class CGrGlobals
 				 circle_hi[GR_PEN_BRUSHES_NUM][GR_PEN_BRUSHES_NUM];
 
 	#define GR_SCREEN_ZOOM_MAX	8
-	U8			*screen_zoom_tables[GR_SCREEN_ZOOM_MAX + 1], *screen_cache;
+	U32			*screen_cache; //Native 32-bit copy of last presented frame.
 	I64			 screen_zoom, sx, sy;
 
 	//When zoomed, this keeps the mouse centered.

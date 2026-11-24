@@ -1,0 +1,86 @@
+// Native 32-bit truecolor demo. Proves the graphics API carries 16M colors.
+//
+// The gradients below are drawn once into an offscreen device context using
+// the normal Gr* API with the new ColorRGB() pen (no direct framebuffer
+// pokes), then blotted to the window every frame. Press any key to exit.
+
+CDC *tc_image;
+
+U0 TrueColorDraw(CTask *task, CDC *dc)
+{
+	GrBlot(dc, 0, 0, tc_image);
+}
+
+U0 TrueColorDemo()
+{
+	I64 x, y, r, g, b, band;
+	F64 t;
+
+	SettingsPush;
+	AutoComplete;
+	WinBorder;
+	WinMax;
+	DocClear;
+	DCFill;
+
+	Fs->win_inhibit = WIG_TASK_DEFAULT - WIF_SELF_FOCUS - WIF_SELF_BORDER;
+
+	tc_image = DCNew(GR_WIDTH, GR_HEIGHT);
+	tc_image->flags |= DCF_NO_TRANSPARENTS;
+	band = GR_HEIGHT / 4;
+
+	//Band 1: horizontal red<->green gradient.
+	for (x = 0; x < GR_WIDTH; x++)
+	{
+		r = 255 * x / GR_WIDTH;
+		g = 255 - r;
+		tc_image->color = ColorRGB(r, g, 64);
+		GrVLine(tc_image, x, 0, band - 1);
+	}
+
+	//Band 2: full hue sweep via sine channels.
+	for (x = 0; x < GR_WIDTH; x++)
+	{
+		t = 6.283 * x / GR_WIDTH;
+		r = 128 + 127.0 * Sin(t);
+		g = 128 + 127.0 * Sin(t + 2.094);
+		b = 128 + 127.0 * Sin(t + 4.188);
+		tc_image->color = ColorRGB(r, g, b);
+		GrVLine(tc_image, x, band, 2 * band - 1);
+	}
+
+	//Band 3: smooth 2D gradient, R across and B down.
+	for (y = 2 * band; y < 3 * band; y++)
+	{
+		b = 255 * (y - 2 * band) / band;
+		for (x = 0; x < GR_WIDTH; x++)
+		{
+			r = 255 * x / GR_WIDTH;
+			tc_image->color = ColorRGB(r, 32, b);
+			GrPlot(tc_image, x, y);
+		}
+	}
+
+	//Band 4: 256-shade grayscale ramp the legacy 16-color palette can't show.
+	for (x = 0; x < GR_WIDTH; x++)
+	{
+		g = 255 * x / GR_WIDTH;
+		tc_image->color = ColorRGB(g, g, g);
+		GrVLine(tc_image, x, 3 * band, GR_HEIGHT - 1);
+	}
+
+	tc_image->color = ColorRGB(255, 255, 255);
+	GrPrint(tc_image, 8, 8, "Native 32-bit truecolor - press any key");
+
+	Fs->draw_it = &TrueColorDraw;
+
+	while (!CharScan)
+		Refresh;
+
+	Fs->draw_it = NULL;
+	DCDel(tc_image);
+	DCFill;
+	SettingsPop;
+}
+
+TrueColorDemo;

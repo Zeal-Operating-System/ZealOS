@@ -1,0 +1,32 @@
+// Truecolor theme demo. Applies combined palette + truecolor-chrome themes.
+// The whole desktop re-themes: window border frames AND title bars become
+// 24-bit colored, matched to each palette. Legacy content is untouched.
+//
+// Themes persist after this runs. Switch anytime with:
+//   GuiThemeMidnight;  GuiThemeAmber;  GuiThemeViolet;
+//   GuiChromePalette;  PaletteSetSlate;   // back to 16-color chrome
+
+U0 TrueColorTheme()
+{
+	"\nTruecolor themes - watch the window borders and title bars.\n\n";
+
+	"Midnight (cyan chrome, slate palette)...\n";
+	GuiThemeMidnight;
+	Refresh;
+	Sleep(2600);
+
+	"Amber (warm chrome, dark palette)...\n";
+	GuiThemeAmber;
+	Refresh;
+	Sleep(2600);
+
+	"Violet (commander palette)...\n";
+	GuiThemeViolet;
+	Refresh;
+	Sleep(2600);
+
+	"\nEnding on Midnight. Switch with GuiThemeAmber; GuiThemeViolet; GuiChromePalette;\n";
+	GuiThemeMidnight;
+}
+
+TrueColorTheme;

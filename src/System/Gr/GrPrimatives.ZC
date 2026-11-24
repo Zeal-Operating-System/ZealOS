@@ -68,7 +68,12 @@ public Bool GrPlot(CDC *dc=gr.dc, I64 x, I64 y)
 	if (dc->brush)
 	{
 		old_color = dc->color;
-		if (dc->color.c0.rop != ROPB_COLLISION)
+		if (old_color & ROPF_TRUE_COLOR)
+		{
+			if (old_color >> ROPf_TC_ROP & 3 != ROPB_COLLISION)
+				dc->color = old_color & ~(3 << ROPf_TC_ROP) | ROPB_MONO << ROPf_TC_ROP;
+		}
+		else if (dc->color.c0.rop != ROPB_COLLISION)
 			dc->color.c0.rop = ROPB_MONO;
 		GrBlot(dc, x, y, dc->brush);
 		dc->color = old_color;
@@ -100,7 +105,12 @@ Bool GrPlot1(CDC *dc=gr.dc, I64 x, I64 y)
 	if (dc->brush)
 	{
 		old_color = dc->color;
-		if (dc->color.c0.rop != ROPB_COLLISION)
+		if (old_color & ROPF_TRUE_COLOR)
+		{
+			if (old_color >> ROPf_TC_ROP & 3 != ROPB_COLLISION)
+				dc->color = old_color & ~(3 << ROPf_TC_ROP) | ROPB_MONO << ROPf_TC_ROP;
+		}
+		else if (dc->color.c0.rop != ROPB_COLLISION)
 			dc->color.c0.rop = ROPB_MONO;
 		if (dc->depth_buf)
 			GrBlot3(dc, x, y, dc->db_z, dc->brush);
@@ -126,9 +136,9 @@ Bool GrPlot1(CDC *dc=gr.dc, I64 x, I64 y)
 	return TRUE;
 }
 
-public I64 GrPeek(CDC *dc=gr.dc, I64 x, I64 y)
+public I64 GrPeek32(CDC *dc=gr.dc, I64 x, I64 y)
 {//2D. Clipping but no transformation.
-//Returns pix color or -1 if off-screen or covered.
+//Returns native 32-bit pix val or -1 if off-screen or covered.
 	CTask *win_task;
 
 	if (dc->flags & DCF_SCREEN_BITMAP)
@@ -147,6 +157,26 @@ public I64 GrPeek(CDC *dc=gr.dc, I64 x, I64 y)
 			return -1;
 
 	return GrPeek0(dc, x, y);
+}
+
+public I64 GrPeek(CDC *dc=gr.dc, I64 x, I64 y)
+{//2D. Clipping but no transformation.
+//Returns pix color or -1 if off-screen or covered.
+//Pixs matching a cur palette color return the legacy 0-15 index,
+	//others return a ROPF_TRUE_COLOR pen usable as dc->color.
+	I64 i, pix = GrPeek32(dc, x, y);
+
+	if (pix < 0)
+		return -1;
+	if (pix == PIXF_TRANSPARENT)
+		return TRANSPARENT;
+	if (pix == PIXF_INVALID)
+		return COLOR_INVALID;
+	for (i = 0; i < COLORS_NUM; i++)
+		if (gr_palette[i] == pix)
+			return i;
+
+	return ROPF_TRUE_COLOR | pix;
 }
 
 /*
@@ -289,22 +319,22 @@ public I64 GrFloodFill(CDC *dc=gr.dc, I64 x, I64 y, Bool not_color=FALSE, I64 z=
 		return 0;
 	old_brush = dc->brush;
 	dc->brush = NULL;
-	if ((j = GrPeek(dc, x, y)) >= 0)
+	if ((j = GrPeek32(dc, x, y)) >= 0)
 	{
 		if (not_color)
 		{
-			dc->color2 = dc->color.c0.color;
+			dc->color2 = GrColorResolve(dc->color);
 			dc->flags |= DCF_FILL_NOT_COLOR;
 		}
 		else
 		{
 			dc->color2 = j;
-			if (dc->color.c1.rop & ROPBF_DITHER)
+			if (!(dc->color & ROPF_TRUE_COLOR) && dc->color.c1.rop & ROPBF_DITHER)
 			{
-				if (dc->color2.c0.color == dc->color.c0.color && dc->color.c0.color == dc->color.c1.color)
+				if (dc->color2 == GrColorResolve(dc->color) && dc->color2 == GrPixResolve(dc->color.c1.color))
 					goto ff_done;
 			}
-			else if (dc->color2.c0.color == dc->color.c0.color)
+			else if (dc->color2 == GrColorResolve(dc->color))
 				goto ff_done;
 			dc->flags &= ~DCF_FILL_NOT_COLOR;
 		}
@@ -523,7 +553,12 @@ public Bool GrPlot3(CDC *dc=gr.dc, I64 x, I64 y, I64 z)
 		GrPlot1(dc, x, y);
 	else if (dc->thick < GR_PEN_BRUSHES_NUM)
 	{
-		if (dc->color.c0.rop != ROPB_COLLISION)
+		if (dc->color & ROPF_TRUE_COLOR)
+		{
+			if (dc->color >> ROPf_TC_ROP & 3 != ROPB_COLLISION)
+				dc->color = dc->color & ~(3 << ROPf_TC_ROP) | ROPB_MONO << ROPf_TC_ROP;
+		}
+		else if (dc->color.c0.rop != ROPB_COLLISION)
 			dc->color.c0.rop = ROPB_MONO;
 		if (dc->depth_buf)
 		{
@@ -545,9 +580,9 @@ public Bool GrPlot3(CDC *dc=gr.dc, I64 x, I64 y, I64 z)
 			}
 			else
 			{
-				if (dc->color.c0.rop == ROPB_COLLISION)
+				if (GrRopBGet(dc->color) == ROPB_COLLISION)
 				{
-					if (dc->color.c0.color != dc->bkcolor.c0.color && dc->color.c0.color != TRANSPARENT)
+					if (GrColorResolve(dc->color) != GrColorResolve(dc->bkcolor) && GrColorResolve(dc->color) != PIXF_TRANSPARENT)
 						record=GrBlot3(dc, x - w, y - w, z, gr.collision_pen_brushes[dc->thick]);
 					else
 						record = FALSE;
@@ -576,9 +611,9 @@ public Bool GrPlot3(CDC *dc=gr.dc, I64 x, I64 y, I64 z)
 			}
 			else
 			{
-				if (dc->color.c0.rop == ROPB_COLLISION)
+				if (GrRopBGet(dc->color) == ROPB_COLLISION)
 				{
-					if (dc->color.c0.color != dc->bkcolor.c0.color && dc->color.c0.color != TRANSPARENT)
+					if (GrColorResolve(dc->color) != GrColorResolve(dc->bkcolor) && GrColorResolve(dc->color) != PIXF_TRANSPARENT)
 						record = GrBlot(dc, x - w, y - w, gr.collision_pen_brushes[dc->thick]);
 					else
 						record = FALSE;
@@ -1282,9 +1317,9 @@ public I64 GrBlot3(CDC *dc=gr.dc, I64 x1, I64 y1, I64 z1, CDC *img)
 				{
 					if (_x2.i32[1] != last_x || _y2.i32[1] != last_y || first)
 					{
-						if ((color = GrPeek(img, x.i32[1], y.i32[1])) >= 0)
+						if ((color = GrPeek32(img, x.i32[1], y.i32[1])) >= 0)
 						{
-							if (dc->color.c0.rop == ROPB_MONO)
+							if (GrRopBGet(dc->color) == ROPB_MONO)
 							{
 								if (color)
 								{
@@ -1300,9 +1335,9 @@ public I64 GrBlot3(CDC *dc=gr.dc, I64 x1, I64 y1, I64 z1, CDC *img)
 							}
 							else
 							{
-								if (color != TRANSPARENT)
+								if (color != PIXF_TRANSPARENT)
 								{
-									dc->color = old_color & ~COLORROP_NO_ROP0_MASK|color;
+									dc->color = ROPF_TRUE_COLOR | (GrRopBGet(old_color) & 3) << ROPf_TC_ROP | color & PIX_RGB_MASK;
 									if (dc->depth_buf)
 									{
 										dc->db_z = _z2.i32[1];
@@ -1414,9 +1449,9 @@ normal_image:
 			{
 				if (x2.i32[1] != last_x || y2.i32[1] != last_y || first)
 				{
-					if ((color = GrPeek(img, x.i32[1], y.i32[1])) >= 0)
+					if ((color = GrPeek32(img, x.i32[1], y.i32[1])) >= 0)
 					{
-						if (dc->color.c0.rop == ROPB_MONO)
+						if (GrRopBGet(dc->color) == ROPB_MONO)
 						{
 							if (color)
 							{
@@ -1432,9 +1467,9 @@ normal_image:
 						}
 						else
 						{
-							if (color != TRANSPARENT)
+							if (color != PIXF_TRANSPARENT)
 							{
-								dc->color = old_color & ~COLORROP_NO_ROP0_MASK | color;//COLOR
+								dc->color = ROPF_TRUE_COLOR | (GrRopBGet(old_color) & 3) << ROPf_TC_ROP | color & PIX_RGB_MASK;//COLOR
 								if (dc->depth_buf)
 								{
 									dc->db_z = z2.i32[1];

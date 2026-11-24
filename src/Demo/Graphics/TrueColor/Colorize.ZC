@@ -1,0 +1,58 @@
+// Colorize the whole OS: a truecolor gradient desktop + a matched truecolor
+// theme (border frames + title bars). Everything else keeps working.
+//
+//   Colorize;     enable the gradient desktop + Midnight chrome
+//   Decolorize;   restore the flat desktop + 16-color chrome
+//
+// NOTE: this installs a wallpaper callback from a JIT'd script; it stays active
+// for the session. Run Decolorize; before recompiling the OS or clearing heaps.
+
+U0 (*colorize_prev_wp)(CTask *task) = NULL;
+
+U0 ColorizeWallPaper(CTask *task)
+{//Fill the desktop (winmgr) cells with a dark Zeal-blue gradient, then chain to
+//the previous wallpaper (the stats readout). Windows draw over, so only the
+//uncovered desktop shows the gradient. Kept DARK so overlaid text stays readable.
+	I64 x, y, idx, r, g, b, fx, fy;
+
+	for (y = 0; y < TEXT_ROWS; y++)
+	{
+		fy = 255 * y / TEXT_ROWS;
+		for (x = 0; x < TEXT_COLS; x++)
+		{
+			fx = 255 * x / TEXT_COLS;
+			//Deep navy at top-left, dark blue-cyan toward bottom-right. Zeal blue.
+			r = 5  + ((fx * 10) >> 8);					//5..15
+			g = 9  + ((fy * 18) >> 8);					//9..27
+			b = 20 + ((fy * 26) >> 8) + ((fx * 14) >> 8); //20..60
+			idx = y * TEXT_COLS + x;
+			gr.text_base[idx] = gr.text_base[idx] & 0xFF | ATTRF_TRUE_COLOR;
+			gr.text_fg[idx] = 0x1A2438;
+			gr.text_bg[idx] = r << 16 | g << 8 | b;
+		}
+	}
+
+	if (colorize_prev_wp)
+		(*colorize_prev_wp)(task);
+}
+
+U0 Colorize()
+{//Turn the OS colorful.
+	GuiThemeMidnight;
+	if (gr.fp_wall_paper != &ColorizeWallPaper)
+		colorize_prev_wp = gr.fp_wall_paper;
+	gr.fp_wall_paper = &ColorizeWallPaper;
+	"Colorized. Gradient desktop + Midnight chrome. Run Decolorize; to revert.\n";
+}
+
+U0 Decolorize()
+{//Restore the plain desktop + 16-color chrome + palette syntax.
+	if (colorize_prev_wp)
+		gr.fp_wall_paper = colorize_prev_wp;
+	GuiChromePalette;
+	GuiSyntaxPalette;
+	PaletteSetSlate;
+	"Restored.\n";
+}
+
+Colorize;

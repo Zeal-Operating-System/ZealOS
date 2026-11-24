@@ -277,6 +277,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc, U8 *st)
 	CHashGeneric	*tmph;
 	CCompCtrl		*cc = CompCtrlNew(st, CCF_DONT_FREE_BUF);
 	CHashTable		*old_hash_table_list = cc->htc.hash_table_list;
+	Bool			 tc_cmd = FALSE;
 
 	try
 	{
@@ -286,7 +287,14 @@ CDocEntry *ParseDollarCmd(CDoc *doc, U8 *st)
 			if (tmph = HashFind(cc->cur_str, doldoc.hash, DHT_DOC_CMD | DHT_COLOR))
 			{
 				if (tmph->type & DHT_DOC_CMD)
+				{
 					i = tmph->user_data0;
+					if (i & DOC_TC_CMD_FLAG)
+					{//$FG24/$BG24 truecolor variant.
+						tc_cmd = TRUE;
+						i &= ~DOC_TC_CMD_FLAG;
+					}
+				}
 				else
 				{//DHT_COLOR
 					i = DOCT_FOREGROUND;
@@ -348,6 +356,8 @@ CDocEntry *ParseDollarCmd(CDoc *doc, U8 *st)
 						doc_e->attr = LexExpressionI64(cc);
 					else
 						doc_e->attr = attr;
+					if (tc_cmd)
+						doc_e->attr = ROPF_TRUE_COLOR | doc_e->attr & 0xFFFFFF;
 					break;
 #assert DOCT_ERROR == DOCT_TYPES_NUM - 1
 

@@ -400,7 +400,9 @@ CSprite *SpriteTransformBitMap(I64 *r, CSprite *tmpg)
 	img->width			= tmpg->pwhu.width;
 	img->width_internal	= (tmpg->pwhu.width + 7) & ~7;
 	img->height			= tmpg->pwhu.height;
-	img->body			= &tmpg->pwhu.u;
+	//Sprite bitmap data is legacy 8-bit indexed: convert to native pixs.
+	img->body			= MAlloc(img->width_internal * img->height * sizeof(U32));
+	GrBitMap8ToBitMap32(img->body, &tmpg->pwhu.u, img->width_internal * img->height);
 	img->dc_signature	= DCS_SIGNATURE_VAL;
 
 	dc3->color = TRANSPARENT;
@@ -414,6 +416,7 @@ CSprite *SpriteTransformBitMap(I64 *r, CSprite *tmpg)
 	dc3->y = tmpg->pwhu.y1 - miny;
 	dc3->z = -minz;
 	GrBlot3(dc3, 0, 0, 0, img);
+	Free(img->body);
 	Free(img);
 
 	elems = DC2Sprite(dc3);

@@ -1,0 +1,54 @@
+// Real window transparency via the overlay compositor. GrOverlayNew() makes a
+// truecolor DC that is alpha-blended over the FINISHED screen every frame, so
+// the desktop AND any windows below it show through.
+//
+// The panel glides left/right so you can watch it pass over other windows
+// translucently. Open a Dir; or Ed(...) first to have something behind it.
+// Press any key to remove.
+
+U0 TrueColorOverlay()
+{
+	CDC *ov = GrOverlayNew(440, 230, 100, 240, 175);
+	I64  px;
+
+	if (!ov)
+	{
+		"No free overlay slot.\n";
+		return;
+	}
+
+	//Panel background + title bar + content, drawn once into the overlay DC.
+	ov->color = ColorRGB(0x12, 0x1C, 0x33);
+	GrRect(ov, 0, 0, 440, 230);
+	ov->color = ColorRGB(0x33, 0xC8, 0xFF);
+	GrRect(ov, 0, 0, 440, 22);
+	ov->color = ColorRGB(0x08, 0x14, 0x24);
+	GrPrint(ov, 8, 7, "Translucent Overlay  (alpha 175)");
+
+	ov->color = ColorRGB(0xE8, 0xE8, 0xF0);
+	GrPrint(ov, 14, 46,  "Desktop and windows below show");
+	GrPrint(ov, 14, 62,  "THROUGH this panel - real per-pixel");
+	GrPrint(ov, 14, 78,  "alpha, composited over the screen.");
+
+	ov->color = ColorRGB(0xFF, 0x60, 0x40);
+	GrRect(ov, 14, 120, 130, 44);
+	ov->color = ColorRGB(0x40, 0xFF, 0x90);
+	GrRect(ov, 160, 120, 130, 44);
+	ov->color = ColorRGB(0xFF, 0xD0, 0x40);
+	GrRect(ov, 306, 120, 120, 44);
+
+	"Overlay shown - it glides over whatever is behind it.\n";
+	"Press any key to remove.\n";
+
+	while (!CharScan)
+	{
+		px = 100 + ToI64(160.0 * (1.0 + Sin(tS)));
+		GrOverlaySet(ov, px, 240, 175);
+		Sleep(20);
+	}
+
+	GrOverlayDel(ov);
+	"Removed.\n";
+}
+
+TrueColorOverlay;
