@@ -79,33 +79,22 @@ umount_tempdisk
 echo "Rebuilding kernel headers, kernel, OS, and building Distro ISO ..."
 "$QEMU_BIN_PATH/qemu-system-x86_64" -machine q35 $KVM -drive format=raw,file="$TMPDISK" -m 1G -rtc base=localtime -smp 4 -device isa-debug-exit $QEMU_HEADLESS || true
 
-LIMINE_BINARY_BRANCH="v10.x-binary"
-
-if [ -d "limine" ]
+if [ ! -d "limine-binary" ]
 then
-	cd limine
-	git remote set-branches origin $LIMINE_BINARY_BRANCH
-	git fetch
-	git remote set-head origin $LIMINE_BINARY_BRANCH
-	git switch $LIMINE_BINARY_BRANCH
-	git config --local pull.ff true
-	git config --local pull.rebase true
-	git pull
-	rm limine
-
-	cd ..
-else
-    git clone https://github.com/limine-bootloader/limine.git --branch=$LIMINE_BINARY_BRANCH --depth=1
+	echo "Downloading latest Limine binary release ..."
+	rm -f limine-binary.tar.gz
+	curl -fL -o limine-binary.tar.gz https://github.com/Limine-Bootloader/Limine/releases/latest/download/limine-binary.tar.gz
+	gunzip < limine-binary.tar.gz | tar -xf -
+	rm -f limine-binary.tar.gz
 fi
-make -C limine
 
-touch limine/Limine-BIOS-HDD.HH
-echo "/*\$WW,1\$" > limine/Limine-BIOS-HDD.HH
-cat limine/LICENSE >> limine/Limine-BIOS-HDD.HH
-echo "*/\$WW,0\$" >> limine/Limine-BIOS-HDD.HH
-cat limine/limine-bios-hdd.h >> limine/Limine-BIOS-HDD.HH
-sed -i 's/const uint8_t/U8/g' limine/Limine-BIOS-HDD.HH
-sed -i "s/\[\]/\[$(grep -o "0x" ./limine/limine-bios-hdd.h | wc -l)\]/g" limine/Limine-BIOS-HDD.HH
+touch limine-binary/Limine-BIOS-HDD.HH
+echo "/*\$WW,1\$" > limine-binary/Limine-BIOS-HDD.HH
+cat limine-binary/LICENSE >> limine-binary/Limine-BIOS-HDD.HH
+echo "*/\$WW,0\$" >> limine-binary/Limine-BIOS-HDD.HH
+cat limine-binary/limine-bios-hdd.h >> limine-binary/Limine-BIOS-HDD.HH
+sed -i 's/const uint8_t/U8/g' limine-binary/Limine-BIOS-HDD.HH
+sed -i "s/\[\]/\[$(grep -o "0x" ./limine-binary/limine-bios-hdd.h | wc -l)\]/g" limine-binary/Limine-BIOS-HDD.HH
 
 mount_tempdisk
 echo "Extracting MyDistro ISO from vdisk ..."
@@ -116,11 +105,12 @@ sudo cp -rf "$TMPMOUNT"/* "$TMPISODIR/"
 sudo rm -f "$TMPISODIR/Boot/OldMBR.BIN"
 sudo rm -f "$TMPISODIR/Boot/BootMHD2.BIN"
 sudo mkdir -p "$TMPISODIR/EFI/BOOT"
-sudo cp limine/Limine-BIOS-HDD.HH "$TMPISODIR/Boot/Limine-BIOS-HDD.HH"
-sudo cp limine/BOOTX64.EFI "$TMPISODIR/EFI/BOOT/BOOTX64.EFI"
-sudo cp limine/limine-uefi-cd.bin "$TMPISODIR/Boot/Limine-UEFI-CD.BIN"
-sudo cp limine/limine-bios-cd.bin "$TMPISODIR/Boot/Limine-BIOS-CD.BIN"
-sudo cp limine/limine-bios.sys "$TMPISODIR/Boot/Limine-BIOS.SYS"
+sudo cp limine-binary/Limine-BIOS-HDD.HH "$TMPISODIR/Boot/Limine-BIOS-HDD.HH"
+sudo cp limine-binary/BOOTX64.EFI "$TMPISODIR/EFI/BOOT/BOOTX64.EFI"
+sudo cp limine-binary/BOOTIA32.EFI "$TMPISODIR/EFI/BOOT/BOOTIA32.EFI"
+sudo cp limine-binary/limine-uefi-cd.bin "$TMPISODIR/Boot/Limine-UEFI-CD.BIN"
+sudo cp limine-binary/limine-bios-cd.bin "$TMPISODIR/Boot/Limine-BIOS-CD.BIN"
+sudo cp limine-binary/limine-bios.sys "$TMPISODIR/Boot/Limine-BIOS.SYS"
 sudo cp ../zealbooter/bin/kernel "$TMPISODIR/Boot/ZealBooter.ELF"
 sudo cp ../zealbooter/limine.conf "$TMPISODIR/Boot/Limine.CONF"
 echo "Copying DVDKernel.ZXE over ISO Boot/Kernel.ZXE ..."
@@ -128,31 +118,23 @@ sudo mv "$TMPMOUNT/Tmp/DVDKernel.ZXE" "$TMPISODIR/Boot/Kernel.ZXE"
 sudo rm -f "$TMPISODIR/Tmp/DVDKernel.ZXE"
 umount_tempdisk
 
-truncate -s 32K bios_boot.img
-
+# ZealOS only boots off optical media, but the GPT stays, as the kernel
+# finds the disc it booted from by its disk GUID.
 xorriso -as mkisofs -R -r -J -b Boot/Limine-BIOS-CD.BIN \
-        -no-emul-boot -boot-load-size 4 -boot-info-table \
-        --efi-boot Boot/Limine-UEFI-CD.BIN \
+        -no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
+        -apm-block-size 2048 --efi-boot Boot/Limine-UEFI-CD.BIN \
         -efi-boot-part --efi-boot-image --protective-msdos-label \
-        -append_partition 4 21686148-6449-6E6F-744E-656564454649 bios_boot.img \
-        -appended_part_as_gpt \
         "$TMPISODIR" -o ZealOS-limine.iso
 
-rm bios_boot.img
-
-./limine/limine bios-install ZealOS-limine.iso --no-gpt-to-mbr-isohybrid-conversion
-
 if [ "$TESTING" = true ]; then
-	if [ ! -d "ovmf" ]; then
+	if [ ! -d "edk2-ovmf-bins" ]; then
 	    echo "Downloading OVMF..."
-	    mkdir ovmf
-	    cd ovmf
-	    curl -o OVMF-X64.zip https://efi.akeo.ie/OVMF/OVMF-X64.zip
-	    7z x OVMF-X64.zip
-	    cd ..
+	    curl -fL -o edk2-ovmf-bins.tar.gz https://github.com/osdev0/edk2-ovmf-stable-bins/releases/latest/download/edk2-ovmf-bins.tar.gz
+	    gunzip < edk2-ovmf-bins.tar.gz | tar -xf -
+	    rm -f edk2-ovmf-bins.tar.gz
 	fi
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in UEFI mode ..."
-	"$QEMU_BIN_PATH/qemu-system-x86_64" -machine q35 $KVM -m 1G -rtc base=localtime -bios ovmf/OVMF.fd -smp 4 -cdrom ZealOS-limine.iso $QEMU_HEADLESS
+	"$QEMU_BIN_PATH/qemu-system-x86_64" -machine q35 $KVM -m 1G -rtc base=localtime -drive if=pflash,unit=0,format=raw,file=edk2-ovmf-bins/ovmf-code-x86_64.fd,readonly=on -smp 4 -cdrom ZealOS-limine.iso $QEMU_HEADLESS
 	echo "Testing limine-zealbooter-xorriso isohybrid boot in BIOS mode ..."
 	"$QEMU_BIN_PATH/qemu-system-x86_64" -machine q35 $KVM -m 1G -rtc base=localtime -smp 4 -cdrom ZealOS-limine.iso $QEMU_HEADLESS
 	echo "Testing native ZealC MyDistro legacy ISO in BIOS mode ..."

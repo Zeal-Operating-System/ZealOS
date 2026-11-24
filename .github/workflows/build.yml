@@ -31,7 +31,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install build-essential git xorriso qemu-system-x86
+          sudo apt-get -y install build-essential curl xorriso qemu-system-x86
 
       - name: Enable KVM Group Perms
         run: |
