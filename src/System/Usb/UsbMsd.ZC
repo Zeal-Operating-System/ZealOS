@@ -1,0 +1,382 @@
+//USB Mass Storage: Bulk-Only Transport + SCSI, mounted as BDT_USB block devices.
+
+#define USB_MSDS_MAX		4
+#define USB_MSD_CHUNK_BLKS	64	//32KB bounce per transfer
+
+#define USB_MSD_CBW_SIG		0x43425355
+#define USB_MSD_CSW_SIG		0x53425355
+
+class CUsbMsdCBW
+{//31 bytes
+	U32	sig, tag, data_len;
+	U8	flags, lun, cb_len;
+	U8	cb[16];
+};
+
+class CUsbMsdCSW
+{//13 bytes
+	U32	sig, tag, residue;
+	U8	status;
+};
+
+class CUsbMsd
+{
+	Bool		 valid, ready;
+	CUsbDev		*dev;
+	CUsbEP		*bulk_in, *bulk_out;
+	I64			 if_num,
+				 next_tag,
+				 max_lba, blk_size,
+				 lock;
+	U8			 first_drive_let;
+	CUsbMsdCBW	*cbw;
+	CUsbMsdCSW	*csw;
+	U8			*bounce;
+	CBlkDev		*bd;
+};
+
+CUsbMsd usb_msds[USB_MSDS_MAX];
+
+U0 UsbMsdLock(CUsbMsd *msd)
+{
+	while (LBts(&msd->lock, 0))
+		Yield;
+}
+
+U0 UsbMsdUnlock(CUsbMsd *msd)
+{
+	LBtr(&msd->lock, 0);
+}
+
+U0 UsbMsdBotReset(CUsbMsd *msd)
+{//Bulk-Only Mass Storage Reset + clear both endpoint halts.
+	UsbCtrl(msd->dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_IF,
+			USB_MSD_RQ_RESET, 0, msd->if_num, NULL, 0);
+	UsbClearHalt(msd->dev, msd->bulk_in);
+	UsbClearHalt(msd->dev, msd->bulk_out);
+}
+
+I64 UsbMsdCmd(CUsbMsd *msd, U8 *cb, I64 cb_len, U8 *data, I64 data_len, I64 dir_in)
+{//One BOT command. Returns CSW status (0 ok, 1 check condition), or -1 transport error.
+	I64		 code, i, residue;
+	CUsbEP	*data_ep;
+
+	MemSet(msd->cbw, 0, sizeof(CUsbMsdCBW));
+	msd->cbw->sig	   = USB_MSD_CBW_SIG;
+	msd->next_tag++;
+	msd->cbw->tag	   = msd->next_tag;
+	msd->cbw->data_len = data_len;
+	if (dir_in)
+		msd->cbw->flags = 0x80;
+	msd->cbw->lun	 = 0;
+	msd->cbw->cb_len = cb_len;
+	for (i = 0; i < cb_len; i++)
+		msd->cbw->cb[i] = cb[i];
+
+	code = XhciBulkXfer(msd->dev, msd->bulk_out, msd->cbw, sizeof(CUsbMsdCBW), 2.0);
+	if (code == XHCI_CC_STALL)
+	{
+		UsbMsdBotReset(msd);
+		return -1;
+	}
+	if (code != XHCI_CC_SUCCESS)
+		return -1;
+
+	if (data_len)
+	{
+		if (dir_in)
+			data_ep = msd->bulk_in;
+		else
+			data_ep = msd->bulk_out;
+		code = XhciBulkXfer(msd->dev, data_ep, data, data_len, 4.0, &residue);
+		if (code == XHCI_CC_STALL)
+			UsbClearHalt(msd->dev, data_ep);
+		else if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+			return -1;
+	}
+
+	MemSet(msd->csw, 0, sizeof(CUsbMsdCSW));
+	code = XhciBulkXfer(msd->dev, msd->bulk_in, msd->csw, sizeof(CUsbMsdCSW), 2.0);
+	if (code == XHCI_CC_STALL)
+	{//Retry CSW once after clearing halt.
+		UsbClearHalt(msd->dev, msd->bulk_in);
+		code = XhciBulkXfer(msd->dev, msd->bulk_in, msd->csw, sizeof(CUsbMsdCSW), 2.0);
+	}
+	if (code != XHCI_CC_SUCCESS && code != XHCI_CC_SHORT_PKT)
+		return -1;
+	if (msd->csw->sig != USB_MSD_CSW_SIG || msd->csw->tag != msd->cbw->tag)
+		return -1;
+	if (msd->csw->status == 2)
+	{//Phase error
+		UsbMsdBotReset(msd);
+		return -1;
+	}
+
+	return msd->csw->status;
+}
+
+I64 UsbMsdRequestSense(CUsbMsd *msd)
+{//Returns sense key, or -1.
+	U8	cb[6], *buf = msd->bounce;
+	I64	res;
+
+	MemSet(cb, 0, 6);
+	cb[0] = 0x03;
+	cb[4] = 18;
+	res = UsbMsdCmd(msd, cb, 6, buf, 18, TRUE);
+	if (res)
+		return -1;
+
+	return buf[2] & 0xF;
+}
+
+Bool UsbMsdTestReady(CUsbMsd *msd)
+{
+	U8 cb[6];
+
+	MemSet(cb, 0, 6);
+
+	return UsbMsdCmd(msd, cb, 6, NULL, 0, TRUE) == 0;
+}
+
+Bool UsbMsdInquiry(CUsbMsd *msd, U8 *buf36)
+{
+	U8	cb[6];
+	I64	res;
+
+	MemSet(cb, 0, 6);
+	cb[0] = 0x12;
+	cb[4] = 36;
+	res = UsbMsdCmd(msd, cb, 6, msd->bounce, 36, TRUE);
+	if (!res)
+		MemCopy(buf36, msd->bounce, 36);
+
+	return res == 0;
+}
+
+Bool UsbMsdReadCapacity(CUsbMsd *msd)
+{
+	U8	cb[10], *buf = msd->bounce;
+	I64	res;
+
+	MemSet(cb, 0, 10);
+	cb[0] = 0x25;
+	res = UsbMsdCmd(msd, cb, 10, buf, 8, TRUE);
+	if (res)
+		return FALSE;
+	msd->max_lba  = (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
+	msd->blk_size = (buf[4] << 24) | (buf[5] << 16) | (buf[6] << 8) | buf[7];
+
+	return TRUE;
+}
+
+I64 UsbMsdRW10(CUsbMsd *msd, I64 write, I64 lba, I64 count, U8 *buf)
+{//READ(10)/WRITE(10) through bounce buffer. count <= USB_MSD_CHUNK_BLKS.
+	U8	cb[10];
+	I64	res, bytes = count * msd->blk_size;
+
+	MemSet(cb, 0, 10);
+	if (write)
+	{
+		cb[0] = 0x2A;
+		MemCopy(msd->bounce, buf, bytes);
+	}
+	else
+		cb[0] = 0x28;
+	cb[2] = (lba >> 24) & 0xFF;
+	cb[3] = (lba >> 16) & 0xFF;
+	cb[4] = (lba >> 8) & 0xFF;
+	cb[5] = lba & 0xFF;
+	cb[7] = (count >> 8) & 0xFF;
+	cb[8] = count & 0xFF;
+	res = UsbMsdCmd(msd, cb, 10, msd->bounce, bytes, !write);
+	if (!res && !write)
+		MemCopy(buf, msd->bounce, bytes);
+
+	return res;
+}
+
+Bool UsbMsdBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, I64 write)
+{
+	CUsbMsd	*msd;
+	I64		 n, res, retries;
+
+	if (bd->port_num < 0 || bd->port_num >= USB_MSDS_MAX)
+		return FALSE;
+	msd = &usb_msds[bd->port_num];
+	if (!msd->valid || !msd->dev || !msd->dev->present)
+		return FALSE;
+	UsbMsdLock(msd);
+	while (count > 0)
+	{
+		n = count;
+		if (n > USB_MSD_CHUNK_BLKS)
+			n = USB_MSD_CHUNK_BLKS;
+		retries = 2;
+		do
+		{
+			res = UsbMsdRW10(msd, write, blk, n, buf);
+			if (res > 0)
+				UsbMsdRequestSense(msd);
+			retries--;
+		}
+		while (res && retries > 0);
+		if (res)
+		{
+			UsbMsdUnlock(msd);
+			return FALSE;
+		}
+		blk	  += n;
+		buf	  += n * msd->blk_size;
+		count -= n;
+	}
+	UsbMsdUnlock(msd);
+
+	return TRUE;
+}
+
+Bool UsbMsdBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{
+	return UsbMsdBlksRW(bd, buf, blk, count, FALSE);
+}
+
+Bool UsbMsdBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{
+	return UsbMsdBlksRW(bd, buf, blk, count, TRUE);
+}
+
+Bool UsbMsdKernelHooksSet()
+{//Resolve kernel USB hooks at runtime so an old Kernel.ZXE degrades gracefully
+//(HID still works, storage disabled) instead of hard-failing the System compile.
+	CHashGlobalVar	*r, *w;
+	U64				*p;
+
+	r = HashFind("fp_usb_msd_blks_read",  Fs->hash_table, HTT_GLOBAL_VAR);
+	w = HashFind("fp_usb_msd_blks_write", Fs->hash_table, HTT_GLOBAL_VAR);
+	if (!r || !w || !r->data_addr || !w->data_addr)
+		return FALSE;
+	p = r->data_addr;
+	*p = &UsbMsdBlksRead;
+	p = w->data_addr;
+	*p = &UsbMsdBlksWrite;
+
+	return TRUE;
+}
+
+U0 UsbMsdAttach(CUsbDev *dev, CUsbIf *uif)
+{//Bind a Bulk-Only SCSI mass storage interface, mount partitions.
+	CUsbMsd	*msd = NULL;
+	CUsbEP	*ep;
+	CBlkDev	*bd;
+	U8		 inq[40];
+	I64		 i, tries, res, msd_idx = 0;
+
+	if (uif->if_proto != USB_MSD_PROTO_BOT)
+	{
+		SysLog("USB: MSD port %d: unsupported protocol 0x%02X.\n", dev->port, uif->if_proto);
+		return;
+	}
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (!usb_msds[i].valid)
+		{
+			msd = &usb_msds[i];
+			msd_idx = i;
+			break;
+		}
+	if (!msd)
+		return;
+//Clear state fields but keep the persistent DMA buffer allocations.
+	MemSet(msd, 0, offset(CUsbMsd.cbw));
+	msd->dev	= dev;
+	msd->if_num	= uif->if_num;
+	for (i = 0; i < uif->ep_count; i++)
+	{
+		ep = &dev->ep_list[uif->ep_idxs[i]];
+		if ((ep->attr & 3) == USB_EP_TYPE_BULK)
+		{
+			if (ep->addr & 0x80)
+				msd->bulk_in = ep;
+			else
+				msd->bulk_out = ep;
+		}
+	}
+	if (!msd->bulk_in || !msd->bulk_out)
+	{
+		SysLog("USB: MSD port %d: missing bulk endpoints.\n", dev->port);
+		return;
+	}
+	if (!msd->cbw)
+		msd->cbw = CAlloc(sizeof(CUsbMsdCBW), sys_task->code_heap);
+	if (!msd->csw)
+		msd->csw = CAlloc(sizeof(CUsbMsdCSW), sys_task->code_heap);
+	if (!msd->bounce)
+		msd->bounce = CAlloc(USB_MSD_CHUNK_BLKS * BLK_SIZE, sys_task->code_heap);
+	msd->next_tag = 1;
+	msd->valid	  = TRUE;
+	dev->drv_data = msd;
+
+	MemSet(inq, 0, 40);
+	UsbMsdInquiry(msd, inq);
+	inq[36] = 0;
+
+	tries = 10;
+	while (tries > 0 && !UsbMsdTestReady(msd))
+	{
+		UsbMsdRequestSense(msd);
+		Sleep(100);
+		tries--;
+	}
+	if (!UsbMsdReadCapacity(msd))
+	{
+		SysLog("USB: MSD port %d: READ CAPACITY failed.\n", dev->port);
+		msd->valid = FALSE;
+		return;
+	}
+	if (msd->blk_size != BLK_SIZE)
+	{
+		SysLog("USB: MSD port %d: unsupported block size %d.\n", dev->port, msd->blk_size);
+		msd->valid = FALSE;
+		return;
+	}
+	msd->ready = TRUE;
+
+	if (!UsbMsdKernelHooksSet)
+	{
+		SysLog("USB: MSD port %d: kernel lacks USB block hooks (rebuild kernel); storage not mounted.\n",
+			   dev->port);
+		return;
+	}
+
+	msd->first_drive_let = DriveNextFreeLet('V');
+	bd = BlkDevNextFreeSlot(msd->first_drive_let, BDT_USB);
+	bd->max_blk	 = msd->max_lba;
+	bd->port_num = msd_idx;
+	msd->bd = bd;
+	res = BlkDevAdd(bd, , FALSE, FALSE);
+	if (res)
+		SysLog("USB: MSD port %d: \"%s\" %d MB mounted, %d partition(s), first drive %C:.\n",
+			   dev->port, &inq[8], ((msd->max_lba + 1) * BLK_SIZE) / 0x100000, res,
+			   msd->first_drive_let);
+	else
+	{
+		SysLog("USB: MSD port %d: no mountable partitions.\n", dev->port);
+		msd->bd = NULL;
+	}
+}
+
+U0 UsbMsdDetach(CUsbDev *dev)
+{
+	I64 i;
+
+	for (i = 0; i < USB_MSDS_MAX; i++)
+		if (usb_msds[i].valid && usb_msds[i].dev == dev)
+		{
+			usb_msds[i].valid = FALSE;
+			usb_msds[i].ready = FALSE;
+			if (usb_msds[i].bd)
+			{
+				BlkDevDel(usb_msds[i].bd);
+				usb_msds[i].bd = NULL;
+			}
+		}
+}

@@ -1,0 +1,265 @@
+//USB HID boot-protocol keyboard + mouse.
+//Keyboard: HID usages -> PS/2 set-1 scancodes -> kbd.fifo2 (reuses kernel KbdHandler).
+//Mouse: boot reports -> mouse_hard state (reuses kernel mouse pipeline).
+
+#define USB_HIDS_MAX		8
+
+#define USB_HID_REPEAT_DELAY	0.400
+#define USB_HID_REPEAT_RATE		0.035
+
+class CUsbHid
+{
+	Bool	 valid;
+	CUsbDev	*dev;
+	CUsbEP	*ep;
+	I64		 proto;			//1=kbd, 2=mouse
+	U8		 prev[8];
+	I64		 repeat_sc;		//held key scancode for software typematic
+	F64		 repeat_time;
+};
+
+CUsbHid usb_hids[USB_HIDS_MAX];
+
+//Absolute cursor position maintained by the USB mouse (pixels).
+I64 usb_mouse_x = 0, usb_mouse_y = 0;
+
+//HID usage (page 7) -> set-1 scancode. 0x100 flag = 0xE0-prefixed.
+I64 usb_hid_to_sc[0x66] = {
+	0,     0,     0,     0,     0x1E,  0x30,  0x2E,  0x20,	//00-07: ---- a b c d
+	0x12,  0x21,  0x22,  0x23,  0x17,  0x24,  0x25,  0x26,	//08-0F: e f g h i j k l
+	0x32,  0x31,  0x18,  0x19,  0x10,  0x13,  0x1F,  0x14,	//10-17: m n o p q r s t
+	0x16,  0x2F,  0x11,  0x2D,  0x15,  0x2C,  0x02,  0x03,	//18-1F: u v w x y z 1 2
+	0x04,  0x05,  0x06,  0x07,  0x08,  0x09,  0x0A,  0x0B,	//20-27: 3 4 5 6 7 8 9 0
+	0x1C,  0x01,  0x0E,  0x0F,  0x39,  0x0C,  0x0D,  0x1A,	//28-2F: Ent Esc BS Tab Sp - = [
+	0x1B,  0x2B,  0x2B,  0x27,  0x28,  0x29,  0x33,  0x34,	//30-37: ] \ # ; ' ` , .
+	0x35,  0x3A,  0x3B,  0x3C,  0x3D,  0x3E,  0x3F,  0x40,	//38-3F: / Caps F1-F6
+	0x41,  0x42,  0x43,  0x44,  0x57,  0x58,  0x137, 0x46,	//40-47: F7-F12 PrtSc ScrLk
+	0,     0x152, 0x147, 0x149, 0x153, 0x14F, 0x151, 0x14D,	//48-4F: Pause Ins Home PgUp Del End PgDn Right
+	0x14B, 0x150, 0x148, 0x45,  0x135, 0x37,  0x4A,  0x4E,	//50-57: Left Down Up NumLk KP/ KP* KP- KP+
+	0x11C, 0x4F,  0x50,  0x51,  0x4B,  0x4C,  0x4D,  0x47,	//58-5F: KPEnt KP1-KP7
+	0x48,  0x49,  0x52,  0x53,  0x56,  0x15D				//60-65: KP8 KP9 KP0 KP. NonUS\ App
+};
+
+//Modifier bit -> scancode: LCtrl LShift LAlt LGUI RCtrl RShift RAlt RGUI
+I64 usb_hid_mod_sc[8] = {0x1D, 0x2A, 0x38, 0x15B, 0x11D, 0x36, 0x138, 0x15C};
+
+U0 UsbKbdEmit(I64 sc, I64 up)
+{//Push set-1 bytes into kernel keyboard fifo.
+	if (!sc)
+		return;
+	if (sc & 0x100)
+		FifoU8Insert(kbd.fifo2, 0xE0);
+	if (up)
+		FifoU8Insert(kbd.fifo2, (sc & 0x7F) | 0x80);
+	else
+		FifoU8Insert(kbd.fifo2, sc & 0x7F);
+}
+
+CUsbHid *UsbHidByEP(CUsbEP *ep)
+{
+	I64 i;
+
+	for (i = 0; i < USB_HIDS_MAX; i++)
+		if (usb_hids[i].valid && usb_hids[i].ep == ep)
+			return &usb_hids[i];
+
+	return NULL;
+}
+
+Bool UsbKbdReportHas(U8 *report, I64 usage)
+{
+	I64 i;
+
+	for (i = 2; i < 8; i++)
+		if (report[i] == usage)
+			return TRUE;
+
+	return FALSE;
+}
+
+U0 UsbKbdCB(U8 *d, U8 *e)
+{//Interrupt IN report arrived (8-byte boot keyboard report).
+	CUsbDev	*dev = d;
+	CUsbEP	*ep	 = e;
+	CUsbHid	*hid = UsbHidByEP(ep);
+	U8		*rep;
+	I64		 i, mods, prev_mods, sc;
+
+	if (!hid || !dev->present)
+		return;
+	rep = ep->auto_buf;
+	if (rep[2] == 1)
+		return;	//error rollover
+	mods	  = rep[0];
+	prev_mods = hid->prev[0];
+	for (i = 0; i < 8; i++)
+	{
+		if ((mods & (1 << i)) && !(prev_mods & (1 << i)))
+			UsbKbdEmit(usb_hid_mod_sc[i], FALSE);
+		if (!(mods & (1 << i)) && (prev_mods & (1 << i)))
+			UsbKbdEmit(usb_hid_mod_sc[i], TRUE);
+	}
+//Released keys
+	for (i = 2; i < 8; i++)
+	{
+		if (hid->prev[i] && !UsbKbdReportHas(rep, hid->prev[i]))
+		{
+			if (hid->prev[i] < 0x66)
+			{
+				sc = usb_hid_to_sc[hid->prev[i]];
+				UsbKbdEmit(sc, TRUE);
+				if (hid->repeat_sc == sc)
+					hid->repeat_sc = 0;
+			}
+		}
+	}
+//Pressed keys
+	for (i = 2; i < 8; i++)
+	{
+		if (rep[i] && !UsbKbdReportHas(hid->prev, rep[i]))
+		{
+			if (rep[i] < 0x66)
+			{
+				sc = usb_hid_to_sc[rep[i]];
+				UsbKbdEmit(sc, FALSE);
+				hid->repeat_sc	 = sc;
+				hid->repeat_time = tS + USB_HID_REPEAT_DELAY;
+			}
+		}
+	}
+	MemCopy(hid->prev, rep, 8);
+}
+
+U0 UsbMouseCB(U8 *d, U8 *e)
+{//Interrupt IN report arrived (boot mouse report: buttons dx dy [wheel]).
+	CUsbDev	*dev = d;
+	CUsbEP	*ep	 = e;
+	U8		*rep;
+	I64		 dx, dy, dz = 0;
+
+	if (!dev->present)
+		return;
+	rep = ep->auto_buf;
+
+	dx = rep[1];
+	if (dx & 0x80)
+		dx -= 256;
+	dy = rep[2];
+	if (dy & 0x80)
+		dy -= 256;
+	if (ep->auto_len >= 4)
+	{
+		dz = rep[3];
+		if (dz & 0x80)
+			dz -= 256;
+	}
+
+//Drive the cursor directly. The kernel prescale/MouseHardSetPost path is meant
+//for the PS/2 handler and gets clobbered by WinMgr's per-frame PS/2 polling;
+//we own an absolute position and write mouse_hard.pos ourselves.
+	usb_mouse_x = ClampI64(usb_mouse_x + dx, 0, sys_framebuffer_width  - 1);
+	usb_mouse_y = ClampI64(usb_mouse_y + dy, 0, sys_framebuffer_height - 1);
+
+	mouse_hard.timestamp	 = TSCGet;
+	MemCopy(&mouse_hard_last, &mouse_hard, sizeof(CMouseHardStateGlobals));
+	mouse_hard.pos.x		 = usb_mouse_x;
+	mouse_hard.pos.y		 = usb_mouse_y;
+	mouse_hard.pos.z		+= dz;
+	mouse_hard.bttns[0]		 =  rep[0] & 1;
+	mouse_hard.bttns[1]		 = (rep[0] & 2) >> 1;
+	mouse_hard.bttns[2]		 = (rep[0] & 4) >> 2;
+	mouse_hard.event		 = TRUE;
+	mouse.show				 = TRUE;
+}
+
+U0 UsbHidTick()
+{//Software typematic repeat; called from USB task main loop.
+	CUsbHid	*hid;
+	I64		 i;
+
+	for (i = 0; i < USB_HIDS_MAX; i++)
+	{
+		hid = &usb_hids[i];
+		if (hid->valid && hid->proto == USB_HID_PROTO_KBD && hid->repeat_sc)
+		{
+			if (tS >= hid->repeat_time)
+			{
+				UsbKbdEmit(hid->repeat_sc, FALSE);
+				hid->repeat_time = tS + USB_HID_REPEAT_RATE;
+			}
+		}
+	}
+}
+
+U0 UsbHidAttach(CUsbDev *dev, CUsbIf *uif)
+{//Bind boot keyboard or mouse interface.
+	CUsbHid	*hid = NULL;
+	CUsbEP	*ep	 = NULL, *tmp;
+	I64		 i;
+
+	for (i = 0; i < uif->ep_count; i++)
+	{
+		tmp = &dev->ep_list[uif->ep_idxs[i]];
+		if ((tmp->addr & 0x80) && (tmp->attr & 3) == USB_EP_TYPE_INT)
+		{
+			ep = tmp;
+			break;
+		}
+	}
+	if (!ep)
+		return;
+	for (i = 0; i < USB_HIDS_MAX; i++)
+		if (!usb_hids[i].valid)
+		{
+			hid = &usb_hids[i];
+			break;
+		}
+	if (!hid)
+		return;
+	MemSet(hid, 0, sizeof(CUsbHid));
+	hid->dev   = dev;
+	hid->ep	   = ep;
+	hid->proto = uif->if_proto;
+	hid->valid = TRUE;
+
+//Boot protocol; idle=0 -> reports only on change.
+	UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_IF,
+			USB_HID_RQ_SET_PROTOCOL, 0, uif->if_num, NULL, 0);
+	UsbCtrl(dev, USB_RT_HOST_TO_DEV | USB_RT_CLASS | USB_RT_RECIP_IF,
+			USB_HID_RQ_SET_IDLE, 0, uif->if_num, NULL, 0);
+
+	if (!ep->auto_buf)
+		ep->auto_buf = CAlloc(8, sys_task->code_heap);
+	ep->auto_len = ep->max_packet;
+	if (ep->auto_len > 8)
+		ep->auto_len = 8;
+	if (ep->auto_len < 3)
+		ep->auto_len = 3;
+	if (uif->if_proto == USB_HID_PROTO_KBD)
+	{
+		ep->auto_len = 8;
+		ep->auto_kind = USB_AUTO_KBD;
+		SysLog("USB: HID keyboard on port %d.\n", dev->port);
+	}
+	else
+	{
+		ep->auto_kind = USB_AUTO_MOUSE;
+//Own the cursor: mark installed so WinMouseUpdate consumes our events, and
+//irqs_working so WinMgr does NOT poll (and clobber) the PS/2 mouse state.
+		mouse_hard.installed	= TRUE;
+		mouse_hard.irqs_working	= TRUE;
+		usb_mouse_x = sys_framebuffer_width  >> 1;
+		usb_mouse_y = sys_framebuffer_height >> 1;
+		SysLog("USB: HID mouse on port %d.\n", dev->port);
+	}
+	XhciIntQueue(dev, ep);
+}
+
+U0 UsbHidDetach(CUsbDev *dev)
+{
+	I64 i;
+
+	for (i = 0; i < USB_HIDS_MAX; i++)
+		if (usb_hids[i].valid && usb_hids[i].dev == dev)
+			usb_hids[i].valid = FALSE;
+}

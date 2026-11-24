@@ -1,0 +1,321 @@
+//USB + xHCI definitions.
+//ZealOS USB stack: xHCI host controller, HID boot keyboard/mouse, mass storage.
+
+#help_index "USB"
+
+#define USB_DEVS_MAX			16
+#define USB_EPS_MAX				8
+#define USB_IFS_MAX				6
+
+//USB descriptor types
+#define USB_DESC_DEV			1
+#define USB_DESC_CONFIG			2
+#define USB_DESC_STR			3
+#define USB_DESC_IF				4
+#define USB_DESC_EP				5
+#define USB_DESC_HID			0x21
+
+//USB standard requests
+#define USB_RQ_GET_STATUS		0
+#define USB_RQ_CLEAR_FEATURE	1
+#define USB_RQ_SET_FEATURE		3
+#define USB_RQ_SET_ADDRESS		5
+#define USB_RQ_GET_DESCRIPTOR	6
+#define USB_RQ_SET_DESCRIPTOR	7
+#define USB_RQ_GET_CONFIG		8
+#define USB_RQ_SET_CONFIG		9
+#define USB_RQ_GET_INTERFACE	10
+#define USB_RQ_SET_INTERFACE	11
+
+//bmRequestType bits
+#define USB_RT_DEV_TO_HOST		0x80
+#define USB_RT_HOST_TO_DEV		0x00
+#define USB_RT_STD				0x00
+#define USB_RT_CLASS			0x20
+#define USB_RT_VENDOR			0x40
+#define USB_RT_RECIP_DEV		0x00
+#define USB_RT_RECIP_IF			0x01
+#define USB_RT_RECIP_EP			0x02
+
+//USB feature selectors
+#define USB_FEAT_EP_HALT		0
+
+//USB classes
+#define USB_CLASS_HID			3
+#define USB_CLASS_MSD			8
+#define USB_CLASS_HUB			9
+
+//HID
+#define USB_HID_SUBCLASS_BOOT	1
+#define USB_HID_PROTO_KBD		1
+#define USB_HID_PROTO_MOUSE		2
+#define USB_HID_RQ_GET_REPORT	1
+#define USB_HID_RQ_SET_IDLE		10
+#define USB_HID_RQ_SET_PROTOCOL	11
+
+//MSD
+#define USB_MSD_SUBCLASS_SCSI	6
+#define USB_MSD_PROTO_BOT		0x50
+#define USB_MSD_RQ_RESET		0xFF
+#define USB_MSD_RQ_GET_MAX_LUN	0xFE
+
+//Device speeds, xHCI PORTSC encoding
+#define USB_SPEED_FULL			1
+#define USB_SPEED_LOW			2
+#define USB_SPEED_HIGH			3
+#define USB_SPEED_SUPER			4
+
+//Endpoint attribute transfer types
+#define USB_EP_TYPE_CTRL		0
+#define USB_EP_TYPE_ISOCH		1
+#define USB_EP_TYPE_BULK		2
+#define USB_EP_TYPE_INT			3
+
+class CUsbDevDesc
+{//18 bytes. HolyC classes are packed.
+	U8	len, type;
+	U16	usb_ver;
+	U8	dev_class, dev_subclass, dev_proto, max_packet0;
+	U16	vendor_id, product_id, dev_ver;
+	U8	i_manufacturer, i_product, i_serial, num_configs;
+};
+
+class CUsbConfigDesc
+{//9 bytes
+	U8	len, type;
+	U16	total_len;
+	U8	num_ifs, config_val, i_config, attr, max_power;
+};
+
+class CUsbIfDesc
+{//9 bytes
+	U8	len, type, if_num, alt, num_eps, if_class, if_subclass, if_proto, i_if;
+};
+
+class CUsbEPDesc
+{//7 bytes
+	U8	len, type, addr, attr;
+	U16	max_packet;
+	U8	interval;
+};
+
+//======================== xHCI ========================
+
+#define XHCI_PCI_CLASS			0x0C0330
+
+//Capability register byte offsets
+#define XHCI_CAP_CAPLENGTH		0x00
+#define XHCI_CAP_HCIVERSION		0x02
+#define XHCI_CAP_HCSPARAMS1		0x04
+#define XHCI_CAP_HCSPARAMS2		0x08
+#define XHCI_CAP_HCSPARAMS3		0x0C
+#define XHCI_CAP_HCCPARAMS1		0x10
+#define XHCI_CAP_DBOFF			0x14
+#define XHCI_CAP_RTSOFF			0x18
+
+//Operational register byte offsets
+#define XHCI_OP_USBCMD			0x00
+#define XHCI_OP_USBSTS			0x04
+#define XHCI_OP_PAGESIZE		0x08
+#define XHCI_OP_DNCTRL			0x14
+#define XHCI_OP_CRCR			0x18
+#define XHCI_OP_DCBAAP			0x30
+#define XHCI_OP_CONFIG			0x38
+#define XHCI_OP_PORTSC_BASE		0x400	//+ 0x10 * port_index
+
+//USBCMD bits
+#define XHCI_CMD_RS				0x0001
+#define XHCI_CMD_HCRST			0x0002
+#define XHCI_CMD_INTE			0x0004
+
+//USBSTS bits
+#define XHCI_STS_HCH			0x0001
+#define XHCI_STS_CNR			0x0800
+
+//PORTSC bits
+#define XHCI_PORTSC_CCS			0x00000001	//Current connect status
+#define XHCI_PORTSC_PED			0x00000002	//Port enabled
+#define XHCI_PORTSC_PR			0x00000010	//Port reset
+#define XHCI_PORTSC_PP			0x00000200	//Port power
+#define XHCI_PORTSC_CSC			0x00020000	//Connect status change
+#define XHCI_PORTSC_PEC			0x00040000	//Enable change
+#define XHCI_PORTSC_WRC			0x00080000	//Warm reset change
+#define XHCI_PORTSC_OCC			0x00100000
+#define XHCI_PORTSC_PRC			0x00200000	//Reset change
+#define XHCI_PORTSC_PLC			0x00400000
+#define XHCI_PORTSC_CEC			0x00800000
+#define XHCI_PORTSC_CHANGE_BITS	0x00FE0000
+//Write-1-to-clear + preserve mask: RW bits we must not clobber when writing.
+//Writing PORTSC: preserve PP, write change bits only to clear them.
+
+//Runtime register byte offsets (interrupter 0)
+#define XHCI_RT_IMAN0			0x20
+#define XHCI_RT_IMOD0			0x24
+#define XHCI_RT_ERSTSZ0			0x28
+#define XHCI_RT_ERSTBA0			0x30
+#define XHCI_RT_ERDP0			0x38
+
+//TRB types
+#define XHCI_TRB_NORMAL			1
+#define XHCI_TRB_SETUP			2
+#define XHCI_TRB_DATA			3
+#define XHCI_TRB_STATUS			4
+#define XHCI_TRB_ISOCH			5
+#define XHCI_TRB_LINK			6
+#define XHCI_TRB_EVENT_DATA		7
+#define XHCI_TRB_NOOP			8
+#define XHCI_TRB_ENABLE_SLOT	9
+#define XHCI_TRB_DISABLE_SLOT	10
+#define XHCI_TRB_ADDRESS_DEV	11
+#define XHCI_TRB_CONFIG_EP		12
+#define XHCI_TRB_EVAL_CTX		13
+#define XHCI_TRB_RESET_EP		14
+#define XHCI_TRB_STOP_EP		15
+#define XHCI_TRB_SET_TR_DEQ		16
+#define XHCI_TRB_RESET_DEV		17
+#define XHCI_TRB_NOOP_CMD		23
+#define XHCI_TRB_EVT_TRANSFER	32
+#define XHCI_TRB_EVT_CMD_DONE	33
+#define XHCI_TRB_EVT_PORT_SC	34
+#define XHCI_TRB_EVT_HOST		37
+
+//TRB control bits
+#define XHCI_TRBF_CYCLE			0x0001
+#define XHCI_TRBF_TC			0x0002	//Toggle cycle (link TRB)
+#define XHCI_TRBF_ISP			0x0004	//Interrupt on short packet
+#define XHCI_TRBF_CH			0x0010	//Chain
+#define XHCI_TRBF_IOC			0x0020	//Interrupt on completion
+#define XHCI_TRBF_IDT			0x0040	//Immediate data
+#define XHCI_TRBF_BSR			0x0200	//Block set address request
+#define XHCI_TRBF_DIR_IN		0x10000	//Data/status stage direction
+
+//Setup stage TRT values (control bits 17:16)
+#define XHCI_TRT_NO_DATA		0
+#define XHCI_TRT_OUT			0x20000
+#define XHCI_TRT_IN				0x30000
+
+//Completion codes
+#define XHCI_CC_SUCCESS			1
+#define XHCI_CC_DATA_BUF		2
+#define XHCI_CC_BABBLE			3
+#define XHCI_CC_TRANS_ERR		4
+#define XHCI_CC_TRB_ERR			5
+#define XHCI_CC_STALL			6
+#define XHCI_CC_SHORT_PKT		13
+#define XHCI_CC_TIMEOUT			-1	//ours, not a hardware code
+
+//Endpoint context EP types
+#define XHCI_EP_TYPE_ISOCH_OUT	1
+#define XHCI_EP_TYPE_BULK_OUT	2
+#define XHCI_EP_TYPE_INT_OUT	3
+#define XHCI_EP_TYPE_CTRL		4
+#define XHCI_EP_TYPE_ISOCH_IN	5
+#define XHCI_EP_TYPE_BULK_IN	6
+#define XHCI_EP_TYPE_INT_IN		7
+
+#define XHCI_RING_TRBS			256	//4096 / 16
+#define XHCI_EVT_RING_TRBS		256
+
+//Interrupt-IN auto-requeue report handler kinds (see CUsbEP.auto_kind).
+#define USB_AUTO_NONE			0
+#define USB_AUTO_KBD			1
+#define USB_AUTO_MOUSE			2
+
+//Forward decls: report handlers live in UsbHid.ZC (compiled after Xhci.ZC),
+//but XhciEventPoll dispatches to them. Single-pass compiler needs these.
+extern U0 UsbKbdCB(U8 *dev, U8 *ep);
+extern U0 UsbMouseCB(U8 *dev, U8 *ep);
+
+class CXhciTRB
+{//16 bytes
+	U32	lo, hi, status, control;
+};
+
+class CXhciRing
+{//Producer ring (command or transfer)
+	CXhciTRB	*trbs;
+	I64			 enq,		//enqueue index
+				 cycle;		//producer cycle state
+};
+
+class CUsbEP
+{
+//ring is a POINTER, not embedded: CUsbEP is itself embedded by value in CUsbDev,
+//and the ZealC JIT class parser rejects two-level by-value class nesting
+//(CUsbDev -> CUsbEP -> CXhciRing). Keeping ring a pointer flattens CUsbEP.
+	CXhciRing	*ring;
+	I64			 dci,			//xHCI device context index
+				 addr,			//USB endpoint address (with 0x80 dir bit)
+				 attr,			//descriptor attributes
+				 max_packet,
+				 interval;		//descriptor bInterval
+	Bool		 valid;
+//Sync transfer completion, set by event poll
+	Bool		 xfer_done;
+	I64			 xfer_code,		//xHCI completion code
+				 xfer_residue;	//untransferred bytes
+//Async auto-requeue (HID interrupt IN). auto_kind selects the report handler
+//(USB_AUTO_*); dispatched in XhciEventPoll. Avoids a function-pointer struct
+//member (which the ZealC JIT class parser rejects) and keeps late binding.
+	U8			*auto_buf;
+	I64			 auto_len,
+				 auto_kind;
+	CXhciTRB	*pending_trb;
+};
+
+class CUsbIf
+{
+	Bool	 valid;
+	I64		 if_num, if_class, if_subclass, if_proto;
+	I64		 ep_idxs[4],	//indices into dev->eps
+			 ep_count;
+};
+
+class CUsbDev
+{
+	Bool	 present, configured;
+	I64		 slot,			//xHCI slot id
+			 port,			//root port index (0-based)
+			 speed;			//USB_SPEED_*
+	U8		*dev_ctx,
+			*in_ctx;
+	CUsbEP	 ep0;
+	CUsbEP	 ep_list[USB_EPS_MAX];
+	I64		 ep_count;
+	CUsbIf	 ifs[USB_IFS_MAX];
+	I64		 if_count;
+	I64		 vendor_id, product_id,
+			 dev_class, dev_subclass, dev_proto,
+			 config_val;
+	U8		*drv_data;		//class driver private (CUsbMsd / CUsbHid)
+	U8		 desc_name[64];	//product string, ASCII
+};
+
+class CXhciGlobals
+{
+	Bool		 present, running;
+	U8			*mmio,		//capability base (uncached alias)
+				*op,		//operational base
+				*rt;		//runtime base
+	U32			*db;		//doorbell array
+	I64			 max_slots, max_ports, ctx_size,
+				 scratch_count;
+	U64			*dcbaa,
+				*scratch_arr,
+				*erst;
+	CXhciRing	 cmd_ring;
+	CXhciTRB	*evt_ring;
+	I64			 evt_deq, evt_cycle;
+	I64			 lock;			//ring enqueue lock
+//Command completion, set by event poll
+	Bool		 cmd_done;
+	I64			 cmd_code, cmd_slot;
+	CXhciTRB	*cmd_trb;		//pending command TRB
+	Bool		 port_change;	//port status change event seen
+	I64			 pci_bus, pci_dev, pci_fun;
+};
+
+CXhciGlobals usb_xhci;
+CUsbDev		 usb_devs[USB_DEVS_MAX];
+CTask		*usb_task = NULL;
+Bool		 usb_verbose = FALSE;

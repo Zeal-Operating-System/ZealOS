@@ -30,6 +30,17 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 	}
 }
 
+Bool BlkDevAddBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Partition-scan read during $LK,"BlkDevAdd",A="MN:BlkDevAdd"$(), before drive is validated.
+	if (bd->type == BDT_USB)
+	{
+		if (fp_usb_msd_blks_read)
+			return (*fp_usb_msd_blks_read)(bd, buf, blk, count);
+		return FALSE;
+	}
+	return AHCIAtaBlksRead(bd, buf, blk, count);
+}
+
 I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free)
 {//It will mount just one partition of prt_num>=0.
 //When repartitioing whole drive, whole_drive=TRUE.
@@ -68,6 +79,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 			break;
 
 		case BDT_ATA:
+		case BDT_USB:
 			drive->drive_signature = DRIVE_SIGNATURE_VAL; //Temporarily validate
 			if (!BlkDevInit(bd))
 				drive->drive_signature = 0; //Revoke validation
@@ -83,14 +95,14 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 					drive->size = bd->max_blk + 1 - bd->drv_offset;
 //The following read is a test read.
 					//if it hangs, the drive is not supported.
-					AHCIAtaBlksRead(bd, &mbr, 0, 1);
+					BlkDevAddBlksRead(bd, &mbr, 0, 1);
 					break;
 				}
 				offset = 0;
 				ext_base = INVALID_CLUS;
 				while (prt_num < 0 || num <= prt_num)
 				{
-					AHCIAtaBlksRead(bd, &mbr, offset, 1);
+					BlkDevAddBlksRead(bd, &mbr, offset, 1);
 					if (mbr.signature != 0xAA55)
 						break;
 					j = -1;
@@ -121,7 +133,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 								case MBR_PT_FAT32d:
 								case MBR_PT_FAT32e:
 								case MBR_PT_FAT32f:
-									AHCIAtaBlksRead(bd, &br, drive->drv_offset, 1);
+									BlkDevAddBlksRead(bd, &br, drive->drv_offset, 1);
 
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
