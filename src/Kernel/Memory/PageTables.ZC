@@ -154,7 +154,7 @@ SYS_INIT_PAGE_TABLES::
 				RET
 
 SYS_INIT_16MEG_SYS_CODE_BP::
-// Init sys_code_bp to BIOS E801 lowest 16Meg value.
+// Init sys_code_bp to the BIOS E820 usable memory below 16Meg.
 // $LK,"BlkPoolsInit",A="MN:BlkPoolsInit"$() adds the rest.
 				MOV 		U32 [SYS_CODE_BP],     SYS_FIXED_AREA + CSysFixedArea.sys_code_bp
 				MOV 		U32 [SYS_CODE_BP + 4], 0
@@ -162,16 +162,44 @@ SYS_INIT_16MEG_SYS_CODE_BP::
 				MOV 		U32 [SYS_DATA_BP],     0
 				MOV 		U32 [SYS_DATA_BP + 4], 0
 
-				XOR 		EAX, EAX
-				MOV 		AX,  U16 [MEM_E801] //1 Kb blocks between 1M and 16M
-				SHL 		EAX, 10
-				ADD 		EAX, 0x100000
+				MOV 		ESI, MEM_E820
+				JMP 		@@10
+@@05:			ADD 		ESI, sizeof(CMemE820)
+@@10:			MOV 		AL,  U8 CMemE820.type[ESI]
+				TEST		AL,  AL
+				JNZ 		@@15
+				BTS 		U32 [SYS_RUN_LEVEL], RLf_16MEG_SYS_CODE_BP
+				RET
+
+@@15:			CMP 		AL,  MEM_E820t_USABLE
+				JNE 		@@05
+				CMP 		U32 CMemE820.base + 4 [ESI], 0
+				JNE 		@@05
+				MOV 		EDI, U32 CMemE820.base[ESI]
+				CMP 		EDI, SYS_16MEG_AREA_LIMIT
+				JAE 		@@05
+
+//Clip the range to between the page tables and 16Meg, whole pages only.
+				MOV 		EAX, EDI
+				XOR 		EDX, EDX
+				ADD 		EAX, U32 CMemE820.len[ESI]
+				ADC 		EDX, U32 CMemE820.len + 4 [ESI]
+				JNZ 		@@20
+				CMP 		EAX, SYS_16MEG_AREA_LIMIT
+				JBE 		@@25
+@@20:			MOV 		EAX, SYS_16MEG_AREA_LIMIT
+@@25:			CMP 		EDI, U32 [MEM_HEAP_BASE]
+				JAE 		@@30
 				MOV 		EDI, U32 [MEM_HEAP_BASE]
+@@30:			ADD 		EDI, MEM_PAG_SIZE - 1
+				AND 		EDI, ~(MEM_PAG_SIZE - 1)
+				AND 		EAX, ~(MEM_PAG_SIZE - 1)
 				SUB 		EAX, EDI
+				JBE 		@@05
 
 //EDI=BASE EAX=SIZE
 				TEST		U8 [SYS_MEM_INIT_FLAG], 1
-				JZ			@@05
+				JZ			@@35
 				PUSH		EAX
 				PUSH		EDI
 				MOV 		ECX, EAX
@@ -180,20 +208,18 @@ SYS_INIT_16MEG_SYS_CODE_BP::
 				POP 		EDI
 				POP 		EAX
 
-@@05:			SHR 		EAX, MEM_PAG_BITS
-				MOV 		ESI, SYS_FIXED_AREA + CSysFixedArea.sys_code_bp
-				MOV 		EBX, U32 CBlkPool.mem_free_list[ESI]
-				MOV 		U32 CMemBlk.next     [EDI], EBX
+@@35:			SHR 		EAX, MEM_PAG_BITS
+				MOV 		EBX, SYS_FIXED_AREA + CSysFixedArea.sys_code_bp
+				MOV 		ECX, U32 CBlkPool.mem_free_list[EBX]
+				MOV 		U32 CMemBlk.next     [EDI], ECX
 				MOV 		U32 CMemBlk.next + 4 [EDI], 0
-				MOV 		U32 CBlkPool.mem_free_list     [ESI], EDI
-				MOV 		U32 CBlkPool.mem_free_list + 4 [ESI], 0
+				MOV 		U32 CBlkPool.mem_free_list     [EBX], EDI
+				MOV 		U32 CBlkPool.mem_free_list + 4 [EBX], 0
 				MOV 		U32 CMemBlk.mb_signature[EDI], MBS_UNUSED_SIGNATURE_VAL
 				MOV 		U32 CMemBlk.pags[EDI], EAX
 				SHL 		EAX, MEM_PAG_BITS
-				ADD 		U32 CBlkPool.alloced_u8s[ESI], EAX
-
-				BTS 		U32 [SYS_RUN_LEVEL], RLf_16MEG_SYS_CODE_BP
-				RET
+				ADD 		U32 CBlkPool.alloced_u8s[EBX], EAX
+				JMP 		I32 @@05
 }
 
 I64 *MemPageTable(U8 *a)

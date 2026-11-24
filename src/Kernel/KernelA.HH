@@ -558,7 +558,6 @@ class CKernel
 
 	U0				start;
 	U32				boot_base;
-	U16				mem_E801[2];
 	CMemE820		mem_E820[MEM_E820_ENTRIES_NUM];
 	U64				mem_physical_space;
 	CSysLimitBase	sys_gdt_ptr;
