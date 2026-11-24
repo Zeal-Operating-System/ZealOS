@@ -55,7 +55,15 @@ U0 NetQueuePush(U8 *data, I64 length)
 	after the last entry of net_queue to keep new
 	items in the back of the Queue, old in front. */ 
 
-	CNetQueueEntry *entry = CAlloc(sizeof(CNetQueueEntry));
+	CNetQueueEntry *entry;
+
+	if (length > ETHERNET_FRAME_SIZE)
+	{ // hardware length field could exceed our fixed entry buffer; never overflow it
+		NetErr("NETQUEUE PUSH: Dropping oversized frame of %d bytes.", length);
+		return;
+	}
+
+	entry = CAlloc(sizeof(CNetQueueEntry));
 
 	entry->packet_length = length;
 
@@ -86,7 +94,15 @@ U0 NetQueueLazyPush(U8 *data, I64 length)
 { // Push into NetQueue, don't trigger interrupt in this func.
   // Trigger interrupt by Spawn-ing another Task to check queue.
 
-	CNetQueueEntry *entry = CAlloc(sizeof(CNetQueueEntry));
+	CNetQueueEntry *entry;
+
+	if (length > ETHERNET_FRAME_SIZE)
+	{
+		NetErr("NETQUEUE LAZY PUSH: Dropping oversized frame of %d bytes.", length);
+		return;
+	}
+
+	entry = CAlloc(sizeof(CNetQueueEntry));
 
 	entry->packet_length = length;
 	MemCopy(entry->frame, data, length);

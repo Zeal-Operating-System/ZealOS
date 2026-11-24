@@ -237,16 +237,34 @@ U0 IPV4SubnetSet(U32 router_address, U32 subnet_mask)
 	ipv4_globals.ipv4_subnet_mask	 = subnet_mask;
 }
 
-//I64
-U0 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
+I64 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 {
-	//...if ethertype not ipv4 error?
+	CIPV4Header *header;
+	I64			 header_length;
+	U16			 total_length;
 
-	// TODO: Check ethernet_frame length ! ... we need to know what's appropriate
+	if (ethernet_frame->length < sizeof(CIPV4Header))
+	{
+		NetErr("IPV4 PACKET PARSE: Frame shorter than IPV4 header.");
+		return -1;
+	}
 
-	CIPV4Header *header = ethernet_frame->data;
-	I64			 header_length = (header->version_ihl & 0x0F) * 4;//this Has to go. at least abstract or something..
-	U16			 total_length = EndianU16(header->total_length);
+	header		  = ethernet_frame->data;
+	header_length = (header->version_ihl & 0x0F) * 4; // IHL is in 32-bit words
+	total_length  = EndianU16(header->total_length);
+
+	if (header->version_ihl >> 4 != 4)
+	{
+		NetErr("IPV4 PACKET PARSE: Not an IPV4 packet.");
+		return -1;
+	}
+	if (header_length < sizeof(CIPV4Header) ||
+		total_length < header_length ||
+		total_length > ethernet_frame->length)
+	{
+		NetErr("IPV4 PACKET PARSE: Invalid header/total length: %d/%d.", header_length, total_length);
+		return -1;
+	}
 
 	packet_out->ethernet_frame			= ethernet_frame;
 	packet_out->source_ip_address		= EndianU32(header->source_ip_address);
@@ -255,7 +273,7 @@ U0 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 	packet_out->data					= ethernet_frame->data + header_length;
 	packet_out->length					= total_length - header_length;
 
-//	return 0;
+	return 0;
 }
 
 U0 IPV4Rep()

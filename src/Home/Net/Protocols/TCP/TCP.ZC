@@ -2,7 +2,7 @@
 U0 TCPGlobalsInit()
 {
 	tcp_globals.bound_socket_tree = NULL;
-	tcp_globals.next_source_port  = 0;
+	tcp_globals.next_source_port  = RandU16 & 0x7FFF; // randomize so reboots don't reuse the same ephemeral ports
 }
 
 Bool IsTCPStateSync(CTCPSocket *tcp_socket)
@@ -139,10 +139,10 @@ U0 TCPPacketFinish(I64			  de_index,
 		send_buffer->retries			= 0;
 		send_buffer->start_seq_num		= EndianU32(header->seq_num);
 		send_buffer->end_seq_num		= 0; // must set this upstream
-		send_buffer->tcp_packet_size	= length;
+		send_buffer->tcp_packet_size	= sizeof(CTCPHeader) + length; // full TCP header + payload
 		send_buffer->tcp_packet			= CAlloc(sizeof(CTCPHeader) + length);
 
-		MemCopy(send_buffer->tcp_packet, frame, sizeof(CTCPHeader) + length);
+		MemCopy(send_buffer->tcp_packet, header, sizeof(CTCPHeader) + length);
 
 		*send_buffer_out = send_buffer; // set output param as new send buffer
 	}
@@ -426,6 +426,8 @@ I64 TCPSendData(CTCPSocket *tcp_socket, U8 flags, U8 *data, I64 length)
 			NetErr("TCP SEND DATA: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
+
+	return 0;
 }
 
 I64 TCPPacketParse(CTCPHeader **header_out,
@@ -433,12 +435,25 @@ I64 TCPPacketParse(CTCPHeader **header_out,
 				   I64		   *length_out,
 				   CIPV4Packet *packet)
 {
-	CTCPHeader		 *header		= packet->data;
-	I64				  header_length	= (header->data_offset >> 4) * 4; // ?? why
+	CTCPHeader		 *header;
+	I64				  header_length;
 //	U32				  checksum, sum;
 //	CTCPPseudoHeader *pseudoheader	= CAlloc(sizeof(CTCPPseudoHeader));
 
-	// TODO: Validate packet->length !
+	if (packet->length < sizeof(CTCPHeader))
+	{
+		NetErr("TCP PACKET PARSE: Packet shorter than TCP header.");
+		return -1;
+	}
+
+	header		  = packet->data;
+	header_length = (header->data_offset >> 4) * 4; // data_offset is high nibble, in 32-bit words
+
+	if (header_length < sizeof(CTCPHeader) || header_length > packet->length)
+	{
+		NetErr("TCP PACKET PARSE: Invalid data offset: %d.", header_length);
+		return -1;
+	}
 
 	// Verify Checksum:
 /*	NetWarn("DEBUG: TCPPACKETPARSE:		0x%X = checksum from packet, verifying...", EndianU16(header->checksum));
@@ -490,10 +505,14 @@ U0 TCPAcknowledgePacket(CTCPSocket *tcp_socket, U32 segment_ack)
 		if (segment_ack_relative <= send_next_relative)
 		{
 			NetDebug("TCP ACKNOWLEDGE PACKET: Saw send buffer entry with ACK <= next relative send ACK, removing.");
-			rtt = time - send_buffer->time_sent; // Round-Trip Time
 
-			tcp_socket->srtt = (tcp_socket->srtt * TCP_SRTT_ALPHA) + ((1.0 - TCP_SRTT_ALPHA) * rtt);
-			// Smoothed Round-Trip Time
+			if (send_buffer->retries == 0)
+			{ // Karn's algorithm: retransmitted segments give ambiguous RTT samples, skip them
+				rtt = time - send_buffer->time_sent; // Round-Trip Time
+
+				tcp_socket->srtt = (tcp_socket->srtt * TCP_SRTT_ALPHA) + ((1.0 - TCP_SRTT_ALPHA) * rtt);
+				// Smoothed Round-Trip Time
+			}
 
 			QueueRemove(send_buffer);
 			Free(send_buffer->tcp_packet);
@@ -533,13 +552,20 @@ U0 TCPCheckACKQueue(CTCPSocket *tcp_socket)
 
 	if (rto < TCP_RTO_MIN)
 		rto = TCP_RTO_MIN;
-	if (rto < TCP_RTO_MAX)
+	if (rto > TCP_RTO_MAX)
 		rto = TCP_RTO_MAX;
 
 	do
 	{
-		if (time > send_buffer->time_sent + rto)
-		{
+		if (time > send_buffer->time_sent + rto * (1 << send_buffer->retries))
+		{ // exponential backoff: rto doubles per retry of this segment
+			if (send_buffer->retries >= TCP_MAX_RETRIES)
+			{
+				NetErr("TCP CHECK ACK QUEUE: Max retries hit, closing connection.");
+				tcp_socket->state = TCP_STATE_CLOSED;
+				return;
+			}
+
 			NetWarn("TCP CHECK ACK QUEUE: Retransmitting TCP packet in ACK Queue.");
 
 			switch (dest->family)
@@ -564,7 +590,7 @@ U0 TCPCheckACKQueue(CTCPSocket *tcp_socket)
 								return;// de_index;
 							}
 
-							MemCopy(&tcp_frame, send_buffer->tcp_packet, send_buffer->tcp_packet_size);
+							MemCopy(tcp_frame, send_buffer->tcp_packet, send_buffer->tcp_packet_size);
 
 							IPV4PacketFinish(de_index);
 
@@ -590,6 +616,7 @@ U0 TCPCheckACKQueue(CTCPSocket *tcp_socket)
 			}
 
 			send_buffer->time_sent = tS;
+			send_buffer->retries++;
 
 			// If it gets here, retransmit was successful.
 
@@ -651,6 +678,11 @@ CTCPSocket TCPSocket(U16 domain=AF_UNSPEC)
 	tcp_socket->receive_buffer = CAlloc(TCP_WINDOW_SIZE);
 
 	tcp_socket->max_segment_size = TCP_MSS;
+
+	// Random Initial Send Sequence number. A fixed ISS of 0 confuses
+	// remote TIME_WAIT states across reconnects and is trivially spoofable.
+	tcp_socket->next_send_seq_num = RandU32;
+	tcp_socket->first_unacked_seq = tcp_socket->next_send_seq_num;
 
 	return tcp_socket;
 }
@@ -1073,6 +1105,7 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 				break;
 
 			default:
+				TCPCheckACKQueue(tcp_socket); // retransmit SYN if lost
 				Sleep(1);
 		}
 	}
@@ -1204,6 +1237,7 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 				break;
 
 			default:
+				TCPCheckACKQueue(new_socket); // retransmit SYN-ACK if lost
 				Sleep(1);
 		}
 	}
@@ -1233,14 +1267,16 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	if (!SocketReceive(tcp_socket->socket))
 	{
 		NetErr("TCP SOCKET RECEIVE: Failed, Socket state-machine must be in OPEN or BOUND state.");
-		return NULL;
+		return -1;
 	}
 
 	timeout = counts.jiffies + tcp_socket->timeout * JIFFY_FREQ / 1000;
 
+	// Wait for data only while the remote can still deliver more.
+	// CLOSE_WAIT means remote sent FIN: anything in flight is already buffered.
 	while ((tcp_socket->state == TCP_STATE_ESTABLISHED	||
 			tcp_socket->state == TCP_STATE_FIN_WAIT1	||
-			tcp_socket->state == TCP_STATE_CLOSE_WAIT)	&& // allowing receive during closing state
+			tcp_socket->state == TCP_STATE_FIN_WAIT2)	&&
 		   tcp_socket->read_position == tcp_socket->write_position)
 	{
 		TCPCheckACKQueue(tcp_socket);
@@ -1250,17 +1286,24 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 			break;
 	}
 
-	if ((tcp_socket->state != TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
-		tcp_socket->read_position == tcp_socket->write_position || length == 0)
+	if (length == 0)
 		return 0;
 
+	if (tcp_socket->read_position == tcp_socket->write_position)
+	{ // no buffered data
+		switch (tcp_socket->state)
+		{
+			case TCP_STATE_ESTABLISHED:
+			case TCP_STATE_FIN_WAIT1:
+			case TCP_STATE_FIN_WAIT2: // still connected: nothing arrived before timeout
+				if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking receives.
+					NetErr("TCP SOCKET RECEIVE: Timed out.");
 
-	if (counts.jiffies > timeout)
-	{
-		if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking receives.
-			NetErr("TCP SOCKET RECEIVE: Timed out.");
+				return -1;
 
-		return -1;
+			default: // remote closed and buffer fully drained: orderly EOF
+				return 0;
+		}
 	}
 
 
@@ -1310,6 +1353,7 @@ I64 TCPSocketReceiveLine(CTCPSocket *tcp_socket, U8 *buffer, I64 size)
 		if (TCPSocketReceive(tcp_socket, buffer + received, 1) <= 0)
 		{
 			NetErr("TCP SOCKET RECEIVE LINE: Failed at TCPSocketReceive.");
+			buffer[received] = 0; // terminate what we have so callers can't read garbage
 			return -1;
 		}
 		if (buffer[received] == '\n')
@@ -1459,7 +1503,7 @@ CTCPSocket *TCPConnectionCreate(U8 *hostname, U16 port)
 			{
 				NetErr("TCP CONNECTION CREATE: Failed to connect TCP Socket to address.");
 				TCPSocketClose(result);
-				return error;
+				return NULL; // returning error code as a pointer invites crashes upstream
 			}
 
 			return result;

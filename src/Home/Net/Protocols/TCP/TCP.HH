@@ -6,6 +6,8 @@
 #define TCP_RTO_MIN		0.2
 #define TCP_RTO_MAX		10
 
+#define TCP_MAX_RETRIES	8 // give up and close connection after this many retransmits of a segment
+
 #define TCP_WINDOW_SIZE	8192
 
 #define TCP_MSS			536 // Max Segment Size default

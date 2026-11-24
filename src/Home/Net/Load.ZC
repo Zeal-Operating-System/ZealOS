@@ -22,6 +22,8 @@ Cd(__DIR__);;
 
 #include "Protocols/TCP/MakeTCP"
 
+#include "Protocols/HTTP" // needs DNS + TCP
+
 #include "Protocols/DHCP"
 
 #include "Utilities/NetHandler" // needs IPV4, UDP, ICMP

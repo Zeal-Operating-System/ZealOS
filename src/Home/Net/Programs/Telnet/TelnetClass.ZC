@@ -1,16 +1,58 @@
+// Telnet stream parser states. State persists across TCPSocketReceive calls,
+// so telnet commands and ANSI sequences split across TCP segments parse correctly.
+#define TELNET_STATE_NORMAL		0 // plain data
+#define TELNET_STATE_IAC		1 // saw IAC, expect command byte
+#define TELNET_STATE_IAC_OPT	2 // saw WILL/WONT/DO/DONT, expect option byte
+#define TELNET_STATE_SB			3 // inside subnegotiation, collecting payload
+#define TELNET_STATE_SB_IAC		4 // saw IAC inside subnegotiation
+#define TELNET_STATE_ESC		5 // saw ESC
+#define TELNET_STATE_CSI		6 // saw ESC [, collecting until final byte
+#define TELNET_STATE_ESC_CHARSET 7 // saw ESC ( or ESC ), swallow designation byte
+
+#define TELNET_SEQ_BUF_SIZE		64 // ANSI CSI parameter collect buffer
+#define TELNET_SB_BUF_SIZE		64 // telnet subnegotiation payload buffer
+
+// The terminal proper: a fixed grid of cells, one glyph + one color attribute
+// each, exactly like VGA text mode. attr = background << 4 | foreground,
+// both VGA palette indices. Rendered by TelnetDrawIt each window refresh.
+#define TERM_MAX_COLS	132
+#define TERM_MAX_ROWS	60
+
+#define TERM_SCROLLBACK_ROWS	600 // history ring; rows evicted off the top land here
+
+#define TERM_DEFAULT_ATTR	0x07 // LTGRAY on BLACK, classic ANSI default
+
 class Terminal {
   I64 sock;
   Bool sock_ready;
+  Bool task_idle; // TRUE while TerminalTask is not touching sock; gates safe socket close
   Bool waiting_for_input;
-  I64 window_width;
+  I64 window_width;  // active terminal size in cells (<= TERM_MAX_*)
   I64 window_height;
   CDoc *doc;
-  CTask *task;
+  CTask *task;     // TerminalTask (receiver)
+  CTask *win_task; // the Telnet window's task; resize must target this, not Fs of the caller
 
-  I64 current_color;
-  I64 current_bgcolor;
-  I64 current_row;
-  I64 current_col;
+  U8  screen_ch[TERM_MAX_ROWS * TERM_MAX_COLS];   // row-major, stride TERM_MAX_COLS
+  U8  screen_attr[TERM_MAX_ROWS * TERM_MAX_COLS];
+
+  U8  back_ch[TERM_SCROLLBACK_ROWS * TERM_MAX_COLS];   // scrollback ring buffer
+  U8  back_attr[TERM_SCROLLBACK_ROWS * TERM_MAX_COLS];
+  I64 back_head;    // next ring row to write
+  I64 back_count;   // filled ring rows
+  I64 view_offset;  // rows scrolled back into history; 0 = live view
+  I64 csr_row, csr_col;
+  I64 saved_row, saved_col; // for CSI s/u and ESC 7/8
+  U8  cur_attr;             // attribute applied to newly written cells
+  Bool bold;                // SGR 1 active: foregrounds get the bright bit
+  Bool csr_visible;         // toggled by CSI ?25h / ?25l
+
+  I64 parse_state; // TELNET_STATE_*
+  U8  iac_cmd;     // pending WILL/WONT/DO/DONT command byte
+  U8  seq_buf[TELNET_SEQ_BUF_SIZE];
+  I64 seq_len;
+  U8  sb_buf[TELNET_SB_BUF_SIZE];
+  I64 sb_len;
 
   U8 buffer[BUF_SIZE];
   I64 buffer_len;

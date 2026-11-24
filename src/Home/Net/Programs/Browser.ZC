@@ -1,0 +1,361 @@
+// Zeb: a minimal text-mode web browser for ZealOS. Public Domain.
+// Fetches pages with the HTTP client (Protocols/HTTP.ZC), strips HTML to
+// plain text, numbers the links, and lets you follow them by number.
+// Plain HTTP only for now: HTTPS needs a TLS stack ZealOS doesn't have yet.
+
+#define ZEB_MAX_LINKS	256
+#define ZEB_HISTORY_MAX	64
+
+U8	*zeb_links[ZEB_MAX_LINKS];
+I64	 zeb_link_count = 0;
+
+U0 ZebLinksFree()
+{
+	I64 i;
+
+	for (i = 0; i < zeb_link_count; i++)
+		Free(zeb_links[i]);
+
+	zeb_link_count = 0;
+}
+
+U0 ZebPutS(U8 *s)
+{ // print untrusted text: double dollar signs so DolDoc takes them literally
+	while (*s)
+	{
+		if (*s == '$$')
+			"$$$$";
+		else
+			"%c", *s;
+		s++;
+	}
+}
+
+Bool ZebTagIsBreak(U8 *tag)
+{ // tags that force a line break in the text rendering
+	return !StrICompare(tag, "br")	|| !StrICompare(tag, "p")	 ||
+		   !StrICompare(tag, "div")	|| !StrICompare(tag, "tr")	 ||
+		   !StrICompare(tag, "li")	|| !StrICompare(tag, "ul")	 ||
+		   !StrICompare(tag, "ol")	|| !StrICompare(tag, "table")||
+		   !StrICompare(tag, "h1")	|| !StrICompare(tag, "h2")	 ||
+		   !StrICompare(tag, "h3")	|| !StrICompare(tag, "h4")	 ||
+		   !StrICompare(tag, "h5")	|| !StrICompare(tag, "h6")	 ||
+		   !StrICompare(tag, "hr")	|| !StrICompare(tag, "blockquote");
+}
+
+U8 *ZebHtmlToText(U8 *html)
+{ // Strip tags/entities, collect <a href> targets into zeb_links, append a
+  // [n] marker after each link's anchor text. Returns MAlloc'ed text.
+  // Output worst case: every byte a dollar doubled, plus "[nnn]" per link.
+	I64	 len = StrLen(html);
+	U8	*out = MAlloc(2 * len + 8 * ZEB_MAX_LINKS + 16);
+	I64	 o = 0;
+	U8	*p = html;
+	U8	 tag[16];
+	I64	 tag_len;
+	Bool closing;
+	U8	*attrs, *attrs_end, *v;
+	U8	 href[1024];
+	I64	 href_len;
+	Bool link_open = FALSE;
+	U8	*marker;
+	I64	 entity;
+	U8	 c, last_out = '\n';
+	I64	 newline_run = 1;
+
+	ZebLinksFree;
+
+	while (*p)
+	{
+		if (*p == '<')
+		{
+			p++;
+			closing = (*p == '/');
+			if (closing)
+				p++;
+
+			tag_len = 0;
+			while (*p && *p != '>' && *p != ' ' && *p != '\t' &&
+				   *p != '\r' && *p != '\n' && tag_len < 15)
+				tag[tag_len++] = *p++;
+			tag[tag_len] = 0;
+
+			attrs = p; // attribute region runs to '>'
+			while (*p && *p != '>')
+				p++;
+			attrs_end = p;
+			if (*p)
+				p++;
+
+			if (!closing && !StrICompare(tag, "a"))
+			{ // find href= inside the attribute region
+				href_len = 0;
+				v = attrs;
+				while (v + 5 < attrs_end && StrNICompare(v, "href", 4))
+					v++;
+				if (v + 5 < attrs_end)
+				{
+					v += 4;
+					while (v < attrs_end && (*v == ' ' || *v == '\t' || *v == '='))
+						v++;
+					if (v < attrs_end && (*v == '"' || *v == '\''))
+					{
+						c = *v++;
+						while (v < attrs_end && *v != c && href_len < 1023)
+							href[href_len++] = *v++;
+					}
+					else
+					{
+						while (v < attrs_end && *v != ' ' && *v != '\t' &&
+							   *v != '>' && href_len < 1023)
+							href[href_len++] = *v++;
+					}
+				}
+				href[href_len] = 0;
+
+				if (href_len && zeb_link_count < ZEB_MAX_LINKS)
+				{
+					zeb_links[zeb_link_count++] = StrNew(href);
+					link_open = TRUE;
+				}
+			}
+			else if (closing && !StrICompare(tag, "a"))
+			{
+				if (link_open)
+				{ // append "[n]" marker after the anchor text
+					marker = MStrPrint("[%d]", zeb_link_count);
+					MemCopy(out + o, marker, StrLen(marker));
+					o += StrLen(marker);
+					Free(marker);
+					last_out = ']';
+					newline_run = 0;
+					link_open = FALSE;
+				}
+			}
+			else if (!closing && (!StrICompare(tag, "script") || !StrICompare(tag, "style")))
+			{ // skip embedded script/style content up to the matching close tag
+				while (*p)
+				{
+					if (*p == '<' && p[1] == '/' && !StrNICompare(p + 2, tag, tag_len))
+					{
+						while (*p && *p != '>')
+							p++;
+						if (*p)
+							p++;
+						break;
+					}
+					p++;
+				}
+			}
+
+			if (ZebTagIsBreak(tag) && newline_run < 2)
+			{
+				out[o++] = '\n';
+				last_out = '\n';
+				newline_run++;
+			}
+		}
+		else if (*p == '&')
+		{ // character entity
+			if (!StrNICompare(p, "&amp;", 5))       { c = '&';  p += 5; }
+			else if (!StrNICompare(p, "&lt;", 4))   { c = '<';  p += 4; }
+			else if (!StrNICompare(p, "&gt;", 4))   { c = '>';  p += 4; }
+			else if (!StrNICompare(p, "&quot;", 6)) { c = '"';  p += 6; }
+			else if (!StrNICompare(p, "&apos;", 6)) { c = '\''; p += 6; }
+			else if (!StrNICompare(p, "&nbsp;", 6)) { c = ' ';  p += 6; }
+			else if (p[1] == '#')
+			{
+				entity = Str2I64(p + 2);
+				c = entity & 0x7F;
+				if (c < 32)
+					c = '?';
+				while (*p && *p != ';')
+					p++;
+				if (*p)
+					p++;
+			}
+			else
+			{
+				c = '&';
+				p++;
+			}
+
+			if (c == '$$')
+			{
+				out[o++] = '$$';
+				out[o++] = '$$';
+			}
+			else
+				out[o++] = c;
+			last_out = c;
+			newline_run = 0;
+		}
+		else
+		{
+			c = *p++;
+
+			if (c == '\r')
+				c = 0; // dropped
+			else if (c == '\n' || c == '\t')
+				c = ' ';
+
+			if (c >= 0x80)
+			{ // UTF-8: '?' for lead bytes, drop continuation bytes
+				if (c >= 0xC0)
+					c = '?';
+				else
+					c = 0;
+			}
+
+			if (c == ' ' && (last_out == ' ' || last_out == '\n'))
+				c = 0; // collapse whitespace runs
+
+			if (c == '$$')
+			{
+				out[o++] = '$$';
+				out[o++] = '$$';
+				last_out = '$$';
+				newline_run = 0;
+			}
+			else if (c)
+			{
+				out[o++] = c;
+				last_out = c;
+				newline_run = 0;
+			}
+		}
+	}
+
+	out[o] = 0;
+	return out;
+}
+
+U0 ZebShowPage(U8 *url, CHttpResponse *response)
+{
+	U8 *text = ZebHtmlToText(response->body);
+
+	"\n$$LTBLUE$$--- ";
+	ZebPutS(url);
+	" ---$$FG$$\n";
+
+	if (response->status != 200)
+		"$$YELLOW$$HTTP status: %d$$FG$$\n", response->status;
+
+	"\n";
+	"%s", text;
+	"\n$$LTBLUE$$--- end (%d links) ---$$FG$$\n", zeb_link_count;
+
+	Free(text);
+}
+
+public U0 Zeb(U8 *url=NULL)
+{
+	U8			  *history[ZEB_HISTORY_MAX];
+	I64			   hist_count = 0;
+	U8			  *current, *input, *target;
+	I64			   n;
+	CHttpUrl	   parsed;
+	CHttpResponse *response;
+	Bool		   running = TRUE, fetch_needed = TRUE;
+
+	if (url)
+		current = StrNew(url);
+	else
+	{
+		current = StrGet("URL:");
+		if (!current || !*current)
+		{
+			Free(current);
+			return;
+		}
+	}
+
+	while (running)
+	{
+		if (fetch_needed)
+		{
+			"$$YELLOW$$Fetching ";
+			ZebPutS(current);
+			" ...$$FG$$\n";
+
+			response = HttpGet(current);
+			if (response)
+			{
+				ZebShowPage(current, response);
+				HttpResponseFree(response);
+			}
+			else
+				"$$RED$$Fetch failed. See Network Log. (Note: HTTPS is not supported yet.)$$FG$$\n";
+
+			fetch_needed = FALSE;
+		}
+
+		input = StrGet("Zeb [#=follow link, u=new URL, b=back, r=reload, q=quit]:");
+
+		if (!input || !StrCompare(input, "q"))
+			running = FALSE;
+		else if (!StrCompare(input, "r"))
+			fetch_needed = TRUE;
+		else if (!StrCompare(input, "b"))
+		{
+			if (hist_count)
+			{
+				Free(current);
+				current = history[--hist_count];
+				fetch_needed = TRUE;
+			}
+			else
+				"No history.\n";
+		}
+		else if (!StrCompare(input, "u"))
+		{
+			target = StrGet("URL:");
+			if (target && *target)
+			{
+				if (hist_count < ZEB_HISTORY_MAX)
+					history[hist_count++] = current;
+				else
+					Free(current);
+				current = target;
+				fetch_needed = TRUE;
+			}
+			else
+				Free(target);
+		}
+		else
+		{
+			n = Str2I64(input);
+			if (n >= 1 && n <= zeb_link_count)
+			{
+				if (HttpUrlParse(current, &parsed) < 0)
+					"Bad current URL.\n";
+				else
+				{
+					target = HttpUrlResolve(&parsed, zeb_links[n - 1]);
+					if (target)
+					{
+						if (hist_count < ZEB_HISTORY_MAX)
+							history[hist_count++] = current;
+						else
+							Free(current);
+						current = target;
+						fetch_needed = TRUE;
+					}
+					else
+						"Unsupported link scheme (mailto/javascript/anchor).\n";
+				}
+			}
+			else
+				"No such link. Links are 1-%d.\n", zeb_link_count;
+		}
+
+		Free(input);
+	}
+
+	Free(current);
+	while (hist_count)
+		Free(history[--hist_count]);
+	ZebLinksFree;
+}
+
+Zeb;

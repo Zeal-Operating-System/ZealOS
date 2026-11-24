@@ -127,11 +127,14 @@ CBST *BSTSinglePop(I64 value, CBST *tree)
 	// original node sub-trees are cleared.
 
 	CBST *node	= BSTPop(value, tree);
-	CBST *left	= node->left;
-	CBST *right	= node->right;
+	CBST *left;
+	CBST *right;
 
 	if (node)
 	{
+		left  = node->left;
+		right = node->right;
+
 		if (left)
 		{ // if node has left tree, add the tree
 			BSTAdd(left, tree);
