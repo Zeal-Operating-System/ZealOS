@@ -1,0 +1,12 @@
+// Credit: Z8Griz
+public CBGR24 gr_palette_colorrosaceae[COLORS_NUM] = {
+0x957599, 0x859BCD, 0x999980, 0x84A8FF, 0x757C8B, 0xEBB660, 0x65944B, 0x3A273A, 0x555676, 0x67BBEB, 0xB8DC7E, 0xCC80BB, 0xBE6262, 0xE1B0B7, 0xFFC7A3, 0x150E13,
+
+};
+public U0 PaletteSetColorRosaceae(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_colorrosaceae);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetColorRosaceae;
+}

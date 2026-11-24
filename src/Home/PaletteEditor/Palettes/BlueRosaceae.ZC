@@ -1,0 +1,12 @@
+// Credit: Z8Griz
+public CBGR24 gr_palette_bluerosaceae[COLORS_NUM] = {
+0x957599, 0x859BCD, 0x999980, 0xC5D0E9, 0x757C8B, 0xBE6262, 0xADC9D7, 0x3A273A, 0x555676, 0x67BBEB, 0xB8DC7E, 0xB8DC7E, 0xBE6262, 0xD9B0E7, 0xFFC7A3, 0x150E13,
+
+};
+public U0 PaletteSetBlueRosaceae(Bool persistent=TRUE)
+{
+	GrPaletteSet(gr_palette_bluerosaceae);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetBlueRosaceae;
+}
