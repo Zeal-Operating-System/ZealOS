@@ -333,6 +333,7 @@ U8 *ScanCode2KeyName(I64 sc)
 			case SC_F10:			CatPrint(buf, "F10");			break;
 			case SC_F11:			CatPrint(buf, "F11");			break;
 			case SC_F12:			CatPrint(buf, "F12");			break;
+			case SC_PAUSE:			CatPrint(buf, "PAUSE");			break;
 			case SC_GUI:			CatPrint(buf, "WINDOWS");		break;
 			case SC_PRINTSCREEN1:	CatPrint(buf, "PRINTSCREEN1");	break;
 			case SC_PRINTSCREEN2:	CatPrint(buf, "PRINTSCREEN2");	break;
@@ -341,10 +342,24 @@ U8 *ScanCode2KeyName(I64 sc)
 	return StrNew(buf);
 }
 
-U0 KbdBuildSC(U8 raw_byte, Bool in_irq, U8 *_last_raw_byte, I64 *_last_sc)
+U0 KbdBuildSC(U8 raw_byte, Bool in_irq, U8 *_last_raw_byte, I64 *_last_sc, I64 *_pause_bytes_left)
 {
 	I64  ch, sc_flags, sc, sc2, sc_raw, new_key_f;
 	Bool set_LEDs = FALSE;
+
+	if (*_pause_bytes_left)
+	{//Pause sends E1 1D 45 E1 9D C5 when pressed and nothing when released.
+	//Skip the middle bytes and treat the last byte as Pause key-up.
+		*_pause_bytes_left -= 1;
+		if (*_pause_bytes_left)
+			return;
+		raw_byte = SC_PAUSE | 0x80;
+	}
+	else if (raw_byte == 0xE1)
+	{
+		*_pause_bytes_left = 5;
+		raw_byte = SC_PAUSE;
+	}
 
 	if (raw_byte == 0xE0)
 	{
@@ -444,14 +459,14 @@ U0 KbdBuildSC(U8 raw_byte, Bool in_irq, U8 *_last_raw_byte, I64 *_last_sc)
 U0 KbdPacketRead()
 {
 	static U8  last_raw_byte = 0;
-	static I64 last_sc = 0;
+	static I64 last_sc = 0, pause_bytes_left = 0;
 	U8		   raw_byte;
 
 	if (TSCGet>kbd.timestamp + counts.time_stamp_freq >> 3)
 		FifoU8Flush(kbd.fifo);
 	kbd.timestamp = TSCGet;
 	raw_byte = InU8(KBD_PORT);
-	KbdBuildSC(raw_byte, TRUE, &last_raw_byte, &last_sc);
+	KbdBuildSC(raw_byte, TRUE, &last_raw_byte, &last_sc, &pause_bytes_left);
 	if (!FifoU8Count(kbd.fifo))
 	{
 		FifoU8Insert(kbd.fifo, raw_byte);
@@ -505,15 +520,16 @@ U0 KbdInit()
 
 U0 KbdHandler()
 {
-	static U8 last_raw_byte = 0;
-	U8		  raw_byte;
+	static U8  last_raw_byte = 0;
+	static I64 pause_bytes_left = 0;
+	U8		   raw_byte;
 
 	FifoU8Remove(kbd.fifo2, &raw_byte);
-	KbdBuildSC(raw_byte, FALSE, &last_raw_byte, &kbd.scan_code);
+	KbdBuildSC(raw_byte, FALSE, &last_raw_byte, &kbd.scan_code, &pause_bytes_left);
 	if (raw_byte == 0xE0)
 	{
 		FifoU8Remove(kbd.fifo2, &raw_byte);
-		KbdBuildSC(raw_byte, FALSE, &last_raw_byte, &kbd.scan_code);
+		KbdBuildSC(raw_byte, FALSE, &last_raw_byte, &kbd.scan_code, &pause_bytes_left);
 	}
 	if (Btr(&kbd.scan_code, SCf_NEW_KEY))
 	{
